@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims{
           int typeStringEnd  =line.IndexOf(", ",typeStringStart);
           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
           Type t=Type.GetType(typeString);
-          int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+8;
+          int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
           int nextIdStringEnd  =line.IndexOf(" }, ",nextIdStringStart);
           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);
           ulong nextId=ulong.Parse(nextIdString);
