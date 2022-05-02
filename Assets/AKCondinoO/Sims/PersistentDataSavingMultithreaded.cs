@@ -154,15 +154,15 @@ namespace AKCondinoO.Sims{
            var releasedIds=container.persistentReleasedIds[t];
            foreach(ulong releasedId in releasedIds){
             Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
-            releasedIdsStringBuilder.AppendFormat("{0}, ",releasedId);
+            releasedIdsStringBuilder.AppendFormat("{0},",releasedId);
            }
            releasedIds.Clear();
            var idsToRelease=typeIdsToReleasePair.Value;
            foreach(ulong idToRelease in idsToRelease){
             Log.DebugMessage("type:"+t+", release id:"+idToRelease);
-            releasedIdsStringBuilder.AppendFormat("{0}, ",idToRelease);
+            releasedIdsStringBuilder.AppendFormat("{0},",idToRelease);
            }
-           releasedIdsStringBuilder.AppendFormat("}}, }}, {0}",Environment.NewLine);
+           releasedIdsStringBuilder.AppendFormat(" }}, }}, {0}",Environment.NewLine);
            idsToRelease.Clear();
           }
           releasedIdsFileStream.SetLength(0L);

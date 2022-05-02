@@ -20,6 +20,25 @@ namespace AKCondinoO.Sims{
          releasedIdsFileStream.Position=0L;
          releasedIdsFileStreamReader.DiscardBufferedData();
          string line;
+         while((line=releasedIdsFileStreamReader.ReadLine())!=null){
+          if(string.IsNullOrEmpty(line)){continue;}
+          int typeStringStart=line.IndexOf("type=")+5;
+          int typeStringEnd  =line.IndexOf(", ",typeStringStart);
+          string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
+          Type t=Type.GetType(typeString);
+          SimObjectManager.Singleton.releasedIds[t]=new List<ulong>();
+          int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
+          int releasedIdsListStringEnd  =line.IndexOf(", }, }, ",releasedIdsListStringStart);
+          if(releasedIdsListStringEnd>=0){
+           string releasedIdsListString=line.Substring(releasedIdsListStringStart,releasedIdsListStringEnd-releasedIdsListStringStart);
+           string[]idStrings=releasedIdsListString.Split(',');
+           foreach(string idString in idStrings){
+            Log.DebugMessage("adding releasedId of "+t+": "+idString+"...");
+            ulong id=ulong.Parse(idString);
+            SimObjectManager.Singleton.releasedIds[t].Add(id);
+           }
+          }
+         }
          releasedIdsFileStream.Position=0L;
          releasedIdsFileStreamReader.DiscardBufferedData();
          FileStream idsFileStream=SimObjectManager.Singleton.persistentDataSavingBGThread.idsFileStream=new FileStream(SimObjectManager.idsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
@@ -56,7 +75,9 @@ namespace AKCondinoO.Sims{
           SimObjectManager.Singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.Singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.Singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
-          SimObjectManager.Singleton.releasedIds.Add(t,new List<ulong>());
+          if(!SimObjectManager.Singleton.releasedIds.ContainsKey(t)){
+              SimObjectManager.Singleton.releasedIds.Add(t,new List<ulong>());
+          }
           SimObjectManager.Singleton.pool.Add(t,new LinkedList<SimObject>());
          }
          spawnCoroutine=StartCoroutine(SpawnCoroutine());
