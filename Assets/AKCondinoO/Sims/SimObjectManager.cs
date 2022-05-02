@@ -44,6 +44,11 @@ namespace AKCondinoO.Sims{
           }
           PersistentDataLoadingMultithreaded.Stop=true;
           persistentDataLoadingBGThread.Wait();
+          foreach(var kvp in persistentDataLoadingBGThread.fileStream){
+           Type t=kvp.Key;
+           persistentDataLoadingBGThread.fileStream      [t].Dispose();
+           persistentDataLoadingBGThread.fileStreamReader[t].Dispose();
+          }
          #endregion
          #region PersistentDataSavingMultithreaded
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);

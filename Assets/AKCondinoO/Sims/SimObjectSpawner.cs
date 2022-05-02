@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims{
            string releasedIdsListString=line.Substring(releasedIdsListStringStart,releasedIdsListStringEnd-releasedIdsListStringStart);
            string[]idStrings=releasedIdsListString.Split(',');
            foreach(string idString in idStrings){
-            Log.DebugMessage("adding releasedId of "+t+": "+idString+"...");
+            //Log.DebugMessage("adding releasedId of "+t+": "+idString+"...");
             ulong id=ulong.Parse(idString);
             SimObjectManager.Singleton.releasedIds[t].Add(id);
            }
@@ -75,6 +75,9 @@ namespace AKCondinoO.Sims{
           SimObjectManager.Singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.Singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.Singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
+          FileStream loaderFileStream;
+          SimObjectManager.Singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          SimObjectManager.Singleton.persistentDataLoadingBGThread.fileStreamReader[t]=new StreamReader(loaderFileStream);
           if(!SimObjectManager.Singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.Singleton.releasedIds.Add(t,new List<ulong>());
           }
