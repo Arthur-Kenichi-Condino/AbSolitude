@@ -107,11 +107,11 @@ namespace AKCondinoO.Sims{
         }
         void OnDeactivate(SimObject simObject){
          active .Remove(simObject.id.Value);
-         SimObjectSpawner.Singleton.DespawnQueue.Enqueue(simObject);
+         SimObjectSpawner.Singleton.despawnQueue.Enqueue(simObject);
         }
         void OnDeactivateAndReleaseId(SimObject simObject){
          active .Remove(simObject.id.Value);
-         SimObjectSpawner.Singleton.DespawnAndReleaseIdQueue.Enqueue(simObject);
+         SimObjectSpawner.Singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
         }
     }
 }
