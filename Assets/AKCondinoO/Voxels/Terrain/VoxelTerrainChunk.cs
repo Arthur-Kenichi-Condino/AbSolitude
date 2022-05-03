@@ -2,11 +2,13 @@
     #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
@@ -27,6 +29,10 @@ namespace AKCondinoO.Voxels.Terrain{
          };
          filter=GetComponent<MeshFilter>();
          filter.mesh=mesh;
+         bakeJob=new BakeJob(){
+          meshId=mesh.GetInstanceID(),
+         };
+         meshCollider=GetComponent<MeshCollider>();
          Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
@@ -34,29 +40,40 @@ namespace AKCondinoO.Voxels.Terrain{
         internal void OnInstantiated(){
         }
         internal void OnDestroyingCore(){
+         bakeJobHandle.Complete();
          marchingCubesBG.IsCompleted(VoxelSystem.Singleton.marchingCubesBGThreads[0].IsRunning,-1);
          Log.DebugMessage("Deallocate NativeLists");
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
+         hasPhysMeshBaked=false;
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
           pendingMarchingCubes=true;
          }
         }
+     bool waitingBakeJob;
      bool waitingMarchingCubes;
      bool pendingMarchingCubes;
         internal void ManualUpdate(){
-            if(waitingMarchingCubes){
-                if(OnMarchingCubesDone()){
-                    waitingMarchingCubes=false;
+            if(waitingBakeJob){
+                if(OnPhysMeshBaked()){
+                    waitingBakeJob=false;
                 }
             }else{
-                if(pendingMarchingCubes){
-                    if(CanBeginMarchingCubes()){
-                        pendingMarchingCubes=false;
-                        waitingMarchingCubes=true;
+                if(waitingMarchingCubes){
+                    if(OnMarchingCubesDone()){
+                        waitingMarchingCubes=false;
+                        SchedulePhysBakeMeshJob();
+                        waitingBakeJob=true;
+                    }
+                }else{
+                    if(pendingMarchingCubes){
+                        if(CanBeginMarchingCubes()){
+                            pendingMarchingCubes=false;
+                            waitingMarchingCubes=true;
+                        }
                     }
                 }
             }
@@ -77,22 +94,22 @@ namespace AKCondinoO.Voxels.Terrain{
          }
          return false;
         }
-        #region Rendering
-            static readonly VertexAttributeDescriptor[]layout=new[]{
-             new VertexAttributeDescriptor(VertexAttribute.Position ,VertexAttributeFormat.Float32,3),
-             new VertexAttributeDescriptor(VertexAttribute.Normal   ,VertexAttributeFormat.Float32,3),
-             new VertexAttributeDescriptor(VertexAttribute.Color    ,VertexAttributeFormat.Float32,4),
-             new VertexAttributeDescriptor(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,2),
-             new VertexAttributeDescriptor(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,2),
-             new VertexAttributeDescriptor(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,2),
-             new VertexAttributeDescriptor(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,2),
-            };
-            MeshUpdateFlags meshFlags=MeshUpdateFlags.DontValidateIndices|
-                                      MeshUpdateFlags.DontNotifyMeshUsers|
-                                      MeshUpdateFlags.DontRecalculateBounds|
-                                      MeshUpdateFlags.DontResetBoneBounds;
-            internal Mesh mesh;
-        #endregion
+     #region Rendering
+         static readonly VertexAttributeDescriptor[]layout=new[]{
+          new VertexAttributeDescriptor(VertexAttribute.Position ,VertexAttributeFormat.Float32,3),
+          new VertexAttributeDescriptor(VertexAttribute.Normal   ,VertexAttributeFormat.Float32,3),
+          new VertexAttributeDescriptor(VertexAttribute.Color    ,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,2),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,2),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,2),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,2),
+         };
+         MeshUpdateFlags meshFlags=MeshUpdateFlags.DontValidateIndices|
+                                   MeshUpdateFlags.DontNotifyMeshUsers|
+                                   MeshUpdateFlags.DontRecalculateBounds|
+                                   MeshUpdateFlags.DontResetBoneBounds;
+         internal Mesh mesh;
+     #endregion
         bool OnMarchingCubesDone(){
          if(marchingCubesBG.IsCompleted(VoxelSystem.Singleton.marchingCubesBGThreads[0].IsRunning)){
           sMarchingCubesExecutionCount--;
@@ -107,6 +124,30 @@ namespace AKCondinoO.Voxels.Terrain{
           mesh.SetIndexBufferData(marchingCubesBG.TempTri.AsArray(),0,0,marchingCubesBG.TempTri.Length,meshFlags);
           mesh.subMeshCount=1;
           mesh.SetSubMesh(0,new SubMeshDescriptor(0,marchingCubesBG.TempTri.Length){firstVertex=0,vertexCount=marchingCubesBG.TempVer.Length},meshFlags);
+          return true;
+         }
+         return false;
+        }
+     BakeJob bakeJob;struct BakeJob:IJob{
+          public int meshId;
+             public void Execute(){
+              Physics.BakeMesh(meshId,false);
+             }
+     }
+      JobHandle bakeJobHandle;
+     internal MeshCollider meshCollider;
+        void SchedulePhysBakeMeshJob(){
+         bakeJobHandle.Complete();
+         bakeJobHandle=bakeJob.Schedule();
+        }
+     internal bool hasPhysMeshBaked{get;private set;}
+        bool OnPhysMeshBaked(){
+         if(bakeJobHandle.IsCompleted){
+            bakeJobHandle.Complete();
+          meshCollider.sharedMesh=null;
+          meshCollider.sharedMesh=mesh;
+          hasPhysMeshBaked=true;
+          SimObjectSpawner.Singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
           return true;
          }
          return false;

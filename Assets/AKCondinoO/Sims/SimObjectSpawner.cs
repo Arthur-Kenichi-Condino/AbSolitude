@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Terrain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -91,15 +93,19 @@ namespace AKCondinoO.Sims{
         }
         void OnDestroy(){
         }
+     readonly HashSet<int>terraincnkIdxPhysMeshBaked=new HashSet<int>();
+        internal void OnVoxelTerrainChunkPhysMeshBaked(VoxelTerrainChunk cnk){
+         terraincnkIdxPhysMeshBaked.Add(cnk.id.Value.cnkIdx);
+        }
      Coroutine spawnCoroutine;
      [SerializeField]int       DEBUG_CREATE_SIM_OBJECT_AMOUNT=1;
      [SerializeField]Vector3   DEBUG_CREATE_SIM_OBJECT_ROTATION;
      [SerializeField]Vector3   DEBUG_CREATE_SIM_OBJECT_POSITION;
      [SerializeField]Vector3   DEBUG_CREATE_SIM_OBJECT_SCALE=Vector3.one;
      [SerializeField]SimObject DEBUG_CREATE_SIM_OBJECT=null;
-     internal readonly Queue<SpawnData>              SpawnQueue=new Queue<SpawnData>();
-     internal readonly Queue<SimObject>            DespawnQueue=new Queue<SimObject>();
-     internal readonly Queue<SimObject>DespawnAndReleaseIdQueue=new Queue<SimObject>();
+     internal readonly Queue<SpawnData>              spawnQueue=new Queue<SpawnData>();
+     internal readonly Queue<SimObject>            despawnQueue=new Queue<SimObject>();
+     internal readonly Queue<SimObject>despawnAndReleaseIdQueue=new Queue<SimObject>();
      readonly SpawnData spawnData=new SpawnData();
      bool savingPersistentData;
      bool loadingPersistentData;
@@ -122,11 +128,11 @@ namespace AKCondinoO.Sims{
                 spawnData.at.Add(at);
                }
                spawnData.dequeued=false;
-               SpawnQueue.Enqueue(spawnData);
+               spawnQueue.Enqueue(spawnData);
                 DEBUG_CREATE_SIM_OBJECT=null;
               }
              }
-             while(SpawnQueue.Count>0){SpawnData toSpawn=SpawnQueue.Dequeue();
+             while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
               foreach(var at in toSpawn.at){
                _GetId:{}
                Type simType=at.type;
@@ -204,12 +210,19 @@ namespace AKCondinoO.Sims{
                                 OnPersistentDataPullingFromFile();
                             }
                         }else{
-                            if(DespawnQueue.Count>0||DespawnAndReleaseIdQueue.Count>0){
-                                Log.DebugMessage("DespawnQueue.Count>0||DespawnAndReleaseIdQueue.Count>0");
-                                if(OnPersistentDataPushToFile()){
-                                    OnPersistentDataPushedToFile();
+                            if(terraincnkIdxPhysMeshBaked.Count>0){
+                                Log.DebugMessage("terraincnkIdxPhysMeshBaked.Count>0");
+                                if(OnPersistentDataPullFromFile()){
+                                    OnPersistentDataPullingFromFile();
                                 }
                             }else{
+                                if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
+                                    Log.DebugMessage("DespawnQueue.Count>0||DespawnAndReleaseIdQueue.Count>0");
+                                    if(OnPersistentDataPushToFile()){
+                                        OnPersistentDataPushedToFile();
+                                    }
+                                }else{
+                                }
                             }
                         }
                     }
@@ -235,13 +248,13 @@ namespace AKCondinoO.Sims{
          foreach(var a in SimObjectManager.Singleton.active){
           SimObjectManager.Singleton.persistentDataSavingBG.gameDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
          }
-         while(DespawnQueue.Count>0){var toDespawn=DespawnQueue.Dequeue();
+         while(despawnQueue.Count>0){var toDespawn=despawnQueue.Dequeue();
           SimObjectManager.Singleton.persistentDataSavingBG.gameDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
           if(!exitSave){
            SimObjectManager.Singleton.despawning.Add(toDespawn.id.Value,toDespawn);
           }
          }
-         while(DespawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=DespawnAndReleaseIdQueue.Dequeue();
+         while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
           SimObjectManager.Singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simType].Add(toDespawnAndReleaseId.id.Value.number);
           if(!exitSave){
            SimObjectManager.Singleton.despawningAndReleasingId.Add(toDespawnAndReleaseId.id.Value,toDespawnAndReleaseId);
@@ -272,6 +285,22 @@ namespace AKCondinoO.Sims{
         }
         bool OnPersistentDataPullFromFile(){
          if(SimObjectManager.Singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.Singleton.persistentDataLoadingBGThread.IsRunning)){
+          foreach(int cnkIdx in terraincnkIdxPhysMeshBaked){
+           SimObjectManager.Singleton.persistentDataLoadingBG.terraincnkIdxToLoad.Add(cnkIdx);
+          }
+          terraincnkIdxPhysMeshBaked.Clear();
+          SimObjectManager.Singleton.persistentDataLoadingBG.terraincnkIdxToLoad.RemoveWhere(
+           cnkIdx=>{
+            if(!VoxelSystem.Singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)){
+             return true;
+            }
+            if(!cnk.hasPhysMeshBaked){
+             return true;
+            }
+            //  cnk is ready for sim objects
+            return false;
+           }
+          );
           PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.Singleton.persistentDataLoadingBG);
           return true;
          }
