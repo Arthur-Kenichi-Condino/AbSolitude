@@ -109,9 +109,14 @@ namespace AKCondinoO.Sims{
      readonly SpawnData spawnData=new SpawnData();
      bool savingPersistentData;
      bool loadingPersistentData;
+     float loaderCooldown=1f;
+     float loaderOnCooldownTimer;
      float reloadInterval=5f;
      float reloadTimer;
         void Update(){
+         if(loaderOnCooldownTimer>0f){
+            loaderOnCooldownTimer-=Time.deltaTime;
+         }
          if(reloadTimer>0f){
             reloadTimer-=Time.deltaTime;
          }
@@ -210,9 +215,10 @@ namespace AKCondinoO.Sims{
                                 OnPersistentDataPullingFromFile();
                             }
                         }else{
-                            if(terraincnkIdxPhysMeshBaked.Count>0){
+                            if(loaderOnCooldownTimer<=0f&&terraincnkIdxPhysMeshBaked.Count>0){
                                 Log.DebugMessage("terraincnkIdxPhysMeshBaked.Count>0");
                                 if(OnPersistentDataPullFromFile()){
+                                    loaderOnCooldownTimer=loaderCooldown;
                                     OnPersistentDataPullingFromFile();
                                 }
                             }else{

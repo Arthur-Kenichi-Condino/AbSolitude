@@ -20,6 +20,26 @@ namespace AKCondinoO.Sims{
           Type t=typeFileStreamPair.Key;
           FileStream fileStream=typeFileStreamPair.Value;
           StreamReader fileStreamReader=this.fileStreamReader[t];
+          Log.DebugMessage("loading data for type:"+t);
+          fileStream.Position=0L;
+          fileStreamReader.DiscardBufferedData();
+          string line;
+          while((line=fileStreamReader.ReadLine())!=null){
+           if(string.IsNullOrEmpty(line)){continue;}
+           int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
+           int cnkIdxStringEnd  =line.IndexOf(" ,",cnkIdxStringStart);
+           string cnkIdxString=line.Substring(cnkIdxStringStart,cnkIdxStringEnd-cnkIdxStringStart);
+           int cnkIdx=int.Parse(cnkIdxString);
+           Log.DebugMessage("reading line for cnkIdx:"+cnkIdx);
+           if(container.terraincnkIdxToLoad.Contains(cnkIdx)){
+            Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
+            int simObjectStringStart=cnkIdxStringEnd+2;
+            while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
+             int simObjectStringEnd=line.IndexOf("}, ",simObjectStringStart)+3;
+             simObjectStringStart=simObjectStringEnd;
+            }
+           }
+          }
          }
         }
     }
