@@ -1,5 +1,6 @@
 using AKCondinoO.Sims;
 using AKCondinoO.UI;
+using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
 using System;
 using System.Collections;
@@ -45,7 +46,9 @@ namespace AKCondinoO{
                }
               }
                                singleton=null;
+              FixedUI         .singleton=null;
               Placeholder     .singleton=null;
+              GameMode        .singleton=null;
               SimObjectManager.singleton=null;
               SimObjectSpawner.singleton=null;
               VoxelSystem     .singleton=null;

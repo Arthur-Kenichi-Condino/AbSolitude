@@ -11,6 +11,10 @@ namespace AKCondinoO{
       BuildBuyEdit,
       Interact,
      }
+     internal static GameMode singleton;
+        void Awake(){
+         if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+        }
      internal GameModesEnum current=GameModesEnum.BuildBuyEdit;
         internal void OnGameModeChangeTo(GameModesEnum newGameMode){
          var args=new OnGameModeChangeEventArgs(){
