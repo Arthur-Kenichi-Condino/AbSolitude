@@ -32,7 +32,7 @@ namespace AKCondinoO{
         }
         void OnCoordinatesChanged(){
          cnkRgn=cCoordTocnkRgn(cCoord);
-         VoxelSystem.Singleton.generationRequests.Add(this);
+         VoxelSystem.singleton.generationRequests.Add(this);
         }
     }
 }

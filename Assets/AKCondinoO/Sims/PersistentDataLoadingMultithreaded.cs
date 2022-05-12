@@ -35,7 +35,16 @@ namespace AKCondinoO.Sims{
             Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
             int simObjectStringStart=cnkIdxStringEnd+2;
             while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
+             Log.DebugMessage("sim object found at cnkIdx:"+cnkIdx);
              int simObjectStringEnd=line.IndexOf("}, ",simObjectStringStart)+3;
+             string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
+             int idNumberStringStart=simObjectString.IndexOf("id=")+3;
+             int idNumberStringEnd  =simObjectString.IndexOf(", ",idNumberStringStart);
+             string idNumberString=simObjectString.Substring(idNumberStringStart,idNumberStringEnd-idNumberStringStart);
+             ulong idNumber=ulong.Parse(idNumberString);
+             (Type simType,ulong number)id=(t,idNumber);
+             int persistentDataStringStart=simObjectString.IndexOf("persistentData=",idNumberStringEnd+2);
+             int persistentDataStringEnd  =simObjectString.IndexOf(" }",persistentDataStringStart)+2;
              simObjectStringStart=simObjectStringEnd;
             }
            }

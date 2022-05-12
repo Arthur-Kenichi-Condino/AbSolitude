@@ -61,12 +61,12 @@ namespace AKCondinoO.Sims{
          if(unplaceRequested){
             unplaceRequested=false;
              DisableInteractions();
-             SimObjectManager.Singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+             SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
          }else{
           if(poolRequested){
              poolRequested=false;
               DisableInteractions();
-              SimObjectManager.Singleton.DeactivateQueue.Enqueue(this);
+              SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
           }
          }
         }

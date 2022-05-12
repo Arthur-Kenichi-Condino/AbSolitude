@@ -1,4 +1,5 @@
 using AKCondinoO.Sims;
+using AKCondinoO.UI;
 using AKCondinoO.Voxels;
 using System;
 using System.Collections;
@@ -7,14 +8,14 @@ using System.IO;
 using UnityEngine;
 namespace AKCondinoO{
     internal class Core:MonoBehaviour{
-     internal static Core Singleton;
-     internal static int ThreadCount;
+     internal static Core singleton;
+     internal static int threadCount;
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
      [SerializeField]Gameplayer GameplayerPrefab;
         private void Awake(){
-         if(Singleton==null){Singleton=this;}else{DestroyImmediate(this);return;}
+         if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          QualitySettings.vSyncCount=1;
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
@@ -22,13 +23,14 @@ namespace AKCondinoO{
          Gameplayer.main=Instantiate(GameplayerPrefab);
         }
         private void Start(){
-         VoxelSystem     .Singleton.Init();
-         SimObjectManager.Singleton.Init();
-         SimObjectSpawner.Singleton.Init();
+         VoxelSystem     .singleton.Init();
+         SimObjectManager.singleton.Init();
+         SimObjectSpawner.singleton.Init();
+         Placeholder     .singleton.Init();
          Gameplayer.main.Init();
         }
         void OnDestroy(){
-         if(Singleton==this){
+         if(singleton==this){
               try{
                EventHandler handler=OnDestroyingCoreEvent;
                handler?.Invoke(this,
@@ -38,14 +40,15 @@ namespace AKCondinoO{
               }catch{
                throw;
               }finally{
-               if(ThreadCount>0){
-                Log.Error("ThreadCount>0(ThreadCount=="+ThreadCount+"):one or more threads weren't stopped nor waited for termination");
+               if(threadCount>0){
+                Log.Error("ThreadCount>0(ThreadCount=="+threadCount+"):one or more threads weren't stopped nor waited for termination");
                }
               }
-                               Singleton=null;
-              SimObjectManager.Singleton=null;
-              SimObjectSpawner.Singleton=null;
-              VoxelSystem     .Singleton=null;
+                               singleton=null;
+              Placeholder     .singleton=null;
+              SimObjectManager.singleton=null;
+              SimObjectSpawner.singleton=null;
+              VoxelSystem     .singleton=null;
          }
         }
      internal event EventHandler OnDestroyingCoreEvent;
