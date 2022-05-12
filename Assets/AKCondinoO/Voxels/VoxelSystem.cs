@@ -71,7 +71,7 @@ namespace AKCondinoO.Voxels{
              }
             }
         #endregion
-     internal static VoxelSystem Singleton;
+     internal static VoxelSystem singleton;
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
@@ -80,7 +80,7 @@ namespace AKCondinoO.Voxels{
      [SerializeField]VoxelTerrainChunk _VoxelTerrainChunkPrefab;
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
-         if(Singleton==null){Singleton=this;}else{DestroyImmediate(this);return;}
+         if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){
@@ -102,7 +102,7 @@ namespace AKCondinoO.Voxels{
          AtlasHelper.SetAtlasData();
          biome.Seed=0;
          proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
-         Core.Singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
         void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");

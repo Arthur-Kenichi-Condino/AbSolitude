@@ -42,7 +42,7 @@ namespace AKCondinoO{
         }
      readonly Task task;
         internal BaseMultithreaded(){
-         Core.ThreadCount++;
+         Core.threadCount++;
          task=Task.Factory.StartNew(BG,TaskCreationOptions.LongRunning);
         }
      protected T container{get;private set;}
@@ -97,7 +97,7 @@ namespace AKCondinoO{
         internal void Wait(){
          try{
           task.Wait();
-          Core.ThreadCount--;
+          Core.threadCount--;
          }catch(Exception e){
           Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }

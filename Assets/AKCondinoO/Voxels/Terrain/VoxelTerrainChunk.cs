@@ -41,7 +41,7 @@ namespace AKCondinoO.Voxels.Terrain{
         }
         internal void OnDestroyingCore(){
          bakeJobHandle.Complete();
-         marchingCubesBG.IsCompleted(VoxelSystem.Singleton.marchingCubesBGThreads[0].IsRunning,-1);
+         marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning,-1);
          Log.DebugMessage("Deallocate NativeLists");
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
@@ -80,10 +80,10 @@ namespace AKCondinoO.Voxels.Terrain{
         }
      internal static int sMarchingCubesExecutionCount;
         bool CanBeginMarchingCubes(){
-         if(sMarchingCubesExecutionCount>=VoxelSystem.Singleton._MarchingCubesExecutionCountLimit){
+         if(sMarchingCubesExecutionCount>=VoxelSystem.singleton._MarchingCubesExecutionCountLimit){
           return false;
          }
-         if(marchingCubesBG.IsCompleted(VoxelSystem.Singleton.marchingCubesBGThreads[0].IsRunning)){
+         if(marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning)){
           worldBounds.center=transform.position=new Vector3(id.Value.cnkRgn.x,0,id.Value.cnkRgn.y);
           marchingCubesBG.cCoord=id.Value.cCoord;
           marchingCubesBG.cnkRgn=id.Value.cnkRgn;
@@ -111,7 +111,7 @@ namespace AKCondinoO.Voxels.Terrain{
          internal Mesh mesh;
      #endregion
         bool OnMarchingCubesDone(){
-         if(marchingCubesBG.IsCompleted(VoxelSystem.Singleton.marchingCubesBGThreads[0].IsRunning)){
+         if(marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning)){
           sMarchingCubesExecutionCount--;
           bool resize;
           if(resize=marchingCubesBG.TempVer.Length>mesh.vertexCount){
@@ -147,7 +147,7 @@ namespace AKCondinoO.Voxels.Terrain{
           meshCollider.sharedMesh=null;
           meshCollider.sharedMesh=mesh;
           hasPhysMeshBaked=true;
-          SimObjectSpawner.Singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
+          SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
           return true;
          }
          return false;

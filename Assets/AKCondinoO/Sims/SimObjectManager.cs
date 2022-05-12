@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class SimObjectManager:MonoBehaviour{
-     internal static SimObjectManager Singleton;
+     internal static SimObjectManager singleton;
      internal PersistentDataSavingBackgroundContainer persistentDataSavingBG;
      internal PersistentDataSavingMultithreaded       persistentDataSavingBGThread;
      internal PersistentDataLoadingBackgroundContainer persistentDataLoadingBG;
@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<(Type simType,ulong number),SimObject>despawning              =new Dictionary<(Type,ulong),SimObject>();
      internal readonly Dictionary<(Type simType,ulong number),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
         private void Awake(){
-         if(Singleton==null){Singleton=this;}else{DestroyImmediate(this);return;}
+         if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          PersistentDataSavingMultithreaded.Stop=false;
          persistentDataSavingBG=new PersistentDataSavingBackgroundContainer();
          persistentDataSavingBGThread=new PersistentDataSavingMultithreaded();
@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims{
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
         }
         internal void Init(){
-         Core.Singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
                  idsFile=string.Format("{0}{1}",Core.savePath,        "ids.txt");
          releasedIdsFile=string.Format("{0}{1}",Core.savePath,"releasedIds.txt");
         }
@@ -53,7 +53,7 @@ namespace AKCondinoO.Sims{
          #region PersistentDataSavingMultithreaded
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
            Log.DebugMessage("SimObjectManager exit save");
-           SimObjectSpawner.Singleton.CollectSavingData(exitSave:true);
+           SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
            PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
           if(PersistentDataSavingMultithreaded.Clear()!=0){
@@ -107,11 +107,11 @@ namespace AKCondinoO.Sims{
         }
         void OnDeactivate(SimObject simObject){
          active .Remove(simObject.id.Value);
-         SimObjectSpawner.Singleton.despawnQueue.Enqueue(simObject);
+         SimObjectSpawner.singleton.despawnQueue.Enqueue(simObject);
         }
         void OnDeactivateAndReleaseId(SimObject simObject){
          active .Remove(simObject.id.Value);
-         SimObjectSpawner.Singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
+         SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
         }
     }
 }
