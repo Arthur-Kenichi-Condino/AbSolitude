@@ -27,7 +27,9 @@ namespace AKCondinoO{
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
+         GameMode        .singleton.Init();
          Placeholder     .singleton.Init();
+         FixedUI         .singleton.Init();
          Gameplayer.main.Init();
         }
         void OnDestroy(){
