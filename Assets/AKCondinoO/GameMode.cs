@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +17,7 @@ namespace AKCondinoO{
           last=current,
          };
          current=newGameMode;
+         Log.DebugMessage("GameModesEnum current:"+current);
          EventHandler handler=OnGameModeChangeEvent;
          handler?.Invoke(this,args);
         }
