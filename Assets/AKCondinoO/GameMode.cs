@@ -15,6 +15,12 @@ namespace AKCondinoO{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
+        internal void Init(){
+         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        }
+        void OnDestroyingCoreEvent(object sender,EventArgs e){
+         Log.DebugMessage("GameMode:OnDestroyingCoreEvent");
+        }
      internal GameModesEnum current=GameModesEnum.BuildBuyEdit;
         internal void OnGameModeChangeTo(GameModesEnum newGameMode){
          var args=new OnGameModeChangeEventArgs(){
