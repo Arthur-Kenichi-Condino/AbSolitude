@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.UI.Fixed{
     internal class FixedUI:MonoBehaviour{
+     internal static FixedUI singleton;
         void Awake(){
+         if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
      [SerializeField]SimObject DEBUG_SET_PLACEHOLDER=null;
         void Update(){
