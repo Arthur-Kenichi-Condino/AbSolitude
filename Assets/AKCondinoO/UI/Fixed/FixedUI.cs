@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.UI.Fixed{
     internal class FixedUI:MonoBehaviour{
+        void Awake(){
+        }
      [SerializeField]SimObject DEBUG_SET_PLACEHOLDER=null;
         void Update(){
          if(DEBUG_SET_PLACEHOLDER!=null){
