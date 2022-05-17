@@ -6,6 +6,7 @@ using UnityEngine;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode{
     [Serializable]internal class BuildBuyEditModeUIContent{
      [SerializeField]internal GameObject buildCategorySimObjectsTablePrefab;
+     [SerializeField]internal GameObject buildCategorySimObjectButtonPrefab;
      [SerializeField]internal RectTransform buildCategoryRectTransform;
       internal BuildCategorySimObjectsTable buildCategoryTableFloors;
     }

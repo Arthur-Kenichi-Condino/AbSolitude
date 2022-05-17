@@ -35,13 +35,13 @@ namespace AKCondinoO.UI.Fixed{
         void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("FixedUI:OnDestroyingCoreEvent");
         }
-     [SerializeField]RectTransform              buildBuyEditModeUI;
-      [SerializeField]BuildBuyEditModeUIContent buildBuyEditModeUIContent=new BuildBuyEditModeUIContent();
+     [SerializeField]internal RectTransform              buildBuyEditModeUI;
+      [SerializeField]internal BuildBuyEditModeUIContent buildBuyEditModeUIContent=new BuildBuyEditModeUIContent();
         public void OnBuildBuyEditModeButtonPress(){
          Log.DebugMessage("FixedUI:OnBuildBuyEditModeButtonPress");
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.BuildBuyEdit);
         }
-     [SerializeField]RectTransform interactModeUI;
+     [SerializeField]internal RectTransform interactModeUI;
         public void OnInteractModeButtonPress(){
          Log.DebugMessage("FixedUI:OnInteractModeButtonPress");
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
