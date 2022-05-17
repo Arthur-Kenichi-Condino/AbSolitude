@@ -764,6 +764,7 @@ MonoBehaviour:
   buildBuyEditModeUI: {fileID: 64730776539849629}
   buildBuyEditModeUIContent:
     buildCategorySimObjectsTablePrefab: {fileID: 5860507490275302822, guid: 0f1c985e25b130e45bbbf09474746b68, type: 3}
+    buildCategorySimObjectButtonPrefab: {fileID: 270866556082243648, guid: 4064f0fbf13ee4444953486450098d6b, type: 3}
     buildCategoryRectTransform: {fileID: 1420786793545763957}
   interactModeUI: {fileID: 3574247779452019374}
   DEBUG_SET_PLACEHOLDER: {fileID: 0}
