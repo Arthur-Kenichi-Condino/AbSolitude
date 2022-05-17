@@ -72,6 +72,8 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          readonly Vector3[]verPos=new Vector3[3];
          readonly Dictionary<Vector3,List<Vector2>>vertexUV=new Dictionary<Vector3,List<Vector2>>();
           readonly Dictionary<Vector2,int>vertexUVCounted=new Dictionary<Vector2,int>();
+           readonly SortedDictionary<(int,float,float),Vector2>vertexUVSorted=new SortedDictionary<(int,float,float),Vector2>();
+            readonly Dictionary<int,int>weights=new Dictionary<int,int>(4);
      #endregion
         internal MarchingCubesMultithreaded(){
          for(int i=0;i<voxels.Length;++i){
@@ -285,6 +287,24 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
           idx[2]=i*3+2;
           for(int j=0;j<3;j++){
            var vertexUVList=vertexUV[verPos[j]=container.TempVer[idx[j]].pos];
+           vertexUVCounted.Clear();
+           foreach(var uv in vertexUVList){
+            if(!vertexUVCounted.ContainsKey(uv)){
+             vertexUVCounted.Add(uv,1);
+            }else{
+             vertexUVCounted[uv]++;
+            }
+           }
+           vertexUVSorted.Clear();
+           foreach(var kvp in vertexUVCounted){
+            vertexUVSorted.Add((kvp.Value,kvp.Key.x,kvp.Key.y),kvp.Key);
+           }
+           weights.Clear();
+           int total=0;
+           Vector2 uv0=container.TempVer[idx[j]].texCoord0;
+           foreach(var materialId in vertexUVSorted){
+            Vector2 uv=materialId.Value;
+           }
           }
          }
         }
