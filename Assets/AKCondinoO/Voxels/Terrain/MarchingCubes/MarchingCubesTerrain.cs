@@ -46,6 +46,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
       (Height/2.0f)-0.5f,
       (Depth /2.0f)-0.5f
      );
+     internal static Vector2 emptyUV{get;}=new Vector2(-1f,-1f);
      internal static ConcurrentQueue<List<Vector2>>vertexUVListPool=new ConcurrentQueue<List<Vector2>>();
         internal static void DoMarchingCubes(
          Voxel[]polygonCell,
