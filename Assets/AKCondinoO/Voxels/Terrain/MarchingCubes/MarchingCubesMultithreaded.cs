@@ -25,9 +25,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
               normal=n;
               color=new Color(1f,0f,0f,0f);
               texCoord0=uv0;
-              texCoord1=new Vector2(-1f,-1f);
-              texCoord2=new Vector2(-1f,-1f);
-              texCoord3=new Vector2(-1f,-1f);
+              texCoord1=emptyUV;
+              texCoord2=emptyUV;
+              texCoord3=emptyUV;
              }
      }
      internal NativeList<UInt32>TempTri;
@@ -304,6 +304,34 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            Vector2 uv0=container.TempVer[idx[j]].texCoord0;
            foreach(var materialId in vertexUVSorted){
             Vector2 uv=materialId.Value;
+            bool add;
+            if(uv0==uv){
+             total+=weights[0]=materialId.Key.Item1;
+            }else if(((add=container.TempVer[idx[j]].texCoord1==emptyUV)&&container.TempVer[idx[j]].texCoord2!=uv&&container.TempVer[idx[j]].texCoord3!=uv)||container.TempVer[idx[j]].texCoord1==uv){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord1=uv;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord1=uv;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord1=uv;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[1]=materialId.Key.Item1;
+            }else if(((add=container.TempVer[idx[j]].texCoord2==emptyUV)&&container.TempVer[idx[j]].texCoord3!=uv                                         )||container.TempVer[idx[j]].texCoord2==uv){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord2=uv;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord2=uv;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord2=uv;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[2]=materialId.Key.Item1;
+            }else if(  add=container.TempVer[idx[j]].texCoord3==emptyUV                                                                                    ||container.TempVer[idx[j]].texCoord3==uv){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord3=uv;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord3=uv;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord3=uv;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[3]=materialId.Key.Item1;
+            }
+           }
+           if(weights.Count>1){
+            var vertex2=container.TempVer[idx[j]];
            }
           }
          }
