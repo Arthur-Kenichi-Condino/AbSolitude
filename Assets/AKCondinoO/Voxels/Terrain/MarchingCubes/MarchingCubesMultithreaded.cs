@@ -281,6 +281,13 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }}}
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;
+         for(crdOffset.y=0,posOffset.y=0,
+             vCoord1.y=0;vCoord1.y<Height;vCoord1.y++){
+         for(vCoord1.z=0;vCoord1.z<Depth ;vCoord1.z++){
+             vCoord1.x=0;
+         }}
+         void AddEdgesvertexUV(){
+         }
          for(int i=0;i<container.TempVer.Length/3;i++){
           idx[0]=i*3  ;
           idx[1]=i*3+1;
@@ -332,6 +339,13 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            }
            if(weights.Count>1){
             var vertex2=container.TempVer[idx[j]];
+            Color col=vertex2.color;
+                                       col.r=(weights[0]/(float)total);
+            if(weights.ContainsKey(1)){col.g=(weights[1]/(float)total);}
+            if(weights.ContainsKey(2)){col.b=(weights[2]/(float)total);}
+            if(weights.ContainsKey(3)){col.a=(weights[3]/(float)total);}
+            vertex2.color=col;
+            container.TempVer[idx[j]]=vertex2;
            }
           }
          }
