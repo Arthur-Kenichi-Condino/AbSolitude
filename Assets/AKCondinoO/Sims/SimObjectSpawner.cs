@@ -1,11 +1,12 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
@@ -36,7 +37,7 @@ namespace AKCondinoO.Sims{
            string[]idStrings=releasedIdsListString.Split(',');
            foreach(string idString in idStrings){
             //Log.DebugMessage("adding releasedId of "+t+": "+idString+"...");
-            ulong id=ulong.Parse(idString);
+            ulong id=ulong.Parse(idString,NumberStyles.Any,CultureInfoUtil.en_US);
             SimObjectManager.singleton.releasedIds[t].Add(id);
            }
           }
@@ -57,7 +58,7 @@ namespace AKCondinoO.Sims{
           int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
           int nextIdStringEnd  =line.IndexOf(" }, ",nextIdStringStart);
           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);
-          ulong nextId=ulong.Parse(nextIdString);
+          ulong nextId=ulong.Parse(nextIdString,NumberStyles.Any,CultureInfoUtil.en_US);
           SimObjectManager.singleton.ids[t]=nextId;
          }
          idsFileStream.Position=0L;
@@ -96,6 +97,11 @@ namespace AKCondinoO.Sims{
      readonly HashSet<int>terraincnkIdxPhysMeshBaked=new HashSet<int>();
         internal void OnVoxelTerrainChunkPhysMeshBaked(VoxelTerrainChunk cnk){
          terraincnkIdxPhysMeshBaked.Add(cnk.id.Value.cnkIdx);
+        }
+     readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3)>();
+        internal void OnSpecificSpawnRequestAt((Type simType,ulong number)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale){
+         Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
+         specificSpawnRequests[id]=(position,eulerAngles,localScale);
         }
      Coroutine spawnCoroutine;
      [SerializeField]int       DEBUG_CREATE_SIM_OBJECT_AMOUNT=1;
@@ -214,7 +220,7 @@ namespace AKCondinoO.Sims{
                                 OnPersistentDataPullingFromFile();
                             }
                         }else{
-                            if(loaderOnCooldownTimer<=0f&&terraincnkIdxPhysMeshBaked.Count>0){
+                            if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
                                 Log.DebugMessage("terraincnkIdxPhysMeshBaked.Count>0");
                                 if(OnPersistentDataPullFromFile()){
                                     loaderOnCooldownTimer=loaderCooldown;

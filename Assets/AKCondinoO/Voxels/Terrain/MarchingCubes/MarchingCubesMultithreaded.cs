@@ -285,8 +285,62 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
              vCoord1.y=0;vCoord1.y<Height;vCoord1.y++){
          for(vCoord1.z=0;vCoord1.z<Depth ;vCoord1.z++){
              vCoord1.x=0;
+          //  east
+          crdOffset.x=1;
+          posOffset.x=Width;
+          AddEdgesvertexUV();   
+             vCoord1.x=Width-1;
+          //  west
+          crdOffset.x=-1;
+          posOffset.x=-Width;
+          AddEdgesvertexUV();
+         }}
+         for(crdOffset.x=0,posOffset.x=0,
+             vCoord1.y=0;vCoord1.y<Height;vCoord1.y++){
+         for(vCoord1.x=0;vCoord1.x<Width ;vCoord1.x++){
+             vCoord1.z=0;
+          //  north
+          crdOffset.y=1;
+          posOffset.y=Depth;
+          AddEdgesvertexUV();
+             vCoord1.z=Depth-1;
+          //  south
+          crdOffset.y=-1;
+          posOffset.y=-Depth;
+          AddEdgesvertexUV();
          }}
          void AddEdgesvertexUV(){
+          int corner=0;Vector3Int vCoord2=vCoord1;                                       EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;vCoord2.x+=1;                          EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;             EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;             vCoord2.y+=1;             EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;                          vCoord2.z+=1;EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;vCoord2.x+=1;             vCoord2.z+=1;EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;vCoord2.z+=1;EdgeSetpolygonCellVoxel();
+              corner++;           vCoord2=vCoord1;             vCoord2.y+=1;vCoord2.z+=1;EdgeSetpolygonCellVoxel();
+                void EdgeSetpolygonCellVoxel(){
+                 Vector2Int cnkRgn2=container.cnkRgn+posOffset;
+                 Vector2Int cCoord2=container.cCoord+crdOffset;
+                 int oftIdx2=-1;
+                 int vxlIdx2=-1;
+                 /*  fora do mundo, baixo:  */
+                 if(vCoord2.y<=0){
+                  polygonCell[corner]=Voxel.bedrock;
+                 /*  fora do mundo, cima:  */
+                 }else if(vCoord2.y>=Height){
+                  polygonCell[corner]=Voxel.air;
+                 //  pegar valor do bioma:
+                 }else{
+                  if(vCoord2.x<0||vCoord2.x>=Width||
+                     vCoord2.z<0||vCoord2.z>=Depth
+                  ){
+                   ValidateCoord(ref cnkRgn2,ref vCoord2);
+                   cCoord2=cnkRgnTocCoord(cnkRgn2);
+                  }
+                  oftIdx2=GetoftIdx(cCoord2-container.cCoord);
+                  vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+                 }
+                }
          }
          for(int i=0;i<container.TempVer.Length/3;i++){
           idx[0]=i*3  ;
