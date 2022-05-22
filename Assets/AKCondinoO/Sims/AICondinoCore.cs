@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.ArthurCondino;
 using System;
@@ -22,6 +22,7 @@ namespace AKCondinoO.Sims{
         void Update(){
          if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
           Log.DebugMessage("AICondinoCore:call to current location idArthurCondino");
+          SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
          }
         }
     }

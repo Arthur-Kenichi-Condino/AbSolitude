@@ -221,7 +221,7 @@ namespace AKCondinoO.Sims{
                             }
                         }else{
                             if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
-                                Log.DebugMessage("terraincnkIdxPhysMeshBaked.Count>0");
+                                Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
                                 if(OnPersistentDataPullFromFile()){
                                     loaderOnCooldownTimer=loaderCooldown;
                                     OnPersistentDataPullingFromFile();
