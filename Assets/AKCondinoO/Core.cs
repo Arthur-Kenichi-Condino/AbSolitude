@@ -26,6 +26,7 @@ namespace AKCondinoO{
          Gameplayer.main=Instantiate(GameplayerPrefab);
         }
         private void Start(){
+         MainCamera      .singleton.Init();
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
@@ -58,6 +59,7 @@ namespace AKCondinoO{
               SimObjectSpawner.singleton=null;
               SimObjectManager.singleton=null;
               VoxelSystem     .singleton=null;
+              MainCamera      .singleton=null;
          }
         }
      internal event EventHandler OnDestroyingCoreEvent;
