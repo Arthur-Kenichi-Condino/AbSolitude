@@ -17,6 +17,8 @@ namespace AKCondinoO{
      [SerializeField]Gameplayer GameplayerPrefab;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+                    Util.SetUtil();
+         CultureInfoUtil.SetUtil();
          QualitySettings.vSyncCount=1;
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
@@ -27,6 +29,7 @@ namespace AKCondinoO{
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
+         AICondinoCore   .singleton.Init();
          GameMode        .singleton.Init();
          Placeholder     .singleton.Init();
          FixedUI         .singleton.Init();
@@ -51,8 +54,9 @@ namespace AKCondinoO{
               FixedUI         .singleton=null;
               Placeholder     .singleton=null;
               GameMode        .singleton=null;
-              SimObjectManager.singleton=null;
+              AICondinoCore   .singleton=null;
               SimObjectSpawner.singleton=null;
+              SimObjectManager.singleton=null;
               VoxelSystem     .singleton=null;
          }
         }

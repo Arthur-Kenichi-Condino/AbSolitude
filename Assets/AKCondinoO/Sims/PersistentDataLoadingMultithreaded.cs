@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
@@ -29,7 +30,7 @@ namespace AKCondinoO.Sims{
            int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
            int cnkIdxStringEnd  =line.IndexOf(" ,",cnkIdxStringStart);
            string cnkIdxString=line.Substring(cnkIdxStringStart,cnkIdxStringEnd-cnkIdxStringStart);
-           int cnkIdx=int.Parse(cnkIdxString);
+           int cnkIdx=int.Parse(cnkIdxString,NumberStyles.Any,CultureInfoUtil.en_US);
            Log.DebugMessage("reading line for cnkIdx:"+cnkIdx);
            if(container.terraincnkIdxToLoad.Contains(cnkIdx)){
             Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
@@ -41,10 +42,12 @@ namespace AKCondinoO.Sims{
              int idNumberStringStart=simObjectString.IndexOf("id=")+3;
              int idNumberStringEnd  =simObjectString.IndexOf(", ",idNumberStringStart);
              string idNumberString=simObjectString.Substring(idNumberStringStart,idNumberStringEnd-idNumberStringStart);
-             ulong idNumber=ulong.Parse(idNumberString);
+             ulong idNumber=ulong.Parse(idNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
              (Type simType,ulong number)id=(t,idNumber);
              int persistentDataStringStart=simObjectString.IndexOf("persistentData=",idNumberStringEnd+2);
              int persistentDataStringEnd  =simObjectString.IndexOf(" }",persistentDataStringStart)+2;
+             string persistentDataString=simObjectString.Substring(persistentDataStringStart,persistentDataStringEnd-persistentDataStringStart);
+             SimObject.PersistentData persistentData=SimObject.PersistentData.Parse(persistentDataString);
              simObjectStringStart=simObjectStringEnd;
             }
            }
