@@ -19,6 +19,7 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("AICondinoCore:OnDestroyingCoreEvent");
         }
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);
+     float specificSpawnRequestsCooldown;
         void Update(){
          if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
           Log.DebugMessage("AICondinoCore:call to current location idArthurCondino");
