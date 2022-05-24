@@ -19,11 +19,18 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("AICondinoCore:OnDestroyingCoreEvent");
         }
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);
+     float specificSpawnRequestsDelay=5f;
      float specificSpawnRequestsCooldown;
         void Update(){
-         if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
-          Log.DebugMessage("AICondinoCore:call to current location idArthurCondino");
-          SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+         if(specificSpawnRequestsCooldown>0f){
+            specificSpawnRequestsCooldown-=Time.deltaTime;
+         }
+         if(specificSpawnRequestsCooldown<=0f){
+            specificSpawnRequestsCooldown=specificSpawnRequestsDelay;
+          if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
+           Log.DebugMessage("AICondinoCore:call to current location idArthurCondino");
+           SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+          }
          }
         }
     }
