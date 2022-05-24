@@ -312,6 +312,7 @@ namespace AKCondinoO.Sims{
             return false;
            }
           );
+          specificSpawnRequests.Clear();
           PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataLoadingBG);
           return true;
          }
