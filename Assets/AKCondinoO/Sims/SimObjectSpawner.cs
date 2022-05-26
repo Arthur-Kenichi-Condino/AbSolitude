@@ -170,6 +170,11 @@ namespace AKCondinoO.Sims{
                 }
                }else{
                 number=at.id.Value;
+                var ids=SimObjectManager.singleton.ids;
+                if(!ids.ContainsKey(simType)||number>=ids[simType]){
+                 ids[simType]=number+1;
+                }
+                releasedIds.Remove(number);
                }
                id=(simType,number);
                if(SimObjectManager.singleton.spawned.ContainsKey(id)){
@@ -312,6 +317,11 @@ namespace AKCondinoO.Sims{
             return false;
            }
           );
+          foreach(var specificSpawnRequest in specificSpawnRequests){
+           (Type simType,ulong number)id=specificSpawnRequest.Key;
+           var spawnRequestData=specificSpawnRequest.Value;
+           SimObjectManager.singleton.persistentDataLoadingBG.specificIdsToLoad.Add(id,spawnRequestData);
+          }
           specificSpawnRequests.Clear();
           PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataLoadingBG);
           return true;

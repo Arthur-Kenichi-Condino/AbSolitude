@@ -10,6 +10,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class PersistentDataLoadingBackgroundContainer:BackgroundContainer{
      internal readonly HashSet<int>terraincnkIdxToLoad=new HashSet<int>();
+     internal readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale)>specificIdsToLoad=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3)>();
      internal readonly SpawnData spawnDataFromFiles=new SpawnData();
     }
     internal class PersistentDataLoadingMultithreaded:BaseMultithreaded<PersistentDataLoadingBackgroundContainer>{
@@ -32,7 +33,7 @@ namespace AKCondinoO.Sims{
            string cnkIdxString=line.Substring(cnkIdxStringStart,cnkIdxStringEnd-cnkIdxStringStart);
            int cnkIdx=int.Parse(cnkIdxString,NumberStyles.Any,CultureInfoUtil.en_US);
            Log.DebugMessage("reading line for cnkIdx:"+cnkIdx);
-           if(container.terraincnkIdxToLoad.Contains(cnkIdx)){
+           if(container.specificIdsToLoad.Count>0||container.terraincnkIdxToLoad.Contains(cnkIdx)){
             Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
             int simObjectStringStart=cnkIdxStringEnd+2;
             while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
@@ -48,11 +49,20 @@ namespace AKCondinoO.Sims{
              int persistentDataStringEnd  =simObjectString.IndexOf(" }",persistentDataStringStart)+2;
              string persistentDataString=simObjectString.Substring(persistentDataStringStart,persistentDataStringEnd-persistentDataStringStart);
              SimObject.PersistentData persistentData=SimObject.PersistentData.Parse(persistentDataString);
+             if(container.specificIdsToLoad.TryGetValue(id,out var specificIdData)){
+
+              container.specificIdsToLoad.Remove(id);
+             }
              simObjectStringStart=simObjectStringEnd;
             }
            }
           }
          }
+         foreach(var specificIdToLoad in container.specificIdsToLoad){
+          (Type simType,ulong number)id=specificIdToLoad.Key;
+          var specificIdData=specificIdToLoad.Value;
+         }
+         container.specificIdsToLoad.Clear();
         }
     }
 }
