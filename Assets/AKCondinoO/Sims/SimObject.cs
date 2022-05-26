@@ -36,6 +36,15 @@ namespace AKCondinoO.Sims{
              }
              int rotationStringStart=s.IndexOf("rotation=(");
              if(rotationStringStart>=0){
+                rotationStringStart+=10;
+              int rotationStringEnd=s.IndexOf("), ",rotationStringStart);
+              string rotationString=s.Substring(rotationStringStart,rotationStringEnd-rotationStringStart);
+              string[]xyzwString=rotationString.Split(',');
+              float x=float.Parse(xyzwString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              float y=float.Parse(xyzwString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              float z=float.Parse(xyzwString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              float w=float.Parse(xyzwString[3].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              persistentData.rotation=new Quaternion(x,y,z,w);
              }
              return persistentData;
             }
