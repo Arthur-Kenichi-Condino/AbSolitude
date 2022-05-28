@@ -334,6 +334,7 @@ namespace AKCondinoO.Sims{
         }
         bool OnPersistentDataLoaded(){
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)){
+          spawnQueue.Enqueue(SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles);
           return true;
          }
          return false;

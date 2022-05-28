@@ -46,6 +46,22 @@ namespace AKCondinoO.Sims{
               float w=float.Parse(xyzwString[3].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
               persistentData.rotation=new Quaternion(x,y,z,w);
              }
+             int localScaleStringStart=s.IndexOf("localScale=(");
+             if(localScaleStringStart>=0){
+                localScaleStringStart+=12;
+              int localScaleStringEnd=s.IndexOf("), ",localScaleStringStart);
+              string localScaleString=s.Substring(localScaleStringStart,localScaleStringEnd-localScaleStringStart);
+              string[]xyzString=localScaleString.Split(',');
+              float x=float.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              float y=float.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              float z=float.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              persistentData.localScale=new Vector3(x,y,z);
+             }
+             if(persistentData.localScale.x<=0f||
+                persistentData.localScale.y<=0f||
+                persistentData.localScale.z<=0f){
+              persistentData.localScale=Vector3.one;
+             }
              return persistentData;
             }
         }
