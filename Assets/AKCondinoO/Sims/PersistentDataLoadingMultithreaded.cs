@@ -50,9 +50,12 @@ namespace AKCondinoO.Sims{
              string persistentDataString=simObjectString.Substring(persistentDataStringStart,persistentDataStringEnd-persistentDataStringStart);
              SimObject.PersistentData persistentData=SimObject.PersistentData.Parse(persistentDataString);
              if(container.specificIdsToLoad.TryGetValue(id,out var specificIdData)){
-
+              persistentData.position=specificIdData.position;
+              persistentData.rotation=Quaternion.Euler(specificIdData.eulerAngles);
+              persistentData.localScale=specificIdData.localScale;
               container.specificIdsToLoad.Remove(id);
              }
+             container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,id.simType,id.number));
              simObjectStringStart=simObjectStringEnd;
             }
            }
@@ -61,6 +64,7 @@ namespace AKCondinoO.Sims{
          foreach(var specificIdToLoad in container.specificIdsToLoad){
           (Type simType,ulong number)id=specificIdToLoad.Key;
           var specificIdData=specificIdToLoad.Value;
+          container.spawnDataFromFiles.at.Add((specificIdData.position,specificIdData.eulerAngles,specificIdData.localScale,id.simType,id.number));
          }
          container.specificIdsToLoad.Clear();
         }
