@@ -112,9 +112,12 @@ namespace AKCondinoO.Sims{
           }
          }
         }
-        #if UNITY_EDITOR
-        protected virtual void OnDrawGizmos(){
+        protected virtual bool IsOutOfSight(){
+         return false;
         }
+        protected virtual void OnDrawGizmos(){
+        #if UNITY_EDITOR
         #endif
+        }
     }
 }
