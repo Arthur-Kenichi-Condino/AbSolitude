@@ -14,7 +14,12 @@ namespace AKCondinoO{
               Gizmos.DrawWireSphere(p1,radius);
               return;
              }
-             Gizmos.DrawLine(p1+Vector3.left*radius,p2+Vector3.left*radius);
+             Gizmos.DrawWireSphere(p1,radius);
+             Gizmos.DrawLine(p1+Vector3.left   *radius,p2+Vector3.left   *radius);
+             Gizmos.DrawLine(p1+Vector3.right  *radius,p2+Vector3.right  *radius);
+             Gizmos.DrawLine(p1+Vector3.back   *radius,p2+Vector3.back   *radius);
+             Gizmos.DrawLine(p1+Vector3.forward*radius,p2+Vector3.forward*radius);
+             Gizmos.DrawWireSphere(p2,radius);
          #endif
         }
     }
