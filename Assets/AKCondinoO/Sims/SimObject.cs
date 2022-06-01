@@ -94,10 +94,13 @@ namespace AKCondinoO.Sims{
          poolRequested=true;
         }
      [NonSerialized]bool unplaceRequested;
+     [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
-        internal virtual void ManualUpdate(){
+        internal virtual void ManualUpdate(bool doValidationChecks){
+         checkIfOutOfSight|=doValidationChecks;
          if(transform.hasChanged){
           persistentData.UpdateData(this);
+          checkIfOutOfSight|=transform.hasChanged;
             transform.hasChanged=false;
          }
          if(unplaceRequested){
@@ -105,11 +108,14 @@ namespace AKCondinoO.Sims{
              DisableInteractions();
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
          }else{
-          if(poolRequested){
-             poolRequested=false;
-              DisableInteractions();
-              SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-          }
+             if(checkIfOutOfSight){
+             }else{
+                 if(poolRequested){
+                    poolRequested=false;
+                     DisableInteractions();
+                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                 }
+             }
          }
         }
         protected virtual bool IsOutOfSight(){

@@ -74,6 +74,10 @@ namespace AKCondinoO.Sims{
         }
         void OnDestroy(){
         }
+        bool terrainMovedFlag;
+        internal void OnVoxelTerrainChunkPositionChange(Vector3 oldPos,Vector2Int newRgn){
+         terrainMovedFlag=true;
+        }
      [SerializeField]bool DEBUG_POOL_ALL_SIM_OBJECTS=false;
      [SerializeField]bool DEBUG_UNPLACE_ALL_SIM_OBJECTS=false;
      internal readonly Queue<SimObject>            DeactivateQueue=new Queue<SimObject>();
@@ -96,7 +100,7 @@ namespace AKCondinoO.Sims{
          }
          foreach(var a in active){
           var simObject=a.Value;
-          simObject.ManualUpdate();
+          simObject.ManualUpdate(terrainMovedFlag);
          }
          while(DeactivateQueue.Count>0){var toDeactivate=DeactivateQueue.Dequeue();
           OnDeactivate(toDeactivate);
@@ -104,6 +108,7 @@ namespace AKCondinoO.Sims{
          while(DeactivateAndReleaseIdQueue.Count>0){var toDeactivateAndReleaseId=DeactivateAndReleaseIdQueue.Dequeue();
           OnDeactivateAndReleaseId(toDeactivateAndReleaseId);
          }
+         terrainMovedFlag=false;
         }
         void OnDeactivate(SimObject simObject){
          active .Remove(simObject.id.Value);
