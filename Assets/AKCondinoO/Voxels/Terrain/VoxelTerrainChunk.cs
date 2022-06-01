@@ -84,6 +84,7 @@ namespace AKCondinoO.Voxels.Terrain{
           return false;
          }
          if(marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning)){
+          SimObjectManager.singleton.OnVoxelTerrainChunkPositionChange(transform.position,id.Value.cnkRgn);
           worldBounds.center=transform.position=new Vector3(id.Value.cnkRgn.x,0,id.Value.cnkRgn.y);
           marchingCubesBG.cCoord=id.Value.cCoord;
           marchingCubesBG.cnkRgn=id.Value.cnkRgn;
