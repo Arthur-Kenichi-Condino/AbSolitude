@@ -69,9 +69,16 @@ namespace AKCondinoO.Sims{
      internal(Type simType,ulong number)?id=null;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
+     internal Bounds localBounds;
+     protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
+           if(localBounds.extents==Vector3.zero){
+              localBounds=collider.bounds;
+           }else{
+              localBounds.Encapsulate(collider.bounds);
+           }
            volumeColliders.Add(collider);
           }
          }
@@ -109,6 +116,11 @@ namespace AKCondinoO.Sims{
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
          }else{
              if(checkIfOutOfSight){
+                checkIfOutOfSight=false;
+                 if(IsOutOfSight()){
+                     DisableInteractions();
+                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                 }
              }else{
                  if(poolRequested){
                     poolRequested=false;
@@ -119,6 +131,7 @@ namespace AKCondinoO.Sims{
          }
         }
         protected virtual bool IsOutOfSight(){
+         Log.DebugMessage("test if IsOutOfSight:id:"+id);
          return false;
         }
         protected virtual void OnDrawGizmos(){
