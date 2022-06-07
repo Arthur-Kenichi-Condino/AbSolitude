@@ -88,6 +88,8 @@ namespace AKCondinoO.Sims{
         internal virtual void OnActivated(){
          Log.DebugMessage("OnActivated:id:"+id);
          TransformBoundsVertices();
+         persistentData.UpdateData(this);
+         transform.hasChanged=false;
          EnableInteractions();
         }
      internal bool interactionsEnabled{get;private set;}
@@ -108,10 +110,10 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool poolRequested;
         internal virtual void ManualUpdate(bool doValidationChecks){
          checkIfOutOfSight|=doValidationChecks;
+         checkIfOutOfSight|=transform.hasChanged;
          if(transform.hasChanged){
           TransformBoundsVertices();
           persistentData.UpdateData(this);
-          checkIfOutOfSight|=transform.hasChanged;
             transform.hasChanged=false;
          }
          if(unplaceRequested){
@@ -149,9 +151,9 @@ namespace AKCondinoO.Sims{
          return false;
         }
         protected virtual void OnDrawGizmos(){
-        #if UNITY_EDITOR
-         Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
-        #endif
+         #if UNITY_EDITOR
+             Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
+         #endif
         }
     }
 }
