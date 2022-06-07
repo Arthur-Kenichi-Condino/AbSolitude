@@ -5,6 +5,7 @@ namespace AKCondinoO.Sims{
     internal class SimConstruction:SimObject{
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
+             base.OnDrawGizmos();
              DrawColliders();
             }
             void DrawColliders(){

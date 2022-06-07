@@ -82,9 +82,12 @@ namespace AKCondinoO.Sims{
            volumeColliders.Add(collider);
           }
          }
+         localBounds.center=transform.InverseTransformPoint(localBounds.center);
+         TransformBoundsVertices();
         }
         internal virtual void OnActivated(){
          Log.DebugMessage("OnActivated:id:"+id);
+         TransformBoundsVertices();
          EnableInteractions();
         }
      internal bool interactionsEnabled{get;private set;}
@@ -106,6 +109,7 @@ namespace AKCondinoO.Sims{
         internal virtual void ManualUpdate(bool doValidationChecks){
          checkIfOutOfSight|=doValidationChecks;
          if(transform.hasChanged){
+          TransformBoundsVertices();
           persistentData.UpdateData(this);
           checkIfOutOfSight|=transform.hasChanged;
             transform.hasChanged=false;
@@ -130,12 +134,23 @@ namespace AKCondinoO.Sims{
              }
          }
         }
+        void TransformBoundsVertices(){
+         worldBoundsVertices[0]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.min.z);
+         worldBoundsVertices[1]=transform.TransformPoint(localBounds.max.x,localBounds.min.y,localBounds.min.z);
+         worldBoundsVertices[2]=transform.TransformPoint(localBounds.max.x,localBounds.min.y,localBounds.max.z);
+         worldBoundsVertices[3]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.max.z);
+         worldBoundsVertices[4]=transform.TransformPoint(localBounds.min.x,localBounds.max.y,localBounds.min.z);
+         worldBoundsVertices[5]=transform.TransformPoint(localBounds.max.x,localBounds.max.y,localBounds.min.z);
+         worldBoundsVertices[6]=transform.TransformPoint(localBounds.max.x,localBounds.max.y,localBounds.max.z);
+         worldBoundsVertices[7]=transform.TransformPoint(localBounds.min.x,localBounds.max.y,localBounds.max.z);
+        }
         protected virtual bool IsOutOfSight(){
          Log.DebugMessage("test if IsOutOfSight:id:"+id);
          return false;
         }
         protected virtual void OnDrawGizmos(){
         #if UNITY_EDITOR
+         Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
         #endif
         }
     }
