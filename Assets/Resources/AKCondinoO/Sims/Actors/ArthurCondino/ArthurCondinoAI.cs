@@ -5,6 +5,7 @@ namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:SimActor{
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
+             base.OnDrawGizmos();
              DrawColliders();
             }
             void DrawColliders(){
