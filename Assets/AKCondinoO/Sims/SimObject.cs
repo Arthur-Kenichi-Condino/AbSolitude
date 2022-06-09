@@ -1,11 +1,15 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Terrain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
+using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal class SimObject:MonoBehaviour{
      internal PersistentData persistentData;
@@ -89,7 +93,7 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("OnActivated:id:"+id);
          TransformBoundsVertices();
          persistentData.UpdateData(this);
-         transform.hasChanged=false;
+            transform.hasChanged=false;
          EnableInteractions();
         }
      internal bool interactionsEnabled{get;private set;}
@@ -124,6 +128,7 @@ namespace AKCondinoO.Sims{
              if(checkIfOutOfSight){
                 checkIfOutOfSight=false;
                  if(IsOutOfSight()){
+                     Log.DebugMessage("simObject IsOutOfSight:id:"+id);
                      DisableInteractions();
                      SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
                  }
@@ -148,7 +153,13 @@ namespace AKCondinoO.Sims{
         }
         protected virtual bool IsOutOfSight(){
          Log.DebugMessage("test if IsOutOfSight:id:"+id);
-         return false;
+         return worldBoundsVertices.Any(
+          v=>{
+           Vector2Int cCoord=vecPosTocCoord(v);
+           int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
+           return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
+          }
+         );
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR

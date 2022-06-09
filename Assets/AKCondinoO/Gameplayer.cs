@@ -8,9 +8,17 @@ namespace AKCondinoO{
      internal static Gameplayer main;
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
+     internal Bounds activeWorldBounds;
         void Awake(){
         }
         internal void Init(){
+         activeWorldBounds=new Bounds(Vector3.zero,
+          new Vector3(
+           (instantiationDistance.x*2+1)*Width,
+           Height,
+           (instantiationDistance.y*2+1)*Depth
+          )
+         );
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
         }
@@ -32,6 +40,7 @@ namespace AKCondinoO{
         }
         void OnCoordinatesChanged(){
          cnkRgn=cCoordTocnkRgn(cCoord);
+         activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
          VoxelSystem.singleton.generationRequests.Add(this);
         }
     }
