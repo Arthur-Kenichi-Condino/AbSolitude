@@ -6,6 +6,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO{
     internal class Gameplayer:MonoBehaviour{
      internal static Gameplayer main;
+     internal static readonly List<Gameplayer>all=new List<Gameplayer>();
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
@@ -22,6 +23,13 @@ namespace AKCondinoO{
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
         }
+        internal void OnVoxelTerrainChunkBaked(){
+         navMeshDirty=true;
+        }
+        internal void OnSimObjectSpawned(){
+         navMeshDirty=true;
+        }
+     bool navMeshDirty;
      bool pendingCoordinatesUpdate=true;
         void Update(){
          transform.position=Camera.main.transform.position;
