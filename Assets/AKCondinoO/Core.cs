@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using AKCondinoO.Sims;
 using AKCondinoO.UI;
 using AKCondinoO.UI.Fixed;
@@ -23,7 +26,7 @@ namespace AKCondinoO{
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
-         Gameplayer.main=Instantiate(GameplayerPrefab);
+         Gameplayer.all.Add(Gameplayer.main=Instantiate(GameplayerPrefab));
         }
         private void Start(){
          MainCamera      .singleton.Init();
@@ -38,6 +41,10 @@ namespace AKCondinoO{
         }
         void OnDestroy(){
          if(singleton==this){
+              foreach(Gameplayer gameplayer in Gameplayer.all){
+               Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer==Gameplayer.main)+")");
+              }
+              Gameplayer.all.Clear();
               try{
                EventHandler handler=OnDestroyingCoreEvent;
                handler?.Invoke(this,
