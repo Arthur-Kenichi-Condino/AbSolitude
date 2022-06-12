@@ -95,6 +95,9 @@ namespace AKCondinoO.Sims{
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
+         for(int i=0;i<Gameplayer.all.Count;++i){
+          Gameplayer.all[i].OnSimObjectSpawned(this);
+         }
         }
      internal bool interactionsEnabled{get;private set;}
         void EnableInteractions(){

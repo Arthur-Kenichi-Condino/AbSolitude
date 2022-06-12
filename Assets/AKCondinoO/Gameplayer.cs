@@ -1,4 +1,9 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
+using AKCondinoO.Sims;
 using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Terrain;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,14 +28,17 @@ namespace AKCondinoO{
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
         }
-        internal void OnVoxelTerrainChunkBaked(){
+        internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
+         Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
          navMeshDirty=true;
         }
-        internal void OnSimObjectSpawned(){
+        internal void OnSimObjectSpawned(SimObject simObject){
+         Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
          navMeshDirty=true;
         }
-     bool navMeshDirty;
      bool pendingCoordinatesUpdate=true;
+     bool waitingNavMeshDataAsyncOperation;
+     bool navMeshDirty;
         void Update(){
          transform.position=Camera.main.transform.position;
          if(transform.hasChanged){
@@ -44,6 +52,12 @@ namespace AKCondinoO{
           if(cCoord!=cCoord_Previous){
            OnCoordinatesChanged();
           }
+         }
+         if(waitingNavMeshDataAsyncOperation){
+         }else{
+             if(navMeshDirty){
+             }else{
+             }
          }
         }
         void OnCoordinatesChanged(){
