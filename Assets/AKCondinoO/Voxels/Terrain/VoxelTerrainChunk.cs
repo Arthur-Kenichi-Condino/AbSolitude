@@ -149,6 +149,9 @@ namespace AKCondinoO.Voxels.Terrain{
           meshCollider.sharedMesh=mesh;
           hasPhysMeshBaked=true;
           SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
+          for(int i=0;i<Gameplayer.all.Count;++i){
+           Gameplayer.all[i].OnVoxelTerrainChunkBaked(this);
+          }
           return true;
          }
          return false;
