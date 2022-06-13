@@ -26,6 +26,7 @@ namespace AKCondinoO{
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
+         NavMeshHelper.SetNavMeshBuildSettings();
          Gameplayer.all.Add(Gameplayer.main=Instantiate(GameplayerPrefab));
         }
         private void Start(){
