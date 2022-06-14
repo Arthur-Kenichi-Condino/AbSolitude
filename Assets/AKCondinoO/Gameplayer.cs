@@ -7,6 +7,7 @@ using AKCondinoO.Voxels.Terrain;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO{
     internal class Gameplayer:MonoBehaviour{
@@ -15,6 +16,8 @@ namespace AKCondinoO{
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
+     internal NavMeshData[]navMeshData;
+      internal NavMeshDataInstance[]navMeshInstance;
         void Awake(){
         }
         internal void Init(){
@@ -25,6 +28,16 @@ namespace AKCondinoO{
            (instantiationDistance.y*2+1)*Depth
           )
          );
+         for(int agentType=0;agentType<NavMeshHelper.navMeshBuildSettings.Length;++agentType){
+          string[]navMeshValidation=NavMeshHelper.navMeshBuildSettings[agentType].ValidationReport(activeWorldBounds);
+          if(navMeshValidation.Length>0){
+           foreach(string s in navMeshValidation){
+            Log.Error(s);
+           }
+          }else{
+           Log.DebugMessage("navMeshValidation:success!");
+          }
+         }
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
         }
