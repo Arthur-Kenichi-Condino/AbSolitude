@@ -21,11 +21,55 @@ namespace AKCondinoO.Sims{
            minRegionArea=0.28125f,
            overrideTileSize=true,
                    tileSize=16,
+           debug=new NavMeshBuildDebugSettings{
+            flags=NavMeshBuildDebugFlags.None,
+           },
+           maxJobWorkers=1,
+          },
+          new NavMeshBuildSettings{
+           agentTypeID=GetAgentTypeIDByName("SmallSize").Value,
+           agentRadius=0.25f,
+           agentHeight=0.755f,
+           agentClimb=0.75f,
+           agentSlope=60f,
+           overrideVoxelSize=true,
+                   voxelSize=0.25f/3f,
+           minRegionArea=0.25f,
+           overrideTileSize=true,
+                   tileSize=16,
+           debug=new NavMeshBuildDebugSettings{
+            flags=NavMeshBuildDebugFlags.None,
+           },
+           maxJobWorkers=1,
+          },
+          new NavMeshBuildSettings{
+           agentTypeID=GetAgentTypeIDByName("LargeSize").Value,
+           agentRadius=0.5625f,
+           agentHeight=2.5f,
+           agentClimb=1.75f,
+           agentSlope=60f,
+           overrideVoxelSize=true,
+                   voxelSize=0.5625f/3f,
+           minRegionArea=0.5625f,
+           overrideTileSize=true,
+                   tileSize=16,
+           debug=new NavMeshBuildDebugSettings{
+            flags=NavMeshBuildDebugFlags.None,
+           },
+           maxJobWorkers=1,
           },
          };
         }
         //  [https://answers.unity.com/questions/1650130/change-agenttype-at-runtime.html]
         internal static int?GetAgentTypeIDByName(string agentTypeName){
+         int count=NavMesh.GetSettingsCount();
+         for(int i=0;i<count;++i){
+          int id=NavMesh.GetSettingsByIndex(i).agentTypeID;
+          string name=NavMesh.GetSettingsNameFromID(id);
+          if(name==agentTypeName){
+           return id;
+          }
+         }
          return null;
         }
     }
