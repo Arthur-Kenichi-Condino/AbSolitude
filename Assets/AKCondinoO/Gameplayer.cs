@@ -18,6 +18,7 @@ namespace AKCondinoO{
      internal Bounds activeWorldBounds;
      internal NavMeshData[]navMeshData;
       internal NavMeshDataInstance[]navMeshInstance;
+       internal AsyncOperation[]navMeshAsyncOperation;
         void Awake(){
         }
         internal void Init(){
@@ -28,7 +29,11 @@ namespace AKCondinoO{
            (instantiationDistance.y*2+1)*Depth
           )
          );
-         for(int agentType=0;agentType<NavMeshHelper.navMeshBuildSettings.Length;++agentType){
+         int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
+         navMeshData=new NavMeshData[navMeshSettingsLength];
+         navMeshInstance=new NavMeshDataInstance[navMeshSettingsLength];
+         navMeshAsyncOperation=new AsyncOperation[navMeshSettingsLength];
+         for(int agentType=0;agentType<navMeshSettingsLength;++agentType){
           string[]navMeshValidation=NavMeshHelper.navMeshBuildSettings[agentType].ValidationReport(activeWorldBounds);
           if(navMeshValidation.Length>0){
            foreach(string s in navMeshValidation){
@@ -37,6 +42,10 @@ namespace AKCondinoO{
           }else{
            Log.DebugMessage("navMeshValidation:success!");
           }
+          navMeshData[agentType]=new NavMeshData(NavMeshHelper.navMeshBuildSettings[agentType].agentTypeID){
+           hideFlags=HideFlags.None,
+          };
+          navMeshInstance[agentType]=NavMesh.AddNavMeshData(navMeshData[agentType]);
          }
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
