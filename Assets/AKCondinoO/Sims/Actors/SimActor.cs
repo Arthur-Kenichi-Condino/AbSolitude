@@ -3,5 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
+     internal PersistentSimActorData persistentSimActorData;
+        internal struct PersistentSimActorData{
+        }
     }
 }
