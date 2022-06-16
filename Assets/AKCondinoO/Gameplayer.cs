@@ -50,6 +50,8 @@ namespace AKCondinoO{
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
         }
+        internal void OnRemove(){
+        }
         internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
          Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
          navMeshDirty=true;
