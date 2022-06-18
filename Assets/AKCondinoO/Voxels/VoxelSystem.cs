@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
     internal class VoxelSystem:MonoBehaviour{
      internal const int MaxcCoordx=312;
@@ -119,6 +120,7 @@ namespace AKCondinoO.Voxels{
         }
         void OnDestroy(){
         }
+     internal readonly SortedDictionary<int,NavMeshBuildSource>navMeshSources=new SortedDictionary<int,NavMeshBuildSource>();
         void Update(){
          foreach(var kvp in terrainActive){
           VoxelTerrainChunk cnk=kvp.Value;
