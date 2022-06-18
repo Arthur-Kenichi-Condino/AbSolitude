@@ -89,5 +89,8 @@ namespace AKCondinoO{
          activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
          VoxelSystem.singleton.generationRequests.Add(this);
         }
+        bool OnNavMeshAsyncOperationStart(){
+         return false;
+        }
     }
 }
