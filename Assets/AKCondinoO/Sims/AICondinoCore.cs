@@ -20,7 +20,7 @@ namespace AKCondinoO.Sims{
         }
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);
      float specificSpawnRequestsDelay=5f;
-     float specificSpawnRequestsCooldown;
+     float specificSpawnRequestsCooldown=5f;
         void Update(){
          if(specificSpawnRequestsCooldown>0f){
             specificSpawnRequestsCooldown-=Time.deltaTime;
