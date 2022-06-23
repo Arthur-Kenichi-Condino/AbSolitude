@@ -8,6 +8,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class SimObjectManager:MonoBehaviour{
      internal static SimObjectManager singleton;
+     [SerializeField]internal bool disableSnappingToSlots=false;
      internal PersistentDataSavingBackgroundContainer persistentDataSavingBG;
      internal PersistentDataSavingMultithreaded       persistentDataSavingBGThread;
      internal PersistentDataLoadingBackgroundContainer persistentDataLoadingBG;
