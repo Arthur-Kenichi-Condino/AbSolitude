@@ -44,6 +44,7 @@ namespace AKCondinoO{
          if(singleton==this){
               foreach(Gameplayer gameplayer in Gameplayer.all){
                Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer==Gameplayer.main)+")");
+               gameplayer.OnRemove();
               }
               Gameplayer.all.Clear();
               try{

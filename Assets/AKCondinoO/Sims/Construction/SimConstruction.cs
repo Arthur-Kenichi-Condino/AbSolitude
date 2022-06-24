@@ -4,12 +4,16 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class SimConstruction:SimObject{
      float snapTimer=0f;
-        internal override void ManualUpdate(bool doValidationChecks){
+        internal override int ManualUpdate(bool doValidationChecks){
+         int result=0;
          if(transform.hasChanged){
           if(!SimObjectManager.singleton.disableSnappingToSlots){
           }
          }
-         base.ManualUpdate(doValidationChecks);
+         if((result=base.ManualUpdate(doValidationChecks))!=0){
+          return result;
+         }
+         return result;
         }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){

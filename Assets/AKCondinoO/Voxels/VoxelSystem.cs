@@ -120,10 +120,6 @@ namespace AKCondinoO.Voxels{
         }
         void OnDestroy(){
         }
-     internal readonly SortedDictionary<int,NavMeshBuildSource>navMeshSources=new SortedDictionary<int,NavMeshBuildSource>();
-     internal readonly SortedDictionary<int,NavMeshBuildMarkup>navMeshMarkups=new SortedDictionary<int,NavMeshBuildMarkup>();
-      readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
-      readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
         void Update(){
          foreach(var kvp in terrainActive){
           VoxelTerrainChunk cnk=kvp.Value;
@@ -220,6 +216,14 @@ namespace AKCondinoO.Voxels{
              }
             }
             goto Loop;
+        }
+     internal bool navMeshSourcesCollectionChanged;
+     internal readonly SortedDictionary<int,NavMeshBuildSource>navMeshSources=new SortedDictionary<int,NavMeshBuildSource>();
+     internal readonly SortedDictionary<int,NavMeshBuildMarkup>navMeshMarkups=new SortedDictionary<int,NavMeshBuildMarkup>();
+      readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
+      readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
+        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected){
+         sourcesCollected=sources;
         }
     }
 }
