@@ -115,7 +115,8 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
-        internal virtual void ManualUpdate(bool doValidationChecks){
+        internal virtual int ManualUpdate(bool doValidationChecks){
+         int result=0;
          checkIfOutOfSight|=doValidationChecks;
          checkIfOutOfSight|=transform.hasChanged;
          if(transform.hasChanged){
@@ -127,6 +128,7 @@ namespace AKCondinoO.Sims{
             unplaceRequested=false;
              DisableInteractions();
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+             result=2;
          }else{
              if(checkIfOutOfSight){
                 checkIfOutOfSight=false;
@@ -134,15 +136,18 @@ namespace AKCondinoO.Sims{
                      Log.DebugMessage("simObject IsOutOfSight:id:"+id);
                      DisableInteractions();
                      SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                     result=1;
                  }
              }else{
                  if(poolRequested){
                     poolRequested=false;
                      DisableInteractions();
                      SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                     result=1;
                  }
              }
          }
+         return result;
         }
         void TransformBoundsVertices(){
          worldBoundsVertices[0]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.min.z);

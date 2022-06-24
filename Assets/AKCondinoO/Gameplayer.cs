@@ -51,6 +51,10 @@ namespace AKCondinoO{
          OnCoordinatesChanged();
         }
         internal void OnRemove(){
+         int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
+         for(int agentType=0;agentType<navMeshSettingsLength;++agentType){
+          NavMesh.RemoveNavMeshData(navMeshInstance[agentType]);
+         }
         }
         internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
          Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
@@ -89,7 +93,16 @@ namespace AKCondinoO{
          activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
          VoxelSystem.singleton.generationRequests.Add(this);
         }
+     [SerializeField]float navMeshDataAsyncUpdateInterval=1.0f;
+     float navMeshDataAsyncUpdateTimer=0.0f;
+     readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
         bool OnNavMeshAsyncOperationStart(){
+         if(navMeshDataAsyncUpdateTimer<=0.0f){
+            navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;
+          Log.DebugMessage("OnNavMeshAsyncOperationStart:start async operation");
+          VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected);
+          sources.Clear();
+         }
          return false;
         }
     }

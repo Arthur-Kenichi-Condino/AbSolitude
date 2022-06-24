@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -23,6 +24,8 @@ namespace AKCondinoO.Voxels.Terrain{
       new Vector3(Width,Height,Depth)
      );
      MeshFilter filter;
+     NavMeshBuildSource navMeshSource;
+     NavMeshBuildMarkup navMeshMarkup;
         void Awake(){
          mesh=new Mesh(){
           bounds=worldBounds,
@@ -33,6 +36,9 @@ namespace AKCondinoO.Voxels.Terrain{
           meshId=mesh.GetInstanceID(),
          };
          meshCollider=GetComponent<MeshCollider>();
+         navMeshSource=new NavMeshBuildSource{
+          transform=transform.localToWorldMatrix,//  Deve ser atualizado sempre que o chunk se move
+         };
          Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
@@ -148,6 +154,7 @@ namespace AKCondinoO.Voxels.Terrain{
           meshCollider.sharedMesh=null;
           meshCollider.sharedMesh=mesh;
           hasPhysMeshBaked=true;
+          VoxelSystem.singleton.navMeshSourcesCollectionChanged=true;
           SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
           for(int i=0;i<Gameplayer.all.Count;++i){
            Gameplayer.all[i].OnVoxelTerrainChunkBaked(this);
