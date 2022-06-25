@@ -38,6 +38,16 @@ namespace AKCondinoO.Voxels.Terrain{
          meshCollider=GetComponent<MeshCollider>();
          navMeshSource=new NavMeshBuildSource{
           transform=transform.localToWorldMatrix,//  Deve ser atualizado sempre que o chunk se move
+          shape=NavMeshBuildSourceShape.Mesh,
+          sourceObject=mesh,
+          component=filter,
+          area=0,//  walkable
+         };
+         navMeshMarkup=new NavMeshBuildMarkup{
+          root=transform,
+          area=0,//  walkable
+          overrideArea=false,
+          ignoreFromBuild=false,
          };
          Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
@@ -154,6 +164,9 @@ namespace AKCondinoO.Voxels.Terrain{
           meshCollider.sharedMesh=null;
           meshCollider.sharedMesh=mesh;
           hasPhysMeshBaked=true;
+          navMeshSource.transform=transform.localToWorldMatrix;
+          VoxelSystem.singleton.navMeshSources[gameObject.GetInstanceID()]=navMeshSource;
+          VoxelSystem.singleton.navMeshMarkups[gameObject.GetInstanceID()]=navMeshMarkup;
           VoxelSystem.singleton.navMeshSourcesCollectionChanged=true;
           SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
           for(int i=0;i<Gameplayer.all.Count;++i){
