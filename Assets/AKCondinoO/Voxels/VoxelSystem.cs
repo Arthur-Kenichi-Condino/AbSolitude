@@ -224,6 +224,9 @@ namespace AKCondinoO.Voxels{
       readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
         internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected){
          sourcesCollected=sources;
+         if(navMeshSourcesCollectionChanged){
+            navMeshSourcesCollectionChanged=false;
+         }
         }
     }
 }
