@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels.Biomes;
+using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -226,6 +227,12 @@ namespace AKCondinoO.Voxels{
          sourcesCollected=sources;
          if(navMeshSourcesCollectionChanged){
             navMeshSourcesCollectionChanged=false;
+          Log.DebugMessage("CollectNavMeshSources");
+          sources.Clear();
+          markups.Clear();
+          sources.AddRange(navMeshSources.Values);
+          markups.AddRange(navMeshMarkups.Values);
+          NavMeshBuilder.CollectSources(null,NavMeshHelper.navMeshLayer,NavMeshCollectGeometry.PhysicsColliders,0,markups,sources);
          }
         }
     }
