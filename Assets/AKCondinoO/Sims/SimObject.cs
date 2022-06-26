@@ -89,6 +89,9 @@ namespace AKCondinoO.Sims{
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
         }
+        internal virtual void OnLoadingPool(){
+         DisableInteractions();
+        }
         internal virtual void OnActivated(){
          Log.DebugMessage("OnActivated:id:"+id);
          TransformBoundsVertices();
@@ -99,11 +102,17 @@ namespace AKCondinoO.Sims{
           Gameplayer.all[i].OnSimObjectSpawned(this);
          }
         }
-     internal bool interactionsEnabled{get;private set;}
-        void EnableInteractions(){
+     public bool interactionsEnabled{get;protected set;}
+        protected virtual void EnableInteractions(){
+         foreach(Collider collider in colliders){
+          collider.enabled=true;
+         }
          interactionsEnabled=true;
         }
-        void DisableInteractions(){
+        protected virtual void DisableInteractions(){
+         foreach(Collider collider in colliders){
+          collider.enabled=false;
+         }
          interactionsEnabled=false;
         }
         internal void OnUnplaceRequest(){
