@@ -7,8 +7,10 @@ using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Sims{
     internal class NavMeshHelper{   
+     internal static int navMeshLayer;
      internal static NavMeshBuildSettings[]navMeshBuildSettings;
         internal static void SetNavMeshBuildSettings(){
+         navMeshLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          navMeshBuildSettings=new NavMeshBuildSettings[]{
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("MediumSize").Value,
@@ -20,11 +22,11 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.28125f/3f,
            minRegionArea=0.28125f,
            overrideTileSize=true,
-                   tileSize=16,
+                   tileSize=64,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=1,
+           maxJobWorkers=2,
           },
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("SmallSize").Value,
@@ -36,11 +38,11 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.25f/3f,
            minRegionArea=0.25f,
            overrideTileSize=true,
-                   tileSize=16,
+                   tileSize=64,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=1,
+           maxJobWorkers=2,
           },
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("LargeSize").Value,
@@ -52,11 +54,11 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.5625f/3f,
            minRegionArea=0.5625f,
            overrideTileSize=true,
-                   tileSize=16,
+                   tileSize=64,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=1,
+           maxJobWorkers=2,
           },
          };
         }

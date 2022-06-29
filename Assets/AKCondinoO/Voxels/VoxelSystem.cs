@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels.Biomes;
+using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -9,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
     internal class VoxelSystem:MonoBehaviour{
      internal const int MaxcCoordx=312;
@@ -215,6 +217,23 @@ namespace AKCondinoO.Voxels{
              }
             }
             goto Loop;
+        }
+     internal bool navMeshSourcesCollectionChanged;
+     internal readonly SortedDictionary<int,NavMeshBuildSource>navMeshSources=new SortedDictionary<int,NavMeshBuildSource>();
+     internal readonly SortedDictionary<int,NavMeshBuildMarkup>navMeshMarkups=new SortedDictionary<int,NavMeshBuildMarkup>();
+      readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
+      readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
+        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected){
+         sourcesCollected=sources;
+         if(navMeshSourcesCollectionChanged){
+            navMeshSourcesCollectionChanged=false;
+          Log.DebugMessage("CollectNavMeshSources");
+          sources.Clear();
+          markups.Clear();
+          sources.AddRange(navMeshSources.Values);
+          markups.AddRange(navMeshMarkups.Values);
+          NavMeshBuilder.CollectSources(null,NavMeshHelper.navMeshLayer,NavMeshCollectGeometry.PhysicsColliders,0,markups,sources);
+         }
         }
     }
 }
