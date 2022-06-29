@@ -17,7 +17,7 @@ namespace AKCondinoO{
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
-     [SerializeField]Gameplayer GameplayerPrefab;
+     [SerializeField]Gameplayer _GameplayerPrefab;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
                     Util.SetUtil();
@@ -27,7 +27,7 @@ namespace AKCondinoO{
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
-         Gameplayer.all.Add(Gameplayer.main=Instantiate(GameplayerPrefab));
+         Gameplayer.all.Add(Gameplayer.main=Instantiate(_GameplayerPrefab));
         }
         private void Start(){
          MainCamera      .singleton.Init();
@@ -44,6 +44,7 @@ namespace AKCondinoO{
          if(singleton==this){
               foreach(Gameplayer gameplayer in Gameplayer.all){
                Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer==Gameplayer.main)+")");
+               gameplayer.OnRemove();
               }
               Gameplayer.all.Clear();
               try{

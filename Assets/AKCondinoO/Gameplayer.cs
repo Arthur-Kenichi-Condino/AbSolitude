@@ -6,6 +6,7 @@ using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -51,6 +52,10 @@ namespace AKCondinoO{
          OnCoordinatesChanged();
         }
         internal void OnRemove(){
+         int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
+         for(int agentType=0;agentType<navMeshSettingsLength;++agentType){
+          NavMesh.RemoveNavMeshData(navMeshInstance[agentType]);
+         }
         }
         internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
          Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
@@ -78,8 +83,15 @@ namespace AKCondinoO{
           }
          }
          if(waitingNavMeshDataAsyncOperation){
+             if(OnNavMeshDataAsyncOperationEnd()){
+                 waitingNavMeshDataAsyncOperation=false;
+             }
          }else{
              if(navMeshDirty){
+                 if(CanStartNavMeshAsyncUpdate()){
+                     navMeshDirty=false;
+                     waitingNavMeshDataAsyncOperation=true;
+                 }
              }else{
              }
          }
@@ -88,6 +100,38 @@ namespace AKCondinoO{
          cnkRgn=cCoordTocnkRgn(cCoord);
          activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
          VoxelSystem.singleton.generationRequests.Add(this);
+        }
+     [SerializeField]float navMeshDataAsyncUpdateInterval=1.0f;
+     float navMeshDataAsyncUpdateTimer=0.0f;
+     readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
+        bool CanStartNavMeshAsyncUpdate(){
+         if(navMeshDataAsyncUpdateTimer>0.0f){
+            navMeshDataAsyncUpdateTimer-=Time.deltaTime;
+         }
+         if(navMeshDataAsyncUpdateTimer<=0.0f){
+            navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;
+          Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
+          VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected);
+          sources.Clear();
+          for(int i=0;i<sourcesCollected.Count;++i){
+           if(activeWorldBounds.Contains(sourcesCollected[i].transform.GetColumn(3))){
+            sources.Add(sourcesCollected[i]);
+           }
+          }
+          int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
+          for(int i=0;i<navMeshSettingsLength;++i){
+           navMeshAsyncOperation[i]=NavMeshBuilder.UpdateNavMeshDataAsync(navMeshData[i],NavMeshHelper.navMeshBuildSettings[i],sources,activeWorldBounds);
+          }
+          return true;
+         }
+         return false;
+        }
+        bool OnNavMeshDataAsyncOperationEnd(){
+         if(navMeshAsyncOperation.All(o=>o==null||o.isDone)){
+          Log.DebugMessage("OnNavMeshDataAsyncOperationEnd");
+          return true;
+         }
+         return false;
         }
     }
 }
