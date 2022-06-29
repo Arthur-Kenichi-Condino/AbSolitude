@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
      internal PersistentSimActorData persistentSimActorData;
         internal struct PersistentSimActorData{
+         public float timerToRandomMove;
         }
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
@@ -62,28 +63,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return result;
         }
-     public const int V_STATE      =15;
-     public const int V_PATHFINDING=16;
-        internal enum State:int{
-         IDLE_ST=0,
-        }
-     protected State MyState=State.IDLE_ST;
-        internal enum PathfindingResult:int{
-         IDLE                   =0,
-         REACHED                =1,
-         PENDING                =2,
-         TRAVELLING             =3,
-         TRAVELLING_BUT_NO_SPEED=4,
-        }
-        PathfindingResult GetPathfindingResult(){
-         if(navMeshAgent.pathPending){
-          return PathfindingResult.PENDING;
-         }
-         return PathfindingResult.REACHED;
-        }
         protected virtual void AI(){
-        }
-        protected virtual void OnIDLE_ST(){
         }
     }
 }

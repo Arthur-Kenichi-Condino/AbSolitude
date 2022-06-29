@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295205bb7344dd84ab56517b027108fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayToRandomMove: 8
 --- !u!195 &4585911009965713821
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -92,7 +93,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313358770255107396}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -100,7 +101,7 @@ Transform:
   - {fileID: 7431066428460625184}
   m_Father: {fileID: 4631629839819614593}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &4899036718858050690
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +164,7 @@ GameObject:
   - component: {fileID: 7431066428449511806}
   - component: {fileID: 7401136412029098698}
   - component: {fileID: 8044990671858312253}
-  - component: {fileID: 7026310015728112182}
+  - component: {fileID: 1500823122924453375}
   m_Layer: 0
   m_Name: UMADynamicCharacterAvatar
   m_TagString: Untagged
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   context: {fileID: 0}
-  umaData: {fileID: 7026310015728112182}
+  umaData: {fileID: 1500823122924453375}
   defaultRendererAsset: {fileID: 0}
   umaRecipe: {fileID: 11400000, guid: ee6e08b01d948474b89f049e3f4ddba5, type: 2}
   umaAdditionalRecipes:
@@ -272,15 +273,9 @@ MonoBehaviour:
       - HumanFemaleDCS
       - HumanFemale
   raceAnimationControllers:
-    defaultAnimationController: {fileID: 9100000, guid: eb280940c811fab4a9e3ddf09381c343, type: 2}
+    defaultAnimationController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
     animators:
-    - raceName: ToonFemale
-      animatorControllerName: IdleTest-w-head
-      animatorController: {fileID: 0}
-    - raceName: HumanMaleDCS
-      animatorControllerName: Locomotion with Head
-      animatorController: {fileID: 0}
-    - raceName: HumanFemaleResources
+    - raceName: RaceHumanMaleMorphable
       animatorControllerName: Locomotion with Head
       animatorController: {fileID: 0}
     dynamicallyAddFromResources: 0
@@ -480,7 +475,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7026310015728112182
+--- !u!114 &1500823122924453375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
