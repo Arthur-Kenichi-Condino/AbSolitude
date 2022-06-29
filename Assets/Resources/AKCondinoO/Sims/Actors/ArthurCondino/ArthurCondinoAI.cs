@@ -1,8 +1,11 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.ArthurCondino{
-    internal class ArthurCondinoAI:SimActor{
+    internal class ArthurCondinoAI:BaseAI{
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
              base.OnDrawGizmos();

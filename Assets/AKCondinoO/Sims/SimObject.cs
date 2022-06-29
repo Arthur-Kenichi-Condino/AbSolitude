@@ -169,7 +169,7 @@ namespace AKCondinoO.Sims{
          worldBoundsVertices[7]=transform.TransformPoint(localBounds.min.x,localBounds.max.y,localBounds.max.z);
         }
         protected virtual bool IsOutOfSight(){
-         Log.DebugMessage("test if IsOutOfSight:id:"+id);
+         //Log.DebugMessage("test if IsOutOfSight:id:"+id);
          return worldBoundsVertices.Any(
           v=>{
            Vector2Int cCoord=vecPosTocCoord(v);
