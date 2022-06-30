@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using System;
 using System.Collections;
@@ -8,7 +8,7 @@ using UnityEngine;
 namespace AKCondinoO{
     internal class SimTime:MonoBehaviour{   
      internal static SimTime singleton;
-     [SerializeField]internal Light mainSun;
+     [SerializeField]internal SunMovement mainSun;
      internal const int   _YEAR  =12;
      internal const int   _MONTH =28;
      internal       float _DAY      {get;private set;}

@@ -35,6 +35,7 @@ namespace AKCondinoO{
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
+         SimsMachine     .singleton.Init();
          AutonomyCore    .singleton.Init();
          GameMode        .singleton.Init();
          Placeholder     .singleton.Init();
@@ -66,6 +67,7 @@ namespace AKCondinoO{
               Placeholder     .singleton=null;
               GameMode        .singleton=null;
               AutonomyCore    .singleton=null;
+              SimsMachine     .singleton=null;
               SimObjectSpawner.singleton=null;
               SimObjectManager.singleton=null;
               VoxelSystem     .singleton=null;
