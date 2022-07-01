@@ -18,7 +18,7 @@ namespace AKCondinoO{
      /// <summary>
      ///  Quantos minutos dura um ciclo dia-noite no jogo se useRealTime==false
      /// </summary>
-     [SerializeField]internal float simDayInRealMinutes=.5f;
+     [SerializeField]internal float simDayInRealMinutes=5.0f;
      internal uint  simDay  =1;
      internal uint  simMonth=1;
      internal ulong simYear =1;
@@ -35,6 +35,7 @@ namespace AKCondinoO{
          _DAY   =24*_HOUR  ;
          sunLights    =GetComponentsInChildren<SunLight    >();
          sunTransforms=GetComponentsInChildren<SunTransform>();
+         simTimeOfDay=12.0f*60f*60f;
         }
         internal void Init(){
          Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
