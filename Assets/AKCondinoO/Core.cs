@@ -31,10 +31,12 @@ namespace AKCondinoO{
         }
         private void Start(){
          MainCamera      .singleton.Init();
+         SimTime         .singleton.Init();
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
-         AICondinoCore   .singleton.Init();
+         SimsMachine     .singleton.Init();
+         AutonomyCore    .singleton.Init();
          GameMode        .singleton.Init();
          Placeholder     .singleton.Init();
          FixedUI         .singleton.Init();
@@ -64,10 +66,12 @@ namespace AKCondinoO{
               FixedUI         .singleton=null;
               Placeholder     .singleton=null;
               GameMode        .singleton=null;
-              AICondinoCore   .singleton=null;
+              AutonomyCore    .singleton=null;
+              SimsMachine     .singleton=null;
               SimObjectSpawner.singleton=null;
               SimObjectManager.singleton=null;
               VoxelSystem     .singleton=null;
+              SimTime         .singleton=null;
               MainCamera      .singleton=null;
          }
         }
