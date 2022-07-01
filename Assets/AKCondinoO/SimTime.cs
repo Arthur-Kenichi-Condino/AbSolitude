@@ -92,7 +92,7 @@ namespace AKCondinoO{
          }else{                                            
           simDayTransition=DayTransitions.Day;
          }
-         ambientLightSettings.UpdateValues(transitionLerp);
+         ambientLightSettings    .UpdateValues(transitionLerp);
          foreach(var sunLight     in sunLights    ){
                      sunLight    .UpdateValues(transitionLerp);
          }
