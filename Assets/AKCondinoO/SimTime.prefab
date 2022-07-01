@@ -45,6 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5b7a3e8fc18aa40bc0bc01ee52d0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sunLightIntensityClearNight: 0
+  sunLightIntensityClearSunset: 0.5
+  sunLightIntensityClearDawn: 0.5
+  sunLightIntensityClearDay: 1
 --- !u!108 &705507994
 Light:
   m_ObjectHideFlags: 0
@@ -153,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSun: {fileID: 3419431286494342690}
-  simDayInRealMinutes: 0.1
+  simDayInRealMinutes: 0.5
 --- !u!1 &6486018392043608168
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,3 +203,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e912f1470ee6f4b8aef8c67ba1e469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sunEulerAngles: {x: 50, y: -90, z: 0}

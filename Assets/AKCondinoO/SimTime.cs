@@ -18,7 +18,7 @@ namespace AKCondinoO{
      /// <summary>
      ///  Quantos minutos dura um ciclo dia-noite no jogo se useRealTime==false
      /// </summary>
-     [SerializeField]internal float simDayInRealMinutes=.1f;
+     [SerializeField]internal float simDayInRealMinutes=.5f;
      internal uint  simDay  =1;
      internal uint  simMonth=1;
      internal ulong simYear =1;
