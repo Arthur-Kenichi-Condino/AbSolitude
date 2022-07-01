@@ -4,6 +4,7 @@
 #endif
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
+using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
+     VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
      internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
@@ -49,6 +51,7 @@ namespace AKCondinoO.Voxels.Terrain{
           overrideArea=false,
           ignoreFromBuild=false,
          };
+         simObjectsPlacing=new VoxelTerrainSimObjectsPlacing(this);
          Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
@@ -73,22 +76,27 @@ namespace AKCondinoO.Voxels.Terrain{
      bool waitingMarchingCubes;
      bool pendingMarchingCubes;
         internal void ManualUpdate(){
-            if(waitingBakeJob){
-                if(OnPhysMeshBaked()){
-                    waitingBakeJob=false;
-                }
+            if(simObjectsPlacing.isBusy){
+                simObjectsPlacing.AddingSimObjectsSubroutine();
             }else{
-                if(waitingMarchingCubes){
-                    if(OnMarchingCubesDone()){
-                        waitingMarchingCubes=false;
-                        SchedulePhysBakeMeshJob();
-                        waitingBakeJob=true;
+                if(waitingBakeJob){
+                    if(OnPhysMeshBaked()){
+                        waitingBakeJob=false;
+                        simObjectsPlacing.OnVoxelTerrainReady();
                     }
                 }else{
-                    if(pendingMarchingCubes){
-                        if(CanBeginMarchingCubes()){
-                            pendingMarchingCubes=false;
-                            waitingMarchingCubes=true;
+                    if(waitingMarchingCubes){
+                        if(OnMarchingCubesDone()){
+                            waitingMarchingCubes=false;
+                            SchedulePhysBakeMeshJob();
+                            waitingBakeJob=true;
+                        }
+                    }else{
+                        if(pendingMarchingCubes){
+                            if(CanBeginMarchingCubes()){
+                                pendingMarchingCubes=false;
+                                waitingMarchingCubes=true;
+                            }
                         }
                     }
                 }

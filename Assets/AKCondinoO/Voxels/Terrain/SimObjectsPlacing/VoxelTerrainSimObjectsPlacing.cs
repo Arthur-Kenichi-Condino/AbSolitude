@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
+    internal class VoxelTerrainSimObjectsPlacing{
+     internal readonly VoxelTerrainChunk cnk;
+     internal readonly VoxelTerrainSurfaceSimObjectsPlacer surface;
+        internal VoxelTerrainSimObjectsPlacing(VoxelTerrainChunk cnk){
+         this.cnk=cnk;
+         surface=new VoxelTerrainSurfaceSimObjectsPlacer(this);
+        }
+     internal bool isBusy{
+      get{
+       return surface.isBusy;
+      }
+      private set{
+       surface.isBusy=true;
+      }
+     }
+        internal void OnVoxelTerrainReady(){
+         isBusy=true;
+        }
+        internal void AddingSimObjectsSubroutine(){
+         surface.OnAddingSurfaceSimObjects();
+        }
+    }
+}
