@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal class VoxelTerrainSimObjectsPlacing{
      internal readonly VoxelTerrainChunk cnk;
