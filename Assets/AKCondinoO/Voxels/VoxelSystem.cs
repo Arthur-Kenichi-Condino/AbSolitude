@@ -3,8 +3,9 @@
 #endif
 using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Sims;
-using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain;
+using AKCondinoO.Voxels.Terrain.MarchingCubes;
+using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,6 +77,7 @@ namespace AKCondinoO.Voxels{
      internal static VoxelSystem singleton;
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
+     internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
@@ -87,6 +89,10 @@ namespace AKCondinoO.Voxels{
          MarchingCubesMultithreaded.Stop=false;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){
                        marchingCubesBGThreads[i]=new MarchingCubesMultithreaded();
+         }
+         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=false;
+         for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
+                       surfaceSimObjectsPlacerBGThreads[i]=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded();
          }
         }
         internal void Init(){
@@ -116,6 +122,10 @@ namespace AKCondinoO.Voxels{
          MarchingCubesMultithreaded.Stop=true;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){
                        marchingCubesBGThreads[i].Wait();
+         }
+         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=true;
+         for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
+                       surfaceSimObjectsPlacerBGThreads[i].Wait();
          }
          biome.DisposeModules();
         }

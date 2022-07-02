@@ -55,6 +55,8 @@ namespace AKCondinoO.Voxels.Terrain{
          Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays=new NativeList<RaycastCommand>(Width*Depth,Allocator.Persistent);
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth,Allocator.Persistent);
         }
         internal void OnInstantiated(){
         }
@@ -64,6 +66,9 @@ namespace AKCondinoO.Voxels.Terrain{
          Log.DebugMessage("Deallocate NativeLists");
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning,-1);
+         if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.Dispose();
+         if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.Dispose();
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          hasPhysMeshBaked=false;
