@@ -1,3 +1,7 @@
+#if UNITY_EDITOR
+    #define ENABLE_DEBUG_GIZMOS
+    #define ENABLE_LOG_DEBUG
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -14,17 +18,22 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      bool settingGetGroundRays;
         internal void OnAddingSurfaceSimObjects(){
             if(settingGetGroundRays){
-                if(isBusy){
-                   isBusy=false;
+                if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
+                    settingGetGroundRays=false;
+                    Log.DebugMessage("settingGetGroundRays=false;");
+                    isBusy=false;
                 }
             }else{
                 surfaceSimObjectsPlacerBG.GetGroundRays.Clear();
                 surfaceSimObjectsPlacerBG.GetGroundHits.Clear();
                 surfaceSimObjectsPlacerBG.gotGroundHits.Clear();
-                //addSimObjectsBG.cCoord=cCoord;
-                //addSimObjectsBG.cnkRgn=cnkRgn;
-                //addSimObjectsBG.cnkIdx=cnkIdx.Value;
+                surfaceSimObjectsPlacerBG.cCoord=simObjectsPlacing.cnk.id.Value.cCoord;
+                surfaceSimObjectsPlacerBG.cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
+                surfaceSimObjectsPlacerBG.cnkIdx=simObjectsPlacing.cnk.id.Value.cnkIdx;
+                surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.GetGround;
                 settingGetGroundRays=true;
+                Log.DebugMessage("settingGetGroundRays=true;");
+                VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Schedule(surfaceSimObjectsPlacerBG);
             }
         }
     }
