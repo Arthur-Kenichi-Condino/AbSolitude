@@ -25,6 +25,15 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          switch(container.execution){
           case Execution.GetGround:{
            Log.DebugMessage("Execution.GetGround");
+           Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+           for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+            Vector3 from=vCoord1;
+                    from.x+=container.cnkRgn.x-Width/2f+.5f;
+                    from.z+=container.cnkRgn.y-Depth/2f+.5f;
+            container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,Height,VoxelSystem.voxelTerrainLayer,1));
+            container.GetGroundHits.AddNoResize(new RaycastHit    ()                                                        );
+           }}
            break;
           }
          }

@@ -74,6 +74,7 @@ namespace AKCondinoO.Voxels{
              }
             }
         #endregion
+     internal static int voxelTerrainLayer;
      internal static VoxelSystem singleton;
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
@@ -85,6 +86,7 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){
