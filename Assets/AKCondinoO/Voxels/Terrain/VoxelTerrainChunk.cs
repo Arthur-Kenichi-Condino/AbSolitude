@@ -67,6 +67,7 @@ namespace AKCondinoO.Voxels.Terrain{
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
          simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning,-1);
+         simObjectsPlacing.surface.doRaycastsHandle.Complete();
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.Dispose();
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.Dispose();
         }
