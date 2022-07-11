@@ -25,12 +25,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(fillingSpawnData){
                 if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                     fillingSpawnData=false;
+                    Log.DebugMessage("fillingSpawnData=false;");
                     isBusy=false;
                 }
             }else{
                 if(doingRaycasts){
                     if(doRaycastsHandle.IsCompleted){
                         doingRaycasts=false;
+                        Log.DebugMessage("doingRaycasts=false;");
                         doRaycastsHandle.Complete();
                         Vector3Int vCoord1=new Vector3Int(0,0,0);
                         int i=0;
