@@ -14,9 +14,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal        int cnkIdx;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
-     internal readonly Dictionary<int,RaycastHit>gotGroundHits=new Dictionary<int,RaycastHit>(Width*Depth);
+     internal readonly Dictionary<int,RaycastHit?>gotGroundHits=new Dictionary<int,RaycastHit?>(Width*Depth);
         internal enum Execution{
          GetGround,
+         FillSpawnData,
         }
      internal Execution execution;
     }
