@@ -37,6 +37,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }}
            break;
           }
+          case Execution.FillSpawnData:{
+           Log.DebugMessage("Execution.FillSpawnData");
+           Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           break;
+          }
          }
         }
     }
