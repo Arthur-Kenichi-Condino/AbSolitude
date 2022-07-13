@@ -40,6 +40,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           case Execution.FillSpawnData:{
            Log.DebugMessage("Execution.FillSpawnData");
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+           for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+           }}
            break;
           }
          }
