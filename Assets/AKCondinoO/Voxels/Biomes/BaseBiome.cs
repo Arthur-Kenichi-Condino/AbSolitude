@@ -8,6 +8,10 @@ using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BaseBiome{
+     readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
+         internal BaseBiome(){
+          biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
+         }
      protected Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
      protected System.Random[]random=new System.Random[2];
@@ -87,7 +91,7 @@ namespace AKCondinoO.Voxels.Biomes{
           modules.Clear();
          }
      protected Select[]selectors=new Select[1];
-         protected virtual int Selection(Vector3 noiseInput){
+         internal virtual int Selection(Vector3 noiseInput){
           double min=selectors[0].Minimum;
           double max=selectors[0].Maximum;
           double fallOff=selectors[0].FallOff*.5;
