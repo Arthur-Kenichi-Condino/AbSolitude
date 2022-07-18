@@ -12,7 +12,7 @@ namespace AKCondinoO.Voxels.Biomes{
          internal BaseBiome(){
           biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
          }
-     protected Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
+     internal Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
      protected System.Random[]random=new System.Random[2];
      int seed_v;
