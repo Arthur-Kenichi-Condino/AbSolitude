@@ -32,9 +32,18 @@ namespace AKCondinoO.Voxels.Biomes{
            },
           }
          );
+         if(!simObjectPicking.TryGetValue(1,out var types1)){
+          types1=simObjectPicking[1]=new List<Type>();
+         }
+         types1.Add(typeof(Pinus_elliottii_1));
         }
-     readonly protected Dictionary<int,Type[]>simObjectPicking;
+     readonly protected Dictionary<int,List<Type>>simObjectPicking=new Dictionary<int,List<Type>>();
         internal(Type simObject,SimObjectSettings simObjectSettings)?TrySpawnSimObject(Vector3Int noiseInputRounded){
+         Vector3 noiseInput=noiseInputRounded+biome.deround;
+         int selection=biome.Selection(noiseInput);
+         if(simObjectPicking.TryGetValue(selection,out var types)){
+          //SimObjectSettings simObjectSettings=allSettings[];
+         }
          return null;
         }
     }
