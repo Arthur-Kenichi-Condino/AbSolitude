@@ -19,17 +19,17 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly BaseBiome biome;
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
-         if(!simObjectPicking.TryGetValue(1,out var types1)){
-          types1=simObjectPicking[1]=new HashSet<Type>();
+         if(!simObjectPicking.TryGetValue(1,out var typesAtPicking1)){
+          typesAtPicking1=simObjectPicking[1]=new HashSet<Type>();
          }
-         types1.Add(typeof(Pinus_elliottii_1));
+         typesAtPicking1.Add(typeof(Pinus_elliottii_1));
          if(!allSettings.TryGetValue(typeof(Pinus_elliottii_1),out var Pinus_elliottii_1Settings)){
           Pinus_elliottii_1Settings=allSettings[typeof(Pinus_elliottii_1)]=new Dictionary<int,List<SimObjectSettings>>();
          }
-         if(!Pinus_elliottii_1Settings.TryGetValue(1,out var Pinus_elliottii_1SettingsList1)){
-          Pinus_elliottii_1SettingsList1=Pinus_elliottii_1Settings[1]=new List<SimObjectSettings>();
+         if(!Pinus_elliottii_1Settings.TryGetValue(1,out var Pinus_elliottii_1SettingsListAtPicking1)){
+          Pinus_elliottii_1SettingsListAtPicking1=Pinus_elliottii_1Settings[1]=new List<SimObjectSettings>();
          }
-         Pinus_elliottii_1SettingsList1.Add(
+         Pinus_elliottii_1SettingsListAtPicking1.Add(
           new SimObjectSettings{
            chance=.125f,
            inclination=.125f,
@@ -46,7 +46,12 @@ namespace AKCondinoO.Voxels.Biomes{
          int selection=biome.Selection(noiseInput);
          if(simObjectPicking.TryGetValue(selection,out var types)){
           foreach(var type in types){
-           //SimObjectSettings simObjectSettings=allSettings[type][];
+           if(allSettings.TryGetValue(type,out var typeSettings)){
+            if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
+             foreach(SimObjectSettings setting in typeSettingsListForSelection){
+             }
+            }
+           }
           }
          }
          return null;
