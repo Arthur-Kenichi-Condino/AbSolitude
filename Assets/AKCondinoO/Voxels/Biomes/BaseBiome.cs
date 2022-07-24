@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using LibNoise;
 using LibNoise.Generator;
 using LibNoise.Operator;
@@ -11,6 +14,7 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
          internal BaseBiome(){
           biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
+          biomeSpawnSettings.Init();
          }
      internal Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
