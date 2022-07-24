@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Trees;
+using LibNoise.Generator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,6 +65,7 @@ namespace AKCondinoO.Voxels.Biomes{
           Log.DebugMessage("Init():settingsCountForSelection["+selection+"]="+settingsCount);
          }
         }
+     internal Perlin simTypeSpawnChancePerlin;
         internal(Type simObject,SimObjectSettings simObjectSettings)?TrySpawnSimObject(Vector3Int noiseInputRounded){
          Vector3 noiseInput=noiseInputRounded+biome.deround;
          int selection=biome.Selection(noiseInput);
@@ -72,6 +74,7 @@ namespace AKCondinoO.Voxels.Biomes{
            if(allSettings.TryGetValue(type,out var typeSettings)){
             if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
              foreach(SimObjectSettings setting in typeSettingsListForSelection){
+								      float chance=setting.chance/settingsCountForSelection[selection];
              }
             }
            }
