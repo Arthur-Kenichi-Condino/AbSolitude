@@ -1,7 +1,11 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using AKCondinoO.Sims.Trees;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BaseBiomeSimObjectsSpawnSettings{
@@ -16,6 +20,7 @@ namespace AKCondinoO.Voxels.Biomes{
         }
      readonly protected Dictionary<int,HashSet<Type>>simObjectPicking=new Dictionary<int,HashSet<Type>>();
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();
+     readonly protected Dictionary<int,int>settingsCountForSelection=new Dictionary<int,int>();
      readonly BaseBiome biome;
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
@@ -40,6 +45,24 @@ namespace AKCondinoO.Voxels.Biomes{
            maxSpacing=Vector3.one*4.8f,
           }
          );
+        }
+        internal void Init(){
+         foreach(var selectionTypesPair in simObjectPicking){
+				      int selection=selectionTypesPair.Key;
+				      HashSet<Type>types=selectionTypesPair.Value;
+				      int settingsCount=0;
+				      foreach(var typeSettingsListByPickingPair in allSettings){
+											Type type=typeSettingsListByPickingPair.Key;
+											Dictionary<int,List<SimObjectSettings>>settingsListByPicking=typeSettingsListByPickingPair.Value;
+											if(types.Contains(type)){
+												if(settingsListByPicking.TryGetValue(selection,out List<SimObjectSettings>settingsList)){
+													settingsCount+=settingsList.Count;
+												}
+											}
+					     }
+          settingsCountForSelection[selection]=settingsCount;
+          Log.DebugMessage("Init():settingsCountForSelection["+selection+"]="+settingsCount);
+         }
         }
         internal(Type simObject,SimObjectSettings simObjectSettings)?TrySpawnSimObject(Vector3Int noiseInputRounded){
          Vector3 noiseInput=noiseInputRounded+biome.deround;
