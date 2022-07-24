@@ -87,12 +87,21 @@ namespace AKCondinoO.Voxels.Biomes{
           modules.Add(module4b);//  5
                           ModuleBase module4c=new Multiply(lhs:module4b,rhs:module1);
           modules.Add(module4c);//  6
+			       biomeSpawnSettings.simTypeSpawnChancePerlin=new Perlin(
+											frequency:.25,
+											 lacunarity:2.0,
+												 persistence:0.5,
+													 octaves:6,
+														 seed:seed_v,
+															 quality:QualityMode.Low
+										);
          }
          internal void DisposeModules(){
           foreach(var module in modules){
                       module.Dispose();
           }
           modules.Clear();
+			       biomeSpawnSettings.simTypeSpawnChancePerlin.Dispose();
          }
      protected Select[]selectors=new Select[1];
          internal virtual int Selection(Vector3 noiseInput){
