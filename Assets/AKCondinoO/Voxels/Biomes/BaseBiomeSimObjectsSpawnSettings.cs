@@ -19,6 +19,10 @@ namespace AKCondinoO.Voxels.Biomes{
          internal Vector3 minSpacing;
          internal Vector3 maxSpacing;
         }
+        internal struct SimObjectSpawnModifiers{
+         internal Vector3 scale;
+			      internal float rotation;
+			     }
      readonly protected Dictionary<int,HashSet<Type>>simObjectPicking=new Dictionary<int,HashSet<Type>>();
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();
      readonly protected Dictionary<int,int>settingsCountForSelection=new Dictionary<int,int>();
@@ -66,15 +70,21 @@ namespace AKCondinoO.Voxels.Biomes{
          }
         }
      internal Perlin simTypeSpawnChancePerlin;
-        internal(Type simObject,SimObjectSettings simObjectSettings)?TrySpawnSimObject(Vector3Int noiseInputRounded){
+        internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(Vector3Int noiseInputRounded){
          Vector3 noiseInput=noiseInputRounded+biome.deround;
          int selection=biome.Selection(noiseInput);
          if(simObjectPicking.TryGetValue(selection,out var types)){
+				      int count=0;
           foreach(var type in types){
            if(allSettings.TryGetValue(type,out var typeSettings)){
             if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
              foreach(SimObjectSettings setting in typeSettingsListForSelection){
 								      float chance=setting.chance/settingsCountForSelection[selection];
+								      float dicing=((float)simTypeSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f;
+								      count++;
+								      if(dicing<=chance){
+									      return(type,setting);
+									     }
              }
             }
            }
@@ -82,5 +92,10 @@ namespace AKCondinoO.Voxels.Biomes{
          }
          return null;
         }
+		      internal virtual SimObjectSpawnModifiers GetSimObjectSpawnModifiers(Vector3Int noiseInputRounded,SimObjectSettings simObjectSettings){
+			      SimObjectSpawnModifiers modifiers=new SimObjectSpawnModifiers{
+									};
+			      return modifiers;
+			     }
     }
 }

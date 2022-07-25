@@ -1,11 +1,14 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels.Biomes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
+using static AKCondinoO.Voxels.Biomes.BaseBiomeSimObjectsSpawnSettings;
 using static AKCondinoO.Voxels.Terrain.SimObjectsPlacing.VoxelTerrainSurfaceSimObjectsPlacerContainer;
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
@@ -42,6 +45,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+							     Vector3Int noiseInput=vCoord1;noiseInput.x+=container.cnkRgn.x;
+                                          noiseInput.z+=container.cnkRgn.y;
+							     (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput);
+							     if(simObjectPicked!=null){
+								    }
            }}
            break;
           }
