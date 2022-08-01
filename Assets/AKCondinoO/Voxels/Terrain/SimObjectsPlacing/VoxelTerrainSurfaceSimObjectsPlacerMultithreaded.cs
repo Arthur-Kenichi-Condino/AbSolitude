@@ -49,6 +49,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                                           noiseInput.z+=container.cnkRgn.y;
 							     (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput);
 							     if(simObjectPicked!=null){
+								     SimObjectSpawnModifiers modifiers=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput,simObjectPicked.Value.simObjectSettings);
 								    }
            }}
            break;
