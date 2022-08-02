@@ -50,6 +50,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
 							     (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput);
 							     if(simObjectPicked!=null){
 								     SimObjectSpawnModifiers modifiers=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput,simObjectPicked.Value.simObjectSettings);
+								     Vector3 minSpacing=simObjectPicked.Value.simObjectSettings.minSpacing;
+								     minSpacing=Vector3.Scale(minSpacing,modifiers.scale);
+								     minSpacing.x=Mathf.Max(minSpacing.x,1f);
+								     minSpacing.y=Mathf.Max(minSpacing.y,1f);
+								     minSpacing.z=Mathf.Max(minSpacing.z,1f);
+								     Vector3 maxSpacing=simObjectPicked.Value.simObjectSettings.maxSpacing;
 								    }
            }}
            break;

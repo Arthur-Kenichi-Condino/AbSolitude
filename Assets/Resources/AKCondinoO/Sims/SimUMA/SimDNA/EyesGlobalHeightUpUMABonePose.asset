@@ -25,42 +25,42 @@ MonoBehaviour:
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidInner
     hash: -1914234196
-    position: {x: -0.00046251342, y: -0.0009910986, z: -0.00304427}
+    position: {x: -0.00046255812, y: -0.00021681935, z: -0.0026639309}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: rEyelidInner
     hash: 1758340174
-    position: {x: 0.00046251342, y: -0.0009910986, z: -0.00304427}
+    position: {x: 0.00046255812, y: -0.00021681935, z: -0.0026639309}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidUpperInner
     hash: 883038750
-    position: {x: -0.0019538961, y: 0.0024150386, z: -0.0021106508}
+    position: {x: -0.001953911, y: 0.0021461695, z: -0.001566397}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: rEyelidUpperInner
     hash: 1658289141
-    position: {x: 0.0019538961, y: 0.0024150386, z: -0.0021106508}
+    position: {x: 0.001953911, y: 0.0021461695, z: -0.001566397}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidUpper
     hash: -1903571207
-    position: {x: -0.002058141, y: 0.00054640323, z: -0.0013413187}
+    position: {x: -0.00087428465, y: 0.00054659694, z: -0.0013419073}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: rEyelidUpper
     hash: 1805709339
-    position: {x: 0.002058141, y: 0.00054640323, z: -0.0013413187}
+    position: {x: 0.00087428465, y: 0.00054659694, z: -0.0013419073}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidUpperOuter
     hash: 759896454
-    position: {x: -0.0014560074, y: 0.0006427467, z: 0.00010250881}
+    position: {x: 0.00088877603, y: 0.00096500665, z: -0.00055004656}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: rEyelidUpperOuter
     hash: 2067691629
-    position: {x: 0.0014560074, y: 0.0006427467, z: 0.00010250881}
+    position: {x: -0.00088877603, y: 0.00096500665, z: -0.00055004656}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidOuter
@@ -75,12 +75,12 @@ MonoBehaviour:
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidLowerOuter
     hash: -1890830563
-    position: {x: 0.0013443567, y: 0.0005600676, z: -0.0016757566}
+    position: {x: 0.0013443418, y: 0.00088582933, z: -0.0023355838}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: rEyelidLowerOuter
     hash: -650553610
-    position: {x: -0.0013443567, y: 0.0005600676, z: -0.0016757566}
+    position: {x: -0.0013443418, y: 0.00088582933, z: -0.0023355838}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
   - bone: lEyelidLower
