@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295205bb7344dd84ab56517b027108fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayToRandomMove: 8
+  delayToRandomMove: 90
 --- !u!195 &4585911009965713821
 NavMeshAgent:
   m_ObjectHideFlags: 0

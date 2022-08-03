@@ -56,6 +56,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
 								     minSpacing.y=Mathf.Max(minSpacing.y,1f);
 								     minSpacing.z=Mathf.Max(minSpacing.z,1f);
 								     Vector3 maxSpacing=simObjectPicked.Value.simObjectSettings.maxSpacing;
+								     maxSpacing=Vector3.Scale(maxSpacing,modifiers.scale);
 								    }
            }}
            break;
