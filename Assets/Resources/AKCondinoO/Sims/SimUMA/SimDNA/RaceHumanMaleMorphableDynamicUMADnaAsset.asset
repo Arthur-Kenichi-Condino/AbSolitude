@@ -16,7 +16,8 @@ MonoBehaviour:
   lastKnownAssetPath: Assets/Resources/AKCondinoO/Sims/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset.asset
   lastKnownDuplicateAssetPath: Assets/Resources/AKCondinoO/Sims/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset
     1.asset
-  lastKnownInstanceID: -10616
+  lastKnownInstanceID: 22848
   Names:
   - EyesGlobalHeightDown
   - EyesGlobalHeightUp
+  - EyesGlobalSizeLarge

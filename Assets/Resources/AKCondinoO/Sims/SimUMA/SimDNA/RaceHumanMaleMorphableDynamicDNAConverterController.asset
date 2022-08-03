@@ -148,6 +148,51 @@ MonoBehaviour:
         _multiplier: 1
         _initialized: 1
       _aggregationMethod: 0
+  - _poseToApply: {fileID: 11400000, guid: 1be7a4ed492d0ac4bba3056b9d51757a, type: 2}
+    _startingPoseWeight: 0
+    _modifyingDNA:
+      _dnaEvaluators:
+      - _calcOption: 0
+        _dnaName: EyesGlobalSizeLarge
+        _dnaNameHash: 1668252832
+        _evaluator:
+          _name: Default
+          _graph:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: -0.5
+              inSlope: 0
+              outSlope: 1
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 0.5
+              value: 0
+              inSlope: 1
+              outSlope: 1
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 0.5
+              inSlope: 1
+              outSlope: 2
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        _multiplier: 1
+        _initialized: 1
+      _aggregationMethod: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
