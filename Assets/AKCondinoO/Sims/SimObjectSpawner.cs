@@ -150,6 +150,9 @@ namespace AKCondinoO.Sims{
 						         SimActor.PersistentSimActorData?persistentSimActorData=null;
 						         if(SimObjectUtil.IsSimActor(at.type)){
 							         //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
+																if(toSpawn.actorData.TryGetValue(index,out var data)){
+								         persistentSimActorData=data;
+								        }
 							        }
 						         index++;
                _GetId:{}
