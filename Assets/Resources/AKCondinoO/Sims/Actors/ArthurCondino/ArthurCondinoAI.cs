@@ -1,11 +1,19 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:BaseAI{
+        protected override void Awake(){
+         base.Awake();
+			      List<Type>requiredSkills=new List<Type>{
+									};
+			      foreach(var skill in skills){
+				     }
+			     }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
              base.OnDrawGizmos();
