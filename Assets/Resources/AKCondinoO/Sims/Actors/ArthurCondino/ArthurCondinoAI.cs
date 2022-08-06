@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:BaseAI{
         protected override void Awake(){
          base.Awake();
-			      List<Type>requiredSkills=new List<Type>{
+			      Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>{
 									};
 			      foreach(var skill in skills){
 				     }

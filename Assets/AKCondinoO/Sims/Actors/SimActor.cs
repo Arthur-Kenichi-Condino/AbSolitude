@@ -12,7 +12,7 @@ namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
      internal PersistentSimActorData persistentSimActorData;
         internal struct PersistentSimActorData{
-			      public List<Type>skills;
+			      public List<(Type skill,int level)>skills;
          public float timerToRandomMove;
         }
 		   internal readonly List<Skill>skills=new List<Skill>();
