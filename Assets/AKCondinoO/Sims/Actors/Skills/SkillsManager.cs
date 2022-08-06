@@ -7,6 +7,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal static SkillsManager singleton;
 		      private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+									foreach(var o in Resources.LoadAll("AKCondinoO/Sims/Actors/Skills/",typeof(GameObject))){
+				     }
         }
         internal void Init(){
          Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
