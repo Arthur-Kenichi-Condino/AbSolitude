@@ -14,6 +14,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
 				     }
 			      return result;
 			     }
+		   internal int level=1;
         internal virtual bool DoSkill(BaseAI actor,BaseAI target){
          return false;
 			     }

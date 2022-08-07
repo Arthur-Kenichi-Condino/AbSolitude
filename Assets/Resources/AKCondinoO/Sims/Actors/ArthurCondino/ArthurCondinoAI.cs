@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace AKCondinoO.Sims.Actors.ArthurCondino{
         protected override void Awake(){
          base.Awake();
 			      Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>{
+										{typeof(GenerateHomunculus),10},
 									};
 			      foreach(var skill in skills){
 				     }
