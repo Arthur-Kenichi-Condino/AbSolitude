@@ -9,12 +9,8 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:BaseAI{
         protected override void Awake(){
+			      requiredSkills.Add(typeof(GenerateHomunculus),10);
          base.Awake();
-			      Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>{
-										{typeof(GenerateHomunculus),10},
-									};
-			      foreach(var skill in skills){
-				     }
 			     }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
