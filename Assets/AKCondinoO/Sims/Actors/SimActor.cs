@@ -39,6 +39,7 @@ namespace AKCondinoO.Sims.Actors{
 				        }
          public float timerToRandomMove;
         }
+		   protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
 		   internal readonly List<Skill>skills=new List<Skill>();
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
@@ -49,6 +50,20 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
+			      foreach(var skill in skills){
+				      //  TO DO: test skill level
+				      requiredSkills.Remove(skill.GetType());
+				     }
+									if(requiredSkills.Count>0){
+										Log.DebugMessage("required skills missing");
+				     }
+									foreach(var requiredSkill in requiredSkills){
+				      GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
+				      Skill skill=skillGameObject.GetComponent<Skill>();
+				      skill.level=requiredSkill.Value;
+				      skills.Add(skill);
+				     }
+									requiredSkills.Clear();
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
