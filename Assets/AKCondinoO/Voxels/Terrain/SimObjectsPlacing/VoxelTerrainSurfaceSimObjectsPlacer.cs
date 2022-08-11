@@ -26,6 +26,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                     fillingSpawnData=false;
                     Log.DebugMessage("fillingSpawnData=false;");
+                    surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                     isBusy=false;
                 }
             }else{
@@ -72,6 +73,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                         surfaceSimObjectsPlacerBG.GetGroundRays.Clear();
                         surfaceSimObjectsPlacerBG.GetGroundHits.Clear();
                         surfaceSimObjectsPlacerBG.gotGroundHits.Clear();
+					                   Array.Clear(surfaceSimObjectsPlacerBG.blocked,0,surfaceSimObjectsPlacerBG.blocked.Length);
                         surfaceSimObjectsPlacerBG.cCoord=simObjectsPlacing.cnk.id.Value.cCoord;
                         surfaceSimObjectsPlacerBG.cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
                         surfaceSimObjectsPlacerBG.cnkIdx=simObjectsPlacing.cnk.id.Value.cnkIdx;
