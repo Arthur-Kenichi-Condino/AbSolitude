@@ -145,16 +145,16 @@ namespace AKCondinoO.Sims{
               }
              }
              while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
-					         int index=0;
+              int index=0;
               foreach(var at in toSpawn.at){
-						         SimActor.PersistentSimActorData?persistentSimActorData=null;
-						         if(SimObjectUtil.IsSimActor(at.type)){
-							         //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
-																if(toSpawn.actorData.TryGetValue(index,out var data)){
-								         persistentSimActorData=data;
-								        }
-							        }
-						         index++;
+               SimActor.PersistentSimActorData?persistentSimActorData=null;
+               if(SimObjectUtil.IsSimActor(at.type)){
+                //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
+                if(toSpawn.actorData.TryGetValue(index,out var data)){
+                 persistentSimActorData=data;
+                }
+               }
+               index++;
                _GetId:{}
                Type simType=at.type;
                ulong number;
