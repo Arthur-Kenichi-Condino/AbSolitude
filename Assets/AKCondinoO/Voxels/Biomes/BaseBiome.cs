@@ -87,39 +87,39 @@ namespace AKCondinoO.Voxels.Biomes{
           modules.Add(module4b);//  5
                           ModuleBase module4c=new Multiply(lhs:module4b,rhs:module1);
           modules.Add(module4c);//  6
-			       biomeSpawnSettings.simObjectSpawnChancePerlin=new Perlin(
-											frequency:.25,
-											 lacunarity:2.0,
-												 persistence:0.5,
-													 octaves:6,
-														 seed:seed_v,
-															 quality:QualityMode.Low
-										);
-			       biomeSpawnSettings.scaleModifierPerlin=new Perlin(
-											frequency:.70,
-											 lacunarity:3.5,
-												 persistence:0.8,
-													 octaves:6,
-														 seed:seed_v,
-															 quality:QualityMode.Low
-										);
-			       biomeSpawnSettings.rotationModifierPerlin=new Perlin(
-											frequency:.85,
-											 lacunarity:3.5,
-												 persistence:0.8,
-													 octaves:6,
-														 seed:seed_v,
-															 quality:QualityMode.Low
-										);
+          biomeSpawnSettings.simObjectSpawnChancePerlin=new Perlin(
+           frequency:.25,
+            lacunarity:2.0,
+             persistence:0.5,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
+          biomeSpawnSettings.scaleModifierPerlin=new Perlin(
+           frequency:.70,
+            lacunarity:3.5,
+             persistence:0.8,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
+          biomeSpawnSettings.rotationModifierPerlin=new Perlin(
+           frequency:.85,
+            lacunarity:3.5,
+             persistence:0.8,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
          }
          internal void DisposeModules(){
           foreach(var module in modules){
                       module.Dispose();
           }
           modules.Clear();
-			       biomeSpawnSettings.simObjectSpawnChancePerlin.Dispose();
-			       biomeSpawnSettings.   scaleModifierPerlin.Dispose();
-			       biomeSpawnSettings.rotationModifierPerlin.Dispose();
+          biomeSpawnSettings.simObjectSpawnChancePerlin.Dispose();
+          biomeSpawnSettings.   scaleModifierPerlin.Dispose();
+          biomeSpawnSettings.rotationModifierPerlin.Dispose();
          }
      protected Select[]selectors=new Select[1];
          internal virtual int Selection(Vector3 noiseInput){
