@@ -21,8 +21,8 @@ namespace AKCondinoO.Voxels.Biomes{
         }
         internal struct SimObjectSpawnModifiers{
          internal Vector3 scale;
-			      internal float rotation;
-			     }
+         internal float rotation;
+        }
      readonly protected Dictionary<int,HashSet<Type>>simObjectPicking=new Dictionary<int,HashSet<Type>>();
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();
      readonly protected Dictionary<int,int>settingsCountForSelection=new Dictionary<int,int>();
@@ -53,18 +53,18 @@ namespace AKCondinoO.Voxels.Biomes{
         }
         internal void Init(){
          foreach(var selectionTypesPair in simObjectPicking){
-				      int selection=selectionTypesPair.Key;
-				      HashSet<Type>types=selectionTypesPair.Value;
-				      int settingsCount=0;
-				      foreach(var typeSettingsListByPickingPair in allSettings){
-											Type type=typeSettingsListByPickingPair.Key;
-											Dictionary<int,List<SimObjectSettings>>settingsListByPicking=typeSettingsListByPickingPair.Value;
-											if(types.Contains(type)){
-												if(settingsListByPicking.TryGetValue(selection,out List<SimObjectSettings>settingsList)){
-													settingsCount+=settingsList.Count;
-												}
-											}
-					     }
+          int selection=selectionTypesPair.Key;
+          HashSet<Type>types=selectionTypesPair.Value;
+          int settingsCount=0;
+          foreach(var typeSettingsListByPickingPair in allSettings){
+           Type type=typeSettingsListByPickingPair.Key;
+           Dictionary<int,List<SimObjectSettings>>settingsListByPicking=typeSettingsListByPickingPair.Value;
+           if(types.Contains(type)){
+            if(settingsListByPicking.TryGetValue(selection,out List<SimObjectSettings>settingsList)){
+             settingsCount+=settingsList.Count;
+            }
+           }
+          }
           settingsCountForSelection[selection]=settingsCount;
           Log.DebugMessage("Init():settingsCountForSelection["+selection+"]="+settingsCount);
          }
@@ -74,17 +74,17 @@ namespace AKCondinoO.Voxels.Biomes{
          Vector3 noiseInput=noiseInputRounded+biome.deround;
          int selection=biome.Selection(noiseInput);
          if(simObjectPicking.TryGetValue(selection,out var types)){
-				      int count=0;
+          int count=0;
           foreach(var type in types){
            if(allSettings.TryGetValue(type,out var typeSettings)){
             if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
              foreach(SimObjectSettings setting in typeSettingsListForSelection){
-								      float chance=setting.chance/settingsCountForSelection[selection];
-								      float dicing=((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f;
-								      count++;
-								      if(dicing<=chance){
-									      return(type,setting);
-									     }
+              float chance=setting.chance/settingsCountForSelection[selection];
+              float dicing=((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f;
+              count++;
+              if(dicing<=chance){
+               return(type,setting);
+              }
              }
             }
            }
@@ -92,21 +92,21 @@ namespace AKCondinoO.Voxels.Biomes{
          }
          return null;
         }
-		   internal Perlin  scaleModifierPerlin;
-		   internal Perlin rotationModifierPerlin;
-		      internal virtual SimObjectSpawnModifiers GetSimObjectSpawnModifiers(Vector3Int noiseInputRounded,SimObjectSettings simObjectSettings){
-			      Vector3 noiseInput=noiseInputRounded+biome.deround;
-			      SimObjectSpawnModifiers modifiers=new SimObjectSpawnModifiers{
-										scale=Vector3.Lerp(
-											simObjectSettings.minScale,
-											simObjectSettings.maxScale,
-											Mathf.Clamp01(
-												((float)scaleModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f
-											)
-										),
-										rotation=(float)rotationModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)*720f,
-									};
-			      return modifiers;
-			     }
+     internal Perlin  scaleModifierPerlin;
+     internal Perlin rotationModifierPerlin;
+        internal virtual SimObjectSpawnModifiers GetSimObjectSpawnModifiers(Vector3Int noiseInputRounded,SimObjectSettings simObjectSettings){
+         Vector3 noiseInput=noiseInputRounded+biome.deround;
+         SimObjectSpawnModifiers modifiers=new SimObjectSpawnModifiers{
+          scale=Vector3.Lerp(
+           simObjectSettings.minScale,
+           simObjectSettings.maxScale,
+           Mathf.Clamp01(
+            ((float)scaleModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f
+           )
+          ),
+          rotation=(float)rotationModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)*720f,
+         };
+         return modifiers;
+        }
     }
 }
