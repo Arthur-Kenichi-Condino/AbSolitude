@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-				#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
 using System;
@@ -11,36 +11,36 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
      internal PersistentSimActorData persistentSimActorData;
-		      //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
+        //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
         internal struct PersistentSimActorData{
-			      public SkillsListWrapper skills;
-			         internal struct SkillsListWrapper:IEnumerator<(Type skill,int level)>{
-				         private List<(Type skill,int level)>.Enumerator m_Enumerator;
-				            public SkillsListWrapper(List<(Type skill,int level)>list){
-					            m_Enumerator=list.GetEnumerator();
-					           }
+         public SkillsListWrapper skills;
+            internal struct SkillsListWrapper:IEnumerator<(Type skill,int level)>{
+             private List<(Type skill,int level)>.Enumerator m_Enumerator;
+                public SkillsListWrapper(List<(Type skill,int level)>list){
+                 m_Enumerator=list.GetEnumerator();
+                }
                 public(Type skill,int level)Current=>m_Enumerator.Current;
                 object IEnumerator.Current=>Current;
                 public bool MoveNext()=>m_Enumerator.MoveNext();
                 public void Reset()=>((IEnumerator)m_Enumerator).Reset();
                 public void Dispose()=>m_Enumerator.Dispose();
-				        }
-			      public SlavesListWrapper slaves;
-			         internal struct SlavesListWrapper:IEnumerator<(Type simType,ulong number)>{
-				         private List<(Type simType,ulong number)>.Enumerator m_Enumerator;
-				            public SlavesListWrapper(List<(Type simType,ulong number)>list){
-					            m_Enumerator=list.GetEnumerator();
-					           }
+            }
+         public SlavesListWrapper slaves;
+            internal struct SlavesListWrapper:IEnumerator<(Type simType,ulong number)>{
+             private List<(Type simType,ulong number)>.Enumerator m_Enumerator;
+                public SlavesListWrapper(List<(Type simType,ulong number)>list){
+                 m_Enumerator=list.GetEnumerator();
+                }
                 public(Type simType,ulong number)Current=>m_Enumerator.Current;
                 object IEnumerator.Current=>Current;
                 public bool MoveNext()=>m_Enumerator.MoveNext();
                 public void Reset()=>((IEnumerator)m_Enumerator).Reset();
                 public void Dispose()=>m_Enumerator.Dispose();
-				        }
+            }
          public float timerToRandomMove;
         }
-		   protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
-		   internal readonly List<Skill>skills=new List<Skill>();
+     protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
+     internal readonly List<Skill>skills=new List<Skill>();
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
         protected override void Awake(){
@@ -50,20 +50,20 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
-			      foreach(var skill in skills){
-				      //  TO DO: test skill level
-				      requiredSkills.Remove(skill.GetType());
-				     }
-									if(requiredSkills.Count>0){
-										Log.DebugMessage("required skills missing");
-				     }
-									foreach(var requiredSkill in requiredSkills){
-				      GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
-				      Skill skill=skillGameObject.GetComponent<Skill>();
-				      skill.level=requiredSkill.Value;
-				      skills.Add(skill);
-				     }
-									requiredSkills.Clear();
+         foreach(var skill in skills){
+          //  TO DO: test skill level
+          requiredSkills.Remove(skill.GetType());
+         }
+         if(requiredSkills.Count>0){
+          Log.DebugMessage("required skills missing");
+         }
+         foreach(var requiredSkill in requiredSkills){
+          GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
+          Skill skill=skillGameObject.GetComponent<Skill>();
+          skill.level=requiredSkill.Value;
+          skills.Add(skill);
+         }
+         requiredSkills.Clear();
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
