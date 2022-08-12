@@ -108,6 +108,7 @@ namespace AKCondinoO.Sims{
           collider.enabled=true;
          }
          interactionsEnabled=true;
+			      isOverlapping=IsOverlappingNonAlloc();
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
@@ -121,6 +122,7 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
+		   [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
@@ -178,6 +180,19 @@ namespace AKCondinoO.Sims{
           }
          );
         }
+		   protected Collider[]overlappedColliders=new Collider[8];
+		      protected virtual bool IsOverlappingNonAlloc(){
+			      bool result=false;
+			      for(int i=0;i<volumeColliders.Count;++i){
+          int overlappingsLength=0;
+				      if(volumeColliders[i]is CapsuleCollider capsule){
+					      var direction=new Vector3{[capsule.direction]=1};
+					      direction=transform.rotation*direction;
+					      //Log.DebugMessage("capsule direction:"+direction);
+					     }
+				     }
+         return result;
+			     }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
              Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
