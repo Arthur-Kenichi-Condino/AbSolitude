@@ -122,7 +122,7 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
-		   [NonSerialized]bool isOverlapping;
+     [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
