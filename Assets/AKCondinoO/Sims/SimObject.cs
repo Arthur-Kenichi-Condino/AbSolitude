@@ -108,7 +108,7 @@ namespace AKCondinoO.Sims{
           collider.enabled=true;
          }
          interactionsEnabled=true;
-			      isOverlapping=IsOverlappingNonAlloc();
+         isOverlapping=IsOverlappingNonAlloc();
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
@@ -185,13 +185,13 @@ namespace AKCondinoO.Sims{
          bool result=false;
          for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
-   	      if(volumeColliders[i]is CapsuleCollider capsule){
-   	       var direction=new Vector3{[capsule.direction]=1};
+          if(volumeColliders[i]is CapsuleCollider capsule){
+           var direction=new Vector3{[capsule.direction]=1};
            direction=transform.rotation*direction;
            //Log.DebugMessage("capsule direction:"+direction);
-   	   	   var offset=capsule.height/2f-capsule.radius-0.001f;
-   	      }
-   	     }
+           var offset=capsule.height/2f-capsule.radius-0.001f;
+          }
+         }
          return result;
         }
         protected virtual void OnDrawGizmos(){
