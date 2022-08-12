@@ -1,6 +1,6 @@
 #if UNITY_EDITOR
-				#define ENABLE_DEBUG_GIZMOS
-				#define ENABLE_LOG_DEBUG
+    #define ENABLE_DEBUG_GIZMOS
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
 using System;
@@ -18,28 +18,28 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          this.simObjectsPlacing=simObjectsPlacing;
         }
      internal bool isBusy;
-		   bool spawning;
+     bool spawning;
      bool fillingSpawnData;
      bool doingRaycasts;
      internal JobHandle doRaycastsHandle{get;private set;}
      bool settingGetGroundRays;
         internal void OnAddingSurfaceSimObjects(){
-			         if(spawning){
-				            if(surfaceSimObjectsPlacerBG.spawnData.dequeued){
-					               spawning=false;
-																				Log.DebugMessage("spawning=false;");
-												        isBusy=false;
-					           }
-				        }else{
-																if(fillingSpawnData){
-																				if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
-																								fillingSpawnData=false;
-																								Log.DebugMessage("fillingSpawnData=false;");
-																								surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
-																								SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
-																								spawning=true;
-																								Log.DebugMessage("spawning=true;");
-																				}
+            if(spawning){
+                if(surfaceSimObjectsPlacerBG.spawnData.dequeued){
+                    spawning=false;
+                    Log.DebugMessage("spawning=false;");
+                    isBusy=false;
+                }
+            }else{
+                if(fillingSpawnData){
+                    if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
+                        fillingSpawnData=false;
+                        Log.DebugMessage("fillingSpawnData=false;");
+                        surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
+                        SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
+                        spawning=true;
+                        Log.DebugMessage("spawning=true;");
+                    }
 																}else{
 																				if(doingRaycasts){
 																								if(doRaycastsHandle.IsCompleted){
