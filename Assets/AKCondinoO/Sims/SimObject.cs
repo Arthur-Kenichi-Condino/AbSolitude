@@ -180,20 +180,20 @@ namespace AKCondinoO.Sims{
           }
          );
         }
-		   protected Collider[]overlappedColliders=new Collider[8];
-		      protected virtual bool IsOverlappingNonAlloc(){
-			      bool result=false;
-			      for(int i=0;i<volumeColliders.Count;++i){
+     protected Collider[]overlappedColliders=new Collider[8];
+        protected virtual bool IsOverlappingNonAlloc(){
+         bool result=false;
+         for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
-				      if(volumeColliders[i]is CapsuleCollider capsule){
-					      var direction=new Vector3{[capsule.direction]=1};
-					      direction=transform.rotation*direction;
-					      //Log.DebugMessage("capsule direction:"+direction);
-											var offset=capsule.height/2f-capsule.radius-0.001f;
-					     }
-				     }
+   	      if(volumeColliders[i]is CapsuleCollider capsule){
+   	       var direction=new Vector3{[capsule.direction]=1};
+           direction=transform.rotation*direction;
+           //Log.DebugMessage("capsule direction:"+direction);
+   	   	   var offset=capsule.height/2f-capsule.radius-0.001f;
+   	      }
+   	     }
          return result;
-			     }
+        }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
              Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
