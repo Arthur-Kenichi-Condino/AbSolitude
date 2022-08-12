@@ -189,6 +189,7 @@ namespace AKCondinoO.Sims{
 					      var direction=new Vector3{[capsule.direction]=1};
 					      direction=transform.rotation*direction;
 					      //Log.DebugMessage("capsule direction:"+direction);
+											var offset=capsule.height/2f-capsule.radius-0.001f;
 					     }
 				     }
          return result;
