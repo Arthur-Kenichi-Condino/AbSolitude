@@ -190,6 +190,10 @@ namespace AKCondinoO.Sims{
            direction=transform.rotation*direction;
            //Log.DebugMessage("capsule direction:"+direction);
            var offset=capsule.height/2f-capsule.radius-0.001f;
+           var localPoint0=capsule.center-direction*offset;
+           var localPoint1=capsule.center+direction*offset;
+           var point0=transform.TransformPoint(localPoint0);
+           var point1=transform.TransformPoint(localPoint1);
           }
          }
          return result;
