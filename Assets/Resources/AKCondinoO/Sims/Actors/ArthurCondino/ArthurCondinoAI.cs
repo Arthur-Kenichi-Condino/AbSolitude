@@ -9,9 +9,15 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:BaseAI{
         protected override void Awake(){
-			      requiredSkills.Add(typeof(GenerateHomunculus),10);
          base.Awake();
-			     }
+        }
+        internal override void OnActivated(){
+         requiredSkills.Add(typeof(GenerateHomunculus),10);
+         base.OnActivated();
+        }
+        protected override void OnIDLE_ST(){
+         base.OnIDLE_ST();
+        }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
              base.OnDrawGizmos();
