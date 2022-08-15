@@ -52,7 +52,7 @@ namespace AKCondinoO.Voxels.Terrain{
           ignoreFromBuild=false,
          };
          simObjectsPlacing=new VoxelTerrainSimObjectsPlacing(this);
-         Log.DebugMessage("Allocate NativeLists");
+         //Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
          simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays=new NativeList<RaycastCommand>(Width*Depth,Allocator.Persistent);

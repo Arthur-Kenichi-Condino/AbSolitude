@@ -58,11 +58,11 @@ namespace AKCondinoO{
          }
         }
         internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
-         Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
+         //Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
          navMeshDirty=true;
         }
         internal void OnSimObjectSpawned(SimObject simObject){
-         Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
+         //Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
          navMeshDirty=true;
         }
      bool pendingCoordinatesUpdate=true;

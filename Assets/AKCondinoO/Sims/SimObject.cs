@@ -94,7 +94,7 @@ namespace AKCondinoO.Sims{
          DisableInteractions();
         }
         internal virtual void OnActivated(){
-         Log.DebugMessage("OnActivated:id:"+id);
+         //Log.DebugMessage("OnActivated:id:"+id);
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
@@ -145,7 +145,7 @@ namespace AKCondinoO.Sims{
          }else{
              if(isOverlapping){
                 isOverlapping=false;
-                 Log.DebugMessage("simObject isOverlapping:id:"+id);
+                 //Log.DebugMessage("simObject isOverlapping:id:"+id);
                  DisableInteractions();
                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
                  result=2;

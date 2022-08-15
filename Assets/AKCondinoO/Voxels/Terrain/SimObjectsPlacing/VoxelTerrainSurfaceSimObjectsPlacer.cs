@@ -27,24 +27,24 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(spawning){
                 if(surfaceSimObjectsPlacerBG.spawnData.dequeued){
                     spawning=false;
-                    Log.DebugMessage("spawning=false;");
+                    //Log.DebugMessage("spawning=false;");
                     isBusy=false;
                 }
             }else{
                 if(fillingSpawnData){
                     if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                         fillingSpawnData=false;
-                        Log.DebugMessage("fillingSpawnData=false;");
+                        //Log.DebugMessage("fillingSpawnData=false;");
                         surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                         SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
                         spawning=true;
-                        Log.DebugMessage("spawning=true;");
+                        //Log.DebugMessage("spawning=true;");
                     }
                 }else{
                     if(doingRaycasts){
                         if(doRaycastsHandle.IsCompleted){
                             doingRaycasts=false;
-                            Log.DebugMessage("doingRaycasts=false;");
+                            //Log.DebugMessage("doingRaycasts=false;");
                             doRaycastsHandle.Complete();
                             Vector3Int vCoord1=new Vector3Int(0,0,0);
                             int i=0;
@@ -55,12 +55,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                              if(hit.collider!=null){
                               surfaceSimObjectsPlacerBG.gotGroundHits[index]=hit;
                                  #if UNITY_EDITOR
-                                     Debug.DrawRay(
-                                      surfaceSimObjectsPlacerBG.GetGroundHits[i-1].point,
-                                      (surfaceSimObjectsPlacerBG.GetGroundRays[i-1].from-surfaceSimObjectsPlacerBG.GetGroundHits[i-1].point).normalized,
-                                      Color.gray,
-                                      5f
-                                     );
+                                     //Debug.DrawRay(
+                                     // surfaceSimObjectsPlacerBG.GetGroundHits[i-1].point,
+                                     // (surfaceSimObjectsPlacerBG.GetGroundRays[i-1].from-surfaceSimObjectsPlacerBG.GetGroundHits[i-1].point).normalized,
+                                     // Color.gray,
+                                     // 5f
+                                     //);
                                  #endif
                              }else{
                               surfaceSimObjectsPlacerBG.gotGroundHits[index]=null;
@@ -68,17 +68,17 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             }}
                             surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.FillSpawnData;
                             fillingSpawnData=true;
-                            Log.DebugMessage("fillingSpawnData=true;");
+                            //Log.DebugMessage("fillingSpawnData=true;");
                             VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Schedule(surfaceSimObjectsPlacerBG);
                         }
                     }else{
                         if(settingGetGroundRays){
                             if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                                 settingGetGroundRays=false;
-                                Log.DebugMessage("settingGetGroundRays=false;");
+                                //Log.DebugMessage("settingGetGroundRays=false;");
                                 doRaycastsHandle=RaycastCommand.ScheduleBatch(surfaceSimObjectsPlacerBG.GetGroundRays,surfaceSimObjectsPlacerBG.GetGroundHits,surfaceSimObjectsPlacerBG.GetGroundRays.Length/Environment.ProcessorCount,default(JobHandle));
                                 doingRaycasts=true;
-                                Log.DebugMessage("doingRaycasts=true;");
+                                //Log.DebugMessage("doingRaycasts=true;");
                             }
                         }else{
                             surfaceSimObjectsPlacerBG.GetGroundRays.Clear();
@@ -90,7 +90,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             surfaceSimObjectsPlacerBG.cnkIdx=simObjectsPlacing.cnk.id.Value.cnkIdx;
                             surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.GetGround;
                             settingGetGroundRays=true;
-                            Log.DebugMessage("settingGetGroundRays=true;");
+                            //Log.DebugMessage("settingGetGroundRays=true;");
                             VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Schedule(surfaceSimObjectsPlacerBG);
                         }
                     }
