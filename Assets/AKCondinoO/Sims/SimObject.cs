@@ -135,16 +135,17 @@ namespace AKCondinoO.Sims{
           TransformBoundsVertices();
           persistentData.UpdateData(this);
             transform.hasChanged=false;
+          isOverlapping=IsOverlappingNonAlloc();
          }
-         if(isOverlapping){
-            isOverlapping=false;
-             Log.DebugMessage("simObject isOverlapping:id:"+id);
+         if(unplaceRequested){
+            unplaceRequested=false;
              DisableInteractions();
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
              result=2;
          }else{
-             if(unplaceRequested){
-                unplaceRequested=false;
+             if(isOverlapping){
+                isOverlapping=false;
+                 Log.DebugMessage("simObject isOverlapping:id:"+id);
                  DisableInteractions();
                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
                  result=2;
@@ -191,6 +192,9 @@ namespace AKCondinoO.Sims{
         }
      protected Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(){
+         if(this is SimActor){
+          return false;
+         }
          bool result=false;
          for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
