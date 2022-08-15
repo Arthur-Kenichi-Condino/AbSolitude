@@ -39,8 +39,6 @@ namespace AKCondinoO.Sims.Actors{
             }
          public float timerToRandomMove;
         }
-     protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
-     internal readonly List<Skill>skills=new List<Skill>();
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
         protected override void Awake(){
@@ -50,6 +48,17 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
+        }
+        internal override void OnLoadingPool(){
+         base.OnLoadingPool();
+        }
+     protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
+     internal readonly List<Skill>skills=new List<Skill>();
+     internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
+        internal override void OnActivated(){
+         base.OnActivated();
+         skills.Clear();
+         //  load skills from file here
          foreach(var skill in skills){
           //  TO DO: test skill level
           requiredSkills.Remove(skill.GetType());
@@ -64,9 +73,8 @@ namespace AKCondinoO.Sims.Actors{
           skills.Add(skill);
          }
          requiredSkills.Clear();
-        }
-        internal override void OnLoadingPool(){
-         base.OnLoadingPool();
+         slaves.Clear();
+         //  load slaves from file here
         }
         protected override void EnableInteractions(){
          interactionsEnabled=true;
