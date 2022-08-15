@@ -194,6 +194,20 @@ namespace AKCondinoO.Sims{
            var localPoint1=capsule.center+direction*offset;
            var point0=transform.TransformPoint(localPoint0);
            var point1=transform.TransformPoint(localPoint1);
+           _GetOverlappedColliders:{
+            overlappingsLength=Physics.OverlapCapsuleNonAlloc(
+             point0,
+             point1,
+             capsule.radius-0.001f,
+             overlappedColliders
+            );
+           }
+           if(overlappingsLength>0){
+            if(overlappingsLength>=overlappedColliders.Length){
+             Array.Resize(ref overlappedColliders,overlappingsLength*2);
+             goto _GetOverlappedColliders;
+            }
+           }
           }
          }
          return result;
