@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -135,26 +136,34 @@ namespace AKCondinoO.Sims{
           persistentData.UpdateData(this);
             transform.hasChanged=false;
          }
-         if(unplaceRequested){
-            unplaceRequested=false;
+         if(isOverlapping){
+            isOverlapping=false;
+             Log.DebugMessage("simObject isOverlapping:id:"+id);
              DisableInteractions();
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
              result=2;
          }else{
-             if(checkIfOutOfSight){
-                checkIfOutOfSight=false;
-                 if(IsOutOfSight()){
-                     Log.DebugMessage("simObject IsOutOfSight:id:"+id);
-                     DisableInteractions();
-                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                     result=1;
-                 }
+             if(unplaceRequested){
+                unplaceRequested=false;
+                 DisableInteractions();
+                 SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                 result=2;
              }else{
-                 if(poolRequested){
-                    poolRequested=false;
-                     DisableInteractions();
-                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                     result=1;
+                 if(checkIfOutOfSight){
+                    checkIfOutOfSight=false;
+                     if(IsOutOfSight()){
+                         Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                         DisableInteractions();
+                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                         result=1;
+                     }
+                 }else{
+                     if(poolRequested){
+                        poolRequested=false;
+                         DisableInteractions();
+                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                         result=1;
+                     }
                  }
              }
          }
@@ -206,6 +215,20 @@ namespace AKCondinoO.Sims{
             if(overlappingsLength>=overlappedColliders.Length){
              Array.Resize(ref overlappedColliders,overlappingsLength*2);
              goto _GetOverlappedColliders;
+            }
+            ProcessOverlappings(capsule);
+           }
+          }
+          void ProcessOverlappings(Collider volumeCollider){
+           for(int j=0;j<overlappingsLength;++j){
+            Collider overlappedCollider=overlappedColliders[j];
+            if(overlappedCollider.transform.root!=transform.root){//  it's not myself
+             SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
+             if(overlappedSimObject!=null){
+              if(!(overlappedSimObject is SimActor)){
+               result=true;
+              }
+             }
             }
            }
           }
