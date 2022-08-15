@@ -53,7 +53,7 @@ namespace AKCondinoO.Sims.Actors{
          base.OnLoadingPool();
         }
      protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
-     internal readonly List<Skill>skills=new List<Skill>();
+     internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
      internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
@@ -61,7 +61,7 @@ namespace AKCondinoO.Sims.Actors{
          //  load skills from file here
          foreach(var skill in skills){
           //  TO DO: test skill level
-          requiredSkills.Remove(skill.GetType());
+          requiredSkills.Remove(skill.Key);
          }
          if(requiredSkills.Count>0){
           Log.DebugMessage("required skills missing");
@@ -70,7 +70,7 @@ namespace AKCondinoO.Sims.Actors{
           GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
           Skill skill=skillGameObject.GetComponent<Skill>();
           skill.level=requiredSkill.Value;
-          skills.Add(skill);
+          skills.Add(skill.GetType(),skill);
          }
          requiredSkills.Clear();
          slaves.Clear();
