@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims{
           Type t=typeFileStreamPair.Key;
           FileStream fileStream=typeFileStreamPair.Value;
           StreamReader fileStreamReader=this.fileStreamReader[t];
-          Log.DebugMessage("loading data for type:"+t);
+          //Log.DebugMessage("loading data for type:"+t);
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
           string line;
@@ -32,12 +32,12 @@ namespace AKCondinoO.Sims{
            int cnkIdxStringEnd  =line.IndexOf(" ,",cnkIdxStringStart);
            string cnkIdxString=line.Substring(cnkIdxStringStart,cnkIdxStringEnd-cnkIdxStringStart);
            int cnkIdx=int.Parse(cnkIdxString,NumberStyles.Any,CultureInfoUtil.en_US);
-           Log.DebugMessage("reading line for cnkIdx:"+cnkIdx);
+           //Log.DebugMessage("reading line for cnkIdx:"+cnkIdx);
            if(container.specificIdsToLoad.Count>0||container.terraincnkIdxToLoad.Contains(cnkIdx)){
-            Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
+            //Log.DebugMessage("must load sim objects at line for cnkIdx:"+cnkIdx);
             int simObjectStringStart=cnkIdxStringEnd+2;
             while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
-             Log.DebugMessage("sim object found at cnkIdx:"+cnkIdx);
+             //Log.DebugMessage("sim object found at cnkIdx:"+cnkIdx);
              int simObjectStringEnd=line.IndexOf("}, ",simObjectStringStart)+3;
              string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
              int idNumberStringStart=simObjectString.IndexOf("id=")+3;

@@ -188,7 +188,7 @@ namespace AKCondinoO.Sims{
                }
                id=(simType,number);
                if(SimObjectManager.singleton.spawned.ContainsKey(id)){
-                Log.DebugMessage("SpawnCoroutine:id already spawned:"+id);
+                //Log.DebugMessage("SpawnCoroutine:id already spawned:"+id);
                 if(numberIsNew||numberIsRecycled){
                  goto _GetId;
                 }
