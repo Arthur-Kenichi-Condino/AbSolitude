@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims{
          navMeshBuildSettings=new NavMeshBuildSettings[]{
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("MediumSize").Value,
-           agentRadius=0.28125f,
+           agentRadius=0.25f,
            agentHeight=1.75f,
            agentClimb=0.75f,
            agentSlope=60f,

@@ -4,6 +4,7 @@
 #endif
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
+using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
+     VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
      internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
@@ -49,9 +51,12 @@ namespace AKCondinoO.Voxels.Terrain{
           overrideArea=false,
           ignoreFromBuild=false,
          };
-         Log.DebugMessage("Allocate NativeLists");
+         simObjectsPlacing=new VoxelTerrainSimObjectsPlacing(this);
+         //Log.DebugMessage("Allocate NativeLists");
          marchingCubesBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays=new NativeList<RaycastCommand>(Width*Depth,Allocator.Persistent);
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth,Allocator.Persistent);
         }
         internal void OnInstantiated(){
         }
@@ -61,6 +66,10 @@ namespace AKCondinoO.Voxels.Terrain{
          Log.DebugMessage("Deallocate NativeLists");
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
+         simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning,-1);
+         simObjectsPlacing.surface.doRaycastsHandle.Complete();
+         if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.Dispose();
+         if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.Dispose();
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          hasPhysMeshBaked=false;
@@ -73,22 +82,27 @@ namespace AKCondinoO.Voxels.Terrain{
      bool waitingMarchingCubes;
      bool pendingMarchingCubes;
         internal void ManualUpdate(){
-            if(waitingBakeJob){
-                if(OnPhysMeshBaked()){
-                    waitingBakeJob=false;
-                }
+            if(simObjectsPlacing.isBusy){
+                simObjectsPlacing.AddingSimObjectsSubroutine();
             }else{
-                if(waitingMarchingCubes){
-                    if(OnMarchingCubesDone()){
-                        waitingMarchingCubes=false;
-                        SchedulePhysBakeMeshJob();
-                        waitingBakeJob=true;
+                if(waitingBakeJob){
+                    if(OnPhysMeshBaked()){
+                        waitingBakeJob=false;
+                        simObjectsPlacing.OnVoxelTerrainReady();
                     }
                 }else{
-                    if(pendingMarchingCubes){
-                        if(CanBeginMarchingCubes()){
-                            pendingMarchingCubes=false;
-                            waitingMarchingCubes=true;
+                    if(waitingMarchingCubes){
+                        if(OnMarchingCubesDone()){
+                            waitingMarchingCubes=false;
+                            SchedulePhysBakeMeshJob();
+                            waitingBakeJob=true;
+                        }
+                    }else{
+                        if(pendingMarchingCubes){
+                            if(CanBeginMarchingCubes()){
+                                pendingMarchingCubes=false;
+                                waitingMarchingCubes=true;
+                            }
                         }
                     }
                 }

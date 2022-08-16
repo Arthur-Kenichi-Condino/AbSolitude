@@ -55,7 +55,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      [SerializeField]protected float delayToRandomMove=8.0f;
-     protected float timerToRandomMove=8.0f;
+     protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
          if(
           MyPathfinding==PathfindingResult.IDLE||

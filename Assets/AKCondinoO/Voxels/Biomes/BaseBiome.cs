@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using LibNoise;
 using LibNoise.Generator;
 using LibNoise.Operator;
@@ -8,7 +11,12 @@ using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BaseBiome{
-     protected Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
+     internal readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
+         internal BaseBiome(){
+          biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
+          biomeSpawnSettings.Init();
+         }
+     internal Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
      protected System.Random[]random=new System.Random[2];
      int seed_v;
@@ -79,15 +87,42 @@ namespace AKCondinoO.Voxels.Biomes{
           modules.Add(module4b);//  5
                           ModuleBase module4c=new Multiply(lhs:module4b,rhs:module1);
           modules.Add(module4c);//  6
+          biomeSpawnSettings.simObjectSpawnChancePerlin=new Perlin(
+           frequency:.25,
+            lacunarity:2.0,
+             persistence:0.5,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
+          biomeSpawnSettings.scaleModifierPerlin=new Perlin(
+           frequency:.70,
+            lacunarity:3.5,
+             persistence:0.8,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
+          biomeSpawnSettings.rotationModifierPerlin=new Perlin(
+           frequency:.85,
+            lacunarity:3.5,
+             persistence:0.8,
+              octaves:6,
+               seed:seed_v,
+                quality:QualityMode.Low
+          );
          }
          internal void DisposeModules(){
           foreach(var module in modules){
                       module.Dispose();
           }
           modules.Clear();
+          biomeSpawnSettings.simObjectSpawnChancePerlin.Dispose();
+          biomeSpawnSettings.   scaleModifierPerlin.Dispose();
+          biomeSpawnSettings.rotationModifierPerlin.Dispose();
          }
      protected Select[]selectors=new Select[1];
-         protected virtual int Selection(Vector3 noiseInput){
+         internal virtual int Selection(Vector3 noiseInput){
           double min=selectors[0].Minimum;
           double max=selectors[0].Maximum;
           double fallOff=selectors[0].FallOff*.5;

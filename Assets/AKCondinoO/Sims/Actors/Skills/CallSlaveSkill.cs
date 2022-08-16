@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Voxels{
-    internal class VoxelTerrainSimObjectsPlacer{
+namespace AKCondinoO.Sims.Actors.Skills{
+    internal class CallSlaveSkill:Skill{
     }
 }

@@ -1,11 +1,27 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.ArthurCondino{
     internal class ArthurCondinoAI:BaseAI{
+        protected override void Awake(){
+         base.Awake();
+        }
+        internal override void OnActivated(){
+         requiredSkills.Add(typeof(GenerateHomunculus),10);
+         base.OnActivated();
+        }
+        protected override void OnIDLE_ST(){
+         Skill skill=Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves);
+         if(skill is GenerateHomunculus generateHomunculusSkill){
+          //Log.DebugMessage("generateHomunculusSkill");
+         }
+         base.OnIDLE_ST();
+        }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
              base.OnDrawGizmos();

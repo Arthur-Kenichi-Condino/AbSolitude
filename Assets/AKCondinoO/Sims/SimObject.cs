@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -93,7 +94,7 @@ namespace AKCondinoO.Sims{
          DisableInteractions();
         }
         internal virtual void OnActivated(){
-         Log.DebugMessage("OnActivated:id:"+id);
+         //Log.DebugMessage("OnActivated:id:"+id);
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
@@ -108,6 +109,7 @@ namespace AKCondinoO.Sims{
           collider.enabled=true;
          }
          interactionsEnabled=true;
+         isOverlapping=IsOverlappingNonAlloc();
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
@@ -121,6 +123,7 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
+     [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
@@ -132,6 +135,7 @@ namespace AKCondinoO.Sims{
           TransformBoundsVertices();
           persistentData.UpdateData(this);
             transform.hasChanged=false;
+          isOverlapping=IsOverlappingNonAlloc();
          }
          if(unplaceRequested){
             unplaceRequested=false;
@@ -139,20 +143,28 @@ namespace AKCondinoO.Sims{
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
              result=2;
          }else{
-             if(checkIfOutOfSight){
-                checkIfOutOfSight=false;
-                 if(IsOutOfSight()){
-                     Log.DebugMessage("simObject IsOutOfSight:id:"+id);
-                     DisableInteractions();
-                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                     result=1;
-                 }
+             if(isOverlapping){
+                isOverlapping=false;
+                 //Log.DebugMessage("simObject isOverlapping:id:"+id);
+                 DisableInteractions();
+                 SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                 result=2;
              }else{
-                 if(poolRequested){
-                    poolRequested=false;
-                     DisableInteractions();
-                     SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                     result=1;
+                 if(checkIfOutOfSight){
+                    checkIfOutOfSight=false;
+                     if(IsOutOfSight()){
+                         Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                         DisableInteractions();
+                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                         result=1;
+                     }
+                 }else{
+                     if(poolRequested){
+                        poolRequested=false;
+                         DisableInteractions();
+                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                         result=1;
+                     }
                  }
              }
          }
@@ -177,6 +189,55 @@ namespace AKCondinoO.Sims{
            return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
           }
          );
+        }
+     protected Collider[]overlappedColliders=new Collider[8];
+        protected virtual bool IsOverlappingNonAlloc(){
+         if(this is SimActor){
+          return false;
+         }
+         bool result=false;
+         for(int i=0;i<volumeColliders.Count;++i){
+          int overlappingsLength=0;
+          if(volumeColliders[i]is CapsuleCollider capsule){
+           var direction=new Vector3{[capsule.direction]=1};
+           direction=transform.rotation*direction;
+           //Log.DebugMessage("capsule direction:"+direction);
+           var offset=capsule.height/2f-capsule.radius-0.001f;
+           var localPoint0=capsule.center-direction*offset;
+           var localPoint1=capsule.center+direction*offset;
+           var point0=transform.TransformPoint(localPoint0);
+           var point1=transform.TransformPoint(localPoint1);
+           _GetOverlappedColliders:{
+            overlappingsLength=Physics.OverlapCapsuleNonAlloc(
+             point0,
+             point1,
+             capsule.radius-0.001f,
+             overlappedColliders
+            );
+           }
+           if(overlappingsLength>0){
+            if(overlappingsLength>=overlappedColliders.Length){
+             Array.Resize(ref overlappedColliders,overlappingsLength*2);
+             goto _GetOverlappedColliders;
+            }
+            ProcessOverlappings(capsule);
+           }
+          }
+          void ProcessOverlappings(Collider volumeCollider){
+           for(int j=0;j<overlappingsLength;++j){
+            Collider overlappedCollider=overlappedColliders[j];
+            if(overlappedCollider.transform.root!=transform.root){//  it's not myself
+             SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
+             if(overlappedSimObject!=null){
+              if(!(overlappedSimObject is SimActor)){
+               result=true;
+              }
+             }
+            }
+           }
+          }
+         }
+         return result;
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR

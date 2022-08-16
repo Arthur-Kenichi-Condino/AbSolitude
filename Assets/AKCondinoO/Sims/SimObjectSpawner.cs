@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -135,7 +136,7 @@ namespace AKCondinoO.Sims{
                Log.DebugMessage("DEBUG_CREATE_SIM_OBJECT:"+DEBUG_CREATE_SIM_OBJECT+";amount:"+DEBUG_CREATE_SIM_OBJECT_AMOUNT);
                Type t=DEBUG_CREATE_SIM_OBJECT.GetType();
                for(int i=0;i<DEBUG_CREATE_SIM_OBJECT_AMOUNT;++i){
-                (Vector3 position,Vector3 rotation,Vector3 scale,Type type,ulong?id)at=(DEBUG_CREATE_SIM_OBJECT_POSITION,DEBUG_CREATE_SIM_OBJECT_ROTATION,DEBUG_CREATE_SIM_OBJECT_SCALE,t,null);
+                (Vector3 position,Vector3 rotation,Vector3 scale,Type type,ulong?id,SimObject.PersistentData persistentData)at=(DEBUG_CREATE_SIM_OBJECT_POSITION,DEBUG_CREATE_SIM_OBJECT_ROTATION,DEBUG_CREATE_SIM_OBJECT_SCALE,t,null,new SimObject.PersistentData());
                 spawnData.at.Add(at);
                }
                spawnData.dequeued=false;
@@ -144,7 +145,16 @@ namespace AKCondinoO.Sims{
               }
              }
              while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
+              int index=0;
               foreach(var at in toSpawn.at){
+               SimActor.PersistentSimActorData?persistentSimActorData=null;
+               if(SimObjectUtil.IsSimActor(at.type)){
+                //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
+                if(toSpawn.actorData.TryGetValue(index,out var data)){
+                 persistentSimActorData=data;
+                }
+               }
+               index++;
                _GetId:{}
                Type simType=at.type;
                ulong number;
@@ -178,7 +188,7 @@ namespace AKCondinoO.Sims{
                }
                id=(simType,number);
                if(SimObjectManager.singleton.spawned.ContainsKey(id)){
-                Log.DebugMessage("SpawnCoroutine:id already spawned:"+id);
+                //Log.DebugMessage("SpawnCoroutine:id already spawned:"+id);
                 if(numberIsNew||numberIsRecycled){
                  goto _GetId;
                 }
@@ -204,7 +214,7 @@ namespace AKCondinoO.Sims{
                 simObject.id=id;
                 simObject.OnActivated();
               }
-              toSpawn.at.Clear();
+              toSpawn.Clear();
               toSpawn.dequeued=true;
              }
                 if(loadingPersistentData){
