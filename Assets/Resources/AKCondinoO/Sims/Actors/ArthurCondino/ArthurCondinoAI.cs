@@ -18,7 +18,7 @@ namespace AKCondinoO.Sims.Actors.ArthurCondino{
         protected override void OnIDLE_ST(){
          Skill skill=Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves);
          if(skill is GenerateHomunculus generateHomunculusSkill){
-          Log.DebugMessage("generateHomunculusSkill");
+          //Log.DebugMessage("generateHomunculusSkill");
          }
          base.OnIDLE_ST();
         }
