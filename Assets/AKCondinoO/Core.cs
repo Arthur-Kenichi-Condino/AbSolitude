@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.UI;
 using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
@@ -35,6 +36,7 @@ namespace AKCondinoO{
          VoxelSystem     .singleton.Init();
          SimObjectManager.singleton.Init();
          SimObjectSpawner.singleton.Init();
+         SkillsManager   .singleton.Init();
          SimsMachine     .singleton.Init();
          AutonomyCore    .singleton.Init();
          GameMode        .singleton.Init();
@@ -68,6 +70,7 @@ namespace AKCondinoO{
               GameMode        .singleton=null;
               AutonomyCore    .singleton=null;
               SimsMachine     .singleton=null;
+              SkillsManager   .singleton=null;
               SimObjectSpawner.singleton=null;
               SimObjectManager.singleton=null;
               VoxelSystem     .singleton=null;

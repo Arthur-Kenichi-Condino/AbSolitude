@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b68d44e3ab744b98027a983d66b345, type: 3}
+  m_Name: EyesGlobalSizeLargeUMABonePose
+  m_EditorClassIdentifier: 
+  poses:
+  - bone: lEye
+    hash: -440365084
+    position: {x: 0.00030416995, y: -0.0029472336, z: -0.0015780551}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1.1590192, y: 1.1590186, z: 1.1590192}
+  - bone: rEye
+    hash: 1426501448
+    position: {x: -0.00030416995, y: -0.0029472336, z: -0.0015780551}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1.1590192, y: 1.1590186, z: 1.1590192}
+  - bone: lEyelidOuter
+    hash: -1811015372
+    position: {x: 0.0032215398, y: -0.000008806586, z: -0.000025203452}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1.1856158, y: 1.1856158, z: 1.1856159}
+  - bone: rEyelidOuter
+    hash: 1898391510
+    position: {x: -0.0032215398, y: -0.000008806586, z: -0.000025203452}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1.1856158, y: 1.1856158, z: 1.1856159}
+  - bone: lEyelidLowerOuter
+    hash: -1890830563
+    position: {x: -0.00000017508864, y: -0.0026382133, z: 0.0012357272}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidLowerOuter
+    hash: -650553610
+    position: {x: 0.00000017508864, y: -0.0026382133, z: 0.0012357272}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidLower
+    hash: -296981946
+    position: {x: 0.0011610314, y: -0.0022308156, z: 0.0017009098}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidLower
+    hash: 191190180
+    position: {x: -0.0011610314, y: -0.0022308156, z: 0.0017009098}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidLowerInner
+    hash: -1767558011
+    position: {x: -0.00000012665987, y: -0.0017479435, z: 0.001261564}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidLowerInner
+    hash: -1060088466
+    position: {x: 0.00000012665987, y: -0.0017479435, z: 0.001261564}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidInner
+    hash: -1914234196
+    position: {x: 0.0014236458, y: -0.00070494413, z: 0.0013514217}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidInner
+    hash: 1758340174
+    position: {x: -0.0014236458, y: -0.00070494413, z: 0.0013514217}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidUpperInner
+    hash: 883038750
+    position: {x: -0.00000016391277, y: 0.00042348355, z: -0.0017290134}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidUpperInner
+    hash: 1658289141
+    position: {x: 0.00000016391277, y: 0.00042348355, z: -0.0017290134}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidUpper
+    hash: -1903571207
+    position: {x: -0.0011397712, y: -0.00044441223, z: -0.0007559657}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidUpper
+    hash: 1805709339
+    position: {x: 0.0011397712, y: -0.00044441223, z: -0.0007559657}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: lEyelidUpperOuter
+    hash: 759896454
+    position: {x: -0.000058285892, y: 0.000052519143, z: 0.00003105402}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  - bone: rEyelidUpperOuter
+    hash: 2067691629
+    position: {x: 0.000058285892, y: 0.000052519143, z: 0.00003105402}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  tweenPoses: []
+  tweenWeights: []
