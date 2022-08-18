@@ -37,6 +37,7 @@ namespace AKCondinoO{
         private void Start(){
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
           {0,MainCamera.singleton},
+          {1,SimTime   .singleton}
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
@@ -46,8 +47,6 @@ namespace AKCondinoO{
           Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
-         //MainCamera         .singleton.Init();
-         SimTime            .singleton.Init();
          VoxelSystem        .singleton.Init();
          VoxelTerrainEditing.singleton.Init();
          SimObjectManager   .singleton.Init();

@@ -6,8 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
-    internal class SimTime:MonoBehaviour{   
-     internal static SimTime singleton;
+    internal class SimTime:MonoBehaviour,ISingletonInitialization{   
+     internal static SimTime singleton{get;set;}
      [SerializeField]internal SunLight mainSun;
      internal const int   _YEAR  =12;
      internal const int   _MONTH =28;
@@ -37,10 +37,9 @@ namespace AKCondinoO{
          sunTransforms=GetComponentsInChildren<SunTransform>();
          simTimeOfDay=12.0f*60f*60f;
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimTime:OnDestroyingCoreEvent");
         }
         internal enum DayTransitions{
