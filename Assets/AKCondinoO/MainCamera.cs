@@ -12,7 +12,6 @@ namespace AKCondinoO{
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
-         //Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
