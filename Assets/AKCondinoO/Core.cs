@@ -36,8 +36,11 @@ namespace AKCondinoO{
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
-          {0,MainCamera.singleton},
-          {1,SimTime   .singleton}
+          { 0,MainCamera         .singleton},
+          { 1,SimTime            .singleton},
+          { 2,VoxelSystem        .singleton},
+          { 3,VoxelTerrainEditing.singleton},
+          {11,FixedUI            .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
@@ -47,8 +50,6 @@ namespace AKCondinoO{
           Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
-         VoxelSystem        .singleton.Init();
-         VoxelTerrainEditing.singleton.Init();
          SimObjectManager   .singleton.Init();
          SimObjectSpawner   .singleton.Init();
          SkillsManager      .singleton.Init();
@@ -56,7 +57,6 @@ namespace AKCondinoO{
          AutonomyCore       .singleton.Init();
          GameMode           .singleton.Init();
          Placeholder        .singleton.Init();
-         FixedUI            .singleton.Init();
          Gameplayer.main.Init();
         }
         void OnDestroy(){

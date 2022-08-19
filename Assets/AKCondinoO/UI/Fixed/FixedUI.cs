@@ -10,14 +10,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.GameMode;
 namespace AKCondinoO.UI.Fixed{
-    internal class FixedUI:MonoBehaviour{
-     internal static FixedUI singleton;
+    internal class FixedUI:MonoBehaviour,ISingletonInitialization{
+     internal static FixedUI singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          (buildBuyEditModeUIContent.buildCategoryTableFloors=Instantiate(buildBuyEditModeUIContent.buildCategorySimObjectsTablePrefab,buildBuyEditModeUIContent.buildCategoryRectTransform,false).AddComponent<TableFloors>()).name="TableFloors";
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
          //  Change UI for game mode:
          GameMode.singleton.OnGameModeChangeEvent+=OnGameModeChangeEvent;
          foreach(var typePrefabPair in SimObjectSpawner.singleton.simObjectPrefabs){
@@ -32,7 +31,7 @@ namespace AKCondinoO.UI.Fixed{
          }
          buildBuyEditModeUIContent.buildCategoryTableFloors.OnCreateTable();
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("FixedUI:OnDestroyingCoreEvent");
         }
      [SerializeField]internal RectTransform              buildBuyEditModeUI;

@@ -7,15 +7,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Editing{
-    internal class VoxelTerrainEditing:MonoBehaviour{
-     internal static VoxelTerrainEditing singleton;
+    internal class VoxelTerrainEditing:MonoBehaviour,ISingletonInitialization{
+     internal static VoxelTerrainEditing singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
         }
     }

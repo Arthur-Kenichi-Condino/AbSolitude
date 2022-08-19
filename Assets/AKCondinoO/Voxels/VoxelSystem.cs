@@ -13,7 +13,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
-    internal class VoxelSystem:MonoBehaviour{
+    internal class VoxelSystem:MonoBehaviour,ISingletonInitialization{
      internal const int MaxcCoordx=312;
      internal const int MaxcCoordy=312;
      internal const ushort Height=(256);
@@ -75,7 +75,7 @@ namespace AKCondinoO.Voxels{
             }
         #endregion
      internal static int voxelTerrainLayer;
-     internal static VoxelSystem singleton;
+     internal static VoxelSystem singleton{get;set;}
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
@@ -97,7 +97,7 @@ namespace AKCondinoO.Voxels{
                        surfaceSimObjectsPlacerBGThreads[i]=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded();
          }
         }
-        internal void Init(){
+        public void Init(){
          int maxConnections=1;
          int poolSize=maxConnections*(expropriationDistance.x*2+1)
                                     *(expropriationDistance.y*2+1);
@@ -112,9 +112,8 @@ namespace AKCondinoO.Voxels{
          AtlasHelper.SetAtlasData();
          biome.Seed=0;
          proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
