@@ -94,7 +94,7 @@ namespace UMA.Editors
 
         }
 
-        private void Cleanup()
+        private new void Cleanup()
         {
             // Guard against Unity calling this via update multiple times even after
             // it's been removed from the event. Only happens on Mac.
