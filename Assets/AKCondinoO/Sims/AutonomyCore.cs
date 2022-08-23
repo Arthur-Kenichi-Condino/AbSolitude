@@ -7,15 +7,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class AutonomyCore:MonoBehaviour{
-     internal static AutonomyCore singleton;
+    internal class AutonomyCore:MonoBehaviour,ISingletonInitialization{
+     internal static AutonomyCore singleton{get;set;}
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("AutonomyCore:OnDestroyingCoreEvent");
         }
         void Update(){

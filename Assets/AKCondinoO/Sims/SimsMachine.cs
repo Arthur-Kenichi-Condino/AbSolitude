@@ -7,15 +7,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimsMachine:MonoBehaviour{
-     internal static SimsMachine singleton;
+    internal class SimsMachine:MonoBehaviour,ISingletonInitialization{
+     internal static SimsMachine singleton{get;set;}
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
         }
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);

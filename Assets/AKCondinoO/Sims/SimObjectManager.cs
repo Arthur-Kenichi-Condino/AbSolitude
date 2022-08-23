@@ -6,8 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimObjectManager:MonoBehaviour{
-     internal static SimObjectManager singleton;
+    internal class SimObjectManager:MonoBehaviour,ISingletonInitialization{
+     internal static SimObjectManager singleton{get;set;}
      [SerializeField]internal bool disableSnappingToSlots=false;
      internal PersistentDataSavingBackgroundContainer persistentDataSavingBG;
      internal PersistentDataSavingMultithreaded       persistentDataSavingBGThread;
@@ -31,12 +31,11 @@ namespace AKCondinoO.Sims{
          persistentDataLoadingBG=new PersistentDataLoadingBackgroundContainer();
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
                  idsFile=string.Format("{0}{1}",Core.savePath,        "ids.txt");
          releasedIdsFile=string.Format("{0}{1}",Core.savePath,"releasedIds.txt");
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
          #region PersistentDataLoadingMultithreaded
           persistentDataLoadingBG.IsCompleted(persistentDataLoadingBGThread.IsRunning,-1);
