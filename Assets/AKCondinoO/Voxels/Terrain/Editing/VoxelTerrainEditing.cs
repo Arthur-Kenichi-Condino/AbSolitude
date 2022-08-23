@@ -17,5 +17,8 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
         }
+     [SerializeField]bool DEBUG_EDIT=false;
+        void Update(){
+        }
     }
 }
