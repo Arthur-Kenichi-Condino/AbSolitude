@@ -11,13 +11,13 @@ using System.Globalization;
 using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimObjectSpawner:MonoBehaviour{
-     internal static SimObjectSpawner singleton;
+    internal class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
+     internal static SimObjectSpawner singleton{get;set;}
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
      internal readonly Dictionary<Type,GameObject>simObjectPrefabs=new Dictionary<Type,GameObject>();
-        internal void Init(){
+        public void Init(){
          FileStream releasedIdsFileStream=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStream=new FileStream(SimObjectManager.releasedIdsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
          StreamWriter releasedIdsFileStreamWriter=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamWriter=new StreamWriter(releasedIdsFileStream);
          StreamReader releasedIdsFileStreamReader=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamReader=new StreamReader(releasedIdsFileStream);
@@ -88,9 +88,8 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.pool.Add(t,new LinkedList<SimObject>());
          }
          spawnCoroutine=StartCoroutine(SpawnCoroutine());
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
         }
         void OnDestroy(){

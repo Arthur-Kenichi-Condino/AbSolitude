@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO{
     internal class Core:MonoBehaviour{
@@ -40,6 +41,13 @@ namespace AKCondinoO{
           { 1,SimTime            .singleton},
           { 2,VoxelSystem        .singleton},
           { 3,VoxelTerrainEditing.singleton},
+          { 4,SimObjectManager   .singleton},
+          { 5,SimObjectSpawner   .singleton},
+          { 6,SkillsManager      .singleton},
+          { 7,SimsMachine        .singleton},
+          { 8,AutonomyCore       .singleton},
+          { 9,GameMode           .singleton},
+          {10,Placeholder        .singleton},
           {11,FixedUI            .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
@@ -50,13 +58,6 @@ namespace AKCondinoO{
           Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
-         SimObjectManager   .singleton.Init();
-         SimObjectSpawner   .singleton.Init();
-         SkillsManager      .singleton.Init();
-         SimsMachine        .singleton.Init();
-         AutonomyCore       .singleton.Init();
-         GameMode           .singleton.Init();
-         Placeholder        .singleton.Init();
          Gameplayer.main.Init();
         }
         void OnDestroy(){
@@ -79,19 +80,15 @@ namespace AKCondinoO{
                 Log.Error("ThreadCount>0(ThreadCount=="+threadCount+"):one or more threads weren't stopped nor waited for termination");
                }
               }
-              FixedUI            .singleton=null;
-              Placeholder        .singleton=null;
-              GameMode           .singleton=null;
-              AutonomyCore       .singleton=null;
-              SimsMachine        .singleton=null;
-              SkillsManager      .singleton=null;
-              SimObjectSpawner   .singleton=null;
-              SimObjectManager   .singleton=null;
-              VoxelTerrainEditing.singleton=null;
-              VoxelSystem        .singleton=null;
-              SimTime            .singleton=null;
-              MainCamera         .singleton=null;
-                                  singleton=null;
+              foreach(var singletonOrderedInReverse in singletonInitReversedOrder){
+               Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+               Type singletonType=singletonOrderedInReverse.Value.GetType();
+               PropertyInfo singletonPropertyInfo=singletonType.GetProperty("singleton",BindingFlags.Static|BindingFlags.NonPublic);
+               Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
+               singletonPropertyInfo.SetValue(null,null);
+               Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
+              }
+              singleton=null;
          }
         }
      internal event EventHandler OnDestroyingCoreEvent;

@@ -4,6 +4,7 @@
 using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain;
+using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
@@ -79,6 +80,7 @@ namespace AKCondinoO.Voxels{
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
+     internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
@@ -96,6 +98,8 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i]=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded();
          }
+         VoxelTerrainEditingMultithreaded.Stop=false;
+         terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
         public void Init(){
          int maxConnections=1;
@@ -128,6 +132,8 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
          }
+         VoxelTerrainEditingMultithreaded.Stop=true;
+         terrainEditingBGThread.Wait();
          biome.DisposeModules();
         }
         void OnDestroy(){

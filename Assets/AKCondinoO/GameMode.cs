@@ -6,19 +6,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
-    internal class GameMode:MonoBehaviour{
+    internal class GameMode:MonoBehaviour,ISingletonInitialization{
      internal enum GameModesEnum{
       BuildBuyEdit,
       Interact,
      }
-     internal static GameMode singleton;
+     internal static GameMode singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
-        internal void Init(){
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
+        public void Init(){
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("GameMode:OnDestroyingCoreEvent");
         }
      internal GameModesEnum current=GameModesEnum.BuildBuyEdit;
