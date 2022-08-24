@@ -3,6 +3,6 @@ Jogo em desenvolvimento em Unity e C#, com código aberto, criado por mim, Arthu
 
 Para acessar o código e jogo e usá-los você deve aceitar o Termo de Uso no arquivo de Licença "LICENSE", presente neste repositório GitHub. Nos Termos de Uso estão explicadas as formas de utilização do código, e, com autorização adequada, qualquer cópia realizada deve seguir o seguinte parâmetro: o arquivo de Licença "LICENSE" deve ser incluído em toda(s) a(s) cópias ou porções substanciais do software/programa/jogo.
 
-A solution C# é a AbSolitude.sln. A scene principal está em 'Assets/Scenes/MainScene'. Estou usando atualmente o Unity 2021.3.3f1 Personal.
+A solution C# é a AbSolitude.sln. A scene principal está em 'Assets/Scenes/MainScene'. Estou usando atualmente o Unity 2021.3.8f1 Personal.
  
 O usuário deve cessar imediatamente o acesso e uso do código e jogo, se não aceitar o Termo de Uso.
