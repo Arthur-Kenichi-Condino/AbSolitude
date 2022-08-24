@@ -2238,258 +2238,6 @@ Transform:
   m_Father: {fileID: 1303920670734307720}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3705290745305368941
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6932715640653140688}
-  - component: {fileID: 925675673682246281}
-  m_Layer: 0
-  m_Name: UMARenderer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6932715640653140688
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3705290745305368941}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7431066428460625184}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &925675673682246281
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3705290745305368941}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
-  m_Bones:
-  - {fileID: 6249961970667328202}
-  - {fileID: 2012667315571585105}
-  - {fileID: 3908136512533992274}
-  - {fileID: 9163689920151770403}
-  - {fileID: 4030316424970280602}
-  - {fileID: 8114416551752388635}
-  - {fileID: 667375769974426651}
-  - {fileID: 8768674132650553955}
-  - {fileID: 7974771205450562162}
-  - {fileID: 4784351886255074277}
-  - {fileID: 3239354700570774533}
-  - {fileID: 3084466901794515196}
-  - {fileID: 1003963233971326389}
-  - {fileID: 2782173886648698842}
-  - {fileID: 3418006494872368448}
-  - {fileID: 2490847193405891657}
-  - {fileID: 5309687260705877014}
-  - {fileID: 3409266974208513311}
-  - {fileID: 33194187932488524}
-  - {fileID: 1055160886655399983}
-  - {fileID: 3354861612880236958}
-  - {fileID: 5921477908989944034}
-  - {fileID: 6617041903278879525}
-  - {fileID: 3775636689643395810}
-  - {fileID: 166361009695726325}
-  - {fileID: 6754686800742138643}
-  - {fileID: 6737489241159237981}
-  - {fileID: 3791901618835042121}
-  - {fileID: 2968139304406105657}
-  - {fileID: 4088997982698676190}
-  - {fileID: 2298433757519430532}
-  - {fileID: 4532557849036697841}
-  - {fileID: 4513792976549783255}
-  - {fileID: 9063676299925321058}
-  - {fileID: 8092771449353091593}
-  - {fileID: 8330524707504915940}
-  - {fileID: 3579776225225626316}
-  - {fileID: 6050067356552749236}
-  - {fileID: 4422591438350781035}
-  - {fileID: 1122605070884944767}
-  - {fileID: 2142194354987535844}
-  - {fileID: 5293604137908894699}
-  - {fileID: 3457344415767220827}
-  - {fileID: 2531919624699174862}
-  - {fileID: 6629258779087706530}
-  - {fileID: 4270468616989008019}
-  - {fileID: 2039537298566749887}
-  - {fileID: 410259840160281033}
-  - {fileID: 652857166505328691}
-  - {fileID: 9038325060417771124}
-  - {fileID: 1055123024032716478}
-  - {fileID: 5327553722891845208}
-  - {fileID: 7076385980356188665}
-  - {fileID: 1388425253328408169}
-  - {fileID: 3899663129731393397}
-  - {fileID: 6809709186705635567}
-  - {fileID: 6480236843622757328}
-  - {fileID: 9152896954069121395}
-  - {fileID: 7386884954218415896}
-  - {fileID: 8073086176351707785}
-  - {fileID: 1924558777886548967}
-  - {fileID: 882999124534848452}
-  - {fileID: 363310597587868690}
-  - {fileID: 448443325765980301}
-  - {fileID: 3054079611745585053}
-  - {fileID: 8146066524895340293}
-  - {fileID: 1436776322159527641}
-  - {fileID: 189436299505563540}
-  - {fileID: 434898666729630405}
-  - {fileID: 2807665570444709134}
-  - {fileID: 3228384886571984150}
-  - {fileID: 9204408412841990849}
-  - {fileID: 6408228862752085854}
-  - {fileID: 6925551244768655921}
-  - {fileID: 8713202897488105151}
-  - {fileID: 6543108228722483940}
-  - {fileID: 2265893483713514874}
-  - {fileID: 713932611297202550}
-  - {fileID: 62043106051054332}
-  - {fileID: 6574779988820393504}
-  - {fileID: 9019926469165395695}
-  - {fileID: 3857273083503982893}
-  - {fileID: 8720566137341719604}
-  - {fileID: 3669097041498406670}
-  - {fileID: 8811213497654217205}
-  - {fileID: 5922176516253070641}
-  - {fileID: 3990917802315710591}
-  - {fileID: 561296378997070895}
-  - {fileID: 3494833122587398564}
-  - {fileID: 6194139024869028299}
-  - {fileID: 1023973739890634191}
-  - {fileID: 2384937179073314328}
-  - {fileID: 3301952868879880171}
-  - {fileID: 188101792690386404}
-  - {fileID: 5483052173251510247}
-  - {fileID: 3596328570909999896}
-  - {fileID: 7588879042132085377}
-  - {fileID: 2946040295422658719}
-  - {fileID: 5378680664172998960}
-  - {fileID: 8048206171144557354}
-  - {fileID: 1769672943551289627}
-  - {fileID: 7792316387957985759}
-  - {fileID: 8265098381499694652}
-  - {fileID: 6548663439895982064}
-  - {fileID: 4552695101203155998}
-  - {fileID: 3659955355422147919}
-  - {fileID: 2516555578325539129}
-  - {fileID: 1147229162505092700}
-  - {fileID: 1498726186287994685}
-  - {fileID: 1928962813013487120}
-  - {fileID: 5427745939814789289}
-  - {fileID: 5756208621537585043}
-  - {fileID: 6117664187297993609}
-  - {fileID: 5169195244409729310}
-  - {fileID: 8217347720388082561}
-  - {fileID: 4687971816066906745}
-  - {fileID: 8133907444125387682}
-  - {fileID: 1571427980909897161}
-  - {fileID: 2882732042998032549}
-  - {fileID: 3610288941627995898}
-  - {fileID: 5868162482008158526}
-  - {fileID: 3059595784172162827}
-  - {fileID: 2026966901891365991}
-  - {fileID: 4929841525389096406}
-  - {fileID: 8501525002851231121}
-  - {fileID: 5180663603846100280}
-  - {fileID: 551573840350726630}
-  - {fileID: 5853620757064585512}
-  - {fileID: 5946766429608080530}
-  - {fileID: 5925904658914767412}
-  - {fileID: 2369232015971025239}
-  - {fileID: 6622109651958135171}
-  - {fileID: 1228908246449168338}
-  - {fileID: 6052649705146254365}
-  - {fileID: 1609644492853266584}
-  - {fileID: 3955826458854745610}
-  - {fileID: 8812325568152114629}
-  - {fileID: 3626641137265651034}
-  - {fileID: 2769705647465001590}
-  - {fileID: 1228669209140091099}
-  - {fileID: 2835564744031909534}
-  - {fileID: 5111419325061127873}
-  - {fileID: 7822258877779427642}
-  - {fileID: 6689432141168518901}
-  - {fileID: 7221176483342257725}
-  - {fileID: 2753362256754988047}
-  - {fileID: 6817516507349136026}
-  - {fileID: 2230330862515656114}
-  - {fileID: 1434848504191989007}
-  - {fileID: 2730729742162925148}
-  - {fileID: 2616345155670602148}
-  - {fileID: 78070468391804794}
-  - {fileID: 280554037688828503}
-  - {fileID: 1511879219867007627}
-  - {fileID: 7975094956853879548}
-  - {fileID: 8098778093042135094}
-  - {fileID: 538190852477441315}
-  - {fileID: 5457747546212449306}
-  - {fileID: 4227600040726667236}
-  - {fileID: 687260083587405685}
-  - {fileID: 5878264616639754479}
-  - {fileID: 8016539668259628373}
-  - {fileID: 6951738694441042709}
-  - {fileID: 7535321189450778398}
-  - {fileID: 8677007581962570319}
-  - {fileID: 7085086414807401613}
-  - {fileID: 6600336298152681199}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 0}
-  m_AABB:
-    m_Center: {x: -0.019245118, y: 0.8890928, z: 0.0019455552}
-    m_Extent: {x: 0.36823115, y: 0.97143924, z: 0.27937794}
-  m_DirtyAABB: 0
 --- !u!1 &3809130555967884271
 GameObject:
   m_ObjectHideFlags: 0
@@ -4869,7 +4617,7 @@ GameObject:
   - component: {fileID: 7431066428449511806}
   - component: {fileID: 7401136412029098698}
   - component: {fileID: 8044990671858312253}
-  - component: {fileID: 5030621208208241280}
+  - component: {fileID: 7472785740415089584}
   m_Layer: 0
   m_Name: UMADynamicCharacterAvatar
   m_TagString: Untagged
@@ -4890,7 +4638,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3007829424104664225}
-  - {fileID: 6932715640653140688}
   m_Father: {fileID: 4379008697441314486}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -4907,13 +4654,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   context: {fileID: 0}
-  umaData: {fileID: 5030621208208241280}
+  umaData: {fileID: 7472785740415089584}
   defaultRendererAsset: {fileID: 0}
   umaRecipe: {fileID: 11400000, guid: ee6e08b01d948474b89f049e3f4ddba5, type: 2}
   umaAdditionalRecipes:
   - {fileID: 11400000, guid: ee6e08b01d948474b89f049e3f4ddba5, type: 2}
   umaGenerator: {fileID: 0}
-  animationController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
+  animationController: {fileID: 9100000, guid: c662bb389be2cfe45932e8766dad8593, type: 2}
   CharacterCreated:
     m_PersistentCalls:
       m_Calls: []
@@ -4964,27 +4711,19 @@ MonoBehaviour:
   keepAvatar: 0
   activeRace:
     name: RaceHumanMaleMorphable
-  defaultChangeRaceOptions: 8
+  defaultChangeRaceOptions: 0
   cacheCurrentState: 1
   rebuildSkeleton: 0
   alwaysRebuildSkeleton: 0
   preloadWardrobeRecipes:
     loadDefaultRecipes: 1
-    recipes:
-    - _recipeName: MaleUnderwear
-      _compatibleRaces:
-      - HumanMale
-      - HumanMaleDCS
-    - _recipeName: FemaleUndies
-      _compatibleRaces:
-      - HumanFemaleDCS
-      - HumanFemale
+    recipes: []
   raceAnimationControllers:
-    defaultAnimationController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
+    defaultAnimationController: {fileID: 9100000, guid: c662bb389be2cfe45932e8766dad8593, type: 2}
     animators:
     - raceName: RaceHumanMaleMorphable
-      animatorControllerName: Locomotion with Head
-      animatorController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
+      animatorControllerName: RaceHumanMaleMorphableAnimatorController
+      animatorController: {fileID: 9100000, guid: c662bb389be2cfe45932e8766dad8593, type: 2}
     dynamicallyAddFromResources: 0
     resourcesFolderPath: 
   characterColors:
@@ -5062,17 +4801,23 @@ MonoBehaviour:
       Raw: 0
       valuesConverted: 0
   predefinedDNA:
-    PreloadValues: []
-  loadPathType: 2
-  loadPath: CharacterRecipes
+    PreloadValues:
+    - Name: EyesGlobalHeightDown
+      Value: 0
+    - Name: EyesGlobalHeightUp
+      Value: 0
+    - Name: EyesGlobalSizeLarge
+      Value: 0
+  loadPathType: 1
+  loadPath: AKCondinoO\Sims\Actors\ArthurCondino
   loadFilename: 
   loadString: 
   loadFileOnStart: 1
   ForceSlotMaterials: 0
   AtlasResolutionScale: 1
   defaultLoadOptions: 31
-  savePathType: 0
-  savePath: CharacterRecipes
+  savePathType: 1
+  savePath: AKCondinoO\Sims\Actors\ArthurCondino
   saveFilename: 
   makeUniqueFilename: 0
   ensureSharedColors: 0
@@ -5172,7 +4917,7 @@ Animator:
   m_GameObject: {fileID: 7431066428460812338}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
+  m_Controller: {fileID: 9100000, guid: c662bb389be2cfe45932e8766dad8593, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5182,7 +4927,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5030621208208241280
+--- !u!114 &7472785740415089584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5194,15 +4939,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 925675673682246281}
+  renderers: []
   umaGenerator: {fileID: 0}
   atlasResolutionScale: 1
   isMeshDirty: 0
   isShapeDirty: 0
   isTextureDirty: 0
   isAtlasDirty: 0
-  animationController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf, type: 2}
+  animationController: {fileID: 0}
   CharacterCreated:
     m_PersistentCalls:
       m_Calls: []
@@ -5245,7 +4989,7 @@ MonoBehaviour:
   PreUpdateUMABody:
     m_PersistentCalls:
       m_Calls: []
-  umaRoot: {fileID: 5131475725055999323}
+  umaRoot: {fileID: 0}
   _umaRecipe:
     raceData: {fileID: 11400000, guid: 55273303ec78088459bc7cac84d70a1e, type: 2}
     dnaValues:
@@ -5257,7 +5001,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     - asset: {fileID: 11400000, guid: 006cf9231c755ae459be6fec82003f6e, type: 2}
       overlayScale: 1
@@ -5265,7 +5009,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     - asset: {fileID: 11400000, guid: 6049048ab587ace488163bbf473f247e, type: 2}
       overlayScale: 1
@@ -5273,7 +5017,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     - asset: {fileID: 11400000, guid: 5ac501deb9da69243966c7cdf83ab7b8, type: 2}
       overlayScale: 1
@@ -5281,7 +5025,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     - asset: {fileID: 11400000, guid: c276deea2834bfd4c99611063846736e, type: 2}
       overlayScale: 1
@@ -5289,7 +5033,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     - asset: {fileID: 11400000, guid: d01791214901d7341b52409cd66cc65e, type: 2}
       overlayScale: 1
@@ -5297,7 +5041,7 @@ MonoBehaviour:
       Races: []
       altMaterial: {fileID: 0}
       Suppressed: 0
-      dontSerialize: 1
+      dontSerialize: 0
       rendererAsset: {fileID: 0}
     sharedColors: []
   animator: {fileID: 8044990671858312253}
