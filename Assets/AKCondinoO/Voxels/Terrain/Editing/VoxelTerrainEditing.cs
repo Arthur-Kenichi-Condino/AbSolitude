@@ -23,6 +23,12 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          PlaceCube,
         }
         internal void EditTerrain(
+         Vector3 at,
+          EditMode mode,
+           Vector3Int size,
+            double density,
+             MaterialId material,
+              int smoothness
         ){
         }
      [SerializeField]bool       DEBUG_EDIT=false;
@@ -36,6 +42,14 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          if(DEBUG_EDIT){
             DEBUG_EDIT=false;
           Log.DebugMessage("DEBUG_EDIT_AT:"+DEBUG_EDIT_AT);
+          EditTerrain(
+           DEBUG_EDIT_AT,
+           DEBUG_EDIT_MODE,
+           DEBUG_EDIT_SIZE,
+           DEBUG_EDIT_DENSITY,
+           DEBUG_EDIT_MATERIAL_ID,
+           DEBUG_EDIT_SMOOTHNESS
+          );
          }
         }
     }
