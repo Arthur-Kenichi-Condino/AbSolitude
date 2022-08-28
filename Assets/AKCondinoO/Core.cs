@@ -21,6 +21,8 @@ namespace AKCondinoO{
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
+     internal static string terrainEditingPath;
+     internal static string terrainEditingFilenameFormat="{0}.{1}.txt";
      [SerializeField]Gameplayer _GameplayerPrefab;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
