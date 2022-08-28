@@ -73,7 +73,7 @@ namespace AKCondinoO.Sims{
             }
            }
            idPersistentDataListBycnkIdxByType[t][cnkIdx].Add((id,persistentData));
-           Log.DebugMessage("simObject of type:"+t+" and id:"+id+" needs to be saved");
+           //Log.DebugMessage("simObject of type:"+t+" and id:"+id+" needs to be saved");
           }
           persistentDataToSave.Clear();
          }
@@ -98,17 +98,17 @@ namespace AKCondinoO.Sims{
            int cnkIdxStringLength=cnkIdxStringEnd-cnkIdxStringStart;
            int cnkIdx=int.Parse(line.Substring(cnkIdxStringStart,cnkIdxStringLength),NumberStyles.Any,CultureInfoUtil.en_US);
            processedcnkIdx.Add(cnkIdx);
-           Log.DebugMessage("process save file of "+t+" at cnkIdx:"+cnkIdx);
+           //Log.DebugMessage("process save file of "+t+" at cnkIdx:"+cnkIdx);
            int simObjectStringStart=cnkIdxStringEnd+2;
            int endOfLineStart=simObjectStringStart;
            while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
             int simObjectStringEnd=line.IndexOf("}, ",simObjectStringStart)+3;
             string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
-            Log.DebugMessage("simObjectString:"+simObjectString);
+            //Log.DebugMessage("simObjectString:"+simObjectString);
             int idStringStart=simObjectString.IndexOf("id=")+3;
             int idStringEnd  =simObjectString.IndexOf(", ",idStringStart);
             ulong id=ulong.Parse(simObjectString.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-            Log.DebugMessage("id:"+id);
+            //Log.DebugMessage("id:"+id);
             if(idListByType[t].Contains(id)||container.idsToRelease[t].Contains(id)){
              int toRemoveLength=simObjectStringEnd-totalCharactersRemoved-(simObjectStringStart-totalCharactersRemoved);
              lineStringBuilder.Remove(simObjectStringStart-totalCharactersRemoved,toRemoveLength);
@@ -154,13 +154,13 @@ namespace AKCondinoO.Sims{
            releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0}, {{ ",t);
            var releasedIds=container.persistentReleasedIds[t];
            foreach(ulong releasedId in releasedIds){
-            Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
+            //Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",releasedId);
            }
            releasedIds.Clear();
            var idsToRelease=typeIdsToReleasePair.Value;
            foreach(ulong idToRelease in idsToRelease){
-            Log.DebugMessage("type:"+t+", release id:"+idToRelease);
+            //Log.DebugMessage("type:"+t+", release id:"+idToRelease);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",idToRelease);
            }
            releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US," }}, }}, {0}",Environment.NewLine);
