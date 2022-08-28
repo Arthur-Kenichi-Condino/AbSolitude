@@ -74,7 +74,8 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           );
          }
          if(applyingEdits){
-             if(OnTerrainEditingSaved()){
+             if(OnTerrainEditingApplied()){
+                 applyingEdits=false;
              }
          }else{
              if(editRequests.Count>0){
@@ -90,6 +91,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           while(editRequests.Count>0){
            terrainEditingBG.requests.Enqueue(editRequests.Dequeue());
           }
+          VoxelTerrainEditingMultithreaded.Schedule(terrainEditingBG);
           return true;
          }
          return false;
@@ -97,7 +99,11 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
         void OnTerrainEditingRequestsPushed(){
          applyingEdits=true;
         }
-        bool OnTerrainEditingSaved(){
+        bool OnTerrainEditingApplied(){
+         if(terrainEditingBG.IsCompleted(VoxelSystem.singleton.terrainEditingBGThread.IsRunning)){
+          //  TO DO: refresh chunks...
+          return true;
+         }
          return false;
         }
     }
