@@ -242,7 +242,7 @@ namespace AKCondinoO.Sims{
                                 }
                             }else{
                                 if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
-                                    Log.DebugMessage("DespawnQueue.Count>0||DespawnAndReleaseIdQueue.Count>0");
+                                    Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
                                     if(OnPersistentDataPushToFile()){
                                         OnPersistentDataPushedToFile();
                                     }
