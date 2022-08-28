@@ -51,7 +51,7 @@ namespace AKCondinoO.Voxels.Biomes{
           }
          );
         }
-        internal void Init(){
+        internal void Set(){
          foreach(var selectionTypesPair in simObjectPicking){
           int selection=selectionTypesPair.Key;
           HashSet<Type>types=selectionTypesPair.Value;
@@ -66,7 +66,7 @@ namespace AKCondinoO.Voxels.Biomes{
            }
           }
           settingsCountForSelection[selection]=settingsCount;
-          Log.DebugMessage("Init():settingsCountForSelection["+selection+"]="+settingsCount);
+          Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
          }
         }
      internal Perlin simObjectSpawnChancePerlin;

@@ -14,7 +14,7 @@ namespace AKCondinoO.Voxels.Biomes{
      internal readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
          internal BaseBiome(){
           biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
-          biomeSpawnSettings.Init();
+          biomeSpawnSettings.Set();
          }
      internal Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
