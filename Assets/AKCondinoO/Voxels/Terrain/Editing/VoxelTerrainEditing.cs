@@ -74,6 +74,8 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           );
          }
          if(applyingEdits){
+             if(OnTerrainEditingSaved()){
+             }
          }else{
              if(editRequests.Count>0){
                  Log.DebugMessage("editRequests.Count>0");
