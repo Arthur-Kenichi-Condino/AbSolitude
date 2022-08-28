@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing;
+
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
+     internal readonly Queue<TerrainEditRequest>requests=new Queue<TerrainEditRequest>();
     }
     internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
         protected override void Execute(){
