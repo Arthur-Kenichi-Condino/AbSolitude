@@ -41,6 +41,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
+     internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
          base.Awake();
          navMeshAgent=GetComponent<NavMeshAgent>();
@@ -48,6 +49,7 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
+         simActorAnimatorController=GetComponent<SimActorAnimatorController>();
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();

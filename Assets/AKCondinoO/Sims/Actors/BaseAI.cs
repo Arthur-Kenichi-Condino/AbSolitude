@@ -8,13 +8,18 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal class BaseAI:SimActor{
-     public const int V_STATE      =15;
-     public const int V_PATHFINDING=16;
+        internal enum ActorMotion:int{
+         MOTION_STAND=0,
+         MOTION_MOVE =1,
+        }
+     protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
+      internal ActorMotion motion{get{return MyMotion;}}
         internal enum State:int{
          IDLE_ST  =0,
          FOLLOW_ST=1,
         }
      protected State MyState=State.IDLE_ST;
+      internal State state{get{return MyState;}}
         internal enum PathfindingResult:int{
          IDLE                   =0,
          REACHED                =1,
