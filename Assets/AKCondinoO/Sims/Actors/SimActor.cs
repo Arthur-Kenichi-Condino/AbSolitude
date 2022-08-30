@@ -41,6 +41,9 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
+       [SerializeField]protected float navMeshAgentWalkSpeed=2f;
+        [SerializeField]protected float navMeshAgentRunSpeed=4f;
+         protected bool navMeshAgentShouldUseRunSpeed=false;
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
          base.Awake();

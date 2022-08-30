@@ -41,7 +41,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
-  - m_Name: MOTION_MOVE_SPEED
+  - m_Name: MOTION_MOVE_VELOCITY
     m_Type: 1
     m_DefaultFloat: 0.6666667
     m_DefaultInt: 0
@@ -49,7 +49,7 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: MOTION_MOVE_TURN
     m_Type: 1
-    m_DefaultFloat: 0.5
+    m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
@@ -103,7 +103,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400002, guid: 6e2bfa8498b0db840865dd4eb42ce0ad, type: 3}
     m_Threshold: 0
-    m_Position: {x: 0.5, y: 0.6666667}
+    m_Position: {x: 0, y: 0.6666667}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_SPEED
@@ -111,13 +111,13 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400024, guid: b35bea543177b624b8e504a16956614d, type: 3}
     m_Threshold: 1
-    m_Position: {x: 0.5, y: 1}
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_SPEED
     m_Mirror: 0
   m_BlendParameter: MOTION_MOVE_TURN
-  m_BlendParameterY: MOTION_MOVE_SPEED
+  m_BlendParameterY: MOTION_MOVE_VELOCITY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
