@@ -53,6 +53,7 @@ namespace AKCondinoO.Sims.Actors{
              areaMask=navMeshAgent.areaMask,
          };
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
+         simActorAnimatorController.actor=this;
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
@@ -62,6 +63,7 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
+         lastForward=transform.forward;
          skills.Clear();
          //  load skills from file here
          foreach(var skill in skills){
@@ -100,6 +102,29 @@ namespace AKCondinoO.Sims.Actors{
          navMeshAgent.enabled=false;
         }
      internal bool isUsingAI=true;
+     internal virtual float moveVelocity{
+      get{
+       if(isUsingAI){
+        float velocityMagnitude=navMeshAgent.velocity.magnitude;
+        //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
+        return velocityMagnitude/navMeshAgentRunSpeed;
+       }
+       return 0f;
+      }
+     }
+     protected Vector3 lastForward=Vector3.forward;
+     internal float turnAngle{
+      get{
+       if(isUsingAI){
+        if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
+         float angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
+         Log.DebugMessage("angle:"+angle);
+         return angle;
+        }
+       }
+       return 0f;
+      }
+     }
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if((result=base.ManualUpdate(doValidationChecks))!=0){
@@ -117,6 +142,7 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           DisableNavMeshAgent();
          }
+         lastForward=transform.forward;
          return result;
         }
         protected virtual void AI(){

@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors {
- internal partial class BaseAI:SimActor{
+    internal partial class BaseAI:SimActor{
+     protected System.Random dice=new System.Random();
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
@@ -22,11 +23,13 @@ namespace AKCondinoO.Sims.Actors {
          }else{
           OnIDLE_ST();
          }
-         if(navMeshAgent.velocity!=Vector3.zero){
-          float velocityMagnitude=navMeshAgent.velocity.magnitude;
-          Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
+         if(MyPathfinding==PathfindingResult.TRAVELLING){
+             MyMotion=ActorMotion.MOTION_MOVE;
+         }else{
+             MyMotion=ActorMotion.MOTION_STAND;
          }
         }
+     [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
@@ -41,7 +44,8 @@ namespace AKCondinoO.Sims.Actors {
            Log.DebugMessage("can do random movement");
            if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
             Log.DebugMessage("got random position:"+result);
-            if(navMeshAgentShouldUseRunSpeed){
+            bool run=dice.NextDouble()<useRunSpeedChance;
+            if(navMeshAgentShouldUseRunSpeed||run){
              navMeshAgent.speed=navMeshAgentRunSpeed;
             }else{
              navMeshAgent.speed=navMeshAgentWalkSpeed;

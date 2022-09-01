@@ -26,7 +26,7 @@ namespace AKCondinoO.Sims.Actors {
           return PathfindingResult.IDLE;
          }
          if(navMeshAgent.remainingDistance>navMeshAgent.stoppingDistance){
-          if(Mathf.Approximately(navMeshAgent.velocity.sqrMagnitude,0f)){
+          if(Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
            return PathfindingResult.TRAVELLING_BUT_NO_SPEED;
           }
           return PathfindingResult.TRAVELLING;
