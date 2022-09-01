@@ -113,6 +113,7 @@ namespace AKCondinoO.Voxels{
           cnk.OnInstantiated();
           terrainSynchronization.Add(cnk,cnk.marchingCubesBG.synchronizer);
          }
+         VoxelTerrainEditing.singleton.terrainEditingBG.terrainSynchronization=terrainSynchronization.Values.ToArray();
          AtlasHelper.SetAtlasData();
          biome.Seed=0;
          proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
