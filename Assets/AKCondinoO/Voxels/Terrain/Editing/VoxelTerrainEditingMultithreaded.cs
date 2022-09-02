@@ -7,18 +7,20 @@ using System.Threading;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing;
+using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingContainer;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
      internal object[]terrainSynchronization;
      internal readonly Queue<TerrainEditRequest>requests=new Queue<TerrainEditRequest>();
+     internal readonly HashSet<int>dirty=new HashSet<int>();
+    }
+    internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
         internal struct TerrainEditData{
          internal double density;
          internal MaterialId material;
         }
-     internal readonly HashSet<int>dirty=new HashSet<int>();
-    }
-    internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
+     internal readonly Queue<Dictionary<Vector3Int,TerrainEditData>>terrainEditDataOutputPool=new Queue<Dictionary<Vector3Int,TerrainEditData>>();
         protected override void Execute(){
          Log.DebugMessage("VoxelTerrainEditingMultithreaded:Execute()");
          container.dirty.Clear();
