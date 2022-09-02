@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -16,11 +17,19 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
      internal readonly HashSet<int>dirty=new HashSet<int>();
     }
     internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
-        internal struct TerrainEditData{
+        internal struct TerrainEditOutputData{
          internal double density;
          internal MaterialId material;
         }
-     internal readonly Queue<Dictionary<Vector3Int,TerrainEditData>>terrainEditDataOutputPool=new Queue<Dictionary<Vector3Int,TerrainEditData>>();
+     internal readonly Queue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new Queue<Dictionary<Vector3Int,TerrainEditOutputData>>();
+     readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataFromFileToMerge=new();
+     readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataForSavingToFile=new();
+        protected override void Cleanup(){
+         foreach(var editData in dataFromFileToMerge){editData.Value.Clear();terrainEditOutputDataPool.Enqueue(editData.Value);}
+         dataFromFileToMerge.Clear();
+         foreach(var editData in dataForSavingToFile){editData.Value.Clear();terrainEditOutputDataPool.Enqueue(editData.Value);}
+         dataForSavingToFile.Clear();
+        }
         protected override void Execute(){
          Log.DebugMessage("VoxelTerrainEditingMultithreaded:Execute()");
          container.dirty.Clear();
@@ -85,6 +94,31 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                           resultDensity=density;
                          }
                          //  TO DO: get current file data to merge
+                         if(!dataFromFileToMerge.ContainsKey(cCoord3)){
+                         }
+                         Voxel currentVoxel;
+                         if(dataFromFileToMerge.ContainsKey(cCoord3)&&dataFromFileToMerge[cCoord3].ContainsKey(vCoord3)){
+                          TerrainEditOutputData voxelData=dataFromFileToMerge[cCoord3][vCoord3];
+                          currentVoxel=new Voxel(voxelData.density,Vector3.zero,voxelData.material);
+                         }else{
+                          currentVoxel=new Voxel();
+                          Vector3Int noiseInput=vCoord3;noiseInput.x+=cnkRgn3.x;
+                                                        noiseInput.z+=cnkRgn3.y;
+                          VoxelSystem.biome.Setvxl(
+                           noiseInput,
+                            null,
+                             null,
+                              0,
+                               vCoord3.z+vCoord3.x*Depth,
+                                ref currentVoxel
+                          );
+                         }
+                         resultDensity=Math.Max(resultDensity,currentVoxel.density);
+                         if(material==MaterialId.Air&&!(-resultDensity>=-isoLevel)){
+                          resultDensity=-resultDensity;
+                         }
+                         if(!dataForSavingToFile.ContainsKey(cCoord3)){
+                         }
                  if(z==0){break;}
                 }}
                  if(x==0){break;}
