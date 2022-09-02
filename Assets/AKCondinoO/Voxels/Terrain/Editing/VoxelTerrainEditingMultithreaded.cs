@@ -12,6 +12,10 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
      internal object[]terrainSynchronization;
      internal readonly Queue<TerrainEditRequest>requests=new Queue<TerrainEditRequest>();
+        internal struct TerrainEditData{
+         internal double density;
+         internal MaterialId material;
+        }
      internal readonly HashSet<int>dirty=new HashSet<int>();
     }
     internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
@@ -28,6 +32,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           switch(editRequest.mode){
            case(EditMode.PlaceCube):{
             Log.DebugMessage("EditMode.PlaceCube");
+                //  calcular valores para suavização
                 float sqrt_yx_1=Mathf.Sqrt(Mathf.Pow(size.y,2)+Mathf.Pow(size.x,2));
                 float sqrt_xz_1=Mathf.Sqrt(Mathf.Pow(size.x,2)+Mathf.Pow(size.z,2));
                 float sqrt_zy_1=Mathf.Sqrt(Mathf.Pow(size.z,2)+Mathf.Pow(size.y,2));
@@ -53,7 +58,31 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                          if(vCoord3.x<0||vCoord3.x>=Width||
                             vCoord3.z<0||vCoord3.z>=Depth
                          ){
+                          ValidateCoord(ref cnkRgn3,ref vCoord3);
+                          cCoord3=cnkRgnTocCoord(cnkRgn3);
                          }
+                         int cnkIdx3=GetcnkIdx(cCoord3.x,cCoord3.y);
+                         sqrt_xz_2=Mathf.Sqrt(Mathf.Pow(x,2)+Mathf.Pow(z,2));
+                         sqrt_zy_2=Mathf.Sqrt(Mathf.Pow(z,2)+Mathf.Pow(y,2));
+                         double resultDensity;
+                         if(y>=size.y||x>=size.x||z>=size.z){
+                          if(y>=size.y&&x>=size.x&&z>=size.z){
+                           float sqrt_yx_xz_2=Mathf.Sqrt(Mathf.Pow(sqrt_yx_2,2)+Mathf.Pow(sqrt_xz_2,2));
+                            float sqrt_yx_xz_zy_2=Mathf.Sqrt(Mathf.Pow(sqrt_yx_xz_2,2)+Mathf.Pow(sqrt_zy_2,2));
+                           resultDensity=density*(1f-(sqrt_yx_xz_zy_2-sqrt_yx_xz_1)/(sqrt_yx_xz_zy_2));
+                          }else if(y>=size.y&&x>=size.x){resultDensity=density*(1f-(sqrt_yx_2-sqrt_yx_1)/(sqrt_yx_2));
+                          }else if(x>=size.x&&z>=size.z){resultDensity=density*(1f-(sqrt_xz_2-sqrt_xz_1)/(sqrt_xz_2));
+                          }else if(z>=size.z&&y>=size.y){resultDensity=density*(1f-(sqrt_zy_2-sqrt_zy_1)/(sqrt_zy_2));
+                          }else if(y>=size.y){resultDensity=density*(1f-(y-size.y)/(float)y)*1.414f;//  raiz quadrada de 2
+                          }else if(x>=size.x){resultDensity=density*(1f-(x-size.x)/(float)x)*1.414f;
+                          }else if(z>=size.z){resultDensity=density*(1f-(z-size.z)/(float)z)*1.414f;
+                          }else{
+                           resultDensity=0d;
+                          }
+                         }else{
+                          resultDensity=density;
+                         }
+                         //  TO DO: get current file data to merge
                  if(z==0){break;}
                 }}
                  if(x==0){break;}
