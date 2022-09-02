@@ -118,7 +118,7 @@ namespace AKCondinoO.Sims.Actors{
        if(isUsingAI){
         if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
          float angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
-         Log.DebugMessage("angle:"+angle);
+         //Log.DebugMessage("angle:"+angle);
          return angle;
         }
        }
