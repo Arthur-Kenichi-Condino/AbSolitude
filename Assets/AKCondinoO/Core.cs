@@ -39,18 +39,19 @@ namespace AKCondinoO{
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
-          { 0,MainCamera         .singleton},
-          { 1,SimTime            .singleton},
-          { 2,VoxelSystem        .singleton},
-          { 3,VoxelTerrainEditing.singleton},
-          { 4,SimObjectManager   .singleton},
-          { 5,SimObjectSpawner   .singleton},
-          { 6,SkillsManager      .singleton},
-          { 7,SimsMachine        .singleton},
-          { 8,AutonomyCore       .singleton},
-          { 9,GameMode           .singleton},
-          {10,Placeholder        .singleton},
-          {11,FixedUI            .singleton},
+          { 0,InputHandler       .singleton},
+          { 1,MainCamera         .singleton},
+          { 2,SimTime            .singleton},
+          { 3,VoxelSystem        .singleton},
+          { 4,VoxelTerrainEditing.singleton},
+          { 5,SimObjectManager   .singleton},
+          { 6,SimObjectSpawner   .singleton},
+          { 7,SkillsManager      .singleton},
+          { 8,SimsMachine        .singleton},
+          { 9,AutonomyCore       .singleton},
+          {10,GameMode           .singleton},
+          {11,Placeholder        .singleton},
+          {12,FixedUI            .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
