@@ -14,6 +14,10 @@ namespace AKCondinoO{
          internal static float ROTATION_SENSITIVITY_X=360.0f;
          internal static float ROTATION_SENSITIVITY_Y=360.0f;
          internal static object[]PAUSE={KeyCode.Tab,Modes.alternateDown};
+         internal static object[]FORWARD ={KeyCode.W,Modes.activeHeld};
+         internal static object[]BACKWARD={KeyCode.S,Modes.activeHeld};
+         internal static object[]RIGHT   ={KeyCode.D,Modes.activeHeld};
+         internal static object[]LEFT    ={KeyCode.A,Modes.activeHeld};
         }
     }
 }
