@@ -13,7 +13,6 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO{
     internal class Gameplayer:MonoBehaviour{
      internal static Gameplayer main;
-     internal static readonly List<Gameplayer>all=new List<Gameplayer>();
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
