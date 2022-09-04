@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.UI;
@@ -23,7 +24,6 @@ namespace AKCondinoO{
      internal static string savePath;
      internal static string terrainEditingPath;
      internal static string terrainEditingFilenameFormat="{0}.{1}.txt";
-     [SerializeField]Gameplayer _GameplayerPrefab;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
                     Util.SetUtil();
@@ -33,25 +33,25 @@ namespace AKCondinoO{
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
-         Gameplayer.all.Add(Gameplayer.main=Instantiate(_GameplayerPrefab));
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
-          { 0,InputHandler       .singleton},
-          { 1,MainCamera         .singleton},
-          { 2,SimTime            .singleton},
-          { 3,VoxelSystem        .singleton},
-          { 4,VoxelTerrainEditing.singleton},
-          { 5,SimObjectManager   .singleton},
-          { 6,SimObjectSpawner   .singleton},
-          { 7,SkillsManager      .singleton},
-          { 8,SimsMachine        .singleton},
-          { 9,AutonomyCore       .singleton},
-          {10,GameMode           .singleton},
-          {11,Placeholder        .singleton},
-          {12,FixedUI            .singleton},
+          { 0,GameplayerManagement.singleton},
+          { 1,InputHandler        .singleton},
+          { 2,MainCamera          .singleton},
+          { 3,SimTime             .singleton},
+          { 4,VoxelSystem         .singleton},
+          { 5,VoxelTerrainEditing .singleton},
+          { 6,SimObjectManager    .singleton},
+          { 7,SimObjectSpawner    .singleton},
+          { 8,SkillsManager       .singleton},
+          { 9,SimsMachine         .singleton},
+          {10,AutonomyCore        .singleton},
+          {11,GameMode            .singleton},
+          {12,Placeholder         .singleton},
+          {13,FixedUI             .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
@@ -65,11 +65,11 @@ namespace AKCondinoO{
         }
         void OnDestroy(){
          if(singleton==this){
-              foreach(Gameplayer gameplayer in Gameplayer.all){
-               Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer==Gameplayer.main)+")");
-               gameplayer.OnRemove();
+              foreach(var gameplayer in GameplayerManagement.singleton.all){
+               Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer.Value==Gameplayer.main)+")");
+               gameplayer.Value.OnRemove();
               }
-              Gameplayer.all.Clear();
+              GameplayerManagement.singleton.all.Clear();
               try{
                EventHandler handler=OnDestroyingCoreEvent;
                handler?.Invoke(this,

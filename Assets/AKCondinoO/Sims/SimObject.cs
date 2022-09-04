@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
@@ -99,8 +100,8 @@ namespace AKCondinoO.Sims{
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
-         for(int i=0;i<Gameplayer.all.Count;++i){
-          Gameplayer.all[i].OnSimObjectSpawned(this);
+         foreach(var gameplayer in GameplayerManagement.singleton.all){
+          gameplayer.Value.OnSimObjectSpawned(this);
          }
         }
      public bool interactionsEnabled{get;protected set;}
