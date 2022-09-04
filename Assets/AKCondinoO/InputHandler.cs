@@ -5,10 +5,18 @@ using AKCondinoO.Sims;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO{
     internal partial class InputHandler:MonoBehaviour,ISingletonInitialization{
      internal static InputHandler singleton{get;set;}
+     internal readonly Dictionary<string,object[]>CommandDictionary=new Dictionary<string,object[]>();
+     internal readonly Dictionary<string,object[]>EnabledDictionary=new Dictionary<string,object[]>();
+        enum GetterReturnMode:int{
+         HeldDown=0,
+         Up      =1,
+         Down    =2,
+        }
      readonly Func<KeyCode,bool>[]  keyboardGetters=new Func<KeyCode,bool>[3]{Input.GetKey        ,Input.GetKeyUp        ,Input.GetKeyDown        ,};
      readonly Func<int    ,bool>[]     mouseGetters=new Func<int    ,bool>[3]{Input.GetMouseButton,Input.GetMouseButtonUp,Input.GetMouseButtonDown,};
      readonly Func<string ,bool>[]controllerGetters=new Func<string ,bool>[3]{Input.GetButton     ,Input.GetButtonUp     ,Input.GetButtonDown     ,};
@@ -21,11 +29,29 @@ namespace AKCondinoO{
       readonly Dictionary<Type,Delegate>delegates=new Dictionary<Type,Delegate>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         getters.Add(typeof(KeyCode),  keyboardGetters);
+         getters.Add(typeof(int    ),     mouseGetters);
+         getters.Add(typeof(string ),controllerGetters);
+         foreach(MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic|BindingFlags.Instance)){
+          if(method.Name=="Get"){
+           Type inputType=method.GetParameters()[1].ParameterType;
+           Delegate result;
+           if(inputType==typeof(KeyCode))result=method.CreateDelegate(typeof(Func<Func<KeyCode,bool>,KeyCode,bool>),this);else
+           if(inputType==typeof(int    ))result=method.CreateDelegate(typeof(Func<Func<int    ,bool>,int    ,bool>),this);else
+                                         result=method.CreateDelegate(typeof(Func<Func<string ,bool>,string ,bool>),this);
+           delegates[inputType]=result;
+          }
+         }
         }
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
+        }
+        bool InvokeDelegate(KeyValuePair<string,object[]>command,Type inputType,GetterReturnMode returnMode){
+         if(inputType==typeof(KeyCode))return((Func<Func<KeyCode,bool>,KeyCode,bool>)delegates[inputType]).Invoke((Func<KeyCode,bool>)getters[inputType][(int)returnMode],(KeyCode)command.Value[0]);else
+         if(inputType==typeof(int    ))return((Func<Func<int    ,bool>,int    ,bool>)delegates[inputType]).Invoke((Func<int    ,bool>)getters[inputType][(int)returnMode],(int    )command.Value[0]);else
+                                       return((Func<Func<string ,bool>,string ,bool>)delegates[inputType]).Invoke((Func<string ,bool>)getters[inputType][(int)returnMode],(string )command.Value[0]);
         }
     }
 }
