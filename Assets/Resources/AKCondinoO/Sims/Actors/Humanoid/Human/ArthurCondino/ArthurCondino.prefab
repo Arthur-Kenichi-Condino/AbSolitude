@@ -103,6 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4631629839819614593}
   - component: {fileID: 7758010734198664649}
+  - component: {fileID: -3747231846007095047}
   - component: {fileID: 4284808389878888570}
   - component: {fileID: 4585911009965713821}
   m_Layer: 0
@@ -141,7 +142,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295205bb7344dd84ab56517b027108fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshAgentWalkSpeed: 2
+  navMeshAgentRunSpeed: 4
+  useRunSpeedChance: 0.5
   delayToRandomMove: 8
+--- !u!114 &-3747231846007095047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249316322628893736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4284808389878888570
 MonoBehaviour:
   m_ObjectHideFlags: 0

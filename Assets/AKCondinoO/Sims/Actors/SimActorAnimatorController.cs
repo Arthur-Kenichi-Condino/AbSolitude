@@ -1,4 +1,4 @@
-using AKCondinoO.Sims.Actors.ArthurCondino;
+using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

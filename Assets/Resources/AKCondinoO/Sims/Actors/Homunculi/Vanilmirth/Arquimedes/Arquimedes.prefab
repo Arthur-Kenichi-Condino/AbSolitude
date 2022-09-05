@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 907142613423581965}
+  - component: {fileID: 2273105198794575747}
+  - component: {fileID: -2704640476733430876}
   - component: {fileID: -4455510629419889334}
   - component: {fileID: 115391049882503325}
   m_Layer: 0
@@ -35,6 +37,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2273105198794575747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065888385727663275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-2704640476733430876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065888385727663275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-4455510629419889334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,6 +73,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea8c9028d5a65ab4d91b895e80d29763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshAgentWalkSpeed: 2
+  navMeshAgentRunSpeed: 4
+  useRunSpeedChance: 0.5
   delayToRandomMove: 8
 --- !u!195 &115391049882503325
 NavMeshAgent:
