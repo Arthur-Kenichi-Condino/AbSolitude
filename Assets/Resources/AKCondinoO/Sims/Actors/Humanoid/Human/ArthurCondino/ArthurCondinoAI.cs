@@ -6,8 +6,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Sims.Actors.ArthurCondino{
-    internal class ArthurCondinoAI:BaseAI{
+namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
+    internal class ArthurCondinoAI:HumanAI{
         protected override void Awake(){
          base.Awake();
         }
