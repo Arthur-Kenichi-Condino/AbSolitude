@@ -30,6 +30,7 @@ namespace AKCondinoO.Sims{
           int typeStringEnd  =line.IndexOf(", ",typeStringStart);
           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
           Type t=Type.GetType(typeString);
+          if(t==null){continue;}
           SimObjectManager.singleton.releasedIds[t]=new List<ulong>();
           int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
           int releasedIdsListStringEnd  =line.IndexOf(", }, }, ",releasedIdsListStringStart);
@@ -56,6 +57,7 @@ namespace AKCondinoO.Sims{
           int typeStringEnd  =line.IndexOf(", ",typeStringStart);
           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
           Type t=Type.GetType(typeString);
+          if(t==null){continue;}
           int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
           int nextIdStringEnd  =line.IndexOf(" }, ",nextIdStringStart);
           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);

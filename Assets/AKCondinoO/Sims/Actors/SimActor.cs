@@ -44,6 +44,7 @@ namespace AKCondinoO.Sims.Actors{
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
         [SerializeField]protected float navMeshAgentRunSpeed=4f;
          protected bool navMeshAgentShouldUseRunSpeed=false;
+     internal SimActorCharacterController simActorCharacterController;
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
          base.Awake();
@@ -52,6 +53,7 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
+         simActorCharacterController=GetComponent<SimActorCharacterController>();
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
@@ -141,6 +143,9 @@ namespace AKCondinoO.Sims.Actors{
           }
          }else{
           DisableNavMeshAgent();
+          if(simActorCharacterController!=null){
+             simActorCharacterController.ManualUpdate();
+          }
          }
          lastForward=transform.forward;
          return result;
