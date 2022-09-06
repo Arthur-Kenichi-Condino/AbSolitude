@@ -45,6 +45,8 @@ namespace AKCondinoO.Sims.Actors{
         [SerializeField]protected float navMeshAgentRunSpeed=4f;
          protected bool navMeshAgentShouldUseRunSpeed=false;
      internal SimActorCharacterController simActorCharacterController;
+      internal float height;
+       internal float heightCrouching;
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
          base.Awake();
@@ -54,6 +56,15 @@ namespace AKCondinoO.Sims.Actors{
              areaMask=navMeshAgent.areaMask,
          };
          simActorCharacterController=GetComponent<SimActorCharacterController>();
+         if(simActorCharacterController!=null){
+            simActorCharacterController.actor=this;
+          height=simActorCharacterController.characterController.height;
+         }
+         heightCrouching=navMeshAgent.height;
+         if(simActorCharacterController==null){
+          height=heightCrouching;
+         }
+         Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
@@ -127,12 +138,33 @@ namespace AKCondinoO.Sims.Actors{
        return 0f;
       }
      }
+     internal bool crouching{
+      get{
+       return crouching_v;
+      }
+     }protected bool crouching_v=false;
+        protected virtual void OnToggleCrouching(){
+         if(height>heightCrouching){//  can crouch
+          if(!crouching_v){
+           crouching_v=true;
+           simActorCharacterController.characterController.height=heightCrouching;
+           simActorCharacterController.characterController.center=new Vector3(0,-((height/2f)-(heightCrouching/2f)),0);
+          }else{
+           crouching_v=false;
+           simActorCharacterController.characterController.height=height;
+           simActorCharacterController.characterController.center=new Vector3(0,0,0);
+          }
+         }
+        }
+     [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
+     protected bool wasCrouching;
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if((result=base.ManualUpdate(doValidationChecks))!=0){
           DisableNavMeshAgent();
           return result;
          }
+         bool shouldCrouch=false;//  is crouching required?
          if(isUsingAI){
           EnableNavMeshAgent();
           if(!navMeshAgent.isOnNavMesh){
@@ -147,10 +179,61 @@ namespace AKCondinoO.Sims.Actors{
              simActorCharacterController.ManualUpdate();
           }
          }
+         if(transform.hasChanged){
+          GetCollidersTouchingNonAlloc();
+         }
+         for(int i=0;i<collidersTouchingUpperCount;++i){
+          Collider colliderTouchingUpper=collidersTouchingUpper[i];
+          if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
+           shouldCrouch=true;
+          }
+         }
+         if(shouldCrouch){
+          if(!crouching){
+           OnToggleCrouching();
+          }
+         }else{
+          if(DEBUG_TOGGLE_CROUCHING){
+             DEBUG_TOGGLE_CROUCHING=false;
+           OnToggleCrouching();
+          }
+         }
          lastForward=transform.forward;
          return result;
         }
         protected virtual void AI(){
+        }
+     protected Collider[]collidersTouchingUpper=new Collider[8];
+      protected int collidersTouchingUpperCount=0;
+        protected override void GetCollidersTouchingNonAlloc(){
+         if(simActorCharacterController!=null){
+          var section=height/3f;
+          if((section/2f)>simActorCharacterController.characterController.radius){
+           var direction=Vector3.up;
+           direction=transform.rotation*direction;
+           var offset=(section/2f)-simActorCharacterController.characterController.radius;
+           var center=simActorCharacterController.characterController.center;
+           center.y+=(height/2f)-(section/2f);
+           var localPoint0=center-direction*offset;
+           var localPoint1=center+direction*offset;
+           var point0=transform.TransformPoint(localPoint0);
+           var point1=transform.TransformPoint(localPoint1);
+           _GetUpperColliders:{
+            collidersTouchingUpperCount=Physics.OverlapCapsuleNonAlloc(
+             point0,
+             point1,
+             simActorCharacterController.characterController.radius,
+             collidersTouchingUpper
+            );
+           }
+           if(collidersTouchingUpperCount>0){
+            if(collidersTouchingUpperCount>=collidersTouchingUpper.Length){
+             Array.Resize(ref collidersTouchingUpper,collidersTouchingUpperCount*2);
+             goto _GetUpperColliders;
+            }
+           }
+          }
+         }
         }
     }
 }

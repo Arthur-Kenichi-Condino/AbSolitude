@@ -141,6 +141,7 @@ namespace AKCondinoO.Sims{
            gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
           }
          }
+         GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
              DisableInteractions();
@@ -242,6 +243,9 @@ namespace AKCondinoO.Sims{
           }
          }
          return result;
+        }
+     protected Collider[]collidersTouching=new Collider[8];
+        protected virtual void GetCollidersTouchingNonAlloc(){
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
