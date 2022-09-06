@@ -70,6 +70,22 @@ namespace AKCondinoO.Sims{
            },
            maxJobWorkers=2,
           },
+          new NavMeshBuildSettings{
+           agentTypeID=GetAgentTypeIDByName("MediumSizeCrouched").Value,
+           agentRadius=0.25f,
+           agentHeight=0.755f,
+           agentClimb=0.75f,
+           agentSlope=60f,
+           overrideVoxelSize=true,
+                   voxelSize=0.25f/3f,
+           minRegionArea=0.25f,
+           overrideTileSize=true,
+                   tileSize=64,
+           debug=new NavMeshBuildDebugSettings{
+            flags=NavMeshBuildDebugFlags.None,
+           },
+           maxJobWorkers=2,
+          },
          };
         }
         //  [https://answers.unity.com/questions/1650130/change-agenttype-at-runtime.html]

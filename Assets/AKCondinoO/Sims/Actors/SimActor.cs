@@ -157,7 +157,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
-     bool wasCrouchingOnShouldCrouch;
+     bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if((result=base.ManualUpdate(doValidationChecks))!=0){
@@ -188,11 +188,32 @@ namespace AKCondinoO.Sims.Actors{
            shouldCrouch=true;
           }
          }
+         for(int i=0;i<collidersTouchingMiddleCount;++i){
+          Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
+          if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
+           shouldCrouch=true;
+          }
+         }
          if(shouldCrouch){
+          if(wasCrouchingBeforeShouldCrouch==null){
+             wasCrouchingBeforeShouldCrouch=crouching;
+          }
           if(!crouching){
            OnToggleCrouching();
           }
          }else{
+          if(wasCrouchingBeforeShouldCrouch!=null){
+           if(!wasCrouchingBeforeShouldCrouch.Value){
+            if(crouching){
+             OnToggleCrouching();
+            }
+           }else{
+            if(!crouching){
+             OnToggleCrouching();
+            }
+           }
+             wasCrouchingBeforeShouldCrouch=null;
+          }
           if(DEBUG_TOGGLE_CROUCHING){
              DEBUG_TOGGLE_CROUCHING=false;
            OnToggleCrouching();
@@ -205,6 +226,8 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
+     protected Collider[]collidersTouchingMiddle=new Collider[8];
+      protected int collidersTouchingMiddleCount=0;
         protected override void GetCollidersTouchingNonAlloc(){
          if(simActorCharacterController!=null){
           var section=height/3f;
@@ -212,7 +235,7 @@ namespace AKCondinoO.Sims.Actors{
            var direction=Vector3.up;
            direction=transform.rotation*direction;
            var offset=(section/2f)-simActorCharacterController.characterController.radius;
-           var center=simActorCharacterController.characterController.center;
+           var center=simActorCharacterController.center;
            center.y+=(height/2f)-(section/2f);
            var localPoint0=center-direction*offset;
            var localPoint1=center+direction*offset;
@@ -230,6 +253,25 @@ namespace AKCondinoO.Sims.Actors{
             if(collidersTouchingUpperCount>=collidersTouchingUpper.Length){
              Array.Resize(ref collidersTouchingUpper,collidersTouchingUpperCount*2);
              goto _GetUpperColliders;
+            }
+           }
+           center=simActorCharacterController.center;
+           localPoint0=center-direction*offset;
+           localPoint1=center+direction*offset;
+           point0=transform.TransformPoint(localPoint0);
+           point1=transform.TransformPoint(localPoint1);
+           _GetMiddleColliders:{
+            collidersTouchingMiddleCount=Physics.OverlapCapsuleNonAlloc(
+             point0,
+             point1,
+             simActorCharacterController.characterController.radius,
+             collidersTouchingMiddle
+            );
+           }
+           if(collidersTouchingMiddleCount>0){
+            if(collidersTouchingMiddleCount>=collidersTouchingMiddle.Length){
+             Array.Resize(ref collidersTouchingMiddle,collidersTouchingMiddleCount*2);
+             goto _GetMiddleColliders;
             }
            }
           }
