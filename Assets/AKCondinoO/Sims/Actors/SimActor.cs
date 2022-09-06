@@ -157,7 +157,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
-     protected bool wasCrouching;
+     bool wasCrouchingOnShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if((result=base.ManualUpdate(doValidationChecks))!=0){
