@@ -144,6 +144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
+  DEBUG_TOGGLE_CROUCHING: 0
+  doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
 --- !u!114 &-3747231846007095047
