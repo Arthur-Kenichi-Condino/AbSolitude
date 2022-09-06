@@ -29,6 +29,16 @@ namespace AKCondinoO{
       readonly Dictionary<Type,Delegate>delegates=new Dictionary<Type,Delegate>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         foreach(FieldInfo field in typeof(Command).GetFields(BindingFlags.NonPublic|BindingFlags.Static)){
+          if(field.GetValue(null)is object[]command){
+           CommandDictionary.Add(field.Name,command);
+          }
+         }
+         foreach(FieldInfo field in typeof(Enabled).GetFields(BindingFlags.NonPublic|BindingFlags.Static)){
+          if(field.GetValue(null)is object[]enabled){
+           EnabledDictionary.Add(field.Name,enabled);
+          }
+         }
          getters.Add(typeof(KeyCode),  keyboardGetters);
          getters.Add(typeof(int    ),     mouseGetters);
          getters.Add(typeof(string ),controllerGetters);
@@ -52,6 +62,9 @@ namespace AKCondinoO{
          if(inputType==typeof(KeyCode))return((Func<Func<KeyCode,bool>,KeyCode,bool>)delegates[inputType]).Invoke((Func<KeyCode,bool>)getters[inputType][(int)returnMode],(KeyCode)command.Value[0]);else
          if(inputType==typeof(int    ))return((Func<Func<int    ,bool>,int    ,bool>)delegates[inputType]).Invoke((Func<int    ,bool>)getters[inputType][(int)returnMode],(int    )command.Value[0]);else
                                        return((Func<Func<string ,bool>,string ,bool>)delegates[inputType]).Invoke((Func<string ,bool>)getters[inputType][(int)returnMode],(string )command.Value[0]);
+        }
+        //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
+        void Update(){
         }
     }
 }

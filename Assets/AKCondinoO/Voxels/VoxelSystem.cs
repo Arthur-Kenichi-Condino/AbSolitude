@@ -241,7 +241,7 @@ namespace AKCondinoO.Voxels{
      internal readonly SortedDictionary<int,NavMeshBuildMarkup>navMeshMarkups=new SortedDictionary<int,NavMeshBuildMarkup>();
       readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
       readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
-        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected){
+        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected,bool dirty){
          sourcesCollected=sources;
          if(navMeshSourcesCollectionChanged){
             navMeshSourcesCollectionChanged=false;
@@ -250,6 +250,11 @@ namespace AKCondinoO.Voxels{
           markups.Clear();
           sources.AddRange(navMeshSources.Values);
           markups.AddRange(navMeshMarkups.Values);
+          Collect();
+         }else if(dirty){
+          Collect();
+         }
+         void Collect(){
           NavMeshBuilder.CollectSources(null,NavMeshHelper.navMeshLayer,NavMeshCollectGeometry.PhysicsColliders,0,markups,sources);
          }
         }
