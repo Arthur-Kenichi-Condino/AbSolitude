@@ -137,6 +137,9 @@ namespace AKCondinoO.Sims{
           persistentData.UpdateData(this);
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
+          foreach(var gameplayer in GameplayerManagement.singleton.all){
+           gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
+          }
          }
          if(unplaceRequested){
             unplaceRequested=false;
