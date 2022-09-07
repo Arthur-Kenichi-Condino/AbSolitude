@@ -46,4 +46,4 @@ O respectivo Termo de Uso (doravante, "Termo de Uso") tem como objetivo regrar a
 
 # 6. Da Lei Aplicável.
 
-6.1. O presente Termo de Uso é regido única e exclusivamente pelas leis da República Federativa do Brasil e qualquer discussão judicial que surja tendo por base sua interpretação ou aplicação deverá ser julgado por tribunais brasileiros, estando desde logo eleito o foro da cidade de São José dos Campoa, Estado de São Paulo, por mais privilegiado que outro seja ou possa vir a ser.
+6.1. O presente Termo de Uso é regido única e exclusivamente pelas leis da República Federativa do Brasil e qualquer discussão judicial que surja tendo por base sua interpretação ou aplicação deverá ser julgado por tribunais brasileiros, estando desde logo eleito o foro da cidade de São José dos Campos, Estado de São Paulo, por mais privilegiado que outro seja ou possa vir a ser.
