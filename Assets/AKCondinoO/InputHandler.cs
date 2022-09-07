@@ -63,8 +63,31 @@ namespace AKCondinoO{
          if(inputType==typeof(int    ))return((Func<Func<int    ,bool>,int    ,bool>)delegates[inputType]).Invoke((Func<int    ,bool>)getters[inputType][(int)returnMode],(int    )command.Value[0]);else
                                        return((Func<Func<string ,bool>,string ,bool>)delegates[inputType]).Invoke((Func<string ,bool>)getters[inputType][(int)returnMode],(string )command.Value[0]);
         }
+        internal bool focus=true;
+        void OnApplicationFocus(bool focus){
+         this.focus=focus;
+        }
+        internal bool escape;
         //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
         void Update(){
+         escape=Input.GetKey(KeyCode.Escape)||Input.GetKeyUp(KeyCode.Escape)||Input.GetKeyDown(KeyCode.Escape);
+         foreach(var command in CommandDictionary){
+          string        name=command.Key;
+          Type          type=command.Value[0].GetType();
+          Command.Modes mode=(Command.Modes)command.Value[1];
+          object[]enabled=EnabledDictionary[name];
+          enabled[1]=enabled[0];
+             if(mode==Command.Modes.HoldDelayAfterInRange){
+             }else if(mode==Command.Modes.HoldDelay){
+             }else if(mode==Command.Modes.ActiveHeld){
+                 enabled[0]=InvokeDelegate(command,type,GetterReturnMode.HeldDown);
+             }else if(mode==Command.Modes.AlternateDown){
+                 if(InvokeDelegate(command,type,GetterReturnMode.Down)){
+                  enabled[0]=!(bool)enabled[0];
+                 }
+             }
+         }
+         Enabled.PAUSE[0]=(bool)Enabled.PAUSE[0]||escape||!focus;
         }
     }
 }
