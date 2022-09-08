@@ -78,7 +78,32 @@ namespace AKCondinoO{
           object[]enabled=EnabledDictionary[name];
           enabled[1]=enabled[0];
              if(mode==Command.Modes.HoldDelayAfterInRange){
+                 enabled[0]=false;
+                 if((bool)command.Value[3]&&InvokeDelegate(command,type,GetterReturnMode.HeldDown)){
+                  float heldTime=(float)enabled[2];
+                        heldTime+=Time.deltaTime;
+                  if(heldTime>=(float)command.Value[2]){
+                   heldTime=0;
+                   enabled[0]=true;
+                  }
+                  enabled[2]=heldTime;
+                 }else{
+                  enabled[2]=0f;
+                 }
+                 command.Value[3]=false;
              }else if(mode==Command.Modes.HoldDelay){
+                 enabled[0]=false;
+                 if(InvokeDelegate(command,type,GetterReturnMode.HeldDown)){
+                  float heldTime=(float)enabled[2];
+                        heldTime+=Time.deltaTime;
+                  if(heldTime>=(float)command.Value[2]){
+                   heldTime=0;
+                   enabled[0]=true;
+                  }
+                  enabled[2]=heldTime;
+                 }else{
+                  enabled[2]=0f;
+                 }
              }else if(mode==Command.Modes.ActiveHeld){
                  enabled[0]=InvokeDelegate(command,type,GetterReturnMode.HeldDown);
              }else if(mode==Command.Modes.AlternateDown){
@@ -88,6 +113,8 @@ namespace AKCondinoO{
              }
          }
          Enabled.PAUSE[0]=(bool)Enabled.PAUSE[0]||escape||!focus;
+         Enabled.MOUSE_ROTATION_DELTA_X[1]=Enabled.MOUSE_ROTATION_DELTA_X[0];Enabled.MOUSE_ROTATION_DELTA_X[0]=Command.ROTATION_SENSITIVITY_X*Input.GetAxis("Mouse X");
+         Enabled.MOUSE_ROTATION_DELTA_Y[1]=Enabled.MOUSE_ROTATION_DELTA_Y[0];Enabled.MOUSE_ROTATION_DELTA_Y[0]=Command.ROTATION_SENSITIVITY_Y*Input.GetAxis("Mouse Y");
         }
     }
 }
