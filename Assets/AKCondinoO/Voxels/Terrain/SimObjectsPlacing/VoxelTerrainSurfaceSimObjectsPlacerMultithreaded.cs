@@ -24,10 +24,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         internal enum Execution{
          GetGround,
          FillSpawnData,
+         SaveStateToFile,
         }
      internal Execution execution;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerMultithreaded:BaseMultithreaded<VoxelTerrainSurfaceSimObjectsPlacerContainer>{
+     static readonly object mutex=new object();
         protected override void Execute(){
          switch(container.execution){
           case Execution.GetGround:{
