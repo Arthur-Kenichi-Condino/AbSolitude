@@ -19,7 +19,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
-     VoxelTerrainSimObjectsPlacing simObjectsPlacing;
+     internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
      internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
