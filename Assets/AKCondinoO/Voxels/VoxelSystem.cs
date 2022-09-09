@@ -10,7 +10,9 @@ using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
@@ -77,6 +79,9 @@ namespace AKCondinoO.Voxels{
         #endregion
      internal static int voxelTerrainLayer;
      internal static VoxelSystem singleton{get;set;}
+     internal static string chunkStatePath;
+     internal static string chunkStateFile;
+      internal static readonly object chunkStateFileSync=new();
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
@@ -102,6 +107,9 @@ namespace AKCondinoO.Voxels{
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
         public void Init(){
+         chunkStatePath=string.Format("{0}{1}",Core.savePath,"chunkState/");
+         Directory.CreateDirectory(chunkStatePath);
+         chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
          int maxConnections=1;
          int poolSize=maxConnections*(expropriationDistance.x*2+1)
                                     *(expropriationDistance.y*2+1);
@@ -133,8 +141,15 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
          }
+         if(terrain!=null){
+          for(int i=0;i<terrain.Length;++i){
+           terrain[i].marchingCubesBG.Dispose();
+           terrain[i].simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.Dispose();
+          }
+         }
          VoxelTerrainEditingMultithreaded.Stop=true;
          terrainEditingBGThread.Wait();
+         VoxelTerrainEditing.singleton.terrainEditingBG.Dispose();
          biome.DisposeModules();
         }
         void OnDestroy(){

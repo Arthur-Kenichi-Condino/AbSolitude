@@ -49,6 +49,7 @@ namespace AKCondinoO.Sims{
            persistentDataLoadingBGThread.fileStream      [t].Dispose();
            persistentDataLoadingBGThread.fileStreamReader[t].Dispose();
           }
+          persistentDataLoadingBG.Dispose();
          #endregion
          #region PersistentDataSavingMultithreaded
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
@@ -70,6 +71,7 @@ namespace AKCondinoO.Sims{
            persistentDataSavingBGThread.fileStreamWriter[t].Dispose();
            persistentDataSavingBGThread.fileStreamReader[t].Dispose();
           }
+          persistentDataSavingBG.Dispose();
          #endregion
         }
         void OnDestroy(){

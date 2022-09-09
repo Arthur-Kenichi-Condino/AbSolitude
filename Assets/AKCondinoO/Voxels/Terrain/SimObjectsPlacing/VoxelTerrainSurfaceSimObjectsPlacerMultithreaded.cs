@@ -29,7 +29,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Execution execution;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerMultithreaded:BaseMultithreaded<VoxelTerrainSurfaceSimObjectsPlacerContainer>{
-     static readonly object mutex=new object();
         protected override void Execute(){
          switch(container.execution){
           case Execution.GetGround:{
@@ -133,6 +132,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              continue;
             }
            }}
+           break;
+          }
+          case Execution.SaveStateToFile:{
+           Log.DebugMessage("Execution.SaveStateToFile");
            break;
           }
          }

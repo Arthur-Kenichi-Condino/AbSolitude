@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 namespace AKCondinoO{
-    internal abstract class BackgroundContainer{
+    internal abstract class BackgroundContainer:IDisposable{
      internal readonly ManualResetEvent backgroundData=new ManualResetEvent( true);
      internal readonly   AutoResetEvent foregroundData=new   AutoResetEvent(false);
         internal bool IsCompleted(Func<bool>isRunning,int millisecondsTimeout=0){
@@ -17,6 +17,23 @@ namespace AKCondinoO{
           return true;
          }
          return backgroundData.WaitOne(millisecondsTimeout);
+        }
+     bool disposed=false;
+        public void Dispose(){
+         Dispose(disposing:true);
+         GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+          backgroundData.Dispose();
+          foregroundData.Dispose();
+         }
+         //  free unmanaged resources here
+         disposed=true;
+        }
+        ~BackgroundContainer(){
+         Dispose(disposing:false);
         }
     }
     internal abstract class BaseMultithreaded<T>where T:BackgroundContainer{
