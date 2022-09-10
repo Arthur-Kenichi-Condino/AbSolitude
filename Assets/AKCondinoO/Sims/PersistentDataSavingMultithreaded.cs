@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal class PersistentDataSavingBackgroundContainer:BackgroundContainer{
-     internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>gameDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
+     internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
+      internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
      internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
@@ -50,7 +52,7 @@ namespace AKCondinoO.Sims{
          }
         }
         protected override void Execute(){
-         foreach(var typePersistentDataToSavePair in container.gameDataToSerializeToFile){
+         foreach(var typePersistentDataToSavePair in container.simObjectDataToSerializeToFile){
           Type t=typePersistentDataToSavePair.Key;
           if(!idListByType.ContainsKey(t)){
            idListByType.Add(t,new List<ulong>());

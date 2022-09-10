@@ -25,6 +25,7 @@ namespace AKCondinoO.Sims.Actors{
          public float timerToRandomMove;
             internal void UpdateData(SimActor simActor){
              skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
+             slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simType=v.simType,number=v.number  };}).ToList());
             }
         }
      internal NavMeshAgent navMeshAgent;
@@ -68,7 +69,11 @@ namespace AKCondinoO.Sims.Actors{
          skills.Clear();
          //  load skills from file here
          foreach(var skill in skills){
-          //  TO DO: test skill level
+          if(requiredSkills.TryGetValue(skill.Key,out int requiredSkillLevel)){
+           if(skill.Value.level<requiredSkillLevel){
+            skill.Value.level=requiredSkillLevel;
+           }
+          }
           requiredSkills.Remove(skill.Key);
          }
          if(requiredSkills.Count>0){
