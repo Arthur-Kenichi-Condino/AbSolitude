@@ -77,7 +77,7 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBGThread.fileStream[t]=fileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamWriter[t]=new StreamWriter(fileStream);
           SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamReader[t]=new StreamReader(fileStream);
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
@@ -273,10 +273,10 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[t]=nextId;
          }
          foreach(var a in SimObjectManager.singleton.active){
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
          }
          while(despawnQueue.Count>0){var toDespawn=despawnQueue.Dequeue();
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
           if(!exitSave){
            SimObjectManager.singleton.despawning.Add(toDespawn.id.Value,toDespawn);
           }
