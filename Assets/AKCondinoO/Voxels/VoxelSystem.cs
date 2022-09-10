@@ -110,6 +110,12 @@ namespace AKCondinoO.Voxels{
          chunkStatePath=string.Format("{0}{1}",Core.savePath,"chunkState/");
          Directory.CreateDirectory(chunkStatePath);
          chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
+         for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
+          FileStream fileStream;
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStream=fileStream=new FileStream(chunkStateFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter=new StreamWriter(fileStream);
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader=new StreamReader(fileStream);
+         }
          int maxConnections=1;
          int poolSize=maxConnections*(expropriationDistance.x*2+1)
                                     *(expropriationDistance.y*2+1);
@@ -140,11 +146,16 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=true;
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter.Dispose();
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader.Dispose();
          }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].marchingCubesBG.Dispose();
-           terrain[i].simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.Dispose();
+           terrain[i].simObjectsPlacing.
+                       surface.
+                        surfaceSimObjectsPlacerBG.
+                         Dispose();
           }
          }
          VoxelTerrainEditingMultithreaded.Stop=true;
