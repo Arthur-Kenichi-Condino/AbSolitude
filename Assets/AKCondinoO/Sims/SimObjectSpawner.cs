@@ -78,6 +78,7 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamWriter[t]=new StreamWriter(fileStream);
           SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamReader[t]=new StreamReader(fileStream);
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
+           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(t,new Dictionary<ulong,SimActor.PersistentSimActorData>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
