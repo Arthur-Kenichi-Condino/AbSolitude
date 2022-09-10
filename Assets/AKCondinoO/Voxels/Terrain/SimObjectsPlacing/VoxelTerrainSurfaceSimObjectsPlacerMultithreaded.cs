@@ -45,6 +45,35 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          switch(container.execution){
           case Execution.GetGround:{
            //Log.DebugMessage("Execution.GetGround");
+           lock(VoxelSystem.chunkStateFileSync){
+            chunkStateFileStream.Position=0L;
+            chunkStateFileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=chunkStateFileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
+             int cnkIdxStringEnd  =line.IndexOf(" ,",cnkIdxStringStart);
+             int cnkIdxStringLength=cnkIdxStringEnd-cnkIdxStringStart;
+             int cnkIdx=int.Parse(line.Substring(cnkIdxStringStart,cnkIdxStringLength),NumberStyles.Any,CultureInfoUtil.en_US);
+             int surfaceSimObjectsAddedStringStart=cnkIdxStringEnd+2;
+             if(cnkIdx==container.cnkIdx){
+              surfaceSimObjectsAddedStringStart=line.IndexOf("surfaceSimObjectsAdded=",surfaceSimObjectsAddedStringStart);
+              if(surfaceSimObjectsAddedStringStart>=0){
+               int surfaceSimObjectsAddedStringEnd=line.IndexOf(", ",surfaceSimObjectsAddedStringStart)+2;
+               string surfaceSimObjectsAddedString=line.Substring(surfaceSimObjectsAddedStringStart,surfaceSimObjectsAddedStringEnd-surfaceSimObjectsAddedStringStart);
+               int surfaceSimObjectsAddedFlagStringStart=surfaceSimObjectsAddedString.IndexOf("=")+1;
+               int surfaceSimObjectsAddedFlagStringEnd  =surfaceSimObjectsAddedString.IndexOf(", ",surfaceSimObjectsAddedFlagStringStart);
+               bool surfaceSimObjectsAddedFlag=bool.Parse(surfaceSimObjectsAddedString.Substring(surfaceSimObjectsAddedFlagStringStart,surfaceSimObjectsAddedFlagStringEnd-surfaceSimObjectsAddedFlagStringStart));
+               if(surfaceSimObjectsAddedFlag){
+                container.surfaceSimObjectsHadBeenAdded=true;
+               }
+              }
+             }
+            }
+           }
+           if(container.surfaceSimObjectsHadBeenAdded){
+            break;
+           }
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
@@ -167,16 +196,16 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              int endOfLineStart=surfaceSimObjectsAddedStringStart;
              if(cnkIdx==container.cnkIdx){
               surfaceSimObjectsAddedStringStart=line.IndexOf("surfaceSimObjectsAdded=",surfaceSimObjectsAddedStringStart);
-              Log.DebugMessage("surfaceSimObjectsAddedStringStart:"+surfaceSimObjectsAddedStringStart);
+              //Log.DebugMessage("surfaceSimObjectsAddedStringStart:"+surfaceSimObjectsAddedStringStart);
               if(surfaceSimObjectsAddedStringStart>=0){
-               Log.DebugMessage("surfaceSimObjectsAdded flag is present");
+               //Log.DebugMessage("surfaceSimObjectsAdded flag is present");
                int surfaceSimObjectsAddedStringEnd=line.IndexOf(", ",surfaceSimObjectsAddedStringStart)+2;
                string surfaceSimObjectsAddedString=line.Substring(surfaceSimObjectsAddedStringStart,surfaceSimObjectsAddedStringEnd-surfaceSimObjectsAddedStringStart);
-               Log.DebugMessage("surfaceSimObjectsAddedString:"+surfaceSimObjectsAddedString);
+               //Log.DebugMessage("surfaceSimObjectsAddedString:"+surfaceSimObjectsAddedString);
                int surfaceSimObjectsAddedFlagStringStart=surfaceSimObjectsAddedString.IndexOf("=")+1;
                int surfaceSimObjectsAddedFlagStringEnd  =surfaceSimObjectsAddedString.IndexOf(", ",surfaceSimObjectsAddedFlagStringStart);
                bool surfaceSimObjectsAddedFlag=bool.Parse(surfaceSimObjectsAddedString.Substring(surfaceSimObjectsAddedFlagStringStart,surfaceSimObjectsAddedFlagStringEnd-surfaceSimObjectsAddedFlagStringStart));
-               Log.DebugMessage("surfaceSimObjectsAddedFlag:"+surfaceSimObjectsAddedFlag);
+               //Log.DebugMessage("surfaceSimObjectsAddedFlag:"+surfaceSimObjectsAddedFlag);
                if(!surfaceSimObjectsAddedFlag){
                 int toRemoveLength=surfaceSimObjectsAddedStringEnd-totalCharactersRemoved-(surfaceSimObjectsAddedStringStart-totalCharactersRemoved);
                 lineStringBuilder.Remove(surfaceSimObjectsAddedStringStart-totalCharactersRemoved,toRemoveLength);
@@ -193,7 +222,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              stringBuilder.Append(line);
              if(cnkIdx==container.cnkIdx){
               if(!stateSavedFlag){
-               Log.DebugMessage("add surfaceSimObjectsAdded flag");
+               //Log.DebugMessage("add surfaceSimObjectsAdded flag");
                stringBuilder.AppendFormat(CultureInfoUtil.en_US,"surfaceSimObjectsAdded={0}, ",true);
                stateSavedFlag=true;
               }
