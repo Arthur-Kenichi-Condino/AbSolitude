@@ -107,7 +107,7 @@ namespace AKCondinoO.Voxels{
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
         public void Init(){
-         chunkStatePath=string.Format("{0}{1}",Core.savePath,"chunkState/");
+         chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
          Directory.CreateDirectory(chunkStatePath);
          chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
