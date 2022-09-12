@@ -66,10 +66,10 @@ namespace AKCondinoO.Sims{
           persistentDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
           persistentDataSavingBGThread.idsFileStreamWriter.Dispose();
           persistentDataSavingBGThread.idsFileStreamReader.Dispose();
-          foreach(var kvp in persistentDataSavingBGThread.fileStream){
+          foreach(var kvp in persistentDataSavingBGThread.simObjectFileStream){
            Type t=kvp.Key;
-           persistentDataSavingBGThread.fileStreamWriter[t].Dispose();
-           persistentDataSavingBGThread.fileStreamReader[t].Dispose();
+           persistentDataSavingBGThread.simObjectFileStreamWriter[t].Dispose();
+           persistentDataSavingBGThread.simObjectFileStreamReader[t].Dispose();
           }
           persistentDataSavingBG.Dispose();
          #endregion

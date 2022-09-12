@@ -19,9 +19,12 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
     }
     internal class PersistentDataSavingMultithreaded:BaseMultithreaded<PersistentDataSavingBackgroundContainer>{
-     internal readonly Dictionary<Type,FileStream>fileStream=new Dictionary<Type,FileStream>();
-      internal readonly Dictionary<Type,StreamWriter>fileStreamWriter=new Dictionary<Type,StreamWriter>();
-      internal readonly Dictionary<Type,StreamReader>fileStreamReader=new Dictionary<Type,StreamReader>();
+     internal readonly Dictionary<Type,FileStream>simObjectFileStream=new Dictionary<Type,FileStream>();
+      internal readonly Dictionary<Type,StreamWriter>simObjectFileStreamWriter=new Dictionary<Type,StreamWriter>();
+      internal readonly Dictionary<Type,StreamReader>simObjectFileStreamReader=new Dictionary<Type,StreamReader>();
+       internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
+        internal readonly Dictionary<Type,StreamWriter>simActorFileStreamWriter=new Dictionary<Type,StreamWriter>();
+        internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly Dictionary<Type,Dictionary<int,List<(ulong id,SimObject.PersistentData persistentData)>>>idPersistentDataListBycnkIdxByType=new Dictionary<Type,Dictionary<int,List<(ulong,SimObject.PersistentData)>>>();
         readonly Queue<List<(ulong id,SimObject.PersistentData persistentData)>>idPersistentDataListPool=new Queue<List<(ulong,SimObject.PersistentData)>>();
        readonly Dictionary<Type,List<ulong>>idListByType=new Dictionary<Type,List<ulong>>();
@@ -83,9 +86,9 @@ namespace AKCondinoO.Sims{
           Type t=kvp1.Key;
           var idPersistentDataListBycnkIdx=kvp1.Value;
           processedcnkIdx.Clear();
-          FileStream fileStream=this.fileStream[t];
-          StreamWriter fileStreamWriter=this.fileStreamWriter[t];
-          StreamReader fileStreamReader=this.fileStreamReader[t];
+          FileStream fileStream=this.simObjectFileStream[t];
+          StreamWriter fileStreamWriter=this.simObjectFileStreamWriter[t];
+          StreamReader fileStreamReader=this.simObjectFileStreamReader[t];
           stringBuilder.Clear();
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
@@ -148,6 +151,13 @@ namespace AKCondinoO.Sims{
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
+         }
+         foreach(var typePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
+          Type t=typePersistentSimActorDataToSavePair.Key;
+          var persistentSimActorDataToSave=typePersistentSimActorDataToSavePair.Value;
+          //foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
+          //}
+          persistentSimActorDataToSave.Clear();
          }
          #region releasedIds
           releasedIdsStringBuilder.Clear();

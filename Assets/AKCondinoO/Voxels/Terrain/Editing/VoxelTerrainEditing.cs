@@ -12,7 +12,6 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditing:MonoBehaviour,ISingletonInitialization{
      internal static VoxelTerrainEditing singleton{get;set;}
      internal static string terrainEditingPath;
-     internal static string terrainEditingFilenameFormat="{0}.{1}.txt";
      internal VoxelTerrainEditingContainer terrainEditingBG=new VoxelTerrainEditingContainer();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
