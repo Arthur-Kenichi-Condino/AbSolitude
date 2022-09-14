@@ -134,6 +134,9 @@ namespace AKCondinoO.Voxels{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
+         if(this!=null){
+          StopCoroutine(proceduralGenerationCoroutine);
+         }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].OnDestroyingCore();

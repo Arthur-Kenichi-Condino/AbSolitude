@@ -105,6 +105,9 @@ namespace AKCondinoO.Sims{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
+         if(this!=null){
+          StopCoroutine(spawnCoroutine);
+         }
         }
         void OnDestroy(){
         }

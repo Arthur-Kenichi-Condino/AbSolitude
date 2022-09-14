@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Music;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace AKCondinoO{
          }else{
           //  TO DO: stop if paused
          }
+         BGM.singleton.transform.position=this.transform.position;
         }
         void Update(){
         }
