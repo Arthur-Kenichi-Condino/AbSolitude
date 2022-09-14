@@ -5,6 +5,7 @@ using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.UI;
+using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain.Editing;
@@ -51,6 +52,7 @@ namespace AKCondinoO{
           {12,GameMode            .singleton},
           {13,Placeholder         .singleton},
           {14,FixedUI             .singleton},
+          {15,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
