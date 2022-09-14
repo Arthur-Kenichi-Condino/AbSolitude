@@ -10,10 +10,12 @@ using static AKCondinoO.GameMode;
 namespace AKCondinoO.UI.Context{
     internal class ContextMenuUI:MonoBehaviour,ISingletonInitialization{
      internal static ContextMenuUI singleton{get;set;}
+     [SerializeField]internal RectTransform panel;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
+         panel.gameObject.SetActive(false);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("ContextMenu:OnDestroyingCoreEvent");
