@@ -30,6 +30,7 @@ namespace AKCondinoO.UI.Fixed{
           }
          }
          buildBuyEditModeUIContent.buildCategoryTableFloors.OnCreateTable();
+         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("FixedUI:OnDestroyingCoreEvent");
@@ -50,6 +51,8 @@ namespace AKCondinoO.UI.Fixed{
          }
         }
      [SerializeField]SimObject DEBUG_SET_PLACEHOLDER=null;
+        void LateUpdate(){
+        }
         void Update(){
          if(DEBUG_SET_PLACEHOLDER!=null){
           Log.DebugMessage("DEBUG_SET_PLACEHOLDER:"+DEBUG_SET_PLACEHOLDER);

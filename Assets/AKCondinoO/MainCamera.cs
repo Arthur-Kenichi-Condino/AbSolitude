@@ -12,9 +12,23 @@ namespace AKCondinoO{
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
+         Camera.main.transparencySortMode=TransparencySortMode.Default;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
+        }
+        void LateUpdate(){
+         bool followerCamera=false;
+         if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
+          //  TO DO: check if is there actually something to be followed (at Gameplayer.main)
+          followerCamera=true;
+         }
+         if(followerCamera){
+         }else{
+          //  TO DO: stop if paused
+         }
+        }
+        void Update(){
         }
     }
 }
