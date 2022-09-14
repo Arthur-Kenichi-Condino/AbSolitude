@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Gameplaying;
+using AKCondinoO.Music;
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.UI;
@@ -40,19 +41,20 @@ namespace AKCondinoO{
           { 0,GameplayerManagement.singleton},
           { 1,InputHandler        .singleton},
           { 2,ScreenInput         .singleton},
-          { 3,MainCamera          .singleton},
-          { 4,SimTime             .singleton},
-          { 5,VoxelSystem         .singleton},
-          { 6,VoxelTerrainEditing .singleton},
-          { 7,SimObjectManager    .singleton},
-          { 8,SimObjectSpawner    .singleton},
-          { 9,SkillsManager       .singleton},
-          {10,SimsMachine         .singleton},
-          {11,AutonomyCore        .singleton},
-          {12,GameMode            .singleton},
-          {13,Placeholder         .singleton},
-          {14,FixedUI             .singleton},
-          {15,ContextMenuUI       .singleton},
+          { 3,BGM                 .singleton},
+          { 4,MainCamera          .singleton},
+          { 5,SimTime             .singleton},
+          { 6,VoxelSystem         .singleton},
+          { 7,VoxelTerrainEditing .singleton},
+          { 8,SimObjectManager    .singleton},
+          { 9,SimObjectSpawner    .singleton},
+          {10,SkillsManager       .singleton},
+          {11,SimsMachine         .singleton},
+          {12,AutonomyCore        .singleton},
+          {13,GameMode            .singleton},
+          {14,Placeholder         .singleton},
+          {15,FixedUI             .singleton},
+          {16,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
