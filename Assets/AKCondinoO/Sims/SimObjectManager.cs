@@ -70,6 +70,10 @@ namespace AKCondinoO.Sims{
            Type t=kvp.Key;
            persistentDataSavingBGThread.simObjectFileStreamWriter[t].Dispose();
            persistentDataSavingBGThread.simObjectFileStreamReader[t].Dispose();
+           if(SimObjectUtil.IsSimActor(t)){
+            persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
+            persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
+           }
           }
           persistentDataSavingBG.Dispose();
          #endregion

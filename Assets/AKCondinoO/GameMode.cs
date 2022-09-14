@@ -10,6 +10,7 @@ namespace AKCondinoO{
      internal enum GameModesEnum{
       BuildBuyEdit,
       Interact,
+      ThirdPerson,
      }
      internal static GameMode singleton{get;set;}
         void Awake(){

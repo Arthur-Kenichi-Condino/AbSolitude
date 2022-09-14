@@ -81,8 +81,13 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(fileStream);
           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamReader[t]=new StreamReader(fileStream);
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
+          fileStream=null;
+          string simActorSaveFile=string.Format("{0}{1}{2}",simActorSavePath,t,".txt");
           if(SimObjectUtil.IsSimActor(t)){
-           string simActorSaveFile=string.Format("{0}{1}{2}",simActorSavePath,t,".txt");
+           FileStream simActorFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamWriter[t]=new StreamWriter(simActorFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(t,new Dictionary<ulong,SimActor.PersistentSimActorData>());
           }
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
