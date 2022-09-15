@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Music;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -50,7 +51,17 @@ namespace AKCondinoO{
          NightToDawn,
          DawnToDay,
         }
-     internal DayTransitions simDayTransition=DayTransitions.Day;
+     internal DayTransitions simDayTransition{
+      get{
+       return simDayTransition_v;
+      }
+      set{
+       if(value!=simDayTransition_v){
+        OnPlayTimeOfDayThemeMusic(value);
+       }
+       simDayTransition_v=value;
+      }
+     }private DayTransitions simDayTransition_v=DayTransitions.Day;
         void Update(){
             simTimeOfDay+=Time.deltaTime*_DAY/(simDayInRealMinutes*_MINUTE);
          if(simTimeOfDay>=_DAY){
@@ -98,6 +109,22 @@ namespace AKCondinoO{
          }
          foreach(var sunTransform in sunTransforms){
                      sunTransform.UpdateValues();
+         }
+        }
+        void OnPlayTimeOfDayThemeMusic(DayTransitions simDayTransition){
+         switch(simDayTransition){
+          case DayTransitions.NightToDawn:{
+           BGM.singleton.newMusic=BGM.singleton.GoodMorningMusic;
+           break;
+          }
+          case DayTransitions.DayToSunset:{
+           BGM.singleton.newMusic=BGM.singleton.RushingNoonMusic;
+           break;
+          }
+          case DayTransitions.Night:{
+           BGM.singleton.newMusic=BGM.singleton.SpookyNightMusic;
+           break;
+          }
          }
         }
     }
