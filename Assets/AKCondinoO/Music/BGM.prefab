@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257609fe4af94ca458ee3d166321fcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GoodMorningMusic: {fileID: 8300000, guid: feb531d5d9d344b4392abbd58fea4f86, type: 3}
+  RushingNoonMusic: {fileID: 8300000, guid: a84059542a4416449b1cb6ac7c7f24da, type: 3}
+  SpookyNightMusic: {fileID: 8300000, guid: 5611ad1873041504489ccee0c780aa6b, type: 3}
 --- !u!82 &9047490388905066474
 AudioSource:
   m_ObjectHideFlags: 0

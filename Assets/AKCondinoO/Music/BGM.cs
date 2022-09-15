@@ -9,6 +9,9 @@ namespace AKCondinoO.Music{
     internal class BGM:MonoBehaviour,ISingletonInitialization{
      internal static BGM singleton{get;set;}
      internal AudioSource audioSource;
+      [SerializeField]AudioClip GoodMorningMusic;
+      [SerializeField]AudioClip RushingNoonMusic;
+      [SerializeField]AudioClip SpookyNightMusic;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          audioSource=GetComponent<AudioSource>();
