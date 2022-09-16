@@ -9,6 +9,7 @@ namespace AKCondinoO.Music{
     internal class BGM:MonoBehaviour,ISingletonInitialization{
      internal static BGM singleton{get;set;}
      internal AudioSource audioSource;
+      [SerializeField]bool mute=false;
       [SerializeField]internal AudioClip GoodMorningMusic;
       [SerializeField]internal AudioClip RushingNoonMusic;
       [SerializeField]internal AudioClip SpookyNightMusic;
@@ -43,7 +44,9 @@ namespace AKCondinoO.Music{
              }
              audioSource.clip=newMusic;
              audioSource.volume=1f;
-             audioSource.Play();
+             if(!mute){
+              audioSource.Play();
+             }
              newMusic=null;
             }
             goto Loop;

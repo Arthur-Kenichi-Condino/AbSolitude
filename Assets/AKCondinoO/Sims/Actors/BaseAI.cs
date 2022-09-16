@@ -8,7 +8,7 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors {
     internal partial class BaseAI:SimActor{
-     protected System.Random dice=new System.Random();
+     protected readonly System.Random dice=new System.Random();
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
