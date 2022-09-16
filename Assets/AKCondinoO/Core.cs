@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Ambience.Clouds;
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Music;
 using AKCondinoO.Sims;
@@ -44,17 +45,18 @@ namespace AKCondinoO{
           { 3,BGM                 .singleton},
           { 4,MainCamera          .singleton},
           { 5,SimTime             .singleton},
-          { 6,VoxelSystem         .singleton},
-          { 7,VoxelTerrainEditing .singleton},
-          { 8,SimObjectManager    .singleton},
-          { 9,SimObjectSpawner    .singleton},
-          {10,SkillsManager       .singleton},
-          {11,SimsMachine         .singleton},
-          {12,AutonomyCore        .singleton},
-          {13,GameMode            .singleton},
-          {14,Placeholder         .singleton},
-          {15,FixedUI             .singleton},
-          {16,ContextMenuUI       .singleton},
+          { 6,CloudParticleSystem .singleton},
+          { 7,GameMode            .singleton},
+          { 8,VoxelSystem         .singleton},
+          { 9,VoxelTerrainEditing .singleton},
+          {10,SimObjectManager    .singleton},
+          {11,SimObjectSpawner    .singleton},
+          {12,SkillsManager       .singleton},
+          {13,SimsMachine         .singleton},
+          {14,AutonomyCore        .singleton},
+          {15,Placeholder         .singleton},
+          {16,FixedUI             .singleton},
+          {17,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
