@@ -8,7 +8,8 @@ using UnityEngine;
 namespace AKCondinoO.Ambience.Clouds{
     internal class CloudParticleSystem:MonoBehaviour,ISingletonInitialization{
      internal static CloudParticleSystem singleton{get;set;}
-     readonly System.Random random=new System.Random();
+     internal readonly System.Random random=new System.Random();
+     internal CloudsCamera cloudsCamera;
      [SerializeField]CloudParticle cloudParticlePrefab;
       internal Material sharedMaterial;
        internal Color sharedColor;
@@ -17,6 +18,8 @@ namespace AKCondinoO.Ambience.Clouds{
         internal readonly Queue<CloudParticle>cachedParticles=new Queue<CloudParticle>();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         cloudsCamera=GetComponentInChildren<CloudsCamera>();
+         Log.DebugMessage("cloudsCamera:"+cloudsCamera);
          MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponent<MeshRenderer>();
          sharedMaterial=prefabRenderer.sharedMaterial;
          sharedColor=sharedMaterial.GetColor("_TintColor");
@@ -40,9 +43,20 @@ namespace AKCondinoO.Ambience.Clouds{
          if(activeParticles.Count<maxParticles){
           CloudParticle cloudParticle;
           cloudParticle=Instantiate(cloudParticlePrefab);
+          cloudParticle.meshRenderer.enabled=false;
+          cloudParticle.alpha.value=0f;
           cloudParticle.fadeIn=true;
           activeParticles.Add(cloudParticle);
          }
+        }
+        [SerializeField]internal CloudParticleAlphaSettings alphaSettings;
+        [Serializable]internal class CloudParticleAlphaSettings{
+         [SerializeField]internal float min=0.05f;
+         [SerializeField]internal float max=0.4f;
+         [SerializeField]internal float minIncrementSpeed=.0125f;
+         [SerializeField]internal float maxIncrementSpeed=.025f;
+         [SerializeField]internal float reverseChance=0.125f;
+         [SerializeField]internal float reverseChanceInterval=10f;
         }
     }
 }
