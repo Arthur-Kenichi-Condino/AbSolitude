@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Ambience.Clouds;
 using AKCondinoO.Gameplaying;
@@ -17,10 +17,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 namespace AKCondinoO{
     internal class Core:MonoBehaviour{
      internal static Core singleton;
+     internal NetworkManager netManager;
+      internal bool isServer=false;
+      internal bool isClient=false;
      internal static int threadCount;
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
@@ -67,6 +72,17 @@ namespace AKCondinoO{
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
          Gameplayer.main.Init();
+         GameObject netManagerGameObject;
+         if((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
+          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null
+         ){
+          Log.Warning("NetworkManager not found: going to EntryScene");
+          SceneManager.LoadScene("EntryScene",LoadSceneMode.Single);
+         }else{
+          isServer=netManager.IsServer||netManager.IsHost;
+          isClient=netManager.IsClient&&!netManager.IsHost;
+          Log.DebugMessage("MainMenu.netManagerInitialized:"+MainMenu.netManagerInitialized+";isServer:"+isServer+";isClient:"+isClient);
+         }
         }
         void OnDestroy(){
          if(singleton==this){

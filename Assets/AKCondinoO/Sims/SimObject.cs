@@ -10,10 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal class SimObject:MonoBehaviour{
+    internal class SimObject:NetworkBehaviour{
      internal PersistentData persistentData;
         internal struct PersistentData{
          public Quaternion rotation;
