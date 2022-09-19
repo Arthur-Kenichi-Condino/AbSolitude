@@ -49,13 +49,25 @@ namespace AKCondinoO.Ambience.Clouds{
           activeParticles.Add(cloudParticle);
          }
         }
-        [SerializeField]internal CloudParticleAlphaSettings alphaSettings;
+     [SerializeField]internal CloudParticleAlphaSettings alphaSettings;
         [Serializable]internal class CloudParticleAlphaSettings{
          [SerializeField]internal float min=0.05f;
          [SerializeField]internal float max=0.4f;
          [SerializeField]internal float minIncrementSpeed=.0125f;
          [SerializeField]internal float maxIncrementSpeed=.025f;
          [SerializeField]internal float reverseChance=0.125f;
+         [SerializeField]internal float reverseChanceInterval=10f;
+        }
+     [SerializeField]internal CloudParticleOrbitSettings orbitSettings;
+        [Serializable]internal class CloudParticleOrbitSettings{
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(.05f,.05f,.05f);
+        }
+     [SerializeField]internal CloudParticleDistanceSettings distanceSettings;
+        [Serializable]internal class CloudParticleDistanceSettings{
+         [SerializeField]internal float min=1f;
+         [SerializeField]internal float max=10f;
+         [SerializeField]internal float minIncrementSpeed=0.05f;
+         [SerializeField]internal float reverseChance=.125f;
          [SerializeField]internal float reverseChanceInterval=10f;
         }
     }
