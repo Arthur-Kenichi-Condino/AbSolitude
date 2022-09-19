@@ -155,8 +155,19 @@ namespace AKCondinoO.Sims{
          foreach(var typePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
           Type t=typePersistentSimActorDataToSavePair.Key;
           var persistentSimActorDataToSave=typePersistentSimActorDataToSavePair.Value;
-          //foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
-          //}
+          Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
+          FileStream fileStream=this.simActorFileStream[t];
+          StreamWriter fileStreamWriter=this.simActorFileStreamWriter[t];
+          StreamReader fileStreamReader=this.simActorFileStreamReader[t];
+          stringBuilder.Clear();
+          fileStream.Position=0L;
+          fileStreamReader.DiscardBufferedData();
+          string line;
+          while((line=fileStreamReader.ReadLine())!=null){
+           if(string.IsNullOrEmpty(line)){continue;}
+          }
+          foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
+          }
           persistentSimActorDataToSave.Clear();
          }
          #region releasedIds

@@ -80,9 +80,9 @@ namespace AKCondinoO.Voxels.Biomes{
             if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
              foreach(SimObjectSettings setting in typeSettingsListForSelection){
               float chance=setting.chance/settingsCountForSelection[selection];
-              float dicing=((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f;
+              float dicing=Mathf.Clamp01(((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f);
               count++;
-              if(dicing<=chance){
+              if(dicing<chance){
                return(type,setting);
               }
              }
