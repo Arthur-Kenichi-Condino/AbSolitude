@@ -4,6 +4,7 @@
 using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,13 +29,15 @@ namespace AKCondinoO.Sims.Actors{
              skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
              slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simType=v.simType,number=v.number  };}).ToList());
             }
-         //private StringBuilder stringBuilder;
+         private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
             public override string ToString(){
-             //if(stringBuilder==null){
-             // stringBuilder=new StringBuilder();
-             //}
-             //stringBuilder.Clear();
-             return string.Format(CultureInfoUtil.en_US,"persistentData={{ }}");
+             if(!stringBuilderPool.TryDequeue(out StringBuilder stringBuilder)){
+              stringBuilder=new StringBuilder();
+             }
+             stringBuilder.Clear();
+             string result=string.Format(CultureInfoUtil.en_US,"persistentData={{ }}");
+             stringBuilderPool.Enqueue(stringBuilder);
+             return result;
             }
         }
      internal NavMeshAgent navMeshAgent;
