@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
-    public struct ListWrapper<T>:IEnumerator{
+    public struct ListWrapper<T>:IEnumerator where T:struct{
      private readonly T[]elements;
      private int position;
         public ListWrapper(List<T>list){
