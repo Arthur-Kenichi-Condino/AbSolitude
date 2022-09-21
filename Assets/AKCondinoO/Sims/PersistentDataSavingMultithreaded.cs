@@ -167,6 +167,9 @@ namespace AKCondinoO.Sims{
            if(string.IsNullOrEmpty(line)){continue;}
           }
           foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
+           ulong id=idPersistentSimActorDataPair.Key;
+           SimActor.PersistentSimActorData persistentSimActorData=idPersistentSimActorDataPair.Value;
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1}",id,persistentSimActorData.ToString());
           }
           persistentSimActorDataToSave.Clear();
          }

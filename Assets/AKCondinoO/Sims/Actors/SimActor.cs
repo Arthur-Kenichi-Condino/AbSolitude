@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -26,6 +27,14 @@ namespace AKCondinoO.Sims.Actors{
             internal void UpdateData(SimActor simActor){
              skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
              slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simType=v.simType,number=v.number  };}).ToList());
+            }
+         private StringBuilder stringBuilder;
+            public override string ToString(){
+             if(stringBuilder==null){
+              stringBuilder=new StringBuilder();
+             }
+             stringBuilder.Clear();
+             return string.Format(CultureInfoUtil.en_US,"persistentData={{ }}");
             }
         }
      internal NavMeshAgent navMeshAgent;
