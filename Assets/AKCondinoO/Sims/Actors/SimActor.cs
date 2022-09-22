@@ -35,7 +35,14 @@ namespace AKCondinoO.Sims.Actors{
               stringBuilder=new StringBuilder();
              }
              stringBuilder.Clear();
-             string result=string.Format(CultureInfoUtil.en_US,"persistentData={{ }}");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"skills={{ ");
+             skills.Reset();
+             while(skills.MoveNext()){
+              SkillData skill=skills.Current;
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",skill.skill,skill.level);
+             }
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}},");
+             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0} }}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
