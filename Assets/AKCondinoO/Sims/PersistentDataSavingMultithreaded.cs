@@ -169,8 +169,11 @@ namespace AKCondinoO.Sims{
           foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
            ulong id=idPersistentSimActorDataPair.Key;
            SimActor.PersistentSimActorData persistentSimActorData=idPersistentSimActorDataPair.Value;
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1}",id,persistentSimActorData.ToString());
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }}, {2}",id,persistentSimActorData.ToString(),Environment.NewLine);
           }
+          fileStream.SetLength(0L);
+          fileStreamWriter.Write(stringBuilder.ToString());
+          fileStreamWriter.Flush();
           persistentSimActorDataToSave.Clear();
          }
          #region releasedIds
