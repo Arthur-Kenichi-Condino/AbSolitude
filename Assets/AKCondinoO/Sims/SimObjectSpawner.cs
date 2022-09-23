@@ -120,6 +120,9 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
          specificSpawnRequests[id]=(position,eulerAngles,localScale);
         }
+        internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
+         Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
+        }
      Coroutine spawnCoroutine;
      [SerializeField]int       DEBUG_CREATE_SIM_OBJECT_AMOUNT=1;
      [SerializeField]Vector3   DEBUG_CREATE_SIM_OBJECT_ROTATION;

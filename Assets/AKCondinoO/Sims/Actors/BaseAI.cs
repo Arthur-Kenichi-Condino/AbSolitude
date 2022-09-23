@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,9 @@ namespace AKCondinoO.Sims.Actors {
              MyMotion=ActorMotion.MOTION_STAND;
          }
         }
+     protected Skill MySkill=null;
+      internal Skill skillToUse{get{return MySkill;}}
+      internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
