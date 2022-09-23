@@ -41,8 +41,15 @@ namespace AKCondinoO.Sims.Actors{
               SkillData skill=skills.Current;
               stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",skill.skill,skill.level);
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}},");
-             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0} }}",stringBuilder.ToString());
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}}, ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"slaves={{ ");
+             slaves.Reset();
+             while(slaves.MoveNext()){
+              SlaveData slave=slaves.Current;
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simType,slave.number);
+             }
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}}, ");
+             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}}}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
@@ -105,6 +112,11 @@ namespace AKCondinoO.Sims.Actors{
           skills.Add(skill.GetType(),skill);
          }
          requiredSkills.Clear();
+         if(this is BaseAI actorAI){
+          foreach(var skill in skills){
+           skill.Value.actor=actorAI;
+          }
+         }
          slaves.Clear();
          //  load slaves from file here
          persistentSimActorData.UpdateData(this);
