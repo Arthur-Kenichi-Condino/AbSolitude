@@ -7,9 +7,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
-namespace AKCondinoO.Sims.Actors {
+namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
      protected readonly System.Random dice=new System.Random();
+        internal void OnSkillUsed(Skill skill){
+         Log.DebugMessage("OnSkillUsed:"+skill);
+         if(MySkill==skill){
+          Log.DebugMessage("OnSkillUsed:MySkill==skill:clear used skill");
+          MySkill=null;
+          if(skill.revoked){
+          }
+          if(skill.done){
+          }
+         }
+        }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
@@ -38,6 +49,11 @@ namespace AKCondinoO.Sims.Actors {
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
+         if(MySkill!=null){
+          if(MySkill is GenerateHomunculus generateHomunculusSkill){
+           generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
+          }
+         }
          if(
           MyPathfinding==PathfindingResult.IDLE||
           MyPathfinding==PathfindingResult.REACHED
