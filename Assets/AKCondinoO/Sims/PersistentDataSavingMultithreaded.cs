@@ -99,19 +99,19 @@ namespace AKCondinoO.Sims{
            lineStringBuilder.Clear();
            lineStringBuilder.Append(line);
            int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
-           int cnkIdxStringEnd  =line.IndexOf(" ,",cnkIdxStringStart);
+           int cnkIdxStringEnd  =line.IndexOf(" , ",cnkIdxStringStart);
            int cnkIdxStringLength=cnkIdxStringEnd-cnkIdxStringStart;
            int cnkIdx=int.Parse(line.Substring(cnkIdxStringStart,cnkIdxStringLength),NumberStyles.Any,CultureInfoUtil.en_US);
            processedcnkIdx.Add(cnkIdx);
            //Log.DebugMessage("process save file of "+t+" at cnkIdx:"+cnkIdx);
-           int simObjectStringStart=cnkIdxStringEnd+2;
+           int simObjectStringStart=cnkIdxStringEnd+3;
            int endOfLineStart=simObjectStringStart;
            while((simObjectStringStart=line.IndexOf("simObject=",simObjectStringStart))>=0){
-            int simObjectStringEnd=line.IndexOf("}, ",simObjectStringStart)+3;
+            int simObjectStringEnd=line.IndexOf("} , ",simObjectStringStart)+4;
             string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
             //Log.DebugMessage("simObjectString:"+simObjectString);
             int idStringStart=simObjectString.IndexOf("id=")+3;
-            int idStringEnd  =simObjectString.IndexOf(", ",idStringStart);
+            int idStringEnd  =simObjectString.IndexOf(" , ",idStringStart);
             ulong id=ulong.Parse(simObjectString.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
             //Log.DebugMessage("id:"+id);
             if(idListByType[t].Contains(id)||container.idsToRelease[t].Contains(id)){
@@ -122,8 +122,8 @@ namespace AKCondinoO.Sims{
             simObjectStringStart=simObjectStringEnd;
             endOfLineStart=simObjectStringStart;
            }
-           endOfLineStart  =line.IndexOf("} }, ",endOfLineStart);
-           int endOfLineEnd=line.IndexOf(", ",endOfLineStart)+2;
+           endOfLineStart  =line.IndexOf("} } , endOfLine",endOfLineStart);
+           int endOfLineEnd=line.IndexOf(" , endOfLine",endOfLineStart)+12;
            lineStringBuilder.Remove(endOfLineStart-totalCharactersRemoved,endOfLineEnd-totalCharactersRemoved-(endOfLineStart-totalCharactersRemoved));
            line=lineStringBuilder.ToString();
            stringBuilder.Append(line);
@@ -131,10 +131,10 @@ namespace AKCondinoO.Sims{
             foreach(var idPersistentData in idPersistentDataListBycnkIdx[cnkIdx]){
              ulong id=idPersistentData.id;
              SimObject.PersistentData persistentData=idPersistentData.persistentData;
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0}, {1} }}, ",id,persistentData.ToString());
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",id,persistentData.ToString());
             }
            }
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }}, {0}",Environment.NewLine);
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
           foreach(var kvp2 in idPersistentDataListBycnkIdx){
            int cnkIdx=kvp2.Key;
@@ -144,9 +144,9 @@ namespace AKCondinoO.Sims{
            foreach(var idPersistentData in idPersistentDataList){
             ulong id=idPersistentData.id;
             SimObject.PersistentData persistentData=idPersistentData.persistentData;
-            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0}, {1} }}, ",id,persistentData.ToString());
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",id,persistentData.ToString());
            }
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }}, {0}",Environment.NewLine);
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
@@ -169,7 +169,7 @@ namespace AKCondinoO.Sims{
           foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
            ulong id=idPersistentSimActorDataPair.Key;
            SimActor.PersistentSimActorData persistentSimActorData=idPersistentSimActorDataPair.Value;
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }}, {2}",id,persistentSimActorData.ToString(),Environment.NewLine);
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",id,persistentSimActorData.ToString(),Environment.NewLine);
           }
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
@@ -180,7 +180,7 @@ namespace AKCondinoO.Sims{
           releasedIdsStringBuilder.Clear();
           foreach(var typeIdsToReleasePair in container.idsToRelease){
            Type t=typeIdsToReleasePair.Key;
-           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0}, {{ ",t);
+           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , {{ ",t);
            var releasedIds=container.persistentReleasedIds[t];
            foreach(ulong releasedId in releasedIds){
             //Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
@@ -192,7 +192,7 @@ namespace AKCondinoO.Sims{
             //Log.DebugMessage("type:"+t+", release id:"+idToRelease);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",idToRelease);
            }
-           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US," }}, }}, {0}",Environment.NewLine);
+           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , }} , endOfLine{0}",Environment.NewLine);
            idsToRelease.Clear();
           }
           releasedIdsFileStream.SetLength(0L);
@@ -204,7 +204,7 @@ namespace AKCondinoO.Sims{
           Type t=typeIdsPair.Key;
           ulong nextId=typeIdsPair.Value;
           if(nextId>0){
-           idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0}, nextId={1} }}, {2}",t,nextId,Environment.NewLine);
+           idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
           }
          }
          idsFileStream.SetLength(0L);

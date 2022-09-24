@@ -6,13 +6,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
     internal class ArthurCondinoAI:HumanAI{
         protected override void Awake(){
          base.Awake();
         }
         internal override void OnActivated(){
-         requiredSkills.Add(typeof(GenerateHomunculus),10);
+         requiredSkills.Add(typeof(GenerateHomunculus),new SkillData(){skill=typeof(GenerateHomunculus),level=10,});
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
