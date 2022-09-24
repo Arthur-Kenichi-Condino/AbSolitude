@@ -1,10 +1,12 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class GenerateHomunculus:CallSlaveSkill{
         internal override bool IsAvailable(BaseAI target,int useLevel){
@@ -28,6 +30,12 @@ namespace AKCondinoO.Sims.Actors.Skills{
         protected void SetHomunToBeGenerated(){
          spawnData.Clear();
          //  add data to spawn
+         if(actor is ArthurCondinoAI arthurCondino){
+          foreach(var requiredSlave in arthurCondino.requiredSlaves){
+           spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,requiredSlave.Key,null,new SimObject.PersistentData()));
+          }
+         }
+         actor.requiredSlaves.Clear();
         }
         protected override void Invoke(){
          //  do more skill initialization here / or use to as main call of the skill
