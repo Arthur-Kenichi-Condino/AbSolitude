@@ -87,10 +87,10 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
         }
-     protected readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
-     internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
-     protected readonly Dictionary<Type,SlaveData>requiredSlaves=new Dictionary<Type,SlaveData>();
-     internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
+     internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
+      internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
+     internal readonly Dictionary<Type,SlaveData>requiredSlaves=new Dictionary<Type,SlaveData>();
+      internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;

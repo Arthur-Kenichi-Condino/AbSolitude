@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1789700468128358956}
   - component: {fileID: 1395240869860508066}
   - component: {fileID: 8115705685408129627}
-  - component: {fileID: 6555782780932828549}
   m_Layer: 0
   m_Name: CloudsCamera
   m_TagString: Untagged
@@ -89,14 +88,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &6555782780932828549
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 572201951154066824}
-  m_Enabled: 1
 --- !u!1 &4328967863402971998
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,5 +141,13 @@ MonoBehaviour:
     max: 0.4
     minIncrementSpeed: 0.0125
     maxIncrementSpeed: 0.025
+    reverseChance: 0.125
+    reverseChanceInterval: 10
+  orbitSettings:
+    minIncrementSpeed: {x: 0.05, y: 0.05, z: 0.05}
+  distanceSettings:
+    min: 1
+    max: 10
+    minIncrementSpeed: 0.05
     reverseChance: 0.125
     reverseChanceInterval: 10

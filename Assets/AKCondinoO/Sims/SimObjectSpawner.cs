@@ -122,6 +122,7 @@ namespace AKCondinoO.Sims{
         }
         internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
          Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
+         spawnQueue.Enqueue(spawnData);
         }
      Coroutine spawnCoroutine;
      [SerializeField]int       DEBUG_CREATE_SIM_OBJECT_AMOUNT=1;

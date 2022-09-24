@@ -64,7 +64,7 @@ namespace AKCondinoO.Sims.Actors{
              timerToRandomMove=delayToRandomMove;
            Log.DebugMessage("can do random movement");
            if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
-            Log.DebugMessage("got random position:"+result);
+            //Log.DebugMessage("got random position:"+result);
             bool run=Mathf.Clamp01((float)dice.NextDouble())<useRunSpeedChance;
             if(navMeshAgentShouldUseRunSpeed||run){
              navMeshAgent.speed=navMeshAgentRunSpeed;
