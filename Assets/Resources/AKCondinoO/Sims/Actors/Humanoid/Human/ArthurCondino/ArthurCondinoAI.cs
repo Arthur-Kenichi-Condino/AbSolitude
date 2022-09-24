@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
@@ -14,6 +15,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
         }
         internal override void OnActivated(){
          requiredSkills.Add(typeof(GenerateHomunculus),new SkillData(){skill=typeof(GenerateHomunculus),level=10,});
+         requiredSlaves.Add(typeof(ArquimedesAI),new SlaveData(){simType=typeof(ArquimedesAI),});
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
@@ -22,10 +24,10 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
           if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
            GenerateHomunculus generateHomunculusSkill=(GenerateHomunculus)skill;
            if(generateHomunculusSkill.IsAvailable(this,generateHomunculusSkill.level)){
-            //if(slaves.Count<=0){//  should Arthur generate his "homunculi friends" now?
+            if(requiredSlaves.Count>0){//  should Arthur generate his "homunculi friends" now?
              MySkill=generateHomunculusSkill;
              Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use generateHomunculusSkill");
-            //}
+            }
            }
           }
           if(MySkill==null){

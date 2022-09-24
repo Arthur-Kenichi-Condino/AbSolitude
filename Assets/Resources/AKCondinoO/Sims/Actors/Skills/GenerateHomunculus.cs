@@ -54,6 +54,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
            if(spawnData.dequeued){//  spawner generated the homunculi
             //  do any other tests here
             Log.DebugMessage("skill "+this+" was cast gracefully");
+            done=true;
             doing=false;
            }
           }

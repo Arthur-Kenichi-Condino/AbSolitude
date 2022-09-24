@@ -29,6 +29,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
       internal BaseAI target;
       internal bool invoked;
       internal bool revoked;
+      internal bool done;
         internal virtual bool IsAvailable(BaseAI target,int useLevel){
          if(!doing||!invoked){
           //  if the skill has not been cast yet then some other tests can still be done here, like focus points required to use the skill
@@ -42,16 +43,16 @@ namespace AKCondinoO.Sims.Actors.Skills{
         /// <param name="useLevel"></param>
         /// <returns></returns>
         internal virtual bool DoSkill(BaseAI target,int useLevel){
-         if(doing){
+         if(doing||done||revoked){
           return false;
          }
          if(!IsAvailable(target,useLevel)){
           return false;
          }
+         Log.DebugMessage("DoSkill:"+this);
          this.useLevel=useLevel;
          this.target=target;
          invoked=false;
-         revoked=false;
          doing=true;
          return true;
         }
@@ -69,6 +70,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
          doing=false;
         }
         protected virtual void Update(){
+         if(!doing){
+          if(revoked||done){
+           actor.OnSkillUsed(this);
+           revoked=false;
+           done=false;
+          }
+          return;
+         }
          if(doing){
           if(!IsAvailable(target,useLevel)){
            Revoke();
