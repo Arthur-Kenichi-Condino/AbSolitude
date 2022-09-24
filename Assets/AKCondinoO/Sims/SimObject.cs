@@ -26,14 +26,14 @@ namespace AKCondinoO.Sims{
              localScale=simObject.transform.localScale;
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0}, rotation={1}, localScale={2}, }}",position,rotation,localScale);
+             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , }}",position,rotation,localScale);
             }
             internal static PersistentData Parse(string s){
              PersistentData persistentData=new PersistentData();
              int positionStringStart=s.IndexOf("position=(");
              if(positionStringStart>=0){
                 positionStringStart+=10;
-              int positionStringEnd=s.IndexOf("), ",positionStringStart);
+              int positionStringEnd=s.IndexOf(") , ",positionStringStart);
               string positionString=s.Substring(positionStringStart,positionStringEnd-positionStringStart);
               string[]xyzString=positionString.Split(',');
               float x=float.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
@@ -44,7 +44,7 @@ namespace AKCondinoO.Sims{
              int rotationStringStart=s.IndexOf("rotation=(");
              if(rotationStringStart>=0){
                 rotationStringStart+=10;
-              int rotationStringEnd=s.IndexOf("), ",rotationStringStart);
+              int rotationStringEnd=s.IndexOf(") , ",rotationStringStart);
               string rotationString=s.Substring(rotationStringStart,rotationStringEnd-rotationStringStart);
               string[]xyzwString=rotationString.Split(',');
               float x=float.Parse(xyzwString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
@@ -56,7 +56,7 @@ namespace AKCondinoO.Sims{
              int localScaleStringStart=s.IndexOf("localScale=(");
              if(localScaleStringStart>=0){
                 localScaleStringStart+=12;
-              int localScaleStringEnd=s.IndexOf("), ",localScaleStringStart);
+              int localScaleStringEnd=s.IndexOf(") , ",localScaleStringStart);
               string localScaleString=s.Substring(localScaleStringStart,localScaleStringEnd-localScaleStringStart);
               string[]xyzString=localScaleString.Split(',');
               float x=float.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);

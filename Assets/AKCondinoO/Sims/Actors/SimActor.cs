@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
+using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
@@ -39,16 +40,16 @@ namespace AKCondinoO.Sims.Actors{
              skills.Reset();
              while(skills.MoveNext()){
               SkillData skill=skills.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",skill.skill,skill.level);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}],",skill.skill,skill.level);
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}}, ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , ");
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"slaves={{ ");
              slaves.Reset();
              while(slaves.MoveNext()){
               SlaveData slave=slaves.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simType,slave.number);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}],",slave.simType,slave.number);
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}}, ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , ");
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}}}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
@@ -86,8 +87,9 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
         }
-     protected readonly Dictionary<Type,int>requiredSkills=new Dictionary<Type,int>();
+     protected readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
      internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
+     protected readonly Dictionary<Type,SlaveData>requiredSlaves=new Dictionary<Type,SlaveData>();
      internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
@@ -95,9 +97,9 @@ namespace AKCondinoO.Sims.Actors{
          skills.Clear();
          //  load skills from file here
          foreach(var skill in skills){
-          if(requiredSkills.TryGetValue(skill.Key,out int requiredSkillLevel)){
-           if(skill.Value.level<requiredSkillLevel){
-            skill.Value.level=requiredSkillLevel;
+          if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
+           if(skill.Value.level<requiredSkill.level){
+            skill.Value.level=requiredSkill.level;
            }
           }
           requiredSkills.Remove(skill.Key);
@@ -108,7 +110,7 @@ namespace AKCondinoO.Sims.Actors{
          foreach(var requiredSkill in requiredSkills){
           GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
           Skill skill=skillGameObject.GetComponent<Skill>();
-          skill.level=requiredSkill.Value;
+          skill.level=requiredSkill.Value.level;
           skills.Add(skill.GetType(),skill);
          }
          requiredSkills.Clear();
