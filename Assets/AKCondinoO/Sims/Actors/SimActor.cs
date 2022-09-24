@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors{
               stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}],",slave.simType,slave.number);
              }
              stringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , ");
-             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}}}",stringBuilder.ToString());
+             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}, }}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
