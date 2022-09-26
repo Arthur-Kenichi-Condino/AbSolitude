@@ -72,8 +72,10 @@ namespace AKCondinoO.Sims{
              return persistentData;
             }
         }
+     internal Gameplayer owner;
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
+     internal(Type simType,ulong number)?master=null;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
      internal Bounds localBounds;

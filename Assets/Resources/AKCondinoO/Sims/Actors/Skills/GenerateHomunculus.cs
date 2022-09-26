@@ -31,8 +31,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
          spawnData.Clear();
          //  add data to spawn
          if(actor is ArthurCondinoAI arthurCondino){
-          foreach(var requiredSlave in arthurCondino.requiredSlaves){
-           spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,requiredSlave.Key,null,new SimObject.PersistentData()));
+          foreach(var requiredSlavesList in arthurCondino.requiredSlaves){
+           Type requiredSlaveType=requiredSlavesList.Key;
+           List<SlaveData>requiredSlavesOfType=requiredSlavesList.Value;
+           foreach(SlaveData requiredSlaveOfType in requiredSlavesOfType){
+            spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,requiredSlaveType,null,new SimObject.PersistentData()));
+            //  TO DO: fill SimActorPersistentData
+            spawnData.masters[spawnData.at.Count-1]=actor.id.Value;
+           }
           }
          }
          actor.requiredSlaves.Clear();

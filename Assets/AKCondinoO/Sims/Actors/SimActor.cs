@@ -89,7 +89,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
-     internal readonly Dictionary<Type,SlaveData>requiredSlaves=new Dictionary<Type,SlaveData>();
+     internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
       internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
@@ -121,6 +121,11 @@ namespace AKCondinoO.Sims.Actors{
          }
          slaves.Clear();
          //  load slaves from file here
+         foreach(var slave in slaves){
+          if(requiredSlaves.TryGetValue(slave.simType,out List<SlaveData>requiredSlavesForType)){
+           //  TO DO: do some checks and set variables here
+          }
+         }
          persistentSimActorData.UpdateData(this);
         }
         protected override void EnableInteractions(){

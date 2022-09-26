@@ -31,6 +31,12 @@ namespace AKCondinoO.Sims.Actors.Skills{
       internal bool revoked;
       internal bool done;
         internal virtual bool IsAvailable(BaseAI target,int useLevel){
+         if(actor.id==null){
+          return false;
+         }
+         if(target!=null&&target.id==null){
+          return false;
+         }
          if(!doing||!invoked){
           //  if the skill has not been cast yet then some other tests can still be done here, like focus points required to use the skill
          }
