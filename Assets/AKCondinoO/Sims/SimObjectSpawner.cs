@@ -174,6 +174,10 @@ namespace AKCondinoO.Sims{
                  persistentSimActorData=data;
                 }
                }
+               (Type simType,ulong number)?masterId=null;
+               if(toSpawn.masters.TryGetValue(index,out var master)){
+                masterId=master;
+               }
                index++;
                _GetId:{}
                Type simType=at.type;
@@ -232,6 +236,22 @@ namespace AKCondinoO.Sims{
                SimObjectManager.singleton.spawned.Add(id,simObject);
                SimObjectManager.singleton.active .Add(id,simObject);
                 simObject.id=id;
+                if(masterId!=null){
+                 Log.DebugMessage("simObject has master");
+                 simObject.master=masterId;
+                }else{
+                 Log.DebugMessage("simObject has no master");
+                 simObject.master=null;
+                }
+                if(simObject is SimActor simActor){
+                 if(persistentSimActorData!=null){
+                  Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
+                  simActor.persistentSimActorData=persistentSimActorData.Value;
+                 }else{
+                  Log.DebugMessage("clear simActor.persistentSimActorData");
+                  simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
+                 }
+                }
                 simObject.OnActivated();
               }
               toSpawn.Clear();
