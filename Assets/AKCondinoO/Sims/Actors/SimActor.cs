@@ -40,16 +40,16 @@ namespace AKCondinoO.Sims.Actors{
              skills.Reset();
              while(skills.MoveNext()){
               SkillData skill=skills.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}],",skill.skill,skill.level);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",skill.skill,skill.level);
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"slaves={{ ");
              slaves.Reset();
              while(slaves.MoveNext()){
               SlaveData slave=slaves.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}],",slave.simType,slave.number);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simType,slave.number);
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US," }} , ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}, }}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
@@ -90,7 +90,7 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
-      internal readonly List<(Type simType,ulong number)>slaves=new List<(Type,ulong)>();
+      internal readonly HashSet<(Type simType,ulong number)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
@@ -124,8 +124,14 @@ namespace AKCondinoO.Sims.Actors{
          foreach(var slave in slaves){
           if(requiredSlaves.TryGetValue(slave.simType,out List<SlaveData>requiredSlavesForType)){
            //  TO DO: do some checks and set variables here
+           requiredSlaves.Remove(slave.simType);
           }
          }
+         persistentSimActorData.UpdateData(this);
+        }
+        protected override void SetSlave(SimObject slave){
+         slaves.Add(slave.id.Value);
+         base.SetSlave(slave);
          persistentSimActorData.UpdateData(this);
         }
         protected override void EnableInteractions(){

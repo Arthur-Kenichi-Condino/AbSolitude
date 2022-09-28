@@ -16,6 +16,8 @@ namespace AKCondinoO.Sims{
     internal class PersistentDataLoadingMultithreaded:BaseMultithreaded<PersistentDataLoadingBackgroundContainer>{
      internal readonly Dictionary<Type,FileStream>fileStream=new Dictionary<Type,FileStream>();
       internal readonly Dictionary<Type,StreamReader>fileStreamReader=new Dictionary<Type,StreamReader>();
+       internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
+        internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
         protected override void Execute(){
          container.spawnDataFromFiles.dequeued=false;
          foreach(var typeFileStreamPair in this.fileStream){

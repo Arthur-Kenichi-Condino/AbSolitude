@@ -96,6 +96,11 @@ namespace AKCondinoO.Sims{
           FileStream loaderFileStream;
           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStreamReader[t]=new StreamReader(loaderFileStream);
+          if(SimObjectUtil.IsSimActor(t)){
+           FileStream simActorFileStream;
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
+          }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
           }

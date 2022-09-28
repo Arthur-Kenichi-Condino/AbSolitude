@@ -76,6 +76,7 @@ namespace AKCondinoO.Sims{
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
+      protected SimObject masterObject;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
      internal Bounds localBounds;
@@ -99,6 +100,10 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
+         masterObject=GetMaster();
+         if(masterObject!=null&&masterObject is SimActor masterActor){
+          masterActor.SetSlave(this);
+         }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
@@ -106,6 +111,14 @@ namespace AKCondinoO.Sims{
          foreach(var gameplayer in GameplayerManagement.singleton.all){
           gameplayer.Value.OnSimObjectSpawned(this);
          }
+        }
+        internal SimObject GetMaster(){
+         if(master!=null&&SimObjectManager.singleton.active.TryGetValue(master.Value,out SimObject masterObject)){
+          return masterObject;
+         }
+         return null;
+        }
+        protected virtual void SetSlave(SimObject slave){
         }
      public bool interactionsEnabled{get;protected set;}
         protected virtual void EnableInteractions(){
