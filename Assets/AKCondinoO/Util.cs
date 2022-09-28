@@ -4,7 +4,9 @@ using System.Globalization;
 using UnityEngine;
 namespace AKCondinoO{
     internal class Util{
+     internal static int UILayer;
         internal static void SetUtil(){
+         UILayer=LayerMask.NameToLayer("UI");
         }
         internal static void DrawRotatedBounds(Vector3[]boundsVertices,Color color,float duration=0){
          #if UNITY_EDITOR

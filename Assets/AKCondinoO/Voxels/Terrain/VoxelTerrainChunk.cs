@@ -2,6 +2,7 @@
     #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
@@ -18,7 +19,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
-     VoxelTerrainSimObjectsPlacing simObjectsPlacing;
+     internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
      internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
@@ -183,8 +184,8 @@ namespace AKCondinoO.Voxels.Terrain{
           VoxelSystem.singleton.navMeshMarkups[gameObject.GetInstanceID()]=navMeshMarkup;
           VoxelSystem.singleton.navMeshSourcesCollectionChanged=true;
           SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
-          for(int i=0;i<Gameplayer.all.Count;++i){
-           Gameplayer.all[i].OnVoxelTerrainChunkBaked(this);
+          foreach(var gameplayer in GameplayerManagement.singleton.all){
+           gameplayer.Value.OnVoxelTerrainChunkBaked(this);
           }
           return true;
          }

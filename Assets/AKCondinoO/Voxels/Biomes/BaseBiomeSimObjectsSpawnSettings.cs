@@ -51,7 +51,7 @@ namespace AKCondinoO.Voxels.Biomes{
           }
          );
         }
-        internal void Init(){
+        internal void Set(){
          foreach(var selectionTypesPair in simObjectPicking){
           int selection=selectionTypesPair.Key;
           HashSet<Type>types=selectionTypesPair.Value;
@@ -66,7 +66,7 @@ namespace AKCondinoO.Voxels.Biomes{
            }
           }
           settingsCountForSelection[selection]=settingsCount;
-          Log.DebugMessage("Init():settingsCountForSelection["+selection+"]="+settingsCount);
+          Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
          }
         }
      internal Perlin simObjectSpawnChancePerlin;
@@ -80,9 +80,9 @@ namespace AKCondinoO.Voxels.Biomes{
             if(typeSettings.TryGetValue(selection,out var typeSettingsListForSelection)){
              foreach(SimObjectSettings setting in typeSettingsListForSelection){
               float chance=setting.chance/settingsCountForSelection[selection];
-              float dicing=((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f;
+              float dicing=Mathf.Clamp01(((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f);
               count++;
-              if(dicing<=chance){
+              if(dicing<chance){
                return(type,setting);
               }
              }

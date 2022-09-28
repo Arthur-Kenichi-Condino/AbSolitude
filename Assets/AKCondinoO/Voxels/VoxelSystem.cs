@@ -4,16 +4,19 @@
 using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain;
+using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
-    internal class VoxelSystem:MonoBehaviour{
+    internal class VoxelSystem:MonoBehaviour,ISingletonInitialization{
      internal const int MaxcCoordx=312;
      internal const int MaxcCoordy=312;
      internal const ushort Height=(256);
@@ -75,10 +78,14 @@ namespace AKCondinoO.Voxels{
             }
         #endregion
      internal static int voxelTerrainLayer;
-     internal static VoxelSystem singleton;
+     internal static VoxelSystem singleton{get;set;}
+     internal static string chunkStatePath;
+     internal static string chunkStateFile;
+      internal static readonly object chunkStateFileSync=new();
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
+     internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
@@ -96,8 +103,19 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i]=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded();
          }
+         VoxelTerrainEditingMultithreaded.Stop=false;
+         terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
-        internal void Init(){
+        public void Init(){
+         chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
+         Directory.CreateDirectory(chunkStatePath);
+         chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
+         for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
+          FileStream fileStream;
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStream=fileStream=new FileStream(chunkStateFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter=new StreamWriter(fileStream);
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader=new StreamReader(fileStream);
+         }
          int maxConnections=1;
          int poolSize=maxConnections*(expropriationDistance.x*2+1)
                                     *(expropriationDistance.y*2+1);
@@ -109,13 +127,16 @@ namespace AKCondinoO.Voxels{
           cnk.OnInstantiated();
           terrainSynchronization.Add(cnk,cnk.marchingCubesBG.synchronizer);
          }
+         VoxelTerrainEditing.singleton.terrainEditingBG.terrainSynchronization=terrainSynchronization.Values.ToArray();
          AtlasHelper.SetAtlasData();
          biome.Seed=0;
          proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
+         if(this!=null){
+          StopCoroutine(proceduralGenerationCoroutine);
+         }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].OnDestroyingCore();
@@ -128,7 +149,21 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=true;
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter.Dispose();
+                       surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader.Dispose();
          }
+         if(terrain!=null){
+          for(int i=0;i<terrain.Length;++i){
+           terrain[i].marchingCubesBG.Dispose();
+           terrain[i].simObjectsPlacing.
+                       surface.
+                        surfaceSimObjectsPlacerBG.
+                         Dispose();
+          }
+         }
+         VoxelTerrainEditingMultithreaded.Stop=true;
+         terrainEditingBGThread.Wait();
+         VoxelTerrainEditing.singleton.terrainEditingBG.Dispose();
          biome.DisposeModules();
         }
         void OnDestroy(){
@@ -235,7 +270,7 @@ namespace AKCondinoO.Voxels{
      internal readonly SortedDictionary<int,NavMeshBuildMarkup>navMeshMarkups=new SortedDictionary<int,NavMeshBuildMarkup>();
       readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
       readonly List<NavMeshBuildMarkup>markups=new List<NavMeshBuildMarkup>();
-        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected){
+        internal void CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected,bool dirty){
          sourcesCollected=sources;
          if(navMeshSourcesCollectionChanged){
             navMeshSourcesCollectionChanged=false;
@@ -244,6 +279,11 @@ namespace AKCondinoO.Voxels{
           markups.Clear();
           sources.AddRange(navMeshSources.Values);
           markups.AddRange(navMeshMarkups.Values);
+          Collect();
+         }else if(dirty){
+          Collect();
+         }
+         void Collect(){
           NavMeshBuilder.CollectSources(null,NavMeshHelper.navMeshLayer,NavMeshCollectGeometry.PhysicsColliders,0,markups,sources);
          }
         }

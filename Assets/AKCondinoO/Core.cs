@@ -1,24 +1,35 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Ambience.Clouds;
+using AKCondinoO.Gameplaying;
+using AKCondinoO.Music;
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.UI;
+using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Terrain.Editing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 namespace AKCondinoO{
     internal class Core:MonoBehaviour{
      internal static Core singleton;
+     internal NetworkManager netManager;
+      internal bool isServer=false;
+      internal bool isClient=false;
      internal static int threadCount;
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
-     [SerializeField]Gameplayer _GameplayerPrefab;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
                     Util.SetUtil();
@@ -28,29 +39,58 @@ namespace AKCondinoO{
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
-         Gameplayer.all.Add(Gameplayer.main=Instantiate(_GameplayerPrefab));
         }
+     SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
+     IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
-         MainCamera      .singleton.Init();
-         SimTime         .singleton.Init();
-         VoxelSystem     .singleton.Init();
-         SimObjectManager.singleton.Init();
-         SimObjectSpawner.singleton.Init();
-         SkillsManager   .singleton.Init();
-         SimsMachine     .singleton.Init();
-         AutonomyCore    .singleton.Init();
-         GameMode        .singleton.Init();
-         Placeholder     .singleton.Init();
-         FixedUI         .singleton.Init();
+         singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
+          { 0,GameplayerManagement.singleton},
+          { 1,InputHandler        .singleton},
+          { 2,ScreenInput         .singleton},
+          { 3,BGM                 .singleton},
+          { 4,MainCamera          .singleton},
+          { 5,SimTime             .singleton},
+          { 6,CloudParticleSystem .singleton},
+          { 7,GameMode            .singleton},
+          { 8,VoxelSystem         .singleton},
+          { 9,VoxelTerrainEditing .singleton},
+          {10,SimObjectManager    .singleton},
+          {11,SimObjectSpawner    .singleton},
+          {12,SkillsManager       .singleton},
+          {13,SimsMachine         .singleton},
+          {14,AutonomyCore        .singleton},
+          {15,Placeholder         .singleton},
+          {16,FixedUI             .singleton},
+          {17,ContextMenuUI       .singleton},
+         };
+         foreach(var singletonOrdered in singletonInitOrder){
+          Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
+          singletonOrdered.Value.Init();
+         }
+         foreach(var singletonOrderedInReverse in singletonInitReversedOrder=singletonInitOrder.Reverse()){
+          Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+          OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
+         }
          Gameplayer.main.Init();
+         GameObject netManagerGameObject;
+         if((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
+          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null
+         ){
+          Log.Warning("NetworkManager not found: going to EntryScene");
+          SceneManager.LoadScene("EntryScene",LoadSceneMode.Single);
+         }else{
+          isServer=netManager.IsServer||netManager.IsHost;
+          isClient=netManager.IsClient&&!netManager.IsHost;
+          Log.DebugMessage("MainMenu.netManagerInitialized:"+MainMenu.netManagerInitialized+";isServer:"+isServer+";isClient:"+isClient);
+         }
         }
         void OnDestroy(){
          if(singleton==this){
-              foreach(Gameplayer gameplayer in Gameplayer.all){
-               Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer==Gameplayer.main)+")");
-               gameplayer.OnRemove();
+              foreach(var gameplayer in GameplayerManagement.singleton.all){
+               Log.DebugMessage("destroying core: disengage gameplayer (main:"+(gameplayer.Value==Gameplayer.main)+")");
+               gameplayer.Value.OnRemove();
               }
-              Gameplayer.all.Clear();
+              GameplayerManagement.singleton.all.Clear();
               try{
                EventHandler handler=OnDestroyingCoreEvent;
                handler?.Invoke(this,
@@ -64,18 +104,15 @@ namespace AKCondinoO{
                 Log.Error("ThreadCount>0(ThreadCount=="+threadCount+"):one or more threads weren't stopped nor waited for termination");
                }
               }
-                               singleton=null;
-              FixedUI         .singleton=null;
-              Placeholder     .singleton=null;
-              GameMode        .singleton=null;
-              AutonomyCore    .singleton=null;
-              SimsMachine     .singleton=null;
-              SkillsManager   .singleton=null;
-              SimObjectSpawner.singleton=null;
-              SimObjectManager.singleton=null;
-              VoxelSystem     .singleton=null;
-              SimTime         .singleton=null;
-              MainCamera      .singleton=null;
+              foreach(var singletonOrderedInReverse in singletonInitReversedOrder){
+               Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+               Type singletonType=singletonOrderedInReverse.Value.GetType();
+               PropertyInfo singletonPropertyInfo=singletonType.GetProperty("singleton",BindingFlags.Static|BindingFlags.NonPublic);
+               Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
+               singletonPropertyInfo.SetValue(null,null);
+               Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
+              }
+              singleton=null;
          }
         }
      internal event EventHandler OnDestroyingCoreEvent;

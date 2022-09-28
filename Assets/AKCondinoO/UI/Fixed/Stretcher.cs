@@ -15,9 +15,11 @@ namespace AKCondinoO.UI.Fixed{
          sizeDelta=rectTransform.sizeDelta;
          float previousSizeDeltaX=sizeDelta.x;
          sizeDelta.x=Screen.width-screenWidthSubtraction;
-         rectTransform.sizeDelta=sizeDelta;
-         anchoredPosition.x-=(previousSizeDeltaX-sizeDelta.x)/2f;
-         rectTransform.anchoredPosition=anchoredPosition;
+         if(sizeDelta.x>0){
+          rectTransform.sizeDelta=sizeDelta;
+          anchoredPosition.x-=(previousSizeDeltaX-sizeDelta.x)/2f;
+          rectTransform.anchoredPosition=anchoredPosition;
+         }
         }
     }
 }

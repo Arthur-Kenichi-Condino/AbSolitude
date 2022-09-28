@@ -1,50 +1,32 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal class BaseAI:SimActor{
-     public const int V_STATE      =15;
-     public const int V_PATHFINDING=16;
-        internal enum State:int{
-         IDLE_ST  =0,
-         FOLLOW_ST=1,
-        }
-     protected State MyState=State.IDLE_ST;
-        internal enum PathfindingResult:int{
-         IDLE                   =0,
-         REACHED                =1,
-         PENDING                =2,
-         TRAVELLING             =3,
-         TRAVELLING_BUT_NO_SPEED=4,
-        }
-        PathfindingResult GetPathfindingResult(){
-         if(navMeshAgent.pathPending){
-          return PathfindingResult.PENDING;
-         }
-         if(!navMeshAgent.hasPath){
-          return PathfindingResult.IDLE;
-         }
-         if(
-          navMeshAgent.remainingDistance==Mathf.Infinity||
-          navMeshAgent.remainingDistance==float.NaN     ||
-          navMeshAgent.remainingDistance<0
-         ){
-          return PathfindingResult.IDLE;
-         }
-         if(navMeshAgent.remainingDistance>navMeshAgent.stoppingDistance){
-          if(Mathf.Approximately(navMeshAgent.velocity.sqrMagnitude,0f)){
-           return PathfindingResult.TRAVELLING_BUT_NO_SPEED;
+    internal partial class BaseAI:SimActor{
+     protected readonly System.Random dice=new System.Random();
+        internal void OnSkillUsed(Skill skill){
+         Log.DebugMessage("OnSkillUsed:"+skill);
+         if(MySkill==skill){
+          Log.DebugMessage("OnSkillUsed:MySkill==skill:clear used skill");
+          MySkill=null;
+          if(skill.revoked){
           }
-          return PathfindingResult.TRAVELLING;
+          if(skill.done){
+          }
          }
-         return PathfindingResult.REACHED;
         }
+     protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
+      internal ActorMotion motion{get{return MyMotion;}}
+     protected State MyState=State.IDLE_ST;
+      internal State state{get{return MyState;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;
+      internal PathfindingResult pathfinding{get{return MyPathfinding;}}
         protected override void AI(){
          base.AI();
          MyPathfinding=GetPathfindingResult();
@@ -53,21 +35,42 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           OnIDLE_ST();
          }
+         if(MyPathfinding==PathfindingResult.TRAVELLING){
+             MyMotion=ActorMotion.MOTION_MOVE;
+         }else{
+             MyMotion=ActorMotion.MOTION_STAND;
+         }
         }
+     protected Skill MySkill=null;
+      internal Skill skillToUse{get{return MySkill;}}
+      internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
+     [SerializeField]protected bool doIdleMove=true;
+     [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
+         if(MySkill!=null){
+          if(MySkill is GenerateHomunculus generateHomunculusSkill){
+           generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
+          }
+         }
          if(
           MyPathfinding==PathfindingResult.IDLE||
           MyPathfinding==PathfindingResult.REACHED
          ){
           if(timerToRandomMove>0.0f){
              timerToRandomMove-=Time.deltaTime;
-          }else{
+          }else if(doIdleMove){
              timerToRandomMove=delayToRandomMove;
            Log.DebugMessage("can do random movement");
            if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
-            Log.DebugMessage("got random position:"+result);
+            //Log.DebugMessage("got random position:"+result);
+            bool run=Mathf.Clamp01((float)dice.NextDouble())<useRunSpeedChance;
+            if(navMeshAgentShouldUseRunSpeed||run){
+             navMeshAgent.speed=navMeshAgentRunSpeed;
+            }else{
+             navMeshAgent.speed=navMeshAgentWalkSpeed;
+            }
             navMeshAgent.destination=result;
            }
           }

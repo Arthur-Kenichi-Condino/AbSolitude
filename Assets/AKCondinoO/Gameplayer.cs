@@ -13,7 +13,6 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO{
     internal class Gameplayer:MonoBehaviour{
      internal static Gameplayer main;
-     internal static readonly List<Gameplayer>all=new List<Gameplayer>();
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
@@ -65,9 +64,18 @@ namespace AKCondinoO{
          //Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
          navMeshDirty=true;
         }
+        internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
+         //Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
+         if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
+          Log.DebugMessage("OnSimObjectTransformHasChanged:navMeshDirty=true");
+          navMeshDirty=true;
+           navMeshSourcesDirty=true;
+         }
+        }
      bool pendingCoordinatesUpdate=true;
      bool waitingNavMeshDataAsyncOperation;
      bool navMeshDirty;
+      bool navMeshSourcesDirty;
         void Update(){
          transform.position=Camera.main.transform.position;
          if(transform.hasChanged){
@@ -90,6 +98,7 @@ namespace AKCondinoO{
              if(navMeshDirty){
                  if(CanStartNavMeshAsyncUpdate()){
                      navMeshDirty=false;
+                      navMeshSourcesDirty=false;
                      waitingNavMeshDataAsyncOperation=true;
                  }
              }else{
@@ -111,7 +120,7 @@ namespace AKCondinoO{
          if(navMeshDataAsyncUpdateTimer<=0.0f){
             navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;
           Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
-          VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected);
+          VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected,navMeshSourcesDirty);
           sources.Clear();
           for(int i=0;i<sourcesCollected.Count;++i){
            if(activeWorldBounds.Contains(sourcesCollected[i].transform.GetColumn(3))){

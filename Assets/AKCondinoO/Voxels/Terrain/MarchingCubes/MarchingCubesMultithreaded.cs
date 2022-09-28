@@ -339,8 +339,41 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                   }
                   oftIdx2=GetoftIdx(cCoord2-container.cCoord);
                   vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+                  if(voxels[oftIdx2].ContainsKey(vxlIdx2)){
+                   polygonCell[corner]=voxels[oftIdx2][vxlIdx2];
+                  }else{
+                   Vector3Int noiseInput=vCoord2;noiseInput.x+=cnkRgn2.x;
+                                                 noiseInput.z+=cnkRgn2.y;
+                   VoxelSystem.biome.Setvxl(
+                    noiseInput,
+                     noiseCache1,
+                      materialIdCache1,
+                       oftIdx2,
+                        vCoord2.z+vCoord2.x*Depth,
+                         ref polygonCell[corner]
+                   );
+                  }
                  }
                 }
+          DoEdgeMarchingCubes(
+           polygonCell,
+            vCoord1,
+             vertices,
+              //verticesCache,
+               materials,
+                normals,
+                 density,
+                  vertex,
+                   material,
+                    //distance,
+                     idx,
+                      verPos,
+                       //ref vertexCount,
+                        //container.TempVer,
+                        //container.TempTri,
+                         vertexUV,
+                          posOffset
+          );
          }
          for(int i=0;i<container.TempVer.Length/3;i++){
           idx[0]=i*3  ;

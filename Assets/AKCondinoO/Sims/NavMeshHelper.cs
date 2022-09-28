@@ -8,9 +8,19 @@ using UnityEngine.AI;
 namespace AKCondinoO.Sims{
     internal class NavMeshHelper{   
      internal static int navMeshLayer;
+      internal static readonly string[]navMeshLayerNames=new string[]{
+       "VoxelTerrain",
+       "Construction",
+      };
      internal static NavMeshBuildSettings[]navMeshBuildSettings;
         internal static void SetNavMeshBuildSettings(){
-         navMeshLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
+         for(int i=0;i<navMeshLayerNames.Length;++i){
+          if(i==0){
+           navMeshLayer=1<<LayerMask.NameToLayer(navMeshLayerNames[i]);
+          }else{
+           navMeshLayer=navMeshLayer|(1<<LayerMask.NameToLayer(navMeshLayerNames[i]));
+          }
+         }
          navMeshBuildSettings=new NavMeshBuildSettings[]{
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("MediumSize").Value,
@@ -53,6 +63,22 @@ namespace AKCondinoO.Sims{
            overrideVoxelSize=true,
                    voxelSize=0.5625f/3f,
            minRegionArea=0.5625f,
+           overrideTileSize=true,
+                   tileSize=64,
+           debug=new NavMeshBuildDebugSettings{
+            flags=NavMeshBuildDebugFlags.None,
+           },
+           maxJobWorkers=2,
+          },
+          new NavMeshBuildSettings{
+           agentTypeID=GetAgentTypeIDByName("MediumSizeCrouched").Value,
+           agentRadius=0.25f,
+           agentHeight=0.755f,
+           agentClimb=0.75f,
+           agentSlope=60f,
+           overrideVoxelSize=true,
+                   voxelSize=0.25f/3f,
+           minRegionArea=0.25f,
            overrideTileSize=true,
                    tileSize=64,
            debug=new NavMeshBuildDebugSettings{

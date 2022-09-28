@@ -11,13 +11,16 @@ using System.Globalization;
 using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimObjectSpawner:MonoBehaviour{
-     internal static SimObjectSpawner singleton;
+    internal class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
+     internal static SimObjectSpawner singleton{get;set;}
+     internal static string simActorSavePath;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
      internal readonly Dictionary<Type,GameObject>simObjectPrefabs=new Dictionary<Type,GameObject>();
-        internal void Init(){
+        public void Init(){
+         simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
+         Directory.CreateDirectory(simActorSavePath);
          FileStream releasedIdsFileStream=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStream=new FileStream(SimObjectManager.releasedIdsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
          StreamWriter releasedIdsFileStreamWriter=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamWriter=new StreamWriter(releasedIdsFileStream);
          StreamReader releasedIdsFileStreamReader=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamReader=new StreamReader(releasedIdsFileStream);
@@ -27,12 +30,13 @@ namespace AKCondinoO.Sims{
          while((line=releasedIdsFileStreamReader.ReadLine())!=null){
           if(string.IsNullOrEmpty(line)){continue;}
           int typeStringStart=line.IndexOf("type=")+5;
-          int typeStringEnd  =line.IndexOf(", ",typeStringStart);
+          int typeStringEnd  =line.IndexOf(" , ",typeStringStart);
           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
           Type t=Type.GetType(typeString);
+          if(t==null){continue;}
           SimObjectManager.singleton.releasedIds[t]=new List<ulong>();
           int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
-          int releasedIdsListStringEnd  =line.IndexOf(", }, }, ",releasedIdsListStringStart);
+          int releasedIdsListStringEnd  =line.IndexOf(", } , } , endOfLine",releasedIdsListStringStart);
           if(releasedIdsListStringEnd>=0){
            string releasedIdsListString=line.Substring(releasedIdsListStringStart,releasedIdsListStringEnd-releasedIdsListStringStart);
            string[]idStrings=releasedIdsListString.Split(',');
@@ -53,11 +57,12 @@ namespace AKCondinoO.Sims{
          while((line=idsFileStreamReader.ReadLine())!=null){
           if(string.IsNullOrEmpty(line)){continue;}
           int typeStringStart=line.IndexOf("type=")+5;
-          int typeStringEnd  =line.IndexOf(", ",typeStringStart);
+          int typeStringEnd  =line.IndexOf(" , ",typeStringStart);
           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
           Type t=Type.GetType(typeString);
+          if(t==null){continue;}
           int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
-          int nextIdStringEnd  =line.IndexOf(" }, ",nextIdStringStart);
+          int nextIdStringEnd  =line.IndexOf(" } , endOfLine",nextIdStringStart);
           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);
           ulong nextId=ulong.Parse(nextIdString,NumberStyles.Any,CultureInfoUtil.en_US);
           SimObjectManager.singleton.ids[t]=nextId;
@@ -72,26 +77,42 @@ namespace AKCondinoO.Sims{
           simObjectPrefabs.Add(t,gameObject);
           string saveFile=string.Format("{0}{1}{2}",Core.savePath,t,".txt");
           FileStream fileStream;
-          SimObjectManager.singleton.persistentDataSavingBGThread.fileStream[t]=fileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-          SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamWriter[t]=new StreamWriter(fileStream);
-          SimObjectManager.singleton.persistentDataSavingBGThread.fileStreamReader[t]=new StreamReader(fileStream);
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
+          SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=fileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(fileStream);
+          SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamReader[t]=new StreamReader(fileStream);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
+          fileStream=null;
+          string simActorSaveFile=string.Format("{0}{1}{2}",simActorSavePath,t,".txt");
+          if(SimObjectUtil.IsSimActor(t)){
+           FileStream simActorFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamWriter[t]=new StreamWriter(simActorFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
+           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(t,new Dictionary<ulong,SimActor.PersistentSimActorData>());
+          }
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
           FileStream loaderFileStream;
           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStreamReader[t]=new StreamReader(loaderFileStream);
+          if(SimObjectUtil.IsSimActor(t)){
+           FileStream simActorFileStream;
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
+          }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
           }
           SimObjectManager.singleton.pool.Add(t,new LinkedList<SimObject>());
          }
          spawnCoroutine=StartCoroutine(SpawnCoroutine());
-         Core.singleton.OnDestroyingCoreEvent+=OnDestroyingCoreEvent;
         }
-        void OnDestroyingCoreEvent(object sender,EventArgs e){
+        public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
+         if(this!=null){
+          StopCoroutine(spawnCoroutine);
+         }
         }
         void OnDestroy(){
         }
@@ -103,6 +124,10 @@ namespace AKCondinoO.Sims{
         internal void OnSpecificSpawnRequestAt((Type simType,ulong number)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale){
          Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
          specificSpawnRequests[id]=(position,eulerAngles,localScale);
+        }
+        internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
+         Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
+         spawnQueue.Enqueue(spawnData);
         }
      Coroutine spawnCoroutine;
      [SerializeField]int       DEBUG_CREATE_SIM_OBJECT_AMOUNT=1;
@@ -153,6 +178,10 @@ namespace AKCondinoO.Sims{
                 if(toSpawn.actorData.TryGetValue(index,out var data)){
                  persistentSimActorData=data;
                 }
+               }
+               (Type simType,ulong number)?masterId=null;
+               if(toSpawn.masters.TryGetValue(index,out var master)){
+                masterId=master;
                }
                index++;
                _GetId:{}
@@ -212,6 +241,22 @@ namespace AKCondinoO.Sims{
                SimObjectManager.singleton.spawned.Add(id,simObject);
                SimObjectManager.singleton.active .Add(id,simObject);
                 simObject.id=id;
+                if(masterId!=null){
+                 Log.DebugMessage("simObject has master");
+                 simObject.master=masterId;
+                }else{
+                 Log.DebugMessage("simObject has no master");
+                 simObject.master=null;
+                }
+                if(simObject is SimActor simActor){
+                 if(persistentSimActorData!=null){
+                  Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
+                  simActor.persistentSimActorData=persistentSimActorData.Value;
+                 }else{
+                  Log.DebugMessage("clear simActor.persistentSimActorData");
+                  simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
+                 }
+                }
                 simObject.OnActivated();
               }
               toSpawn.Clear();
@@ -243,7 +288,7 @@ namespace AKCondinoO.Sims{
                                 }
                             }else{
                                 if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
-                                    Log.DebugMessage("DespawnQueue.Count>0||DespawnAndReleaseIdQueue.Count>0");
+                                    Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
                                     if(OnPersistentDataPushToFile()){
                                         OnPersistentDataPushedToFile();
                                     }
@@ -272,10 +317,16 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[t]=nextId;
          }
          foreach(var a in SimObjectManager.singleton.active){
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
+          if(a.Value is SimActor simActor){
+           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,simActor.persistentSimActorData);
+          }
          }
          while(despawnQueue.Count>0){var toDespawn=despawnQueue.Dequeue();
-          SimObjectManager.singleton.persistentDataSavingBG.gameDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
+          if(toDespawn is SimActor simActor){
+           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,simActor.persistentSimActorData);
+          }
           if(!exitSave){
            SimObjectManager.singleton.despawning.Add(toDespawn.id.Value,toDespawn);
           }
