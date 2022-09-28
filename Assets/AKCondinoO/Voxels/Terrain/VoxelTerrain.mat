@@ -2,14 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: VoxelTerrain
   m_Shader: {fileID: 4800000, guid: 5bf847df6a08a2e468c10bedd6ad17b1, type: 3}
-  m_ShaderKeywords: 
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -79,6 +80,7 @@ Material:
         m_Texture: {fileID: 18700000, guid: 2d2765c6493ab3b468e98d262d19a11d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -97,9 +99,9 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _columns: 2
-    - _height: 0.065
+    - _height: 0.02
     - _rows: 2
-    - _scale: 0.1
+    - _scale: 0.25
     - _sharpness: 1.25
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

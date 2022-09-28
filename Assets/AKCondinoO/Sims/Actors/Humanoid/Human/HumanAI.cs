@@ -1,0 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+namespace AKCondinoO.Sims.Actors.Humanoid.Human{
+    internal class HumanAI:HumanoidAI{
+    }
+}

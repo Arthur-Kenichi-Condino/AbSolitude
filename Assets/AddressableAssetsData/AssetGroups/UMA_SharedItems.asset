@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UMA_SharedItems
+  m_EditorClassIdentifier: 
+  m_GroupName: UMA_SharedItems
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bda47f2ab33dc8b4f985588f40b6641b
+  m_SerializeEntries:
+  - m_GUID: fca386a016aed0646a65c33ef2449ef1
+    m_Address: UMA/SlotDataAsset-G8mbasearmsmapd_1004
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63c53978740d78d4ca464b44d20a2d07
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Arms_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 006cf9231c755ae459be6fec82003f6e
+    m_Address: UMA/SlotDataAsset-G8mbaseeyesmap02d_1007
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 744b567807b2d8b4ab23ece149d1e80c
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Eyes_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6049048ab587ace488163bbf473f247e
+    m_Address: UMA/SlotDataAsset-G8mbasefacemapd01_1001
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd56361a0055b3443a6a121d818041b0
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Face_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
+    m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c276deea2834bfd4c99611063846736e
+    m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 823abf9c6123e4d47985592ad67dde13
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d01791214901d7341b52409cd66cc65e
+    m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97fffd6a3f6442a4ba80a4074727b8bc
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Torso_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d17254f1214f14a48b6888e0a0191904, type: 2}
+    - {fileID: 11400000, guid: 4089349cee45b414bb8af69ca6a53c2e, type: 2}

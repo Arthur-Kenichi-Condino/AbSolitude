@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
@@ -9,10 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal class SimObject:MonoBehaviour{
+    internal class SimObject:NetworkBehaviour{
      internal PersistentData persistentData;
         internal struct PersistentData{
          public Quaternion rotation;
@@ -24,14 +26,14 @@ namespace AKCondinoO.Sims{
              localScale=simObject.transform.localScale;
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0}, rotation={1}, localScale={2}, }}",position,rotation,localScale);
+             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , }}",position,rotation,localScale);
             }
             internal static PersistentData Parse(string s){
              PersistentData persistentData=new PersistentData();
              int positionStringStart=s.IndexOf("position=(");
              if(positionStringStart>=0){
                 positionStringStart+=10;
-              int positionStringEnd=s.IndexOf("), ",positionStringStart);
+              int positionStringEnd=s.IndexOf(") , ",positionStringStart);
               string positionString=s.Substring(positionStringStart,positionStringEnd-positionStringStart);
               string[]xyzString=positionString.Split(',');
               float x=float.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
@@ -42,7 +44,7 @@ namespace AKCondinoO.Sims{
              int rotationStringStart=s.IndexOf("rotation=(");
              if(rotationStringStart>=0){
                 rotationStringStart+=10;
-              int rotationStringEnd=s.IndexOf("), ",rotationStringStart);
+              int rotationStringEnd=s.IndexOf(") , ",rotationStringStart);
               string rotationString=s.Substring(rotationStringStart,rotationStringEnd-rotationStringStart);
               string[]xyzwString=rotationString.Split(',');
               float x=float.Parse(xyzwString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
@@ -54,7 +56,7 @@ namespace AKCondinoO.Sims{
              int localScaleStringStart=s.IndexOf("localScale=(");
              if(localScaleStringStart>=0){
                 localScaleStringStart+=12;
-              int localScaleStringEnd=s.IndexOf("), ",localScaleStringStart);
+              int localScaleStringEnd=s.IndexOf(") , ",localScaleStringStart);
               string localScaleString=s.Substring(localScaleStringStart,localScaleStringEnd-localScaleStringStart);
               string[]xyzString=localScaleString.Split(',');
               float x=float.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
@@ -70,8 +72,11 @@ namespace AKCondinoO.Sims{
              return persistentData;
             }
         }
+     internal Gameplayer owner;
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
+     internal(Type simType,ulong number)?master=null;
+      protected SimObject masterObject;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
      internal Bounds localBounds;
@@ -95,13 +100,25 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
+         masterObject=GetMaster();
+         if(masterObject!=null&&masterObject is SimActor masterActor){
+          masterActor.SetSlave(this);
+         }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
-         for(int i=0;i<Gameplayer.all.Count;++i){
-          Gameplayer.all[i].OnSimObjectSpawned(this);
+         foreach(var gameplayer in GameplayerManagement.singleton.all){
+          gameplayer.Value.OnSimObjectSpawned(this);
          }
+        }
+        internal SimObject GetMaster(){
+         if(master!=null&&SimObjectManager.singleton.active.TryGetValue(master.Value,out SimObject masterObject)){
+          return masterObject;
+         }
+         return null;
+        }
+        protected virtual void SetSlave(SimObject slave){
         }
      public bool interactionsEnabled{get;protected set;}
         protected virtual void EnableInteractions(){
@@ -136,7 +153,11 @@ namespace AKCondinoO.Sims{
           persistentData.UpdateData(this);
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
+          foreach(var gameplayer in GameplayerManagement.singleton.all){
+           gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
+          }
          }
+         GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
              DisableInteractions();
@@ -238,6 +259,9 @@ namespace AKCondinoO.Sims{
           }
          }
          return result;
+        }
+     protected Collider[]collidersTouching=new Collider[8];
+        protected virtual void GetCollidersTouchingNonAlloc(){
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR

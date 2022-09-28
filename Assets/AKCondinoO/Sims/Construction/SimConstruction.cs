@@ -15,10 +15,13 @@ namespace AKCondinoO.Sims{
          }
          return result;
         }
+     [SerializeField]bool DEBUG_DRAW_COLLIDERS=true;
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){
              base.OnDrawGizmos();
-             DrawColliders();
+             if(DEBUG_DRAW_COLLIDERS){
+              DrawColliders();
+             }
             }
             void DrawColliders(){
              if(interactionsEnabled){
