@@ -18,10 +18,22 @@ namespace AKCondinoO.Sims{
       internal readonly Dictionary<Type,StreamReader>fileStreamReader=new Dictionary<Type,StreamReader>();
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
+       readonly Dictionary<Type,Dictionary<ulong,int>>simActorSpawnAtIndexByType=new Dictionary<Type,Dictionary<ulong,int>>();
+        protected override void Cleanup(){
+         foreach(var typeSimActorSpawnAtIndexPair in simActorSpawnAtIndexByType){
+          typeSimActorSpawnAtIndexPair.Value.Clear();
+         }
+        }
         protected override void Execute(){
          container.spawnDataFromFiles.dequeued=false;
          foreach(var typeFileStreamPair in this.fileStream){
           Type t=typeFileStreamPair.Key;
+          Dictionary<ulong,int>simActorSpawnAtIndex=null;
+          if(SimObjectUtil.IsSimActor(t)){
+           if(!simActorSpawnAtIndexByType.TryGetValue(t,out simActorSpawnAtIndex)){
+            simActorSpawnAtIndexByType.Add(t,simActorSpawnAtIndex=new Dictionary<ulong,int>());
+           }
+          }
           FileStream fileStream=typeFileStreamPair.Value;
           StreamReader fileStreamReader=this.fileStreamReader[t];
           //Log.DebugMessage("loading data for type:"+t);
@@ -58,9 +70,16 @@ namespace AKCondinoO.Sims{
               container.specificIdsToLoad.Remove(id);
              }
              container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,id.simType,id.number,persistentData));
+             if(simActorSpawnAtIndex!=null){
+              simActorSpawnAtIndex.Add(id.number,container.spawnDataFromFiles.at.Count-1);
+             }
              simObjectStringStart=simObjectStringEnd;
             }
            }
+          }
+          if(SimObjectUtil.IsSimActor(t)){
+           fileStream      =this.simActorFileStream      [t];
+           fileStreamReader=this.simActorFileStreamReader[t];
           }
          }
          foreach(var specificIdToLoad in container.specificIdsToLoad){
