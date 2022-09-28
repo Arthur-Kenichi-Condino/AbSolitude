@@ -1,3 +1,55 @@
+The original official Portuguese license version is below the following English translated version.
+
+# Terms and Conditions of Use
+
+The respective Term of Use (hereinafter, "Term of Use") aims to regulate the use by Internet users (hereinafter, "User") of the GAME NAMED "O SANEADOR", created and planned by the developer Arthur Kenichi Condino Odaguiri, Brazilian, of RG 42.085.411-3, (hereinafter, "Developer") and made available by the same through this GitHub repository.
+
+# 1. User's Acceptance of the Term of Use.
+
+1.1. In order for the User to be able to freely use the contents and make use of the game “O SANEADOR” the User must previously read carefully and express their total agreement, unequivocally and unconditionally, with this Term of Use, as well as with our Privacy Policy, being able to do this by clicking on the specified area to accept or agree with the respective Term of Use, when this option is made available and enabled;
+
+1.2 Other notices and instructions published by the game “O SANEADOR” must be understood as complements to these Terms of Use, and the User must, in the same way, observe and respect them in full.
+
+1.3. “O SANEADOR” reserves the right to modify, delete and/or expand, freely and at any time, without prior notice, this Term of Use, and the user is responsible for carrying out subsequent informative readings.
+
+1.4. It is the User's responsibility to read the respective Term of Use and the Specific Terms every time they use and/or access the aforementioned Game, as these Terms may change at any time without prior notice.
+
+1.5. In this way, it is established that access and/or use of the game “O SANEADOR” by the User is not allowed if the User does not fully accept, without any reservation, all the provisions contained in this Term of Use. In this case, the User must immediately cease access.
+
+# 2. Access and Use of the Services
+
+2.1. The game “O SANEADOR” is offered to Users free of charge;
+
+2.2. For access to the same, subscription and/or registration of the User is not required. However, the same is restricted to users over 18 (eighteen) years of age;
+
+2.3. If the User is a minor, in order to have access to the game, the User must obtain authorization from its parents, guardians or legal representatives, in order to allow its access, making them fully responsible for all acts performed by the minor, as well as as for the contents and services accessed and/or used by the minor.
+
+2.4. The User hereby agrees and undertakes to access the game “O SANEADOR”, only for the permitted purposes, in accordance with the provisions of this Term of Use, in the legislation in force and in a manner consistent with morals and good customs, as well as how it agrees and undertakes in any capacity not to reproduce, duplicate, copy, sell, market or resell the aforementioned game in any capacity, except when specially authorized by virtue of a contract signed with the developer;
+
+2.5. The User agrees, by accepting this document, that the User is solely responsible for any breach of his commitments and obligations with regard to the Terms, as set out above, and acknowledges that the game “O SANEADOR” has no liability to it or to third parties, the User being fully liable for all consequences that the developer and/or third party may suffer, such as loss, damage or injury, resulting from non-compliance with this term.
+
+# 3. User Privacy.
+
+3.1. The User, by accepting this document, agrees with the data protection practices used, as well as with the Privacy Policy of the Game “O SANEADOR”.
+
+# 4. Intellectual Property Rights
+
+4.1. The brands, names or distinctive signs of any kind that are conveyed to the game “O SANEADOR” are their sole and exclusive property. The simple use of these does not grant the User any assignment, licensing, authorization or any other right to use any of the brands, names or signs in question.
+
+4.2. All information reproduced in this game is protected by copyright and intellectual property held exclusively by the developer. None of this information may be reproduced, modified, stored, rebroadcast, translated, commercially exploited or reused in whole or in part without the prior written consent of the developer.
+
+# 5. Exclusion of Warranties and Liabilities.
+
+5.1. The User, by accepting this document, expressly agrees that the use and/or access to the game “O SANEADOR” is at his/her own risk, understanding that, for strictly technical and operational reasons, the said Developer cannot guarantee the availability and continuity of operation of the game indefinitely, not being able to guarantee that its access will be uninterrupted, punctual, safe and free of errors, as well as that any defect existing in the development will be corrected, being exempt from responsibility for any damages, losses or complications that may may fall on the User.
+
+5.2. The developer disclaims any and all liability for any losses, damages, and injuries of any nature arising from the lack of availability and continuity of operation of the game “O SANEADOR”.
+
+5.3. The developer of the game “O SANEADOR” does not guarantee the absence of viruses in the contents or in other elements that may produce changes in the User's computer system or in the stored electronic files/documents. In this way, it disclaims any and all liability for any losses, damages and injuries of any nature arising from these events. Any downloaded file and/or electronic document is obtained at the User's own discretion, at his/her own risk, being the User solely responsible for any damage to the computer system or for the loss of data due to the download.
+
+# 6. Applicable Law.
+
+6.1. The present Term of Use is governed solely and exclusively by the laws of the Federative Republic of Brazil and any legal dispute that arises based on its interpretation or application must be judged by Brazilian courts, the forum of the city of São José dos Campos, State of São Paulo, being elected, however privileged another may be or may become.
+
 # Termos e Condições de Uso
 
 O respectivo Termo de Uso (doravante, "Termo de Uso") tem como objetivo regrar a utilização pelos usuários de Internet (doravante, “Usuário”) do JOGO DENOMINADO “O SANEADOR”, criado e planejado pelo desenvolvedor Arthur Kenichi Condino Odaguiri, brasileiro, de RG 42.085.411-3, (doravante, "Desenvolvedor") e disponibilizado pelo mesmo através deste repositório do GitHub.
@@ -42,7 +94,7 @@ O respectivo Termo de Uso (doravante, "Termo de Uso") tem como objetivo regrar a
 
 5.2. O desenvolvedor se exime de toda e qualquer responsabilidade por eventuais perdas, danos, e prejuízos de qualquer natureza decorrentes da falta de disponibilidade e continuidade do funcionamento do jogo “O SANEADOR”.
 
-5.4. O desenvolvedor do jogo “O SANEADOR’ não garante a ausência de vírus nos conteúdos ou ainda em outros elementos que possam chegar a produzir alterações no sistema informático do Usuário ou nos arquivos/documentos eletrônicos armazenados. Desta forma, se exime de toda e qualquer responsabilidade por eventuais perdas, danos e prejuízos de qualquer natureza decorrentes destes eventos. Qualquer arquivo e/ou documento eletrônico baixado é obtido pelo próprio critério do Usuário, por sua conta e risco, sendo o único responsável por qualquer dano ao sistema informático ou pela perda de dados por conta da descarga.
+5.3. O desenvolvedor do jogo “O SANEADOR’ não garante a ausência de vírus nos conteúdos ou ainda em outros elementos que possam chegar a produzir alterações no sistema informático do Usuário ou nos arquivos/documentos eletrônicos armazenados. Desta forma, se exime de toda e qualquer responsabilidade por eventuais perdas, danos e prejuízos de qualquer natureza decorrentes destes eventos. Qualquer arquivo e/ou documento eletrônico baixado é obtido pelo próprio critério do Usuário, por sua conta e risco, sendo o único responsável por qualquer dano ao sistema informático ou pela perda de dados por conta da descarga.
 
 # 6. Da Lei Aplicável.
 
