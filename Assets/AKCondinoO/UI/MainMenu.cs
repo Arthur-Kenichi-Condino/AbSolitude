@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
 using System.Collections;
@@ -11,10 +11,10 @@ namespace AKCondinoO.UI{
     internal class MainMenu:MonoBehaviour{
      internal static bool netManagerInitialized;
      NetworkManager netManager;
-        void Awake(){
+        void Update(){
          GameObject netManagerGameObject;
-         if((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
-          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null
+         if(netManager==null&&((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
+          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null)
          ){
           Log.Warning("NetworkManager not found");
          }else{
@@ -32,9 +32,22 @@ namespace AKCondinoO.UI{
            }
           }
           netManagerInitialized=true;
+          if(!netManager.IsServer&&!netManager.IsHost&&!netManager.IsClient){
+           if(Application.isEditor){
+            if(NetworkManager.Singleton.StartHost()){
+             Log.DebugMessage("NetworkManager StartHost successful");
+            }else{
+             Log.Error("NetworkManager StartHost failed");
+            }
+           }else{
+            if(NetworkManager.Singleton.StartClient()){
+             Log.DebugMessage("NetworkManager StartClient successful");
+            }else{
+             Log.Error("NetworkManager StartClient failed");
+            }
+           }
+          }
          }
-        }
-        void Update(){
          SceneManager.LoadScene("MainScene",LoadSceneMode.Single);
         }
     }

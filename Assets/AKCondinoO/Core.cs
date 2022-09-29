@@ -83,6 +83,9 @@ namespace AKCondinoO{
           isClient=netManager.IsClient&&!netManager.IsHost;
           Log.DebugMessage("MainMenu.netManagerInitialized:"+MainMenu.netManagerInitialized+";isServer:"+isServer+";isClient:"+isClient);
          }
+         if(!isServer&&!isClient){
+          Log.Error("!isServer&&!isClient");
+         }
         }
         void OnDestroy(){
          if(singleton==this){
