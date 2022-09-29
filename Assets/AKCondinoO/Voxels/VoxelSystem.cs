@@ -107,6 +107,9 @@ namespace AKCondinoO.Voxels{
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
         public void Init(){
+         if(!Core.singleton.isServer){
+          //return;
+         }
          chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
          Directory.CreateDirectory(chunkStatePath);
          chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
@@ -134,6 +137,9 @@ namespace AKCondinoO.Voxels{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
+         if(!Core.singleton.isServer){
+          //return;
+         }
          if(this!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }

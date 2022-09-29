@@ -8,12 +8,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
+     //[SerializeField]GameObject simUMADataPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
         internal struct PersistentSimActorData{
@@ -55,6 +57,7 @@ namespace AKCondinoO.Sims.Actors{
              return result;
             }
         }
+     internal DynamicCharacterAvatar simUMAData;
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
@@ -65,6 +68,7 @@ namespace AKCondinoO.Sims.Actors{
        internal float heightCrouching;
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
+         //simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
          base.Awake();
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
