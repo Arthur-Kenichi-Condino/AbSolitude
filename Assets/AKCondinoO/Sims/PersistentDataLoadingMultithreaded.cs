@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,6 +81,19 @@ namespace AKCondinoO.Sims{
           if(SimObjectUtil.IsSimActor(t)){
            fileStream      =this.simActorFileStream      [t];
            fileStreamReader=this.simActorFileStreamReader[t];
+           fileStream.Position=0L;
+           fileStreamReader.DiscardBufferedData();
+           line=null;
+           while((line=fileStreamReader.ReadLine())!=null){
+            if(string.IsNullOrEmpty(line)){continue;}
+            int idStringStart=line.IndexOf("id=")+3;
+            int idStringEnd  =line.IndexOf(" , ",idStringStart);
+            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+            if(simActorSpawnAtIndex.TryGetValue(id,out int index)){
+             Log.DebugMessage("sim actor data has to be loaded for id:"+id);
+             SimActor.PersistentSimActorData persistentSimActorData;
+            }
+           }
           }
          }
          foreach(var specificIdToLoad in container.specificIdsToLoad){
