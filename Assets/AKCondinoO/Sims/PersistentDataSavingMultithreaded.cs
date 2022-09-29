@@ -168,7 +168,7 @@ namespace AKCondinoO.Sims{
            int idStringStart=line.IndexOf("id=")+3;
            int idStringEnd  =line.IndexOf(" , ",idStringStart);
            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-           Log.DebugMessage("id:"+id);
+           //Log.DebugMessage("id:"+id);
            if(!persistentSimActorDataToSave.ContainsKey(id)){
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
            }
