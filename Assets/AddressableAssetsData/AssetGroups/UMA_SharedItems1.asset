@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UMA_SharedItems1
+  m_EditorClassIdentifier: 
+  m_GroupName: UMA_SharedItems1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2b20a2b6e3621d34290038944533c874
+  m_SerializeEntries:
+  - m_GUID: ffee4dd5daf4a624baff4017b50aabbf
+    m_Address: Tex-Empty
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 246b4e24bf357c1418debb424405a14a, type: 2}
+    - {fileID: 11400000, guid: d4f79f446d2a04446b76964b97a1104f, type: 2}

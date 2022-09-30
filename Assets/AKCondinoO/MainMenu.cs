@@ -11,6 +11,7 @@ namespace AKCondinoO.UI{
     internal class MainMenu:MonoBehaviour{
      internal static bool netManagerInitialized;
      NetworkManager netManager;
+     [SerializeField]bool editorNetAsClient;
         void Update(){
          GameObject netManagerGameObject;
          if(netManager==null&&((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
@@ -34,10 +35,18 @@ namespace AKCondinoO.UI{
           netManagerInitialized=true;
           if(!netManager.IsServer&&!netManager.IsHost&&!netManager.IsClient){
            if(Application.isEditor){
-            if(NetworkManager.Singleton.StartHost()){
-             Log.DebugMessage("NetworkManager StartHost successful");
+            if(editorNetAsClient){
+             if(NetworkManager.Singleton.StartClient()){
+              Log.DebugMessage("NetworkManager StartClient successful");
+             }else{
+              Log.Error("NetworkManager StartClient failed");
+             }
             }else{
-             Log.Error("NetworkManager StartHost failed");
+             if(NetworkManager.Singleton.StartHost()){
+              Log.DebugMessage("NetworkManager StartHost successful");
+             }else{
+              Log.Error("NetworkManager StartHost failed");
+             }
             }
            }else{
             if(NetworkManager.Singleton.StartClient()){

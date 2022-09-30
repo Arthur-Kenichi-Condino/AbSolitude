@@ -14,12 +14,14 @@ namespace AKCondinoO.Gameplaying{
      internal readonly Dictionary<string,Gameplayer>all=new();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         if(String.IsNullOrEmpty(hostId)){
-          hostId="0";
-         }
-         all.Add(hostId,Gameplayer.main=Instantiate(_GameplayerPrefab));
         }
         public void Init(){
+         if(Core.singleton.isServer){
+          if(String.IsNullOrEmpty(hostId)){
+           hostId="0";
+          }
+          all.Add(hostId,Gameplayer.main=Instantiate(_GameplayerPrefab));
+         }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("GameplayerManagement:OnDestroyingCoreEvent");

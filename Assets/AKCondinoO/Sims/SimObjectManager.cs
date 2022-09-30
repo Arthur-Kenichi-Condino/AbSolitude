@@ -32,8 +32,10 @@ namespace AKCondinoO.Sims{
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
         }
         public void Init(){
-                 idsFile=string.Format("{0}{1}",Core.savePath,        "ids.txt");
-         releasedIdsFile=string.Format("{0}{1}",Core.savePath,"releasedIds.txt");
+         if(Core.singleton.isServer){
+                  idsFile=string.Format("{0}{1}",Core.savePath,        "ids.txt");
+          releasedIdsFile=string.Format("{0}{1}",Core.savePath,"releasedIds.txt");
+         }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
@@ -46,37 +48,45 @@ namespace AKCondinoO.Sims{
           persistentDataLoadingBGThread.Wait();
           foreach(var kvp in persistentDataLoadingBGThread.fileStream){
            Type t=kvp.Key;
-           persistentDataLoadingBGThread.fileStream      [t].Dispose();
-           persistentDataLoadingBGThread.fileStreamReader[t].Dispose();
-           if(SimObjectUtil.IsSimActor(t)){
-            persistentDataLoadingBGThread.simActorFileStream      [t].Dispose();
-            persistentDataLoadingBGThread.simActorFileStreamReader[t].Dispose();
+           if(Core.singleton.isServer){
+            persistentDataLoadingBGThread.fileStream      [t].Dispose();
+            persistentDataLoadingBGThread.fileStreamReader[t].Dispose();
+            if(SimObjectUtil.IsSimActor(t)){
+             persistentDataLoadingBGThread.simActorFileStream      [t].Dispose();
+             persistentDataLoadingBGThread.simActorFileStreamReader[t].Dispose();
+            }
            }
           }
           persistentDataLoadingBG.Dispose();
          #endregion
          #region PersistentDataSavingMultithreaded
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+          if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
            PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
+          }
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
           if(PersistentDataSavingMultithreaded.Clear()!=0){
            Log.Error("PersistentDataSavingMultithreaded will stop with pending work");
           }
           PersistentDataSavingMultithreaded.Stop=true;
           persistentDataSavingBGThread.Wait();
-          persistentDataSavingBGThread.releasedIdsFileStreamWriter.Dispose();
-          persistentDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
-          persistentDataSavingBGThread.idsFileStreamWriter.Dispose();
-          persistentDataSavingBGThread.idsFileStreamReader.Dispose();
+          if(Core.singleton.isServer){
+           persistentDataSavingBGThread.releasedIdsFileStreamWriter.Dispose();
+           persistentDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
+           persistentDataSavingBGThread.idsFileStreamWriter.Dispose();
+           persistentDataSavingBGThread.idsFileStreamReader.Dispose();
+          }
           foreach(var kvp in persistentDataSavingBGThread.simObjectFileStream){
            Type t=kvp.Key;
-           persistentDataSavingBGThread.simObjectFileStreamWriter[t].Dispose();
-           persistentDataSavingBGThread.simObjectFileStreamReader[t].Dispose();
-           if(SimObjectUtil.IsSimActor(t)){
-            persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
-            persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
+           if(Core.singleton.isServer){
+            persistentDataSavingBGThread.simObjectFileStreamWriter[t].Dispose();
+            persistentDataSavingBGThread.simObjectFileStreamReader[t].Dispose();
+            if(SimObjectUtil.IsSimActor(t)){
+             persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
+             persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
+            }
            }
           }
           persistentDataSavingBG.Dispose();
