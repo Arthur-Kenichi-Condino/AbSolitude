@@ -20,11 +20,11 @@ The respective Term of Use (hereinafter, "Term of Use") aims to regulate the use
 
 2.1. The game “O SANEADOR” is offered to Users free of charge;
 
-2.2. For access to the same, subscription and/or registration of the User is not required. However, the same is restricted to users over 18 (eighteen) years of age;
+2.2. Access to the game does not require User subscription or registration. The User must, however, be over 18 (eighteen) years of age to access the game;
 
-2.3. If the User is a minor, in order to have access to the game, the User must obtain authorization from its parents, guardians or legal representatives, in order to allow its access, making them fully responsible for all acts performed by the minor, as well as as for the contents and services accessed and/or used by the minor.
+2.3. If the User is a minor/underaged (under 18 years of age), in order for them to have access to the game, the User must obtain authorization from their parents, guardians or legal representatives in order to allow the User's access, making the parents, guardians or legal representatives fully responsible for all acts performed by the minor, as well as for the contents and services accessed and/or used by the minor.
 
-2.4. The User hereby agrees and undertakes to access the game “O SANEADOR”, only for the permitted purposes, in accordance with the provisions of this Term of Use, in the legislation in force and in a manner consistent with morals and good customs, as well as how it agrees and undertakes in any capacity not to reproduce, duplicate, copy, sell, market or resell the aforementioned game in any capacity, except when specially authorized by virtue of a contract signed with the developer;
+2.4. The User hereby agrees and undertakes to access the game “O SANEADOR”, only for the permitted purposes, in accordance with the provisions of this Term of Use, in the legislation in force and in a manner consistent with morals and good customs, as well as how the User agrees and undertakes in any capacity not to reproduce, duplicate, copy, sell, market or resell the aforementioned game in any capacity, except when specially authorized by virtue of a contract signed with the developer;
 
 2.5. The User agrees, by accepting this document, that the User is solely responsible for any breach of his commitments and obligations with regard to the Terms, as set out above, and acknowledges that the game “O SANEADOR” has no liability to it or to third parties, the User being fully liable for all consequences that the developer and/or third party may suffer, such as loss, damage or injury, resulting from non-compliance with this term.
 
