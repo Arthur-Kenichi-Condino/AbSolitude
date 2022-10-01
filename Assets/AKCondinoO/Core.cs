@@ -25,7 +25,14 @@ namespace AKCondinoO{
      internal static Core singleton;
      internal NetworkManager netManager;
       internal int maxConnections=112;
+      //  do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// <summary>
+      ///  Do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// </summary>
       internal bool isServer=false;
+      /// <summary>
+      ///  Do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// </summary>
       internal bool isClient=false;
      internal static int threadCount;
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
