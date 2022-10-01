@@ -37,7 +37,7 @@ namespace AKCondinoO.Gameplaying{
         void OnServerSideClientConnected(ulong clientId){
          Log.DebugMessage("OnServerSideClientConnected:clientId:"+clientId);
          if(clientId==Core.singleton.netManager.LocalClientId){
-          Log.DebugMessage("OnServerSideClientConnected:this event was raised by the server connection to itself");
+          Log.Warning("OnServerSideClientConnected:somehow this event was raised by the server connection to itself");
           return;
          }
         }
