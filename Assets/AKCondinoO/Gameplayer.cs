@@ -24,7 +24,7 @@ namespace AKCondinoO{
         void Awake(){
          netObj=GetComponent<NetworkObject>();
         }
-        internal void Init(){
+        internal void Init(ulong clientId){
          activeWorldBounds=new Bounds(Vector3.zero,
           new Vector3(
            (instantiationDistance.x*2+1)*Width,
@@ -53,7 +53,11 @@ namespace AKCondinoO{
           }
          }
          if(Core.singleton.isServer){
-          netObj.Spawn(false);
+          if(this==Gameplayer.main){
+           netObj.Spawn(destroyWithScene:false);
+          }else{
+           netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+          }
          }
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();

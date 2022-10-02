@@ -72,7 +72,20 @@ namespace AKCondinoO.Sims{
              return persistentData;
             }
         }
+     internal NetworkObject netObj;
      internal Gameplayer owner;
+      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>();
+       private void OnClientSideNetPositionValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isClient){
+         transform.position=current;
+        }
+       }
+      private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>();
+       private void OnClientSideNetScaleValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isClient){
+         transform.localScale=current;
+        }
+       }
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
@@ -82,6 +95,7 @@ namespace AKCondinoO.Sims{
      internal Bounds localBounds;
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
+         netObj=GetComponent<NetworkObject>();
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){
@@ -100,17 +114,52 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
-         masterObject=GetMaster();
-         if(masterObject!=null&&masterObject is SimActor masterActor){
-          masterActor.SetSlave(this);
+         if(Core.singleton.isServer){
+          masterObject=GetMaster();
+          if(masterObject!=null&&masterObject is SimActor masterActor){
+           masterActor.SetSlave(this);
+          }
          }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
-         foreach(var gameplayer in GameplayerManagement.singleton.all){
-          gameplayer.Value.OnSimObjectSpawned(this);
+         if(Core.singleton.isServer){
+          if(!netObj.IsSpawned){
+           netObj.Spawn(destroyWithScene:false);
+          }else{
+           Log.Warning("netObj should have been despawned");
+          }
+          foreach(var gameplayer in GameplayerManagement.singleton.all){
+           gameplayer.Value.OnSimObjectSpawned(this);
+          }
          }
+        }
+        public override void OnNetworkSpawn(){
+         base.OnNetworkSpawn();
+         if(Core.singleton.isServer){
+          Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
+          netPosition.Value=persistentData.position  ;
+          netScale   .Value=persistentData.localScale;
+         }
+         if(Core.singleton.isClient){
+          Log.DebugMessage("SimObject:OnNetworkSpawn:isClient");
+          OnClientSideNetPositionValueChanged(transform.position,netPosition.Value);//  update on spawn
+          netPosition.OnValueChanged+=OnClientSideNetPositionValueChanged;
+          OnClientSideNetScaleValueChanged(transform.localScale,netScale.Value);//  update on spawn
+          netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged;
+         }
+        }
+        public override void OnNetworkDespawn(){
+         if(Core.singleton.isServer){
+          Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
+         }
+         if(Core.singleton.isClient){
+          Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
+          netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
+          netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged;
+         }
+         base.OnNetworkDespawn();
         }
         internal SimObject GetMaster(){
          if(master!=null&&SimObjectManager.singleton.active.TryGetValue(master.Value,out SimObject masterObject)){
@@ -151,6 +200,10 @@ namespace AKCondinoO.Sims{
          if(transform.hasChanged){
           TransformBoundsVertices();
           persistentData.UpdateData(this);
+          if(Core.singleton.isServer){
+           netPosition.Value=persistentData.position  ;
+           netScale   .Value=persistentData.localScale;
+          }
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
           foreach(var gameplayer in GameplayerManagement.singleton.all){
@@ -161,6 +214,11 @@ namespace AKCondinoO.Sims{
          if(unplaceRequested){
             unplaceRequested=false;
              DisableInteractions();
+             if(Core.singleton.isServer){
+              if(netObj.IsSpawned){
+               netObj.Despawn(destroy:false);
+              }
+             }
              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
              result=2;
          }else{
@@ -168,6 +226,11 @@ namespace AKCondinoO.Sims{
                 isOverlapping=false;
                  //Log.DebugMessage("simObject isOverlapping:id:"+id);
                  DisableInteractions();
+                 if(Core.singleton.isServer){
+                  if(netObj.IsSpawned){
+                   netObj.Despawn(destroy:false);
+                  }
+                 }
                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
                  result=2;
              }else{
@@ -176,6 +239,11 @@ namespace AKCondinoO.Sims{
                      if(IsOutOfSight()){
                          Log.DebugMessage("simObject IsOutOfSight:id:"+id);
                          DisableInteractions();
+                         if(Core.singleton.isServer){
+                          if(netObj.IsSpawned){
+                           netObj.Despawn(destroy:false);
+                          }
+                         }
                          SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
                          result=1;
                      }
@@ -183,6 +251,11 @@ namespace AKCondinoO.Sims{
                      if(poolRequested){
                         poolRequested=false;
                          DisableInteractions();
+                         if(Core.singleton.isServer){
+                          if(netObj.IsSpawned){
+                           netObj.Despawn(destroy:false);
+                          }
+                         }
                          SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
                          result=1;
                      }
