@@ -40,9 +40,30 @@ namespace AKCondinoO.Gameplaying{
           Log.Warning("OnServerSideClientConnected:somehow this event was raised by the server connection to itself");
           return;
          }
+         connectedClientsPendingPlayerPrefabInstantiation.Add(clientId);
         }
         void OnServerSideClientDisconnect(ulong clientId){
          Log.DebugMessage("OnServerSideClientDisconnect:clientId:"+clientId);
+        }
+        readonly HashSet<ulong>connectedClientsPendingPlayerPrefabInstantiation=new HashSet<ulong>();
+         readonly HashSet<ulong>connectedClientsPlayerPrefabInstantiated=new HashSet<ulong>();
+        void Update(){
+         if(Core.singleton.isServer){
+          //  to do: remove disconnected from connected pending here (so it cancels the spawning)
+          if(connectedClientsPendingPlayerPrefabInstantiation.Count>0){
+           foreach(ulong clientId in connectedClientsPendingPlayerPrefabInstantiation){
+            Log.DebugMessage("instantiating player prefab for clientId:"+clientId);
+            Gameplayer gameplayer=Instantiate(_GameplayerPrefab);
+            all.Add(clientId,gameplayer);
+            gameplayer.Init(clientId);
+            connectedClientsPlayerPrefabInstantiated.Add(clientId);
+           }
+           foreach(ulong clientId in connectedClientsPlayerPrefabInstantiated){
+            connectedClientsPendingPlayerPrefabInstantiation.Remove(clientId);
+           }
+           connectedClientsPlayerPrefabInstantiated.Clear();
+          }
+         }
         }
     }
 }

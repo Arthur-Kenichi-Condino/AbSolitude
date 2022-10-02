@@ -96,7 +96,7 @@ namespace AKCondinoO{
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
          if(Gameplayer.main!=null){
-            Gameplayer.main.Init();
+            Gameplayer.main.Init(netManager.LocalClientId);
          }
         }
         void OnDestroy(){
@@ -127,6 +127,8 @@ namespace AKCondinoO{
                singletonPropertyInfo.SetValue(null,null);
                Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
               }
+              Gameplayer.main=null;//  also unset current player prefab that is no more active
+              //  game was deinitialized
               singleton=null;
          }
         }
