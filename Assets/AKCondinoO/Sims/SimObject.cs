@@ -74,16 +74,40 @@ namespace AKCondinoO.Sims{
         }
      internal NetworkObject netObj;
      internal Gameplayer owner;
-      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>();
+      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
        private void OnClientSideNetPositionValueChanged(Vector3 previous,Vector3 current){
         if(Core.singleton.isClient){
-         transform.position=current;
+         if(!IsOwner){
+          transform.position=current;
+         }
         }
        }
-      private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>();
+       private void OnServerSideNetPositionValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.position=current;
+         }
+        }
+       }
+      private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
        private void OnClientSideNetScaleValueChanged(Vector3 previous,Vector3 current){
         if(Core.singleton.isClient){
-         transform.localScale=current;
+         if(!IsOwner){
+          transform.localScale=current;
+         }
+        }
+       }
+       private void OnServerSideNetScaleValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.localScale=current;
+         }
         }
        }
      internal LinkedListNode<SimObject>pooled; 
@@ -139,25 +163,35 @@ namespace AKCondinoO.Sims{
          base.OnNetworkSpawn();
          if(Core.singleton.isServer){
           Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
-          netPosition.Value=persistentData.position  ;
-          netScale   .Value=persistentData.localScale;
+          if(IsOwner){
+           netPosition.Value=persistentData.position  ;
+           netScale   .Value=persistentData.localScale;
+          }else{
+           Log.Warning("SimObject OnNetworkSpawn should always start with the server as owner");
+          }
+          OnServerSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
+          netPosition.OnValueChanged+=OnServerSideNetPositionValueChanged;
+          OnServerSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
+          netScale   .OnValueChanged+=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
           Log.DebugMessage("SimObject:OnNetworkSpawn:isClient");
-          OnClientSideNetPositionValueChanged(transform.position,netPosition.Value);//  update on spawn
+          OnClientSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnClientSideNetPositionValueChanged;
-          OnClientSideNetScaleValueChanged(transform.localScale,netScale.Value);//  update on spawn
-          netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged;
+          OnClientSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
+          netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged   ;
          }
         }
         public override void OnNetworkDespawn(){
          if(Core.singleton.isServer){
           Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
+          netPosition.OnValueChanged-=OnServerSideNetPositionValueChanged;
+          netScale   .OnValueChanged-=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
           Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
           netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
-          netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged;
+          netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
          }
          base.OnNetworkDespawn();
         }
@@ -201,8 +235,10 @@ namespace AKCondinoO.Sims{
           TransformBoundsVertices();
           persistentData.UpdateData(this);
           if(Core.singleton.isServer){
-           netPosition.Value=persistentData.position  ;
-           netScale   .Value=persistentData.localScale;
+           if(IsOwner){
+            netPosition.Value=persistentData.position  ;
+            netScale   .Value=persistentData.localScale;
+           }
           }
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
