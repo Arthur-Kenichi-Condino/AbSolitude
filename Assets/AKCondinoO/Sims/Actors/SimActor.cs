@@ -209,18 +209,24 @@ namespace AKCondinoO.Sims.Actors{
           return result;
          }
          bool shouldCrouch=false;//  is crouching required?
-         if(isUsingAI){
-          EnableNavMeshAgent();
-          if(!navMeshAgent.isOnNavMesh){
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(isUsingAI){
+            EnableNavMeshAgent();
+            if(!navMeshAgent.isOnNavMesh){
+             DisableNavMeshAgent();
+            }
+            if(navMeshAgent.enabled){
+             AI();
+            }
+           }else{
+            DisableNavMeshAgent();
+            if(simActorCharacterController!=null){
+               simActorCharacterController.ManualUpdate();
+            }
+           }
+          }else{
            DisableNavMeshAgent();
-          }
-          if(navMeshAgent.enabled){
-           AI();
-          }
-         }else{
-          DisableNavMeshAgent();
-          if(simActorCharacterController!=null){
-             simActorCharacterController.ManualUpdate();
           }
          }
          if(transform.hasChanged){
@@ -238,29 +244,33 @@ namespace AKCondinoO.Sims.Actors{
            shouldCrouch=true;
           }
          }
-         if(shouldCrouch){
-          if(wasCrouchingBeforeShouldCrouch==null){
-             wasCrouchingBeforeShouldCrouch=crouching;
-          }
-          if(!crouching){
-           OnToggleCrouching();
-          }
-         }else{
-          if(wasCrouchingBeforeShouldCrouch!=null){
-           if(!wasCrouchingBeforeShouldCrouch.Value){
-            if(crouching){
-             OnToggleCrouching();
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(shouldCrouch){
+            if(wasCrouchingBeforeShouldCrouch==null){
+               wasCrouchingBeforeShouldCrouch=crouching;
             }
-           }else{
             if(!crouching){
              OnToggleCrouching();
             }
+           }else{
+            if(wasCrouchingBeforeShouldCrouch!=null){
+             if(!wasCrouchingBeforeShouldCrouch.Value){
+              if(crouching){
+               OnToggleCrouching();
+              }
+             }else{
+              if(!crouching){
+               OnToggleCrouching();
+              }
+             }
+               wasCrouchingBeforeShouldCrouch=null;
+            }
+            if(DEBUG_TOGGLE_CROUCHING){
+               DEBUG_TOGGLE_CROUCHING=false;
+             OnToggleCrouching();
+            }
            }
-             wasCrouchingBeforeShouldCrouch=null;
-          }
-          if(DEBUG_TOGGLE_CROUCHING){
-             DEBUG_TOGGLE_CROUCHING=false;
-           OnToggleCrouching();
           }
          }
          lastForward=transform.forward;
