@@ -22,6 +22,7 @@ namespace AKCondinoO{
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
+     internal Bounds worldBounds;
      internal NavMeshData[]navMeshData;
       internal NavMeshDataInstance[]navMeshInstance;
        internal AsyncOperation[]navMeshAsyncOperation;
@@ -34,6 +35,13 @@ namespace AKCondinoO{
            (instantiationDistance.x*2+1)*Width,
            Height,
            (instantiationDistance.y*2+1)*Depth
+          )
+         );
+         worldBounds=new Bounds(Vector3.zero,
+          new Vector3(
+           (expropriationDistance.x*2+1)*Width,
+           Height,
+           (expropriationDistance.y*2+1)*Depth
           )
          );
          int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
@@ -59,8 +67,10 @@ namespace AKCondinoO{
          if(Core.singleton.isServer){
           if(this==Gameplayer.main){
            netObj.Spawn(destroyWithScene:false);
+           netObj.DontDestroyWithOwner=true;
           }else{
            netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           netObj.DontDestroyWithOwner=true;
           }
          }
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
@@ -136,6 +146,7 @@ namespace AKCondinoO{
         void OnCoordinatesChanged(){
          cnkRgn=cCoordTocnkRgn(cCoord);
          activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
+         worldBounds.center=activeWorldBounds.center;
          if(this==Gameplayer.main){
           VoxelSystem.singleton.generationRequests.Add(this);
          }
@@ -174,5 +185,10 @@ namespace AKCondinoO{
          }
          return false;
         }
+        #if UNITY_EDITOR
+        void OnDrawGizmos(){
+         Util.DrawBounds(worldBounds,Color.blue);
+        }
+        #endif
     }
 }

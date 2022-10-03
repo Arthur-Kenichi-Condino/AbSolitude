@@ -168,11 +168,12 @@ namespace AKCondinoO.Sims{
          EnableInteractions();
          if(Core.singleton.isServer){
           if(!netObj.IsSpawned){
+           Log.DebugMessage("netObj should be spawned now");
            netObj.Spawn(destroyWithScene:false);
-          }else{
-           Log.Warning("netObj should have been despawned");
+           netObj.DontDestroyWithOwner=true;
           }
           foreach(var gameplayer in GameplayerManagement.singleton.all){
+           ulong clientId=gameplayer.Key;
            gameplayer.Value.OnSimObjectSpawned(this);
           }
          }
@@ -182,11 +183,10 @@ namespace AKCondinoO.Sims{
          if(Core.singleton.isServer){
           Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
           if(IsOwner){
+           Log.DebugMessage("init net variables");
            netPosition.Value=persistentData.position  ;
            netRotation.Value=persistentData.rotation  ;
            netScale   .Value=persistentData.localScale;
-          }else{
-           Log.Warning("SimObject OnNetworkSpawn should always start with the server as owner");
           }
           OnServerSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnServerSideNetPositionValueChanged;
@@ -307,7 +307,7 @@ namespace AKCondinoO.Sims{
                            foreach(var gameplayer in GameplayerManagement.singleton.all){
                             ulong clientId=gameplayer.Key;
                             //Log.DebugMessage("should the ownership be changed to clientId:"+clientId);
-                            if(gameplayer.Value!=Gameplayer.main&&IsInPlayerActiveWorldBounds(gameplayer.Value)){
+                            if(gameplayer.Value!=Gameplayer.main&&IsInPlayerWorldBounds(gameplayer.Value)){
                              Log.DebugMessage("change ownership to clientId:"+clientId);
                              netObj.ChangeOwnership(clientId);
                              netObj.DontDestroyWithOwner=true;
@@ -346,6 +346,10 @@ namespace AKCondinoO.Sims{
          }
          return result;
         }
+        internal virtual int ManualUpdateAsClient(bool doValidationChecks){
+         int result=0;
+         return result;
+        }
         void TransformBoundsVertices(){
          worldBoundsVertices[0]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.min.z);
          worldBoundsVertices[1]=transform.TransformPoint(localBounds.max.x,localBounds.min.y,localBounds.min.z);
@@ -371,6 +375,14 @@ namespace AKCondinoO.Sims{
           v=>{
            //Log.DebugMessage("IsInPlayerActiveWorldBounds:testing v");
            return gameplayer.activeWorldBounds.Contains(v);
+          }
+         );
+        }
+        protected virtual bool IsInPlayerWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerWorldBounds:testing v");
+           return gameplayer.worldBounds.Contains(v);
           }
          );
         }
