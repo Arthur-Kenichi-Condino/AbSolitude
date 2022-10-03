@@ -73,6 +73,7 @@ namespace AKCondinoO.Sims{
             }
         }
      internal NetworkObject netObj;
+     internal Queue<NetworkObject>clientSidePooling=null;
      internal Gameplayer owner;
       private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
        NetworkVariableReadPermission.Everyone,

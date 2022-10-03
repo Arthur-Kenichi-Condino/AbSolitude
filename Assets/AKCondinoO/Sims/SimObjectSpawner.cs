@@ -11,7 +11,7 @@ using System.Globalization;
 using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
+    internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
      internal static string simActorSavePath;
         private void Awake(){
