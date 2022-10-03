@@ -36,7 +36,7 @@ namespace AKCondinoO.Sims{
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=2,
+           maxJobWorkers=1,
           },
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("SmallSize").Value,
@@ -52,7 +52,7 @@ namespace AKCondinoO.Sims{
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=2,
+           maxJobWorkers=1,
           },
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("LargeSize").Value,
@@ -68,7 +68,7 @@ namespace AKCondinoO.Sims{
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=2,
+           maxJobWorkers=1,
           },
           new NavMeshBuildSettings{
            agentTypeID=GetAgentTypeIDByName("MediumSizeCrouched").Value,
@@ -84,7 +84,7 @@ namespace AKCondinoO.Sims{
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
-           maxJobWorkers=2,
+           maxJobWorkers=1,
           },
          };
         }
