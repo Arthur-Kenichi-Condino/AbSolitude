@@ -44,6 +44,7 @@ namespace AKCondinoO.Gameplaying{
         }
         void OnServerSideClientDisconnect(ulong clientId){
          Log.DebugMessage("OnServerSideClientDisconnect:clientId:"+clientId);
+         //  to do: remove gameplayer
         }
         readonly HashSet<ulong>connectedClientsPendingPlayerPrefabInstantiation=new HashSet<ulong>();
          readonly HashSet<ulong>connectedClientsPlayerPrefabInstantiated=new HashSet<ulong>();

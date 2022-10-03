@@ -15,6 +15,10 @@ namespace AKCondinoO{
     internal class Gameplayer:NetworkBehaviour{
      internal static Gameplayer main;
      internal NetworkObject netObj;
+      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
@@ -73,7 +77,7 @@ namespace AKCondinoO{
           if(Core.singleton.isServer){
            if(Core.singleton.netManager.SpawnManager!=null){
             netObj.DontDestroyWithOwner=true;
-            netObj.Despawn();
+            netObj.Despawn(destroy:false);
            }
           }
          }
@@ -99,7 +103,9 @@ namespace AKCondinoO{
      bool navMeshDirty;
       bool navMeshSourcesDirty;
         void Update(){
-         transform.position=Camera.main.transform.position;
+         if(this==Gameplayer.main){
+          transform.position=Camera.main.transform.position;
+         }
          if(transform.hasChanged){
             transform.hasChanged=false;
           pendingCoordinatesUpdate=true;

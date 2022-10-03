@@ -92,6 +92,24 @@ namespace AKCondinoO.Sims{
          }
         }
        }
+      private readonly NetworkVariable<Quaternion>netRotation=new NetworkVariable<Quaternion>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
+       private void OnClientSideNetRotationValueChanged(Quaternion previous,Quaternion current){
+        if(Core.singleton.isClient){
+         if(!IsOwner){
+          transform.rotation=current;
+         }
+        }
+       }
+       private void OnServerSideNetRotationValueChanged(Quaternion previous,Quaternion current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.rotation=current;
+         }
+        }
+       }
       private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>(default,
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Owner
@@ -165,12 +183,15 @@ namespace AKCondinoO.Sims{
           Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
           if(IsOwner){
            netPosition.Value=persistentData.position  ;
+           netRotation.Value=persistentData.rotation  ;
            netScale   .Value=persistentData.localScale;
           }else{
            Log.Warning("SimObject OnNetworkSpawn should always start with the server as owner");
           }
           OnServerSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnServerSideNetPositionValueChanged;
+          OnServerSideNetRotationValueChanged(transform.rotation  ,netRotation.Value);//  update on spawn
+          netRotation.OnValueChanged+=OnServerSideNetRotationValueChanged;
           OnServerSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
           netScale   .OnValueChanged+=OnServerSideNetScaleValueChanged   ;
          }
@@ -178,6 +199,8 @@ namespace AKCondinoO.Sims{
           Log.DebugMessage("SimObject:OnNetworkSpawn:isClient");
           OnClientSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnClientSideNetPositionValueChanged;
+          OnClientSideNetRotationValueChanged(transform.rotation  ,netRotation.Value);//  update on spawn
+          netRotation.OnValueChanged+=OnClientSideNetRotationValueChanged;
           OnClientSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
           netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged   ;
          }
@@ -186,11 +209,13 @@ namespace AKCondinoO.Sims{
          if(Core.singleton.isServer){
           Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
           netPosition.OnValueChanged-=OnServerSideNetPositionValueChanged;
+          netRotation.OnValueChanged-=OnServerSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
           Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
           netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
+          netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
          }
          base.OnNetworkDespawn();
@@ -237,6 +262,7 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            if(IsOwner){
             netPosition.Value=persistentData.position  ;
+            netRotation.Value=persistentData.rotation  ;
             netScale   .Value=persistentData.localScale;
            }
           }
@@ -249,51 +275,71 @@ namespace AKCondinoO.Sims{
          GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
-             DisableInteractions();
              if(Core.singleton.isServer){
+              DisableInteractions();
               if(netObj.IsSpawned){
+               netObj.DontDestroyWithOwner=true;
                netObj.Despawn(destroy:false);
               }
+              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+              result=2;
              }
-             SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-             result=2;
          }else{
              if(isOverlapping){
                 isOverlapping=false;
-                 //Log.DebugMessage("simObject isOverlapping:id:"+id);
-                 DisableInteractions();
                  if(Core.singleton.isServer){
+                  //Log.DebugMessage("simObject isOverlapping:id:"+id);
+                  DisableInteractions();
                   if(netObj.IsSpawned){
+                   netObj.DontDestroyWithOwner=true;
                    netObj.Despawn(destroy:false);
                   }
+                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                  result=2;
                  }
-                 SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-                 result=2;
              }else{
                  if(checkIfOutOfSight){
                     checkIfOutOfSight=false;
                      if(IsOutOfSight()){
-                         Log.DebugMessage("simObject IsOutOfSight:id:"+id);
-                         DisableInteractions();
                          if(Core.singleton.isServer){
-                          if(netObj.IsSpawned){
-                           netObj.Despawn(destroy:false);
+                          if(IsOwner){
+                           bool ownershipChanged=false;
+                           foreach(var gameplayer in GameplayerManagement.singleton.all){
+                            ulong clientId=gameplayer.Key;
+                            //Log.DebugMessage("should the ownership be changed to clientId:"+clientId);
+                            if(gameplayer.Value!=Gameplayer.main&&IsInPlayerActiveWorldBounds(gameplayer.Value)){
+                             Log.DebugMessage("change ownership to clientId:"+clientId);
+                             netObj.ChangeOwnership(clientId);
+                             netObj.DontDestroyWithOwner=true;
+                             ownershipChanged=true;
+                             break;
+                            }
+                           }
+                           if(!ownershipChanged){
+                            Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                            DisableInteractions();
+                            if(netObj.IsSpawned){
+                             netObj.DontDestroyWithOwner=true;
+                             netObj.Despawn(destroy:false);
+                            }
+                            SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                            result=1;
+                           }
                           }
                          }
-                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                         result=1;
                      }
                  }else{
                      if(poolRequested){
                         poolRequested=false;
-                         DisableInteractions();
                          if(Core.singleton.isServer){
+                          DisableInteractions();
                           if(netObj.IsSpawned){
+                           netObj.DontDestroyWithOwner=true;
                            netObj.Despawn(destroy:false);
                           }
+                          SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                          result=1;
                          }
-                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                         result=1;
                      }
                  }
              }
@@ -317,6 +363,14 @@ namespace AKCondinoO.Sims{
            Vector2Int cCoord=vecPosTocCoord(v);
            int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
            return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
+          }
+         );
+        }
+        protected virtual bool IsInPlayerActiveWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerActiveWorldBounds:testing v");
+           return gameplayer.activeWorldBounds.Contains(v);
           }
          );
         }
