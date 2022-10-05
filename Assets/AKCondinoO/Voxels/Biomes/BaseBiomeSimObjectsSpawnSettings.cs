@@ -66,7 +66,7 @@ namespace AKCondinoO.Voxels.Biomes{
            }
           }
           settingsCountForSelection[selection]=settingsCount;
-          Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
+          //Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
          }
         }
      internal Perlin simObjectSpawnChancePerlin;
