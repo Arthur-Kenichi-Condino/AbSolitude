@@ -19,7 +19,7 @@ namespace AKCondinoO.Ambience.Clouds{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          cloudsCamera=GetComponentInChildren<CloudsCamera>();
-         Log.DebugMessage("cloudsCamera:"+cloudsCamera);
+         //Log.DebugMessage("cloudsCamera:"+cloudsCamera);
          MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponent<MeshRenderer>();
          sharedMaterial=prefabRenderer.sharedMaterial;
          sharedColor=sharedMaterial.GetColor("_TintColor");

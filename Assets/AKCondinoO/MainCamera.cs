@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.InputHandler;
 namespace AKCondinoO{
     internal class MainCamera:MonoBehaviour,ISingletonInitialization{
      internal static MainCamera singleton{get;set;}
@@ -14,12 +15,15 @@ namespace AKCondinoO{
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;
+         tgtRot=tgtRot_Last=transform.eulerAngles;
+         tgtPos=tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
         }
+     bool followerCamera;
         void LateUpdate(){
-         bool followerCamera=false;
+         followerCamera=false;
          if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
           //  TO DO: check if is there actually something to be followed (at Gameplayer.main)
           followerCamera=true;
@@ -30,7 +34,120 @@ namespace AKCondinoO{
          }
          BGM.singleton.transform.position=this.transform.position;
         }
+     Vector3 tgtRot,tgtRot_Last;
+      float tgtRotLerpTime;
+       float tgtRotLerpVal;
+        Quaternion tgtRotLerpA,tgtRotLerpB;
+         [SerializeField]float tgtRotLerpSpeed=18.75f;
+          [SerializeField]float tgtRotLerpMaxTime=.025f;
+      Vector3 inputViewRotationEuler;
+       [SerializeField]float viewRotationSmoothValue=.025f;
+     Vector3 tgtPos,tgtPos_Last;
+      float tgtPosLerpTime;
+       float tgtPosLerpVal;
+        Vector3 tgtPosLerpA,tgtPosLerpB;
+      Vector3 inputMoveVelocity=Vector3.zero;
+       [SerializeField]Vector3 moveAcceleration=new Vector3(.4f,.4f,.4f);
+        [SerializeField]Vector3 maxMoveSpeed=new Vector3(4.0f,4.0f,4.0f);
         void Update(){
+         if(!followerCamera){
+          //Log.DebugMessage("MainCamera:camera is free");
+             if(!Enabled.PAUSE.curState){
+                 inputViewRotationEuler.x+=-Enabled.MOUSE_ROTATION_DELTA_Y[0]*viewRotationSmoothValue;
+                 inputViewRotationEuler.y+= Enabled.MOUSE_ROTATION_DELTA_X[0]*viewRotationSmoothValue;
+                 inputViewRotationEuler.x=inputViewRotationEuler.x%360f;
+                 inputViewRotationEuler.y=inputViewRotationEuler.y%360f;
+                 //Log.DebugMessage("MainCamera:inputViewRotationEuler.x:"+inputViewRotationEuler.x);
+                 //Log.DebugMessage("MainCamera:inputViewRotationEuler.x:"+inputViewRotationEuler.y);
+                 if(inputViewRotationEuler!=Vector3.zero){
+                  tgtRot+=inputViewRotationEuler;
+                    inputViewRotationEuler=Vector3.zero;
+                 }
+                 if(tgtRotLerpTime==0f){
+                  if(tgtRot!=tgtRot_Last){
+                   //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
+                   tgtRotLerpVal=0f;
+                   tgtRotLerpA=transform.rotation;
+                   tgtRotLerpB=Quaternion.Euler(tgtRot);
+                   tgtRotLerpTime+=Time.deltaTime;
+                   tgtRot_Last=tgtRot;
+                  }
+                 }else{
+                  tgtRotLerpTime+=Time.deltaTime;
+                 }
+                 if(tgtRotLerpTime!=0f){
+                  tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
+                  if(tgtRotLerpVal>=1f){
+                   tgtRotLerpVal=1f;
+                   tgtRotLerpTime=0f;
+                  }
+                  transform.rotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
+                  if(tgtRotLerpTime>=tgtRotLerpMaxTime){
+                   if(tgtRot!=tgtRot_Last){
+                    tgtRotLerpTime=0;
+                   }
+                  }
+                 }
+                 if(Enabled.FORWARD .curState){inputMoveVelocity.z+=moveAcceleration.z;}
+                 if(Enabled.BACKWARD.curState){inputMoveVelocity.z-=moveAcceleration.z;}
+                  if(!Enabled.FORWARD.curState&&!Enabled.BACKWARD.curState){
+                   if(inputMoveVelocity.z!=0f){
+                    if(inputMoveVelocity.z>0f){
+                     inputMoveVelocity.z-=moveAcceleration.z;
+                     if(inputMoveVelocity.z<=0f){//  reached 0f
+                      inputMoveVelocity.z=0f;
+                     }
+                    }else{
+                     inputMoveVelocity.z+=moveAcceleration.z;
+                     if(inputMoveVelocity.z>=0f){//  reached 0f
+                      inputMoveVelocity.z=0f;
+                     }
+                    }
+                   }
+                  }
+                   if( inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z= maxMoveSpeed.z;}
+                   if(-inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z=-maxMoveSpeed.z;}
+                 if(Enabled.RIGHT   .curState){inputMoveVelocity.x+=moveAcceleration.x;}
+                 if(Enabled.LEFT    .curState){inputMoveVelocity.x-=moveAcceleration.x;}
+                  if(!Enabled.RIGHT  .curState&&!Enabled.LEFT    .curState){
+                   if(inputMoveVelocity.x!=0f){
+                    if(inputMoveVelocity.x>0f){
+                     inputMoveVelocity.x-=moveAcceleration.x;
+                     if(inputMoveVelocity.x<=0f){//  reached 0f
+                      inputMoveVelocity.x=0f;
+                     }
+                    }else{
+                     inputMoveVelocity.x+=moveAcceleration.x;
+                     if(inputMoveVelocity.x>=0f){//  reached 0f
+                      inputMoveVelocity.x=0f;
+                     }
+                    }
+                   }
+                  }
+                   if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
+                   if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
+                 if(inputMoveVelocity!=Vector3.zero){
+                  float divideBy=Mathf.Max(
+                   1f,
+                   (inputMoveVelocity.z!=0f?1f:0f)+
+                   (inputMoveVelocity.x!=0f?1f:0f)+
+                   (inputMoveVelocity.y!=0f?1f:0f)
+                  );
+                  tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
+                 }
+                 if(tgtPosLerpTime==0){
+                  if(tgtPos!=tgtPos_Last){
+                   tgtPosLerpVal=0;
+                   tgtPosLerpA=transform.position;
+                   tgtPosLerpB=tgtPos;
+                   tgtPosLerpTime+=Time.deltaTime;
+                   tgtPos_Last=tgtPos;
+                  }
+                 }else{
+                  tgtPosLerpTime+=Time.deltaTime;
+                 }
+             }
+         }
         }
     }
 }
