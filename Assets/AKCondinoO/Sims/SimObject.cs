@@ -169,9 +169,14 @@ namespace AKCondinoO.Sims{
          EnableInteractions();
          if(Core.singleton.isServer){
           if(!netObj.IsSpawned){
-           Log.DebugMessage("netObj should be spawned now");
+           //Log.DebugMessage("netObj should be spawned now");
            netObj.Spawn(destroyWithScene:false);
            netObj.DontDestroyWithOwner=true;
+          }else if(IsOwner){
+           Log.DebugMessage("set net variables");
+           netPosition.Value=persistentData.position  ;
+           netRotation.Value=persistentData.rotation  ;
+           netScale   .Value=persistentData.localScale;
           }
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            ulong clientId=gameplayer.Key;

@@ -64,7 +64,7 @@ namespace AKCondinoO.Voxels.Terrain{
         internal void OnDestroyingCore(){
          bakeJobHandle.Complete();
          marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning,-1);
-         Log.DebugMessage("Deallocate NativeLists");
+         //Log.DebugMessage("Deallocate NativeLists");
          if(marchingCubesBG.TempVer.IsCreated)marchingCubesBG.TempVer.Dispose();
          if(marchingCubesBG.TempTri.IsCreated)marchingCubesBG.TempTri.Dispose();
          simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning,-1);

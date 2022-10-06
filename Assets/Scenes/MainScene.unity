@@ -297,6 +297,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1975350285, guid: 3081ed2c3b06d9340a909967dcc4dbb7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2976087096671477519, guid: 3081ed2c3b06d9340a909967dcc4dbb7, type: 3}
       propertyPath: m_RootOrder
       value: 19
@@ -918,6 +922,30 @@ PrefabInstance:
     - target: {fileID: 4328967863402971998, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
       propertyPath: m_Name
       value: CloudParticleSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: maxParticles
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: spawnInterval
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: angleSettings.minIncrementSpeed.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: angleSettings.minIncrementSpeed.z
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: orbitSettings.minIncrementSpeed.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035502658062953410, guid: e105469ecfbe3684199e6488c36187d4, type: 3}
+      propertyPath: orbitSettings.minIncrementSpeed.y
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e105469ecfbe3684199e6488c36187d4, type: 3}

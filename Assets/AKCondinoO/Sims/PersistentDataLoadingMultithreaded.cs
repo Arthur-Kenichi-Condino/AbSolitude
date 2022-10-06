@@ -90,7 +90,7 @@ namespace AKCondinoO.Sims{
             int idStringEnd  =line.IndexOf(" , ",idStringStart);
             ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
             if(simActorSpawnAtIndex.TryGetValue(id,out int index)){
-             Log.DebugMessage("sim actor data has to be loaded for id:"+id);
+             //Log.DebugMessage("sim actor data has to be loaded for id:"+id);
              SimActor.PersistentSimActorData persistentSimActorData;
             }
            }
