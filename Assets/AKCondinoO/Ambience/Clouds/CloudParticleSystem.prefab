@@ -143,8 +143,10 @@ MonoBehaviour:
     maxIncrementSpeed: 0.025
     reverseChance: 0.125
     reverseChanceInterval: 10
+  angleSettings:
+    minIncrementSpeed: {x: 0, y: 10, z: 0}
   orbitSettings:
-    minIncrementSpeed: {x: 0.05, y: 0.05, z: 0.05}
+    minIncrementSpeed: {x: -10, y: 0, z: 0}
   distanceSettings:
     min: 1
     max: 10

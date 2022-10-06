@@ -6,12 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static AKCondinoO.InputHandler;
 namespace AKCondinoO{
     internal class ScreenInput:MonoBehaviour,ISingletonInitialization{
      internal static ScreenInput singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
+     internal GameObject currentSelectedGameObject;
+     internal bool isInputFieldSelected;
      internal bool isPointerOverUIElement;
      internal PointerEventData pointerEventData;
       internal readonly List<RaycastResult>eventSystemRaycastResults=new List<RaycastResult>();
@@ -29,6 +32,22 @@ namespace AKCondinoO{
          foreach(var raycastResult in eventSystemRaycastResults){
           if(raycastResult.gameObject.layer==Util.UILayer){
            isPointerOverUIElement=true;
+          }
+         }
+         if(currentSelectedGameObject!=EventSystem.current.currentSelectedGameObject){
+          Log.DebugMessage("selected:"+EventSystem.current.currentSelectedGameObject);
+          currentSelectedGameObject=EventSystem.current.currentSelectedGameObject;
+         }
+         //Log.DebugMessage("currentSelectedGameObject:"+currentSelectedGameObject);
+         if(!Enabled.PAUSE.curState){
+          if(Cursor.lockState!=CursorLockMode.Locked){
+           Cursor.visible=false;
+           Cursor.lockState=CursorLockMode.Locked;
+          }
+         }else{
+          if(Cursor.lockState==CursorLockMode.Locked){
+           Cursor.visible=true;
+           Cursor.lockState=CursorLockMode.None;
           }
          }
         }

@@ -47,6 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b7136e5f1176048b937803b3d1b128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tgtRotLerpSpeed: 18.75
+  tgtRotLerpMaxTime: 0.025
+  viewRotationSmoothValue: 0.025
+  tgtPosLerpSpeed: 18.75
+  tgtPosLerpMaxTime: 0.025
+  moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
+  maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!20 &6595663811422386843
 Camera:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ namespace AKCondinoO.Ambience.Clouds{
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          cloudsCamera=GetComponentInChildren<CloudsCamera>();
          //Log.DebugMessage("cloudsCamera:"+cloudsCamera);
-         MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponent<MeshRenderer>();
+         MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponentInChildren<MeshRenderer>();
          sharedMaterial=prefabRenderer.sharedMaterial;
          sharedColor=sharedMaterial.GetColor("_TintColor");
         }
@@ -58,9 +58,13 @@ namespace AKCondinoO.Ambience.Clouds{
          [SerializeField]internal float reverseChance=0.125f;
          [SerializeField]internal float reverseChanceInterval=10f;
         }
+     [SerializeField]internal CloudParticleAngleSettings angleSettings;
+        [Serializable]internal class CloudParticleAngleSettings{
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(0.0f,0.0f,1.0f);
+        }
      [SerializeField]internal CloudParticleOrbitSettings orbitSettings;
         [Serializable]internal class CloudParticleOrbitSettings{
-         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(.05f,.05f,.05f);
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(-1.0f,0.0f,0.0f);
         }
      [SerializeField]internal CloudParticleDistanceSettings distanceSettings;
         [Serializable]internal class CloudParticleDistanceSettings{
