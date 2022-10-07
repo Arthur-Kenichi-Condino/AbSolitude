@@ -56,6 +56,45 @@ namespace AKCondinoO.Sims.Actors{
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
+         private static readonly ConcurrentQueue<List<SkillData>>parsingSkillListPool=new ConcurrentQueue<List<SkillData>>();
+            internal static PersistentSimActorData Parse(string s){
+             PersistentSimActorData persistentSimActorData=new PersistentSimActorData();
+             if(!parsingSkillListPool.TryDequeue(out List<SkillData>skillList)){
+              skillList=new List<SkillData>();
+             }
+             skillList.Clear();
+             //Log.DebugMessage("s:"+s);
+             int skillsStringStart=s.IndexOf("skills={");
+             if(skillsStringStart>=0){
+                skillsStringStart+=8;
+              int skillsStringEnd=s.IndexOf("} , ",skillsStringStart);
+              string skillsString=s.Substring(skillsStringStart,skillsStringEnd-skillsStringStart);
+              int skillStringStart=0;
+              while((skillStringStart=skillsString.IndexOf("[",skillStringStart))>=0){
+               int skillTypeStringStart=skillStringStart+1;
+               int skillTypeStringEnd  =skillsString.IndexOf(",",skillTypeStringStart);
+               Type skillType=Type.GetType(skillsString.Substring(skillTypeStringStart,skillTypeStringEnd-skillTypeStringStart));
+               int skillLevelStringStart=skillTypeStringEnd+1;
+               int skillLevelStringEnd  =skillsString.IndexOf("],",skillLevelStringStart);
+               int skillLevel=int.Parse(skillsString.Substring(skillLevelStringStart,skillLevelStringEnd-skillLevelStringStart));
+               //Log.DebugMessage("skillType:"+skillType+";skillLevel:"+skillLevel);
+               SkillData skill=new SkillData(){
+                skill=skillType,
+                level=skillLevel,
+               };
+               skillList.Add(skill);
+               skillStringStart=skillLevelStringEnd+2;
+              }
+             }
+             int slavesStringStart=s.IndexOf("slaves={");
+             if(slavesStringStart>=0){
+                slavesStringStart+=8;
+              int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
+             }
+             persistentSimActorData.skills=new ListWrapper<SkillData>(skillList);
+             parsingSkillListPool.Enqueue(skillList);
+             return persistentSimActorData;
+            }
         }
      internal DynamicCharacterAvatar simUMAData;
      internal NavMeshAgent navMeshAgent;
@@ -151,7 +190,7 @@ namespace AKCondinoO.Sims.Actors{
           if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
            transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
            navMeshAgent.enabled=true;
-           Log.DebugMessage("navMeshAgent is enabled");
+           //Log.DebugMessage("navMeshAgent is enabled");
           }
          }
         }

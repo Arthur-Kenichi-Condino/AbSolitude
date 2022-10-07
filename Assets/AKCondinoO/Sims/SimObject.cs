@@ -187,9 +187,9 @@ namespace AKCondinoO.Sims{
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isServer){
-          Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
+          //Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
           if(IsOwner){
-           Log.DebugMessage("init net variables");
+           //Log.DebugMessage("init net variables");
            netPosition.Value=persistentData.position  ;
            netRotation.Value=persistentData.rotation  ;
            netScale   .Value=persistentData.localScale;
@@ -213,13 +213,13 @@ namespace AKCondinoO.Sims{
         }
         public override void OnNetworkDespawn(){
          if(Core.singleton.isServer){
-          Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
           netPosition.OnValueChanged-=OnServerSideNetPositionValueChanged;
           netRotation.OnValueChanged-=OnServerSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
-          Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
           netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
           netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
