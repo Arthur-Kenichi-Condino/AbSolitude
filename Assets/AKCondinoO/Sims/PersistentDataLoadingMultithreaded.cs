@@ -91,7 +91,11 @@ namespace AKCondinoO.Sims{
             ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
             if(simActorSpawnAtIndex.TryGetValue(id,out int index)){
              //Log.DebugMessage("sim actor data has to be loaded for id:"+id);
-             SimActor.PersistentSimActorData persistentSimActorData;
+             int persistentSimActorDataStringStart=line.IndexOf("persistentSimActorData=",idStringEnd+3);
+             int persistentSimActorDataStringEnd  =line.IndexOf(" , }",persistentSimActorDataStringStart)+4;
+             string persistentSimActorDataString=line.Substring(persistentSimActorDataStringStart,persistentSimActorDataStringEnd-persistentSimActorDataStringStart);
+             SimActor.PersistentSimActorData persistentSimActorData=SimActor.PersistentSimActorData.Parse(persistentSimActorDataString);
+             container.spawnDataFromFiles.actorData.Add(index,persistentSimActorData);
             }
            }
           }
