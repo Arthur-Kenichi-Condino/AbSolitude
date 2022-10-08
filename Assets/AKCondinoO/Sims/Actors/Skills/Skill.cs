@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
          }
         }
-     internal BaseAI actor;
+     internal SimActor actor;
      internal int level=1;
      internal bool doing;
       internal int useLevel;

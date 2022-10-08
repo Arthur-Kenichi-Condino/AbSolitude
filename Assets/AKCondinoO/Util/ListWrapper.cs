@@ -12,7 +12,7 @@ namespace AKCondinoO{
         }
         public bool MoveNext(){
          position++;
-         return(position<elements.Length);
+         return(elements!=null&&position<elements.Length);
         }
         public void Reset(){
          position=-1;
