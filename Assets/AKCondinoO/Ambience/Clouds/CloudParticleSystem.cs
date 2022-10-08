@@ -69,10 +69,14 @@ namespace AKCondinoO.Ambience.Clouds{
      [SerializeField]internal CloudParticleDistanceSettings distanceSettings;
         [Serializable]internal class CloudParticleDistanceSettings{
          [SerializeField]internal float min=1f;
-         [SerializeField]internal float max=10f;
+         [SerializeField]internal float max=5f;
          [SerializeField]internal float minIncrementSpeed=0.05f;
          [SerializeField]internal float reverseChance=.125f;
          [SerializeField]internal float reverseChanceInterval=10f;
+        }
+     [SerializeField]internal CloudParticleScaleSettings scaleSettings;
+        [Serializable]internal class CloudParticleScaleSettings{
+         [SerializeField]internal Vector3 min=new Vector3(1.0f,1.0f,1.0f);
         }
     }
 }

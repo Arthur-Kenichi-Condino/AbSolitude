@@ -57,12 +57,17 @@ namespace AKCondinoO.Sims.Actors{
              return result;
             }
          private static readonly ConcurrentQueue<List<SkillData>>parsingSkillListPool=new ConcurrentQueue<List<SkillData>>();
+         private static readonly ConcurrentQueue<List<SlaveData>>parsingSlaveListPool=new ConcurrentQueue<List<SlaveData>>();
             internal static PersistentSimActorData Parse(string s){
              PersistentSimActorData persistentSimActorData=new PersistentSimActorData();
              if(!parsingSkillListPool.TryDequeue(out List<SkillData>skillList)){
               skillList=new List<SkillData>();
              }
              skillList.Clear();
+             if(!parsingSlaveListPool.TryDequeue(out List<SlaveData>slaveList)){
+              slaveList=new List<SlaveData>();
+             }
+             slaveList.Clear();
              //Log.DebugMessage("s:"+s);
              int skillsStringStart=s.IndexOf("skills={");
              if(skillsStringStart>=0){
@@ -90,9 +95,28 @@ namespace AKCondinoO.Sims.Actors{
              if(slavesStringStart>=0){
                 slavesStringStart+=8;
               int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
+              string slavesString=s.Substring(slavesStringStart,slavesStringEnd-slavesStringStart);
+              Log.DebugMessage("slavesString:"+slavesString);
+              int slaveStringStart=0;
+              while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
+               int slaveSimTypeStringStart=slaveStringStart+1;
+               int slaveSimTypeStringEnd  =slavesString.IndexOf(",",slaveSimTypeStringStart);
+               Type slaveSimType=Type.GetType(slavesString.Substring(slaveSimTypeStringStart,slaveSimTypeStringEnd-slaveSimTypeStringStart));
+               int slaveIdNumberStringStart=slaveSimTypeStringEnd+1;
+               int slaveIdNumberStringEnd  =slavesString.IndexOf("],",slaveIdNumberStringStart);
+               ulong slaveIdNumber=ulong.Parse(slavesString.Substring(slaveIdNumberStringStart,slaveIdNumberStringEnd-slaveIdNumberStringStart));
+               SlaveData slave=new SlaveData(){
+                simType=slaveSimType,
+                number=slaveIdNumber,
+               };
+               slaveList.Add(slave);
+               slaveStringStart=slaveIdNumberStringEnd+2;
+              }
              }
              persistentSimActorData.skills=new ListWrapper<SkillData>(skillList);
+             persistentSimActorData.slaves=new ListWrapper<SlaveData>(slaveList);
              parsingSkillListPool.Enqueue(skillList);
+             parsingSlaveListPool.Enqueue(slaveList);
              return persistentSimActorData;
             }
         }
@@ -139,8 +163,16 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
-         skills.Clear();
-         //  load skills from file here
+         skills.Clear();//  to do: pool skills before clearing the list
+         //  load skills from file here:
+         persistentSimActorData.skills.Reset();
+         while(persistentSimActorData.skills.MoveNext()){
+          SkillData skillData=persistentSimActorData.skills.Current;
+          GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[skillData.skill]);
+          Skill skill=skillGameObject.GetComponent<Skill>();
+          skill.level=skillData.level;
+          skills.Add(skill.GetType(),skill);
+         }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
            if(skill.Value.level<requiredSkill.level){
@@ -159,13 +191,16 @@ namespace AKCondinoO.Sims.Actors{
           skills.Add(skill.GetType(),skill);
          }
          requiredSkills.Clear();
-         if(this is BaseAI actorAI){
-          foreach(var skill in skills){
-           skill.Value.actor=actorAI;
-          }
+         foreach(var skill in skills){
+          skill.Value.actor=this;
          }
          slaves.Clear();
-         //  load slaves from file here
+         //  load slaves from file here:
+         persistentSimActorData.slaves.Reset();
+         while(persistentSimActorData.slaves.MoveNext()){
+          SlaveData slaveData=persistentSimActorData.slaves.Current;
+          slaves.Add((slaveData.simType,slaveData.number));
+         }
          foreach(var slave in slaves){
           if(requiredSlaves.TryGetValue(slave.simType,out List<SlaveData>requiredSlavesForType)){
            //  TO DO: do some checks and set variables here
@@ -196,6 +231,8 @@ namespace AKCondinoO.Sims.Actors{
         }
         void DisableNavMeshAgent(){
          navMeshAgent.enabled=false;
+        }
+        internal virtual void OnSkillUsed(Skill skill){
         }
      internal bool isUsingAI=true;
      internal virtual float moveVelocity{

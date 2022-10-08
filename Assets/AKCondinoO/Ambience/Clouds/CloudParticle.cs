@@ -14,7 +14,7 @@ namespace AKCondinoO.Ambience.Clouds{
          alpha=new CloudParticleAlpha(value:color.a     ,CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed);
          angle=new CloudParticleAngle(value:Vector3.zero,CloudParticleSystem.singleton.angleSettings.minIncrementSpeed);
          orbit=new CloudParticleOrbit(value:Vector3.zero,CloudParticleSystem.singleton.orbitSettings.minIncrementSpeed);
-         distance=new CloudParticleDistance(value:CloudParticleSystem.singleton.distanceSettings.min,CloudParticleSystem.singleton.distanceSettings.minIncrementSpeed);
+         distance=new CloudParticleDistance(value:CloudParticleSystem.singleton.distanceSettings.min,CloudParticleSystem.singleton.distanceSettings.minIncrementSpeed,CloudParticleSystem.singleton.distanceSettings.reverseChanceInterval);
         }
      internal bool fadeIn;
       Color color;
@@ -31,6 +31,22 @@ namespace AKCondinoO.Ambience.Clouds{
           }
          }else{
           //
+         }
+         distance.reverseChanceTimer-=Time.deltaTime;
+         if(distance.reverseChanceTimer<=0f){
+          distance.reverseChanceTimer=CloudParticleSystem.singleton.distanceSettings.reverseChanceInterval;
+          bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.distanceSettings.reverseChance;
+          if(reverse){
+           Log.DebugMessage("reverse cloud particle distance.incrementSpeed");
+           distance.incrementSpeed=-distance.incrementSpeed;
+          }
+         }
+         distance.value+=distance.incrementSpeed*Time.deltaTime;
+         if(distance.value>=CloudParticleSystem.singleton.distanceSettings.max){
+          distance.value=CloudParticleSystem.singleton.distanceSettings.max;
+         }
+         if(distance.value<=CloudParticleSystem.singleton.distanceSettings.min){
+          distance.value=CloudParticleSystem.singleton.distanceSettings.min;
          }
          orbit.value+=orbit.incrementSpeed*Time.deltaTime;
          orbit.value.x=orbit.value.x%360f;
@@ -79,10 +95,14 @@ namespace AKCondinoO.Ambience.Clouds{
         internal struct CloudParticleDistance{
          internal float value;
          internal float incrementSpeed;
-            internal CloudParticleDistance(float value,float incrementSpeed){
+         internal float reverseChanceTimer;
+            internal CloudParticleDistance(float value,float incrementSpeed,float reverseChanceTimer){
              this.value=value;
              this.incrementSpeed=incrementSpeed;
+             this.reverseChanceTimer=reverseChanceTimer;
             }
+        }
+        internal struct CloudParticleScale{
         }
     }
 }
