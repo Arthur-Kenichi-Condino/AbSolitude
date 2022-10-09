@@ -9,23 +9,31 @@ namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorController:MonoBehaviour{
      internal SimActor actor;
      internal Animator animator;
+     internal SimActorAnimatorIKController animatorIKController;
         void Awake(){
         }
      bool synced=true;
      internal float animationTime=0f;
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
+     readonly List<AnimatorClipInfo>animatorClip=new List<AnimatorClipInfo>();
      string lastClipName="";
      int loopCount=0;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
       int lastLoopCount=0;
         void Update(){
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
+          if(animator!=null){
+           Log.DebugMessage("add SimActorAnimatorIKController");
+           animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
+           animatorIKController.simActorAnimatorController=this;
+          }
          }
          if(animator!=null&&actor is BaseAI baseAI){
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
+          animatorClip.Clear();
           AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(0);
-          AnimatorClipInfo[]animatorClip =animator.GetCurrentAnimatorClipInfo (0);
-          if(animatorClip.Length>0){
+                                          animator.GetCurrentAnimatorClipInfo (0,animatorClip);
+          if(animatorClip.Count>0){
            if(lastClipName!=animatorClip[0].clip.name){
             Log.DebugMessage("changed to new animatorClip[0].clip.name:"+animatorClip[0].clip.name);
             lastClipName=animatorClip[0].clip.name;
