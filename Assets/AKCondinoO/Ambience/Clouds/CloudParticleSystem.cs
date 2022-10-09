@@ -56,7 +56,7 @@ namespace AKCondinoO.Ambience.Clouds{
          [SerializeField]internal float minIncrementSpeed=.0125f;
          [SerializeField]internal float maxIncrementSpeed=.025f;
          [SerializeField]internal float reverseChance=0.125f;
-         [SerializeField]internal float reverseChanceInterval=10f;
+         [SerializeField]internal float reverseInterval=10f;
         }
      [SerializeField]internal CloudParticleAngleSettings angleSettings;
         [Serializable]internal class CloudParticleAngleSettings{
@@ -64,19 +64,34 @@ namespace AKCondinoO.Ambience.Clouds{
         }
      [SerializeField]internal CloudParticleOrbitSettings orbitSettings;
         [Serializable]internal class CloudParticleOrbitSettings{
-         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(-1.0f,0.0f,0.0f);
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(-1.0f,-1.0f,0.0f);
+         [SerializeField]internal Vector3 maxIncrementSpeed=new Vector3(1.0f,1.0f,0.0f);
+         [SerializeField]internal float reverseChance=.125f;
+         [SerializeField]internal float reverseInterval=5f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=5f;
         }
      [SerializeField]internal CloudParticleDistanceSettings distanceSettings;
         [Serializable]internal class CloudParticleDistanceSettings{
          [SerializeField]internal float min=1f;
          [SerializeField]internal float max=5f;
          [SerializeField]internal float minIncrementSpeed=0.05f;
+         [SerializeField]internal float maxIncrementSpeed=0.1f;
          [SerializeField]internal float reverseChance=.125f;
-         [SerializeField]internal float reverseChanceInterval=10f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
         }
      [SerializeField]internal CloudParticleScaleSettings scaleSettings;
         [Serializable]internal class CloudParticleScaleSettings{
          [SerializeField]internal Vector3 min=new Vector3(1.0f,1.0f,1.0f);
+         [SerializeField]internal Vector3 max=new Vector3(10.0f,10.0f,10.0f);
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(.0125f,.0125f,.0125f);
+         [SerializeField]internal Vector3 maxIncrementSpeed=new Vector3(.125f,.125f,.125f);
+         [SerializeField]internal float reverseChance=.125f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
         }
     }
 }

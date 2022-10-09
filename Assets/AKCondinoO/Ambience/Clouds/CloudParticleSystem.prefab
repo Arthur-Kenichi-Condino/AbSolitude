@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cloudParticlePrefab: {fileID: 114096974267340580, guid: 055ba01762f51294e92a986d0ccbae70, type: 3}
-  maxParticles: 1
+  maxParticles: 10
   spawnInterval: 1
   alphaSettings:
     min: 0.05
@@ -142,14 +142,27 @@ MonoBehaviour:
     minIncrementSpeed: 0.0125
     maxIncrementSpeed: 0.025
     reverseChance: 0.125
-    reverseChanceInterval: 10
+    reverseInterval: 10
   angleSettings:
     minIncrementSpeed: {x: 0, y: 0, z: 1}
   orbitSettings:
-    minIncrementSpeed: {x: -1, y: 0, z: 0}
+    minIncrementSpeed: {x: -1, y: -1, z: 0}
+    maxIncrementSpeed: {x: 1, y: 1, z: 0}
   distanceSettings:
     min: 1
     max: 5
     minIncrementSpeed: 0.05
+    maxIncrementSpeed: 0.1
     reverseChance: 0.125
-    reverseChanceInterval: 10
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10
+  scaleSettings:
+    min: {x: 1, y: 1, z: 1}
+    max: {x: 10, y: 10, z: 10}
+    minIncrementSpeed: {x: 0.0125, y: 0.0125, z: 0.0125}
+    maxIncrementSpeed: {x: 0.125, y: 0.125, z: 0.125}
+    reverseChance: 0.125
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10
