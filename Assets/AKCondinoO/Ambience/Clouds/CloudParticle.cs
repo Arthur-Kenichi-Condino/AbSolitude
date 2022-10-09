@@ -11,12 +11,15 @@ namespace AKCondinoO.Ambience.Clouds{
         void Awake(){
          meshRenderer=GetComponentInChildren<MeshRenderer>();
          color=CloudParticleSystem.singleton.sharedColor;
-         alpha=new CloudParticleAlpha(value:color.a     ,CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed);
+         alpha=new CloudParticleAlpha(value:color.a     ,CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed,CloudParticleSystem.singleton.alphaSettings.reverseInterval,CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueInterval);
          angle=new CloudParticleAngle(value:Vector3.zero,CloudParticleSystem.singleton.angleSettings.minIncrementSpeed,CloudParticleSystem.singleton.angleSettings.reverseInterval,CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueInterval);
          angle.RandomlyReverseSpeed();
          angle.RandomlyChangeIncrementSpeedValue();
          orbit=new CloudParticleOrbit(value:Vector3.zero,CloudParticleSystem.singleton.orbitSettings.minIncrementSpeed,CloudParticleSystem.singleton.orbitSettings.reverseInterval,CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueInterval);
          orbit.value=new Vector3(
+          Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())*360f,
+          Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())*360f,
+          0f
          );
          orbit.RandomlyReverseSpeed();
          orbit.RandomlyChangeIncrementSpeedValue();
@@ -33,15 +36,35 @@ namespace AKCondinoO.Ambience.Clouds{
          if(fadeIn){
           if(!meshRenderer.enabled){
            meshRenderer.enabled=true;
+           Log.DebugMessage("cloud particle spawning:fadeIn==true");
+           alpha.incrementSpeed=CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed;
           }
           if(alpha.value<CloudParticleSystem.singleton.alphaSettings.min){
            alpha.value+=alpha.incrementSpeed*Time.deltaTime;
           }else{
            fadeIn=false;
            Log.DebugMessage("cloud particle spawned:fadeIn=false;");
+           alpha.RandomlyReverseSpeed();
+           alpha.RandomlyChangeIncrementSpeedValue();
           }
          }else{
           //
+             alpha.reverseTimer-=Time.deltaTime;
+          if(alpha.reverseTimer<=0f){
+             alpha.reverseTimer=CloudParticleSystem.singleton.alphaSettings.reverseInterval;
+           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.reverseChance;
+           if(reverse){
+            alpha.RandomlyReverseSpeed();
+           }
+          }
+             alpha.changeIncrementSpeedValueTimer-=Time.deltaTime;
+          if(alpha.changeIncrementSpeedValueTimer<=0f){
+             alpha.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueInterval;
+           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueChance;
+           if(change){
+            alpha.RandomlyChangeIncrementSpeedValue();
+           }
+          }
          }
             angle.reverseTimer-=Time.deltaTime;
          if(angle.reverseTimer<=0f){
@@ -153,9 +176,17 @@ namespace AKCondinoO.Ambience.Clouds{
         internal struct CloudParticleAlpha{
          internal float value;
          internal float incrementSpeed;
-            internal CloudParticleAlpha(float value,float incrementSpeed){
+         internal float reverseTimer;
+         internal float changeIncrementSpeedValueTimer;
+            internal CloudParticleAlpha(float value,float incrementSpeed,float reverseTimer,float changeIncrementSpeedValueTimer){
              this.value=value;
              this.incrementSpeed=incrementSpeed;
+             this.reverseTimer=reverseTimer;
+             this.changeIncrementSpeedValueTimer=changeIncrementSpeedValueTimer;
+            }
+            internal void RandomlyReverseSpeed(){
+            }
+            internal void RandomlyChangeIncrementSpeedValue(){
             }
         }
      internal CloudParticleAngle angle;
