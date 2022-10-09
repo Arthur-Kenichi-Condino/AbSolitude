@@ -44,7 +44,7 @@ namespace AKCondinoO.Voxels.Biomes{
            chance=.125f,
            inclination=.125f,
            minScale=Vector3.one*.5f,
-           maxScale=Vector3.one*1.5f,
+           maxScale=Vector3.one*.75f,
            depth=1.2f,
            minSpacing=Vector3.one*2.4f,
            maxSpacing=Vector3.one*4.8f,
