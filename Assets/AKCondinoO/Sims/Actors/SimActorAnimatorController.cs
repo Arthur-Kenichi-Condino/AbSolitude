@@ -8,6 +8,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorController:MonoBehaviour{
      internal SimActor actor;
+      internal Vector3 actorLeft;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
         void Awake(){
@@ -29,6 +30,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
+          actorLeft=-actor.transform.right;
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
           animatorClip.Clear();
           AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(0);
