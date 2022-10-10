@@ -33,11 +33,24 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 leftToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorLeft*(disBetweenFeet/2f));
           if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit)){
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
-           Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
+           //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
+          }
+          Vector3 rightFootIKPosition=new Vector3(
+           rightFoot.position.x,
+           rightFoot.position.y,
+           rightFoot.position.z
+          );
+          Vector3 rightToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorRight*(disBetweenFeet/2f));
+          if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit)){
+           rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
+           //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
           simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1f);
           simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,1f);
           simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
+          simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,1f);
+          simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,1f);
+          simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
          }
         }
     }

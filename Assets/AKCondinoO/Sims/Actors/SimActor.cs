@@ -121,6 +121,7 @@ namespace AKCondinoO.Sims.Actors{
             }
         }
      internal DynamicCharacterAvatar simUMAData;
+      internal Vector3 simUMADataPosOffset;
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
@@ -132,7 +133,9 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
          if(simUMADataPrefab!=null){
+          simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
           simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
+          Log.DebugMessage("simUMADataPosOffset:"+simUMADataPosOffset);
          }
          base.Awake();
          navMeshAgent=GetComponent<NavMeshAgent>();
