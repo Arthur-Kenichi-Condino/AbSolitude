@@ -54,7 +54,7 @@ namespace AKCondinoO{
         void Update(){
          if(!followerCamera){
           //Log.DebugMessage("MainCamera:camera is free");
-             if(!Enabled.PAUSE.curState){
+             if(!Enabled.RELEASE_MOUSE.curState){
                  inputViewRotationEuler.x+=-Enabled.MOUSE_ROTATION_DELTA_Y[0]*viewRotationSmoothValue;
                  inputViewRotationEuler.y+= Enabled.MOUSE_ROTATION_DELTA_X[0]*viewRotationSmoothValue;
                  inputViewRotationEuler.x=inputViewRotationEuler.x%360f;

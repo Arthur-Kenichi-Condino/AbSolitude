@@ -39,7 +39,10 @@ namespace AKCondinoO{
           currentSelectedGameObject=EventSystem.current.currentSelectedGameObject;
          }
          //Log.DebugMessage("currentSelectedGameObject:"+currentSelectedGameObject);
-         if(!Enabled.PAUSE.curState){
+         if(currentSelectedGameObject!=null){
+          Enabled.RELEASE_MOUSE.curState=true;
+         }
+         if(!Enabled.RELEASE_MOUSE.curState){
           if(Cursor.lockState!=CursorLockMode.Locked){
            Cursor.visible=false;
            Cursor.lockState=CursorLockMode.Locked;
