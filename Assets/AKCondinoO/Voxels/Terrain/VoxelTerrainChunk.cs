@@ -79,6 +79,10 @@ namespace AKCondinoO.Voxels.Terrain{
           pendingMarchingCubes=true;
          }
         }
+        internal void OnEdited(){
+         Log.DebugMessage("OnEdited():chunk:"+id);
+         pendingMarchingCubes=true;
+        }
      bool waitingBakeJob;
      bool waitingMarchingCubes;
      bool pendingMarchingCubes;
