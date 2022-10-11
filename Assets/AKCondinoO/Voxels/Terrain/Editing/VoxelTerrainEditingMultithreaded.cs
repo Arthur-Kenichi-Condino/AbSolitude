@@ -10,6 +10,9 @@ using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingContainer;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+using System.Text;
+using System.IO;
+
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
      internal object[]terrainSynchronization;
@@ -18,12 +21,16 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
     }
     internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
         internal struct TerrainEditOutputData{
-         internal double density;
-         internal MaterialId material;
+         public double density;
+         public MaterialId material;
+            internal TerrainEditOutputData(double density,MaterialId material){
+             this.density=density;this.material=material;
+            }
         }
      internal readonly Queue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new Queue<Dictionary<Vector3Int,TerrainEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataFromFileToMerge=new();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataForSavingToFile=new();
+     readonly StringBuilder stringBuilder=new StringBuilder();
         protected override void Cleanup(){
          foreach(var editData in dataFromFileToMerge){editData.Value.Clear();terrainEditOutputDataPool.Enqueue(editData.Value);}
          dataFromFileToMerge.Clear();
@@ -95,6 +102,11 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                          }
                          //  TO DO: get current file data to merge
                          if(!dataFromFileToMerge.ContainsKey(cCoord3)){
+                          if(!terrainEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,TerrainEditOutputData>editData)){
+                           editData=new Dictionary<Vector3Int,TerrainEditOutputData>();
+                          }
+                          dataFromFileToMerge.Add(cCoord3,editData);
+                          //  TO DO: load data here
                          }
                          Voxel currentVoxel;
                          if(dataFromFileToMerge.ContainsKey(cCoord3)&&dataFromFileToMerge[cCoord3].ContainsKey(vCoord3)){
@@ -118,7 +130,14 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                           resultDensity=-resultDensity;
                          }
                          if(!dataForSavingToFile.ContainsKey(cCoord3)){
+                          if(!terrainEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,TerrainEditOutputData>editData)){
+                           editData=new Dictionary<Vector3Int,TerrainEditOutputData>();
+                          }
+                          dataForSavingToFile.Add(cCoord3,editData);
                          }
+                         dataForSavingToFile[cCoord3][vCoord3]=new TerrainEditOutputData(resultDensity,-resultDensity>=-isoLevel?MaterialId.Air:material);
+                         container.dirty.Add(cnkIdx3);
+                         //  TO DO: add neighbours that are dirty too
                  if(z==0){break;}
                 }}
                  if(x==0){break;}
@@ -134,6 +153,9 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           Monitor.Enter(syn);
          }
          try{
+          //  Write file safely here
+          stringBuilder.Clear();
+          FileStream fileStream;
          }catch{
           throw;
          }finally{
