@@ -160,7 +160,21 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
            stringBuilder.Clear();
            string fileName=string.Format(VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
            Log.DebugMessage("save edit data in fileName:"+fileName);
-           FileStream fileStream;
+           FileStream fileStream=new FileStream(fileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           StreamWriter fileStreamWriter=new StreamWriter(fileStream);
+           StreamReader fileStreamReader=new StreamReader(fileStream);
+           //  TO DO: read or write to file here then dispose
+           fileStream.Position=0L;
+           fileStreamReader.DiscardBufferedData();
+           string line;
+           while((line=fileStreamReader.ReadLine())!=null){
+            if(string.IsNullOrEmpty(line)){continue;}
+           }
+           foreach(var voxelEdited in editData){
+           }
+           //  dispose
+           fileStreamWriter.Dispose();
+           fileStreamReader.Dispose();
           }
          }catch{
           throw;
