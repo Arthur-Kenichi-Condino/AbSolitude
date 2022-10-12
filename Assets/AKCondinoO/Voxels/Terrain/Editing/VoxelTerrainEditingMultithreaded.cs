@@ -154,8 +154,14 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          }
          try{
           //  Write file safely here
-          stringBuilder.Clear();
-          FileStream fileStream;
+          foreach(var cCoordDataForSavingPair in dataForSavingToFile){
+           Vector2Int cCoord=cCoordDataForSavingPair.Key;
+           Dictionary<Vector3Int,TerrainEditOutputData>editData=cCoordDataForSavingPair.Value;
+           stringBuilder.Clear();
+           string fileName=string.Format(VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
+           Log.DebugMessage("save edit data in fileName:"+fileName);
+           FileStream fileStream;
+          }
          }catch{
           throw;
          }finally{
