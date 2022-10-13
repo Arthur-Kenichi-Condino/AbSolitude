@@ -26,6 +26,9 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
             internal TerrainEditOutputData(double density,MaterialId material){
              this.density=density;this.material=material;
             }
+            public override string ToString(){
+             return string.Format(CultureInfoUtil.en_US,"terrainEditOutputData={{ , }}");
+            }
         }
      internal readonly Queue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new Queue<Dictionary<Vector3Int,TerrainEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataFromFileToMerge=new();
@@ -171,7 +174,13 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
             if(string.IsNullOrEmpty(line)){continue;}
            }
            foreach(var voxelEdited in editData){
+            Vector3Int vCoord=voxelEdited.Key;
+            TerrainEditOutputData edit=voxelEdited.Value;
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ vCoord={0} , {{ {1} }} }} , endOfLine{2}",vCoord,edit.ToString(),Environment.NewLine);
            }
+           fileStream.SetLength(0L);
+           fileStreamWriter.Write(stringBuilder.ToString());
+           fileStreamWriter.Flush();
            //  dispose
            fileStreamWriter.Dispose();
            fileStreamReader.Dispose();
