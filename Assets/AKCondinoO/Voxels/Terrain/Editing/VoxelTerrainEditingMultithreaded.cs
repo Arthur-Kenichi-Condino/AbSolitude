@@ -12,6 +12,7 @@ using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingContainer;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
@@ -27,7 +28,22 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
              this.density=density;this.material=material;
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"terrainEditOutputData={{ , }}");
+             return string.Format(CultureInfoUtil.en_US,"terrainEditOutputData={{ density={0} , material={1} , }}",density,(ushort)material);
+            }
+            internal static TerrainEditOutputData Parse(string s){
+             TerrainEditOutputData result=new TerrainEditOutputData();
+             double density=0d;
+             MaterialId material=MaterialId.Air;
+             int densityStringStart=s.IndexOf("density=");
+             if(densityStringStart>=0){
+                densityStringStart+=8;
+              int densityStringEnd=s.IndexOf(" , ",densityStringStart);
+              string densityString=s.Substring(densityStringStart,densityStringEnd-densityStringStart);
+              Log.DebugMessage("densityString:"+densityString);
+             }
+             result.density=density;
+             result.material=material;
+             return result;
             }
         }
      internal readonly Queue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new Queue<Dictionary<Vector3Int,TerrainEditOutputData>>();
@@ -172,6 +188,20 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
            string line;
            while((line=fileStreamReader.ReadLine())!=null){
             if(string.IsNullOrEmpty(line)){continue;}
+            int vCoordStringStart=line.IndexOf("vCoord=(");
+            if(vCoordStringStart>=0){
+               vCoordStringStart+=8;
+             int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+             string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+             //Log.DebugMessage("vCoordString:"+vCoordString);
+             string[]xyzString=vCoordString.Split(',');
+             int x=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int y=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int z=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             Vector3Int vCoord=new Vector3Int(x,y,z);
+             int editStringStart=vCoordStringEnd+4;
+             editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+            }
            }
            foreach(var voxelEdited in editData){
             Vector3Int vCoord=voxelEdited.Key;
