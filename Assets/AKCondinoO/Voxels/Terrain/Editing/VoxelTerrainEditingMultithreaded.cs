@@ -201,6 +201,11 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
              Vector3Int vCoord=new Vector3Int(x,y,z);
              int editStringStart=vCoordStringEnd+4;
              editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+             if(editStringStart>=0){
+              int editStringEnd=line.IndexOf(" , }",editStringStart);
+              string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+              TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+             }
             }
            }
            foreach(var voxelEdited in editData){
