@@ -14,7 +14,9 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          base.Awake();
         }
         internal override void OnActivated(){
+         requiredSkills.Clear();
          requiredSkills.Add(typeof(GenerateHomunculus),new SkillData(){skill=typeof(GenerateHomunculus),level=10,});
+         requiredSlaves.Clear();
          requiredSlaves.Add(typeof(ArquimedesAI),
           new List<SlaveData>(){
            new SlaveData(){simType=typeof(ArquimedesAI),},

@@ -26,9 +26,11 @@ namespace AKCondinoO.Sims{
          }
          if(specificSpawnRequestsCooldown<=0f){
             specificSpawnRequestsCooldown=specificSpawnRequestsDelay;
-          if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
-           Log.DebugMessage("SimsMachine:call to current location:idArthurCondino:"+idArthurCondino);
-           SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+          if(Core.singleton.isServer){
+           if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
+            Log.DebugMessage("SimsMachine:call to current location:idArthurCondino:"+idArthurCondino);
+            SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+           }
           }
          }
         }

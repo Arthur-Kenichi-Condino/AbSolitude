@@ -8,12 +8,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActor:SimObject{
+     [SerializeField]GameObject simUMADataPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
         internal struct PersistentSimActorData{
@@ -54,7 +56,72 @@ namespace AKCondinoO.Sims.Actors{
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
+         private static readonly ConcurrentQueue<List<SkillData>>parsingSkillListPool=new ConcurrentQueue<List<SkillData>>();
+         private static readonly ConcurrentQueue<List<SlaveData>>parsingSlaveListPool=new ConcurrentQueue<List<SlaveData>>();
+            internal static PersistentSimActorData Parse(string s){
+             PersistentSimActorData persistentSimActorData=new PersistentSimActorData();
+             if(!parsingSkillListPool.TryDequeue(out List<SkillData>skillList)){
+              skillList=new List<SkillData>();
+             }
+             skillList.Clear();
+             if(!parsingSlaveListPool.TryDequeue(out List<SlaveData>slaveList)){
+              slaveList=new List<SlaveData>();
+             }
+             slaveList.Clear();
+             //Log.DebugMessage("s:"+s);
+             int skillsStringStart=s.IndexOf("skills={");
+             if(skillsStringStart>=0){
+                skillsStringStart+=8;
+              int skillsStringEnd=s.IndexOf("} , ",skillsStringStart);
+              string skillsString=s.Substring(skillsStringStart,skillsStringEnd-skillsStringStart);
+              int skillStringStart=0;
+              while((skillStringStart=skillsString.IndexOf("[",skillStringStart))>=0){
+               int skillTypeStringStart=skillStringStart+1;
+               int skillTypeStringEnd  =skillsString.IndexOf(",",skillTypeStringStart);
+               Type skillType=Type.GetType(skillsString.Substring(skillTypeStringStart,skillTypeStringEnd-skillTypeStringStart));
+               int skillLevelStringStart=skillTypeStringEnd+1;
+               int skillLevelStringEnd  =skillsString.IndexOf("],",skillLevelStringStart);
+               int skillLevel=int.Parse(skillsString.Substring(skillLevelStringStart,skillLevelStringEnd-skillLevelStringStart));
+               //Log.DebugMessage("skillType:"+skillType+";skillLevel:"+skillLevel);
+               SkillData skill=new SkillData(){
+                skill=skillType,
+                level=skillLevel,
+               };
+               skillList.Add(skill);
+               skillStringStart=skillLevelStringEnd+2;
+              }
+             }
+             int slavesStringStart=s.IndexOf("slaves={");
+             if(slavesStringStart>=0){
+                slavesStringStart+=8;
+              int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
+              string slavesString=s.Substring(slavesStringStart,slavesStringEnd-slavesStringStart);
+              Log.DebugMessage("slavesString:"+slavesString);
+              int slaveStringStart=0;
+              while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
+               int slaveSimTypeStringStart=slaveStringStart+1;
+               int slaveSimTypeStringEnd  =slavesString.IndexOf(",",slaveSimTypeStringStart);
+               Type slaveSimType=Type.GetType(slavesString.Substring(slaveSimTypeStringStart,slaveSimTypeStringEnd-slaveSimTypeStringStart));
+               int slaveIdNumberStringStart=slaveSimTypeStringEnd+1;
+               int slaveIdNumberStringEnd  =slavesString.IndexOf("],",slaveIdNumberStringStart);
+               ulong slaveIdNumber=ulong.Parse(slavesString.Substring(slaveIdNumberStringStart,slaveIdNumberStringEnd-slaveIdNumberStringStart));
+               SlaveData slave=new SlaveData(){
+                simType=slaveSimType,
+                number=slaveIdNumber,
+               };
+               slaveList.Add(slave);
+               slaveStringStart=slaveIdNumberStringEnd+2;
+              }
+             }
+             persistentSimActorData.skills=new ListWrapper<SkillData>(skillList);
+             persistentSimActorData.slaves=new ListWrapper<SlaveData>(slaveList);
+             parsingSkillListPool.Enqueue(skillList);
+             parsingSlaveListPool.Enqueue(slaveList);
+             return persistentSimActorData;
+            }
         }
+     internal DynamicCharacterAvatar simUMAData;
+      internal Vector3 simUMADataPosOffset;
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
@@ -65,6 +132,11 @@ namespace AKCondinoO.Sims.Actors{
        internal float heightCrouching;
      internal SimActorAnimatorController simActorAnimatorController;
         protected override void Awake(){
+         if(simUMADataPrefab!=null){
+          simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
+          simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
+          Log.DebugMessage("simUMADataPosOffset:"+simUMADataPosOffset);
+         }
          base.Awake();
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
@@ -94,8 +166,16 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
-         skills.Clear();
-         //  load skills from file here
+         skills.Clear();//  to do: pool skills before clearing the list
+         //  load skills from file here:
+         persistentSimActorData.skills.Reset();
+         while(persistentSimActorData.skills.MoveNext()){
+          SkillData skillData=persistentSimActorData.skills.Current;
+          GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[skillData.skill]);
+          Skill skill=skillGameObject.GetComponent<Skill>();
+          skill.level=skillData.level;
+          skills.Add(skill.GetType(),skill);
+         }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
            if(skill.Value.level<requiredSkill.level){
@@ -114,13 +194,16 @@ namespace AKCondinoO.Sims.Actors{
           skills.Add(skill.GetType(),skill);
          }
          requiredSkills.Clear();
-         if(this is BaseAI actorAI){
-          foreach(var skill in skills){
-           skill.Value.actor=actorAI;
-          }
+         foreach(var skill in skills){
+          skill.Value.actor=this;
          }
          slaves.Clear();
-         //  load slaves from file here
+         //  load slaves from file here:
+         persistentSimActorData.slaves.Reset();
+         while(persistentSimActorData.slaves.MoveNext()){
+          SlaveData slaveData=persistentSimActorData.slaves.Current;
+          slaves.Add((slaveData.simType,slaveData.number));
+         }
          foreach(var slave in slaves){
           if(requiredSlaves.TryGetValue(slave.simType,out List<SlaveData>requiredSlavesForType)){
            //  TO DO: do some checks and set variables here
@@ -145,12 +228,14 @@ namespace AKCondinoO.Sims.Actors{
           if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
            transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
            navMeshAgent.enabled=true;
-           Log.DebugMessage("navMeshAgent is enabled");
+           //Log.DebugMessage("navMeshAgent is enabled");
           }
          }
         }
         void DisableNavMeshAgent(){
          navMeshAgent.enabled=false;
+        }
+        internal virtual void OnSkillUsed(Skill skill){
         }
      internal bool isUsingAI=true;
      internal virtual float moveVelocity{
@@ -203,18 +288,24 @@ namespace AKCondinoO.Sims.Actors{
           return result;
          }
          bool shouldCrouch=false;//  is crouching required?
-         if(isUsingAI){
-          EnableNavMeshAgent();
-          if(!navMeshAgent.isOnNavMesh){
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(isUsingAI){
+            EnableNavMeshAgent();
+            if(!navMeshAgent.isOnNavMesh){
+             DisableNavMeshAgent();
+            }
+            if(navMeshAgent.enabled){
+             AI();
+            }
+           }else{
+            DisableNavMeshAgent();
+            if(simActorCharacterController!=null){
+               simActorCharacterController.ManualUpdate();
+            }
+           }
+          }else{
            DisableNavMeshAgent();
-          }
-          if(navMeshAgent.enabled){
-           AI();
-          }
-         }else{
-          DisableNavMeshAgent();
-          if(simActorCharacterController!=null){
-             simActorCharacterController.ManualUpdate();
           }
          }
          if(transform.hasChanged){
@@ -232,29 +323,33 @@ namespace AKCondinoO.Sims.Actors{
            shouldCrouch=true;
           }
          }
-         if(shouldCrouch){
-          if(wasCrouchingBeforeShouldCrouch==null){
-             wasCrouchingBeforeShouldCrouch=crouching;
-          }
-          if(!crouching){
-           OnToggleCrouching();
-          }
-         }else{
-          if(wasCrouchingBeforeShouldCrouch!=null){
-           if(!wasCrouchingBeforeShouldCrouch.Value){
-            if(crouching){
-             OnToggleCrouching();
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(shouldCrouch){
+            if(wasCrouchingBeforeShouldCrouch==null){
+               wasCrouchingBeforeShouldCrouch=crouching;
             }
-           }else{
             if(!crouching){
              OnToggleCrouching();
             }
+           }else{
+            if(wasCrouchingBeforeShouldCrouch!=null){
+             if(!wasCrouchingBeforeShouldCrouch.Value){
+              if(crouching){
+               OnToggleCrouching();
+              }
+             }else{
+              if(!crouching){
+               OnToggleCrouching();
+              }
+             }
+               wasCrouchingBeforeShouldCrouch=null;
+            }
+            if(DEBUG_TOGGLE_CROUCHING){
+               DEBUG_TOGGLE_CROUCHING=false;
+             OnToggleCrouching();
+            }
            }
-             wasCrouchingBeforeShouldCrouch=null;
-          }
-          if(DEBUG_TOGGLE_CROUCHING){
-             DEBUG_TOGGLE_CROUCHING=false;
-           OnToggleCrouching();
           }
          }
          lastForward=transform.forward;

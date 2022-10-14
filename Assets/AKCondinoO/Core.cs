@@ -24,7 +24,15 @@ namespace AKCondinoO{
     internal class Core:MonoBehaviour{
      internal static Core singleton;
      internal NetworkManager netManager;
+      internal int maxConnections=112;
+      //  do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// <summary>
+      ///  Do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// </summary>
       internal bool isServer=false;
+      /// <summary>
+      ///  Do not test for !isServer or !isClient: this could also mean the game didn't start the netManager yet
+      /// </summary>
       internal bool isClient=false;
      internal static int threadCount;
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
@@ -43,6 +51,22 @@ namespace AKCondinoO{
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
+         isServer=false;
+         isClient=false;
+         GameObject netManagerGameObject;
+         if((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
+          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null
+         ){
+          Log.Warning("NetworkManager not found: going to EntryScene");
+          SceneManager.LoadScene("EntryScene",LoadSceneMode.Single);
+         }else{
+          isServer=netManager.IsServer||netManager.IsHost;
+          isClient=netManager.IsClient&&!netManager.IsHost;
+          Log.DebugMessage("MainMenu.netManagerInitialized:"+MainMenu.netManagerInitialized+";isServer:"+isServer+";isClient:"+isClient);
+         }
+         if(!isServer&&!isClient){
+          //Log.Error("harmless error:!isServer&&!isClient:engine will reload the game entry scene now");
+         }
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
           { 0,GameplayerManagement.singleton},
           { 1,InputHandler        .singleton},
@@ -71,17 +95,8 @@ namespace AKCondinoO{
           Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
-         Gameplayer.main.Init();
-         GameObject netManagerGameObject;
-         if((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
-          (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null
-         ){
-          Log.Warning("NetworkManager not found: going to EntryScene");
-          SceneManager.LoadScene("EntryScene",LoadSceneMode.Single);
-         }else{
-          isServer=netManager.IsServer||netManager.IsHost;
-          isClient=netManager.IsClient&&!netManager.IsHost;
-          Log.DebugMessage("MainMenu.netManagerInitialized:"+MainMenu.netManagerInitialized+";isServer:"+isServer+";isClient:"+isClient);
+         if(Gameplayer.main!=null){
+            Gameplayer.main.Init(netManager.LocalClientId);
          }
         }
         void OnDestroy(){
@@ -112,6 +127,8 @@ namespace AKCondinoO{
                singletonPropertyInfo.SetValue(null,null);
                Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
               }
+              Gameplayer.main=null;//  also unset current player prefab that is no more active
+              //  game was deinitialized
               singleton=null;
          }
         }

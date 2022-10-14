@@ -106,9 +106,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              minSpacing.z=Mathf.Max(minSpacing.z,1f);
              Vector3 maxSpacing=simObjectPicked.Value.simObjectSettings.maxSpacing;
              maxSpacing=Vector3.Scale(maxSpacing,modifiers.scale);
-             maxSpacing.x=MathF.Max(maxSpacing.x,1f);
-             maxSpacing.y=MathF.Max(maxSpacing.y,1f);
-             maxSpacing.z=MathF.Max(maxSpacing.z,1f);
+             maxSpacing.x=Mathf.Max(maxSpacing.x,1f);
+             maxSpacing.y=Mathf.Max(maxSpacing.y,1f);
+             maxSpacing.z=Mathf.Max(maxSpacing.z,1f);
              if(Width-1-vCoord1.x<=Mathf.CeilToInt(minSpacing.x)){
               continue;
              }

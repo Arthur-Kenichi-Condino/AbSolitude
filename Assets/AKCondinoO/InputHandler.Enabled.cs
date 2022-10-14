@@ -9,7 +9,7 @@ namespace AKCondinoO{
             }
          internal static readonly float[]MOUSE_ROTATION_DELTA_X={0,0};
          internal static readonly float[]MOUSE_ROTATION_DELTA_Y={0,0};
-         internal static readonly EnabledState PAUSE=new EnabledState{curState=true,lastState=true};
+         internal static readonly EnabledState RELEASE_MOUSE=new EnabledState{curState=true,lastState=true};
          internal static readonly EnabledState FORWARD =new EnabledState{curState=false,lastState=false};
          internal static readonly EnabledState BACKWARD=new EnabledState{curState=false,lastState=false};
          internal static readonly EnabledState RIGHT   =new EnabledState{curState=false,lastState=false};

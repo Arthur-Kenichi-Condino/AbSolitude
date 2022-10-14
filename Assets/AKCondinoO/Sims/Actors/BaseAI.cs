@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
@@ -10,7 +10,8 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
      protected readonly System.Random dice=new System.Random();
-        internal void OnSkillUsed(Skill skill){
+        internal override void OnSkillUsed(Skill skill){
+         base.OnSkillUsed(skill);
          Log.DebugMessage("OnSkillUsed:"+skill);
          if(MySkill==skill){
           Log.DebugMessage("OnSkillUsed:MySkill==skill:clear used skill");

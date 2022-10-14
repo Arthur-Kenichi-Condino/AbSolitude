@@ -7,26 +7,41 @@ using AKCondinoO.Voxels.Terrain;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO{
-    internal class Gameplayer:MonoBehaviour{
+    internal class Gameplayer:NetworkBehaviour{
      internal static Gameplayer main;
+     internal NetworkObject netObj;
+      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
      internal Vector2Int cCoord,cCoord_Previous;
      internal Vector2Int cnkRgn;
      internal Bounds activeWorldBounds;
+     internal Bounds worldBounds;
      internal NavMeshData[]navMeshData;
       internal NavMeshDataInstance[]navMeshInstance;
        internal AsyncOperation[]navMeshAsyncOperation;
         void Awake(){
+         netObj=GetComponent<NetworkObject>();
         }
-        internal void Init(){
+        internal void Init(ulong clientId){
          activeWorldBounds=new Bounds(Vector3.zero,
           new Vector3(
            (instantiationDistance.x*2+1)*Width,
            Height,
            (instantiationDistance.y*2+1)*Depth
+          )
+         );
+         worldBounds=new Bounds(Vector3.zero,
+          new Vector3(
+           (expropriationDistance.x*2+1)*Width,
+           Height,
+           (expropriationDistance.y*2+1)*Depth
           )
          );
          int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
@@ -42,10 +57,21 @@ namespace AKCondinoO{
           }else{
            Log.DebugMessage("navMeshValidation:success!");
           }
-          navMeshData[agentType]=new NavMeshData(NavMeshHelper.navMeshBuildSettings[agentType].agentTypeID){
-           hideFlags=HideFlags.None,
-          };
-          navMeshInstance[agentType]=NavMesh.AddNavMeshData(navMeshData[agentType]);
+          if(this==Gameplayer.main){
+           navMeshData[agentType]=new NavMeshData(NavMeshHelper.navMeshBuildSettings[agentType].agentTypeID){
+            hideFlags=HideFlags.None,
+           };
+           navMeshInstance[agentType]=NavMesh.AddNavMeshData(navMeshData[agentType]);
+          }
+         }
+         if(Core.singleton.isServer){
+          if(this==Gameplayer.main){
+           netObj.Spawn(destroyWithScene:false);
+           netObj.DontDestroyWithOwner=true;
+          }else{
+           netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           netObj.DontDestroyWithOwner=true;
+          }
          }
          cCoord_Previous=cCoord=vecPosTocCoord(transform.position);
          OnCoordinatesChanged();
@@ -53,7 +79,17 @@ namespace AKCondinoO{
         internal void OnRemove(){
          int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
          for(int agentType=0;agentType<navMeshSettingsLength;++agentType){
-          NavMesh.RemoveNavMeshData(navMeshInstance[agentType]);
+          if(this==Gameplayer.main){
+           NavMesh.RemoveNavMeshData(navMeshInstance[agentType]);
+          }
+         }
+         if(this!=null){
+          if(Core.singleton.isServer){
+           if(Core.singleton.netManager.SpawnManager!=null){
+            netObj.DontDestroyWithOwner=true;
+            netObj.Despawn(destroy:false);
+           }
+          }
          }
         }
         internal void OnVoxelTerrainChunkBaked(VoxelTerrainChunk cnk){
@@ -77,7 +113,9 @@ namespace AKCondinoO{
      bool navMeshDirty;
       bool navMeshSourcesDirty;
         void Update(){
-         transform.position=Camera.main.transform.position;
+         if(this==Gameplayer.main){
+          transform.position=Camera.main.transform.position;
+         }
          if(transform.hasChanged){
             transform.hasChanged=false;
           pendingCoordinatesUpdate=true;
@@ -108,7 +146,10 @@ namespace AKCondinoO{
         void OnCoordinatesChanged(){
          cnkRgn=cCoordTocnkRgn(cCoord);
          activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
-         VoxelSystem.singleton.generationRequests.Add(this);
+         worldBounds.center=activeWorldBounds.center;
+         if(this==Gameplayer.main){
+          VoxelSystem.singleton.generationRequests.Add(this);
+         }
         }
      [SerializeField]float navMeshDataAsyncUpdateInterval=1.0f;
      float navMeshDataAsyncUpdateTimer=0.0f;
@@ -129,7 +170,9 @@ namespace AKCondinoO{
           }
           int navMeshSettingsLength=NavMeshHelper.navMeshBuildSettings.Length;
           for(int i=0;i<navMeshSettingsLength;++i){
-           navMeshAsyncOperation[i]=NavMeshBuilder.UpdateNavMeshDataAsync(navMeshData[i],NavMeshHelper.navMeshBuildSettings[i],sources,activeWorldBounds);
+           if(this==Gameplayer.main){
+            navMeshAsyncOperation[i]=NavMeshBuilder.UpdateNavMeshDataAsync(navMeshData[i],NavMeshHelper.navMeshBuildSettings[i],sources,activeWorldBounds);
+           }
           }
           return true;
          }
@@ -142,5 +185,10 @@ namespace AKCondinoO{
          }
          return false;
         }
+        #if UNITY_EDITOR
+        void OnDrawGizmos(){
+         Util.DrawBounds(worldBounds,Color.blue);
+        }
+        #endif
     }
 }
