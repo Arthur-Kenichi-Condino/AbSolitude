@@ -114,7 +114,7 @@ namespace AKCondinoO{
                  }
              }
          }
-         Enabled.PAUSE.curState=Enabled.PAUSE.curState||escape||!focus;
+         Enabled.RELEASE_MOUSE.curState=Enabled.RELEASE_MOUSE.curState||escape||!focus;
          Enabled.MOUSE_ROTATION_DELTA_X[1]=Enabled.MOUSE_ROTATION_DELTA_X[0];Enabled.MOUSE_ROTATION_DELTA_X[0]=Command.ROTATION_SENSITIVITY_X*Input.GetAxis("Mouse X");
          Enabled.MOUSE_ROTATION_DELTA_Y[1]=Enabled.MOUSE_ROTATION_DELTA_Y[0];Enabled.MOUSE_ROTATION_DELTA_Y[0]=Command.ROTATION_SENSITIVITY_Y*Input.GetAxis("Mouse Y");
         }

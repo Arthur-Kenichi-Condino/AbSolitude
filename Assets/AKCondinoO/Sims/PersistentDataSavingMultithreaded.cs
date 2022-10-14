@@ -86,6 +86,9 @@ namespace AKCondinoO.Sims{
           Type t=kvp1.Key;
           var idPersistentDataListBycnkIdx=kvp1.Value;
           processedcnkIdx.Clear();
+          if(!simObjectFileStream.ContainsKey(t)){
+           continue;
+          }
           FileStream fileStream=this.simObjectFileStream[t];
           StreamWriter fileStreamWriter=this.simObjectFileStreamWriter[t];
           StreamReader fileStreamReader=this.simObjectFileStreamReader[t];
@@ -156,6 +159,9 @@ namespace AKCondinoO.Sims{
           Type t=typePersistentSimActorDataToSavePair.Key;
           var persistentSimActorDataToSave=typePersistentSimActorDataToSavePair.Value;
           Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
+          if(!simActorFileStream.ContainsKey(t)){
+           continue;
+          }
           FileStream fileStream=this.simActorFileStream[t];
           StreamWriter fileStreamWriter=this.simActorFileStreamWriter[t];
           StreamReader fileStreamReader=this.simActorFileStreamReader[t];
@@ -168,7 +174,7 @@ namespace AKCondinoO.Sims{
            int idStringStart=line.IndexOf("id=")+3;
            int idStringEnd  =line.IndexOf(" , ",idStringStart);
            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-           Log.DebugMessage("id:"+id);
+           //Log.DebugMessage("id:"+id);
            if(!persistentSimActorDataToSave.ContainsKey(id)){
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
            }
@@ -184,6 +190,7 @@ namespace AKCondinoO.Sims{
           persistentSimActorDataToSave.Clear();
          }
          #region releasedIds
+         if(releasedIdsFileStream!=null){
           releasedIdsStringBuilder.Clear();
           foreach(var typeIdsToReleasePair in container.idsToRelease){
            Type t=typeIdsToReleasePair.Key;
@@ -205,18 +212,21 @@ namespace AKCondinoO.Sims{
           releasedIdsFileStream.SetLength(0L);
           releasedIdsFileStreamWriter.Write(releasedIdsStringBuilder.ToString());
           releasedIdsFileStreamWriter.Flush();
-         #endregion
-         idsStringBuilder.Clear();
-         foreach(var typeIdsPair in container.persistentIds){
-          Type t=typeIdsPair.Key;
-          ulong nextId=typeIdsPair.Value;
-          if(nextId>0){
-           idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
-          }
          }
-         idsFileStream.SetLength(0L);
-         idsFileStreamWriter.Write(idsStringBuilder.ToString());
-         idsFileStreamWriter.Flush();
+         #endregion
+         if(idsFileStream!=null){
+          idsStringBuilder.Clear();
+          foreach(var typeIdsPair in container.persistentIds){
+           Type t=typeIdsPair.Key;
+           ulong nextId=typeIdsPair.Value;
+           if(nextId>0){
+            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
+           }
+          }
+          idsFileStream.SetLength(0L);
+          idsFileStreamWriter.Write(idsStringBuilder.ToString());
+          idsFileStreamWriter.Flush();
+         }
         }
     }
 }

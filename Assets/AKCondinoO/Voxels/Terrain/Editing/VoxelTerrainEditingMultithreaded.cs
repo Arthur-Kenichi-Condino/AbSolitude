@@ -10,6 +10,10 @@ using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingContainer;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+using System.Text;
+using System.IO;
+using System.Globalization;
+
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
      internal object[]terrainSynchronization;
@@ -18,12 +22,34 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
     }
     internal class VoxelTerrainEditingMultithreaded:BaseMultithreaded<VoxelTerrainEditingContainer>{
         internal struct TerrainEditOutputData{
-         internal double density;
-         internal MaterialId material;
+         public double density;
+         public MaterialId material;
+            internal TerrainEditOutputData(double density,MaterialId material){
+             this.density=density;this.material=material;
+            }
+            public override string ToString(){
+             return string.Format(CultureInfoUtil.en_US,"terrainEditOutputData={{ density={0} , material={1} , }}",density,(ushort)material);
+            }
+            internal static TerrainEditOutputData Parse(string s){
+             TerrainEditOutputData result=new TerrainEditOutputData();
+             double density=0d;
+             MaterialId material=MaterialId.Air;
+             int densityStringStart=s.IndexOf("density=");
+             if(densityStringStart>=0){
+                densityStringStart+=8;
+              int densityStringEnd=s.IndexOf(" , ",densityStringStart);
+              string densityString=s.Substring(densityStringStart,densityStringEnd-densityStringStart);
+              Log.DebugMessage("densityString:"+densityString);
+             }
+             result.density=density;
+             result.material=material;
+             return result;
+            }
         }
      internal readonly Queue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new Queue<Dictionary<Vector3Int,TerrainEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataFromFileToMerge=new();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,TerrainEditOutputData>>dataForSavingToFile=new();
+     readonly StringBuilder stringBuilder=new StringBuilder();
         protected override void Cleanup(){
          foreach(var editData in dataFromFileToMerge){editData.Value.Clear();terrainEditOutputDataPool.Enqueue(editData.Value);}
          dataFromFileToMerge.Clear();
@@ -95,6 +121,11 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                          }
                          //  TO DO: get current file data to merge
                          if(!dataFromFileToMerge.ContainsKey(cCoord3)){
+                          if(!terrainEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,TerrainEditOutputData>editData)){
+                           editData=new Dictionary<Vector3Int,TerrainEditOutputData>();
+                          }
+                          dataFromFileToMerge.Add(cCoord3,editData);
+                          //  TO DO: load data here
                          }
                          Voxel currentVoxel;
                          if(dataFromFileToMerge.ContainsKey(cCoord3)&&dataFromFileToMerge[cCoord3].ContainsKey(vCoord3)){
@@ -118,7 +149,14 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                           resultDensity=-resultDensity;
                          }
                          if(!dataForSavingToFile.ContainsKey(cCoord3)){
+                          if(!terrainEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,TerrainEditOutputData>editData)){
+                           editData=new Dictionary<Vector3Int,TerrainEditOutputData>();
+                          }
+                          dataForSavingToFile.Add(cCoord3,editData);
                          }
+                         dataForSavingToFile[cCoord3][vCoord3]=new TerrainEditOutputData(resultDensity,-resultDensity>=-isoLevel?MaterialId.Air:material);
+                         container.dirty.Add(cnkIdx3);
+                         //  TO DO: add neighbours that are dirty too
                  if(z==0){break;}
                 }}
                  if(x==0){break;}
@@ -134,6 +172,54 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           Monitor.Enter(syn);
          }
          try{
+          //  Write file safely here
+          foreach(var cCoordDataForSavingPair in dataForSavingToFile){
+           Vector2Int cCoord=cCoordDataForSavingPair.Key;
+           Dictionary<Vector3Int,TerrainEditOutputData>editData=cCoordDataForSavingPair.Value;
+           stringBuilder.Clear();
+           string fileName=string.Format(VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
+           Log.DebugMessage("save edit data in fileName:"+fileName);
+           FileStream fileStream=new FileStream(fileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           StreamWriter fileStreamWriter=new StreamWriter(fileStream);
+           StreamReader fileStreamReader=new StreamReader(fileStream);
+           //  TO DO: read or write to file here then dispose
+           fileStream.Position=0L;
+           fileStreamReader.DiscardBufferedData();
+           string line;
+           while((line=fileStreamReader.ReadLine())!=null){
+            if(string.IsNullOrEmpty(line)){continue;}
+            int vCoordStringStart=line.IndexOf("vCoord=(");
+            if(vCoordStringStart>=0){
+               vCoordStringStart+=8;
+             int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+             string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+             //Log.DebugMessage("vCoordString:"+vCoordString);
+             string[]xyzString=vCoordString.Split(',');
+             int x=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int y=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int z=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             Vector3Int vCoord=new Vector3Int(x,y,z);
+             int editStringStart=vCoordStringEnd+4;
+             editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+             if(editStringStart>=0){
+              int editStringEnd=line.IndexOf(" , }",editStringStart);
+              string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+              TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+             }
+            }
+           }
+           foreach(var voxelEdited in editData){
+            Vector3Int vCoord=voxelEdited.Key;
+            TerrainEditOutputData edit=voxelEdited.Value;
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ vCoord={0} , {{ {1} }} }} , endOfLine{2}",vCoord,edit.ToString(),Environment.NewLine);
+           }
+           fileStream.SetLength(0L);
+           fileStreamWriter.Write(stringBuilder.ToString());
+           fileStreamWriter.Flush();
+           //  dispose
+           fileStreamWriter.Dispose();
+           fileStreamReader.Dispose();
+          }
          }catch{
           throw;
          }finally{

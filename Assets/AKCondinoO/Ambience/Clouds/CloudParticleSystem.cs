@@ -19,8 +19,8 @@ namespace AKCondinoO.Ambience.Clouds{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          cloudsCamera=GetComponentInChildren<CloudsCamera>();
-         Log.DebugMessage("cloudsCamera:"+cloudsCamera);
-         MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponent<MeshRenderer>();
+         //Log.DebugMessage("cloudsCamera:"+cloudsCamera);
+         MeshRenderer prefabRenderer=cloudParticlePrefab.GetComponentInChildren<MeshRenderer>();
          sharedMaterial=prefabRenderer.sharedMaterial;
          sharedColor=sharedMaterial.GetColor("_TintColor");
         }
@@ -56,19 +56,49 @@ namespace AKCondinoO.Ambience.Clouds{
          [SerializeField]internal float minIncrementSpeed=.0125f;
          [SerializeField]internal float maxIncrementSpeed=.025f;
          [SerializeField]internal float reverseChance=0.125f;
-         [SerializeField]internal float reverseChanceInterval=10f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
+        }
+     [SerializeField]internal CloudParticleAngleSettings angleSettings;
+        [Serializable]internal class CloudParticleAngleSettings{
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(0.0f,0.0f,-1.0f);
+         [SerializeField]internal Vector3 maxIncrementSpeed=new Vector3(0.0f,0.0f,1.0f);
+         [SerializeField]internal float reverseChance=.125f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
         }
      [SerializeField]internal CloudParticleOrbitSettings orbitSettings;
         [Serializable]internal class CloudParticleOrbitSettings{
-         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(.05f,.05f,.05f);
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(-2.0f,-2.0f,0.0f);
+         [SerializeField]internal Vector3 maxIncrementSpeed=new Vector3(2.0f,2.0f,0.0f);
+         [SerializeField]internal float reverseChance=.125f;
+         [SerializeField]internal float reverseInterval=5f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=5f;
         }
      [SerializeField]internal CloudParticleDistanceSettings distanceSettings;
         [Serializable]internal class CloudParticleDistanceSettings{
          [SerializeField]internal float min=1f;
-         [SerializeField]internal float max=10f;
+         [SerializeField]internal float max=2f;
          [SerializeField]internal float minIncrementSpeed=0.05f;
+         [SerializeField]internal float maxIncrementSpeed=0.1f;
          [SerializeField]internal float reverseChance=.125f;
-         [SerializeField]internal float reverseChanceInterval=10f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
+        }
+     [SerializeField]internal CloudParticleScaleSettings scaleSettings;
+        [Serializable]internal class CloudParticleScaleSettings{
+         [SerializeField]internal Vector3 min=new Vector3(2.0f,2.0f,2.0f);
+         [SerializeField]internal Vector3 max=new Vector3(3.0f,3.0f,3.0f);
+         [SerializeField]internal Vector3 minIncrementSpeed=new Vector3(.0125f,.0125f,.0125f);
+         [SerializeField]internal Vector3 maxIncrementSpeed=new Vector3(.125f,.125f,.125f);
+         [SerializeField]internal float reverseChance=.125f;
+         [SerializeField]internal float reverseInterval=10f;
+         [SerializeField]internal float changeIncrementSpeedValueChance=.125f;
+         [SerializeField]internal float changeIncrementSpeedValueInterval=10f;
         }
     }
 }

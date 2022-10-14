@@ -135,19 +135,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloudParticlePrefab: {fileID: 114096974267340580, guid: 055ba01762f51294e92a986d0ccbae70, type: 3}
   maxParticles: 10
-  spawnInterval: 5
+  spawnInterval: 1
   alphaSettings:
     min: 0.05
     max: 0.4
     minIncrementSpeed: 0.0125
     maxIncrementSpeed: 0.025
     reverseChance: 0.125
-    reverseChanceInterval: 10
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10
+  angleSettings:
+    minIncrementSpeed: {x: 0, y: 0, z: -1}
+    maxIncrementSpeed: {x: 0, y: 0, z: 1}
+    reverseChance: 0.125
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10
   orbitSettings:
-    minIncrementSpeed: {x: 0.05, y: 0.05, z: 0.05}
+    minIncrementSpeed: {x: -2, y: -2, z: 0}
+    maxIncrementSpeed: {x: 2, y: 2, z: 0}
+    reverseChance: 0.125
+    reverseInterval: 5
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 5
   distanceSettings:
     min: 1
-    max: 10
+    max: 2
     minIncrementSpeed: 0.05
+    maxIncrementSpeed: 0.1
     reverseChance: 0.125
-    reverseChanceInterval: 10
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10
+  scaleSettings:
+    min: {x: 2, y: 2, z: 2}
+    max: {x: 3, y: 3, z: 3}
+    minIncrementSpeed: {x: 0.0125, y: 0.0125, z: 0.0125}
+    maxIncrementSpeed: {x: 0.125, y: 0.125, z: 0.125}
+    reverseChance: 0.125
+    reverseInterval: 10
+    changeIncrementSpeedValueChance: 0.125
+    changeIncrementSpeedValueInterval: 10

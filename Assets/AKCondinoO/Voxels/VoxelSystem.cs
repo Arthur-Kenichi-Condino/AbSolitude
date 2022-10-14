@@ -106,19 +106,21 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainEditingMultithreaded.Stop=false;
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
         }
+     internal int chunkPoolMultiplier=1;
         public void Init(){
-         chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
-         Directory.CreateDirectory(chunkStatePath);
-         chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
-         for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
-          FileStream fileStream;
+         int poolSize=chunkPoolMultiplier*(expropriationDistance.x*2+1)*
+                                          (expropriationDistance.y*2+1);
+         if(Core.singleton.isServer){
+          chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
+          Directory.CreateDirectory(chunkStatePath);
+          chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
+          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
+           FileStream fileStream;
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStream=fileStream=new FileStream(chunkStateFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter=new StreamWriter(fileStream);
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader=new StreamReader(fileStream);
+          }
          }
-         int maxConnections=1;
-         int poolSize=maxConnections*(expropriationDistance.x*2+1)
-                                    *(expropriationDistance.y*2+1);
          terrainSynchronization.Clear();
          terrain=new VoxelTerrainChunk[poolSize];
          for(int i=0;i<terrain.Length;++i){
@@ -129,12 +131,14 @@ namespace AKCondinoO.Voxels{
          }
          VoxelTerrainEditing.singleton.terrainEditingBG.terrainSynchronization=terrainSynchronization.Values.ToArray();
          AtlasHelper.SetAtlasData();
-         biome.Seed=0;
-         proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
+         if(Core.singleton.isServer){
+          biome.Seed=0;
+          proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
+         }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
-         if(this!=null){
+         if(this!=null&&proceduralGenerationCoroutine!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }
          if(terrain!=null){
@@ -149,8 +153,10 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=true;
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
+          if(Core.singleton.isServer){
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter.Dispose();
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader.Dispose();
+          }
          }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
@@ -164,7 +170,9 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainEditingMultithreaded.Stop=true;
          terrainEditingBGThread.Wait();
          VoxelTerrainEditing.singleton.terrainEditingBG.Dispose();
-         biome.DisposeModules();
+         if(proceduralGenerationCoroutine!=null){
+          biome.DisposeModules();
+         }
         }
         void OnDestroy(){
         }

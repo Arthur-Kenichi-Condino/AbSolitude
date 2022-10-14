@@ -5,18 +5,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
-
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditing:MonoBehaviour,ISingletonInitialization{
      internal static VoxelTerrainEditing singleton{get;set;}
      internal static string terrainEditingPath;
+     internal static string terrainEditingFileFormat="{0}chunkEdits.{1}.{2}.txt";
      internal VoxelTerrainEditingContainer terrainEditingBG=new VoxelTerrainEditingContainer();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
+         terrainEditingPath=string.Format("{0}{1}",Core.savePath,"ChunkEdits/");
+         Directory.CreateDirectory(terrainEditingPath);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
@@ -103,6 +106,11 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
         bool OnTerrainEditingApplied(){
          if(terrainEditingBG.IsCompleted(VoxelSystem.singleton.terrainEditingBGThread.IsRunning)){
           //  TO DO: refresh chunks...
+          foreach(int cnkIdx in terrainEditingBG.dirty){
+           if(VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)){
+            cnk.OnEdited();
+           }
+          }
           return true;
          }
          return false;

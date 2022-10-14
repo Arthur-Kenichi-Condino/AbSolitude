@@ -72,7 +72,63 @@ namespace AKCondinoO.Sims{
              return persistentData;
             }
         }
+     internal NetworkObject netObj;
+     internal Queue<NetworkObject>clientSidePooling=null;
      internal Gameplayer owner;
+      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
+       private void OnClientSideNetPositionValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isClient){
+         if(!IsOwner){
+          transform.position=current;
+         }
+        }
+       }
+       private void OnServerSideNetPositionValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.position=current;
+         }
+        }
+       }
+      private readonly NetworkVariable<Quaternion>netRotation=new NetworkVariable<Quaternion>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
+       private void OnClientSideNetRotationValueChanged(Quaternion previous,Quaternion current){
+        if(Core.singleton.isClient){
+         if(!IsOwner){
+          transform.rotation=current;
+         }
+        }
+       }
+       private void OnServerSideNetRotationValueChanged(Quaternion previous,Quaternion current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.rotation=current;
+         }
+        }
+       }
+      private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner
+      );
+       private void OnClientSideNetScaleValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isClient){
+         if(!IsOwner){
+          transform.localScale=current;
+         }
+        }
+       }
+       private void OnServerSideNetScaleValueChanged(Vector3 previous,Vector3 current){
+        if(Core.singleton.isServer){
+         if(!IsOwner){
+          transform.localScale=current;
+         }
+        }
+       }
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
@@ -82,6 +138,7 @@ namespace AKCondinoO.Sims{
      internal Bounds localBounds;
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
+         netObj=GetComponent<NetworkObject>();
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){
@@ -100,17 +157,74 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
-         masterObject=GetMaster();
-         if(masterObject!=null&&masterObject is SimActor masterActor){
-          masterActor.SetSlave(this);
+         if(Core.singleton.isServer){
+          masterObject=GetMaster();
+          if(masterObject!=null&&masterObject is SimActor masterActor){
+           masterActor.SetSlave(this);
+          }
          }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
-         foreach(var gameplayer in GameplayerManagement.singleton.all){
-          gameplayer.Value.OnSimObjectSpawned(this);
+         if(Core.singleton.isServer){
+          if(!netObj.IsSpawned){
+           //Log.DebugMessage("netObj should be spawned now");
+           netObj.Spawn(destroyWithScene:false);
+           netObj.DontDestroyWithOwner=true;
+          }else if(IsOwner){
+           Log.DebugMessage("set net variables");
+           netPosition.Value=persistentData.position  ;
+           netRotation.Value=persistentData.rotation  ;
+           netScale   .Value=persistentData.localScale;
+          }
+          foreach(var gameplayer in GameplayerManagement.singleton.all){
+           ulong clientId=gameplayer.Key;
+           gameplayer.Value.OnSimObjectSpawned(this);
+          }
          }
+        }
+        public override void OnNetworkSpawn(){
+         base.OnNetworkSpawn();
+         if(Core.singleton.isServer){
+          //Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
+          if(IsOwner){
+           //Log.DebugMessage("init net variables");
+           netPosition.Value=persistentData.position  ;
+           netRotation.Value=persistentData.rotation  ;
+           netScale   .Value=persistentData.localScale;
+          }
+          OnServerSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
+          netPosition.OnValueChanged+=OnServerSideNetPositionValueChanged;
+          OnServerSideNetRotationValueChanged(transform.rotation  ,netRotation.Value);//  update on spawn
+          netRotation.OnValueChanged+=OnServerSideNetRotationValueChanged;
+          OnServerSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
+          netScale   .OnValueChanged+=OnServerSideNetScaleValueChanged   ;
+         }
+         if(Core.singleton.isClient){
+          Log.DebugMessage("SimObject:OnNetworkSpawn:isClient");
+          OnClientSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
+          netPosition.OnValueChanged+=OnClientSideNetPositionValueChanged;
+          OnClientSideNetRotationValueChanged(transform.rotation  ,netRotation.Value);//  update on spawn
+          netRotation.OnValueChanged+=OnClientSideNetRotationValueChanged;
+          OnClientSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
+          netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged   ;
+         }
+        }
+        public override void OnNetworkDespawn(){
+         if(Core.singleton.isServer){
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
+          netPosition.OnValueChanged-=OnServerSideNetPositionValueChanged;
+          netRotation.OnValueChanged-=OnServerSideNetRotationValueChanged;
+          netScale   .OnValueChanged-=OnServerSideNetScaleValueChanged   ;
+         }
+         if(Core.singleton.isClient){
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
+          netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
+          netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
+          netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
+         }
+         base.OnNetworkDespawn();
         }
         internal SimObject GetMaster(){
          if(master!=null&&SimObjectManager.singleton.active.TryGetValue(master.Value,out SimObject masterObject)){
@@ -151,6 +265,13 @@ namespace AKCondinoO.Sims{
          if(transform.hasChanged){
           TransformBoundsVertices();
           persistentData.UpdateData(this);
+          if(Core.singleton.isServer){
+           if(IsOwner){
+            netPosition.Value=persistentData.position  ;
+            netRotation.Value=persistentData.rotation  ;
+            netScale   .Value=persistentData.localScale;
+           }
+          }
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
           foreach(var gameplayer in GameplayerManagement.singleton.all){
@@ -160,35 +281,79 @@ namespace AKCondinoO.Sims{
          GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
-             DisableInteractions();
-             SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-             result=2;
+             if(Core.singleton.isServer){
+              DisableInteractions();
+              if(netObj.IsSpawned){
+               netObj.DontDestroyWithOwner=true;
+               netObj.Despawn(destroy:false);
+              }
+              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+              result=2;
+             }
          }else{
              if(isOverlapping){
                 isOverlapping=false;
-                 //Log.DebugMessage("simObject isOverlapping:id:"+id);
-                 DisableInteractions();
-                 SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-                 result=2;
+                 if(Core.singleton.isServer){
+                  //Log.DebugMessage("simObject isOverlapping:id:"+id);
+                  DisableInteractions();
+                  if(netObj.IsSpawned){
+                   netObj.DontDestroyWithOwner=true;
+                   netObj.Despawn(destroy:false);
+                  }
+                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                  result=2;
+                 }
              }else{
                  if(checkIfOutOfSight){
                     checkIfOutOfSight=false;
                      if(IsOutOfSight()){
-                         Log.DebugMessage("simObject IsOutOfSight:id:"+id);
-                         DisableInteractions();
-                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                         result=1;
+                         if(Core.singleton.isServer){
+                          if(IsOwner){
+                           bool ownershipChanged=false;
+                           foreach(var gameplayer in GameplayerManagement.singleton.all){
+                            ulong clientId=gameplayer.Key;
+                            //Log.DebugMessage("should the ownership be changed to clientId:"+clientId);
+                            if(gameplayer.Value!=Gameplayer.main&&IsInPlayerWorldBounds(gameplayer.Value)){
+                             Log.DebugMessage("change ownership to clientId:"+clientId);
+                             netObj.ChangeOwnership(clientId);
+                             netObj.DontDestroyWithOwner=true;
+                             ownershipChanged=true;
+                             break;
+                            }
+                           }
+                           if(!ownershipChanged){
+                            Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                            DisableInteractions();
+                            if(netObj.IsSpawned){
+                             netObj.DontDestroyWithOwner=true;
+                             netObj.Despawn(destroy:false);
+                            }
+                            SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                            result=1;
+                           }
+                          }
+                         }
                      }
                  }else{
                      if(poolRequested){
                         poolRequested=false;
-                         DisableInteractions();
-                         SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
-                         result=1;
+                         if(Core.singleton.isServer){
+                          DisableInteractions();
+                          if(netObj.IsSpawned){
+                           netObj.DontDestroyWithOwner=true;
+                           netObj.Despawn(destroy:false);
+                          }
+                          SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                          result=1;
+                         }
                      }
                  }
              }
          }
+         return result;
+        }
+        internal virtual int ManualUpdateAsClient(bool doValidationChecks){
+         int result=0;
          return result;
         }
         void TransformBoundsVertices(){
@@ -208,6 +373,22 @@ namespace AKCondinoO.Sims{
            Vector2Int cCoord=vecPosTocCoord(v);
            int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
            return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
+          }
+         );
+        }
+        protected virtual bool IsInPlayerActiveWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerActiveWorldBounds:testing v");
+           return gameplayer.activeWorldBounds.Contains(v);
+          }
+         );
+        }
+        protected virtual bool IsInPlayerWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerWorldBounds:testing v");
+           return gameplayer.worldBounds.Contains(v);
           }
          );
         }
