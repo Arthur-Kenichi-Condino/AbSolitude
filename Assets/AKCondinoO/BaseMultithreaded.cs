@@ -18,7 +18,7 @@ namespace AKCondinoO{
          }
          return backgroundData.WaitOne(millisecondsTimeout);
         }
-     bool disposed=false;
+     protected bool disposed=false;
         public void Dispose(){
          Dispose(disposing:true);
          GC.SuppressFinalize(this);

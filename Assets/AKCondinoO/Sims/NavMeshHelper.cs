@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.28125f/3f,
            minRegionArea=0.28125f,
            overrideTileSize=true,
-                   tileSize=64,
+                   tileSize=32,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -48,7 +49,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.25f/3f,
            minRegionArea=0.25f,
            overrideTileSize=true,
-                   tileSize=64,
+                   tileSize=32,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -64,7 +65,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.5625f/3f,
            minRegionArea=0.5625f,
            overrideTileSize=true,
-                   tileSize=64,
+                   tileSize=32,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -80,7 +81,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.25f/3f,
            minRegionArea=0.25f,
            overrideTileSize=true,
-                   tileSize=64,
+                   tileSize=32,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },

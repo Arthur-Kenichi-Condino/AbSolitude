@@ -1,17 +1,25 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels.Terrain.Editing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Unity.Collections;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
+
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     internal class MarchingCubesBackgroundContainer:BackgroundContainer{
      internal readonly object synchronizer=new object();
+     internal readonly Dictionary<int,string>editsFileName=new Dictionary<int,string>();
+     internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
+     internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal NativeList<Vertex>TempVer;[StructLayout(LayoutKind.Sequential)]internal struct Vertex{
           internal Vector3 pos;
           internal Vector3 normal;
@@ -35,6 +43,17 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
      internal Vector2Int cnkRgn;
      internal        int cnkIdx;
         internal MarchingCubesBackgroundContainer(){
+        }
+        protected override void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+          foreach(var fS in editsFileStream      ){if(fS.Value!=null){fS.Value.Dispose();}}
+          foreach(var sR in editsFileStreamReader){if(sR.Value!=null){sR.Value.Dispose();}}
+          editsFileStream      .Clear();
+          editsFileStreamReader.Clear();
+         }
+         //  free unmanaged resources here
+         base.Dispose(disposing);
         }
     }
     internal class MarchingCubesMultithreaded:BaseMultithreaded<MarchingCubesBackgroundContainer>{
@@ -131,6 +150,58 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          container.TempVer.Clear();
          container.TempTri.Clear();
          lock(container.synchronizer){
+          for(int x=-1;x<=1;x++){
+          for(int y=-1;y<=1;y++){
+           Vector2Int cCoord1=container.cCoord+new Vector2Int(x,y);
+           if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+              Math.Abs(cCoord1.y)>=MaxcCoordy)
+           {
+            continue;
+           }
+           int oftIdx1=GetoftIdx(cCoord1-container.cCoord);
+           string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
+           if(!container.editsFileStream.ContainsKey(oftIdx1)||!container.editsFileName.ContainsKey(oftIdx1)||container.editsFileName[oftIdx1]!=editsFileName){
+            container.editsFileName[oftIdx1]=editsFileName;
+            if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fStream)){
+             fStream                                 .Dispose();
+             container.editsFileStreamReader[oftIdx1].Dispose();
+             container.editsFileStream      .Remove(oftIdx1);
+             container.editsFileStreamReader.Remove(oftIdx1);
+            }
+            if(File.Exists(editsFileName)){
+             container.editsFileStream.Add(oftIdx1,new FileStream(editsFileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite));
+             container.editsFileStreamReader.Add(oftIdx1,new StreamReader(container.editsFileStream[oftIdx1]));
+            }
+           }
+           if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+            StreamReader fileStreamReader=container.editsFileStreamReader[oftIdx1];
+            fileStream.Position=0L;
+            fileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=fileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int vCoordStringStart=line.IndexOf("vCoord=(");
+             if(vCoordStringStart>=0){
+                vCoordStringStart+=8;
+              int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+              string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+              string[]xyzString=vCoordString.Split(',');
+              int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+              int editStringStart=vCoordStringEnd+4;
+              editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+              if(editStringStart>=0){
+               int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+               string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+               TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+               voxels[oftIdx1][GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new Voxel(edit.density,Vector3.zero,edit.material);
+              }
+             }
+            }
+           }
+          }}
          }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
