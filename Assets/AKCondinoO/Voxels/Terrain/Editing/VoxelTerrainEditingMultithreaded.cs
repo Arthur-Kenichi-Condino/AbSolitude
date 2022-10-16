@@ -79,6 +79,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           switch(editRequest.mode){
            case(EditMode.PlaceCube):{
             Log.DebugMessage("EditMode.PlaceCube");
+            //  TO DO: validade values before start
                 //  TO DO: calcular valores para suavização
                 Vector2Int cCoord1=vecPosTocCoord(center ),        cCoord3;
                 Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1),        cnkRgn3;
@@ -229,6 +230,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
            }
            case(EditMode.PlaceSphere):{
             Log.DebugMessage("EditMode.PlaceSphere");
+            //  TO DO: PlaceSphere but validade values before start
                 //float sqrt_yx_1=Mathf.Sqrt(Mathf.Pow(size.y,2)+Mathf.Pow(size.x,2));
                 //float sqrt_xz_1=Mathf.Sqrt(Mathf.Pow(size.x,2)+Mathf.Pow(size.z,2));
                 //float sqrt_zy_1=Mathf.Sqrt(Mathf.Pow(size.z,2)+Mathf.Pow(size.y,2));
