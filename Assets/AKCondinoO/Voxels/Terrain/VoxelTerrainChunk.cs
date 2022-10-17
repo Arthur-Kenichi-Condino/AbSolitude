@@ -6,6 +6,7 @@ using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
+using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundCont
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
+     [SerializeField]VoxelWaterChunk _VoxelWaterChunkPrefab;
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
      internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
