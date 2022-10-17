@@ -194,37 +194,6 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                         }
                  if(y==0){break;}
                 }}
-                //float sqrt_yx_1=Mathf.Sqrt(Mathf.Pow(size.y,2)+Mathf.Pow(size.x,2));
-                //float sqrt_xz_1=Mathf.Sqrt(Mathf.Pow(size.x,2)+Mathf.Pow(size.z,2));
-                //float sqrt_zy_1=Mathf.Sqrt(Mathf.Pow(size.z,2)+Mathf.Pow(size.y,2));
-                // float sqrt_yx_xz_1=Mathf.Sqrt(Mathf.Pow(sqrt_yx_1,2)+Mathf.Pow(sqrt_xz_1,2));
-                //  float sqrt_yx_xz_zy_1=Mathf.Sqrt(Mathf.Pow(sqrt_yx_xz_1,2)+Mathf.Pow(sqrt_zy_1,2));
-                //float sqrt_yx_2;
-                //float sqrt_xz_2;
-                //float sqrt_zy_2;
-                
-                         //sqrt_yx_2=Mathf.Sqrt(Mathf.Pow(y,2)+Mathf.Pow(x,2));
-                         
-                         //sqrt_xz_2=Mathf.Sqrt(Mathf.Pow(x,2)+Mathf.Pow(z,2));
-                         //sqrt_zy_2=Mathf.Sqrt(Mathf.Pow(z,2)+Mathf.Pow(y,2));
-                         
-                         //if(y>=size.y||x>=size.x||z>=size.z){
-                         // if(y>=size.y&&x>=size.x&&z>=size.z){
-                         //  float sqrt_yx_xz_2=Mathf.Sqrt(Mathf.Pow(sqrt_yx_2,2)+Mathf.Pow(sqrt_xz_2,2));
-                         //   float sqrt_yx_xz_zy_2=Mathf.Sqrt(Mathf.Pow(sqrt_yx_xz_2,2)+Mathf.Pow(sqrt_zy_2,2));
-                         //  resultDensity=density*(1f-(sqrt_yx_xz_zy_2-sqrt_yx_xz_1)/(sqrt_yx_xz_zy_2));
-                         // }else if(y>=size.y&&x>=size.x){resultDensity=density*(1f-(sqrt_yx_2-sqrt_yx_1)/(sqrt_yx_2));
-                         // }else if(x>=size.x&&z>=size.z){resultDensity=density*(1f-(sqrt_xz_2-sqrt_xz_1)/(sqrt_xz_2));
-                         // }else if(z>=size.z&&y>=size.y){resultDensity=density*(1f-(sqrt_zy_2-sqrt_zy_1)/(sqrt_zy_2));
-                         // }else if(y>=size.y){resultDensity=density*(1f-(y-size.y)/(float)y)*1.414f;//  raiz quadrada de 2
-                         // }else if(x>=size.x){resultDensity=density*(1f-(x-size.x)/(float)x)*1.414f;
-                         // }else if(z>=size.z){resultDensity=density*(1f-(z-size.z)/(float)z)*1.414f;
-                         // }else{
-                         //  resultDensity=0d;
-                         // }
-                         //}else{
-                         // resultDensity=density;
-                         //}
             break;
            }
           }
