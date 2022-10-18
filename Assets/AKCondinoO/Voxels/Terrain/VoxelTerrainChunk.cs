@@ -9,6 +9,7 @@ using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
@@ -16,6 +17,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{

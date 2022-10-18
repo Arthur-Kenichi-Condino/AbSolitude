@@ -4,6 +4,7 @@
 using AKCondinoO.Voxels.Terrain.Editing;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,9 +14,9 @@ using Unity.Collections;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
-
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     internal class MarchingCubesBackgroundContainer:BackgroundContainer{
+     internal readonly Voxel[]voxelsOutput=new Voxel[VoxelsPerChunk];
      internal readonly object synchronizer=new object();
      internal readonly Dictionary<int,string>editsFileName=new Dictionary<int,string>();
      internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
@@ -208,7 +209,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+          int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           int corner=0;Vector3Int vCoord2=vCoord1;                                       if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][0];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][0];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0];else SetpolygonCellVoxel();
+          container.voxelsOutput[vxlIdx1]=polygonCell[corner];
               corner++;           vCoord2=vCoord1;vCoord2.x+=1;                          if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][1];                                                                      else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1];else SetpolygonCellVoxel();
               corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][2];                                                                                                                                                            else SetpolygonCellVoxel();
               corner++;           vCoord2=vCoord1;             vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][3];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][1];                                                                                      else SetpolygonCellVoxel();
@@ -350,6 +353,11 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                          vertexUV
           );
          }}}
+         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+         for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
+         }
+         }}
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;
          for(crdOffset.y=0,posOffset.y=0,
