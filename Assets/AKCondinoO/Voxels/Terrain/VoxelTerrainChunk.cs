@@ -20,6 +20,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
      [SerializeField]VoxelWaterChunk _VoxelWaterChunkPrefab;
+     internal VoxelWaterChunk wCnk;
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
      internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
@@ -62,6 +63,8 @@ namespace AKCondinoO.Voxels.Terrain{
          simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth,Allocator.Persistent);
         }
         internal void OnInstantiated(){
+         wCnk=Instantiate(_VoxelWaterChunkPrefab);
+         wCnk.OnInstantiated();
         }
         internal void OnDestroyingCore(){
          bakeJobHandle.Complete();
