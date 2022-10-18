@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Voxels.Water{
+namespace AKCondinoO.Voxels.Water.MarchingCubes{
     //  marching cubes functions
     internal class MarchingCubesWater{
         internal struct VoxelWater{

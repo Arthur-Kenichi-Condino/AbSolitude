@@ -34,7 +34,7 @@ namespace AKCondinoO.Voxels.Biomes{
           modules.Add(new Const(  1));
           modules.Add(new Const( -1));
           modules.Add(new Const( .5));
-          modules.Add(new Const(128));
+          modules.Add(new Const(Height));
               ModuleBase module1=new Const(5);
                   ModuleBase module2a=new RidgedMultifractal(
                    frequency:.003,
@@ -49,7 +49,7 @@ namespace AKCondinoO.Voxels.Biomes{
                    ((Turbulence)module2b).Power=1.0;
                   ModuleBase module2c=new ScaleBias(
                    scale:1.0,
-                    bias:30.0,
+                    bias:.11*Height,
                      input:module2b
                   ); 
                       ModuleBase module3a=new Billow(
@@ -66,7 +66,7 @@ namespace AKCondinoO.Voxels.Biomes{
                        ((Turbulence)module3b).Power=1.0;
                       ModuleBase module3c=new ScaleBias(
                        scale:1.0,
-                        bias:31.0,
+                        bias:.11*Height,
                          input:module3b
                       );
                           ModuleBase module4a=new Perlin(
