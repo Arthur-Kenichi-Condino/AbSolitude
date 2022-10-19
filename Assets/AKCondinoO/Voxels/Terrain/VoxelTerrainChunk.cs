@@ -119,6 +119,7 @@ namespace AKCondinoO.Voxels.Terrain{
                     }
                 }
             }
+         wCnk.ManualUpdate();
         }
      internal static int sMarchingCubesExecutionCount;
         bool CanBeginMarchingCubes(){

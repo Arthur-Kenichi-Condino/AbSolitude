@@ -7,6 +7,7 @@ using AKCondinoO.Voxels.Terrain;
 using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
+using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,6 +87,7 @@ namespace AKCondinoO.Voxels{
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
+     internal readonly WaterSpreadingMultithreaded[]waterSpreadingBGThreads=new WaterSpreadingMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
@@ -93,6 +95,8 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         VoxelSystemConcurrent.terrainrwl=new ReaderWriterLockSlim();
+         VoxelSystemConcurrent.waterrwl  =new ReaderWriterLockSlim();
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
@@ -173,6 +177,12 @@ namespace AKCondinoO.Voxels{
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
+         VoxelSystemConcurrent.terrainrwl.Dispose();
+         VoxelSystemConcurrent.waterrwl  .Dispose();
+         VoxelSystemConcurrent.terrainVoxels      .Clear();
+         VoxelSystemConcurrent.terrainVoxelscnkIdx.Clear();
+         VoxelSystemConcurrent.waterVoxels        .Clear();
+         VoxelSystemConcurrent.waterVoxelscnkIdx  .Clear();
         }
         void OnDestroy(){
         }

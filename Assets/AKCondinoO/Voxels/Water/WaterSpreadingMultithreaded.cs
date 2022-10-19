@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
