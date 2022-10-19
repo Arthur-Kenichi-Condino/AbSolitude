@@ -204,6 +204,8 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            }
           }}
          }
+         int voxelsOutputOldcnkIdx;
+         Voxel[]removedOldcnkIdxVoxelsOutput=null;
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
          lock(container.voxelsOutput){
@@ -354,6 +356,22 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                           vertexUV
            );
           }}}
+          if(VoxelSystemConcurrent.terrainVoxelscnkIdx.TryGetValue(container.voxelsOutput,out voxelsOutputOldcnkIdx)){
+           VoxelSystemConcurrent.terrainVoxels.TryRemove(voxelsOutputOldcnkIdx,out removedOldcnkIdxVoxelsOutput);
+          }
+          VoxelSystemConcurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
+          VoxelSystemConcurrent.terrainVoxelscnkIdx[container.voxelsOutput]=container.cnkIdx;
+         }
+         if(removedOldcnkIdxVoxelsOutput!=null){
+          lock(removedOldcnkIdxVoxelsOutput){
+           if(removedOldcnkIdxVoxelsOutput!=container.voxelsOutput){
+            if(VoxelSystemConcurrent.terrainVoxelscnkIdx.TryGetValue(removedOldcnkIdxVoxelsOutput,out int removedVoxelsOutputCurrentcnkIdx)){
+             if(removedVoxelsOutputCurrentcnkIdx==voxelsOutputOldcnkIdx){
+              VoxelSystemConcurrent.terrainVoxels.TryAdd(removedVoxelsOutputCurrentcnkIdx,removedOldcnkIdxVoxelsOutput);
+             }
+            }
+           }
+          }
          }
          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
