@@ -96,7 +96,7 @@ namespace AKCondinoO.Sims.Actors{
                 slavesStringStart+=8;
               int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
               string slavesString=s.Substring(slavesStringStart,slavesStringEnd-slavesStringStart);
-              Log.DebugMessage("slavesString:"+slavesString);
+              //Log.DebugMessage("slavesString:"+slavesString);
               int slaveStringStart=0;
               while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
                int slaveSimTypeStringStart=slaveStringStart+1;
