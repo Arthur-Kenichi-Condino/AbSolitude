@@ -204,8 +204,19 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            }
           }}
          }
-         int voxelsOutputOldcnkIdx;
-         Voxel[]removedOldcnkIdxVoxelsOutput=null;
+         VoxelSystemConcurrent.terrainrwl.EnterWriteLock();
+         try{
+          if(VoxelSystemConcurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
+           if(VoxelSystemConcurrent.terrainVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+            VoxelSystemConcurrent.terrainVoxels.Remove(voxelsOutputOldId.cnkIdx);
+            //Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
+           }
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystemConcurrent.terrainrwl.ExitWriteLock();
+         }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
          lock(container.voxelsOutput){
@@ -356,28 +367,22 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                           vertexUV
            );
           }}}
-          if(VoxelSystemConcurrent.terrainVoxelscnkIdx.TryGetValue(container.voxelsOutput,out voxelsOutputOldcnkIdx)){
-           VoxelSystemConcurrent.terrainVoxels.TryRemove(voxelsOutputOldcnkIdx,out removedOldcnkIdxVoxelsOutput);
-          }
-          VoxelSystemConcurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
-          VoxelSystemConcurrent.terrainVoxelscnkIdx[container.voxelsOutput]=container.cnkIdx;
-         }
-         if(removedOldcnkIdxVoxelsOutput!=null){
-          lock(removedOldcnkIdxVoxelsOutput){
-           if(removedOldcnkIdxVoxelsOutput!=container.voxelsOutput){
-            if(VoxelSystemConcurrent.terrainVoxelscnkIdx.TryGetValue(removedOldcnkIdxVoxelsOutput,out int removedVoxelsOutputCurrentcnkIdx)){
-             if(removedVoxelsOutputCurrentcnkIdx==voxelsOutputOldcnkIdx){
-              VoxelSystemConcurrent.terrainVoxels.TryAdd(removedVoxelsOutputCurrentcnkIdx,removedOldcnkIdxVoxelsOutput);
-             }
-            }
-           }
-          }
          }
          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
          for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
          }
          }}
+         VoxelSystemConcurrent.terrainrwl.EnterWriteLock();
+         try{
+          VoxelSystemConcurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
+          VoxelSystemConcurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
+          //Log.DebugMessage("added voxelsOutput for container.cnkIdx:"+container.cnkIdx);
+         }catch{
+          throw;
+         }finally{
+          VoxelSystemConcurrent.terrainrwl.ExitWriteLock();
+         }
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;
          for(crdOffset.y=0,posOffset.y=0,

@@ -69,6 +69,7 @@ namespace AKCondinoO.Voxels.Terrain{
          wCnk.OnInstantiated();
         }
         internal void OnDestroyingCore(){
+         wCnk.OnDestroyingCore();
          bakeJobHandle.Complete();
          marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning,-1);
          //Log.DebugMessage("Deallocate NativeLists");
