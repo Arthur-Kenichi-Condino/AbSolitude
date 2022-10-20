@@ -72,7 +72,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.reverseChance;
           if(reverse){
            angle.RandomlyReverseSpeed();
-           Log.DebugMessage("reversed cloud particle angle.incrementSpeed to:"+angle.incrementSpeed);
+           //Log.DebugMessage("reversed cloud particle angle.incrementSpeed to:"+angle.incrementSpeed);
           }
          }
             angle.changeIncrementSpeedValueTimer-=Time.deltaTime;
@@ -81,7 +81,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueChance;
           if(change){
            angle.RandomlyChangeIncrementSpeedValue();
-           Log.DebugMessage("changed cloud particle angle.incrementSpeed value to:"+angle.incrementSpeed);
+           //Log.DebugMessage("changed cloud particle angle.incrementSpeed value to:"+angle.incrementSpeed);
           }
          }
             orbit.reverseTimer-=Time.deltaTime;
@@ -90,7 +90,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.reverseChance;
           if(reverse){
            orbit.RandomlyReverseSpeed();
-           Log.DebugMessage("reversed cloud particle orbit.incrementSpeed to:"+orbit.incrementSpeed);
+           //Log.DebugMessage("reversed cloud particle orbit.incrementSpeed to:"+orbit.incrementSpeed);
           }
          }
             orbit.changeIncrementSpeedValueTimer-=Time.deltaTime;
@@ -99,7 +99,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueChance;
           if(change){
            orbit.RandomlyChangeIncrementSpeedValue();
-           Log.DebugMessage("changed cloud particle orbit.incrementSpeed value to:"+orbit.incrementSpeed);
+           //Log.DebugMessage("changed cloud particle orbit.incrementSpeed value to:"+orbit.incrementSpeed);
           }
          }
             distance.reverseTimer-=Time.deltaTime;
@@ -109,7 +109,7 @@ namespace AKCondinoO.Ambience.Clouds{
           if(reverse){
            //Log.DebugMessage("reverse cloud particle distance.incrementSpeed");
            distance.RandomlyReverseSpeed();
-           Log.DebugMessage("reversed cloud particle distance.incrementSpeed to:"+distance.incrementSpeed);
+           //Log.DebugMessage("reversed cloud particle distance.incrementSpeed to:"+distance.incrementSpeed);
           }
          }
             distance.changeIncrementSpeedValueTimer-=Time.deltaTime;
@@ -119,7 +119,7 @@ namespace AKCondinoO.Ambience.Clouds{
           if(change){
            //Log.DebugMessage("change cloud particle distance.incrementSpeed value");
            distance.RandomlyChangeIncrementSpeedValue();
-           Log.DebugMessage("changed cloud particle distance.incrementSpeed value to:"+distance.incrementSpeed);
+           //Log.DebugMessage("changed cloud particle distance.incrementSpeed value to:"+distance.incrementSpeed);
           }
          }
             scale.reverseTimer-=Time.deltaTime;
@@ -128,7 +128,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.reverseChance;
           if(reverse){
            scale.RandomlyReverseSpeed();
-           Log.DebugMessage("reversed cloud particle scale.incrementSpeed to:"+scale.incrementSpeed);
+           //Log.DebugMessage("reversed cloud particle scale.incrementSpeed to:"+scale.incrementSpeed);
           }
          }
             scale.changeIncrementSpeedValueTimer-=Time.deltaTime;
@@ -137,7 +137,7 @@ namespace AKCondinoO.Ambience.Clouds{
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.changeIncrementSpeedValueChance;
           if(change){
            scale.RandomlyChangeIncrementSpeedValue();
-           Log.DebugMessage("changed cloud particle scale.incrementSpeed value to:"+scale.incrementSpeed);
+           //Log.DebugMessage("changed cloud particle scale.incrementSpeed value to:"+scale.incrementSpeed);
           }
          }
          scale.value+=scale.incrementSpeed*Time.deltaTime;

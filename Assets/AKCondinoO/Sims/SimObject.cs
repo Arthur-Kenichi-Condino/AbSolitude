@@ -322,7 +322,7 @@ namespace AKCondinoO.Sims{
                             }
                            }
                            if(!ownershipChanged){
-                            Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                            //Log.DebugMessage("simObject IsOutOfSight:id:"+id);
                             DisableInteractions();
                             if(netObj.IsSpawned){
                              netObj.DontDestroyWithOwner=true;

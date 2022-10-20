@@ -39,7 +39,7 @@ namespace AKCondinoO.Ambience.Clouds{
          }
         }
         void OnSpawnParticle(){
-         Log.DebugMessage("OnSpawnParticle()");
+         //Log.DebugMessage("OnSpawnParticle()");
          if(activeParticles.Count<maxParticles){
           CloudParticle cloudParticle;
           cloudParticle=Instantiate(cloudParticlePrefab);

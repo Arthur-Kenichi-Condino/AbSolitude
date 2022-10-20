@@ -17,6 +17,8 @@ namespace AKCondinoO.Voxels.Water{
         protected override void Cleanup(){
         }
         protected override void Execute(){
+         lock(container.voxelsOutput){
+         }
         }
     }
 }
