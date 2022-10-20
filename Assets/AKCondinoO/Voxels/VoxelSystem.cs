@@ -109,6 +109,10 @@ namespace AKCondinoO.Voxels{
          }
          VoxelTerrainEditingMultithreaded.Stop=false;
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
+         WaterSpreadingMultithreaded.Stop=false;
+         for(int i=0;i<waterSpreadingBGThreads.Length;++i){
+                       waterSpreadingBGThreads[i]=new WaterSpreadingMultithreaded();
+         }
         }
      internal int chunkPoolMultiplier=1;
         public void Init(){
@@ -150,6 +154,10 @@ namespace AKCondinoO.Voxels{
            terrain[i].OnDestroyingCore();
           }
          }
+         WaterSpreadingMultithreaded.Stop=true;
+         for(int i=0;i<waterSpreadingBGThreads.Length;++i){
+                       waterSpreadingBGThreads[i].Wait();
+         }
          MarchingCubesMultithreaded.Stop=true;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){
                        marchingCubesBGThreads[i].Wait();
@@ -169,6 +177,7 @@ namespace AKCondinoO.Voxels{
                        surface.
                         surfaceSimObjectsPlacerBG.
                          Dispose();
+           terrain[i].wCnk.waterSpreadingBG.Dispose();
           }
          }
          VoxelTerrainEditingMultithreaded.Stop=true;
@@ -179,10 +188,10 @@ namespace AKCondinoO.Voxels{
          }
          VoxelSystemConcurrent.terrainrwl.Dispose();
          VoxelSystemConcurrent.waterrwl  .Dispose();
-         VoxelSystemConcurrent.terrainVoxels      .Clear();
-         VoxelSystemConcurrent.terrainVoxelscnkIdx.Clear();
-         VoxelSystemConcurrent.waterVoxels        .Clear();
-         VoxelSystemConcurrent.waterVoxelscnkIdx  .Clear();
+         VoxelSystemConcurrent.terrainVoxels  .Clear();
+         VoxelSystemConcurrent.terrainVoxelsId.Clear();
+         VoxelSystemConcurrent.waterVoxels    .Clear();
+         VoxelSystemConcurrent.waterVoxelsId  .Clear();
         }
         void OnDestroy(){
         }

@@ -14,8 +14,16 @@ namespace AKCondinoO.Voxels.Water{
      internal WaterSpreadingContainer waterSpreadingBG=new WaterSpreadingContainer();
         internal void OnInstantiated(){
         }
+        internal void OnDestroyingCore(){
+         waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning,-1);
+        }
         internal void ManualUpdate(){
          //Log.DebugMessage("ManualUpdate");
+         if(CanSpreadWater()){
+         }
+        }
+        bool CanSpreadWater(){
+         return false;
         }
     }
 }
