@@ -18,7 +18,9 @@ namespace AKCondinoO.Voxels.Water{
         }
         protected override void Execute(){
          lock(container.voxelsOutput){
+          //  do not do edges
          }
+         //  do edges but lock the voxels output only when reading or writing
         }
     }
 }
