@@ -41,5 +41,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          //  if this message fails to be received, client may ask for it after detecting missing segments in the "dictionary" of
          // segment-data
         }
+        int segmentCount=-1;
+        internal IEnumerator SendVoxelTerrainChunkEditDataFileCoroutine(){
+            Loop:{
+             yield return null;
+            }
+            goto Loop;
+        }
     }
 }
