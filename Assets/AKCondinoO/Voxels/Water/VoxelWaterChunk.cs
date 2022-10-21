@@ -17,12 +17,26 @@ namespace AKCondinoO.Voxels.Water{
         internal void OnDestroyingCore(){
          waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning,-1);
         }
+     bool waitingMarchingCubes;
+     bool pendingMarchingCubes;
+     bool waitingWaterSpread;
         internal void ManualUpdate(){
          //Log.DebugMessage("ManualUpdate");
-         if(CanSpreadWater()){
+         if(waitingWaterSpread){
+             if(OnWaterSpread()){
+                 waitingWaterSpread=false;
+                 pendingMarchingCubes=true;
+             }
+         }else{
+             if(CanSpreadWater()){
+                 waitingWaterSpread=true;
+             }
          }
         }
         bool CanSpreadWater(){
+         return false;
+        }
+        bool OnWaterSpread(){
          return false;
         }
     }
