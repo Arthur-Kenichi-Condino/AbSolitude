@@ -204,18 +204,18 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            }
           }}
          }
-         VoxelSystemConcurrent.terrainrwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrainrwl.EnterWriteLock();
          try{
-          if(VoxelSystemConcurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
-           if(VoxelSystemConcurrent.terrainVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
-            VoxelSystemConcurrent.terrainVoxels.Remove(voxelsOutputOldId.cnkIdx);
+          if(VoxelSystem.Concurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
+           if(VoxelSystem.Concurrent.terrainVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+            VoxelSystem.Concurrent.terrainVoxels.Remove(voxelsOutputOldId.cnkIdx);
             //Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
            }
           }
          }catch{
           throw;
          }finally{
-          VoxelSystemConcurrent.terrainrwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainrwl.ExitWriteLock();
          }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
@@ -373,15 +373,15 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
          }
          }}
-         VoxelSystemConcurrent.terrainrwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrainrwl.EnterWriteLock();
          try{
-          VoxelSystemConcurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
-          VoxelSystemConcurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
+          VoxelSystem.Concurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
+          VoxelSystem.Concurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
           //Log.DebugMessage("added voxelsOutput for container.cnkIdx:"+container.cnkIdx);
          }catch{
           throw;
          }finally{
-          VoxelSystemConcurrent.terrainrwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainrwl.ExitWriteLock();
          }
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;

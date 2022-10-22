@@ -1,11 +1,12 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
-using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Sims;
+using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Voxels.Terrain;
 using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
+using AKCondinoO.Voxels.Terrain.Networking;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using AKCondinoO.Voxels.Water;
 using System;
@@ -17,7 +18,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Voxels{
-    internal class VoxelSystem:MonoBehaviour,ISingletonInitialization{
+    internal partial class VoxelSystem:MonoBehaviour,ISingletonInitialization{
      internal const int MaxcCoordx=312;
      internal const int MaxcCoordy=312;
      internal const ushort Height=(128);
@@ -95,8 +96,8 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystemConcurrent.terrainrwl=new ReaderWriterLockSlim();
-         VoxelSystemConcurrent.waterrwl  =new ReaderWriterLockSlim();
+         VoxelSystem.Concurrent.terrainrwl=new ReaderWriterLockSlim();
+         VoxelSystem.Concurrent.waterrwl  =new ReaderWriterLockSlim();
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
@@ -140,6 +141,7 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainEditing.singleton.terrainEditingBG.terrainSynchronization=terrainSynchronization.Values.ToArray();
          AtlasHelper.SetAtlasData();
          if(Core.singleton.isServer){
+          NetServerSideInit();
           biome.Seed=0;
           proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
          }
@@ -149,6 +151,7 @@ namespace AKCondinoO.Voxels{
          if(this!=null&&proceduralGenerationCoroutine!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }
+         OnDestroyingCoreNetDestroy();
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].OnDestroyingCore();
@@ -186,12 +189,12 @@ namespace AKCondinoO.Voxels{
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
-         VoxelSystemConcurrent.terrainrwl.Dispose();
-         VoxelSystemConcurrent.waterrwl  .Dispose();
-         VoxelSystemConcurrent.terrainVoxels  .Clear();
-         VoxelSystemConcurrent.terrainVoxelsId.Clear();
-         VoxelSystemConcurrent.waterVoxels    .Clear();
-         VoxelSystemConcurrent.waterVoxelsId  .Clear();
+         VoxelSystem.Concurrent.terrainrwl.Dispose();
+         VoxelSystem.Concurrent.waterrwl  .Dispose();
+         VoxelSystem.Concurrent.terrainVoxels  .Clear();
+         VoxelSystem.Concurrent.terrainVoxelsId.Clear();
+         VoxelSystem.Concurrent.waterVoxels    .Clear();
+         VoxelSystem.Concurrent.waterVoxelsId  .Clear();
         }
         void OnDestroy(){
         }
@@ -214,6 +217,9 @@ namespace AKCondinoO.Voxels{
              yield return null;
              if(generationRequests.Count>0){
               foreach(var gameplayer in generationRequests){
+               if(Core.singleton.isServer){
+                generationRequestedAssignMessageHandlers.Add(gameplayer);
+               }
                if(activatingCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
                 deactivatingCoordinates[gameplayer]=cCoord_Previous;
                }
@@ -222,7 +228,7 @@ namespace AKCondinoO.Voxels{
               }
                 generationRequests.Clear();
               foreach(var gameplayer in toGenerate){
-               if(deactivatingCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){                
+               if(deactivatingCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
                 //Log.DebugMessage("deactivate chunks around cCoord_Previous:"+cCoord_Previous);
                 #region expropriation
                     for(Vector2Int eCoord=new Vector2Int(),cCoord1=new Vector2Int();eCoord.y<=expropriationDistance.y;eCoord.y++){for(cCoord1.y=-eCoord.y+cCoord_Previous.y;cCoord1.y<=eCoord.y+cCoord_Previous.y;cCoord1.y+=eCoord.y*2){

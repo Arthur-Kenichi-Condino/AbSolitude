@@ -1,0 +1,93 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
+using AKCondinoO.Voxels.Terrain;
+using AKCondinoO.Voxels.Terrain.Networking;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+namespace AKCondinoO.Voxels{
+    internal partial class VoxelSystem{
+     [SerializeField]VoxelTerrainChunkUnnamedMessageHandler _VoxelTerrainChunkUnnamedMessageHandlerPrefab;
+     internal VoxelTerrainChunkUnnamedMessageHandler[]terrainMessageHandlers;
+     internal readonly LinkedList<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersPool=new LinkedList<VoxelTerrainChunkUnnamedMessageHandler>();
+        internal void NetServerSideInit(){
+         Log.DebugMessage("NetServerSideInit");
+         terrainMessageHandlers=new VoxelTerrainChunkUnnamedMessageHandler[terrain.Length];
+         for(int i=0;i<terrainMessageHandlers.Length;++i){
+          VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=terrainMessageHandlers[i]=Instantiate(_VoxelTerrainChunkUnnamedMessageHandlerPrefab);
+          cnkMsgr.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr);
+          cnkMsgr.OnInstantiated();
+          cnkMsgr.netObj.Spawn(destroyWithScene:false);
+          cnkMsgr.netObj.DontDestroyWithOwner=true;
+         }
+         serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
+        }
+        internal void NetClientSideInit(){
+         Log.DebugMessage("NetClientSideInit");
+        }
+        internal void OnDestroyingCoreNetDestroy(){
+         if(this!=null&&serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine!=null){
+          StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
+         }
+         if(Core.singleton.isServer){
+         }
+        }
+        internal void NetUpdate(){
+        }
+     Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
+     internal readonly HashSet<Gameplayer>generationRequestedAssignMessageHandlers=new HashSet<Gameplayer>();
+      readonly Dictionary<Gameplayer,Vector2Int>  assigningCoordinates=new Dictionary<Gameplayer,Vector2Int>();
+      readonly Dictionary<Gameplayer,Vector2Int>deassigningCoordinates=new Dictionary<Gameplayer,Vector2Int>();
+      readonly HashSet<Gameplayer>toAssignMessageHandlers=new HashSet<Gameplayer>();
+        internal IEnumerator ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine(){
+            Loop:{
+             yield return null;
+             if(generationRequestedAssignMessageHandlers.Count>0){
+              foreach(var gameplayer in generationRequestedAssignMessageHandlers){
+               if(assigningCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
+                deassigningCoordinates[gameplayer]=cCoord_Previous;
+               }
+               assigningCoordinates[gameplayer]=gameplayer.cCoord;
+               toAssignMessageHandlers.Add(gameplayer);
+              }
+                generationRequestedAssignMessageHandlers.Clear();
+              foreach(var gameplayer in toAssignMessageHandlers){
+               if(deassigningCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
+                #region expropriation
+                    for(Vector2Int eCoord=new Vector2Int(),cCoord1=new Vector2Int();eCoord.y<=expropriationDistance.y;eCoord.y++){for(cCoord1.y=-eCoord.y+cCoord_Previous.y;cCoord1.y<=eCoord.y+cCoord_Previous.y;cCoord1.y+=eCoord.y*2){
+                    for(           eCoord.x=0                                      ;eCoord.x<=expropriationDistance.x;eCoord.x++){for(cCoord1.x=-eCoord.x+cCoord_Previous.x;cCoord1.x<=eCoord.x+cCoord_Previous.x;cCoord1.x+=eCoord.x*2){
+                     if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+                        Math.Abs(cCoord1.y)>=MaxcCoordy){
+                      goto _skip;
+                     }
+                     _skip:{}
+                     if(eCoord.x==0){break;}
+                    }}
+                     if(eCoord.y==0){break;}
+                    }}
+                #endregion
+               }
+               Vector2Int cCoord=assigningCoordinates[gameplayer];
+               #region instantiation
+                   for(Vector2Int iCoord=new Vector2Int(),cCoord1=new Vector2Int();iCoord.y<=instantiationDistance.y;iCoord.y++){for(cCoord1.y=-iCoord.y+cCoord.y;cCoord1.y<=iCoord.y+cCoord.y;cCoord1.y+=iCoord.y*2){
+                   for(           iCoord.x=0                                      ;iCoord.x<=instantiationDistance.x;iCoord.x++){for(cCoord1.x=-iCoord.x+cCoord.x;cCoord1.x<=iCoord.x+cCoord.x;cCoord1.x+=iCoord.x*2){
+                    if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+                       Math.Abs(cCoord1.y)>=MaxcCoordy){
+                     goto _skip;
+                    }
+                    _skip:{}
+                    if(iCoord.x==0){break;}
+                   }}
+                    if(iCoord.y==0){break;}
+                   }}
+               #endregion
+              }
+              toAssignMessageHandlers.Clear();
+             }
+            }
+            goto Loop;
+        }
+    }
+}
