@@ -9,7 +9,7 @@ using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
-    //  passively gets data from VoxelSystemConcurrent
+    //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingContainer:BackgroundContainer{
      internal readonly VoxelWater[]voxelsOutput=new VoxelWater[VoxelsPerChunk];
     }

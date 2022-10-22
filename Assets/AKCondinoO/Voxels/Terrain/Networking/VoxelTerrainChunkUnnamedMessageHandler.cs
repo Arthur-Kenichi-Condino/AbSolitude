@@ -8,8 +8,15 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
+     internal NetworkObject netObj;
+     internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
         void Awake(){
+         netObj=GetComponent<NetworkObject>();
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
+        }
+        internal void OnInstantiated(){
+        }
+        internal void OnDestroyingCore(){
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
@@ -18,6 +25,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         public override void OnNetworkDespawn(){
          NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnReceivedUnnamedMessage;
          base.OnNetworkDespawn();
+        }
+        internal void ManualUpdate(){
         }
         private void OnReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
          var messageType=(int)UnnamedMessageTypes.Undefined;
