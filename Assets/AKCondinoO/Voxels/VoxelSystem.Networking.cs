@@ -6,22 +6,19 @@ using AKCondinoO.Voxels.Terrain.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
      [SerializeField]VoxelTerrainChunkUnnamedMessageHandler _VoxelTerrainChunkUnnamedMessageHandlerPrefab;
-     internal VoxelTerrainChunkUnnamedMessageHandler[]terrainMessageHandlers;
-     internal readonly LinkedList<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersPool=new LinkedList<VoxelTerrainChunkUnnamedMessageHandler>();
+     internal readonly List<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlers=new List<VoxelTerrainChunkUnnamedMessageHandler>();
+     internal readonly     LinkedList<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersPool    =new     LinkedList<VoxelTerrainChunkUnnamedMessageHandler>();
+     internal readonly Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersAssigned=new Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>();
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
-         terrainMessageHandlers=new VoxelTerrainChunkUnnamedMessageHandler[terrain.Length];
-         for(int i=0;i<terrainMessageHandlers.Length;++i){
-          VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=terrainMessageHandlers[i]=Instantiate(_VoxelTerrainChunkUnnamedMessageHandlerPrefab);
-          cnkMsgr.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr);
-          cnkMsgr.OnInstantiated();
-          cnkMsgr.netObj.Spawn(destroyWithScene:false);
-          cnkMsgr.netObj.DontDestroyWithOwner=true;
-         }
+         int poolSize=Core.singleton.maxConnections*(expropriationDistance.x*2+1)*
+                                                    (expropriationDistance.y*2+1);
+         Log.DebugMessage("terrainMessageHandlers poolSize:"+poolSize);
          serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
         }
         internal void NetClientSideInit(){
@@ -32,6 +29,9 @@ namespace AKCondinoO.Voxels{
           StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
          }
          if(Core.singleton.isServer){
+          for(int i=0;i<terrainMessageHandlers.Count;++i){
+          }
+          terrainMessageHandlers.Clear();
          }
         }
         internal void NetUpdate(){
@@ -62,6 +62,22 @@ namespace AKCondinoO.Voxels{
                         Math.Abs(cCoord1.y)>=MaxcCoordy){
                       goto _skip;
                      }
+                     if(
+                      assigningCoordinates.All(
+                       kvp=>{
+                        Vector2Int assigningCoordinate=kvp.Value;
+                        return Mathf.Abs(cCoord1.x-assigningCoordinate.x)>instantiationDistance.x||
+                               Mathf.Abs(cCoord1.y-assigningCoordinate.y)>instantiationDistance.y;
+                       }
+                      )
+                     ){
+                          int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                          if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
+                           if(cnkMsgr.expropriated==null){
+                            cnkMsgr.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr);
+                           }
+                          }
+                     }
                      _skip:{}
                      if(eCoord.x==0){break;}
                     }}
@@ -76,6 +92,31 @@ namespace AKCondinoO.Voxels{
                     if(Math.Abs(cCoord1.x)>=MaxcCoordx||
                        Math.Abs(cCoord1.y)>=MaxcCoordy){
                      goto _skip;
+                    }
+                    int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                    if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
+                     if(terrainMessageHandlersPool.Count>0){
+                         cnkMsgr=terrainMessageHandlersPool.First.Value;
+                         terrainMessageHandlersPool.RemoveFirst();
+                         cnkMsgr.expropriated=null;
+                     }else{
+                         cnkMsgr=Instantiate(_VoxelTerrainChunkUnnamedMessageHandlerPrefab);
+                         terrainMessageHandlers.Add(cnkMsgr);
+                         cnkMsgr.OnInstantiated();
+                         cnkMsgr.netObj.Spawn(destroyWithScene:false);
+                         cnkMsgr.netObj.DontDestroyWithOwner=true;
+                     }
+                         bool firstCall=cnkMsgr.id==null;
+                         if(!firstCall&&terrainMessageHandlersAssigned.ContainsKey(cnkMsgr.id.Value.cnkIdx)){
+                          terrainMessageHandlersAssigned.Remove(cnkMsgr.id.Value.cnkIdx);
+                         }
+                         terrainMessageHandlersAssigned.Add(cnkIdx1,cnkMsgr);
+                         cnkMsgr.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
+                    }else{
+                         if(cnkMsgr.expropriated!=null){
+                          terrainMessageHandlersPool.Remove(cnkMsgr.expropriated);
+                          cnkMsgr.expropriated=null;
+                         }
                     }
                     _skip:{}
                     if(iCoord.x==0){break;}

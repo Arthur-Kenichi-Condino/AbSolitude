@@ -150,6 +150,9 @@ namespace AKCondinoO{
          if(this==Gameplayer.main){
           VoxelSystem.singleton.generationRequests.Add(this);
          }
+         if(Core.singleton.isServer){
+          VoxelSystem.singleton.generationRequestedAssignMessageHandlers.Add(this);
+         }
         }
      [SerializeField]float navMeshDataAsyncUpdateInterval=1.0f;
      float navMeshDataAsyncUpdateTimer=0.0f;
