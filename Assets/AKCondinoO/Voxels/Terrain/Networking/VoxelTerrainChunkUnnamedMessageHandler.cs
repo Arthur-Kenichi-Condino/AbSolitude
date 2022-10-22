@@ -6,10 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      internal NetworkObject netObj;
      internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
+     internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         void Awake(){
          netObj=GetComponent<NetworkObject>();
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
@@ -26,6 +28,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnReceivedUnnamedMessage;
          base.OnNetworkDespawn();
         }
+        internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
+         if(firstCall||cCoord1!=id.Value.cCoord){
+          id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
+          pendingGetEditData=true;
+         }
+        }
+     bool pendingGetEditData;
         internal void ManualUpdate(){
         }
         private void OnReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){

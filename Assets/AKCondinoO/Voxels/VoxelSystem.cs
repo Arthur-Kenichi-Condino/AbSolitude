@@ -217,9 +217,6 @@ namespace AKCondinoO.Voxels{
              yield return null;
              if(generationRequests.Count>0){
               foreach(var gameplayer in generationRequests){
-               if(Core.singleton.isServer){
-                generationRequestedAssignMessageHandlers.Add(gameplayer);
-               }
                if(activatingCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
                 deactivatingCoordinates[gameplayer]=cCoord_Previous;
                }

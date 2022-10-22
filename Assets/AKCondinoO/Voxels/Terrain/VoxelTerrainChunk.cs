@@ -26,7 +26,7 @@ namespace AKCondinoO.Voxels.Terrain{
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
      internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
-     internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
+     internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
       Vector3.zero,
       new Vector3(Width,Height,Depth)
