@@ -30,11 +30,16 @@ namespace AKCondinoO.Voxels{
          }
          if(Core.singleton.isServer){
           for(int i=0;i<terrainMessageHandlers.Count;++i){
+           terrainMessageHandlers[i].OnDestroyingCore();
           }
           terrainMessageHandlers.Clear();
          }
         }
         internal void NetUpdate(){
+         foreach(var kvp in terrainMessageHandlersAssigned){
+          VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
+          cnkMsgr.ManualUpdate();
+         }
         }
      Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
      internal readonly HashSet<Gameplayer>generationRequestedAssignMessageHandlers=new HashSet<Gameplayer>();

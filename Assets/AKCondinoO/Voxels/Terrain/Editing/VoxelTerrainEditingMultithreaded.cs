@@ -249,43 +249,51 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           }}
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,TerrainEditOutputData>editData){
-          string fileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
-          if(File.Exists(fileName)){
-           FileStream fileStream=new FileStream(fileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
-           StreamReader fileStreamReader=new StreamReader(fileStream);
-           fileStream.Position=0L;
-           fileStreamReader.DiscardBufferedData();
-           string line;
-           while((line=fileStreamReader.ReadLine())!=null){
-            if(string.IsNullOrEmpty(line)){continue;}
-            int vCoordStringStart=line.IndexOf("vCoord=(");
-            if(vCoordStringStart>=0){
-               vCoordStringStart+=8;
-             int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
-             string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
-             //Log.DebugMessage("vCoordString:"+vCoordString);
-             string[]xyzString=vCoordString.Split(',');
-             int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
-             if(!editData.ContainsKey(vCoord)){
-              int editStringStart=vCoordStringEnd+4;
-              editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
-              if(editStringStart>=0){
-               int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
-               string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
-               //Log.DebugMessage("editString:"+editString);
-               TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
-               editData.Add(vCoord,edit);
+          VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
+          try{
+           string fileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
+           if(File.Exists(fileName)){
+            FileStream fileStream=new FileStream(fileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
+            StreamReader fileStreamReader=new StreamReader(fileStream);
+            fileStream.Position=0L;
+            fileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=fileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int vCoordStringStart=line.IndexOf("vCoord=(");
+             if(vCoordStringStart>=0){
+                vCoordStringStart+=8;
+              int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+              string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+              //Log.DebugMessage("vCoordString:"+vCoordString);
+              string[]xyzString=vCoordString.Split(',');
+              int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+              if(!editData.ContainsKey(vCoord)){
+               int editStringStart=vCoordStringEnd+4;
+               editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+               if(editStringStart>=0){
+                int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+                string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+                //Log.DebugMessage("editString:"+editString);
+                TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+                editData.Add(vCoord,edit);
+               }
               }
              }
             }
+            fileStream      .Dispose();
+            fileStreamReader.Dispose();
            }
-           fileStream      .Dispose();
-           fileStreamReader.Dispose();
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.terrainFileDatarwl.ExitReadLock();
           }
          }
+         VoxelSystem.Concurrent.terrainFileDatarwl.EnterWriteLock();
          foreach(object syn in container.terrainSynchronization){
           Monitor.Enter(syn);
          }
@@ -348,6 +356,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           foreach(object syn in container.terrainSynchronization){
            Monitor.Exit(syn);
           }
+          VoxelSystem.Concurrent.terrainFileDatarwl.ExitWriteLock();
          }
         }
     }

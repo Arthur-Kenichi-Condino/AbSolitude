@@ -10,6 +10,7 @@ namespace AKCondinoO.Voxels{
         /// </summary>
         internal class Concurrent{
          internal static ReaderWriterLockSlim terrainrwl;
+         internal static ReaderWriterLockSlim terrainFileDatarwl;
          internal static readonly Dictionary<int,Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[]>terrainVoxels=new Dictionary<int,Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[]>();
          internal static readonly Dictionary<Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[],(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>terrainVoxelsId=new Dictionary<Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[],(Vector2Int,Vector2Int,int)>();
          internal static ReaderWriterLockSlim waterrwl;
