@@ -89,6 +89,7 @@ namespace AKCondinoO.Voxels{
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal readonly WaterSpreadingMultithreaded[]waterSpreadingBGThreads=new WaterSpreadingMultithreaded[Environment.ProcessorCount];
+     internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
@@ -96,7 +97,7 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystem.Concurrent.terrainrwl=new ReaderWriterLockSlim();
+         VoxelSystem.Concurrent.terrainrwl=new ReaderWriterLockSlim();VoxelSystem.Concurrent.terrainFileDatarwl=new ReaderWriterLockSlim();
          VoxelSystem.Concurrent.waterrwl  =new ReaderWriterLockSlim();
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
@@ -113,6 +114,10 @@ namespace AKCondinoO.Voxels{
          WaterSpreadingMultithreaded.Stop=false;
          for(int i=0;i<waterSpreadingBGThreads.Length;++i){
                        waterSpreadingBGThreads[i]=new WaterSpreadingMultithreaded();
+         }
+         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stop=false;
+         for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
+                       terrainGetFileEditDataToNetSyncBGThreads[i]=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded();
          }
         }
      internal int chunkPoolMultiplier=1;
@@ -157,6 +162,10 @@ namespace AKCondinoO.Voxels{
            terrain[i].OnDestroyingCore();
           }
          }
+         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stop=true;
+         for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
+                       terrainGetFileEditDataToNetSyncBGThreads[i].Wait();
+         }
          WaterSpreadingMultithreaded.Stop=true;
          for(int i=0;i<waterSpreadingBGThreads.Length;++i){
                        waterSpreadingBGThreads[i].Wait();
@@ -189,7 +198,7 @@ namespace AKCondinoO.Voxels{
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
-         VoxelSystem.Concurrent.terrainrwl.Dispose();
+         VoxelSystem.Concurrent.terrainrwl.Dispose();VoxelSystem.Concurrent.terrainFileDatarwl.Dispose();
          VoxelSystem.Concurrent.waterrwl  .Dispose();
          VoxelSystem.Concurrent.terrainVoxels  .Clear();
          VoxelSystem.Concurrent.terrainVoxelsId.Clear();
@@ -203,6 +212,8 @@ namespace AKCondinoO.Voxels{
           VoxelTerrainChunk cnk=kvp.Value;
           cnk.ManualUpdate();
          }
+         //  Sync data in network
+         NetUpdate();
         }
      Coroutine proceduralGenerationCoroutine;
      internal readonly HashSet<Gameplayer>generationRequests=new HashSet<Gameplayer>();
