@@ -3,27 +3,40 @@
 #endif
 using AKCondinoO.Networking;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
+     internal static readonly ConcurrentQueue<Dictionary<Vector3Int,TerrainEditOutputData>>dataToSendDictionaryPool=new ConcurrentQueue<Dictionary<Vector3Int,TerrainEditOutputData>>();
+     internal const int VoxelEditDataSize=sizeof(int)*3+sizeof(double)+sizeof(ushort);
+     internal const int MaxDataSize=
+      sizeof(int)+//  message type
+      sizeof(int)+//  cnkIdx
+      sizeof(int)+//  total segments (segment count)
+      sizeof(int)+//  current segment
+      VoxelsPerChunk*VoxelEditDataSize;//  all edit data if whole chunk is edited
+     internal const int SegmentSize=6144;
+     internal const int VoxelsPerSegment=(SegmentSize-sizeof(int)*4)/VoxelEditDataSize;
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      internal NetworkObject netObj;
      internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
      internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
+     FastBufferWriter writer;
         void Awake(){
          netObj=GetComponent<NetworkObject>();
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
-         terrainGetFileEditDataToNetSyncBG.dataToSendToClients=new FastBufferWriter(sizeof(int)+sizeof(int)+sizeof(int)+sizeof(int)+VoxelsPerChunk*(sizeof(int)*3+sizeof(double)+sizeof(ushort)),Allocator.Persistent);
+         writer=new FastBufferWriter(SegmentSize,Allocator.Persistent);
         }
         internal void OnInstantiated(){
         }
         internal void OnDestroyingCore(){
          terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
-         terrainGetFileEditDataToNetSyncBG.dataToSendToClients.Dispose();
+         writer.Dispose();
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
@@ -72,7 +85,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         bool OnGotFileEditData(){
          if(terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
           Log.DebugMessage("OnGotFileEditData");
-          segmentCount=0;
+          dataToSendToClients=terrainGetFileEditDataToNetSyncBG.dataToSendToClients;
+          terrainGetFileEditDataToNetSyncBG.dataToSendToClients=null;
+          segmentCount=Mathf.CeilToInt((float)dataToSendToClients.Count/(float)VoxelsPerSegment);
+          Log.DebugMessage("segmentCount:"+segmentCount);
           return true;
          }
          return false;
@@ -101,11 +117,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         void OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment(ulong clientId,FastBufferReader reader){
          Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment");
 
-         FastBufferReader dataToReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
-         dataToReceivedFromServer.ReadValueSafe(out int readFirstValue);
-         //Log.DebugMessage("readFirstValue:"+readFirstValue);
-         Debug.Log("readFirstValue:"+readFirstValue);
-         dataToReceivedFromServer.Dispose();
+          //testing, REMOVE:
+         //FastBufferReader dataToReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
+         //dataToReceivedFromServer.ReadValueSafe(out int readFirstValue);
+         ////Log.DebugMessage("readFirstValue:"+readFirstValue);
+         //Debug.Log("readFirstValue:"+readFirstValue);
+         //dataToReceivedFromServer.Dispose();
 
          //  Validate segment with the cnkIdx in the message "header" by comparing it to the
          // current cnkIdx set to this MessageHandler
@@ -113,14 +130,27 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          // segment-data
         }
      Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
-     int segmentCount=-1;
-     WaitUntil waitUntilGetFileData;
+      Dictionary<Vector3Int,TerrainEditOutputData>dataToSendToClients;
+      int segmentCount=-1;
+      WaitUntil waitUntilGetFileData;
         internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
             Loop:{
              yield return waitUntilGetFileData;
              segmentCount=-1;//  restart loop but don't repeat for the same edit data file
              Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
-             NetworkManager.CustomMessagingManager.SendUnnamedMessageToAll(terrainGetFileEditDataToNetSyncBG.dataToSendToClients,NetworkDelivery.ReliableFragmentedSequenced);
+
+          //testing, REMOVE:
+             //container.dataToSendToClients.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataFileSegment);
+             //container.dataToSendToClients.WriteValueSafe((int)0);
+             //container.dataToSendToClients.WriteValueSafe((int)0);
+             //container.dataToSendToClients.WriteValueSafe((int)0);
+             // container.dataToSendToClients.WriteValueSafe(vCoord1.x);
+             // container.dataToSendToClients.WriteValueSafe(vCoord1.y);
+             // container.dataToSendToClients.WriteValueSafe(vCoord1.z);
+             // container.dataToSendToClients.WriteValueSafe((double)0.0d);
+             // container.dataToSendToClients.WriteValueSafe((ushort)MaterialId.Air);
+             //NetworkManager.CustomMessagingManager.SendUnnamedMessageToAll(terrainGetFileEditDataToNetSyncBG.dataToSendToClients,NetworkDelivery.ReliableFragmentedSequenced);
+
             }
             goto Loop;
         }
