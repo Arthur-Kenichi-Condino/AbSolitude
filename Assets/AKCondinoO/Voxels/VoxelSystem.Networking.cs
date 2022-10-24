@@ -32,10 +32,19 @@ namespace AKCondinoO.Voxels{
           for(int i=0;i<terrainMessageHandlers.Count;++i){
            terrainMessageHandlers[i].OnDestroyingCore();
           }
+         }
+        }
+        internal void OnDestroyingCoreNetDispose(){
+         if(Core.singleton.isServer){
+          for(int i=0;i<terrainMessageHandlers.Count;++i){
+           terrainMessageHandlers[i].terrainGetFileEditDataToNetSyncBG.Dispose();
+          }
+          //  everything has been disposed
           terrainMessageHandlers.Clear();
          }
         }
         internal void NetUpdate(){
+         VoxelTerrainChunkUnnamedMessageHandler.writingExecutionTime=0d;
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
           cnkMsgr.ManualUpdate();
