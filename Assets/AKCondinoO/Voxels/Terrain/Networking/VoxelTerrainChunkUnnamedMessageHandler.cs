@@ -24,7 +24,17 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        private void OnClientSideNetcnkIdxValueChanged(int previous,int current){
         if(Core.singleton.isClient){
          if(!IsOwner){
-          Log.DebugMessage("ask server for chunk data");
+          if(asClientcnkIdx==null||current!=asClientcnkIdx.Value){
+           asClientcnkIdx=current;
+           //Log.DebugMessage("ask server for chunk data");
+           FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent);
+           if(writer.TryBeginWrite(sizeof(int)*2)){
+            writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
+            writer.WriteValue((int)current);
+           }
+           NetworkManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,writer,NetworkDelivery.ReliableSequenced);
+           writer.Dispose();
+          }
          }
         }
        }
@@ -63,8 +73,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
+          NetworkManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;
          }
-         NetworkManager.CustomMessagingManager.OnUnnamedMessage+=OnReceivedUnnamedMessage;
          if(Core.singleton.isServer){
           serverSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
@@ -73,8 +83,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(this!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
           StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
          }
-         NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnReceivedUnnamedMessage;
          if(Core.singleton.isClient){
+          NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnClientReceivedUnnamedMessage;
           netcnkIdx.OnValueChanged-=OnClientSideNetcnkIdxValueChanged;
          }
          base.OnNetworkDespawn();
@@ -95,23 +105,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           sentSegments.Clear();
          }
         }
-        private void OnReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
+        private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
          var messageType=(int)UnnamedMessageTypes.Undefined;
          reader.ReadValueSafe(out messageType);
-         if(messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest){
-          Log.DebugMessage("messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest");
-          if(Core.singleton.isServer){
-           OnServerSideReceivedVoxelTerrainChunkEditDataRequest(clientId,reader);
-          }
-         }else if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment){
-          Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment");
+         if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment){
+          //Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment");
           if(Core.singleton.isClient){
            OnClientSideReceivedVoxelTerrainChunkEditDataSegment(clientId,reader);
           }
          }
-        }
-        void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
-         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest");
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          if(firstCall||cCoord1!=id.Value.cCoord){
@@ -136,6 +138,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 }
             }
         }
+     //  TO DO: send interval
      readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         bool CanGetFileEditData(){
          if(clientIdsRequestingData.Count>0){

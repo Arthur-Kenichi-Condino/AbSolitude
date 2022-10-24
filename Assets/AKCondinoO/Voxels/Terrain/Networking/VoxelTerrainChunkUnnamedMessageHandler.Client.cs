@@ -4,6 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
+        int?asClientcnkIdx=null;
         void OnClientSideReceivedVoxelTerrainChunkEditDataSegment(ulong clientId,FastBufferReader reader){
          //Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment");
           //testing, REMOVE:
