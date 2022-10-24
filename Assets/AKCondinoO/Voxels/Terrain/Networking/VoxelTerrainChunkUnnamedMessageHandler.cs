@@ -7,23 +7,27 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      internal static readonly ConcurrentQueue<Dictionary<int,FastBufferWriter>>dataToSendDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferWriter>>();
-     internal const int SegmentSize=6144;
-     // VoxelsPerChunk*VoxelEditDataSize all edit data if whole chunk is edited
-     internal const int VoxelEditDataSize=sizeof(int)*3+sizeof(double)+sizeof(ushort);
-     // sizeof(int) message type
-     // sizeof(int) cnkIdx
-     // sizeof(int) total segments (segment count)
-     // sizeof(int) current segment
-     // sizeof(int) segment writes count
-     internal const int VoxelsPerSegment=(SegmentSize-sizeof(int)*5)/VoxelEditDataSize;
+     internal const int VoxelEditDataSize=sizeof(int)*3+sizeof(double)+sizeof(ushort);// VoxelsPerChunk*VoxelEditDataSize is all edit data size if whole chunk is edited
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      internal NetworkObject netObj;
+      private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
+       private void OnClientSideNetcnkIdxValueChanged(int previous,int current){
+        if(Core.singleton.isClient){
+         if(!IsOwner){
+          Log.DebugMessage("ask server for chunk data");
+         }
+        }
+       }
      internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
      internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         void Awake(){
@@ -31,6 +35,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
         }
         internal void OnInstantiated(){
+         if(Core.singleton.isServer){
+          terrainGetFileEditDataToNetSyncBG.segmentSize=NetworkManager.GetComponent<UnityTransport>().MaxPayloadSize;
+          //add sizeof(int) for the message type
+          //add sizeof(int) for the total segments (segment count)
+          //add sizeof(int) for the current segment
+          //add sizeof(int) for the segment writes count
+          terrainGetFileEditDataToNetSyncBG.voxelsPerSegment=(terrainGetFileEditDataToNetSyncBG.segmentSize-sizeof(int)*4)/VoxelEditDataSize;
+         }
         }
         internal void OnDestroyingCore(){
          terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
@@ -48,6 +60,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+         if(Core.singleton.isClient){
+          OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
+          netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
+         }
          NetworkManager.CustomMessagingManager.OnUnnamedMessage+=OnReceivedUnnamedMessage;
          if(Core.singleton.isServer){
           serverSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
@@ -58,6 +74,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
          }
          NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnReceivedUnnamedMessage;
+         if(Core.singleton.isClient){
+          netcnkIdx.OnValueChanged-=OnClientSideNetcnkIdxValueChanged;
+         }
          base.OnNetworkDespawn();
          if(sendingDataToClients!=null){
           foreach(var segmentBufferPair in sendingDataToClients){
@@ -79,22 +98,25 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         private void OnReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
          var messageType=(int)UnnamedMessageTypes.Undefined;
          reader.ReadValueSafe(out messageType);
-         //Log.DebugMessage("messageType:"+messageType);
-         if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkcnkIdx){
-          //Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkcnkIdx");
-          if(Core.singleton.isClient){
-           OnClientSideReceivedVoxelTerrainChunkcnkIdx(clientId,reader);
+         if(messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest){
+          Log.DebugMessage("messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest");
+          if(Core.singleton.isServer){
+           OnServerSideReceivedVoxelTerrainChunkEditDataRequest(clientId,reader);
           }
-         }else if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataFileSegment){
-          //Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataFileSegment");
+         }else if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment){
+          Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment");
           if(Core.singleton.isClient){
-           OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment(clientId,reader);
+           OnClientSideReceivedVoxelTerrainChunkEditDataSegment(clientId,reader);
           }
          }
+        }
+        void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
+         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest");
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
+          netcnkIdx.Value=id.Value.cnkIdx;
           pendingGetFileEditData=true;
          }
         }
@@ -114,7 +136,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 }
             }
         }
-     readonly List<ulong>clientIdsRequestingData=new List<ulong>();
+     readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         bool CanGetFileEditData(){
          if(clientIdsRequestingData.Count>0){
           terrainGetFileEditDataToNetSyncBG.cCoord=id.Value.cCoord;
@@ -140,6 +162,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          return false;
         }
      Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
+      WaitUntil waitUntilGetFileData;
       readonly List<ulong>clientIdsToSendData=new List<ulong>();
       internal static double writingMaxExecutionTime=20.0;
        internal static double writingExecutionTime;
@@ -147,7 +170,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
       int sendingcnkIdx;
       Dictionary<int,FastBufferWriter>sendingDataToClients;
       readonly List<int>sentSegments=new List<int>();
-      WaitUntil waitUntilGetFileData;
         internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
             //Log.DebugMessage("writingMaxExecutionTime:"+writingMaxExecutionTime);
             System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
@@ -161,15 +183,16 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             Loop:{
              yield return waitUntilGetFileData;
              Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
-             FastBufferWriter writer=new FastBufferWriter(sizeof(int)*3,Allocator.Persistent);
-             writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkcnkIdx);//  message type
-             writer.WriteValueSafe(sendingcnkIdx);//  cnkIdx
-             writer.WriteValueSafe(segmentCount);//  total segments (segment count)
-             foreach(ulong clientId in clientIdsToSendData){
-              NetworkManager.CustomMessagingManager.SendUnnamedMessage(clientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
-             }
-             writer.Dispose();
-             yield return null;
+             FastBufferWriter writer;
+             //FastBufferWriter writer=new FastBufferWriter(sizeof(int)*3,Allocator.Persistent);
+             //writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkcnkIdx);//  message type
+             //writer.WriteValueSafe(sendingcnkIdx);//  cnkIdx
+             //writer.WriteValueSafe(segmentCount);//  total segments (segment count)
+             //foreach(ulong clientId in clientIdsToSendData){
+             // NetworkManager.CustomMessagingManager.SendUnnamedMessage(clientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
+             //}
+             //writer.Dispose();
+             //yield return null;
              stopwatch.Restart();
              foreach(var segmentBufferPair in sendingDataToClients){
               while(LimitExecutionTime()){

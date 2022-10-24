@@ -90,7 +90,7 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal readonly WaterSpreadingMultithreaded[]waterSpreadingBGThreads=new WaterSpreadingMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
-     internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);
+     internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);//  pool size
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(12,12);
      internal static readonly BaseBiome biome=new BaseBiome();
      [SerializeField]VoxelTerrainChunk _VoxelTerrainChunkPrefab;
