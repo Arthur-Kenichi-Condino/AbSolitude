@@ -1,12 +1,15 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Networking;
 using AKCondinoO.Voxels.Terrain;
 using AKCondinoO.Voxels.Terrain.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
@@ -16,10 +19,26 @@ namespace AKCondinoO.Voxels{
      internal readonly Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersAssigned=new Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>();
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
-         //int poolSize=Core.singleton.maxConnections*(expropriationDistance.x*2+1)*
-         //                                           (expropriationDistance.y*2+1);
-         //Log.DebugMessage("terrainMessageHandlers poolSize:"+poolSize);
+         Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnServerReceivedUnnamedMessage;
          serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
+        }
+        private void OnServerReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
+         var messageType=(int)UnnamedMessageTypes.Undefined;
+         reader.ReadValueSafe(out messageType);
+         if(messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest){
+          //Log.DebugMessage("messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest");
+          if(Core.singleton.isServer){
+           OnServerSideReceivedVoxelTerrainChunkEditDataRequest(clientId,reader);
+          }
+         }
+        }
+        void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
+         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest");
+         int cnkIdx;
+         reader.ReadValueSafe(out cnkIdx);
+         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:cnkIdx:"+cnkIdx);
+         //clientIdsRequestingData.Add(clientId);
+         //pendingGetFileEditData=true;
         }
         internal void NetClientSideInit(){
          Log.DebugMessage("NetClientSideInit");
@@ -29,6 +48,9 @@ namespace AKCondinoO.Voxels{
           StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
          }
          if(Core.singleton.isServer){
+          if(Core.singleton.netManager.CustomMessagingManager!=null){
+             Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage-=OnServerReceivedUnnamedMessage;
+          }
           for(int i=0;i<terrainMessageHandlers.Count;++i){
            terrainMessageHandlers[i].OnDestroyingCore();
           }
