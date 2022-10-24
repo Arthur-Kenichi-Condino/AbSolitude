@@ -16,9 +16,9 @@ namespace AKCondinoO.Voxels{
      internal readonly Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersAssigned=new Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>();
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
-         int poolSize=Core.singleton.maxConnections*(expropriationDistance.x*2+1)*
-                                                    (expropriationDistance.y*2+1);
-         Log.DebugMessage("terrainMessageHandlers poolSize:"+poolSize);
+         //int poolSize=Core.singleton.maxConnections*(expropriationDistance.x*2+1)*
+         //                                           (expropriationDistance.y*2+1);
+         //Log.DebugMessage("terrainMessageHandlers poolSize:"+poolSize);
          serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
         }
         internal void NetClientSideInit(){

@@ -36,11 +36,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     }
     internal class VoxelTerrainGetFileEditDataToNetSyncMultithreaded:BaseMultithreaded<VoxelTerrainGetFileEditDataToNetSyncContainer>{
         protected override void Execute(){
-         Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:VoxelsPerSegment:"+VoxelsPerSegment);
+         Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.voxelsPerSegment:"+container.voxelsPerSegment);
          if(!dataToSendDictionaryPool.TryDequeue(out container.dataToSendToClients)){
           container.dataToSendToClients=new Dictionary<int,FastBufferWriter>();
          }
          if(container.segmentSize<=0){
+          Log.DebugMessage("container.segmentSize<=0");
           return;
          }
          VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
