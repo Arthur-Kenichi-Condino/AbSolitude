@@ -4,12 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
-        void OnClientSideReceivedVoxelTerrainChunkcnkIdx(ulong clientId,FastBufferReader reader){
-         Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkcnkIdx");
-         //  if this message fails to be received, client may ask for it after there's a missing MessageHandler for its chunk;
-         //  spawn and update message handlers in the server with VoxelSystemNetworking
-        }
-        void OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment(ulong clientId,FastBufferReader reader){
+        void OnClientSideReceivedVoxelTerrainChunkEditDataSegment(ulong clientId,FastBufferReader reader){
          //Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataFileSegment");
           //testing, REMOVE:
          //FastBufferReader dataToReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);

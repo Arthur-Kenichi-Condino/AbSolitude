@@ -15,13 +15,15 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkUnnamedMessag
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainGetFileEditDataToNetSyncContainer:BackgroundContainer{
-     internal Dictionary<int,FastBufferWriter>dataToSendToClients;
+     internal int segmentSize;
+     internal int voxelsPerSegment;
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
      internal        int cnkIdx;
      internal string editsFileName;
      internal FileStream editsFileStream;
      internal StreamReader editsFileStreamReader;
+     internal Dictionary<int,FastBufferWriter>dataToSendToClients;
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here
@@ -37,6 +39,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:VoxelsPerSegment:"+VoxelsPerSegment);
          if(!dataToSendDictionaryPool.TryDequeue(out container.dataToSendToClients)){
           container.dataToSendToClients=new Dictionary<int,FastBufferWriter>();
+         }
+         if(container.segmentSize<=0){
+          return;
          }
          VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
          try{
