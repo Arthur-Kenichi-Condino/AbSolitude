@@ -166,6 +166,7 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i].Wait();
          }
+         OnDestroyingCoreNetDispose();
          WaterSpreadingMultithreaded.Stop=true;
          for(int i=0;i<waterSpreadingBGThreads.Length;++i){
                        waterSpreadingBGThreads[i].Wait();
