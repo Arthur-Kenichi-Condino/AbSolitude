@@ -26,7 +26,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(!IsOwner){
           if(asClientcnkIdx==null||current!=asClientcnkIdx.Value){
            asClientcnkIdx=current;
-           //Log.DebugMessage("ask server for chunk data");
+           Log.DebugMessage("ask server for chunk data");
            FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent);
            if(writer.TryBeginWrite(sizeof(int)*2)){
             writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
@@ -73,7 +73,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
-          NetworkManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;
          }
          if(Core.singleton.isServer){
           serverSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
@@ -84,7 +83,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
          }
          if(Core.singleton.isClient){
-          NetworkManager.CustomMessagingManager.OnUnnamedMessage-=OnClientReceivedUnnamedMessage;
           netcnkIdx.OnValueChanged-=OnClientSideNetcnkIdxValueChanged;
          }
          base.OnNetworkDespawn();
@@ -103,16 +101,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           dataToSendDictionaryPool.Enqueue(sendingDataToClients);
           sendingDataToClients=null;
           sentSegments.Clear();
-         }
-        }
-        private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
-         var messageType=(int)UnnamedMessageTypes.Undefined;
-         reader.ReadValueSafe(out messageType);
-         if(messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment){
-          //Log.DebugMessage("messageType==(int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment");
-          if(Core.singleton.isClient){
-           OnClientSideReceivedVoxelTerrainChunkEditDataSegment(clientId,reader);
-          }
          }
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
