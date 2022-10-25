@@ -150,6 +150,9 @@ namespace AKCondinoO.Voxels{
           biome.Seed=0;
           proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
          }
+         if(Core.singleton.isClient){
+          NetClientSideInit();
+         }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
