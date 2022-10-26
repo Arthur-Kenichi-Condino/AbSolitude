@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Networking;
+using AKCondinoO.Voxels.Terrain.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -19,12 +20,13 @@ namespace AKCondinoO.Voxels{
          }
         }
         private void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
-         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest");
+         //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId);
          int cnkIdx;
          reader.ReadValueSafe(out cnkIdx);
-         Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:cnkIdx:"+cnkIdx);
-         //clientIdsRequestingData.Add(clientId);
-         //pendingGetFileEditData=true;
+         //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:cnkIdx:"+cnkIdx);
+         if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
+          cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
+         }
         }
     }
 }
