@@ -36,7 +36,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     }
     internal class VoxelTerrainGetFileEditDataToNetSyncMultithreaded:BaseMultithreaded<VoxelTerrainGetFileEditDataToNetSyncContainer>{
         protected override void Execute(){
-         Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.voxelsPerSegment:"+container.voxelsPerSegment);
+         //Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.voxelsPerSegment:"+container.voxelsPerSegment);
          if(!dataToSendDictionaryPool.TryDequeue(out container.dataToSendToClients)){
           container.dataToSendToClients=new Dictionary<int,FastBufferWriter>();
          }
@@ -51,41 +51,47 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           if(container.editsFileStream==null||container.editsFileName!=editsFileName){
            container.editsFileName=editsFileName;
           }
-          //FastBufferWriter writer;
-          //int writtenDataCount=0;
-          //int segment=0;
+
+          FastBufferWriter writer;
+          int writtenDataCount=0;
+          int segment=0;
           //testing, REMOVE:
-             //Vector3Int vCoord1;
-             //for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-             //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-             //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-             // if(writtenDataCount<=0){
+             Vector3Int vCoord1;
+             for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+             for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+             for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+              if(writtenDataCount<=0){
              //  //Log.DebugMessage("start writing to segment:"+segment);
              //  // sizeof(int) message type
              //  // sizeof(int) cnkIdx
              //  // sizeof(int) total segments (segment count)
              //  // sizeof(int) current segment
              //  // sizeof(int) segment writes count
-             //  writer=new FastBufferWriter(SegmentSize,Allocator.Persistent);
-             //  writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataFileSegment);
-             //  writer.WriteValueSafe(container.cnkIdx);
-             //  writer.WriteValueSafe((int)117);
-             //  writer.WriteValueSafe((int)segment);
-             //  writer.WriteValueSafe((int)278);
-             // }
-             // if(writtenDataCount++<VoxelsPerSegment){
-             //  writer.WriteValueSafe(vCoord1.x);
-             //  writer.WriteValueSafe(vCoord1.y);
-             //  writer.WriteValueSafe(vCoord1.z);
-             //  writer.WriteValueSafe((double)0.0d);
-             //  writer.WriteValueSafe((ushort)MaterialId.Air);
-             //  if(writtenDataCount>=VoxelsPerSegment){
-             //   container.dataToSendToClients.Add(segment,writer);
-             //   segment++;
-             //   writtenDataCount=0;
-             //  }
-             // }
-             //}}}
+               writer=new FastBufferWriter(1100,Allocator.Persistent,container.segmentSize);
+               writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment);
+               writer.WriteValueSafe(container.cnkIdx);
+               writer.WriteValueSafe((int)117);
+               writer.WriteValueSafe((int)segment);
+               writer.WriteValueSafe((int)278);
+              }
+              if(writtenDataCount++<container.voxelsPerSegment){
+               BytePacker.WriteValuePacked(writer,GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z));
+               //writer.WriteValueSafe(GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z));
+               //writer.WriteValueSafe(vCoord1.x);
+               //writer.WriteValueSafe(vCoord1.y);
+               //writer.WriteValueSafe(vCoord1.z);
+               BytePacker.WriteValuePacked(writer,(double)0.0d);
+               //writer.WriteValueSafe((double)0.0d);
+               BytePacker.WriteValuePacked(writer,(ushort)MaterialId.Air);
+               //writer.WriteValueSafe((ushort)MaterialId.Air);
+               if(writtenDataCount>=container.voxelsPerSegment){
+                container.dataToSendToClients.Add(segment,writer);
+                segment++;
+                writtenDataCount=0;
+               }
+              }
+             }}}
+
          }catch{
           throw;
          }finally{

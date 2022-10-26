@@ -8,6 +8,12 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
+     float clientSendMessageDelay=1f;
+     float clientSendMessageTimer=10f;
+     internal readonly Dictionary<int,FastBufferWriter>clientVoxelTerrainChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
+      internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=32;
+       internal int clientVoxelTerrainChunkEditDataRequestsSent;
+     internal readonly List<int>clientVoxelTerrainChunkEditDataRequestsSentToRemove=new List<int>();
         private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
          var messageType=(int)UnnamedMessageTypes.Undefined;
          reader.ReadValueSafe(out messageType);

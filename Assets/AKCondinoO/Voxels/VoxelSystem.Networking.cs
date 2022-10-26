@@ -53,12 +53,44 @@ namespace AKCondinoO.Voxels{
           //  everything has been disposed
           terrainMessageHandlers.Clear();
          }
+         if(Core.singleton.isClient){
+          foreach(var asClientRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
+           FastBufferWriter request=asClientRequestToSend.Value;
+           request.Dispose();
+          }
+          clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
+         }
         }
         internal void NetUpdate(){
-         VoxelTerrainChunkUnnamedMessageHandler.writingExecutionTime=0d;
+         VoxelTerrainChunkUnnamedMessageHandler.messagesSent=0;
+         VoxelTerrainChunkUnnamedMessageHandler.sendingExecutionTime=0d;
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
           cnkMsgr.ManualUpdate();
+         }
+         if(clientSendMessageTimer<=0f){
+            clientSendMessageTimer=clientSendMessageDelay;
+          clientVoxelTerrainChunkEditDataRequestsSentToRemove.Clear();
+          clientVoxelTerrainChunkEditDataRequestsSent=0;
+          foreach(var asClientRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
+           FastBufferWriter request=asClientRequestToSend.Value;
+           if(Core.singleton.isClient){
+            if(Core.singleton.netManager.IsConnectedClient){
+             Core.singleton.netManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,request,NetworkDelivery.ReliableSequenced);
+            }
+           }
+           request.Dispose();
+           clientVoxelTerrainChunkEditDataRequestsSentToRemove.Add(asClientRequestToSend.Key);
+           clientVoxelTerrainChunkEditDataRequestsSent++;
+           if(clientVoxelTerrainChunkEditDataRequestsSent>=clientMaxVoxelTerrainChunkEditDataRequestsPerFrame){
+            break;
+           }
+          }
+          foreach(int toRemove in clientVoxelTerrainChunkEditDataRequestsSentToRemove){
+           clientVoxelTerrainChunkEditDataRequestsToSend.Remove(toRemove);
+          }
+         }else{
+          clientSendMessageTimer-=Time.deltaTime;
          }
         }
      Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;

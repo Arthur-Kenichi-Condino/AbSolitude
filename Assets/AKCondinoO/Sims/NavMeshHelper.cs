@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.28125f/3f,
            minRegionArea=0.28125f,
            overrideTileSize=true,
-                   tileSize=128,
+                   tileSize=16,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -49,7 +49,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.25f/3f,
            minRegionArea=0.25f,
            overrideTileSize=true,
-                   tileSize=128,
+                   tileSize=16,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -65,7 +65,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.5625f/3f,
            minRegionArea=0.5625f,
            overrideTileSize=true,
-                   tileSize=128,
+                   tileSize=16,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
@@ -81,7 +81,7 @@ namespace AKCondinoO.Sims{
                    voxelSize=0.25f/3f,
            minRegionArea=0.25f,
            overrideTileSize=true,
-                   tileSize=128,
+                   tileSize=16,
            debug=new NavMeshBuildDebugSettings{
             flags=NavMeshBuildDebugFlags.None,
            },
