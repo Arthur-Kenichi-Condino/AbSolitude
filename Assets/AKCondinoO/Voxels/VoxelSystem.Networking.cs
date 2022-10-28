@@ -61,7 +61,16 @@ namespace AKCondinoO.Voxels{
           clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
          }
         }
+     [SerializeField]ulong DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0;
         internal void NetUpdate(){
+         if(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT>0uL){
+          Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+          foreach(var kvp in terrainMessageHandlersAssigned){
+           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
+           cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+          }
+            DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
+         }
          VoxelTerrainChunkUnnamedMessageHandler.messagesSent=0;
          VoxelTerrainChunkUnnamedMessageHandler.sendingExecutionTime=0d;
          foreach(var kvp in terrainMessageHandlersAssigned){

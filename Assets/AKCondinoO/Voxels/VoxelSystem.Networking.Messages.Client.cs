@@ -3,7 +3,9 @@
 #endif
 using AKCondinoO.Networking;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
@@ -24,18 +26,18 @@ namespace AKCondinoO.Voxels{
           }
          }
         }
+     internal static readonly ConcurrentQueue<Dictionary<int,FastBufferReader>>clientVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferReader>>();
+     internal readonly Dictionary<int,Dictionary<int,FastBufferReader>>clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer=new Dictionary<int,Dictionary<int,FastBufferReader>>();
         void OnClientSideReceivedVoxelTerrainChunkEditDataSegment(ulong clientId,FastBufferReader reader){
          Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataSegment");
-          //testing, REMOVE:
-         //FastBufferReader dataToReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
-         //dataToReceivedFromServer.ReadValueSafe(out int readFirstValue);
-         ////Log.DebugMessage("readFirstValue:"+readFirstValue);
-         //Debug.Log("readFirstValue:"+readFirstValue);
-         //dataToReceivedFromServer.Dispose();
-         //  Validate segment with the cnkIdx in the message "header" by comparing it to the
-         // current cnkIdx set to this MessageHandler
-         //  if this message fails to be received, client may ask for it after detecting missing segments in the "dictionary" of
-         // segment-data
+         FastBufferReader dataReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
+         //  creating a buffer from a buffer puts the reading position on beginning again
+         var messageType=(int)UnnamedMessageTypes.Undefined;
+         reader.ReadValueSafe(out messageType);
+         int cnkIdx;
+         reader.ReadValueSafe(out cnkIdx);
+         int segment;
+         reader.ReadValueSafe(out segment);
         }
     }
 }
