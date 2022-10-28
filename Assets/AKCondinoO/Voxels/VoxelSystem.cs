@@ -21,7 +21,7 @@ namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem:MonoBehaviour,ISingletonInitialization{
      internal const int MaxcCoordx=312;
      internal const int MaxcCoordy=312;
-     internal const ushort Height=(128);
+     internal const ushort Height=(256);
      internal const ushort Width=(16);
      internal const ushort Depth=(16);
      internal const ushort FlattenOffset=(Width*Depth);

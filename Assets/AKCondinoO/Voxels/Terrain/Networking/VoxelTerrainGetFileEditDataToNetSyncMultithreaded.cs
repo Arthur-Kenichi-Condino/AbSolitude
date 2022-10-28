@@ -64,14 +64,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              //  //Log.DebugMessage("start writing to segment:"+segment);
              //  // sizeof(int) message type
              //  // sizeof(int) cnkIdx
-             //  // sizeof(int) total segments (segment count)
              //  // sizeof(int) current segment
+             //  // sizeof(int) total segments (segment count)
              //  // sizeof(int) segment writes count
                writer=new FastBufferWriter(1100,Allocator.Persistent,container.segmentSize);
                writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment);
                writer.WriteValueSafe(container.cnkIdx);
-               writer.WriteValueSafe((int)117);
                writer.WriteValueSafe((int)segment);
+               writer.WriteValueSafe((int)117);
                writer.WriteValueSafe((int)278);
               }
               if(writtenDataCount++<container.voxelsPerSegment){
