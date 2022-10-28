@@ -26,8 +26,8 @@ namespace AKCondinoO.Voxels{
           }
          }
         }
-     internal static readonly ConcurrentQueue<Dictionary<int,FastBufferReader>>clientVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferReader>>();
-     internal readonly Dictionary<int,Dictionary<int,FastBufferReader>>clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer=new Dictionary<int,Dictionary<int,FastBufferReader>>();
+     internal readonly Dictionary<int,Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer=new Dictionary<int,Dictionary<int,(int,FastBufferReader)>>();
+      internal static readonly ConcurrentQueue<Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>clientVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,(int,FastBufferReader)>>();
         void OnClientSideReceivedVoxelTerrainChunkEditDataSegment(ulong clientId,FastBufferReader reader){
          Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataSegment");
          FastBufferReader dataReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
@@ -38,6 +38,19 @@ namespace AKCondinoO.Voxels{
          reader.ReadValueSafe(out cnkIdx);
          int segment;
          reader.ReadValueSafe(out segment);
+         int totalSegments;
+         reader.ReadValueSafe(out totalSegments);
+         if(!clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer.TryGetValue(cnkIdx,out Dictionary<int,(int totalSegments,FastBufferReader segmentData)>segmentsReceivedFromServer)){
+          if(!clientVoxelTerrainChunkEditDataSegmentsDictionaryPool.TryDequeue(out segmentsReceivedFromServer)){
+           segmentsReceivedFromServer=new Dictionary<int,(int totalSegments,FastBufferReader segmentData)>();
+          }
+          clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer[cnkIdx]=segmentsReceivedFromServer;
+         }
+         if(segmentsReceivedFromServer.TryGetValue(segment,out(int totalSegments,FastBufferReader segmentData)oldEditDataSegment)){
+          oldEditDataSegment.segmentData.Dispose();
+          segmentsReceivedFromServer.Remove(segment);
+         }
+         segmentsReceivedFromServer[segment]=(totalSegments,reader);
         }
     }
 }

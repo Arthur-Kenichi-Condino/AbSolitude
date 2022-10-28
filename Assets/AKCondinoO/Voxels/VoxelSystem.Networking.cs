@@ -59,6 +59,14 @@ namespace AKCondinoO.Voxels{
            request.Dispose();
           }
           clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
+          foreach(var kvp1 in clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer){
+           foreach(var kvp2 in kvp1.Value){
+            kvp2.Value.segmentData.Dispose();
+           }
+           kvp1.Value.Clear();
+           clientVoxelTerrainChunkEditDataSegmentsDictionaryPool.Enqueue(kvp1.Value);
+          }
+          clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer.Clear();
          }
         }
      [SerializeField]ulong DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0;
