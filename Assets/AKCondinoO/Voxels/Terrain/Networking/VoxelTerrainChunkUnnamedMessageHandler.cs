@@ -16,7 +16,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      internal static readonly ConcurrentQueue<Dictionary<int,FastBufferWriter>>dataToSendDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferWriter>>();
      internal const int VoxelEditDataSize=sizeof(int)+sizeof(double)+sizeof(ushort);// VoxelsPerChunk*VoxelEditDataSize is all edit data size if whole chunk is edited: 720,896.0 if height is 128
-     internal const int Splits=22;
+     internal const int Splits=164;
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -47,7 +47,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         void Awake(){
          netObj=GetComponent<NetworkObject>();
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
-         waitForDelayToSendNewMessages=new WaitForSeconds(0.05f);
+         waitForDelayToSendNewMessages=new WaitForSeconds(0.1f);
         }
         internal void OnInstantiated(){
          if(Core.singleton.isServer){
@@ -167,7 +167,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
       WaitUntil waitUntilGetFileData;
       WaitForSeconds waitForDelayToSendNewMessages;
       readonly List<ulong>clientIdsToSendData=new List<ulong>();
-      internal static int maxMessagesPerFrame=22;
+      internal static int maxMessagesPerFrame=5;
        internal static int messagesSent;
       internal static double sendingMaxExecutionTime=5.0;
        internal static double sendingExecutionTime;
