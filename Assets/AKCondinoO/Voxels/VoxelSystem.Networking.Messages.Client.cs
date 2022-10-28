@@ -10,10 +10,10 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
-     float clientSendMessageDelay=1f;
+     float clientSendMessageDelay=0.05f;
      float clientSendMessageTimer=10f;
      internal readonly Dictionary<int,FastBufferWriter>clientVoxelTerrainChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
-      internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=32;
+      internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=8;
        internal int clientVoxelTerrainChunkEditDataRequestsSent;
      internal readonly List<int>clientVoxelTerrainChunkEditDataRequestsSentToRemove=new List<int>();
         private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
@@ -33,13 +33,13 @@ namespace AKCondinoO.Voxels{
          FastBufferReader dataReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
          //  creating a buffer from a buffer puts the reading position on beginning again
          var messageType=(int)UnnamedMessageTypes.Undefined;
-         reader.ReadValueSafe(out messageType);
+         dataReceivedFromServer.ReadValueSafe(out messageType);
          int cnkIdx;
-         reader.ReadValueSafe(out cnkIdx);
+         dataReceivedFromServer.ReadValueSafe(out cnkIdx);
          int segment;
-         reader.ReadValueSafe(out segment);
+         dataReceivedFromServer.ReadValueSafe(out segment);
          int totalSegments;
-         reader.ReadValueSafe(out totalSegments);
+         dataReceivedFromServer.ReadValueSafe(out totalSegments);
          if(!clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer.TryGetValue(cnkIdx,out Dictionary<int,(int totalSegments,FastBufferReader segmentData)>segmentsReceivedFromServer)){
           if(!clientVoxelTerrainChunkEditDataSegmentsDictionaryPool.TryDequeue(out segmentsReceivedFromServer)){
            segmentsReceivedFromServer=new Dictionary<int,(int totalSegments,FastBufferReader segmentData)>();
@@ -50,7 +50,7 @@ namespace AKCondinoO.Voxels{
           oldEditDataSegment.segmentData.Dispose();
           segmentsReceivedFromServer.Remove(segment);
          }
-         segmentsReceivedFromServer[segment]=(totalSegments,reader);
+         segmentsReceivedFromServer[segment]=(totalSegments,dataReceivedFromServer);
         }
     }
 }
