@@ -54,8 +54,8 @@ namespace AKCondinoO.Voxels{
           terrainMessageHandlers.Clear();
          }
          if(Core.singleton.isClient){
-          foreach(var asClientRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
-           FastBufferWriter request=asClientRequestToSend.Value;
+          foreach(var clientSideRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
+           FastBufferWriter request=clientSideRequestToSend.Value;
            request.Dispose();
           }
           clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
@@ -89,15 +89,15 @@ namespace AKCondinoO.Voxels{
             clientSendMessageTimer=clientSendMessageDelay;
           clientVoxelTerrainChunkEditDataRequestsSentToRemove.Clear();
           clientVoxelTerrainChunkEditDataRequestsSent=0;
-          foreach(var asClientRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
-           FastBufferWriter request=asClientRequestToSend.Value;
+          foreach(var clientSideRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
+           FastBufferWriter request=clientSideRequestToSend.Value;
            if(Core.singleton.isClient){
             if(Core.singleton.netManager.IsConnectedClient){
              Core.singleton.netManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,request,NetworkDelivery.ReliableSequenced);
             }
            }
            request.Dispose();
-           clientVoxelTerrainChunkEditDataRequestsSentToRemove.Add(asClientRequestToSend.Key);
+           clientVoxelTerrainChunkEditDataRequestsSentToRemove.Add(clientSideRequestToSend.Key);
            clientVoxelTerrainChunkEditDataRequestsSent++;
            if(clientVoxelTerrainChunkEditDataRequestsSent>=clientMaxVoxelTerrainChunkEditDataRequestsPerFrame){
             break;

@@ -7,6 +7,6 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
-     int?asClientcnkIdx=null;
+     int?clientSidecnkIdx=null;
     }
 }
