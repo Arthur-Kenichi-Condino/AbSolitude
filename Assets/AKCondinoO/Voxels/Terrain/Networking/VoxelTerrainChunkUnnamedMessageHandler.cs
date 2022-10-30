@@ -32,8 +32,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        private void OnClientSideNetcnkIdxValueChanged(int previous,int current){
         if(Core.singleton.isClient){
          if(!IsOwner){
-          if(asClientcnkIdx==null||current!=asClientcnkIdx.Value){
-           asClientcnkIdx=current;
+          if(clientSidecnkIdx==null||current!=clientSidecnkIdx.Value){
+           clientSidecnkIdx=current;
            //Log.DebugMessage("ask server for chunk data");
            //add sizeof(int) for the message type
            //add sizeof(int) for the cnkIdx
