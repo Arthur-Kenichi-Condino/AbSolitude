@@ -15,6 +15,12 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      internal static readonly ConcurrentQueue<Dictionary<int,FastBufferWriter>>dataToSendDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferWriter>>();
+     //add sizeof(int) for the message type
+     //add sizeof(int) for the cnkIdx
+     //add sizeof(int) for the current segment
+     //add sizeof(int) for the total segments (segment count)
+     //add sizeof(int) for the segment writes count
+     internal const int HeaderSize=sizeof(int)*5;
      internal const int VoxelEditDataSize=sizeof(int)+sizeof(double)+sizeof(ushort);// VoxelsPerChunk*VoxelEditDataSize is all edit data size if whole chunk is edited: 720,896.0 if height is 128
      internal const int Splits=164;
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
@@ -51,13 +57,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         internal void OnInstantiated(){
          if(Core.singleton.isServer){
-          segmentSize=terrainGetFileEditDataToNetSyncBG.segmentSize=(VoxelsPerChunk*VoxelEditDataSize+20)/Splits;
-          //add sizeof(int) for the message type
-          //add sizeof(int) for the cnkIdx
-          //add sizeof(int) for the current segment
-          //add sizeof(int) for the total segments (segment count)
-          //add sizeof(int) for the segment writes count
-          terrainGetFileEditDataToNetSyncBG.voxelsPerSegment=(terrainGetFileEditDataToNetSyncBG.segmentSize-sizeof(int)*5)/VoxelEditDataSize;
+          segmentSize=terrainGetFileEditDataToNetSyncBG.segmentSize=(VoxelsPerChunk*VoxelEditDataSize+HeaderSize)/Splits;
+          terrainGetFileEditDataToNetSyncBG.voxelsPerSegment=(terrainGetFileEditDataToNetSyncBG.segmentSize-HeaderSize)/VoxelEditDataSize;
          }
         }
         internal void OnDestroyingCore(){

@@ -96,46 +96,44 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              }
             }
            }
+           int totalSegments=Mathf.CeilToInt((float)editData.Count/(float)container.voxelsPerSegment);
+           int lastSegmentWriteDataCount=editData.Count%container.voxelsPerSegment;
+           if(lastSegmentWriteDataCount<=0){
+            lastSegmentWriteDataCount=container.voxelsPerSegment;
+           }
+           FastBufferWriter writer;
+           int writtenDataCount=0;
+           int segment=0;
+           foreach(var voxelEdited in editData){
+            Vector3Int vCoord=voxelEdited.Key;
+            TerrainEditOutputData edit=voxelEdited.Value;
+            if(writtenDataCount<=0){
+             writer=new FastBufferWriter(1100,Allocator.Persistent,container.segmentSize);
+             writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment);//message type
+             writer.WriteValueSafe(container.cnkIdx);//cnkIdx
+             writer.WriteValueSafe((int)segment);//current segment
+             writer.WriteValueSafe((int)totalSegments);//total segments (segment count)
+             //segment writes count
+             if(segment<(totalSegments-1)){
+              writer.WriteValueSafe((int)container.voxelsPerSegment);
+             }else{
+              writer.WriteValueSafe((int)lastSegmentWriteDataCount);
+             }
+            }
+            if(writtenDataCount++<container.voxelsPerSegment){
+             BytePacker.WriteValuePacked(writer,GetvxlIdx(vCoord.x,vCoord.y,vCoord.z));
+             BytePacker.WriteValuePacked(writer,(double)edit.density);
+             BytePacker.WriteValuePacked(writer,(ushort)edit.material);
+             if(writtenDataCount>=container.voxelsPerSegment){
+              container.dataToSendToClients.Add(segment,writer);
+              segment++;
+              writtenDataCount=0;
+             }
+            }
+           }
+           editData.Clear();
+           terrainEditOutputDataPool.Enqueue(editData);
           }
-          FastBufferWriter writer;
-          int writtenDataCount=0;
-          int segment=0;
-          //testing, REMOVE:
-             //Vector3Int vCoord1;
-             //for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-             //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-             //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-             // if(writtenDataCount<=0){
-             ////  //Log.DebugMessage("start writing to segment:"+segment);
-             ////  // sizeof(int) message type
-             ////  // sizeof(int) cnkIdx
-             ////  // sizeof(int) current segment
-             ////  // sizeof(int) total segments (segment count)
-             ////  // sizeof(int) segment writes count
-             //  writer=new FastBufferWriter(1100,Allocator.Persistent,container.segmentSize);
-             //  writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment);
-             //  writer.WriteValueSafe(container.cnkIdx);
-             //  writer.WriteValueSafe((int)segment);
-             //  writer.WriteValueSafe((int)117);
-             //  writer.WriteValueSafe((int)278);
-             // }
-             // if(writtenDataCount++<container.voxelsPerSegment){
-             //  BytePacker.WriteValuePacked(writer,GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z));
-             //  //writer.WriteValueSafe(GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z));
-             //  //writer.WriteValueSafe(vCoord1.x);
-             //  //writer.WriteValueSafe(vCoord1.y);
-             //  //writer.WriteValueSafe(vCoord1.z);
-             //  BytePacker.WriteValuePacked(writer,(double)0.0d);
-             //  //writer.WriteValueSafe((double)0.0d);
-             //  BytePacker.WriteValuePacked(writer,(ushort)MaterialId.Air);
-             //  //writer.WriteValueSafe((ushort)MaterialId.Air);
-             //  if(writtenDataCount>=container.voxelsPerSegment){
-             //   container.dataToSendToClients.Add(segment,writer);
-             //   segment++;
-             //   writtenDataCount=0;
-             //  }
-             // }
-             //}}}
          }catch{
           throw;
          }finally{
