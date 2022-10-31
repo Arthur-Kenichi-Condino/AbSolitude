@@ -12,6 +12,7 @@ using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -41,6 +42,7 @@ namespace AKCondinoO.Voxels{
             internal static Vector2Int cnkRgnTocCoord(Vector2Int cnkRgn){return new Vector2Int(cnkRgn.x/Width,cnkRgn.y/Depth);}
             internal static Vector2Int cCoordTocnkRgn(Vector2Int cCoord){return new Vector2Int(cCoord.x*Width,cCoord.y*Depth);}
             internal static int GetcnkIdx(int cx,int cy){return cy+cx*(MaxcCoordy*2+1);}
+            internal static readonly ReadOnlyDictionary<int,Vector2Int>GetcCoord;
         #endregion
         #region voxel
             internal static Vector3Int vecPosTovCoord(Vector3 pos){
@@ -55,6 +57,7 @@ namespace AKCondinoO.Voxels{
              return coord;
             }
             internal static int GetvxlIdx(int vcx,int vcy,int vcz){return vcy*FlattenOffset+vcx*Depth+vcz;}
+            internal static readonly ReadOnlyCollection<Vector3Int>GetvCoord;
             internal static int GetoftIdx(Vector2Int offset){//  ..for neighbors
              if(offset.x== 0&&offset.y== 0)return 0;
              if(offset.x==-1&&offset.y== 0)return 1;
@@ -79,6 +82,24 @@ namespace AKCondinoO.Voxels{
              }
             }
         #endregion
+        static VoxelSystem(){
+         Log.DebugMessage("static VoxelSystem()");
+         var GetvCoordArray=new Vector3Int[VoxelsPerChunk];
+         Vector3Int vCoord1;
+         for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+          GetvCoordArray[GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z)]=vCoord1;
+         }}}
+         GetvCoord=new ReadOnlyCollection<Vector3Int>(GetvCoordArray);
+         var GetcCoordDictionary=new Dictionary<int,Vector2Int>();
+         Vector2Int cCoord1=new Vector2Int();
+         for(cCoord1.x=-MaxcCoordx+1;cCoord1.x<=MaxcCoordx-1;cCoord1.x++){
+         for(cCoord1.y=-MaxcCoordy+1;cCoord1.y<=MaxcCoordy-1;cCoord1.y++){
+          GetcCoordDictionary.Add(GetcnkIdx(cCoord1.x,cCoord1.y),cCoord1);
+         }}
+         GetcCoord=new ReadOnlyDictionary<int,Vector2Int>(GetcCoordDictionary);
+        }
      internal static int voxelTerrainLayer;
      internal static VoxelSystem singleton{get;set;}
      internal static string chunkStatePath;
