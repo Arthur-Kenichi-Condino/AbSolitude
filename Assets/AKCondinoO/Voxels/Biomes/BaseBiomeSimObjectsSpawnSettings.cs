@@ -6,18 +6,38 @@ using LibNoise.Generator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BaseBiomeSimObjectsSpawnSettings{
+        internal enum SpawnedTypes:int{
+         All=0,
+         Grass=1,
+         Trees=2,
+         Bushes=3,
+        }
         internal struct SimObjectSettings{
          internal float chance;
          internal float inclination;
          internal Vector3 minScale;
          internal Vector3 maxScale;
          internal float depth;
-         internal Vector3 minSpacing;
-         internal Vector3 maxSpacing;
+         internal readonly ReadOnlyDictionary<SpawnedTypes,Vector3>minSpacing;
+         internal readonly ReadOnlyDictionary<SpawnedTypes,Vector3>maxSpacing;
+         internal readonly ReadOnlyCollection<SpawnedTypes>blocksTypes;
+         internal readonly ReadOnlyCollection<SpawnedTypes>isBlockedBy;
+            internal SimObjectSettings(float chance,float inclination,Vector3 minScale,Vector3 maxScale,float depth,Dictionary<SpawnedTypes,Vector3>minSpacing,Dictionary<SpawnedTypes,Vector3>maxSpacing,SpawnedTypes[]blocksTypes,SpawnedTypes[]isBlockedBy){
+             this.chance=chance;
+             this.inclination=inclination;
+             this.minScale=minScale;
+             this.maxScale=maxScale;
+             this.depth=depth;
+             this.minSpacing=new ReadOnlyDictionary<SpawnedTypes,Vector3>(minSpacing);
+             this.maxSpacing=new ReadOnlyDictionary<SpawnedTypes,Vector3>(maxSpacing);
+             this.blocksTypes=new ReadOnlyCollection<SpawnedTypes>(blocksTypes);
+             this.isBlockedBy=new ReadOnlyCollection<SpawnedTypes>(isBlockedBy);
+            }
         }
         internal struct SimObjectSpawnModifiers{
          internal Vector3 scale;
@@ -40,14 +60,17 @@ namespace AKCondinoO.Voxels.Biomes{
           Pinus_elliottii_1SettingsListAtPicking1=Pinus_elliottii_1Settings[1]=new List<SimObjectSettings>();
          }
          Pinus_elliottii_1SettingsListAtPicking1.Add(
-          new SimObjectSettings{
-           chance=.125f,
-           inclination=.125f,
-           minScale=Vector3.one*.5f,
-           maxScale=Vector3.one*.75f,
-           depth=1.2f,
-           minSpacing=Vector3.one*2.4f,
-           maxSpacing=Vector3.one*4.8f,
+          new SimObjectSettings(
+           chance:.125f,
+           inclination:.125f,
+           minScale:Vector3.one*.5f,
+           maxScale:Vector3.one*.75f,
+           depth:1.2f,
+           minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Trees,Vector3.one*2.0f}},
+           maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Trees,Vector3.one*4.0f}},
+           blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees},
+           isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees}
+          ){
           }
          );
         }
