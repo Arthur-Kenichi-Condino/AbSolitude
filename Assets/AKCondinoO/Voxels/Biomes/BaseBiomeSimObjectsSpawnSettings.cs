@@ -49,19 +49,10 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly BaseBiome biome;
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
-         if(!simObjectPicking.TryGetValue(1,out var typesAtPicking1)){
-          typesAtPicking1=simObjectPicking[1]=new HashSet<Type>();
-         }
-         typesAtPicking1.Add(typeof(Pinus_elliottii_1));
-         if(!allSettings.TryGetValue(typeof(Pinus_elliottii_1),out var Pinus_elliottii_1Settings)){
-          Pinus_elliottii_1Settings=allSettings[typeof(Pinus_elliottii_1)]=new Dictionary<int,List<SimObjectSettings>>();
-         }
-         if(!Pinus_elliottii_1Settings.TryGetValue(1,out var Pinus_elliottii_1SettingsListAtPicking1)){
-          Pinus_elliottii_1SettingsListAtPicking1=Pinus_elliottii_1Settings[1]=new List<SimObjectSettings>();
-         }
+         AddSimObjectTypeAtPicking(1,typeof(Pinus_elliottii_1),out List<SimObjectSettings>Pinus_elliottii_1SettingsListAtPicking1);
          Pinus_elliottii_1SettingsListAtPicking1.Add(
           new SimObjectSettings(
-           chance:.125f,
+           chance:.5f,
            inclination:.125f,
            minScale:Vector3.one*.5f,
            maxScale:Vector3.one*.75f,
@@ -73,6 +64,33 @@ namespace AKCondinoO.Voxels.Biomes{
           ){
           }
          );
+         AddSimObjectTypeAtPicking(1,typeof(Betula_occidentalis_1),out List<SimObjectSettings>Betula_occidentalis_1SettingsListAtPicking1);
+         Betula_occidentalis_1SettingsListAtPicking1.Add(
+          new SimObjectSettings(
+           chance:.5f,
+           inclination:.125f,
+           minScale:Vector3.one*.5f,
+           maxScale:Vector3.one*.75f,
+           depth:1.2f,
+           minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Bushes,Vector3.one*1.0f}},
+           maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Bushes,Vector3.one*2.0f}},
+           blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes},
+           isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes}
+          ){
+          }
+         );
+        }
+        protected void AddSimObjectTypeAtPicking(int picking,Type simObjectType,out List<SimObjectSettings>simObjectTypeSettingsListAtPicking){
+         if(!simObjectPicking.TryGetValue(picking,out var typesAtPicking)){
+          typesAtPicking=simObjectPicking[picking]=new HashSet<Type>();
+         }
+         typesAtPicking.Add(simObjectType);
+         if(!allSettings.TryGetValue(simObjectType,out var simObjectTypeSettings)){
+          simObjectTypeSettings=allSettings[simObjectType]=new Dictionary<int,List<SimObjectSettings>>();
+         }
+         if(!simObjectTypeSettings.TryGetValue(picking,out simObjectTypeSettingsListAtPicking)){
+          simObjectTypeSettingsListAtPicking=simObjectTypeSettings[picking]=new List<SimObjectSettings>();
+         }
         }
         internal void Set(){
          foreach(var selectionTypesPair in simObjectPicking){
