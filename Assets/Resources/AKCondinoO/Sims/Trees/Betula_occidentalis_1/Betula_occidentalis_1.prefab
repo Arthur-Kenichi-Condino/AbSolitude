@@ -29,6 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1591903233967555654}
+  - {fileID: 6038012881746694495}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -42,8 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1591903233967555654}
   - component: {fileID: 3384084095361042317}
-  - component: {fileID: 3506664333571248710}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Volume
   m_TagString: SimObjectVolume
   m_Icon: {fileID: 0}
@@ -73,25 +73,71 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8311550286705911288}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.097
   m_Height: 0.75
   m_Direction: 1
   m_Center: {x: 0.0065, y: -0.1, z: 0.02}
---- !u!208 &3506664333571248710
-NavMeshObstacle:
+--- !u!1001 &6042175129112237339
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3335299321166872583}
+    m_Modifications:
+    - target: {fileID: 1639987689182440, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_Name
+      value: Betula_occidentalis_1_Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+--- !u!4 &6038012881746694495 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4867528393344068, guid: 63716c4bac6fbbc4bb17c5878b3ada30, type: 3}
+  m_PrefabInstance: {fileID: 6042175129112237339}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8311550286705911288}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.097, y: 0.375, z: 0.097}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0.0065, y: -0.1, z: 0.02}
-  m_TimeToStationary: 0.5
