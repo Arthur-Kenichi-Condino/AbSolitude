@@ -12,6 +12,9 @@ namespace AKCondinoO.Voxels.Water{
     //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingContainer:BackgroundContainer{
      internal readonly VoxelWater[]voxelsOutput=new VoxelWater[VoxelsPerChunk];
+     internal Vector2Int cCoord,lastcCoord;
+     internal Vector2Int cnkRgn,lastcnkRgn;
+     internal        int cnkIdx,lastcnkIdx;
     }
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
         protected override void Cleanup(){
