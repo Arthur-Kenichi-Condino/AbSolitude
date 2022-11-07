@@ -26,20 +26,17 @@ namespace AKCondinoO.Voxels.Water{
          if(container.cnkIdx==null){
           return;
          }
+         Log.DebugMessage("Execute()");
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           Array.Clear(voxels,0,voxels.Length);
          }else{
           lock(container.voxelsOutput){
-           unsafe{
-            Buffer.BlockCopy(container.voxelsOutput,0,voxels,0,container.voxelsOutput.Length*sizeof(VoxelWater));
-           }
+           Array.Copy(container.voxelsOutput,voxels,container.voxelsOutput.Length);
           }
          }
          //  do edges but lock the voxels output only when reading or writing
          lock(container.voxelsOutput){
-          unsafe{
-           Buffer.BlockCopy(voxels,0,container.voxelsOutput,0,voxels.Length*sizeof(VoxelWater));
-          }
+          Array.Copy(voxels,container.voxelsOutput,voxels.Length);
          }
         }
     }

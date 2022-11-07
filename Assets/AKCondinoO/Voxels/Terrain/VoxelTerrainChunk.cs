@@ -66,6 +66,7 @@ namespace AKCondinoO.Voxels.Terrain{
         }
         internal void OnInstantiated(){
          wCnk=Instantiate(_VoxelWaterChunkPrefab);
+         wCnk.tCnk=this;
          wCnk.OnInstantiated();
         }
         internal void OnDestroyingCore(){
