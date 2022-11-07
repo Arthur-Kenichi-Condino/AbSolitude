@@ -42,7 +42,9 @@ namespace AKCondinoO.Voxels.Water{
          if(spreadTimer<=0f){
           //Log.DebugMessage("CanSpreadWater");
           spreadTimer=spreadTimeInterval;
-          //waterSpreadingBG.cCoord=
+          waterSpreadingBG.cCoord=tCnk.id.Value.cCoord;
+          waterSpreadingBG.cnkRgn=tCnk.id.Value.cnkRgn;
+          waterSpreadingBG.cnkIdx=tCnk.id.Value.cnkIdx;
           WaterSpreadingMultithreaded.Schedule(waterSpreadingBG);
           return true;
          }
