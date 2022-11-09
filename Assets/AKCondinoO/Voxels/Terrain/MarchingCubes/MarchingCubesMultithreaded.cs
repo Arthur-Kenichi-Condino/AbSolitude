@@ -150,7 +150,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          //Log.DebugMessage("do MarchingCubes for cnkIdx:"+container.cnkIdx);
          container.TempVer.Clear();
          container.TempTri.Clear();
-         VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
+         VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
          try{
           lock(container.synchronizer){
            for(int x=-1;x<=1;x++){
@@ -209,9 +209,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainFileDatarwl.ExitReadLock();
+          VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
          }
-         VoxelSystem.Concurrent.terrainrwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
          try{
           if(VoxelSystem.Concurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
            if(VoxelSystem.Concurrent.terrainVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
@@ -222,7 +222,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainrwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
          }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
@@ -380,7 +380,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
          }
          }}
-         VoxelSystem.Concurrent.terrainrwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
          try{
           VoxelSystem.Concurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
           VoxelSystem.Concurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
@@ -388,7 +388,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainrwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
          }
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;
