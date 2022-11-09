@@ -11,6 +11,7 @@ using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain.Editing;
+using AKCondinoO.Voxels.Water.Editing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -78,14 +79,15 @@ namespace AKCondinoO{
           { 7,GameMode            .singleton},
           { 8,VoxelSystem         .singleton},
           { 9,VoxelTerrainEditing .singleton},
-          {10,SimObjectManager    .singleton},
-          {11,SimObjectSpawner    .singleton},
-          {12,SkillsManager       .singleton},
-          {13,SimsMachine         .singleton},
-          {14,AutonomyCore        .singleton},
-          {15,Placeholder         .singleton},
-          {16,FixedUI             .singleton},
-          {17,ContextMenuUI       .singleton},
+          {10,VoxelWaterEditing   .singleton},
+          {11,SimObjectManager    .singleton},
+          {12,SimObjectSpawner    .singleton},
+          {13,SkillsManager       .singleton},
+          {14,SimsMachine         .singleton},
+          {15,AutonomyCore        .singleton},
+          {16,Placeholder         .singleton},
+          {17,FixedUI             .singleton},
+          {18,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);

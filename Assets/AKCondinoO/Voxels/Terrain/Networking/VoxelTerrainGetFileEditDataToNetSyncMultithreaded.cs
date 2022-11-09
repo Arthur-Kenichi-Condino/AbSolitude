@@ -47,7 +47,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           Log.DebugMessage("container.segmentSize<=0");
           return;
          }
-         VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
+         VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
          try{
           Vector2Int cCoord1=container.cCoord;
           string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
@@ -137,7 +137,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainFileDatarwl.ExitReadLock();
+          VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
          }
         }
     }

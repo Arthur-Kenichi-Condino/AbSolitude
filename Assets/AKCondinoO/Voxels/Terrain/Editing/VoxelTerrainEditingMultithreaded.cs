@@ -4,16 +4,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Threading;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingContainer;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
-using System.Text;
-using System.IO;
-using System.Globalization;
-
 namespace AKCondinoO.Voxels.Terrain.Editing{
     internal class VoxelTerrainEditingContainer:BackgroundContainer{
      internal object[]terrainSynchronization;
@@ -249,7 +248,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           }}
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,TerrainEditOutputData>editData){
-          VoxelSystem.Concurrent.terrainFileDatarwl.EnterReadLock();
+          VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
           try{
            string fileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
            if(File.Exists(fileName)){
@@ -290,10 +289,10 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           }catch{
            throw;
           }finally{
-           VoxelSystem.Concurrent.terrainFileDatarwl.ExitReadLock();
+           VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
           }
          }
-         VoxelSystem.Concurrent.terrainFileDatarwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrainFileData_rwl.EnterWriteLock();
          foreach(object syn in container.terrainSynchronization){
           Monitor.Enter(syn);
          }
@@ -356,7 +355,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           foreach(object syn in container.terrainSynchronization){
            Monitor.Exit(syn);
           }
-          VoxelSystem.Concurrent.terrainFileDatarwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainFileData_rwl.ExitWriteLock();
          }
         }
     }
