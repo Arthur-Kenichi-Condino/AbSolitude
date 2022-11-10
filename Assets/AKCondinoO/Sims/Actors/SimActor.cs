@@ -14,7 +14,7 @@ using UnityEngine.AI;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActor:SimObject{
+    internal partial class SimActor:SimObject{
      [SerializeField]GameObject simUMADataPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]

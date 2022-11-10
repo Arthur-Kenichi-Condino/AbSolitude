@@ -86,6 +86,10 @@ namespace AKCondinoO.Sims.Actors{
               animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
                 animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
+              animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
+              animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
+               animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
+                animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
              }
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
