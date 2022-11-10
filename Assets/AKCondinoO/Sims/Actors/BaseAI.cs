@@ -22,6 +22,8 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+     [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;

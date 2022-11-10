@@ -45,12 +45,16 @@ namespace AKCondinoO.Sims.Actors{
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
-          simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1f);
-          simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,1f);
-          simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
-          simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,1f);
-          simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,1f);
-          simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
+          if(simActorAnimatorController.actor is BaseAI baseAI&&
+           (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND)
+          ){
+           simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1f);
+           simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,1f);
+           simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
+           simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,1f);
+           simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,1f);
+           simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
+          }
          }
         }
     }
