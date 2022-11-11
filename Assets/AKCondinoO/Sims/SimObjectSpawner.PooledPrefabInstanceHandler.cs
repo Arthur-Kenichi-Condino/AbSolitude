@@ -23,7 +23,9 @@ namespace AKCondinoO.Sims{
             }
             //  client and server
             void INetworkPrefabInstanceHandler.Destroy(NetworkObject networkObject){
-             //  I don't like to destroy anything in Unity so actually do nothing here! :)
+             if(Core.singleton.isClient){
+              pool.Enqueue(networkObject);
+             }
             }
         }
     }

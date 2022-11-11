@@ -55,6 +55,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
            weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
+           layerTransitionCoroutine=StartCoroutine(LayerTransition());
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
@@ -137,6 +138,13 @@ namespace AKCondinoO.Sims.Actors{
           }
           lastMotion=baseAI.motion;
          }
+        }
+     Coroutine layerTransitionCoroutine;
+        IEnumerator LayerTransition(){
+            Loop:{
+             yield return null;
+            }
+            goto Loop;
         }
         /// <summary>
         ///  Check if animation locks another motion beforehand
