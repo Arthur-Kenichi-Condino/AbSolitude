@@ -5,6 +5,7 @@ using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorController:MonoBehaviour{
      internal SimActor actor;
@@ -17,12 +18,16 @@ namespace AKCondinoO.Sims.Actors{
         void Awake(){
         }
      bool synced=true;
-     internal float animationTime=0f;
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
-     readonly List<AnimatorClipInfo>animatorClip=new List<AnimatorClipInfo>();
-     string lastClipName="";
-     int loopCount=0;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
-      int lastLoopCount=0;
+     internal int layerCount{get;private set;}
+     internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
+      WeaponTypes lastWeaponType=WeaponTypes.None;
+     internal Dictionary<int,float>animationTime{get;private set;}
+     Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
+      Dictionary<int,int>lastLoopCount;
+     Dictionary<int,List<AnimatorClipInfo>>animatorClip;
+     Dictionary<int,int>lastClipInstanceID;
+      Dictionary<int,string>lastClipName;
         void Update(){
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
@@ -30,6 +35,26 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("add SimActorAnimatorIKController");
            animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
            animatorIKController.simActorAnimatorController=this;
+           layerCount=animator.layerCount;
+           weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
+           animationTime=new Dictionary<int,float>(layerCount);
+           loopCount=new Dictionary<int,int>(layerCount);
+            lastLoopCount=new Dictionary<int,int>(layerCount);
+           animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
+           lastClipInstanceID=new Dictionary<int,int>(layerCount);
+            lastClipName=new Dictionary<int,string>(layerCount);
+           for(int i=0;i<layerCount;++i){
+            animationTime[i]=0f;
+            loopCount[i]=0;
+             lastLoopCount[i]=0;
+            animatorClip[i]=new List<AnimatorClipInfo>();
+            lastClipInstanceID[i]=0;
+             lastClipName[i]="";
+           }
+           weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
+           Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
+           weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
+           Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
@@ -67,29 +92,45 @@ namespace AKCondinoO.Sims.Actors{
            actor.simUMAData.transform.parent.position=tgtPos;
           }
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
-          animatorClip.Clear();
-          AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(0);
-                                          animator.GetCurrentAnimatorClipInfo (0,animatorClip);
-          if(animatorClip.Count>0){
-           if(lastClipName!=animatorClip[0].clip.name){
-            Log.DebugMessage("changed to new animatorClip[0].clip.name:"+animatorClip[0].clip.name);
-            lastClipName=animatorClip[0].clip.name;
+          foreach(var layer in animatorClip){
+           int layerIndex=layer.Key;
+           List<AnimatorClipInfo>clipList=layer.Value;
+           clipList.Clear();
+           AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(layerIndex);
+                                           animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
+           if(clipList.Count>0){
+            if(lastClipInstanceID[layerIndex]!=(lastClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||lastClipName[layerIndex]!=clipList[0].clip.name){
+             Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
+             lastClipName[layerIndex]=clipList[0].clip.name;
+            }
+            //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);
+            animationTime[layerIndex]=clipList[0].clip.length*animatorState.normalizedTime;
            }
-           //Log.DebugMessage("current animatorClip[0].clip.name:"+animatorClip[0].clip.name);
-           animationTime=animatorClip[0].clip.length*animatorState.normalizedTime;
           }
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
              if(baseAI is ArthurCondinoAI arthurCondinoAI){
-              animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
-              animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-               animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
-                animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
-              animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
-              animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-               animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
-                animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
+              if(lastWeaponType!=baseAI.weaponType){
+               if(weaponLayer.TryGetValue(baseAI.weaponType,out int layerIndex)){
+                animator.SetLayerWeight(layerIndex,1.0f);
+                if(weaponLayer.TryGetValue(lastWeaponType,out int lastLayerIndex)){
+                 animator.SetLayerWeight(lastLayerIndex,0.0f);
+                }
+                lastWeaponType=baseAI.weaponType;
+               }
+              }
+              if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
+               animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
+               animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
+                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
+                 animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
+              }else{
+               animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
+               animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
+                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
+                 animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
+              }
              }
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
