@@ -30,7 +30,13 @@ namespace AKCondinoO.Sims.Actors{
       internal State state{get{return MyState;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;
       internal PathfindingResult pathfinding{get{return MyPathfinding;}}
+     protected WeaponTypes MyWeaponType=WeaponTypes.None;
+      internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected override void AI(){
+         if(DEBUG_TOGGLE_HOLSTER_WEAPON){
+            DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+          MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
+         }
          base.AI();
          MyPathfinding=GetPathfindingResult();
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
@@ -39,9 +45,17 @@ namespace AKCondinoO.Sims.Actors{
           OnIDLE_ST();
          }
          if(MyPathfinding==PathfindingResult.TRAVELLING){
-             MyMotion=ActorMotion.MOTION_MOVE;
+             if(MyWeaponType==WeaponTypes.SniperRifle){
+              MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
+             }else{
+              MyMotion=ActorMotion.MOTION_MOVE;
+             }
          }else{
-             MyMotion=ActorMotion.MOTION_STAND;
+             if(MyWeaponType==WeaponTypes.SniperRifle){
+              MyMotion=ActorMotion.MOTION_RIFLE_STAND;
+             }else{
+              MyMotion=ActorMotion.MOTION_STAND;
+             }
          }
         }
      protected Skill MySkill=null;
