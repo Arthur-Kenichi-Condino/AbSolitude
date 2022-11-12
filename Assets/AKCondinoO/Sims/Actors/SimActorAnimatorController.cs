@@ -143,8 +143,10 @@ namespace AKCondinoO.Sims.Actors{
       readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
             Loop:{
-       //animator.SetLayerWeight(layerIndex,1.0f);
-                 //animator.SetLayerWeight(lastLayerIndex,0.0f);
+             foreach(var layer in layerTargetWeight){
+              //animator.SetLayerWeight(layerIndex,1.0f);
+              //animator.SetLayerWeight(lastLayerIndex,0.0f);
+             }
              yield return null;
             }
             goto Loop;
