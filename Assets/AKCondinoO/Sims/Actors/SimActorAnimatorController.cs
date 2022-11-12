@@ -114,9 +114,9 @@ namespace AKCondinoO.Sims.Actors{
              if(baseAI is ArthurCondinoAI arthurCondinoAI){
               if(lastWeaponType!=baseAI.weaponType){
                if(weaponLayer.TryGetValue(baseAI.weaponType,out int layerIndex)){
-                animator.SetLayerWeight(layerIndex,1.0f);
+                layerTargetWeight[layerIndex]=1.0f;
                 if(weaponLayer.TryGetValue(lastWeaponType,out int lastLayerIndex)){
-                 animator.SetLayerWeight(lastLayerIndex,0.0f);
+                 layerTargetWeight[lastLayerIndex]=0.0f;
                 }
                 lastWeaponType=baseAI.weaponType;
                }
@@ -140,8 +140,11 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      Coroutine layerTransitionCoroutine;
+      readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
             Loop:{
+       //animator.SetLayerWeight(layerIndex,1.0f);
+                 //animator.SetLayerWeight(lastLayerIndex,0.0f);
              yield return null;
             }
             goto Loop;

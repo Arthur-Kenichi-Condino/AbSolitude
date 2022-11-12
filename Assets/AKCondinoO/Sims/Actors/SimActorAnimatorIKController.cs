@@ -46,7 +46,9 @@ namespace AKCondinoO.Sims.Actors{
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
           if(simActorAnimatorController.actor is BaseAI baseAI&&
-           (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND)
+           (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
+            baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
+           )
           ){
            simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1f);
            simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,1f);
