@@ -55,6 +55,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
            weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
+           transitionTimeInterval=new WaitForSeconds(0.05f);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
           }
          }
@@ -140,14 +141,33 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      Coroutine layerTransitionCoroutine;
+      WaitForSeconds transitionTimeInterval;
       readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
+       readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
             Loop:{
              foreach(var layer in layerTargetWeight){
-              //animator.SetLayerWeight(layerIndex,1.0f);
-              //animator.SetLayerWeight(lastLayerIndex,0.0f);
+              int layerIndex=layer.Key;
+              float targetWeight=layer.Value;
+              if(!layerWeight.TryGetValue(layerIndex,out float weight)){
+               weight=layerWeight[layerIndex]=animator.GetLayerWeight(layerIndex);
+              }
+              if(weight!=targetWeight){
+               if(weight>targetWeight){
+                weight-=20.0f*Time.deltaTime;
+                if(weight<=targetWeight){
+                 weight=targetWeight;
+                }
+               }else if(weight<targetWeight){
+                weight+=20.0f*Time.deltaTime;
+                if(weight>=targetWeight){
+                 weight=targetWeight;
+                }
+               }
+               animator.SetLayerWeight(layerIndex,layerWeight[layerIndex]=weight);
+              }
              }
-             yield return null;
+             yield return transitionTimeInterval;
             }
             goto Loop;
         }
