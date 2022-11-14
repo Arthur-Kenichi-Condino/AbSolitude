@@ -9,6 +9,7 @@ using UnityEngine;
 namespace AKCondinoO.Voxels.Water.Editing{
     internal class VoxelWaterEditing:MonoBehaviour,ISingletonInitialization{
      internal static VoxelWaterEditing singleton{get;set;}
+     internal VoxelWaterEditingContainer waterEditingBG=new VoxelWaterEditingContainer();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
@@ -16,6 +17,11 @@ namespace AKCondinoO.Voxels.Water.Editing{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelWaterEditing:OnDestroyingCoreEvent");
+         waterEditingBG.IsCompleted(VoxelSystem.singleton.waterEditingBGThread.IsRunning,-1);
+        }
+     [SerializeField]bool    DEBUG_ADD_WATER_SOURCE=false;
+     [SerializeField]Vector3 DEBUG_ADD_WATER_SOURCE_AT=new Vector3(0,60,0);
+        void Update(){
         }
     }
 }
