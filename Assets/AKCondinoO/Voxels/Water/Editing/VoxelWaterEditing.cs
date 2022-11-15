@@ -39,6 +39,9 @@ namespace AKCondinoO.Voxels.Water.Editing{
          if(DEBUG_ADD_WATER_SOURCE){
             DEBUG_ADD_WATER_SOURCE=false;
           Log.DebugMessage("DEBUG_ADD_WATER_SOURCE_AT:"+DEBUG_ADD_WATER_SOURCE_AT);
+          EditWater(
+           DEBUG_ADD_WATER_SOURCE_AT
+          );
          }
          if(applyingEdits){
              if(OnWaterEditingApplied()){

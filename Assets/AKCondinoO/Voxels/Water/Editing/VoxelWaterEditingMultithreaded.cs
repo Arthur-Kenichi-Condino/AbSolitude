@@ -12,6 +12,9 @@ namespace AKCondinoO.Voxels.Water.Editing{
     internal class VoxelWaterEditingMultithreaded:BaseMultithreaded<VoxelWaterEditingContainer>{
         protected override void Execute(){
          Log.DebugMessage("VoxelWaterEditingMultithreaded:Execute()");
+         while(container.requests.Count>0){
+          WaterEditRequest editRequest=container.requests.Dequeue();
+         }
         }
     }
 }
