@@ -30,13 +30,27 @@ namespace AKCondinoO.Voxels.Water{
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           Array.Clear(voxels,0,voxels.Length);
          }else{
-          lock(container.voxelsOutput){
-           Array.Copy(container.voxelsOutput,voxels,container.voxelsOutput.Length);
+          VoxelSystem.Concurrent.water_rwl.EnterReadLock();
+          try{
+           lock(container.voxelsOutput){
+            Array.Copy(container.voxelsOutput,voxels,container.voxelsOutput.Length);
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.water_rwl.ExitReadLock();
           }
          }
          //  do edges but lock the voxels output only when reading or writing
-         lock(container.voxelsOutput){
-          Array.Copy(voxels,container.voxelsOutput,voxels.Length);
+         VoxelSystem.Concurrent.water_rwl.EnterReadLock();
+         try{
+          lock(container.voxelsOutput){
+           Array.Copy(voxels,container.voxelsOutput,voxels.Length);
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.water_rwl.ExitReadLock();
          }
         }
     }
