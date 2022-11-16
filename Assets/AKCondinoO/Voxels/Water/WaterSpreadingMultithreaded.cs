@@ -42,6 +42,11 @@ namespace AKCondinoO.Voxels.Water{
           }
          }
          //  do edges but lock the voxels output only when reading or writing
+         Vector3Int vCoord1;
+         for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+         }}}
          VoxelSystem.Concurrent.water_rwl.EnterReadLock();
          try{
           lock(container.voxelsOutput){
