@@ -9,17 +9,23 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingContainer:BackgroundContainer{
      internal readonly VoxelWater[]voxelsOutput=new VoxelWater[VoxelsPerChunk];
+     internal readonly Dictionary<Vector3Int,double>absorbingOutput=new();
+     internal readonly Dictionary<Vector3Int,double>spreadingOutput=new();
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
     }
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
-        readonly VoxelWater[]voxels=new VoxelWater[VoxelsPerChunk];
+     readonly VoxelWater[]voxels=new VoxelWater[VoxelsPerChunk];
+     readonly Dictionary<Vector3Int,double>absorbing=new();
+     readonly Dictionary<Vector3Int,double>spreading=new();
         protected override void Cleanup(){
         }
         protected override void Execute(){
@@ -29,6 +35,23 @@ namespace AKCondinoO.Voxels.Water{
          Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           Array.Clear(voxels,0,voxels.Length);
+          absorbing.Clear();
+          spreading.Clear();
+          VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
+          try{
+           if(VoxelSystem.Concurrent.waterVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
+            if(VoxelSystem.Concurrent.waterVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out VoxelWater[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+             VoxelSystem.Concurrent.waterVoxels.Remove(voxelsOutputOldId.cnkIdx);
+             VoxelSystem.Concurrent.absorbing.Remove(voxelsOutputOldId.cnkIdx);
+             VoxelSystem.Concurrent.spreading.Remove(voxelsOutputOldId.cnkIdx);
+             Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
+            }
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.water_rwl.ExitWriteLock();
+          }
          }else{
           VoxelSystem.Concurrent.water_rwl.EnterReadLock();
           try{

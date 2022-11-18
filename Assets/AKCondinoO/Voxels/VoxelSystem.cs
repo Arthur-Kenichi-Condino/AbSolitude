@@ -247,6 +247,8 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.terrainVoxels  .Clear();
          VoxelSystem.Concurrent.terrainVoxelsId.Clear();
          VoxelSystem.Concurrent.waterVoxels    .Clear();
+          VoxelSystem.Concurrent.absorbing.Clear();
+          VoxelSystem.Concurrent.spreading.Clear();
          VoxelSystem.Concurrent.waterVoxelsId  .Clear();
         }
         void OnDestroy(){
