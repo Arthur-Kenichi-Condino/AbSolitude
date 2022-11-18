@@ -15,6 +15,8 @@ namespace AKCondinoO.Voxels{
          internal static readonly Dictionary<Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[],(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>terrainVoxelsId=new Dictionary<Terrain.MarchingCubes.MarchingCubesTerrain.Voxel[],(Vector2Int,Vector2Int,int)>();
          internal static ReaderWriterLockSlim water_rwl;
          internal static readonly Dictionary<int,Water.MarchingCubes.MarchingCubesWater.VoxelWater[]>waterVoxels=new Dictionary<int,Water.MarchingCubes.MarchingCubesWater.VoxelWater[]>();
+          internal static readonly Dictionary<int,Dictionary<Vector3Int,double>>absorbing=new();
+          internal static readonly Dictionary<int,Dictionary<Vector3Int,double>>spreading=new();
          internal static readonly Dictionary<Water.MarchingCubes.MarchingCubesWater.VoxelWater[],(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>waterVoxelsId=new Dictionary<Water.MarchingCubes.MarchingCubesWater.VoxelWater[],(Vector2Int,Vector2Int,int)>();
         }
     }
