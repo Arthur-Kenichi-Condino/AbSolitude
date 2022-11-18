@@ -34,9 +34,9 @@ namespace AKCondinoO.Voxels.Water{
          }
          Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
-          Array.Clear(voxels,0,voxels.Length);
           absorbing.Clear();
           spreading.Clear();
+          Array.Clear(voxels,0,voxels.Length);
           VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
           try{
            if(VoxelSystem.Concurrent.waterVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
@@ -53,10 +53,16 @@ namespace AKCondinoO.Voxels.Water{
            VoxelSystem.Concurrent.water_rwl.ExitWriteLock();
           }
          }else{
+          absorbing.Clear();
+          spreading.Clear();
           VoxelSystem.Concurrent.water_rwl.EnterReadLock();
           try{
            lock(container.voxelsOutput){
             Array.Copy(container.voxelsOutput,voxels,container.voxelsOutput.Length);
+           }
+           lock(container.absorbingOutput){
+            foreach(var kvp in container.absorbingOutput){
+            }
            }
           }catch{
            throw;
