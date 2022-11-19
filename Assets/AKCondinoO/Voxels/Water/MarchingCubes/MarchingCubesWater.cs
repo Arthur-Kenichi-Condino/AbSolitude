@@ -6,11 +6,12 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
     internal class MarchingCubesWater{
         internal struct VoxelWater{
          public double density;
-         public double spreading;
-         public double absorbing;
+         public double absorbing;public bool absorbingB,absorbingT,absorbingW,absorbingE,absorbingS,absorbingN;
+         public double spreading;public bool spreadingB,spreadingT,spreadingW,spreadingE,spreadingS,spreadingN;
          public bool sleeping{
           get{
-           return spreading==0d&&absorbing==0d;
+           return!absorbingB&&!absorbingT&&!absorbingW&&!absorbingE&&!absorbingS&&!absorbingN&&
+                 !spreadingB&&!spreadingT&&!spreadingW&&!spreadingE&&!spreadingS&&!spreadingN;
           }
          }
         }
