@@ -121,7 +121,7 @@ namespace AKCondinoO.Voxels{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          VoxelSystem.Concurrent.terrain_rwl=new ReaderWriterLockSlim();VoxelSystem.Concurrent.terrainFileData_rwl=new ReaderWriterLockSlim();
-         VoxelSystem.Concurrent.water_rwl  =new ReaderWriterLockSlim();
+         VoxelSystem.Concurrent.water_rwl  =new ReaderWriterLockSlim();VoxelSystem.Concurrent.waterFileData_rwl  =new ReaderWriterLockSlim();
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
@@ -243,7 +243,7 @@ namespace AKCondinoO.Voxels{
           biome.DisposeModules();
          }
          VoxelSystem.Concurrent.terrain_rwl.Dispose();VoxelSystem.Concurrent.terrainFileData_rwl.Dispose();
-         VoxelSystem.Concurrent.water_rwl  .Dispose();
+         VoxelSystem.Concurrent.water_rwl  .Dispose();VoxelSystem.Concurrent.waterFileData_rwl  .Dispose();
          VoxelSystem.Concurrent.terrainVoxels  .Clear();
          VoxelSystem.Concurrent.terrainVoxelsId.Clear();
          VoxelSystem.Concurrent.waterVoxels    .Clear();
