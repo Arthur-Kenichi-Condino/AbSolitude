@@ -15,8 +15,8 @@ namespace AKCondinoO.Voxels.Water.Editing{
     internal class VoxelWaterEditingMultithreaded:BaseMultithreaded<VoxelWaterEditingContainer>{
         internal struct WaterEditOutputData{
          public double density;
-         public double absorbing;public bool absorbingB,absorbingT,absorbingW,absorbingE,absorbingS,absorbingN;
-         public double spreading;public bool spreadingB,spreadingT,spreadingW,spreadingE,spreadingS,spreadingN;
+         public double previousDensity;
+         public bool sleeping;
         }
      internal readonly Queue<Dictionary<Vector3Int,WaterEditOutputData>>waterEditOutputDataPool=new Queue<Dictionary<Vector3Int,WaterEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataFromFileToMerge=new();
