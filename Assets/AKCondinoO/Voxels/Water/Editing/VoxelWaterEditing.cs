@@ -5,15 +5,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Water.Editing{
     internal class VoxelWaterEditing:MonoBehaviour,ISingletonInitialization{
      internal static VoxelWaterEditing singleton{get;set;}
      internal VoxelWaterEditingContainer waterEditingBG=new VoxelWaterEditingContainer();
+     internal static string waterEditingPath;
+     internal static string waterEditingFileFormat="{0}waterChunkEdits.{1}.{2}.txt";
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
+         waterEditingPath=string.Format("{0}{1}",Core.savePath,"WaterChunkEdits/");
+         Directory.CreateDirectory(waterEditingPath);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelWaterEditing:OnDestroyingCoreEvent");
