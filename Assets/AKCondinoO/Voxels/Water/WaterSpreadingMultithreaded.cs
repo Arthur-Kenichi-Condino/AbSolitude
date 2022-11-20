@@ -22,7 +22,20 @@ namespace AKCondinoO.Voxels.Water{
      internal        int?cnkIdx,lastcnkIdx;
      internal readonly Dictionary<int,string>editsFileName=new Dictionary<int,string>();
      internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
+     internal readonly Dictionary<int,StreamWriter>editsFileStreamWriter=new Dictionary<int,StreamWriter>();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
+        protected override void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+          foreach(var sW in editsFileStreamWriter){if(sW.Value!=null){sW.Value.Dispose();}}
+          foreach(var sR in editsFileStreamReader){if(sR.Value!=null){sR.Value.Dispose();}}
+          editsFileStream      .Clear();
+          editsFileStreamWriter.Clear();
+          editsFileStreamReader.Clear();
+         }
+         //  free unmanaged resources here
+         base.Dispose(disposing);
+        }
     }
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
      readonly VoxelWater[]voxels=new VoxelWater[VoxelsPerChunk];
