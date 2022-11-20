@@ -86,6 +86,7 @@ namespace AKCondinoO.Voxels.Water{
          VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
          try{
           //  carregar dados de arquivo aqui em voxels, e absorbing e spreading
+          string editsFileName;
          }catch{
           throw;
          }finally{
