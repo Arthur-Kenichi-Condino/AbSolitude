@@ -214,8 +214,8 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
          try{
           if(VoxelSystem.Concurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
-           if(VoxelSystem.Concurrent.terrainVoxels.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
-            VoxelSystem.Concurrent.terrainVoxels.Remove(voxelsOutputOldId.cnkIdx);
+           if(VoxelSystem.Concurrent.terrainVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+            VoxelSystem.Concurrent.terrainVoxelsOutput.Remove(voxelsOutputOldId.cnkIdx);
             //Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
            }
           }
@@ -382,7 +382,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }}
          VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
          try{
-          VoxelSystem.Concurrent.terrainVoxels[container.cnkIdx]=container.voxelsOutput;
+          VoxelSystem.Concurrent.terrainVoxelsOutput[container.cnkIdx]=container.voxelsOutput;
           VoxelSystem.Concurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
           //Log.DebugMessage("added voxelsOutput for container.cnkIdx:"+container.cnkIdx);
          }catch{

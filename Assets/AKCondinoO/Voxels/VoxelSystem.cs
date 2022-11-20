@@ -244,12 +244,10 @@ namespace AKCondinoO.Voxels{
          }
          VoxelSystem.Concurrent.terrain_rwl.Dispose();VoxelSystem.Concurrent.terrainFileData_rwl.Dispose();
          VoxelSystem.Concurrent.water_rwl  .Dispose();VoxelSystem.Concurrent.waterFileData_rwl  .Dispose();
-         VoxelSystem.Concurrent.terrainVoxels  .Clear();
-         VoxelSystem.Concurrent.terrainVoxelsId.Clear();
-         VoxelSystem.Concurrent.waterVoxels    .Clear();
-          VoxelSystem.Concurrent.absorbing.Clear();
-          VoxelSystem.Concurrent.spreading.Clear();
-         VoxelSystem.Concurrent.waterVoxelsId  .Clear();
+         VoxelSystem.Concurrent.terrainVoxelsOutput.Clear();
+         VoxelSystem.Concurrent.terrainVoxelsId    .Clear();
+         VoxelSystem.Concurrent.waterVoxelsOutput  .Clear();
+         VoxelSystem.Concurrent.waterVoxelsId      .Clear();
         }
         void OnDestroy(){
         }
