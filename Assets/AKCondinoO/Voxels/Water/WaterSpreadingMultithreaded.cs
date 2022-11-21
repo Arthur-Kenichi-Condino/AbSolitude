@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels.Water.Editing;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -86,7 +87,11 @@ namespace AKCondinoO.Voxels.Water{
          VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
          try{
           //  carregar dados de arquivo aqui em voxels, e absorbing e spreading
-          string editsFileName;
+          Vector2Int cCoord1=container.cCoord.Value;
+          int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
+          string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelWaterEditing.waterEditingFileFormat,VoxelWaterEditing.waterEditingPath,cCoord1.x,cCoord1.y);
+          if(!container.editsFileStream.ContainsKey(oftIdx1)||!container.editsFileName.ContainsKey(oftIdx1)||container.editsFileName[oftIdx1]!=editsFileName){
+          }
          }catch{
           throw;
          }finally{
