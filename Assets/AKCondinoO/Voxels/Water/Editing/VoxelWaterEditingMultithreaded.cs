@@ -79,6 +79,13 @@ namespace AKCondinoO.Voxels.Water.Editing{
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
          }
          void MergeEdits(Vector2Int cCoord,Vector3Int vCoord,Vector2Int cnkRgn,double resultDensity,double previousDensity,bool sleeping){
+          if(!dataFromFileToMerge.ContainsKey(cCoord)){
+           if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
+            editData=new Dictionary<Vector3Int,WaterEditOutputData>();
+           }
+           dataFromFileToMerge.Add(cCoord,editData);
+           //  TO DO: load data here
+          }
          }
          VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
          try{
