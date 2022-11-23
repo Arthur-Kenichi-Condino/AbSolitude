@@ -3,6 +3,7 @@
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -17,6 +18,35 @@ namespace AKCondinoO.Voxels.Water.Editing{
          public double density;
          public double previousDensity;
          public bool sleeping;
+            internal WaterEditOutputData(double density,double previousDensity,bool sleeping){
+             this.density=density;this.previousDensity=previousDensity;this.sleeping=sleeping;
+            }
+            public override string ToString(){
+             return string.Format(CultureInfoUtil.en_US,"waterEditOutputData={{ density={0} , previousDensity={1} , sleeping={2} , }}",density,previousDensity,sleeping);
+            }
+            internal static WaterEditOutputData Parse(string s){
+             WaterEditOutputData result=new WaterEditOutputData();
+             double density=0d;
+             double previousDensity=0d;
+             bool sleeping=false;
+             int densityStringStart=s.IndexOf("density=");
+             if(densityStringStart>=0){
+                densityStringStart+=8;
+              int densityStringEnd=s.IndexOf(" , ",densityStringStart);
+              string densityString=s.Substring(densityStringStart,densityStringEnd-densityStringStart);
+              //Log.DebugMessage("densityString:"+densityString);
+              density=double.Parse(densityString,NumberStyles.Any,CultureInfoUtil.en_US);
+             }
+             int previousDensityStringStart=s.IndexOf("previousDensity=");
+             if(previousDensityStringStart>=0){
+                previousDensityStringStart+=16;
+              int previousDensityStringEnd=s.IndexOf(" , ",previousDensityStringStart);
+              string previousDensityString=s.Substring(previousDensityStringStart,previousDensityStringEnd-previousDensityStringStart);
+              previousDensity=double.Parse(previousDensityString,NumberStyles.Any,CultureInfoUtil.en_US);
+             }
+             int sleepingStringStart=s.IndexOf("sleeping=");
+             return result;
+            }
         }
      internal readonly Queue<Dictionary<Vector3Int,WaterEditOutputData>>waterEditOutputDataPool=new Queue<Dictionary<Vector3Int,WaterEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataFromFileToMerge=new();

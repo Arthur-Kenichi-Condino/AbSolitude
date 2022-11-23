@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: RaceHumanMaleMorphableDynamicUMADnaAsset
   m_EditorClassIdentifier: 
   dnaTypeHash: 1677886961
-  lastKnownAssetPath: Assets/Resources/AKCondinoO/Sims/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset.asset
-  lastKnownDuplicateAssetPath: Assets/Resources/AKCondinoO/Sims/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset
+  lastKnownAssetPath: Assets/Resources/UMA/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset.asset
+  lastKnownDuplicateAssetPath: Assets/Resources/UMA/SimUMA/SimDNA/RaceHumanMaleMorphableDynamicUMADnaAsset
     1.asset
-  lastKnownInstanceID: 23268
-  Names:
-  - EyesGlobalHeightDown
-  - EyesGlobalHeightUp
-  - EyesGlobalSizeLarge
+  lastKnownInstanceID: 25206
+  Names: []
