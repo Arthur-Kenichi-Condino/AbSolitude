@@ -45,6 +45,15 @@ namespace AKCondinoO.Voxels.Water.Editing{
               previousDensity=double.Parse(previousDensityString,NumberStyles.Any,CultureInfoUtil.en_US);
              }
              int sleepingStringStart=s.IndexOf("sleeping=");
+             if(sleepingStringStart>=0){
+                sleepingStringStart+=9;
+              int sleepingStringEnd=s.IndexOf(" , ",sleepingStringStart);
+              string sleepingString=s.Substring(sleepingStringStart,sleepingStringEnd-sleepingStringStart);
+              sleeping=bool.Parse(sleepingString);
+             }
+             result.density=density;
+             result.previousDensity=previousDensity;
+             result.sleeping=sleeping;
              return result;
             }
         }
@@ -52,6 +61,12 @@ namespace AKCondinoO.Voxels.Water.Editing{
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataFromFileToMerge=new();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataForSavingToFile=new();
      readonly StringBuilder stringBuilder=new StringBuilder();
+        protected override void Cleanup(){
+         foreach(var editData in dataFromFileToMerge){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
+         dataFromFileToMerge.Clear();
+         foreach(var editData in dataForSavingToFile){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
+         dataForSavingToFile.Clear();
+        }
         protected override void Execute(){
          Log.DebugMessage("VoxelWaterEditingMultithreaded:Execute()");
          while(container.requests.Count>0){
@@ -62,6 +77,8 @@ namespace AKCondinoO.Voxels.Water.Editing{
           int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
           Vector3Int vCoord1=vecPosTovCoord(center );
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+         }
+         void MergeEdits(Vector2Int cCoord,Vector3Int vCoord,Vector2Int cnkRgn,double resultDensity,double previousDensity,bool sleeping){
          }
          VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
          try{
