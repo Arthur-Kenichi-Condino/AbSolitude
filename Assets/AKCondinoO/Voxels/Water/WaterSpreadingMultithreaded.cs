@@ -13,6 +13,8 @@ using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Water.Editing.VoxelWaterEditingMultithreaded;
+using System.ComponentModel;
+
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
@@ -91,6 +93,29 @@ namespace AKCondinoO.Voxels.Water{
           int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
           string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelWaterEditing.waterEditingFileFormat,VoxelWaterEditing.waterEditingPath,cCoord1.x,cCoord1.y);
           if(!container.editsFileStream.ContainsKey(oftIdx1)||!container.editsFileName.ContainsKey(oftIdx1)||container.editsFileName[oftIdx1]!=editsFileName){
+           container.editsFileName[oftIdx1]=editsFileName;
+           if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fStream)){
+            container.editsFileStreamWriter[oftIdx1].Dispose();
+            container.editsFileStreamReader[oftIdx1].Dispose();
+            container.editsFileStream      .Remove(oftIdx1);
+            container.editsFileStreamWriter.Remove(oftIdx1);
+            container.editsFileStreamReader.Remove(oftIdx1);
+           }
+           if(File.Exists(editsFileName)){
+            container.editsFileStream.Add(oftIdx1,new FileStream(editsFileName,FileMode.Open,FileAccess.ReadWrite,FileShare.ReadWrite));
+            container.editsFileStreamWriter.Add(oftIdx1,new StreamWriter(container.editsFileStream[oftIdx1]));
+            container.editsFileStreamReader.Add(oftIdx1,new StreamReader(container.editsFileStream[oftIdx1]));
+           }
+          }
+          if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+           StreamReader fileStreamReader=container.editsFileStreamReader[oftIdx1];
+           fileStream.Position=0L;
+           fileStreamReader.DiscardBufferedData();
+           string line;
+           while((line=fileStreamReader.ReadLine())!=null){
+            if(string.IsNullOrEmpty(line)){continue;}
+            int vCoordStringStart=line.IndexOf("vCoord=(");
+           }
           }
          }catch{
           throw;
