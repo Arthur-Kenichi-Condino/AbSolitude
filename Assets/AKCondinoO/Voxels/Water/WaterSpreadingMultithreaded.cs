@@ -133,6 +133,9 @@ namespace AKCondinoO.Voxels.Water{
          VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
          try{
           //  salvar
+          for(int x=-1;x<=1;x++){
+          for(int y=-1;y<=1;y++){
+          }}
          }catch{
           throw;
          }finally{

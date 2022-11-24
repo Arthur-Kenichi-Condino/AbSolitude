@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -85,6 +86,35 @@ namespace AKCondinoO.Voxels.Water.Editing{
            }
            dataFromFileToMerge.Add(cCoord,editData);
            //  TO DO: load data here
+           LoadDataFromFile(cCoord,editData);
+          }
+         }
+         void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData){
+          VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
+          try{
+           string fileName=string.Format(CultureInfoUtil.en_US,VoxelWaterEditing.waterEditingFileFormat,VoxelWaterEditing.waterEditingPath,cCoord.x,cCoord.y);
+           if(File.Exists(fileName)){
+            FileStream fileStream=new FileStream(fileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
+            StreamReader fileStreamReader=new StreamReader(fileStream);
+            fileStream.Position=0L;
+            fileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=fileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int vCoordStringStart=line.IndexOf("vCoord=(");
+             if(vCoordStringStart>=0){
+                vCoordStringStart+=8;
+              int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+              string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+             }
+            }
+            fileStream      .Dispose();
+            fileStreamReader.Dispose();
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.waterFileData_rwl.ExitReadLock();
           }
          }
          VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
