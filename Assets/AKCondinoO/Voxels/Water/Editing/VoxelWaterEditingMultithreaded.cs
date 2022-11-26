@@ -88,6 +88,15 @@ namespace AKCondinoO.Voxels.Water.Editing{
            //  TO DO: load data here
            LoadDataFromFile(cCoord,editData);
           }
+          VoxelWater currentVoxel;
+          if(dataFromFileToMerge.ContainsKey(cCoord)&&dataFromFileToMerge[cCoord].ContainsKey(vCoord)){
+           WaterEditOutputData voxelData=dataFromFileToMerge[cCoord][vCoord];
+           currentVoxel=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping);
+          }else{
+           currentVoxel=new VoxelWater();
+          }
+          if(resultDensity>=currentVoxel.density){
+          }
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData){
           VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
@@ -106,6 +115,21 @@ namespace AKCondinoO.Voxels.Water.Editing{
                 vCoordStringStart+=8;
               int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
               string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+              string[]xyzString=vCoordString.Split(',');
+              int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+              if(!editData.ContainsKey(vCoord)){
+               int editStringStart=vCoordStringEnd+4;
+               editStringStart=line.IndexOf("waterEditOutputData=",editStringStart);
+               if(editStringStart>=0){
+                int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+                string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+                WaterEditOutputData edit=WaterEditOutputData.Parse(editString);
+                editData.Add(vCoord,edit);
+               }
+              }
              }
             }
             fileStream      .Dispose();

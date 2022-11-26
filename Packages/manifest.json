@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.community.netcode.extensions": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/com.community.netcode.extensions",
+    "com.community.netcode.transport.steamnetworking": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworking",
+    "com.rlabrecque.steamworks.net": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
     "com.unity.addressables": "1.20.5",
     "com.unity.collab-proxy": "1.17.6",
     "com.unity.collections": "1.2.4",
