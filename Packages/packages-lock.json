@@ -1,5 +1,28 @@
 {
   "dependencies": {
+    "com.community.netcode.extensions": {
+      "version": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/com.community.netcode.extensions",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.netcode.gameobjects": "1.0.2"
+      },
+      "hash": "e9f53f86a047b585556e615c2093c7bfe3dad136"
+    },
+    "com.community.netcode.transport.steamnetworking": {
+      "version": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworking",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e9f53f86a047b585556e615c2093c7bfe3dad136"
+    },
+    "com.rlabrecque.steamworks.net": {
+      "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6c169a9129de81d2bd836612131617f1be82edd1"
+    },
     "com.unity.addressables": {
       "version": "1.20.5",
       "depth": 0,
