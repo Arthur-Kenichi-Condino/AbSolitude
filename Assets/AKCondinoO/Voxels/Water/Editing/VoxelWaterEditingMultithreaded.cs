@@ -95,7 +95,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
           }else{
            currentVoxel=new VoxelWater();
           }
-          if(resultDensity>=currentVoxel.density){
+          if(resultDensity!=currentVoxel.density){
           }
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData){
