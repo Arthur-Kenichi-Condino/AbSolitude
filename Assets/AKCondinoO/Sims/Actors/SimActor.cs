@@ -279,6 +279,10 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+        internal void OnThirdPersonCamFollow(){
+         Log.DebugMessage("OnThirdPersonCamFollow()");
+        }
+     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
@@ -290,6 +294,10 @@ namespace AKCondinoO.Sims.Actors{
          bool shouldCrouch=false;//  is crouching required?
          if(Core.singleton.isServer){
           if(IsOwner){
+           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW){
+              DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW=false;
+            OnThirdPersonCamFollow();
+           }
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
