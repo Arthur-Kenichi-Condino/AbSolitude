@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
@@ -377,7 +378,6 @@ namespace AKCondinoO.Sims.Actors{
           var section=height/3f;
           if((section/2f)>simActorCharacterController.characterController.radius){
            var direction=Vector3.up;
-           direction=transform.rotation*direction;
            var offset=(section/2f)-simActorCharacterController.characterController.radius;
            var center=simActorCharacterController.center;
            center.y+=(height/2f)-(section/2f);
@@ -385,11 +385,17 @@ namespace AKCondinoO.Sims.Actors{
            var localPoint1=center+direction*offset;
            var point0=transform.TransformPoint(localPoint0);
            var point1=transform.TransformPoint(localPoint1);
+           Vector3 r=transform.TransformVector(
+            simActorCharacterController.characterController.radius,
+            simActorCharacterController.characterController.radius,
+            simActorCharacterController.characterController.radius
+           );
+           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==1?0:r[xyz]).Select(Mathf.Abs).Max();
            _GetUpperColliders:{
             collidersTouchingUpperCount=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             simActorCharacterController.characterController.radius,
+             radius,
              collidersTouchingUpper
             );
            }
@@ -408,7 +414,7 @@ namespace AKCondinoO.Sims.Actors{
             collidersTouchingMiddleCount=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             simActorCharacterController.characterController.radius,
+             radius,
              collidersTouchingMiddle
             );
            }

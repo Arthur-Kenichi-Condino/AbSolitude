@@ -402,18 +402,19 @@ namespace AKCondinoO.Sims{
           int overlappingsLength=0;
           if(volumeColliders[i]is CapsuleCollider capsule){
            var direction=new Vector3{[capsule.direction]=1};
-           direction=transform.rotation*direction;
            //Log.DebugMessage("capsule direction:"+direction);
-           var offset=capsule.height/2f-capsule.radius-0.001f;
+           var offset=capsule.height/2f-capsule.radius;
            var localPoint0=capsule.center-direction*offset;
            var localPoint1=capsule.center+direction*offset;
            var point0=transform.TransformPoint(localPoint0);
            var point1=transform.TransformPoint(localPoint1);
+           Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
+           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
            _GetOverlappedColliders:{
             overlappingsLength=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             capsule.radius-0.001f,
+             radius-0.001f,
              overlappedColliders
             );
            }
