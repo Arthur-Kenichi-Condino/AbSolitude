@@ -11,6 +11,7 @@ using System.Text;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
+using static AKCondinoO.GameMode;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
@@ -281,8 +282,10 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal void OnThirdPersonCamFollow(){
          Log.DebugMessage("OnThirdPersonCamFollow()");
+         MainCamera.singleton.toFollowActor=this;
+         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
-     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW=false;
+     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
@@ -294,8 +297,8 @@ namespace AKCondinoO.Sims.Actors{
          bool shouldCrouch=false;//  is crouching required?
          if(Core.singleton.isServer){
           if(IsOwner){
-           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW){
-              DEBUG_ACTIVATE_THIRD_PERSON_CAM_FOLLOW=false;
+           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
+              DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
             OnThirdPersonCamFollow();
            }
            if(isUsingAI){

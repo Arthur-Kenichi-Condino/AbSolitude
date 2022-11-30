@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System.Collections;
@@ -26,6 +27,7 @@ namespace AKCondinoO{
      internal NavMeshData[]navMeshData;
       internal NavMeshDataInstance[]navMeshInstance;
        internal AsyncOperation[]navMeshAsyncOperation;
+     internal readonly Queue<SimActor>camFollowableActors=new();
         void Awake(){
          netObj=GetComponent<NetworkObject>();
         }
