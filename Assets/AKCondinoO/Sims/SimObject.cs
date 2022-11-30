@@ -133,6 +133,7 @@ namespace AKCondinoO.Sims{
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
+     //  TO DO: componente Rigidbody tem que ficar sempre no transform root
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
      internal Bounds localBounds;
