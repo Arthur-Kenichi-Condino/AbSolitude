@@ -237,6 +237,11 @@ namespace AKCondinoO.Sims.Actors{
         void DisableNavMeshAgent(){
          navMeshAgent.enabled=false;
         }
+        internal void OnThirdPersonCamFollow(){
+         Log.DebugMessage("OnThirdPersonCamFollow()");
+         MainCamera.singleton.toFollowActor=this;
+         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
+        }
         internal virtual void OnSkillUsed(Skill skill){
         }
      internal bool isUsingAI=true;
@@ -280,11 +285,6 @@ namespace AKCondinoO.Sims.Actors{
            simActorCharacterController.characterController.center=new Vector3(0,0,0);
           }
          }
-        }
-        internal void OnThirdPersonCamFollow(){
-         Log.DebugMessage("OnThirdPersonCamFollow()");
-         MainCamera.singleton.toFollowActor=this;
-         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
      [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
