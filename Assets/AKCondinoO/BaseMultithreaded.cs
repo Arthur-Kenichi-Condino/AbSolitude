@@ -57,13 +57,16 @@ namespace AKCondinoO{
          }
          return count;
         }
+     readonly System.Threading.ThreadPriority priority;
      readonly Task task;
-        internal BaseMultithreaded(){
+        internal BaseMultithreaded(System.Threading.ThreadPriority priority=System.Threading.ThreadPriority.BelowNormal){
+         this.priority=priority;
          Core.threadCount++;
          task=Task.Factory.StartNew(BG,TaskCreationOptions.LongRunning);
         }
      protected T container{get;private set;}
         void BG(){Thread.CurrentThread.IsBackground=false;
+         Thread.CurrentThread.Priority=priority;
          ManualResetEvent backgroundData;
            AutoResetEvent foregroundData;
          while(!Stop){enqueued.WaitOne();if(Stop){enqueued.Set();goto _Stop;}

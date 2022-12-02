@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
+using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -41,6 +43,14 @@ namespace AKCondinoO{
      internal static string savePath;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         int procCt=Environment.ProcessorCount;
+         Log.DebugMessage("Environment.ProcessorCount:"+procCt);
+         ThreadPool.GetMinThreads(out int minWorkerThreads,out int minIOCThreads);
+         Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
+         ThreadPool.GetMaxThreads(out int maxWorkerThreads,out int maxIOCThreads);
+         Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
+         Thread.CurrentThread.Priority=System.Threading.ThreadPriority.Normal;
+         GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
          QualitySettings.vSyncCount=1;
@@ -100,6 +110,8 @@ namespace AKCondinoO{
          if(Gameplayer.main!=null){
             Gameplayer.main.Init(netManager.LocalClientId);
          }
+         MemoryManagement.CallGC(Time.time);
+         Resources.UnloadUnusedAssets();
         }
         void OnDestroy(){
          if(singleton==this){
