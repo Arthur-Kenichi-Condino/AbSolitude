@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal class SimObject:NetworkBehaviour{
@@ -136,6 +137,8 @@ namespace AKCondinoO.Sims{
      //  TO DO: componente Rigidbody tem que ficar sempre no transform root
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
+     internal NavMeshObstacle[]navMeshObstacles;
+      internal bool navMeshObstacleCarving;
      internal Bounds localBounds;
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
@@ -149,6 +152,9 @@ namespace AKCondinoO.Sims{
            }
            volumeColliders.Add(collider);
           }
+         }
+         foreach(NavMeshObstacle navMeshObstacle in navMeshObstacles=GetComponentsInChildren<NavMeshObstacle>()){
+          navMeshObstacleCarving|=navMeshObstacle.carving;
          }
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
@@ -181,7 +187,7 @@ namespace AKCondinoO.Sims{
           }
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            ulong clientId=gameplayer.Key;
-           gameplayer.Value.OnSimObjectSpawned(this);
+           gameplayer.Value.OnSimObjectSpawned(this,colliders[0].gameObject.layer);
           }
          }
         }
@@ -242,12 +248,21 @@ namespace AKCondinoO.Sims{
          }
          interactionsEnabled=true;
          isOverlapping=IsOverlappingNonAlloc();
+         if(isOverlapping){
+          safePosition=null;
+         }else{
+          safePosition=transform.position;
+         }
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
           collider.enabled=false;
          }
          interactionsEnabled=false;
+         foreach(var gameplayer in GameplayerManagement.singleton.all){
+          ulong clientId=gameplayer.Key;
+          gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
+         }
         }
         internal void OnUnplaceRequest(){
          unplaceRequested=true;
@@ -255,6 +270,7 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
+     Vector3?safePosition;
      [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
@@ -279,6 +295,7 @@ namespace AKCondinoO.Sims{
            gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
           }
          }
+         bool returnedToSafePos=false;
          GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
@@ -295,14 +312,20 @@ namespace AKCondinoO.Sims{
              if(isOverlapping){
                 isOverlapping=false;
                  if(Core.singleton.isServer){
-                  //Log.DebugMessage("simObject isOverlapping:id:"+id);
-                  DisableInteractions();
-                  if(netObj.IsSpawned){
-                   netObj.DontDestroyWithOwner=true;
-                   netObj.Despawn(destroy:false);
+                  if(safePosition!=null){
+                   transform.position=safePosition.Value;
+                   returnedToSafePos=!IsOverlappingNonAlloc();
                   }
-                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-                  result=2;
+                  if(!returnedToSafePos){
+                   Log.DebugMessage("simObject isOverlapping:id:"+id);
+                   DisableInteractions();
+                   if(netObj.IsSpawned){
+                    netObj.DontDestroyWithOwner=true;
+                    netObj.Despawn(destroy:false);
+                   }
+                   SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                   result=2;
+                  }
                  }
              }else{
                  if(checkIfOutOfSight){
@@ -350,6 +373,9 @@ namespace AKCondinoO.Sims{
                      }
                  }
              }
+         }
+         if(result==0){
+          safePosition=transform.position;
          }
          return result;
         }
