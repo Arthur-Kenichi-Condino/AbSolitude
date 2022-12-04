@@ -99,33 +99,26 @@ namespace AKCondinoO{
          navMeshDirty=true;
         }
         internal void OnSimObjectSpawned(SimObject simObject,int layer){
-         if(simObject.navMeshObstacleCarving){
-          //Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
-          navMeshDirty=true;
-         }
-         //Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
-         if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
-          navMeshSourcesDirty=true;
-         }
+         Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
+         OnNavMeshShouldChange(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
-         if(simObject.navMeshObstacleCarving){
-          Log.DebugMessage("OnSimObjectTransformHasChanged:navMeshDirty=true");
-          navMeshDirty=true;
-         }
-         //Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
-         if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
-          navMeshSourcesDirty=true;
-         }
+         Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
+         OnNavMeshShouldChange(simObject,layer);
         }
         internal void OnSimObjectDespawned(SimObject simObject,int layer){
+         Log.DebugMessage("OnSimObjectDespawned:layer:"+layer);
+         OnNavMeshShouldChange(simObject,layer);
+        }
+        void OnNavMeshShouldChange(SimObject simObject,int layer){
          if(simObject.navMeshObstacleCarving){
-          Log.DebugMessage("OnSimObjectDespawned:navMeshDirty=true");
           navMeshDirty=true;
+          Log.DebugMessage("OnNavMeshShouldChange:navMeshDirty=true");
          }
-         //Log.DebugMessage("OnSimObjectDespawned:layer:"+layer);
          if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
           navMeshSourcesDirty=true;
+          navMeshDirty=true;
+          Log.DebugMessage("OnNavMeshShouldChange:navMeshDirty=true;navMeshSourcesDirty=true;");
          }
         }
      bool pendingCoordinatesUpdate=true;

@@ -135,6 +135,7 @@ namespace AKCondinoO.Sims{
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
      //  TO DO: componente Rigidbody tem que ficar sempre no transform root
+     internal Rigidbody hasRigidbody;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
      internal NavMeshObstacle[]navMeshObstacles;
@@ -143,6 +144,8 @@ namespace AKCondinoO.Sims{
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
          netObj=GetComponent<NetworkObject>();
+         hasRigidbody=transform.root.GetComponent<Rigidbody>();
+         Log.DebugMessage(id+" hasRigidbody:"+(hasRigidbody!=null));
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){
@@ -421,6 +424,9 @@ namespace AKCondinoO.Sims{
         }
      protected Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(){
+         if(hasRigidbody!=null){
+          return false;
+         }
          if(this is SimActor){
           return false;
          }
@@ -459,7 +465,7 @@ namespace AKCondinoO.Sims{
             if(overlappedCollider.transform.root!=transform.root){//  it's not myself
              SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
              if(overlappedSimObject!=null){
-              if(!(overlappedSimObject is SimActor)){
+              if(!(overlappedSimObject is SimActor||overlappedSimObject.hasRigidbody!=null)){
                result=true;
               }
              }
