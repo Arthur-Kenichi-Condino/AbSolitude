@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -13,8 +14,6 @@ using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Water.Editing.VoxelWaterEditingMultithreaded;
-using System.ComponentModel;
-
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
@@ -27,6 +26,7 @@ namespace AKCondinoO.Voxels.Water{
      internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
      internal readonly Dictionary<int,StreamWriter>editsFileStreamWriter=new Dictionary<int,StreamWriter>();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
+     internal float deltaTime;
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here

@@ -8,8 +8,11 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
          public double density;
          public double previousDensity;
          public bool sleeping;
-            internal VoxelWater(double density,double previousDensity,bool sleeping){
-             this.density=density;this.previousDensity=previousDensity;this.sleeping=sleeping;
+         public float evaporateAfter;
+            internal VoxelWater(double density,double previousDensity,bool sleeping):this(density,previousDensity,sleeping,-1f){
+            }
+            internal VoxelWater(double density,double previousDensity,bool sleeping,float evaporateAfter){
+             this.density=density;this.previousDensity=previousDensity;this.sleeping=sleeping;this.evaporateAfter=evaporateAfter;
             }
         }
     }
