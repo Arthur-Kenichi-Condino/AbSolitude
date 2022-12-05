@@ -99,6 +99,11 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _columns: 2
+    - _fadeEndDis: 104
+    - _fadeStartDis: 72
+    - _fogEndDis: 96
+    - _fogIntensity: 1
+    - _fogStartDis: 88
     - _height: 0.02
     - _rows: 2
     - _scale: 0.25
@@ -106,4 +111,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _cameraPosition: {r: 0.5381253, g: 17.866096, b: -5.9936066, a: 0}
+    - _fogColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   m_BuildTextureStacks: []

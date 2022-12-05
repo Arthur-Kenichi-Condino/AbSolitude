@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal class SimObject:NetworkBehaviour{
+    internal partial class SimObject:NetworkBehaviour{
      internal PersistentData persistentData;
         internal struct PersistentData{
          public Quaternion rotation;
@@ -161,6 +161,8 @@ namespace AKCondinoO.Sims{
          }
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
+         foreach(Renderer renderer in renderers=GetComponentsInChildren<Renderer>()){
+         }
         }
         internal virtual void OnLoadingPool(){
          DisableInteractions();
@@ -256,6 +258,7 @@ namespace AKCondinoO.Sims{
          }else{
           safePosition=transform.position;
          }
+         EnableRenderers();
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
@@ -266,6 +269,7 @@ namespace AKCondinoO.Sims{
           ulong clientId=gameplayer.Key;
           gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
          }
+         DisableRenderers();
         }
         internal void OnUnplaceRequest(){
          unplaceRequested=true;
@@ -280,6 +284,10 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
          int result=0;
+         bool updateRenderersFlag=doValidationChecks;
+         updateRenderersFlag|=transform.hasChanged;
+         updateRenderersFlag|=Core.singleton.currentCameraChanged;
+         updateRenderersFlag|=Core.singleton.currentCameraHasTransformChanges;
          checkIfOutOfSight|=doValidationChecks;
          checkIfOutOfSight|=transform.hasChanged;
          if(transform.hasChanged){
@@ -380,6 +388,7 @@ namespace AKCondinoO.Sims{
          if(result==0){
           safePosition=transform.position;
          }
+         UpdateRenderers(updateRenderersFlag);
          return result;
         }
         internal virtual int ManualUpdateAsClient(bool doValidationChecks){

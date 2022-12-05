@@ -115,6 +115,8 @@ namespace AKCondinoO.Voxels{
      internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(12,12);//  pool size
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(6,6);
+      internal static float fadeStartDis;
+       internal static float fadeEndDis;
      internal static readonly BaseBiome biome=new BaseBiome();
      [SerializeField]VoxelTerrainChunk _VoxelTerrainChunkPrefab;
      internal VoxelTerrainChunk[]terrain;
@@ -169,7 +171,12 @@ namespace AKCondinoO.Voxels{
           terrainSynchronization.Add(cnk,cnk.marchingCubesBG.synchronizer);
          }
          VoxelTerrainEditing.singleton.terrainEditingBG.terrainSynchronization=terrainSynchronization.Values.ToArray();
+         AtlasHelper.sharedMaterial=_VoxelTerrainChunkPrefab.GetComponent<MeshRenderer>().sharedMaterial;
          AtlasHelper.SetAtlasData();
+         AtlasHelper.SetFadeDis(
+          fadeStartDis=Mathf.Min(instantiationDistance.x,instantiationDistance.y)*16f-24f,
+          fadeEndDis  =Mathf.Min(instantiationDistance.x,instantiationDistance.y)*16f+8f
+         );
          if(Core.singleton.isServer){
           NetServerSideInit();
           biome.Seed=0;
