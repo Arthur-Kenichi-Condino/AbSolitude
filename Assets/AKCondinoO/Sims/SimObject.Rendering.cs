@@ -24,13 +24,15 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.currentCamera!=null){
            //Log.DebugMessage("UpdateRenderers:update");
            float viewDistance=Vector3.Distance(Core.singleton.currentCamera.transform.position,transform.root.position);
-           float transparencyStrength=(VoxelSystem.fadeEndDis-viewDistance)/(VoxelSystem.fadeEndDis-VoxelSystem.fadeStartDis);
-           transparencyStrength=Mathf.Clamp01(transparencyStrength);
+           float opacity=(VoxelSystem.fadeEndDis-viewDistance)/(VoxelSystem.fadeEndDis-VoxelSystem.fadeStartDis);
+           opacity=Mathf.Clamp01(opacity);
            //Log.DebugMessage("transparencyStrength:"+transparencyStrength);
            foreach(Renderer renderer in renderers){
             foreach(Material material in renderer.materials){
+             if(opacity!=1f){
+             }
              Color c=material.GetColor("_Color");
-             c.a=transparencyStrength;
+             c.a=opacity;
              material.SetColor("_Color",c);
             }
            }
