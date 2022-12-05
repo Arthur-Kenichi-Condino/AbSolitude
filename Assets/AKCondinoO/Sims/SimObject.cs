@@ -286,8 +286,8 @@ namespace AKCondinoO.Sims{
          int result=0;
          bool updateRenderersFlag=doValidationChecks;
          updateRenderersFlag|=transform.hasChanged;
-         updateRenderersFlag|=Core.singleton.currentCameraChanged;
-         updateRenderersFlag|=Core.singleton.currentCameraHasTransformChanges;
+         updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraChanged;
+         updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraHasTransformChanges;
          checkIfOutOfSight|=doValidationChecks;
          checkIfOutOfSight|=transform.hasChanged;
          if(transform.hasChanged){

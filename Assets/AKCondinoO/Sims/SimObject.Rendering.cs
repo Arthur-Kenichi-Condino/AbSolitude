@@ -21,15 +21,16 @@ namespace AKCondinoO.Sims{
         }
         protected virtual void UpdateRenderers(bool updateFlag){
          if(updateFlag){
-          if(Core.singleton.currentCamera!=null){
+          if(Core.singleton.currentRenderingTargetCamera!=null){
            //Log.DebugMessage("UpdateRenderers:update");
-           float viewDistance=Vector3.Distance(Core.singleton.currentCamera.transform.position,transform.root.position);
+           float viewDistance=Vector3.Distance(Core.singleton.currentRenderingTargetCamera.transform.position,transform.root.position);
            float opacity=(VoxelSystem.fadeEndDis-viewDistance)/(VoxelSystem.fadeEndDis-VoxelSystem.fadeStartDis);
            opacity=Mathf.Clamp01(opacity);
            //Log.DebugMessage("transparencyStrength:"+transparencyStrength);
            foreach(Renderer renderer in renderers){
             foreach(Material material in renderer.materials){
              if(opacity!=1f){
+             }else{
              }
              Color c=material.GetColor("_Color");
              c.a=opacity;

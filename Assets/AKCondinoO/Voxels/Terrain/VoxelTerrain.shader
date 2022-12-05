@@ -184,9 +184,9 @@ Shader"Voxels/VoxelTerrain"{
     o.Normal=UnpackNormal(b);
     float alpha=c.a;
     float viewDistance=length(_WorldSpaceCameraPos-input.worldPos);
-    float transparencyStrength=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
-    clip(transparencyStrength);
-    alpha=alpha*saturate(transparencyStrength);
+    float opacity=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
+    clip(opacity);
+    alpha=alpha*saturate(opacity);
     o.Alpha=(alpha);
    }
    void applyFixedFog(Input input,SurfaceOutputStandard o,inout fixed4 color){
