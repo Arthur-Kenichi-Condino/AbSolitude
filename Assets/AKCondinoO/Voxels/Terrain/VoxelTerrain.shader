@@ -11,9 +11,11 @@ Shader"Voxels/VoxelTerrain"{
   _materials("materials"       ,2DArray)="white"{}
   _bumps    ("material bumps"  ,2DArray)="bump" {}
   _heights  ("material heights",2DArray)="white"{}
-   _height("Height",Range(0,.125))=.05//  "distortion" level
+   _height("height",Range(0,.125))=.05//  "distortion" level
   _scale("scale",float)=1 	  
   _sharpness("triplanar blend sharpness",float)=1
+  _fadeStartDis("fade start distance",float)=32
+  _fadeEndDis("fade end distance",float)=40
  }
  SubShader{
   Tags{"Queue"="AlphaTest" "RenderType"="Transparent" "IgnoreProjector"="True"}
@@ -25,6 +27,7 @@ Shader"Voxels/VoxelTerrain"{
     #pragma   vertex vert
     #pragma fragment frag
     #pragma require 2darray
+    #pragma multi_compile_fog
     #include "UnityCG.cginc"
     struct v2f{
      float4 pos:SV_POSITION;
@@ -61,7 +64,10 @@ Shader"Voxels/VoxelTerrain"{
     float _height;
    float _scale;
    float _sharpness;
+   float _fadeStartDis;
+   float _fadeEndDis;
    struct Input{
+    float4 position:SV_POSITION;
     float3 worldPos:POSITION;
     float3 worldNormal:NORMAL;
     float3 viewDir;
@@ -74,6 +80,8 @@ Shader"Voxels/VoxelTerrain"{
    };
    Input vert(inout appdata_full v){
      Input o;
+    UNITY_INITIALIZE_OUTPUT(Input,o);
+           o.position=UnityObjectToClipPos(v.vertex);
     return o;
    }
    half2 uv_x;
@@ -175,9 +183,18 @@ Shader"Voxels/VoxelTerrain"{
     o.Albedo=(c.rgb);
     o.Normal=UnpackNormal(b);
     float alpha=c.a;
+    float viewDistance=length(_WorldSpaceCameraPos-input.worldPos);
+    float transparencyStrength=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
+    clip(transparencyStrength);
+    alpha=alpha*saturate(transparencyStrength);
     o.Alpha=(alpha);
    }
    void applyFixedFog(Input input,SurfaceOutputStandard o,inout fixed4 color){
+    float viewDistance=length(_WorldSpaceCameraPos-input.worldPos);
+    UNITY_CALC_FOG_FACTOR_RAW(viewDistance);
+    if(unityFogFactor>0){
+	    color.rgb=lerp(unity_FogColor.rgb,color.rgb,saturate(unityFogFactor));
+    }
    }
   ENDCG
  }

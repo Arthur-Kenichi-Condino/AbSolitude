@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Music;
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Voxels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,9 @@ namespace AKCondinoO{
          isFollowing=false;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
         }
+     Vector3 endOfFrameRotation;
+     Vector3 endOfFramePosition;
+      internal bool hasTransformChanges{get;private set;}
      internal SimActor toFollowActor;
       bool isFollowing;
        internal Vector3 thirdPersonOffset=new Vector3(1.0f,.4f,-2.0f);
@@ -48,6 +52,13 @@ namespace AKCondinoO{
           //  TO DO: stop following movement if paused
          }
          BGM.singleton.transform.position=this.transform.position;
+         hasTransformChanges=false;
+         if(
+          endOfFrameRotation!=(endOfFrameRotation=transform.eulerAngles)||
+          endOfFramePosition!=(endOfFramePosition=transform.position)
+         ){
+          hasTransformChanges=true;
+         }
         }
      [SerializeField]bool DEBUG_STOP_FOLLOWING=false;
      Vector3 tgtRot,tgtRot_Last;

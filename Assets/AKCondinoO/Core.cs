@@ -149,5 +149,32 @@ namespace AKCondinoO{
      internal event EventHandler OnDestroyingCoreEvent;
         internal class OnDestroyingCoreEventArgs:EventArgs{
         }
+     internal Camera currentCamera{get;private set;}
+      internal bool currentCameraChanged{get;private set;}
+      Vector3 currentCameraRotation;
+      Vector3 currentCameraPosition;
+       internal bool currentCameraHasTransformChanges{get;private set;}
+        void Update(){
+         currentCameraChanged=false;
+         if(Camera.current!=null&&currentCamera!=(currentCamera=Camera.current)){
+          currentCameraChanged=true;
+          Log.DebugMessage("Camera.current changed to:"+currentCamera);
+         }
+         currentCameraHasTransformChanges=false;
+         if(currentCamera!=null){
+          if(currentCamera==Camera.main){
+           currentCameraHasTransformChanges=MainCamera.singleton.hasTransformChanges;
+           //Log.DebugMessage("does Camera.main transform has changes?"+currentCameraHasTransformChanges);
+          }else{
+           if(
+            currentCameraRotation!=(currentCameraRotation=currentCamera.transform.eulerAngles)||
+            currentCameraPosition!=(currentCameraPosition=currentCamera.transform.position)
+           ){
+            currentCameraHasTransformChanges=true;
+           }
+           //Log.DebugMessage("does Camera.current transform has changes?"+currentCameraHasTransformChanges);
+          }
+         }
+        }
     }
 }

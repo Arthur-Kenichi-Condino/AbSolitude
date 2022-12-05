@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Actors{
      Vector3 tgtPos,tgtPos_Last;
       Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(.4f,.4f,.4f);
-        [SerializeField]Vector3 moveDeceleration=new Vector3(.8f,.8f,.8f);
+        [SerializeField]Vector3 moveDeceleration=new Vector3(1.6f,1.6f,1.6f);
          [SerializeField]Vector3 maxMoveSpeed=new Vector3(4.0f,4.0f,4.0f);
           Vector3 appliedControllerVelocity;
      [SerializeField]float jumpTimeLength=.125f;
