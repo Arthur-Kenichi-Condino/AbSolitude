@@ -53,6 +53,7 @@ namespace AKCondinoO{
          GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
+           RenderingUtil.SetUtil();
          QualitySettings.vSyncCount=1;
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);

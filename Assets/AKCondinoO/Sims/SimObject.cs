@@ -162,6 +162,10 @@ namespace AKCondinoO.Sims{
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
          foreach(Renderer renderer in renderers=GetComponentsInChildren<Renderer>()){
+          foreach(Material material in renderer.materials){
+           materialShader[material]=material.shader;
+          }
+          renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
          }
         }
         internal virtual void OnLoadingPool(){
@@ -278,13 +282,14 @@ namespace AKCondinoO.Sims{
          poolRequested=true;
         }
      Vector3?safePosition;
+     [NonSerialized]bool updateRenderersFlag;
      [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
          int result=0;
-         bool updateRenderersFlag=doValidationChecks;
+         updateRenderersFlag|=doValidationChecks;
          updateRenderersFlag|=transform.hasChanged;
          updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraChanged;
          updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraHasTransformChanges;
@@ -388,7 +393,6 @@ namespace AKCondinoO.Sims{
          if(result==0){
           safePosition=transform.position;
          }
-         UpdateRenderers(updateRenderersFlag);
          return result;
         }
         internal virtual int ManualUpdateAsClient(bool doValidationChecks){
@@ -486,6 +490,9 @@ namespace AKCondinoO.Sims{
         }
      protected Collider[]collidersTouching=new Collider[8];
         protected virtual void GetCollidersTouchingNonAlloc(){
+        }
+        internal virtual void ManualLateUpdate(){
+         UpdateRenderers();
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
