@@ -14,6 +14,7 @@ namespace AKCondinoO.UI{
      internal static bool netManagerInitialized;
      NetworkManager netManager;
      [SerializeField]bool editorNetAsClient;
+     [SerializeField]bool devBuildNetAsClient;
      readonly Dictionary<Type,PooledPrefabInstanceHandler>prefabInstanceHandlers=new Dictionary<Type,PooledPrefabInstanceHandler>();
         void Update(){
          GameObject netManagerGameObject;
@@ -59,10 +60,18 @@ namespace AKCondinoO.UI{
              }
             }
            }else{
-            if(NetworkManager.Singleton.StartClient()){
-             Log.DebugMessage("NetworkManager StartClient successful");
+            if(devBuildNetAsClient){
+             if(NetworkManager.Singleton.StartClient()){
+              Log.DebugMessage("NetworkManager StartClient successful");
+             }else{
+              Log.Error("NetworkManager StartClient failed");
+             }
             }else{
-             Log.Error("NetworkManager StartClient failed");
+             if(NetworkManager.Singleton.StartHost()){
+              Log.DebugMessage("NetworkManager StartHost successful");
+             }else{
+              Log.Error("NetworkManager StartHost failed");
+             }
             }
            }
           }
