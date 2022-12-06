@@ -55,7 +55,13 @@ namespace AKCondinoO{
           }
          }
         }
+     internal readonly HashSet<EnabledState>activityDetectionInputState=new HashSet<EnabledState>();
+      internal bool activityDetected;
         public void Init(){
+         activityDetectionInputState.Add(Enabled.FORWARD );
+         activityDetectionInputState.Add(Enabled.BACKWARD);
+         activityDetectionInputState.Add(Enabled.RIGHT   );
+         activityDetectionInputState.Add(Enabled.LEFT    );
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
@@ -72,6 +78,14 @@ namespace AKCondinoO{
         internal bool escape;
         //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
         void Update(){
+         activityDetected=false;
+         void SetActivityDetectionFlag(EnabledState enabledState){
+          if(activityDetectionInputState.Contains(enabledState)){
+           if(enabledState.curState||(enabledState.curState!=enabledState.lastState)){
+            activityDetected=true;
+           }
+          }
+         }
          escape=Input.GetKey(KeyCode.Escape)||Input.GetKeyUp(KeyCode.Escape)||Input.GetKeyDown(KeyCode.Escape);
          foreach(var command in CommandDictionary){
           string        name=command.Key;
@@ -87,6 +101,7 @@ namespace AKCondinoO{
                   if(heldTime>=command.Value.holdDelay){
                    heldTime=0;
                    enabled.curState=true;
+                   SetActivityDetectionFlag(enabled);
                   }
                   enabled.heldTime=heldTime;
                  }else{
@@ -101,6 +116,7 @@ namespace AKCondinoO{
                   if(heldTime>=command.Value.holdDelay){
                    heldTime=0;
                    enabled.curState=true;
+                   SetActivityDetectionFlag(enabled);
                   }
                   enabled.heldTime=heldTime;
                  }else{
@@ -108,15 +124,21 @@ namespace AKCondinoO{
                  }
              }else if(mode==Command.Modes.ActiveHeld){
                  enabled.curState=InvokeDelegate(command,type,GetterReturnMode.HeldDown);
+                 SetActivityDetectionFlag(enabled);
              }else if(mode==Command.Modes.AlternateDown){
                  if(InvokeDelegate(command,type,GetterReturnMode.Down)){
                   enabled.curState=!enabled.curState;
+                  SetActivityDetectionFlag(enabled);
                  }
              }
          }
          Enabled.RELEASE_MOUSE.curState=Enabled.RELEASE_MOUSE.curState||escape||!focus;
          Enabled.MOUSE_ROTATION_DELTA_X[1]=Enabled.MOUSE_ROTATION_DELTA_X[0];Enabled.MOUSE_ROTATION_DELTA_X[0]=Command.ROTATION_SENSITIVITY_X*Input.GetAxis("Mouse X");
          Enabled.MOUSE_ROTATION_DELTA_Y[1]=Enabled.MOUSE_ROTATION_DELTA_Y[0];Enabled.MOUSE_ROTATION_DELTA_Y[0]=Command.ROTATION_SENSITIVITY_Y*Input.GetAxis("Mouse Y");
+         //Log.DebugMessage("Enabled.MOUSE_ROTATION_DELTA_X[0]:"+Enabled.MOUSE_ROTATION_DELTA_X[0]);
+         //Log.DebugMessage("Enabled.MOUSE_ROTATION_DELTA_Y[0]:"+Enabled.MOUSE_ROTATION_DELTA_Y[0]);
+         activityDetected|=(Enabled.MOUSE_ROTATION_DELTA_X[0]!=0f);
+         activityDetected|=(Enabled.MOUSE_ROTATION_DELTA_Y[0]!=0f);
         }
     }
 }
