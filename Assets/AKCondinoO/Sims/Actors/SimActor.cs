@@ -288,6 +288,8 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
+     [SerializeField]float AFKTimeToUseAI=30f;
+      float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
@@ -304,6 +306,26 @@ namespace AKCondinoO.Sims.Actors{
            }
            if(MainCamera.singleton.toFollowActor==this){
             Log.DebugMessage("following this:"+this);
+            if(InputHandler.singleton.activityDetected){
+             isUsingAI=false;
+             AFKTimerToUseAI=AFKTimeToUseAI;
+             Log.DebugMessage("start using manual control:"+this);
+            }
+           }else{
+            if(!isUsingAI){
+             isUsingAI=true;
+             AFKTimerToUseAI=0f;
+             Log.DebugMessage("camera stopped following, use AI:"+this);
+            }
+           }
+           if(!isUsingAI){
+            if(AFKTimerToUseAI>0f){
+             AFKTimerToUseAI-=Time.deltaTime;
+            }
+            if(AFKTimerToUseAI<=0f){
+             isUsingAI=true;
+             Log.DebugMessage("AFK for too long, use AI:"+this);
+            }
            }
            if(isUsingAI){
             EnableNavMeshAgent();
