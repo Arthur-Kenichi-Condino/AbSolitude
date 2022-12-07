@@ -99,7 +99,7 @@ namespace AKCondinoO{
          navMeshDirty=true;
         }
         internal void OnSimObjectSpawned(SimObject simObject,int layer){
-         Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
+         //Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
          OnNavMeshShouldChange(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
