@@ -392,6 +392,9 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         if(simActorAnimatorController!=null){
+            simActorAnimatorController.ManualUpdate();
+         }
          lastForward=transform.forward;
          return result;
         }

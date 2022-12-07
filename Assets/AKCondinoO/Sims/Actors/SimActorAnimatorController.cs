@@ -15,6 +15,11 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActorAnimatorIKController animatorIKController;
      Vector3 tgtRot,tgtRot_Last;
      Vector3 tgtPos,tgtPos_Last;
+      float tgtPosLerpTime;
+       float tgtPosLerpVal;
+        Vector3 tgtPosLerpA,tgtPosLerpB;
+         [SerializeField]float tgtPosLerpSpeed=18.75f;
+          [SerializeField]float tgtPosLerpMaxTime=.025f;
         void Awake(){
         }
      bool synced=true;
@@ -28,7 +33,7 @@ namespace AKCondinoO.Sims.Actors{
      Dictionary<int,List<AnimatorClipInfo>>animatorClip;
      Dictionary<int,int>lastClipInstanceID;
       Dictionary<int,string>lastClipName;
-        void Update(){
+        internal void ManualUpdate(){
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
@@ -57,6 +62,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            transitionTimeInterval=new WaitForSeconds(0.05f);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
+           actor.simUMAData.transform.parent.SetParent(null);
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
@@ -91,7 +97,30 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
           if(actor.simUMAData!=null){
-           actor.simUMAData.transform.parent.position=tgtPos;
+           if(tgtPosLerpTime==0){
+            if(tgtPos!=tgtPos_Last){
+             tgtPosLerpVal=0;
+             tgtPosLerpA=actor.simUMAData.transform.parent.position;
+             tgtPosLerpB=tgtPos;
+             tgtPosLerpTime+=Time.deltaTime;
+             tgtPos_Last=tgtPos;
+            }
+           }else{
+            tgtPosLerpTime+=Time.deltaTime;
+           }
+           if(tgtPosLerpTime!=0){
+            tgtPosLerpVal+=tgtPosLerpSpeed*Time.deltaTime;
+            if(tgtPosLerpVal>=1){
+             tgtPosLerpVal=1;
+             tgtPosLerpTime=0;
+            }
+            actor.simUMAData.transform.parent.position=Vector3.Lerp(tgtPosLerpA,tgtPosLerpB,tgtPosLerpVal);
+            if(tgtPosLerpTime>tgtPosLerpMaxTime){
+             if(tgtPos!=tgtPos_Last){
+              tgtPosLerpTime=0;
+             }
+            }
+           }
           }
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
           foreach(var layer in animatorClip){
@@ -185,6 +214,8 @@ namespace AKCondinoO.Sims.Actors{
         /// <returns></returns>
         internal bool Sync(){
          return synced;
+        }
+        void LateUpdate(){
         }
     }
 }
