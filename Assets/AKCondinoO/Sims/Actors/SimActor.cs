@@ -159,6 +159,12 @@ namespace AKCondinoO.Sims.Actors{
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
+        public override void OnDestroy(){
+         if(simUMAData!=null){
+          DestroyImmediate(simUMAData.gameObject);
+         }
+         base.OnDestroy();
+        }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
         }
