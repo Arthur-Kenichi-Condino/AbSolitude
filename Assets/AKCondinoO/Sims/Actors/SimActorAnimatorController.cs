@@ -14,6 +14,11 @@ namespace AKCondinoO.Sims.Actors{
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
      Vector3 tgtRot,tgtRot_Last;
+      float tgtRotLerpTime;
+       float tgtRotLerpVal;
+        Quaternion tgtRotLerpA,tgtRotLerpB;
+         [SerializeField]float tgtRotLerpSpeed=18.75f;
+          [SerializeField]float tgtRotLerpMaxTime=.025f;
      Vector3 tgtPos,tgtPos_Last;
       float tgtPosLerpTime;
        float tgtPosLerpVal;
@@ -66,6 +71,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
+          tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
           tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
           actorLeft=-actor.transform.right;
           actorRight=actor.transform.right;
@@ -97,6 +103,31 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
           if(actor.simUMAData!=null){
+           if(tgtRotLerpTime==0f){
+            if(tgtRot!=tgtRot_Last){
+             //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
+             tgtRotLerpVal=0f;
+             tgtRotLerpA=actor.simUMAData.transform.parent.rotation;
+             tgtRotLerpB=Quaternion.Euler(tgtRot);
+             tgtRotLerpTime+=Time.deltaTime;
+             tgtRot_Last=tgtRot;
+            }
+           }else{
+            tgtRotLerpTime+=Time.deltaTime;
+           }
+           if(tgtRotLerpTime!=0f){
+            tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
+            if(tgtRotLerpVal>=1f){
+             tgtRotLerpVal=1f;
+             tgtRotLerpTime=0f;
+            }
+            actor.simUMAData.transform.parent.rotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
+            if(tgtRotLerpTime>=tgtRotLerpMaxTime){
+             if(tgtRot!=tgtRot_Last){
+              tgtRotLerpTime=0;
+             }
+            }
+           }
            if(tgtPosLerpTime==0){
             if(tgtPos!=tgtPos_Last){
              tgtPosLerpVal=0;

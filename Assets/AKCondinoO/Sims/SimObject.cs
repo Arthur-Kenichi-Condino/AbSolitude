@@ -168,6 +168,9 @@ namespace AKCondinoO.Sims{
           renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
          }
         }
+        public override void OnDestroy(){
+         base.OnDestroy();
+        }
         internal virtual void OnLoadingPool(){
          DisableInteractions();
         }
