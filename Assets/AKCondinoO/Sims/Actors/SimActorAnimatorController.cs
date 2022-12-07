@@ -73,7 +73,7 @@ namespace AKCondinoO.Sims.Actors{
                   boundsMinLeft.z=actor.simActorCharacterController.characterController.transform.position.z;
           float minLeftDis=Vector3.Distance(actor.simActorCharacterController.characterController.transform.position,boundsMinLeft);
           Vector3 minLeft=actor.simActorCharacterController.characterController.transform.position+actor.simActorCharacterController.characterController.transform.rotation*(Vector3.left*minLeftDis);
-          if(actor.navMeshAgent.enabled||actor.simActorCharacterController.characterController.isGrounded){
+          if(actor.navMeshAgent.enabled||actor.simActorCharacterController.isGrounded){
            Debug.DrawRay(maxRight,Vector3.down,Color.blue);
            if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit)){
             Debug.DrawRay(rightFloorHit.point,rightFloorHit.normal);

@@ -145,7 +145,7 @@ namespace AKCondinoO.Sims{
         protected virtual void Awake(){
          netObj=GetComponent<NetworkObject>();
          hasRigidbody=transform.root.GetComponent<Rigidbody>();
-         Log.DebugMessage(id+" hasRigidbody:"+(hasRigidbody!=null));
+         //Log.DebugMessage(id+" hasRigidbody:"+(hasRigidbody!=null));
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){

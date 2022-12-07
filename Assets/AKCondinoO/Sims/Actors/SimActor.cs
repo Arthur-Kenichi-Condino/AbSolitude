@@ -13,6 +13,7 @@ using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.GameMode;
+using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
@@ -305,11 +306,11 @@ namespace AKCondinoO.Sims.Actors{
             OnThirdPersonCamFollow();
            }
            if(MainCamera.singleton.toFollowActor==this){
-            Log.DebugMessage("following this:"+this);
-            if(InputHandler.singleton.activityDetected){
+            //Log.DebugMessage("following this:"+this);
+            if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){
              isUsingAI=false;
              AFKTimerToUseAI=AFKTimeToUseAI;
-             Log.DebugMessage("start using manual control:"+this);
+             //Log.DebugMessage("start using manual control:"+this);
             }
            }else{
             if(!isUsingAI){
@@ -339,6 +340,8 @@ namespace AKCondinoO.Sims.Actors{
             DisableNavMeshAgent();
             if(simActorCharacterController!=null){
                simActorCharacterController.ManualUpdate();
+             transform.position+=simActorCharacterController.moveDelta;
+             simActorCharacterController.characterController.transform.position-=simActorCharacterController.moveDelta;
             }
            }
           }else{
