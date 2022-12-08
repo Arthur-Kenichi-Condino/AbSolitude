@@ -52,7 +52,7 @@ MonoBehaviour:
   simUMADataPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
-  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
+  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   AFKTimeToUseAI: 30
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
@@ -92,6 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tgtRotLerpSpeed: 18.75
+  tgtRotLerpMaxTime: 0.025
+  tgtPosLerpSpeed: 18.75
+  tgtPosLerpMaxTime: 0.025
 --- !u!195 &4585911009965713821
 NavMeshAgent:
   m_ObjectHideFlags: 0

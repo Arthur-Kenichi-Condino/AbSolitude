@@ -35,7 +35,16 @@ namespace AKCondinoO{
       internal bool hasTransformChanges{get;private set;}
      internal SimActor toFollowActor;
       bool isFollowing;
-       internal Vector3 thirdPersonOffset=new Vector3(1.0f,.4f,-2.0f);
+       internal Vector3 thirdPersonOffset=new Vector3(
+        .375f,//  radius+radius/2f
+        .75f,//  height/2f-radius/2f
+        -2.0f//  -radius*8f
+       );
+       internal Vector3 overTheShoulderOffset=new Vector3(
+        .375f,//  radius+radius/2f
+        .75f,//  height/2f-radius/2f
+        -.75f//  -radius*3f
+       );
         void LateUpdate(){
          isFollowing=false;
          if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
