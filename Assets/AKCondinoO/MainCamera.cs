@@ -56,6 +56,7 @@ namespace AKCondinoO{
          }
          if(isFollowing){
           tgtPos=toFollowActor.transform.position+toFollowActor.simActorCharacterController.viewRotation*thirdPersonOffset;
+          tgtRot=toFollowActor.simActorCharacterController.viewRotation.eulerAngles;
           UpdateTransformPosition();
           UpdateTransformRotation();
           //  TO DO: stop following movement if paused
