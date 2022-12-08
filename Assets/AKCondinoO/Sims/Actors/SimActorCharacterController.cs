@@ -10,6 +10,11 @@ namespace AKCondinoO.Sims.Actors{
         void Awake(){
          characterController=GetComponentInChildren<CharacterController>();
          center=characterController.center;
+         headOffset=new Vector3(
+          0f,
+          characterController.height/2f-characterController.radius/2f,
+          0f
+         );
          tgtRot=tgtRot_Last=characterController.transform.eulerAngles;
          tgtPos=tgtPos_Last=characterController.transform.position;
         }
@@ -43,6 +48,7 @@ namespace AKCondinoO.Sims.Actors{
         internal Vector3 beforeMovePos;
          internal Vector3 afterMovePos;
           internal Vector3 moveDelta;
+        internal Vector3 headOffset;
         internal Vector3 aimingAt;
         internal void ManualUpdate(){
          if(characterController.isGrounded){
