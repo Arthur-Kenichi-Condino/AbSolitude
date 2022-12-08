@@ -67,12 +67,18 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            transitionTimeInterval=new WaitForSeconds(0.05f);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
-           actor.simUMAData.transform.parent.SetParent(null);
+           if(actor.simUMAData!=null){
+            actor.simUMAData.transform.parent.SetParent(null);
+            GetTransformTgtValues();
+            tgtRot_Last=tgtRot;
+            tgtPos_Last=tgtPos;
+            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(tgtRot);
+            actor.simUMAData.transform.parent.position=tgtPos;
+           }
           }
          }
          if(animator!=null&&actor is BaseAI baseAI){
-          tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
-          tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
+          GetTransformTgtValues();
           actorLeft=-actor.transform.right;
           actorRight=actor.transform.right;
           Vector3 boundsMaxRight=actor.simActorCharacterController.characterController.bounds.max;
@@ -199,6 +205,10 @@ namespace AKCondinoO.Sims.Actors{
           }
           lastMotion=baseAI.motion;
          }
+        }
+        void GetTransformTgtValues(){
+          tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
+          tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
         }
      Coroutine layerTransitionCoroutine;
       WaitForSeconds transitionTimeInterval;
