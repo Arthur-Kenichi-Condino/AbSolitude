@@ -18,6 +18,7 @@ namespace AKCondinoO{
      internal bool isPointerOverUIElement;
      internal PointerEventData pointerEventData;
       internal readonly List<RaycastResult>eventSystemRaycastResults=new List<RaycastResult>();
+     internal Ray?screenPointRay;
         public void Init(){
          pointerEventData=new PointerEventData(EventSystem.current);
         }
@@ -52,6 +53,9 @@ namespace AKCondinoO{
            Cursor.visible=true;
            Cursor.lockState=CursorLockMode.None;
           }
+         }
+         if(Camera.main!=null){
+          screenPointRay=Camera.main.ScreenPointToRay(Input.mousePosition);
          }
         }
     }
