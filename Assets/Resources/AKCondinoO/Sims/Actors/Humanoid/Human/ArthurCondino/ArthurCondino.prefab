@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tgtRotLerpSpeed: 18.75
+  tgtRotLerpSpeed: 17.8125
   tgtRotLerpMaxTime: 0.025
   viewRotationSmoothValue: 0.025
   moveAcceleration: {x: 16, y: 16, z: 16}
