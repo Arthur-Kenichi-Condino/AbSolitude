@@ -65,7 +65,6 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
            weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
-           transitionTimeInterval=new WaitForSeconds(0.05f);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
            if(actor.simUMAData!=null){
             actor.simUMAData.transform.parent.SetParent(null);
@@ -207,11 +206,10 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         void GetTransformTgtValues(){
-          tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
-          tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
+         tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
+         tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
         }
      Coroutine layerTransitionCoroutine;
-      WaitForSeconds transitionTimeInterval;
       readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
        readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
@@ -224,12 +222,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=20.0f*Time.deltaTime;
+                weight-=5.0f*Time.deltaTime;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=20.0f*Time.deltaTime;
+                weight+=5.0f*Time.deltaTime;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }
@@ -237,7 +235,7 @@ namespace AKCondinoO.Sims.Actors{
                animator.SetLayerWeight(layerIndex,layerWeight[layerIndex]=weight);
               }
              }
-             yield return transitionTimeInterval;
+             yield return null;
             }
             goto Loop;
         }
