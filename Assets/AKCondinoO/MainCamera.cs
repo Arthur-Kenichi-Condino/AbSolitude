@@ -55,8 +55,9 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          tgtPos=toFollowActor.transform.position+toFollowActor.simActorCharacterController.viewRotation*thirdPersonOffset;
-          tgtRot=toFollowActor.simActorCharacterController.viewRotation.eulerAngles;
+          Quaternion rot=Quaternion.Euler(toFollowActor.simActorCharacterController.tgtRot);
+          tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
+          tgtRot=rot.eulerAngles;
           UpdateTransformPosition();
           UpdateTransformRotation();
           //  TO DO: stop following movement if paused

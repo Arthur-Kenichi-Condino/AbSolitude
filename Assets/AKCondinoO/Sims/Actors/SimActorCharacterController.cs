@@ -17,6 +17,7 @@ namespace AKCondinoO.Sims.Actors{
          );
          tgtRot=tgtRot_Last=characterController.transform.eulerAngles;
          tgtPos=tgtPos_Last=characterController.transform.position;
+         viewRotation=Quaternion.LookRotation(characterController.transform.forward,Vector3.up);
         }
      float delayToConsiderNotOnGround=.2f;
      internal bool isGrounded{
@@ -27,11 +28,11 @@ namespace AKCondinoO.Sims.Actors{
        return true;
       }
      }
-     Vector3 tgtRot,tgtRot_Last;
+     internal Vector3 tgtRot,tgtRot_Last;
       float tgtRotLerpTime;
        float tgtRotLerpVal;
         Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]float tgtRotLerpSpeed=18.75f;
+         [SerializeField]float tgtRotLerpSpeed=17.8125f;
           [SerializeField]float tgtRotLerpMaxTime=.025f;
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
@@ -57,6 +58,41 @@ namespace AKCondinoO.Sims.Actors{
           delayToConsiderNotOnGround-=Time.deltaTime;
          }
          beforeMovePos=characterController.transform.position;
+         if(!Enabled.RELEASE_MOUSE.curState){
+          inputViewRotationEuler.x+=-Enabled.MOUSE_ROTATION_DELTA_Y[0]*viewRotationSmoothValue;
+          inputViewRotationEuler.y+= Enabled.MOUSE_ROTATION_DELTA_X[0]*viewRotationSmoothValue;
+           inputViewRotationEuler.x=inputViewRotationEuler.x%360f;
+           inputViewRotationEuler.y=inputViewRotationEuler.y%360f;
+         }
+         if(inputViewRotationEuler!=Vector3.zero){
+          tgtRot+=inputViewRotationEuler;
+          inputViewRotationEuler=Vector3.zero;
+         }
+         if(tgtRotLerpTime==0f){
+          if(tgtRot!=tgtRot_Last){
+           //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
+           tgtRotLerpVal=0f;
+           tgtRotLerpA=viewRotation;
+           tgtRotLerpB=Quaternion.Euler(tgtRot);
+           tgtRotLerpTime+=Time.deltaTime;
+           tgtRot_Last=tgtRot;
+          }
+         }else{
+          tgtRotLerpTime+=Time.deltaTime;
+         }
+         if(tgtRotLerpTime!=0f){
+          tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
+          if(tgtRotLerpVal>=1f){
+           tgtRotLerpVal=1f;
+           tgtRotLerpTime=0f;
+          }
+          viewRotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
+          if(tgtRotLerpTime>=tgtRotLerpMaxTime){
+           if(tgtRot!=tgtRot_Last){
+            tgtRotLerpTime=0;
+           }
+          }
+         }
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}
