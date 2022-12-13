@@ -100,25 +100,25 @@ namespace AKCondinoO{
         }
         internal void OnSimObjectSpawned(SimObject simObject,int layer){
          //Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
-         OnNavMeshShouldChange(simObject,layer);
+         OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
          Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
-         OnNavMeshShouldChange(simObject,layer);
+         OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectDespawned(SimObject simObject,int layer){
          Log.DebugMessage("OnSimObjectDespawned:layer:"+layer);
-         OnNavMeshShouldChange(simObject,layer);
+         OnNavMeshShouldUpdate(simObject,layer);
         }
-        void OnNavMeshShouldChange(SimObject simObject,int layer){
+        void OnNavMeshShouldUpdate(SimObject simObject,int layer){
          if(simObject.navMeshObstacleCarving){
           navMeshDirty=true;
-          Log.DebugMessage("OnNavMeshShouldChange:navMeshDirty=true");
+          Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true");
          }
          if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
           navMeshSourcesDirty=true;
           navMeshDirty=true;
-          Log.DebugMessage("OnNavMeshShouldChange:navMeshDirty=true;navMeshSourcesDirty=true;");
+          Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true;navMeshSourcesDirty=true;");
          }
         }
      bool pendingCoordinatesUpdate=true;
