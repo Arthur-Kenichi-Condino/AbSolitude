@@ -55,7 +55,7 @@ namespace AKCondinoO.Voxels.Water{
          if(container.cnkIdx==null){
           return;
          }
-         Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
+         //Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          bool hasChangedIndex=false;
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           hasChangedIndex=true;

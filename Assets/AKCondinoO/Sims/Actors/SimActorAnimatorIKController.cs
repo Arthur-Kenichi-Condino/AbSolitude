@@ -8,6 +8,7 @@ namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorIKController:MonoBehaviour{
      internal SimActorAnimatorController simActorAnimatorController;
      bool initialized=false;
+     internal Transform      head;
      internal Transform  leftFoot;
      internal Transform rightFoot;
       internal float footHeight=.075f;
@@ -15,12 +16,40 @@ namespace AKCondinoO.Sims.Actors{
         void OnAnimatorIK(int layerIndex){
          //Log.DebugMessage("OnAnimatorIK:layerIndex:"+layerIndex);
          if(!initialized){
+               head=Util.FindChildRecursively(transform, "head");
+          if(head!=null){
+           Log.DebugMessage("OnAnimatorIK:found head Bone");
+          }
            leftFoot=Util.FindChildRecursively(transform,"lFoot");
           rightFoot=Util.FindChildRecursively(transform,"rFoot");
           if(leftFoot!=null&&rightFoot!=null){
-           Log.DebugMessage("OnAnimatorIK:found feet bones");
+           Log.DebugMessage("OnAnimatorIK:found feet Bones");
           }
           initialized=true;
+         }
+         if(head!=null){
+          Vector3 headLookAtPosition=simActorAnimatorController.actor.simActorCharacterController.aimingAt;
+          Quaternion rot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+          Quaternion horizontalRot=RotationHelper.IsolateRotationYComponent(rot);
+          //Log.DebugMessage("horizontalRot angle:"+Quaternion.Angle(horizontalRot,Quaternion.identity));
+          //  rotation from simActorCharacterController to horizontalRot [https://forum.unity.com/threads/quaternion-how-to-compute-delta-angle-for-each-axis.242208/]
+          Quaternion horizontalRotDiff=horizontalRot*Quaternion.Inverse(RotationHelper.IsolateRotationYComponent(simActorAnimatorController.actor.simActorCharacterController.transform.rotation));
+          float horizontalRotDiffAngle=Quaternion.Angle(horizontalRotDiff,Quaternion.identity);
+          //Log.DebugMessage("horizontalRotDiff angle:"+horizontalRotDiffAngle);
+          Quaternion verticalRot=RotationHelper.IsolateRotationXComponent(rot);
+          //Log.DebugMessage("verticalRot angle:"+Quaternion.Angle(verticalRot,Quaternion.identity));
+          //  rotation from simActorCharacterController to verticalRot 
+          Quaternion verticalRotDiff=verticalRot*Quaternion.Inverse(RotationHelper.IsolateRotationXComponent(simActorAnimatorController.actor.simActorCharacterController.transform.rotation));
+          float verticalRotDiffAngle=Quaternion.Angle(verticalRotDiff,Quaternion.identity);
+          //Log.DebugMessage("verticalRotDiff angle:"+verticalRotDiffAngle);
+          if(verticalRotDiffAngle>90f){
+           Log.DebugMessage("vertical angle to set to head IK is above 90f");
+          }
+          if(horizontalRotDiffAngle>90f){
+           Log.DebugMessage("horizontal angle to set to head IK is above 90f");
+          }
+          simActorAnimatorController.animator.SetLookAtWeight(1f);
+          simActorAnimatorController.animator.SetLookAtPosition(headLookAtPosition);
          }
          if(leftFoot!=null&&rightFoot!=null){
           float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;
