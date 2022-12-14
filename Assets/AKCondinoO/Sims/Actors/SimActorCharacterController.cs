@@ -49,8 +49,8 @@ namespace AKCondinoO.Sims.Actors{
         internal Vector3 beforeMovePos;
          internal Vector3 afterMovePos;
           internal Vector3 moveDelta;
-        internal Vector3 headOffset;
-        internal Vector3 aimingAt;
+     internal Vector3 headOffset;
+     internal Vector3 aimingAt;
         internal void ManualUpdate(){
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
