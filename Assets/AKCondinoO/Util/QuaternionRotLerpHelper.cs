@@ -8,9 +8,9 @@ using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class QuaternionRotLerpHelper{
      internal Vector3 tgtRot,tgtRot_Last;
-      float tgtRotLerpTime;
-       float tgtRotLerpVal;
-        Quaternion tgtRotLerpA,tgtRotLerpB;
+      internal float tgtRotLerpTime;
+       internal float tgtRotLerpVal;
+        internal Quaternion tgtRotLerpA,tgtRotLerpB;
          [SerializeField]internal float tgtRotLerpSpeed=18.75f;
           [SerializeField]internal float tgtRotLerpMaxTime=.025f;
         internal Quaternion UpdateRotation(Quaternion rotation,float deltaTime){

@@ -8,9 +8,9 @@ using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class Vector3PosLerpHelper{
      internal Vector3 tgtPos,tgtPos_Last;
-      float tgtPosLerpTime;
-       float tgtPosLerpVal;
-        Vector3 tgtPosLerpA,tgtPosLerpB;
+      internal float tgtPosLerpTime;
+       internal float tgtPosLerpVal;
+        internal Vector3 tgtPosLerpA,tgtPosLerpB;
          [SerializeField]internal float tgtPosLerpSpeed=18.75f;
           [SerializeField]internal float tgtPosLerpMaxTime=.025f;
         internal Vector3 UpdatePosition(Vector3 position,float deltaTime){

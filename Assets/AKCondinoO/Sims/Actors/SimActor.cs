@@ -406,8 +406,13 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void AI(){
         }
-        internal Vector3 GetHeadPosition(){
-         Vector3 headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
+        internal Vector3 GetHeadPosition(bool fromAnimator=true){
+         Vector3 headPos;
+         if(fromAnimator&&simActorAnimatorController!=null&&simActorAnimatorController.animator!=null){
+          headPos=simActorAnimatorController.animator.transform.position+simActorAnimatorController.animator.transform.rotation*simActorCharacterController.headOffset;
+         }else{
+          headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
+         }
          return headPos;
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
