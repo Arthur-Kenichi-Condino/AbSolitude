@@ -13,18 +13,8 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
-     Vector3 tgtRot,tgtRot_Last;
-      float tgtRotLerpTime;
-       float tgtRotLerpVal;
-        Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]float tgtRotLerpSpeed=18.75f;
-          [SerializeField]float tgtRotLerpMaxTime=.025f;
-     Vector3 tgtPos,tgtPos_Last;
-      float tgtPosLerpTime;
-       float tgtPosLerpVal;
-        Vector3 tgtPosLerpA,tgtPosLerpB;
-         [SerializeField]float tgtPosLerpSpeed=18.75f;
-          [SerializeField]float tgtPosLerpMaxTime=.025f;
+     [SerializeField]QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
+     [SerializeField]   Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
         void Awake(){
         }
      bool synced=true;
@@ -69,10 +59,10 @@ namespace AKCondinoO.Sims.Actors{
            if(actor.simUMAData!=null){
             actor.simUMAData.transform.parent.SetParent(null);
             GetTransformTgtValues();
-            tgtRot_Last=tgtRot;
-            tgtPos_Last=tgtPos;
-            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(tgtRot);
-            actor.simUMAData.transform.parent.position=tgtPos;
+            rotLerp.tgtRot_Last=rotLerp.tgtRot;
+            posLerp.tgtPos_Last=posLerp.tgtPos;
+            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(rotLerp.tgtRot);
+            actor.simUMAData.transform.parent.position=posLerp.tgtPos;
            }
           }
          }
@@ -102,61 +92,14 @@ namespace AKCondinoO.Sims.Actors{
             if(floorPlane.Raycast(leftRay,out float enter)){
              Vector3 leftFloorHitPoint=leftRay.GetPoint(enter);
              float minY=Mathf.Min(bottom.y,leftFloorHitPoint.y,rightFloorHit.point.y);
-             tgtPos.y+=minY-bottom.y;
-             Debug.DrawLine(bottom,tgtPos,Color.yellow);
+             posLerp.tgtPos.y+=minY-bottom.y;
+             Debug.DrawLine(bottom,posLerp.tgtPos,Color.yellow);
             }
            }
           }
           if(actor.simUMAData!=null){
-           if(tgtRotLerpTime==0f){
-            if(tgtRot!=tgtRot_Last){
-             //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
-             tgtRotLerpVal=0f;
-             tgtRotLerpA=actor.simUMAData.transform.parent.rotation;
-             tgtRotLerpB=Quaternion.Euler(tgtRot);
-             tgtRotLerpTime+=Time.deltaTime;
-             tgtRot_Last=tgtRot;
-            }
-           }else{
-            tgtRotLerpTime+=Time.deltaTime;
-           }
-           if(tgtRotLerpTime!=0f){
-            tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
-            if(tgtRotLerpVal>=1f){
-             tgtRotLerpVal=1f;
-             tgtRotLerpTime=0f;
-            }
-            actor.simUMAData.transform.parent.rotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
-            if(tgtRotLerpTime>=tgtRotLerpMaxTime){
-             if(tgtRot!=tgtRot_Last){
-              tgtRotLerpTime=0;
-             }
-            }
-           }
-           if(tgtPosLerpTime==0){
-            if(tgtPos!=tgtPos_Last){
-             tgtPosLerpVal=0;
-             tgtPosLerpA=actor.simUMAData.transform.parent.position;
-             tgtPosLerpB=tgtPos;
-             tgtPosLerpTime+=Time.deltaTime;
-             tgtPos_Last=tgtPos;
-            }
-           }else{
-            tgtPosLerpTime+=Time.deltaTime;
-           }
-           if(tgtPosLerpTime!=0){
-            tgtPosLerpVal+=tgtPosLerpSpeed*Time.deltaTime;
-            if(tgtPosLerpVal>=1){
-             tgtPosLerpVal=1;
-             tgtPosLerpTime=0;
-            }
-            actor.simUMAData.transform.parent.position=Vector3.Lerp(tgtPosLerpA,tgtPosLerpB,tgtPosLerpVal);
-            if(tgtPosLerpTime>tgtPosLerpMaxTime){
-             if(tgtPos!=tgtPos_Last){
-              tgtPosLerpTime=0;
-             }
-            }
-           }
+           actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Time.deltaTime);
+           actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Time.deltaTime);
           }
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
           foreach(var layer in animatorClip){
@@ -206,8 +149,8 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         void GetTransformTgtValues(){
-         tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
-         tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
+         rotLerp.tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
+         posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
         }
      Coroutine layerTransitionCoroutine;
       readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
