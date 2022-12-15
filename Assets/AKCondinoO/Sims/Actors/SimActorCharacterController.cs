@@ -15,8 +15,8 @@ namespace AKCondinoO.Sims.Actors{
           characterController.height/2f-characterController.radius/2f,
           0f
          );
-         tgtRot=tgtRot_Last=characterController.transform.eulerAngles;
-         tgtPos=tgtPos_Last=characterController.transform.position;
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=characterController.transform.eulerAngles;
+         posLerp.tgtPos=posLerp.tgtPos_Last=characterController.transform.position;
          viewRotation=Quaternion.LookRotation(characterController.transform.forward,Vector3.up);
         }
      float delayToConsiderNotOnGround=.2f;
@@ -28,16 +28,11 @@ namespace AKCondinoO.Sims.Actors{
        return true;
       }
      }
-     internal Vector3 tgtRot,tgtRot_Last;
-      float tgtRotLerpTime;
-       float tgtRotLerpVal;
-        Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]float tgtRotLerpSpeed=17.8125f;
-          [SerializeField]float tgtRotLerpMaxTime=.025f;
+     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();//  tgtRotLerpSpeed:17.8125, tgtRotLerpMaxTime:.025
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
-     Vector3 tgtPos,tgtPos_Last;
+     [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(16f,16f,16f);
         [SerializeField]Vector3 moveDeceleration=new Vector3(32f,32f,32f);
@@ -65,34 +60,10 @@ namespace AKCondinoO.Sims.Actors{
            inputViewRotationEuler.y=inputViewRotationEuler.y%360f;
          }
          if(inputViewRotationEuler!=Vector3.zero){
-          tgtRot+=inputViewRotationEuler;
+          rotLerp.tgtRot+=inputViewRotationEuler;
           inputViewRotationEuler=Vector3.zero;
          }
-         if(tgtRotLerpTime==0f){
-          if(tgtRot!=tgtRot_Last){
-           //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
-           tgtRotLerpVal=0f;
-           tgtRotLerpA=viewRotation;
-           tgtRotLerpB=Quaternion.Euler(tgtRot);
-           tgtRotLerpTime+=Time.deltaTime;
-           tgtRot_Last=tgtRot;
-          }
-         }else{
-          tgtRotLerpTime+=Time.deltaTime;
-         }
-         if(tgtRotLerpTime!=0f){
-          tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
-          if(tgtRotLerpVal>=1f){
-           tgtRotLerpVal=1f;
-           tgtRotLerpTime=0f;
-          }
-          viewRotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
-          if(tgtRotLerpTime>=tgtRotLerpMaxTime){
-           if(tgtRot!=tgtRot_Last){
-            tgtRotLerpTime=0;
-           }
-          }
-         }
+         viewRotation=rotLerp.UpdateRotation(viewRotation,Time.deltaTime);
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}

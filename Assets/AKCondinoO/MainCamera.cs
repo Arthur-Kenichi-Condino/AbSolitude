@@ -18,8 +18,8 @@ namespace AKCondinoO{
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;
-         tgtRot=tgtRot_Last=transform.eulerAngles;
-         tgtPos=tgtPos_Last=transform.position;
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=transform.eulerAngles;
+         posLerp.tgtPos=posLerp.tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
@@ -55,9 +55,9 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          Quaternion rot=Quaternion.Euler(toFollowActor.simActorCharacterController.tgtRot);
-          tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
-          tgtRot=rot.eulerAngles;
+          Quaternion rot=Quaternion.Euler(toFollowActor.simActorCharacterController.rotLerp.tgtRot);
+          posLerp.tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
+          rotLerp.tgtRot=rot.eulerAngles;
           UpdateTransformPosition();
           UpdateTransformRotation();
           //  TO DO: stop following movement if paused
@@ -72,20 +72,10 @@ namespace AKCondinoO{
          }
         }
      [SerializeField]bool DEBUG_STOP_FOLLOWING=false;
-     Vector3 tgtRot,tgtRot_Last;
-      float tgtRotLerpTime;
-       float tgtRotLerpVal;
-        Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]float tgtRotLerpSpeed=18.75f;
-          [SerializeField]float tgtRotLerpMaxTime=.025f;
+     [SerializeField]QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
-     Vector3 tgtPos,tgtPos_Last;
-      float tgtPosLerpTime;
-       float tgtPosLerpVal;
-        Vector3 tgtPosLerpA,tgtPosLerpB;
-         [SerializeField]float tgtPosLerpSpeed=18.75f;
-          [SerializeField]float tgtPosLerpMaxTime=.025f;
+     [SerializeField]Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(.1f,.1f,.1f);
         [SerializeField]Vector3 maxMoveSpeed=new Vector3(1.0f,1.0f,1.0f);
@@ -171,7 +161,7 @@ namespace AKCondinoO{
                  }
              }
              if(inputViewRotationEuler!=Vector3.zero){
-              tgtRot+=inputViewRotationEuler;
+              rotLerp.tgtRot+=inputViewRotationEuler;
                 inputViewRotationEuler=Vector3.zero;
              }
              UpdateTransformRotation();
@@ -186,63 +176,16 @@ namespace AKCondinoO{
                (inputMoveVelocity.x!=0f?1f:0f)+
                (inputMoveVelocity.y!=0f?1f:0f)
               );
-              tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
+              posLerp.tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
              }
              UpdateTransformPosition();
          }
         }
         void UpdateTransformRotation(){
-             if(tgtRotLerpTime==0f){
-              if(tgtRot!=tgtRot_Last){
-               //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
-               tgtRotLerpVal=0f;
-               tgtRotLerpA=transform.rotation;
-               tgtRotLerpB=Quaternion.Euler(tgtRot);
-               tgtRotLerpTime+=Time.deltaTime;
-               tgtRot_Last=tgtRot;
-              }
-             }else{
-              tgtRotLerpTime+=Time.deltaTime;
-             }
-             if(tgtRotLerpTime!=0f){
-              tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
-              if(tgtRotLerpVal>=1f){
-               tgtRotLerpVal=1f;
-               tgtRotLerpTime=0f;
-              }
-              transform.rotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
-              if(tgtRotLerpTime>=tgtRotLerpMaxTime){
-               if(tgtRot!=tgtRot_Last){
-                tgtRotLerpTime=0;
-               }
-              }
-             }
+         transform.rotation=rotLerp.UpdateRotation(transform.rotation,Time.deltaTime);
         }
         void UpdateTransformPosition(){
-             if(tgtPosLerpTime==0){
-              if(tgtPos!=tgtPos_Last){
-               tgtPosLerpVal=0;
-               tgtPosLerpA=transform.position;
-               tgtPosLerpB=tgtPos;
-               tgtPosLerpTime+=Time.deltaTime;
-               tgtPos_Last=tgtPos;
-              }
-             }else{
-              tgtPosLerpTime+=Time.deltaTime;
-             }
-             if(tgtPosLerpTime!=0){
-              tgtPosLerpVal+=tgtPosLerpSpeed*Time.deltaTime;
-              if(tgtPosLerpVal>=1){
-               tgtPosLerpVal=1;
-               tgtPosLerpTime=0;
-              }
-              transform.position=Vector3.Lerp(tgtPosLerpA,tgtPosLerpB,tgtPosLerpVal);
-              if(tgtPosLerpTime>tgtPosLerpMaxTime){
-               if(tgtPos!=tgtPos_Last){
-                tgtPosLerpTime=0;
-               }
-              }
-             }
+         transform.position=posLerp.UpdatePosition(transform.position,Time.deltaTime);
         }
     }
 }
