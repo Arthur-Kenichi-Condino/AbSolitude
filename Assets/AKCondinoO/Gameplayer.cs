@@ -103,7 +103,7 @@ namespace AKCondinoO{
          OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
-         Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
+         //Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
          OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectDespawned(SimObject simObject,int layer){
@@ -113,7 +113,7 @@ namespace AKCondinoO{
         void OnNavMeshShouldUpdate(SimObject simObject,int layer){
          if(simObject.navMeshObstacleCarving){
           navMeshDirty=true;
-          Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true");
+          //Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true");
          }
          if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
           navMeshSourcesDirty=true;
