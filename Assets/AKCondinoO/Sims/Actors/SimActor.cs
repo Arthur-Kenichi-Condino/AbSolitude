@@ -406,6 +406,10 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void AI(){
         }
+        internal Vector3 GetHeadPosition(){
+         Vector3 headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
+         return headPos;
+        }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
      protected Collider[]collidersTouchingMiddle=new Collider[8];

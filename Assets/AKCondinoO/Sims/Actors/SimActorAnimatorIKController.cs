@@ -9,6 +9,8 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActorAnimatorController simActorAnimatorController;
      bool initialized=false;
      internal Transform      head;
+     [SerializeField]internal Vector3PosLerpHelper headLookAtPositionLerp=new Vector3PosLerpHelper();
+      Vector3 headLookAtPositionLerped;
      internal Transform  leftFoot;
      internal Transform rightFoot;
       internal float footHeight=.075f;
@@ -30,6 +32,7 @@ namespace AKCondinoO.Sims.Actors{
          if(head!=null){
           Vector3 headLookAtPosition=simActorAnimatorController.actor.simActorCharacterController.aimingAt;
           Quaternion rot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+          Quaternion bodyRot=simActorAnimatorController.actor.simActorCharacterController.transform.rotation;
           Quaternion horizontalRot=RotationHelper.IsolateRotationYComponent(rot);
           //Log.DebugMessage("horizontalRot angle:"+Quaternion.Angle(horizontalRot,Quaternion.identity));
           //  rotation from simActorCharacterController to horizontalRot [https://forum.unity.com/threads/quaternion-how-to-compute-delta-angle-for-each-axis.242208/]
@@ -42,14 +45,25 @@ namespace AKCondinoO.Sims.Actors{
           Quaternion verticalRotDiff=verticalRot*Quaternion.Inverse(RotationHelper.IsolateRotationXComponent(simActorAnimatorController.actor.simActorCharacterController.transform.rotation));
           float verticalRotDiffAngle=Quaternion.Angle(verticalRotDiff,Quaternion.identity);
           //Log.DebugMessage("verticalRotDiff angle:"+verticalRotDiffAngle);
-          if(verticalRotDiffAngle>90f){
-           Log.DebugMessage("vertical angle to set to head IK is above 90f");
+          bool flag=false;
+          if(verticalRotDiffAngle>70f){
+           Log.DebugMessage("vertical angle to set to head IK is above 70f");
+           if(!flag){
+            headLookAtPosition=simActorAnimatorController.actor.GetHeadPosition()+bodyRot*Vector3.forward*1000f;
+            flag=true;
+           }
           }
           if(horizontalRotDiffAngle>90f){
            Log.DebugMessage("horizontal angle to set to head IK is above 90f");
+           if(!flag){
+            headLookAtPosition=simActorAnimatorController.actor.GetHeadPosition()+bodyRot*Vector3.forward*1000f;
+            flag=true;
+           }
           }
+          headLookAtPositionLerp.tgtPos=headLookAtPosition;
+          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Time.deltaTime);
           simActorAnimatorController.animator.SetLookAtWeight(1f);
-          simActorAnimatorController.animator.SetLookAtPosition(headLookAtPosition);
+          simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
          }
          if(leftFoot!=null&&rightFoot!=null){
           float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;

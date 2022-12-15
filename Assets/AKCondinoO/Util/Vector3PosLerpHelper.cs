@@ -11,8 +11,8 @@ namespace AKCondinoO{
       float tgtPosLerpTime;
        float tgtPosLerpVal;
         Vector3 tgtPosLerpA,tgtPosLerpB;
-         [SerializeField]float tgtPosLerpSpeed=18.75f;
-          [SerializeField]float tgtPosLerpMaxTime=.025f;
+         [SerializeField]internal float tgtPosLerpSpeed=18.75f;
+          [SerializeField]internal float tgtPosLerpMaxTime=.025f;
         internal Vector3 UpdatePosition(Vector3 position,float deltaTime){
          Vector3 result=position;
              if(tgtPosLerpTime==0){

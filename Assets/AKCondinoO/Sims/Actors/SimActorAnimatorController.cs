@@ -35,6 +35,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("add SimActorAnimatorIKController");
            animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
            animatorIKController.simActorAnimatorController=this;
+           animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=4.6875f;
            layerCount=animator.layerCount;
            weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
            animationTime=new Dictionary<int,float>(layerCount);
