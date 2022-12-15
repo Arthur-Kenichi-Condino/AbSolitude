@@ -13,8 +13,8 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
-     [SerializeField]QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
-     [SerializeField]   Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
+     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
+     [SerializeField]internal    Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
         void Awake(){
         }
      bool synced=true;
