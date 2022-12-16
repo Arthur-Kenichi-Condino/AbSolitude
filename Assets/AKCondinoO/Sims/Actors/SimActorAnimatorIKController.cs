@@ -79,7 +79,7 @@ namespace AKCondinoO.Sims.Actors{
           if(Quaternion.Angle(RotationHelper.IsolateRotationYComponent(headRot),RotationHelper.IsolateRotationYComponent(bodyRot))>90f||
              Quaternion.Angle(RotationHelper.IsolateRotationXComponent(headRot),RotationHelper.IsolateRotationXComponent(bodyRot))>90f
           ){
-           Log.DebugMessage("angle between body and target head IK is above 90f");
+           Log.DebugMessage("angle between body and target head IK is above 90f (or, vertically, 90f)");
            if(!flag2){
             headLookAtPositionLerp.tgtPosLerpTime=0f;
             headLookAtPositionLerped=headLookAtPosition;
