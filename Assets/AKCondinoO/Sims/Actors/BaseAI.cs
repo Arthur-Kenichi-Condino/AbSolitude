@@ -58,6 +58,11 @@ namespace AKCondinoO.Sims.Actors{
              }
          }
         }
+        protected override void OnCharacterControllerUpdated(){
+         base.OnCharacterControllerUpdated();
+         if(moveVelocity>0f){
+         }
+        }
      protected Skill MySkill=null;
       internal Skill skillToUse{get{return MySkill;}}
       internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
