@@ -259,6 +259,11 @@ namespace AKCondinoO.Sims.Actors{
         //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
         return velocityMagnitude/navMeshAgentRunSpeed;
        }
+       if(simActorCharacterController!=null){
+        float velocityMagnitude=simActorCharacterController.characterController.velocity.magnitude;
+        Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
+        return velocityMagnitude/4f;
+       }
        return 0f;
       }
      }
@@ -348,6 +353,7 @@ namespace AKCondinoO.Sims.Actors{
                simActorCharacterController.ManualUpdate();
              transform.position+=simActorCharacterController.moveDelta;
              simActorCharacterController.characterController.transform.position-=simActorCharacterController.moveDelta;
+             OnCharacterControllerUpdated();
             }
            }
           }else{
@@ -405,6 +411,8 @@ namespace AKCondinoO.Sims.Actors{
          return result;
         }
         protected virtual void AI(){
+        }
+        protected virtual void OnCharacterControllerUpdated(){
         }
         internal Vector3 GetHeadPosition(bool fromAnimator=true){
          Vector3 headPos;
