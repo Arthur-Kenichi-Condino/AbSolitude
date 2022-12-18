@@ -134,12 +134,12 @@ namespace AKCondinoO.Sims.Actors{
               if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
                animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
                animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
+                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocityNormalized);
                  animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
               }else{
                animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
                animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocity);
+                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocityNormalized);
                  animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
               }
              }

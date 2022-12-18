@@ -252,7 +252,7 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnSkillUsed(Skill skill){
         }
      internal bool isUsingAI=true;
-     internal virtual float moveVelocity{
+     internal virtual float moveVelocityNormalized{
       get{
        if(isUsingAI){
         float velocityMagnitude=navMeshAgent.velocity.magnitude;
@@ -260,9 +260,9 @@ namespace AKCondinoO.Sims.Actors{
         return velocityMagnitude/navMeshAgentRunSpeed;
        }
        if(simActorCharacterController!=null){
-        float velocityMagnitude=simActorCharacterController.characterController.velocity.magnitude;
+        float velocityMagnitude=Vector3.Scale(simActorCharacterController.inputMoveVelocity,new Vector3(1f,0f,1f)).magnitude;
         Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
-        return velocityMagnitude/4f;
+        return velocityMagnitude/(simActorCharacterController.walkSpeedAverage*2f);
        }
        return 0f;
       }

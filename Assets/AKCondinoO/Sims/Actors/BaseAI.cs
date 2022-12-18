@@ -60,7 +60,18 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected override void OnCharacterControllerUpdated(){
          base.OnCharacterControllerUpdated();
-         if(moveVelocity>0f){
+         if(moveVelocityNormalized>0f){
+             if(MyWeaponType==WeaponTypes.SniperRifle){
+              MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
+             }else{
+              MyMotion=ActorMotion.MOTION_MOVE;
+             }
+         }else{
+             if(MyWeaponType==WeaponTypes.SniperRifle){
+              MyMotion=ActorMotion.MOTION_RIFLE_STAND;
+             }else{
+              MyMotion=ActorMotion.MOTION_STAND;
+             }
          }
         }
      protected Skill MySkill=null;

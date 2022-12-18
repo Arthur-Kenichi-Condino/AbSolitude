@@ -33,10 +33,11 @@ namespace AKCondinoO.Sims.Actors{
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
-      Vector3 inputMoveVelocity=Vector3.zero;
+      internal Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(16f,16f,16f);
         [SerializeField]Vector3 moveDeceleration=new Vector3(32f,32f,32f);
          [SerializeField]Vector3 maxMoveSpeed=new Vector3(256f,256f,256f);
+          [SerializeField]internal float walkSpeedAverage=256f;
           Vector3 appliedControllerVelocity;
      [SerializeField]float jumpTimeLength=.125f;
       [SerializeField]float jumpSpeed=8.0f;
