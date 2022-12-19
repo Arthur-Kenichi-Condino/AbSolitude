@@ -267,6 +267,11 @@ namespace AKCondinoO.Sims.Actors{
        return 0f;
       }
      }
+     internal virtual bool isMovingBackwards{
+      get{
+       return false;
+      }
+     }
      protected Vector3 lastForward=Vector3.forward;
      internal float turnAngle{
       get{
