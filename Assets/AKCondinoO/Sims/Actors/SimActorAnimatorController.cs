@@ -23,11 +23,15 @@ namespace AKCondinoO.Sims.Actors{
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
       WeaponTypes lastWeaponType=WeaponTypes.None;
      internal Dictionary<int,float>animationTime{get;private set;}
+      internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
+     Dictionary<int,float>normalizedTime;
+      Dictionary<int,float>normalizedTimeInCurrentLoop;
      Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
       Dictionary<int,int>lastLoopCount;
+       Dictionary<int,bool>looped;
      Dictionary<int,List<AnimatorClipInfo>>animatorClip;
-     Dictionary<int,int>lastClipInstanceID;
-      Dictionary<int,string>lastClipName;
+     Dictionary<int,int>currentClipInstanceID;
+      Dictionary<int,string>currentClipName;
         internal void ManualUpdate(){
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
@@ -39,18 +43,26 @@ namespace AKCondinoO.Sims.Actors{
            layerCount=animator.layerCount;
            weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
            animationTime=new Dictionary<int,float>(layerCount);
+            animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
+           normalizedTime=new Dictionary<int,float>(layerCount);
+            normalizedTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
            loopCount=new Dictionary<int,int>(layerCount);
             lastLoopCount=new Dictionary<int,int>(layerCount);
+             looped=new Dictionary<int,bool>(layerCount);
            animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
-           lastClipInstanceID=new Dictionary<int,int>(layerCount);
-            lastClipName=new Dictionary<int,string>(layerCount);
+           currentClipInstanceID=new Dictionary<int,int>(layerCount);
+            currentClipName=new Dictionary<int,string>(layerCount);
            for(int i=0;i<layerCount;++i){
             animationTime[i]=0f;
+             animationTimeInCurrentLoop[i]=0f;
+            normalizedTime[i]=0f;
+             normalizedTimeInCurrentLoop[i]=0f;
             loopCount[i]=0;
              lastLoopCount[i]=0;
+              looped[i]=false;
             animatorClip[i]=new List<AnimatorClipInfo>();
-            lastClipInstanceID[i]=0;
-             lastClipName[i]="";
+            currentClipInstanceID[i]=0;
+             currentClipName[i]="";
            }
            weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
@@ -110,12 +122,22 @@ namespace AKCondinoO.Sims.Actors{
            AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(layerIndex);
                                            animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
            if(clipList.Count>0){
-            if(lastClipInstanceID[layerIndex]!=(lastClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||lastClipName[layerIndex]!=clipList[0].clip.name){
+            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
              Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
-             lastClipName[layerIndex]=clipList[0].clip.name;
+             currentClipName[layerIndex]=clipList[0].clip.name;
+             looped[layerIndex]=false;
             }
+            lastLoopCount[layerIndex]=loopCount[layerIndex];
+            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
+             Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
+             looped[layerIndex]=true;
+            }
+            normalizedTime[layerIndex]=animatorState.normalizedTime;
+             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1);
             //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);
-            animationTime[layerIndex]=clipList[0].clip.length*animatorState.normalizedTime;
+            animationTime[layerIndex]=clipList[0].clip.length*normalizedTime[layerIndex];
+             animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
+            //Log.DebugMessage("current animationTime:"+animationTime[layerIndex]);
            }
           }
           if(lastMotion!=baseAI.motion){
