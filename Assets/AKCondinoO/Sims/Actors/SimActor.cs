@@ -261,7 +261,7 @@ namespace AKCondinoO.Sims.Actors{
        }
        if(simActorCharacterController!=null){
         float velocityMagnitude=Vector3.Scale(simActorCharacterController.inputMoveVelocity,new Vector3(1f,0f,1f)).magnitude;
-        Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
+        //Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
         return velocityMagnitude/(simActorCharacterController.walkSpeedAverage*2f);
        }
        return 0f;
