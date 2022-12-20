@@ -133,7 +133,7 @@ namespace AKCondinoO.Sims.Actors{
              looped[layerIndex]=true;
             }
             normalizedTime[layerIndex]=animatorState.normalizedTime;
-             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1);
+             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
             //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);
             animationTime[layerIndex]=clipList[0].clip.length*normalizedTime[layerIndex];
              animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
