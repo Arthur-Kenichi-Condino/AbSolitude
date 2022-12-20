@@ -257,12 +257,12 @@ namespace AKCondinoO.Sims.Actors{
        if(isUsingAI){
         float velocityMagnitude=navMeshAgent.velocity.magnitude;
         //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
-        return velocityMagnitude/navMeshAgentRunSpeed;
+        return Mathf.Clamp01(velocityMagnitude/navMeshAgentRunSpeed);
        }
        if(simActorCharacterController!=null){
         float velocityMagnitude=Vector3.Scale(simActorCharacterController.inputMoveVelocity,new Vector3(1f,0f,1f)).magnitude;
         //Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
-        return velocityMagnitude/(simActorCharacterController.walkSpeedAverage*2f);
+        return Mathf.Clamp01(velocityMagnitude/(simActorCharacterController.walkSpeedAverage*2f));
        }
        return 0f;
       }
