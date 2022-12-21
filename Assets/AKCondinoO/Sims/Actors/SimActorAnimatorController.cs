@@ -124,6 +124,7 @@ namespace AKCondinoO.Sims.Actors{
            if(clipList.Count>0){
             if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
              Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
+             OnAnimationChanged(layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
              currentClipName[layerIndex]=clipList[0].clip.name;
              looped[layerIndex]=false;
             }
@@ -131,6 +132,7 @@ namespace AKCondinoO.Sims.Actors{
             if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
              Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
              looped[layerIndex]=true;
+             OnAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
             }
             normalizedTime[layerIndex]=animatorState.normalizedTime;
              normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
@@ -169,6 +171,16 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
           }
           lastMotion=baseAI.motion;
+         }
+        }
+        protected void OnAnimationLooped(int layerIndex,string currentClipName){
+         if(actor is BaseAI baseAI){
+          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:currentClipName,currentClipName:currentClipName);
+         }
+        }
+        protected void OnAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
+         if(actor is BaseAI baseAI){
+          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
          }
         }
         void GetTransformTgtValues(){
