@@ -44,35 +44,11 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           OnIDLE_ST();
          }
-         if(MyPathfinding==PathfindingResult.TRAVELLING){
-             if(MyWeaponType==WeaponTypes.SniperRifle){
-              MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
-             }else{
-              MyMotion=ActorMotion.MOTION_MOVE;
-             }
-         }else{
-             if(MyWeaponType==WeaponTypes.SniperRifle){
-              MyMotion=ActorMotion.MOTION_RIFLE_STAND;
-             }else{
-              MyMotion=ActorMotion.MOTION_STAND;
-             }
-         }
+         UpdateMotion(true);
         }
         protected override void OnCharacterControllerUpdated(){
          base.OnCharacterControllerUpdated();
-         if(moveVelocityNormalized>0f){
-             if(MyWeaponType==WeaponTypes.SniperRifle){
-              MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
-             }else{
-              MyMotion=ActorMotion.MOTION_MOVE;
-             }
-         }else{
-             if(MyWeaponType==WeaponTypes.SniperRifle){
-              MyMotion=ActorMotion.MOTION_RIFLE_STAND;
-             }else{
-              MyMotion=ActorMotion.MOTION_STAND;
-             }
-         }
+         UpdateMotion(false);
         }
      protected Skill MySkill=null;
       internal Skill skillToUse{get{return MySkill;}}
