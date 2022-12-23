@@ -32,6 +32,7 @@ namespace AKCondinoO.Sims.Actors{
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
+       internal Quaternion bodyRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(16f,16f,16f);
