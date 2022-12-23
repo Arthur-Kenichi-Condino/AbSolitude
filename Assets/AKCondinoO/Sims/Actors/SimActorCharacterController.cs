@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -66,6 +69,12 @@ namespace AKCondinoO.Sims.Actors{
           inputViewRotationEuler=Vector3.zero;
          }
          viewRotation=rotLerp.UpdateRotation(viewRotation,Time.deltaTime);
+         bodyRotation=characterController.transform.rotation;
+         float BodyToHeadRotationYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(bodyRotation,viewRotation);
+         //Log.DebugMessage("BodyToHeadRotationYComponentSignedAngle:"+BodyToHeadRotationYComponentSignedAngle);
+         if(Mathf.Abs(BodyToHeadRotationYComponentSignedAngle)>=90f){
+          Log.DebugMessage("angle between viewRotation and bodyRotation is equal to or above 90f");
+         }
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}
