@@ -16,7 +16,7 @@ namespace AKCondinoO{
         internal Quaternion UpdateRotation(Quaternion rotation,float deltaTime){
          Quaternion result=rotation;
              if(tgtRotLerpTime==0f){
-              if(tgtRot!=tgtRot_Last){
+              if(tgtRot!=tgtRot_Last||rotation!=Quaternion.Euler(tgtRot)){
                //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
                tgtRotLerpVal=0f;
                tgtRotLerpA=rotation;

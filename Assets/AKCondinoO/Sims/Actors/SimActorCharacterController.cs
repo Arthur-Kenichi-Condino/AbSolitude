@@ -10,12 +10,14 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActor actor;
      internal CharacterController characterController;
       internal Vector3 center;
+     [SerializeField]internal float headMaxVerticalRotationAngle=40f;
+      [SerializeField]internal float headMaxHorizontalRotationAngle=60f;
         void Awake(){
          characterController=GetComponentInChildren<CharacterController>();
          center=characterController.center;
          headOffset=new Vector3(
           0f,
-          characterController.height/2f-characterController.radius/2f,
+          characterController.height/2f-characterController.radius,
           0f
          );
          rotLerp.tgtRot=rotLerp.tgtRot_Last=characterController.transform.eulerAngles;
@@ -51,6 +53,7 @@ namespace AKCondinoO.Sims.Actors{
           internal Vector3 moveDelta;
      internal Vector3 headOffset;
      internal Vector3 aimingAt;
+      [SerializeField]internal float aimAtMaxDistance=1000f;
         internal void ManualUpdate(){
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
@@ -70,11 +73,13 @@ namespace AKCondinoO.Sims.Actors{
          }
          viewRotation=rotLerp.UpdateRotation(viewRotation,Time.deltaTime);
          bodyRotation=characterController.transform.rotation;
-         float BodyToHeadRotationYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(bodyRotation,viewRotation);
-         //Log.DebugMessage("BodyToHeadRotationYComponentSignedAngle:"+BodyToHeadRotationYComponentSignedAngle);
-         if(Mathf.Abs(BodyToHeadRotationYComponentSignedAngle)>=90f){
-          Log.DebugMessage("angle between viewRotation and bodyRotation is equal to or above 90f");
+         float bodyToHeadRotationYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(bodyRotation,viewRotation);
+         //Log.DebugMessage("bodyToHeadRotationYComponentSignedAngle:"+bodyToHeadRotationYComponentSignedAngle);
+         if(Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)>=headMaxHorizontalRotationAngle){
+          Log.DebugMessage("angle between viewRotation and bodyRotation is equal to or above "+headMaxHorizontalRotationAngle);
          }
+         float bodyToHeadRotationXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(bodyRotation,viewRotation);
+         //Log.DebugMessage("bodyToHeadRotationXComponentSignedAngle:"+bodyToHeadRotationXComponentSignedAngle);
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}
@@ -129,7 +134,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          afterMovePos=characterController.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
-         aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*1000f;
+         aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
         }
     }
 }

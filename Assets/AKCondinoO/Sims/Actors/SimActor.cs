@@ -387,10 +387,10 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnCharacterControllerUpdated(){
         }
-        internal Vector3 GetHeadPosition(bool fromAnimator=true){
+        internal Vector3 GetHeadPosition(bool fromAnimator){
          Vector3 headPos;
          if(fromAnimator&&simActorAnimatorController!=null&&simActorAnimatorController.animator!=null){
-          headPos=simActorAnimatorController.animator.transform.position+simActorAnimatorController.animator.transform.rotation*simActorCharacterController.headOffset;
+          headPos=simActorAnimatorController.animator.transform.position+simActorAnimatorController.animator.transform.rotation*(new Vector3(0f,simActorCharacterController.characterController.height/2f+simActorCharacterController.characterController.radius,0f)+simActorCharacterController.headOffset);
          }else{
           headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
          }

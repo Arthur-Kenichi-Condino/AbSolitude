@@ -16,7 +16,7 @@ namespace AKCondinoO{
         internal Vector3 UpdatePosition(Vector3 position,float deltaTime){
          Vector3 result=position;
              if(tgtPosLerpTime==0){
-              if(tgtPos!=tgtPos_Last){
+              if(tgtPos!=tgtPos_Last||position!=tgtPos){
                tgtPosLerpVal=0;
                tgtPosLerpA=position;
                tgtPosLerpB=tgtPos;
