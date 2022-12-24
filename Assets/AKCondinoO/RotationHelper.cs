@@ -24,7 +24,11 @@ namespace AKCondinoO{
         /// <param name="rotationA"></param>
         /// <param name="rotationB"></param>
         /// <returns></returns>
-        internal static float SignedAngleFromRotationYComponentFromAToB(Quaternion rotationA,Quaternion rotationB){
+        internal static float SignedAngleFromRotationYComponentFromAToB(Quaternion rotationA,Quaternion rotationB,bool isolate=true){
+         if(isolate){
+          rotationA=IsolateRotationYComponent(rotationA);
+          rotationB=IsolateRotationYComponent(rotationB);
+         }
          //  get a "forward vector" for each rotation
          Vector3 forwardA=rotationA*Vector3.forward;
          Vector3 forwardB=rotationB*Vector3.forward;
@@ -34,6 +38,30 @@ namespace AKCondinoO{
          //  get the signed difference in these angles
          float angleDiff=Mathf.DeltaAngle(angleA,angleB);
          return angleDiff;
+        }
+        internal static float SignedAngleFromRotationXComponentFromAToB(Quaternion rotationA,Quaternion rotationB,bool isolate=true){
+         if(isolate){
+          rotationA=IsolateRotationXComponent(rotationA);
+          rotationB=IsolateRotationXComponent(rotationB);
+         }
+         //  get a "forward vector" for each rotation
+         Vector3 forwardA=rotationA*Vector3.forward;
+         Vector3 forwardB=rotationB*Vector3.forward;
+         //  get a numeric angle for each vector, on the Y-Z plane (relative to world forward)
+         float angleA=Mathf.Atan2(forwardA.y,forwardA.z)*Mathf.Rad2Deg;
+         float angleB=Mathf.Atan2(forwardB.y,forwardB.z)*Mathf.Rad2Deg;
+         //  get the signed difference in these angles
+         float angleDiff=Mathf.DeltaAngle(angleA,angleB);
+         return angleDiff;
+        }
+        /// <summary>
+        ///  [https://forum.unity.com/threads/quaternion-how-to-compute-delta-angle-for-each-axis.242208/]
+        /// </summary>
+        /// <param name="rotationA"></param>
+        /// <param name="rotationB"></param>
+        /// <returns></returns>
+        internal static Quaternion RotDiffFromAToB(Quaternion rotationA,Quaternion rotationB){
+         return rotationB*Quaternion.Inverse(rotationA);
         }
     }
 }
