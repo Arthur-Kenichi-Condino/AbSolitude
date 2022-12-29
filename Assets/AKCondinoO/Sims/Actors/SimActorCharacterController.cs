@@ -73,6 +73,18 @@ namespace AKCondinoO.Sims.Actors{
          }
          viewRotation=rotLerp.UpdateRotation(viewRotation,Time.deltaTime);
          bodyRotation=characterController.transform.rotation;
+         if(!Enabled.RELEASE_MOUSE.curState){
+          if(
+           Enabled.FORWARD .curState||
+           Enabled.BACKWARD.curState||
+           Enabled.RIGHT   .curState||
+           Enabled.LEFT    .curState
+          ){
+           Vector3 viewEuler=viewRotation.eulerAngles;
+           Vector3 bodyEuler=bodyRotation.eulerAngles;
+           bodyRotation=Quaternion.Euler(bodyEuler.x,viewEuler.y,bodyEuler.z);
+          }
+         }
          float bodyToHeadRotationYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(bodyRotation,viewRotation);
          //Log.DebugMessage("bodyToHeadRotationYComponentSignedAngle:"+bodyToHeadRotationYComponentSignedAngle);
          float bodyToHeadRotationXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(bodyRotation,viewRotation);
@@ -84,6 +96,7 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("rotate body in degrees:"+angleToRotateBody);
           bodyRotation*=Quaternion.AngleAxis(angleToRotateBody,bodyRotation*Vector3.up);
          }
+         characterController.transform.rotation=bodyRotation;
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}
