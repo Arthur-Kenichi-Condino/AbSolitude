@@ -18,7 +18,7 @@ namespace AKCondinoO.Sims.Actors{
      internal Transform  leftFoot;
      internal Transform rightFoot;
       internal float footHeight=.075f;
-     [SerializeField]float headOnIKRotationStoppedCooldown=.5f;
+     [SerializeField]float headOnIKRotationStoppedCooldown=.05f;
       float headIKRotationStoppedTimer=0f;
         //  [https://forum.unity.com/threads/setikrotation-for-feet-on-slope.510931/]
         void OnAnimatorIK(int layerIndex){
