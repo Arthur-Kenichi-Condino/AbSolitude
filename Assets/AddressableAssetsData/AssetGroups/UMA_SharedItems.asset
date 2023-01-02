@@ -113,6 +113,22 @@ MonoBehaviour:
     - UMA_Default
     - RaceHumanMaleMorphableUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ad131127d30ee441ab262813402d03a
+    m_Address: UMA/OverlayDataAsset-Vanilmirth_Body_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d343111848165b346855b7cbcb4c1dfc
+    m_Address: UMA/SlotDataAsset-Vanilmirth_Body
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
   m_SchemaSet:
