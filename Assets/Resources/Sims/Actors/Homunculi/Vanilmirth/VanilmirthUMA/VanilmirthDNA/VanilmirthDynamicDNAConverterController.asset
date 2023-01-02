@@ -22,9 +22,9 @@ MonoBehaviour:
     _updateBounds: 0
     _tightenBounds: 0
     _adjustBounds: 0
-    _scale: 0.5
-    _bone: Global
-    _scaleBoneHash: -274100555
+    _scale: 0.125
+    _bone: Position
+    _scaleBoneHash: -1084586333
     _headRatio: 7.5
     _radiusAdjustY: 0.01
     _radiusAdjust: {x: 0.23, y: 0}
