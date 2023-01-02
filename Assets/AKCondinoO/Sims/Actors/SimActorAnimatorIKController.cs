@@ -18,6 +18,8 @@ namespace AKCondinoO.Sims.Actors{
      internal Transform  leftFoot;
      internal Transform rightFoot;
       internal float footHeight=.075f;
+     [SerializeField]float headOnIKRotationStoppedCooldown=.5f;
+      float headIKRotationStoppedTimer=0f;
         //  [https://forum.unity.com/threads/setikrotation-for-feet-on-slope.510931/]
         void OnAnimatorIK(int layerIndex){
          //Log.DebugMessage("OnAnimatorIK:layerIndex:"+layerIndex);
@@ -47,9 +49,15 @@ namespace AKCondinoO.Sims.Actors{
            animBodyRot;
           Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
           //  TO DO: rotating? Or moving?
-          if(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f){
+          bool flag;
+          if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation!=simActorAnimatorController.rotLerp.tgtRotLerpB))||headIKRotationStoppedTimer>0f){
            Log.DebugMessage("rotating body, set target head IK to forward");
            headLookAtPosition=animHeadPos+animBodyRot*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+           if(flag){
+            headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
+           }else{
+            headIKRotationStoppedTimer-=Time.deltaTime;
+           }
           }
           headLookAtPositionLerp.tgtPos=headLookAtPosition;
           headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Time.deltaTime);
