@@ -17,54 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: bda47f2ab33dc8b4f985588f40b6641b
   m_SerializeEntries:
-  - m_GUID: 97fffd6a3f6442a4ba80a4074727b8bc
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Torso_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d01791214901d7341b52409cd66cc65e
-    m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 823abf9c6123e4d47985592ad67dde13
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c276deea2834bfd4c99611063846736e
-    m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
-    m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd56361a0055b3443a6a121d818041b0
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Face_Overlay
     m_ReadOnly: 0
@@ -113,6 +65,54 @@ MonoBehaviour:
     - UMA_Default
     - RaceHumanMaleMorphableUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb8cf77b216f780448fa289b30eca968
+    m_Address: UMA/OverlayDataAsset-Vanilmirth_Cards_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be1d510a9d41d7f428f94941a341f5c7
+    m_Address: UMA/SlotDataAsset-Vanilmirth_Cards
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30bb5d2ae27b4394bbc12ffbb1a51924
+    m_Address: UMA/OverlayDataAsset-Vanilmirth_Eyes_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a8bf46a2cb4ca14bb492f441e33ce66
+    m_Address: UMA/SlotDataAsset-Vanilmirth_Eyes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5de7215f6b53dab4695cc2707117a29a
+    m_Address: UMA/OverlayDataAsset-Vanilmirth_Brain_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fdec000da227c54fb620af9986e180a
+    m_Address: UMA/SlotDataAsset-Vanilmirth_Brain
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ad131127d30ee441ab262813402d03a
     m_Address: UMA/OverlayDataAsset-Vanilmirth_Body_Overlay
     m_ReadOnly: 0
@@ -128,6 +128,54 @@ MonoBehaviour:
     - UMA_Base
     - UMA_Default
     - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
+    m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c276deea2834bfd4c99611063846736e
+    m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 823abf9c6123e4d47985592ad67dde13
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d01791214901d7341b52409cd66cc65e
+    m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97fffd6a3f6442a4ba80a4074727b8bc
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Torso_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - RaceHumanMaleMorphableUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
