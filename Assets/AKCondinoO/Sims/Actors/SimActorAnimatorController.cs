@@ -17,6 +17,54 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]internal    Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
         void Awake(){
         }
+        protected virtual void GetAnimator(){
+         if(animator==null){
+          animator=GetComponentInChildren<Animator>();
+          if(animator!=null){
+           Log.DebugMessage("add SimActorAnimatorIKController");
+           animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
+           animatorIKController.simActorAnimatorController=this;
+           animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=4.6875f;
+           layerCount=animator.layerCount;
+           weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
+           animationTime=new Dictionary<int,float>(layerCount);
+            animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
+           normalizedTime=new Dictionary<int,float>(layerCount);
+            normalizedTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
+           loopCount=new Dictionary<int,int>(layerCount);
+            lastLoopCount=new Dictionary<int,int>(layerCount);
+             looped=new Dictionary<int,bool>(layerCount);
+           animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
+           currentClipInstanceID=new Dictionary<int,int>(layerCount);
+            currentClipName=new Dictionary<int,string>(layerCount);
+           for(int i=0;i<layerCount;++i){
+            animationTime[i]=0f;
+             animationTimeInCurrentLoop[i]=0f;
+            normalizedTime[i]=0f;
+             normalizedTimeInCurrentLoop[i]=0f;
+            loopCount[i]=0;
+             lastLoopCount[i]=0;
+              looped[i]=false;
+            animatorClip[i]=new List<AnimatorClipInfo>();
+            currentClipInstanceID[i]=0;
+             currentClipName[i]="";
+           }
+           weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
+           Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
+           weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
+           Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
+           layerTransitionCoroutine=StartCoroutine(LayerTransition());
+           if(actor.simUMAData!=null){
+            actor.simUMAData.transform.parent.SetParent(null);
+            GetTransformTgtValuesFromCharacterController();
+            rotLerp.tgtRot_Last=rotLerp.tgtRot;
+            posLerp.tgtPos_Last=posLerp.tgtPos;
+            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(rotLerp.tgtRot);
+            actor.simUMAData.transform.parent.position=posLerp.tgtPos;
+           }
+          }
+         }
+        }
      bool synced=true;
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
      internal int layerCount{get;private set;}
@@ -35,7 +83,8 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void ManualUpdate(){
          GetAnimator();
          if(animator!=null&&actor is BaseAI baseAI){
-          GetTransformTgtValues();
+          GetTransformTgtValuesFromCharacterController();
+          SetTransformTgtValuesUsingActorAndPhysicData();
           actorLeft=-actor.transform.right;
           actorRight=actor.transform.right;
           Vector3 boundsMaxRight=actor.simActorCharacterController.characterController.bounds.max;
@@ -66,8 +115,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
           if(actor.simUMAData!=null){
-           actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Time.deltaTime);
-           actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Time.deltaTime);
+           SetSimUMADataTransform();
           }
           //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
           foreach(var layer in animatorClip){
@@ -128,54 +176,6 @@ namespace AKCondinoO.Sims.Actors{
           lastMotion=baseAI.motion;
          }
         }
-        protected virtual void GetAnimator(){
-         if(animator==null){
-          animator=GetComponentInChildren<Animator>();
-          if(animator!=null){
-           Log.DebugMessage("add SimActorAnimatorIKController");
-           animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
-           animatorIKController.simActorAnimatorController=this;
-           animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=4.6875f;
-           layerCount=animator.layerCount;
-           weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
-           animationTime=new Dictionary<int,float>(layerCount);
-            animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
-           normalizedTime=new Dictionary<int,float>(layerCount);
-            normalizedTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
-           loopCount=new Dictionary<int,int>(layerCount);
-            lastLoopCount=new Dictionary<int,int>(layerCount);
-             looped=new Dictionary<int,bool>(layerCount);
-           animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
-           currentClipInstanceID=new Dictionary<int,int>(layerCount);
-            currentClipName=new Dictionary<int,string>(layerCount);
-           for(int i=0;i<layerCount;++i){
-            animationTime[i]=0f;
-             animationTimeInCurrentLoop[i]=0f;
-            normalizedTime[i]=0f;
-             normalizedTimeInCurrentLoop[i]=0f;
-            loopCount[i]=0;
-             lastLoopCount[i]=0;
-              looped[i]=false;
-            animatorClip[i]=new List<AnimatorClipInfo>();
-            currentClipInstanceID[i]=0;
-             currentClipName[i]="";
-           }
-           weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
-           Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
-           weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
-           Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
-           layerTransitionCoroutine=StartCoroutine(LayerTransition());
-           if(actor.simUMAData!=null){
-            actor.simUMAData.transform.parent.SetParent(null);
-            GetTransformTgtValues();
-            rotLerp.tgtRot_Last=rotLerp.tgtRot;
-            posLerp.tgtPos_Last=posLerp.tgtPos;
-            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(rotLerp.tgtRot);
-            actor.simUMAData.transform.parent.position=posLerp.tgtPos;
-           }
-          }
-         }
-        }
         protected void OnAnimationLooped(int layerIndex,string currentClipName){
          if(actor is BaseAI baseAI){
           baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:currentClipName,currentClipName:currentClipName);
@@ -186,9 +186,15 @@ namespace AKCondinoO.Sims.Actors{
           baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
          }
         }
-        void GetTransformTgtValues(){
+        protected virtual void GetTransformTgtValuesFromCharacterController(){
          rotLerp.tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
          posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
+        }
+        protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
+        }
+        protected virtual void SetSimUMADataTransform(){
+         actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Time.deltaTime);
+         actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Time.deltaTime);
         }
      Coroutine layerTransitionCoroutine;
       readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
