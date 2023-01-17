@@ -82,6 +82,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                 Vector2Int cCoord1=vecPosTocCoord(center ),        cCoord3;
                 Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1),        cnkRgn3;
                 Vector3Int vCoord1=vecPosTovCoord(center ),vCoord2,vCoord3;
+            Log.DebugMessage("EditMode.PlaceCube:cCoord1:"+cCoord1+";vCoord1:"+vCoord1);
                 //  y
                 for(int y=0;y<size.y;++y){for(vCoord2=new Vector3Int(vCoord1.x,vCoord1.y-y,vCoord1.z);vCoord2.y<=vCoord1.y+y;vCoord2.y+=y*2){
                         if(vCoord2.y>=0&&vCoord2.y<Height){
@@ -150,6 +151,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                 Vector2Int cCoord1=vecPosTocCoord(center ),        cCoord3;
                 Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1),        cnkRgn3;
                 Vector3Int vCoord1=vecPosTovCoord(center ),vCoord2,vCoord3;
+            Log.DebugMessage("EditMode.PlaceSphere:cCoord1:"+cCoord1+";vCoord1:"+vCoord1);
                 //  TO DO: calcular valores para suavização
                 //  calculate hypotenuses
                 float hyp_size_yx=Mathf.Sqrt(Mathf.Pow(size.y,2)+Mathf.Pow(size.x,2));

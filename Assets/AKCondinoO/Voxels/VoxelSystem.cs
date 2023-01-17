@@ -32,8 +32,8 @@ namespace AKCondinoO.Voxels{
             internal static Vector2Int vecPosTocCoord(Vector3 pos){
                                                               pos.x/=(float)Width;
                                                               pos.z/=(float)Depth;
-             return new Vector2Int((pos.x>0)?(pos.x-(int)pos.x==0.5f?Mathf.FloorToInt(pos.x):Mathf.RoundToInt(pos.x)):(int)Math.Round(pos.x,MidpointRounding.AwayFromZero),
-                                   (pos.z>0)?(pos.z-(int)pos.z==0.5f?Mathf.FloorToInt(pos.z):Mathf.RoundToInt(pos.z)):(int)Math.Round(pos.z,MidpointRounding.AwayFromZero)
+             return new Vector2Int((pos.x>0)?((pos.x-(int)pos.x==0.5f)?Mathf.CeilToInt(pos.x):Mathf.RoundToInt(pos.x)):(Mathf.Abs(pos.x-(int)pos.x)==0.5f)?Mathf.CeilToInt(pos.x):(int)Math.Round(pos.x,MidpointRounding.AwayFromZero),
+                                   (pos.z>0)?((pos.z-(int)pos.z==0.5f)?Mathf.CeilToInt(pos.z):Mathf.RoundToInt(pos.z)):(Mathf.Abs(pos.z-(int)pos.z)==0.5f)?Mathf.CeilToInt(pos.z):(int)Math.Round(pos.z,MidpointRounding.AwayFromZero)
                                   );
             }
             internal static Vector2Int vecPosTocnkRgn(Vector3 pos){Vector2Int coord=vecPosTocCoord(pos);
