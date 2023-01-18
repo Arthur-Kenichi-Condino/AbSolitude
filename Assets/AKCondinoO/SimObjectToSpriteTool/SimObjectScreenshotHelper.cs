@@ -13,6 +13,7 @@ namespace AKCondinoO.SimObjectToSpriteTool{
          if(camera!=null){
           int sWidth=Screen.width;int sHeight=Screen.height;
           RenderTexture rt=new RenderTexture(sWidth,sHeight,24);
+          camera.targetTexture=rt;
          }
         }
     }
