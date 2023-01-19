@@ -7,6 +7,71 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Bolt
+    second: {fileID: 2100000, guid: d8370d7eee967a04d8fd5953cd4c9ab2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet0
+    second: {fileID: 2100000, guid: 593195d5e40eb66499177022718a8ce0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet1
+    second: {fileID: 2100000, guid: e61eb0614378a774cacc429f3e8f1e40, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet2
+    second: {fileID: 2100000, guid: f9d17a8df956dda4dbd31747c3c2680b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet3
+    second: {fileID: 2100000, guid: 01853a3171c41654fbe3d2d1ca68e21b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cartridge0
+    second: {fileID: 2100000, guid: fe6151cc5c0d9244698bd3b453b25101, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cartridge1
+    second: {fileID: 2100000, guid: d73871aa6f1533144bc63f6fb76e7560, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cartridge2
+    second: {fileID: 2100000, guid: 56f92edb796b6424fb58b13ae85aa57e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cartridge3
+    second: {fileID: 2100000, guid: 867f357309bc5b84e9205c49a1a9997c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Magazine
+    second: {fileID: 2100000, guid: d833c2802d00da548b187e9147a4d02b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SightFixation
+    second: {fileID: 2100000, guid: cfa1d3f83a7848c47b9d95121f3b4803, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TelescopicSight
+    second: {fileID: 2100000, guid: 19c7459ed806e7d45a6280326c739cef, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Weapon
+    second: {fileID: 2100000, guid: 70e5d42e0b92c0c42aae038a71cf81d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: material
     second: {fileID: 2100000, guid: d833c2802d00da548b187e9147a4d02b, type: 2}
   - first:
@@ -137,8 +202,8 @@ ModelImporter:
     sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
