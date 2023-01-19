@@ -14,13 +14,14 @@ namespace AKCondinoO.SimObjectToSpriteTool{
      Transform gameObjectToExtractThumbnailTransform;
         void Update(){
          if(prefabToExtractThumbnail!=null){
-          GameObject gameObjectToExtractThumbnail=Instantiate(prefabToExtractThumbnail,Vector3.zero,Quaternion.identity);
+          gameObjectToExtractThumbnailTransform=null;
+          GameObject gameObjectToExtractThumbnail=Instantiate(prefabToExtractThumbnail);
           MeshFilter[]meshFilters=gameObjectToExtractThumbnail.GetComponentsInChildren<MeshFilter>();
           if(meshFilters.Length>0){
+           gameObjectToExtractThumbnailTransform=gameObjectToExtractThumbnail.transform;
                bounds=new Bounds();
            foreach(MeshFilter meshFilter in meshFilters){
             if(bounds.extents==Vector3.zero){
-             gameObjectToExtractThumbnailTransform=meshFilter.transform;
                bounds=meshFilter.mesh.bounds;
             }else{
                bounds.Encapsulate(meshFilter.mesh.bounds);
@@ -52,14 +53,14 @@ namespace AKCondinoO.SimObjectToSpriteTool{
          var p6=new Vector3(b.max.x,b.max.y,b.min.z);
          var p7=new Vector3(b.max.x,b.max.y,b.max.z);
          var p8=new Vector3(b.min.x,b.max.y,b.max.z);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p1);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p2);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p3);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p4);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p5);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p6);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p7);
-         gameObjectToExtractThumbnailTransform.TransformPoint(p8);
+         p1=gameObjectToExtractThumbnailTransform.TransformPoint(p1);
+         p2=gameObjectToExtractThumbnailTransform.TransformPoint(p2);
+         p3=gameObjectToExtractThumbnailTransform.TransformPoint(p3);
+         p4=gameObjectToExtractThumbnailTransform.TransformPoint(p4);
+         p5=gameObjectToExtractThumbnailTransform.TransformPoint(p5);
+         p6=gameObjectToExtractThumbnailTransform.TransformPoint(p6);
+         p7=gameObjectToExtractThumbnailTransform.TransformPoint(p7);
+         p8=gameObjectToExtractThumbnailTransform.TransformPoint(p8);
          UnityEngine.Debug.DrawLine(p1,p2,color);
          UnityEngine.Debug.DrawLine(p2,p3,color);
          UnityEngine.Debug.DrawLine(p3,p4,color);
