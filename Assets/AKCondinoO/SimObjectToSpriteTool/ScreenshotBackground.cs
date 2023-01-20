@@ -27,14 +27,20 @@ namespace AKCondinoO.SimObjectToSpriteTool{
                bounds.Encapsulate(meshFilter.mesh.bounds);
             }
            }
+           if(bounds.extents!=Vector3.zero){
 #if UNITY_EDITOR
 #endif
+            Camera camera=Camera.main;
+            if(camera!=null){
+             Util.PositionCameraToCoverFullObject(camera,gameObjectToExtractThumbnailTransform,bounds,gameObjectToExtractThumbnailTransform.lossyScale);
+            }
+           }
           }
           prefabToExtractThumbnail=null;
          }
-         DrawBounds();
         }
         private void OnDrawGizmos(){
+         DrawBounds();
         }
         void DrawBounds(){
          if(bounds.extents==Vector3.zero){
