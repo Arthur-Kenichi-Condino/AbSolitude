@@ -6,7 +6,7 @@ namespace AKCondinoO.SimObjectToSpriteTool{
     //  [https://answers.unity.com/questions/1473282/show-screen-capture-as-ui-image.html]
     internal class SimObjectScreenshotHelper:MonoBehaviour{
      WaitForEndOfFrame waitForEndOfFrame=new WaitForEndOfFrame();
-        private IEnumerator TakeScreenshot(){
+        internal IEnumerator TakeScreenshot(){
          yield return waitForEndOfFrame;
          Camera camera=Camera.main;
          if(camera!=null){
