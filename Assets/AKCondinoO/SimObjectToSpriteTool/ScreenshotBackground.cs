@@ -9,6 +9,10 @@ using UnityEditor;
 #endif
 namespace AKCondinoO.SimObjectToSpriteTool{
     internal class ScreenshotBackground:MonoBehaviour{
+     MeshFilter backgroundQuad;
+        void Awake(){
+         backgroundQuad=GetComponentInChildren<MeshFilter>();
+        }
      [SerializeField]GameObject prefabToExtractThumbnail;
      Bounds bounds;
      Transform gameObjectToExtractThumbnailTransform;
@@ -32,7 +36,15 @@ namespace AKCondinoO.SimObjectToSpriteTool{
 #endif
             Camera camera=Camera.main;
             if(camera!=null){
-             Util.PositionCameraToCoverFullObject(camera,gameObjectToExtractThumbnailTransform,bounds,gameObjectToExtractThumbnailTransform.lossyScale);
+             Util.PositionCameraToCoverFullObject(camera,gameObjectToExtractThumbnailTransform,bounds.size.y,bounds.size.z,bounds.size.x,bounds.center,gameObjectToExtractThumbnailTransform.lossyScale);
+             backgroundQuad.transform.eulerAngles=new Vector3(
+              backgroundQuad.transform.eulerAngles.x,
+              backgroundQuad.transform.eulerAngles.y,
+              gameObjectToExtractThumbnailTransform.eulerAngles.x
+             );
+             backgroundQuad.transform.position=gameObjectToExtractThumbnailTransform.position+gameObjectToExtractThumbnailTransform.rotation*bounds.center+camera.transform.forward*(bounds.extents.x+.01f);
+             //
+             backgroundQuad.transform.localScale=new Vector3(Screen.width,Screen.height,1f);
             }
            }
           }

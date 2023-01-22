@@ -152,7 +152,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
                 Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1),        cnkRgn3;
                 Vector3Int vCoord1=vecPosTovCoord(center ),vCoord2,vCoord3;
             Log.DebugMessage("EditMode.PlaceSphere:cCoord1:"+cCoord1+";vCoord1:"+vCoord1);
-                //  TO DO: calcular valores para suavização
+                //  TO DO: calcular valores para suavizaÃ§Ã£o
                 //  calculate hypotenuses
                 float hyp_size_yx=Mathf.Sqrt(Mathf.Pow(size.y,2)+Mathf.Pow(size.x,2));
                 float hyp_size_xz=Mathf.Sqrt(Mathf.Pow(size.x,2)+Mathf.Pow(size.z,2));
