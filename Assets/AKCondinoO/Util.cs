@@ -24,19 +24,19 @@ namespace AKCondinoO{
         /// <summary>
         ///  https://forum.unity.com/threads/make-sure-4-points-of-bounds-are-always-visible-no-matter-the-aspect-ratio.1165082/ quote: "The principal is fairly simple which is that tangent of the half of fov angle in horizontal axis is equal to the half the width of the plane divided by the distance of the plane (from the camera). ( tan( fovX / 2f ) = ( obj.width / 2f ) / ( distance ) )"
         /// </summary>
-        internal static void PositionCameraToCoverFullObject(Camera cam,Transform targetTransform,Bounds bounds,Vector3 scale){
+        internal static void PositionCameraToCoverFullObject(Camera cam,Transform targetTransform,float boundsSizeX,float boundsSizeY,float boundsSizeZ,Vector3 boundsCenter,Vector3 scale){
          float fovYRad=cam.fieldOfView*Mathf.Deg2Rad;
          //  calculate field of view in x (horizontal) axis
          float fovXRad=Mathf.Atan(cam.aspect*Mathf.Tan(fovYRad/2f))*2f;
          //  get the width of the target quad
-         float width =bounds.size.x*scale.x;
-         float height=bounds.size.y*scale.y;
+         float width =boundsSizeX*scale.x;
+         float height=boundsSizeY*scale.y;
          //  calculate distance of the camera so the width of the target quad match the camera width at that point in the world
          float disX=(width /2f)/Mathf.Tan(fovXRad/2f);
          float disY=(height/2f)/Mathf.Tan(fovYRad/2f);
          float targetDistance=disX>disY?disX:disY;
-         cam.transform.position=targetTransform.position-Vector3.forward*targetDistance;
-         cam.transform.LookAt(targetTransform);
+         cam.transform.position=(targetTransform.position+targetTransform.rotation*boundsCenter)-Vector3.forward*(targetDistance+boundsSizeZ/2f);
+         cam.transform.LookAt(targetTransform.position+targetTransform.rotation*boundsCenter);
         }
         internal static void DrawBounds(Bounds b,Color color,float duration=0){//[https://gist.github.com/unitycoder/58f4b5d80f423d29e35c814a9556f9d9]
          var p1=new Vector3(b.min.x,b.min.y,b.min.z);// bottom
