@@ -10,8 +10,10 @@ using UnityEditor;
 namespace AKCondinoO.SimObjectToSpriteTool{
     internal class ScreenshotBackground:MonoBehaviour{
      MeshFilter backgroundQuad;
+     SimObjectScreenshotHelper screenshotHelper;
         void Awake(){
          backgroundQuad=GetComponentInChildren<MeshFilter>();
+         screenshotHelper=transform.GetComponentInParent<SimObjectScreenshotHelper>();
         }
      [SerializeField]GameObject prefabToExtractThumbnail;
      Bounds bounds;
@@ -43,8 +45,22 @@ namespace AKCondinoO.SimObjectToSpriteTool{
               gameObjectToExtractThumbnailTransform.eulerAngles.x
              );
              backgroundQuad.transform.position=gameObjectToExtractThumbnailTransform.position+gameObjectToExtractThumbnailTransform.rotation*bounds.center+camera.transform.forward*(bounds.extents.x+.01f);
-             //
-             backgroundQuad.transform.localScale=new Vector3(Screen.width,Screen.height,1f);
+             float camToBackgroundDis=Vector3.Distance(backgroundQuad.transform.position,camera.transform.position);
+             Log.DebugMessage("camToBackgroundDis:"+camToBackgroundDis);
+             float fovYRad=camera.fieldOfView*Mathf.Deg2Rad;
+             //  calculate field of view in x (horizontal) axis
+             float fovXRad=Mathf.Atan(camera.aspect*Mathf.Tan(fovYRad/2f))*2f;
+             float fovY=fovYRad*Mathf.Rad2Deg;
+             float fovX=fovXRad*Mathf.Rad2Deg;
+             Log.DebugMessage("fovX:"+fovX);
+             float backgroundQuadWidth=Mathf.Tan(fovXRad/2f)*camToBackgroundDis*2f;
+             Log.DebugMessage("backgroundQuadWidth:"+backgroundQuadWidth);
+             float backgroundQuadHeight=Mathf.Tan(fovYRad/2f)*camToBackgroundDis*2f;
+             Log.DebugMessage("backgroundQuadHeight:"+backgroundQuadHeight);
+             backgroundQuad.transform.localScale=new Vector3(backgroundQuadHeight,backgroundQuadWidth,1f);
+             if(screenshotHelper!=null){
+              screenshotHelper.TakeScreenshot(camera);
+             }
             }
            }
           }
