@@ -19,7 +19,11 @@ namespace AKCondinoO.SimObjectToSpriteTool{
           camera=Camera.main;
          }
          if(camera!=null){
+          FullScreenMode screenMode=Screen.fullScreenMode;
+          int screenWidth=Screen.width;int screenHeight=Screen.height;
+          Log.DebugMessage("screenWidth:"+screenWidth+";screenHeight:"+screenHeight+";screenMode:"+screenMode);
           int sWidth=Screen.width;int sHeight=Screen.height;
+          Log.DebugMessage("sWidth:"+sWidth+";sHeight:"+sHeight+";screenMode:"+screenMode);
           RenderTexture rt=new RenderTexture(sWidth,sHeight,24);
           camera.targetTexture=rt;
           Texture2D screenshot=new Texture2D(sWidth,sHeight,TextureFormat.RGB24,false);
