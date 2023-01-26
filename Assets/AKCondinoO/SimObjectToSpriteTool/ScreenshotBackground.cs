@@ -11,9 +11,12 @@ namespace AKCondinoO.SimObjectToSpriteTool{
     internal class ScreenshotBackground:MonoBehaviour{
      MeshFilter backgroundQuad;
      SimObjectScreenshotHelper screenshotHelper;
+     SpriteRenderer previewSpriteRenderer;
         void Awake(){
          backgroundQuad=GetComponentInChildren<MeshFilter>();
          screenshotHelper=transform.GetComponentInParent<SimObjectScreenshotHelper>();
+         previewSpriteRenderer=GetComponentInChildren<SpriteRenderer>();
+         Log.DebugMessage("previewSpriteRenderer:"+previewSpriteRenderer);
         }
      [SerializeField]GameObject prefabToExtractThumbnail;
      Bounds bounds;
@@ -58,8 +61,9 @@ namespace AKCondinoO.SimObjectToSpriteTool{
              float backgroundQuadHeight=Mathf.Tan(fovYRad/2f)*camToBackgroundDis*2f;
              Log.DebugMessage("backgroundQuadHeight:"+backgroundQuadHeight);
              backgroundQuad.transform.localScale=new Vector3(backgroundQuadHeight,backgroundQuadWidth,1f);
+             Log.DebugMessage("screenshotHelper:"+screenshotHelper);
              if(screenshotHelper!=null){
-              screenshotHelper.TakeScreenshot(camera);
+              screenshotHelper.TakeScreenshot(camera,previewSpriteRenderer);
              }
             }
            }
