@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: -6976451084508369379, guid: 8c80f5528f98ec94a8b840ec0697edfc, type: 3}
       propertyPath: prefabToExtractThumbnail
       value: 
-      objectReference: {fileID: 5619068118059489712, guid: 380e76e7b0449704aa3054026665ee51, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: -6976451084508369379, guid: 8c80f5528f98ec94a8b840ec0697edfc, type: 3}
       propertyPath: gameObjectToExtractThumbnail
       value: 

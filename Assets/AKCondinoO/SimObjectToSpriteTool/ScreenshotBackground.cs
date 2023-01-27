@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 namespace AKCondinoO.SimObjectToSpriteTool{
     internal class ScreenshotBackground:MonoBehaviour{
      MeshFilter backgroundQuad;
@@ -38,7 +39,14 @@ namespace AKCondinoO.SimObjectToSpriteTool{
            }
            if(bounds.extents!=Vector3.zero){
 #if UNITY_EDITOR
+            string path=AssetDatabase.GetAssetPath(prefabToExtractThumbnail).Replace("\\","/");
+#else
+            string path=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/Temp/Thumbnails/";
+            Directory.CreateDirectory(path);
 #endif
+            if(!string.IsNullOrEmpty(path)){
+             Log.DebugMessage("screenshot path:"+path);
+            }
             Camera camera=Camera.main;
             if(camera!=null){
              Util.PositionCameraToCoverFullObject(camera,gameObjectToExtractThumbnailTransform,bounds.size.y,bounds.size.z,bounds.size.x,bounds.center,gameObjectToExtractThumbnailTransform.lossyScale);
@@ -63,7 +71,7 @@ namespace AKCondinoO.SimObjectToSpriteTool{
              backgroundQuad.transform.localScale=new Vector3(backgroundQuadHeight,backgroundQuadWidth,1f);
              Log.DebugMessage("screenshotHelper:"+screenshotHelper);
              if(screenshotHelper!=null){
-              screenshotHelper.TakeScreenshot(camera,previewSpriteRenderer);
+              screenshotHelper.TakeScreenshot(camera,previewSpriteRenderer,path,gameObjectToExtractThumbnail);
              }
             }
            }
