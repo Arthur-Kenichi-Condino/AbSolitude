@@ -133,6 +133,7 @@ namespace AKCondinoO.Sims{
        }
      internal LinkedListNode<SimObject>pooled; 
      internal InventoryItem asInventoryItem=null;
+     internal SimInventory inventory=null;
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
