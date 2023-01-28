@@ -117,6 +117,10 @@ namespace AKCondinoO.Sims{
           }
           SimObjectManager.singleton.pool.Add(t,new LinkedList<SimObject>());
          }
+         Log.DebugMessage("load thumbnails");
+         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(Texture))){
+          Log.DebugMessage("load Texture, o.name:"+o.name);
+         }
          if(Core.singleton.isServer){
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
