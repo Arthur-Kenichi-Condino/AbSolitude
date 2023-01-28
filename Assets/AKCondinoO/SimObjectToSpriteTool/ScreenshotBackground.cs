@@ -12,10 +12,19 @@ using UnityEngine;
 namespace AKCondinoO.SimObjectToSpriteTool{
     internal class ScreenshotBackground:MonoBehaviour{
      MeshFilter backgroundQuad;
+     MeshFilter isolateLightCube;
      SimObjectScreenshotHelper screenshotHelper;
      SpriteRenderer previewSpriteRenderer;
         void Awake(){
-         backgroundQuad=GetComponentInChildren<MeshFilter>();
+         foreach(MeshFilter meshFilter in GetComponentsInChildren<MeshFilter>()){
+          if(backgroundQuad==null&&meshFilter.name=="BackgroundQuad"){
+           backgroundQuad=meshFilter;
+           //Log.DebugMessage("backgroundQuad:"+backgroundQuad);
+          }else if(isolateLightCube==null&&meshFilter.name=="IsolateLightCube"){
+           isolateLightCube=meshFilter;
+           //Log.DebugMessage("isolateLightCube:"+isolateLightCube);
+          }
+         }
          screenshotHelper=transform.GetComponentInParent<SimObjectScreenshotHelper>();
          previewSpriteRenderer=GetComponentInChildren<SpriteRenderer>();
          Log.DebugMessage("previewSpriteRenderer:"+previewSpriteRenderer);
@@ -30,6 +39,7 @@ namespace AKCondinoO.SimObjectToSpriteTool{
           MeshFilter[]meshFilters=gameObjectToExtractThumbnail.GetComponentsInChildren<MeshFilter>();
           if(meshFilters.Length>0){
            gameObjectToExtractThumbnailTransform=gameObjectToExtractThumbnail.transform;
+           gameObjectToExtractThumbnailTransform.position=transform.root.position;
                bounds=new Bounds();
            foreach(MeshFilter meshFilter in meshFilters){
             if(bounds.extents==Vector3.zero){
@@ -48,8 +58,9 @@ namespace AKCondinoO.SimObjectToSpriteTool{
             if(!string.IsNullOrEmpty(path)){
              Log.DebugMessage("screenshot path:"+path);
             }
-            Camera camera=Camera.main;
+            Camera camera=GetComponentInChildren<Camera>();
             if(camera!=null){
+             camera.enabled=true;
              Util.PositionCameraToCoverFullObject(camera,gameObjectToExtractThumbnailTransform,bounds.size.y,bounds.size.z,bounds.size.x,bounds.center,gameObjectToExtractThumbnailTransform.lossyScale);
              backgroundQuad.transform.eulerAngles=new Vector3(
               backgroundQuad.transform.eulerAngles.x,
@@ -70,6 +81,13 @@ namespace AKCondinoO.SimObjectToSpriteTool{
              float backgroundQuadHeight=Mathf.Tan(fovYRad/2f)*camToBackgroundDis*2f;
              Log.DebugMessage("backgroundQuadHeight:"+backgroundQuadHeight);
              backgroundQuad.transform.localScale=new Vector3(backgroundQuadHeight,backgroundQuadWidth,1f);
+             isolateLightCube.transform.position=new Vector3(
+              backgroundQuad.transform.position.x,
+              backgroundQuad.transform.position.y,
+              (camera.transform.position.z+backgroundQuad.transform.position.z)/2f
+             );
+             isolateLightCube.transform.rotation=backgroundQuad.transform.rotation;
+             isolateLightCube.transform.localScale=new Vector3(backgroundQuadHeight,backgroundQuadWidth,camToBackgroundDis);
              Log.DebugMessage("screenshotHelper:"+screenshotHelper);
              if(screenshotHelper!=null){
               screenshotHelper.TakeScreenshot(camera,previewSpriteRenderer,path,gameObjectToExtractThumbnail);

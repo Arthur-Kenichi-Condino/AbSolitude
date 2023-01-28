@@ -23,9 +23,9 @@ namespace AKCondinoO.SimObjectToSpriteTool{
           Destroy(screenshot);
           screenshot=null;
          }
-         if(camera==null){
-          camera=Camera.main;
-         }
+         //if(camera==null){
+         // camera=Camera.main;//  when using multiple scenes, this will get the wrong camera
+         //}
          if(camera!=null){
           FullScreenMode screenMode=Screen.fullScreenMode;
           int screenWidth=Screen.width;int screenHeight=Screen.height;
@@ -54,15 +54,16 @@ namespace AKCondinoO.SimObjectToSpriteTool{
            Sprite tempSprite=Sprite.Create(screenshot,new Rect(0,0,sWidth,sHeight),new Vector2(0,0));
            previewSpriteRenderer.sprite=tempSprite;
           }
-#if UNITY_EDITOR
-#else
-#endif
           if(!string.IsNullOrEmpty(path)){
            path+=gameObjectToExtractThumbnail.name.Replace("(Clone)","")+".png";
            Log.DebugMessage("screenshot file name:"+path);
            byte[]bytes=screenshot.EncodeToPNG();
            System.IO.File.WriteAllBytes(path,bytes);
+#if UNITY_EDITOR
+           AssetDatabase.Refresh();
+#endif
           }
+          camera.enabled=false;
          }
          if(gameObjectToExtractThumbnail!=null){
           Log.DebugMessage("screenshot taken, destroy gameObjectToExtractThumbnail:"+gameObjectToExtractThumbnail);

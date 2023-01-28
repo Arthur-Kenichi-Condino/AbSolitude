@@ -43,6 +43,10 @@ namespace AKCondinoO{
      internal static string savePath;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();
+         simObjectToSpriteToolLoadSceneParameters.loadSceneMode=LoadSceneMode.Additive;
+         simObjectToSpriteToolLoadSceneParameters.localPhysicsMode=LocalPhysicsMode.Physics3D;
+         SceneManager.LoadScene("SimObjectToSpriteTool",simObjectToSpriteToolLoadSceneParameters);
          int procCt=Environment.ProcessorCount;
          Log.DebugMessage("Environment.ProcessorCount:"+procCt);
          ThreadPool.GetMinThreads(out int minWorkerThreads,out int minIOCThreads);
