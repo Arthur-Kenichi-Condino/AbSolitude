@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Gameplaying;
+using AKCondinoO.Inventory;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
@@ -131,6 +132,7 @@ namespace AKCondinoO.Sims{
         }
        }
      internal LinkedListNode<SimObject>pooled; 
+     internal InventoryItem asInventoryItem=null;
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
