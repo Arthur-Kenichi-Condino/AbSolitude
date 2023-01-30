@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Inventory{
-    internal class InventoryItem{
+namespace AKCondinoO.Sims.Inventory{
+    internal class SimInventoryItem{
     }
 }
