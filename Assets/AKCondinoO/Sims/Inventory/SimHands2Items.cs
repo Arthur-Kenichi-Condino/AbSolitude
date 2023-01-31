@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
-    internal class SimInventoryItem{
-     internal SimInventory container;
+    internal class SimHands2Items:SimInventory{
+        internal SimHands2Items():base(2){
+        }
     }
 }
