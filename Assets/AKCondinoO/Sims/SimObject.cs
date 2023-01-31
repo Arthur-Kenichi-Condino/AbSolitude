@@ -184,6 +184,11 @@ namespace AKCondinoO.Sims{
           if(masterObject!=null&&masterObject is SimActor masterActor){
            masterActor.SetSlave(this);
           }
+          if(inventory==null){
+           inventory=new SimInventory(this,0);
+          }else{
+           inventory.Clear();
+          }
          }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
