@@ -27,6 +27,7 @@ namespace AKCondinoO.Sims.Inventory{
           Log.DebugMessage("simInventoryItemPool is empty");
           simInventoryItem=new SimInventoryItem();
          }
+         simInventoryItem.SetAsInventoryItem(simObject);
         }
     }
 }
