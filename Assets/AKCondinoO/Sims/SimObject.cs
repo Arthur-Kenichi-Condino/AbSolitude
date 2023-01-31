@@ -187,7 +187,7 @@ namespace AKCondinoO.Sims{
           if(inventory==null){
            inventory=new SimInventory(this,0);
           }else{
-           inventory.Clear();
+           inventory.Reset();
           }
          }
          TransformBoundsVertices();

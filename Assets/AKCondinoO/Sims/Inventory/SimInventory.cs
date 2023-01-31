@@ -20,11 +20,19 @@ namespace AKCondinoO.Sims.Inventory{
          items=new HashSet<SimInventoryItem>(maxItemsCount);
          simInventoryItemPool=new Queue<SimInventoryItem>(maxItemsCount);
          this.owner=owner;
+         this.ownerId=owner.id.Value;
          for(int id=0;id<maxItemsCount;id++){
           openIds.Add(id);
          }
          this.maxItemsCount=maxItemsCount;
          Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and owner:"+owner);
+        }
+        internal virtual void Reset(){
+         Log.DebugMessage("SimInventory Reset");
+         if(ownerId!=owner.id.Value){
+          Log.DebugMessage("ownerId!=owner.id.Value");
+          this.ownerId=owner.id.Value;
+         }
         }
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
         internal virtual void Add(SimObject simObject){
@@ -37,9 +45,6 @@ namespace AKCondinoO.Sims.Inventory{
           simInventoryItem=new SimInventoryItem();
          }
          simInventoryItem.SetAsInventoryItem(simObject);
-        }
-        internal virtual void Clear(){
-         Log.DebugMessage("SimInventory Clear");
         }
     }
 }
