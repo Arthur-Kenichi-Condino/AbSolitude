@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,6 +16,17 @@ namespace AKCondinoO.Sims.Inventory{
           openIds.Add(id);
          }
          this.maxItemsCount=maxItemsCount;
+        }
+     internal readonly Queue<SimInventoryItem>simInventoryItemPool=new Queue<SimInventoryItem>();
+        internal virtual void Add(SimObject simObject){
+         SimInventoryItem simInventoryItem=null;
+         if(simInventoryItemPool.Count>0){
+          Log.DebugMessage("use simInventoryItemPool");
+          simInventoryItem=simInventoryItemPool.Dequeue();
+         }else{
+          Log.DebugMessage("simInventoryItemPool is empty");
+          simInventoryItem=new SimInventoryItem();
+         }
         }
     }
 }
