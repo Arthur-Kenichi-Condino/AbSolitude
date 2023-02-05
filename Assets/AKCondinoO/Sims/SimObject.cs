@@ -133,7 +133,7 @@ namespace AKCondinoO.Sims{
        }
      internal LinkedListNode<SimObject>pooled; 
      internal SimInventoryItem asInventoryItem=null;
-     internal SimInventory inventory=null;
+     internal readonly Dictionary<Type,List<SimInventory>>inventory=new Dictionary<Type,List<SimInventory>>();
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
@@ -184,10 +184,14 @@ namespace AKCondinoO.Sims{
           if(masterObject!=null&&masterObject is SimActor masterActor){
            masterActor.SetSlave(this);
           }
-          if(inventory==null){
-           inventory=new SimInventory(this,0);
-          }else{
-           inventory.Reset();
+          if(!inventory.ContainsKey(typeof(SimInventory))){
+           inventory.Add(typeof(SimInventory),new List<SimInventory>());
+           inventory[typeof(SimInventory)].Add(new SimInventory(this,0));
+          }
+          foreach(var typeInventoryListPair in inventory){
+           foreach(SimInventory simInventory in typeInventoryListPair.Value){
+            simInventory.Reset();
+           }
           }
          }
          TransformBoundsVertices();

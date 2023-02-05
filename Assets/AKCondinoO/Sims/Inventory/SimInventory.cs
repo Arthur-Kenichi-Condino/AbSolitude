@@ -27,15 +27,27 @@ namespace AKCondinoO.Sims.Inventory{
          this.maxItemsCount=maxItemsCount;
          Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and owner:"+owner);
         }
-        internal virtual void Reset(){
+        internal virtual void Reset(bool clear=false){
          Log.DebugMessage("SimInventory Reset");
          if(ownerId!=owner.id.Value){
           Log.DebugMessage("ownerId!=owner.id.Value");
           this.ownerId=owner.id.Value;
          }
+         if(clear){
+          Clear();
+         }
         }
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
+        internal virtual void Clear(){
+        }
         internal virtual void Add(SimObject simObject){
+         int spaces=1;
+         if(openIds.Count<spaces){
+          Log.DebugMessage("not enough space in the inventory");
+          return;
+         }
+         //if(items.Contains){
+         //}
          SimInventoryItem simInventoryItem=null;
          if(simInventoryItemPool.Count>0){
           Log.DebugMessage("use simInventoryItemPool");
