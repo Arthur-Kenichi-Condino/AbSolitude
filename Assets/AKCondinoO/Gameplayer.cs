@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System.Collections;
@@ -26,6 +27,7 @@ namespace AKCondinoO{
      internal NavMeshData[]navMeshData;
       internal NavMeshDataInstance[]navMeshInstance;
        internal AsyncOperation[]navMeshAsyncOperation;
+     internal readonly Queue<SimActor>camFollowableActors=new();
         void Awake(){
          netObj=GetComponent<NetworkObject>();
         }
@@ -96,16 +98,27 @@ namespace AKCondinoO{
          //Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
          navMeshDirty=true;
         }
-        internal void OnSimObjectSpawned(SimObject simObject){
-         //Log.DebugMessage("OnSimObjectSpawned:navMeshDirty=true");
-         navMeshDirty=true;
+        internal void OnSimObjectSpawned(SimObject simObject,int layer){
+         //Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
+         OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
          //Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
-         if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
-          Log.DebugMessage("OnSimObjectTransformHasChanged:navMeshDirty=true");
+         OnNavMeshShouldUpdate(simObject,layer);
+        }
+        internal void OnSimObjectDespawned(SimObject simObject,int layer){
+         Log.DebugMessage("OnSimObjectDespawned:layer:"+layer);
+         OnNavMeshShouldUpdate(simObject,layer);
+        }
+        void OnNavMeshShouldUpdate(SimObject simObject,int layer){
+         if(simObject.navMeshObstacleCarving){
           navMeshDirty=true;
-           navMeshSourcesDirty=true;
+          //Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true");
+         }
+         if(PhysUtil.LayerMaskContains(NavMeshHelper.navMeshLayer,layer)){
+          navMeshSourcesDirty=true;
+          navMeshDirty=true;
+          Log.DebugMessage("OnNavMeshShouldUpdate:navMeshDirty=true;navMeshSourcesDirty=true;");
          }
         }
      bool pendingCoordinatesUpdate=true;
@@ -149,6 +162,9 @@ namespace AKCondinoO{
          worldBounds.center=activeWorldBounds.center;
          if(this==Gameplayer.main){
           VoxelSystem.singleton.generationRequests.Add(this);
+         }
+         if(Core.singleton.isServer){
+          VoxelSystem.singleton.generationRequestedAssignMessageHandlers.Add(this);
          }
         }
      [SerializeField]float navMeshDataAsyncUpdateInterval=1.0f;

@@ -27,6 +27,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
         }
         internal enum EditMode{
          PlaceCube,
+         PlaceSphere,
         }
         internal struct TerrainEditRequest{
          internal Vector3 center;
@@ -34,7 +35,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          internal Vector3Int size;
          internal double density;
          internal MaterialId material;
-         internal int smoothness;
+         internal Vector3Int smoothness;
         }
         internal void EditTerrain(
          Vector3 at,
@@ -42,7 +43,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
            Vector3Int size,
             double density,
              MaterialId material,
-              int smoothness
+              Vector3Int smoothness
         ){
          editRequests.Enqueue(
           new TerrainEditRequest{
@@ -58,10 +59,10 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
      [SerializeField]bool       DEBUG_EDIT=false;
      [SerializeField]Vector3Int DEBUG_EDIT_AT=new Vector3Int(0,40,40);
      [SerializeField]EditMode   DEBUG_EDIT_MODE=EditMode.PlaceCube;
-     [SerializeField]Vector3Int DEBUG_EDIT_SIZE=new Vector3Int(3,3,3);
+     [SerializeField]Vector3Int DEBUG_EDIT_SIZE=new Vector3Int(5,5,5);
      [SerializeField]double     DEBUG_EDIT_DENSITY=100.0;
      [SerializeField]MaterialId DEBUG_EDIT_MATERIAL_ID=MaterialId.Dirt;
-     [SerializeField]int        DEBUG_EDIT_SMOOTHNESS=5;
+     [SerializeField]Vector3Int DEBUG_EDIT_SMOOTHNESS=new Vector3Int(3,3,3);
      readonly Queue<TerrainEditRequest>editRequests=new Queue<TerrainEditRequest>();
      bool applyingEdits;
         void Update(){

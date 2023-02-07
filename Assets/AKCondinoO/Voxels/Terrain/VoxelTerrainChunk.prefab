@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e68d35f287d8024c83b822771f3e718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _VoxelWaterChunkPrefab: {fileID: 1457353472748934636, guid: 477689e8ddbfe4445a5b238f95dce50e, type: 3}
 --- !u!33 &-8607791544344508263
 MeshFilter:
   m_ObjectHideFlags: 0

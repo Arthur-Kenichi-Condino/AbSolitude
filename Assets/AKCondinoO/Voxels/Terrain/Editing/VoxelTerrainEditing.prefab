@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_EDIT: 0
-  DEBUG_EDIT_AT: {x: 0, y: 40, z: 40}
-  DEBUG_EDIT_MODE: 0
-  DEBUG_EDIT_SIZE: {x: 3, y: 3, z: 3}
+  DEBUG_EDIT_AT: {x: 0, y: 46, z: 40}
+  DEBUG_EDIT_MODE: 1
+  DEBUG_EDIT_SIZE: {x: 5, y: 5, z: 5}
   DEBUG_EDIT_DENSITY: 100
   DEBUG_EDIT_MATERIAL_ID: 2
-  DEBUG_EDIT_SMOOTHNESS: 5
+  DEBUG_EDIT_SMOOTHNESS: {x: 3, y: 3, z: 3}

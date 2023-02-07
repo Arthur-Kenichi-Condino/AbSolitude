@@ -11,12 +11,15 @@ using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain.Editing;
+using AKCondinoO.Voxels.Water.Editing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
+using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,8 +43,21 @@ namespace AKCondinoO{
      internal static string savePath;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();
+         simObjectToSpriteToolLoadSceneParameters.loadSceneMode=LoadSceneMode.Additive;
+         simObjectToSpriteToolLoadSceneParameters.localPhysicsMode=LocalPhysicsMode.Physics3D;
+         SceneManager.LoadScene("SimObjectToSpriteTool",simObjectToSpriteToolLoadSceneParameters);
+         int procCt=Environment.ProcessorCount;
+         Log.DebugMessage("Environment.ProcessorCount:"+procCt);
+         ThreadPool.GetMinThreads(out int minWorkerThreads,out int minIOCThreads);
+         Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
+         ThreadPool.GetMaxThreads(out int maxWorkerThreads,out int maxIOCThreads);
+         Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
+         Thread.CurrentThread.Priority=System.Threading.ThreadPriority.Normal;
+         GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
+           RenderingUtil.SetUtil();
          QualitySettings.vSyncCount=1;
          Application.targetFrameRate=75;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
@@ -78,14 +94,15 @@ namespace AKCondinoO{
           { 7,GameMode            .singleton},
           { 8,VoxelSystem         .singleton},
           { 9,VoxelTerrainEditing .singleton},
-          {10,SimObjectManager    .singleton},
-          {11,SimObjectSpawner    .singleton},
-          {12,SkillsManager       .singleton},
-          {13,SimsMachine         .singleton},
-          {14,AutonomyCore        .singleton},
-          {15,Placeholder         .singleton},
-          {16,FixedUI             .singleton},
-          {17,ContextMenuUI       .singleton},
+          {10,VoxelWaterEditing   .singleton},
+          {11,SimObjectManager    .singleton},
+          {12,SimObjectSpawner    .singleton},
+          {13,SkillsManager       .singleton},
+          {14,SimsMachine         .singleton},
+          {15,AutonomyCore        .singleton},
+          {16,Placeholder         .singleton},
+          {17,FixedUI             .singleton},
+          {18,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
@@ -98,6 +115,8 @@ namespace AKCondinoO{
          if(Gameplayer.main!=null){
             Gameplayer.main.Init(netManager.LocalClientId);
          }
+         MemoryManagement.CallGC(Time.time);
+         Resources.UnloadUnusedAssets();
         }
         void OnDestroy(){
          if(singleton==this){
@@ -134,6 +153,33 @@ namespace AKCondinoO{
         }
      internal event EventHandler OnDestroyingCoreEvent;
         internal class OnDestroyingCoreEventArgs:EventArgs{
+        }
+     internal Camera currentRenderingTargetCamera{get;private set;}
+      Vector3 currentRenderingTargetCameraRotation;
+      Vector3 currentRenderingTargetCameraPosition;
+       internal bool currentRenderingTargetCameraHasTransformChanges{get;private set;}
+     internal bool currentRenderingTargetCameraChanged{get;private set;}
+        void Update(){
+         currentRenderingTargetCameraChanged=false;
+         if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){
+          currentRenderingTargetCameraChanged=true;
+          Log.DebugMessage("Camera.current changed to:"+currentRenderingTargetCamera);
+         }
+         currentRenderingTargetCameraHasTransformChanges=false;
+         if(currentRenderingTargetCamera!=null){
+          if(currentRenderingTargetCamera==Camera.main){
+           currentRenderingTargetCameraHasTransformChanges=MainCamera.singleton.hasTransformChanges;
+           //Log.DebugMessage("does Camera.main transform has changes?"+currentCameraHasTransformChanges);
+          }else{
+           if(
+            currentRenderingTargetCameraRotation!=(currentRenderingTargetCameraRotation=currentRenderingTargetCamera.transform.eulerAngles)||
+            currentRenderingTargetCameraPosition!=(currentRenderingTargetCameraPosition=currentRenderingTargetCamera.transform.position)
+           ){
+            currentRenderingTargetCameraHasTransformChanges=true;
+           }
+           //Log.DebugMessage("does Camera.current transform has changes?"+currentCameraHasTransformChanges);
+          }
+         }
         }
     }
 }
