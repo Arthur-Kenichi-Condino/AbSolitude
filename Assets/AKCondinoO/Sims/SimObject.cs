@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -12,9 +13,10 @@ using System.Globalization;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal class SimObject:NetworkBehaviour{
+    internal partial class SimObject:NetworkBehaviour{
      internal PersistentData persistentData;
         internal struct PersistentData{
          public Quaternion rotation;
@@ -130,15 +132,23 @@ namespace AKCondinoO.Sims{
         }
        }
      internal LinkedListNode<SimObject>pooled; 
+     internal SimInventoryItem asInventoryItem=null;
+     internal readonly Dictionary<Type,List<SimInventory>>inventory=new Dictionary<Type,List<SimInventory>>();
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
+     //  TO DO: componente Rigidbody tem que ficar sempre no transform root
+     internal Rigidbody hasRigidbody;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
+     internal NavMeshObstacle[]navMeshObstacles;
+      internal bool navMeshObstacleCarving;
      internal Bounds localBounds;
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
         protected virtual void Awake(){
          netObj=GetComponent<NetworkObject>();
+         hasRigidbody=transform.root.GetComponent<Rigidbody>();
+         //Log.DebugMessage(id+" hasRigidbody:"+(hasRigidbody!=null));
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){
@@ -149,8 +159,20 @@ namespace AKCondinoO.Sims{
            volumeColliders.Add(collider);
           }
          }
+         foreach(NavMeshObstacle navMeshObstacle in navMeshObstacles=GetComponentsInChildren<NavMeshObstacle>()){
+          navMeshObstacleCarving|=navMeshObstacle.carving;
+         }
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
+         foreach(Renderer renderer in renderers=GetComponentsInChildren<Renderer>()){
+          foreach(Material material in renderer.materials){
+           materialShader[material]=material.shader;
+          }
+          renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
+         }
+        }
+        public override void OnDestroy(){
+         base.OnDestroy();
         }
         internal virtual void OnLoadingPool(){
          DisableInteractions();
@@ -161,6 +183,15 @@ namespace AKCondinoO.Sims{
           masterObject=GetMaster();
           if(masterObject!=null&&masterObject is SimActor masterActor){
            masterActor.SetSlave(this);
+          }
+          if(!inventory.ContainsKey(typeof(SimInventory))){
+           inventory.Add(typeof(SimInventory),new List<SimInventory>());
+           inventory[typeof(SimInventory)].Add(new SimInventory(this,0));
+          }
+          foreach(var typeInventoryListPair in inventory){
+           foreach(SimInventory simInventory in typeInventoryListPair.Value){
+            simInventory.Reset();
+           }
           }
          }
          TransformBoundsVertices();
@@ -180,7 +211,7 @@ namespace AKCondinoO.Sims{
           }
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            ulong clientId=gameplayer.Key;
-           gameplayer.Value.OnSimObjectSpawned(this);
+           gameplayer.Value.OnSimObjectSpawned(this,colliders[0].gameObject.layer);
           }
          }
         }
@@ -241,12 +272,23 @@ namespace AKCondinoO.Sims{
          }
          interactionsEnabled=true;
          isOverlapping=IsOverlappingNonAlloc();
+         if(isOverlapping){
+          safePosition=null;
+         }else{
+          safePosition=transform.position;
+         }
+         EnableRenderers();
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){
           collider.enabled=false;
          }
          interactionsEnabled=false;
+         foreach(var gameplayer in GameplayerManagement.singleton.all){
+          ulong clientId=gameplayer.Key;
+          gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
+         }
+         DisableRenderers();
         }
         internal void OnUnplaceRequest(){
          unplaceRequested=true;
@@ -254,12 +296,18 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
+     Vector3?safePosition;
+     [NonSerialized]bool updateRenderersFlag;
      [NonSerialized]bool isOverlapping;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
          int result=0;
+         updateRenderersFlag|=doValidationChecks;
+         updateRenderersFlag|=transform.hasChanged;
+         updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraChanged;
+         updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraHasTransformChanges;
          checkIfOutOfSight|=doValidationChecks;
          checkIfOutOfSight|=transform.hasChanged;
          if(transform.hasChanged){
@@ -278,6 +326,7 @@ namespace AKCondinoO.Sims{
            gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
           }
          }
+         bool returnedToSafePos=false;
          GetCollidersTouchingNonAlloc();
          if(unplaceRequested){
             unplaceRequested=false;
@@ -294,14 +343,20 @@ namespace AKCondinoO.Sims{
              if(isOverlapping){
                 isOverlapping=false;
                  if(Core.singleton.isServer){
-                  //Log.DebugMessage("simObject isOverlapping:id:"+id);
-                  DisableInteractions();
-                  if(netObj.IsSpawned){
-                   netObj.DontDestroyWithOwner=true;
-                   netObj.Despawn(destroy:false);
+                  if(safePosition!=null){
+                   transform.position=safePosition.Value;
+                   returnedToSafePos=!IsOverlappingNonAlloc();
                   }
-                  SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
-                  result=2;
+                  if(!returnedToSafePos){
+                   Log.DebugMessage("simObject isOverlapping:id:"+id);
+                   DisableInteractions();
+                   if(netObj.IsSpawned){
+                    netObj.DontDestroyWithOwner=true;
+                    netObj.Despawn(destroy:false);
+                   }
+                   SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                   result=2;
+                  }
                  }
              }else{
                  if(checkIfOutOfSight){
@@ -322,7 +377,7 @@ namespace AKCondinoO.Sims{
                             }
                            }
                            if(!ownershipChanged){
-                            Log.DebugMessage("simObject IsOutOfSight:id:"+id);
+                            //Log.DebugMessage("simObject IsOutOfSight:id:"+id);
                             DisableInteractions();
                             if(netObj.IsSpawned){
                              netObj.DontDestroyWithOwner=true;
@@ -349,6 +404,9 @@ namespace AKCondinoO.Sims{
                      }
                  }
              }
+         }
+         if(result==0){
+          safePosition=transform.position;
          }
          return result;
         }
@@ -394,6 +452,9 @@ namespace AKCondinoO.Sims{
         }
      protected Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(){
+         if(hasRigidbody!=null){
+          return false;
+         }
          if(this is SimActor){
           return false;
          }
@@ -402,18 +463,19 @@ namespace AKCondinoO.Sims{
           int overlappingsLength=0;
           if(volumeColliders[i]is CapsuleCollider capsule){
            var direction=new Vector3{[capsule.direction]=1};
-           direction=transform.rotation*direction;
            //Log.DebugMessage("capsule direction:"+direction);
-           var offset=capsule.height/2f-capsule.radius-0.001f;
+           var offset=capsule.height/2f-capsule.radius;
            var localPoint0=capsule.center-direction*offset;
            var localPoint1=capsule.center+direction*offset;
            var point0=transform.TransformPoint(localPoint0);
            var point1=transform.TransformPoint(localPoint1);
+           Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
+           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
            _GetOverlappedColliders:{
             overlappingsLength=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             capsule.radius-0.001f,
+             radius-0.001f,
              overlappedColliders
             );
            }
@@ -431,7 +493,7 @@ namespace AKCondinoO.Sims{
             if(overlappedCollider.transform.root!=transform.root){//  it's not myself
              SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
              if(overlappedSimObject!=null){
-              if(!(overlappedSimObject is SimActor)){
+              if(!(overlappedSimObject is SimActor||overlappedSimObject.hasRigidbody!=null)){
                result=true;
               }
              }
@@ -443,6 +505,9 @@ namespace AKCondinoO.Sims{
         }
      protected Collider[]collidersTouching=new Collider[8];
         protected virtual void GetCollidersTouchingNonAlloc(){
+        }
+        internal virtual void ManualLateUpdate(){
+         UpdateRenderers();
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR

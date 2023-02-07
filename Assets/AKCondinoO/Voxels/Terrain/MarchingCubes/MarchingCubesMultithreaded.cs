@@ -1,17 +1,26 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels.Terrain.Editing;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Unity.Collections;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     internal class MarchingCubesBackgroundContainer:BackgroundContainer{
+     internal readonly Voxel[]voxelsOutput=new Voxel[VoxelsPerChunk];
      internal readonly object synchronizer=new object();
+     internal readonly Dictionary<int,string>editsFileName=new Dictionary<int,string>();
+     internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
+     internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal NativeList<Vertex>TempVer;[StructLayout(LayoutKind.Sequential)]internal struct Vertex{
           internal Vector3 pos;
           internal Vector3 normal;
@@ -35,6 +44,17 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
      internal Vector2Int cnkRgn;
      internal        int cnkIdx;
         internal MarchingCubesBackgroundContainer(){
+        }
+        protected override void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+          foreach(var fS in editsFileStream      ){if(fS.Value!=null){fS.Value.Dispose();}}
+          foreach(var sR in editsFileStreamReader){if(sR.Value!=null){sR.Value.Dispose();}}
+          editsFileStream      .Clear();
+          editsFileStreamReader.Clear();
+         }
+         //  free unmanaged resources here
+         base.Dispose(disposing);
         }
     }
     internal class MarchingCubesMultithreaded:BaseMultithreaded<MarchingCubesBackgroundContainer>{
@@ -130,155 +150,246 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          //Log.DebugMessage("do MarchingCubes for cnkIdx:"+container.cnkIdx);
          container.TempVer.Clear();
          container.TempTri.Clear();
-         lock(container.synchronizer){
+         VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
+         try{
+          lock(container.synchronizer){
+           for(int x=-1;x<=1;x++){
+           for(int y=-1;y<=1;y++){
+            Vector2Int cCoord1=container.cCoord+new Vector2Int(x,y);
+            if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+               Math.Abs(cCoord1.y)>=MaxcCoordy)
+            {
+             continue;
+            }
+            int oftIdx1=GetoftIdx(cCoord1-container.cCoord);
+            string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
+            if(!container.editsFileStream.ContainsKey(oftIdx1)||!container.editsFileName.ContainsKey(oftIdx1)||container.editsFileName[oftIdx1]!=editsFileName){
+             container.editsFileName[oftIdx1]=editsFileName;
+             if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fStream)){
+              fStream                                 .Dispose();
+              container.editsFileStreamReader[oftIdx1].Dispose();
+              container.editsFileStream      .Remove(oftIdx1);
+              container.editsFileStreamReader.Remove(oftIdx1);
+             }
+             if(File.Exists(editsFileName)){
+              container.editsFileStream.Add(oftIdx1,new FileStream(editsFileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite));
+              container.editsFileStreamReader.Add(oftIdx1,new StreamReader(container.editsFileStream[oftIdx1]));
+             }
+            }
+            if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+             StreamReader fileStreamReader=container.editsFileStreamReader[oftIdx1];
+             fileStream.Position=0L;
+             fileStreamReader.DiscardBufferedData();
+             string line;
+             while((line=fileStreamReader.ReadLine())!=null){
+              if(string.IsNullOrEmpty(line)){continue;}
+              int vCoordStringStart=line.IndexOf("vCoord=(");
+              if(vCoordStringStart>=0){
+                 vCoordStringStart+=8;
+               int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+               string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+               string[]xyzString=vCoordString.Split(',');
+               int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+               int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+               int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+               Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+               int editStringStart=vCoordStringEnd+4;
+               editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+               if(editStringStart>=0){
+                int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+                string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+                TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+                voxels[oftIdx1][GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new Voxel(edit.density,Vector3.zero,edit.material);
+               }
+              }
+             }
+            }
+           }}
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
+         }
+         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
+         try{
+          if(VoxelSystem.Concurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
+           if(VoxelSystem.Concurrent.terrainVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+            VoxelSystem.Concurrent.terrainVoxelsOutput.Remove(voxelsOutputOldId.cnkIdx);
+            //Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
+           }
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
          }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
-         for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-          int corner=0;Vector3Int vCoord2=vCoord1;                                       if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][0];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][0];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0];else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;vCoord2.x+=1;                          if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][1];                                                                      else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1];else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][2];                                                                                                                                                            else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;             vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][3];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][1];                                                                                      else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;                          vCoord2.z+=1;                                                              if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][2];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][2];else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;vCoord2.x+=1;             vCoord2.z+=1;                                                                                                                                    if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][3];else SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;vCoord2.z+=1;                                                                                                                                                                                                                          SetpolygonCellVoxel();
-              corner++;           vCoord2=vCoord1;             vCoord2.y+=1;vCoord2.z+=1;                                                              if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][3];                                                                                      else SetpolygonCellVoxel();
-          voxelsCache1[0][0][0]=polygonCell[4];
-          voxelsCache1[0][0][1]=polygonCell[5];
-          voxelsCache1[0][0][2]=polygonCell[6];
-          voxelsCache1[0][0][3]=polygonCell[7];
-          voxelsCache1[1][vCoord1.z][0]=polygonCell[1];
-          voxelsCache1[1][vCoord1.z][1]=polygonCell[2];
-          voxelsCache1[1][vCoord1.z][2]=polygonCell[5];
-          voxelsCache1[1][vCoord1.z][3]=polygonCell[6];
-          voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0]=polygonCell[3];
-          voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1]=polygonCell[2];
-          voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][2]=polygonCell[7];
-          voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][3]=polygonCell[6];
-                void SetpolygonCellVoxel(){
-                 Vector2Int cnkRgn2=container.cnkRgn;
-                 Vector2Int cCoord2=container.cCoord;
-                 int oftIdx2=-1;
-                 int vxlIdx2=-1;
-                 bool cache2=false;
-                 /*  fora do mundo, baixo:  */
-                 if(vCoord2.y<=0){
-                  polygonCell[corner]=Voxel.bedrock;
-                 /*  fora do mundo, cima:  */
-                 }else if(vCoord2.y>=Height){
-                  polygonCell[corner]=Voxel.air;
-                 //  pegar valor do bioma:
-                 }else{
-                  if(vCoord2.x<0||vCoord2.x>=Width||
-                     vCoord2.z<0||vCoord2.z>=Depth
-                  ){
-                   ValidateCoord(ref cnkRgn2,ref vCoord2);
-                   cCoord2=cnkRgnTocCoord(cnkRgn2);
+         lock(container.voxelsOutput){
+          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+           int corner=0;Vector3Int vCoord2=vCoord1;                                       if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][0];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][0];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0];else SetpolygonCellVoxel();
+           container.voxelsOutput[vxlIdx1]=polygonCell[corner];
+               corner++;           vCoord2=vCoord1;vCoord2.x+=1;                          if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][1];                                                                      else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1];else SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][2];                                                                                                                                                            else SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;             vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][3];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][1];                                                                                      else SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;                          vCoord2.z+=1;                                                              if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][2];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][2];else SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;vCoord2.x+=1;             vCoord2.z+=1;                                                                                                                                    if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][3];else SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;vCoord2.z+=1;                                                                                                                                                                                                                          SetpolygonCellVoxel();
+               corner++;           vCoord2=vCoord1;             vCoord2.y+=1;vCoord2.z+=1;                                                              if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][3];                                                                                      else SetpolygonCellVoxel();
+           voxelsCache1[0][0][0]=polygonCell[4];
+           voxelsCache1[0][0][1]=polygonCell[5];
+           voxelsCache1[0][0][2]=polygonCell[6];
+           voxelsCache1[0][0][3]=polygonCell[7];
+           voxelsCache1[1][vCoord1.z][0]=polygonCell[1];
+           voxelsCache1[1][vCoord1.z][1]=polygonCell[2];
+           voxelsCache1[1][vCoord1.z][2]=polygonCell[5];
+           voxelsCache1[1][vCoord1.z][3]=polygonCell[6];
+           voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0]=polygonCell[3];
+           voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1]=polygonCell[2];
+           voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][2]=polygonCell[7];
+           voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][3]=polygonCell[6];
+                 void SetpolygonCellVoxel(){
+                  Vector2Int cnkRgn2=container.cnkRgn;
+                  Vector2Int cCoord2=container.cCoord;
+                  int oftIdx2=-1;
+                  int vxlIdx2=-1;
+                  bool cache2=false;
+                  /*  fora do mundo, baixo:  */
+                  if(vCoord2.y<=0){
+                   polygonCell[corner]=Voxel.bedrock;
+                  /*  fora do mundo, cima:  */
+                  }else if(vCoord2.y>=Height){
+                   polygonCell[corner]=Voxel.air;
+                  //  pegar valor do bioma:
                   }else{
-                   cache2=true;
+                   if(vCoord2.x<0||vCoord2.x>=Width||
+                      vCoord2.z<0||vCoord2.z>=Depth
+                   ){
+                    ValidateCoord(ref cnkRgn2,ref vCoord2);
+                    cCoord2=cnkRgnTocCoord(cnkRgn2);
+                   }else{
+                    cache2=true;
+                   }
+                   oftIdx2=GetoftIdx(cCoord2-container.cCoord);
+                   vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+                   if(voxels[oftIdx2].ContainsKey(vxlIdx2)){
+                    polygonCell[corner]=voxels[oftIdx2][vxlIdx2];
+                   }else{
+                    Vector3Int noiseInput=vCoord2;noiseInput.x+=cnkRgn2.x;
+                                                  noiseInput.z+=cnkRgn2.y;
+                    VoxelSystem.biome.Setvxl(
+                     noiseInput,
+                      noiseCache1,
+                       materialIdCache1,
+                        oftIdx2,
+                         vCoord2.z+vCoord2.x*Depth,
+                          ref polygonCell[corner]
+                    );
+                   }
                   }
-                  oftIdx2=GetoftIdx(cCoord2-container.cCoord);
-                  vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-                  if(voxels[oftIdx2].ContainsKey(vxlIdx2)){
-                   polygonCell[corner]=voxels[oftIdx2][vxlIdx2];
-                  }else{
-                   Vector3Int noiseInput=vCoord2;noiseInput.x+=cnkRgn2.x;
-                                                 noiseInput.z+=cnkRgn2.y;
-                   VoxelSystem.biome.Setvxl(
-                    noiseInput,
-                     noiseCache1,
-                      materialIdCache1,
-                       oftIdx2,
-                        vCoord2.z+vCoord2.x*Depth,
-                         ref polygonCell[corner]
-                   );
-                  }
-                 }
-                 if(polygonCell[corner].normal==Vector3.zero){
-                  //  calcular normal:
-                  int tmpIdx=0;Vector3Int vCoord3=vCoord2;vCoord3.x++;                                                                                                                                                                                              Settmpvxl();
-                      tmpIdx++;           vCoord3=vCoord2;vCoord3.x--;                        if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[1][vCoord2.z].isCreated)                tmpvxl[tmpIdx]=voxelsCache2[1][vCoord2.z];                else Settmpvxl();
-                      tmpIdx++;           vCoord3=vCoord2;            vCoord3.y++;                                                                                                                                                                                  Settmpvxl();
-                      tmpIdx++;           vCoord3=vCoord2;            vCoord3.y--;            if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[2][vCoord2.z+vCoord2.x*Depth].isCreated)tmpvxl[tmpIdx]=voxelsCache2[2][vCoord2.z+vCoord2.x*Depth];else Settmpvxl();
-                      tmpIdx++;           vCoord3=vCoord2;                        vCoord3.z++;                                                                                                                                                                      Settmpvxl();
-                      tmpIdx++;           vCoord3=vCoord2;                        vCoord3.z--;if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[0][0].isCreated)                        tmpvxl[tmpIdx]=voxelsCache2[0][0];                        else Settmpvxl();
-                       void Settmpvxl(){
-                        Vector2Int cnkRgn3=cnkRgn2;
-                        Vector2Int cCoord3=cCoord2;
-                        /*  fora do mundo, baixo:  */
-                        if(vCoord3.y<=0){
-                         tmpvxl[tmpIdx]=Voxel.bedrock;
-                        /*  fora do mundo, cima:  */
-                        }else if(vCoord3.y>=Height){
-                         tmpvxl[tmpIdx]=Voxel.air;
-                        //  pegar valor do bioma:
-                        }else{
-                         if(vCoord3.x<0||vCoord3.x>=Width||
-                            vCoord3.z<0||vCoord3.z>=Depth
-                         ){
-                          ValidateCoord(ref cnkRgn3,ref vCoord3);
-                          cCoord3=cnkRgnTocCoord(cnkRgn3);
-                         }
-                         int oftIdx3=GetoftIdx(cCoord3-container.cCoord);
-                         int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-                         if(voxels[oftIdx3].ContainsKey(vxlIdx3)){
-                          tmpvxl[tmpIdx]=voxels[oftIdx3][vxlIdx3];
+                  if(polygonCell[corner].normal==Vector3.zero){
+                   //  calcular normal:
+                   int tmpIdx=0;Vector3Int vCoord3=vCoord2;vCoord3.x++;                                                                                                                                                                                              Settmpvxl();
+                       tmpIdx++;           vCoord3=vCoord2;vCoord3.x--;                        if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[1][vCoord2.z].isCreated)                tmpvxl[tmpIdx]=voxelsCache2[1][vCoord2.z];                else Settmpvxl();
+                       tmpIdx++;           vCoord3=vCoord2;            vCoord3.y++;                                                                                                                                                                                  Settmpvxl();
+                       tmpIdx++;           vCoord3=vCoord2;            vCoord3.y--;            if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[2][vCoord2.z+vCoord2.x*Depth].isCreated)tmpvxl[tmpIdx]=voxelsCache2[2][vCoord2.z+vCoord2.x*Depth];else Settmpvxl();
+                       tmpIdx++;           vCoord3=vCoord2;                        vCoord3.z++;                                                                                                                                                                      Settmpvxl();
+                       tmpIdx++;           vCoord3=vCoord2;                        vCoord3.z--;if(cache2&&vCoord2.z>1&&vCoord2.x>1&&vCoord2.y>1&&voxelsCache2[0][0].isCreated)                        tmpvxl[tmpIdx]=voxelsCache2[0][0];                        else Settmpvxl();
+                        void Settmpvxl(){
+                         Vector2Int cnkRgn3=cnkRgn2;
+                         Vector2Int cCoord3=cCoord2;
+                         /*  fora do mundo, baixo:  */
+                         if(vCoord3.y<=0){
+                          tmpvxl[tmpIdx]=Voxel.bedrock;
+                         /*  fora do mundo, cima:  */
+                         }else if(vCoord3.y>=Height){
+                          tmpvxl[tmpIdx]=Voxel.air;
+                         //  pegar valor do bioma:
                          }else{
-                          Vector3Int noiseInput=vCoord3;noiseInput.x+=cnkRgn3.x;
-                                                        noiseInput.z+=cnkRgn3.y;
-                          VoxelSystem.biome.Setvxl(
-                           noiseInput,
-                            noiseCache1,
-                             materialIdCache1,
-                              oftIdx3,
-                               vCoord3.z+vCoord3.x*Depth,
-                                ref tmpvxl[tmpIdx]
-                          );
-                          voxels[oftIdx3][vxlIdx3]=tmpvxl[tmpIdx];
+                          if(vCoord3.x<0||vCoord3.x>=Width||
+                             vCoord3.z<0||vCoord3.z>=Depth
+                          ){
+                           ValidateCoord(ref cnkRgn3,ref vCoord3);
+                           cCoord3=cnkRgnTocCoord(cnkRgn3);
+                          }
+                          int oftIdx3=GetoftIdx(cCoord3-container.cCoord);
+                          int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+                          if(voxels[oftIdx3].ContainsKey(vxlIdx3)){
+                           tmpvxl[tmpIdx]=voxels[oftIdx3][vxlIdx3];
+                          }else{
+                           Vector3Int noiseInput=vCoord3;noiseInput.x+=cnkRgn3.x;
+                                                         noiseInput.z+=cnkRgn3.y;
+                           VoxelSystem.biome.Setvxl(
+                            noiseInput,
+                             noiseCache1,
+                              materialIdCache1,
+                               oftIdx3,
+                                vCoord3.z+vCoord3.x*Depth,
+                                 ref tmpvxl[tmpIdx]
+                           );
+                           voxels[oftIdx3][vxlIdx3]=tmpvxl[tmpIdx];
+                          }
                          }
                         }
-                       }
-                  Vector3 polygonCellNormal=new Vector3{
-                   x=(float)(tmpvxl[1].density-tmpvxl[0].density),
-                   y=(float)(tmpvxl[3].density-tmpvxl[2].density),
-                   z=(float)(tmpvxl[5].density-tmpvxl[4].density)
-                  };
-                  polygonCell[corner].normal=polygonCellNormal;
-                  if(polygonCell[corner].normal!=Vector3.zero){
-                     polygonCell[corner].normal.Normalize();
+                   Vector3 polygonCellNormal=new Vector3{
+                    x=(float)(tmpvxl[1].density-tmpvxl[0].density),
+                    y=(float)(tmpvxl[3].density-tmpvxl[2].density),
+                    z=(float)(tmpvxl[5].density-tmpvxl[4].density)
+                   };
+                   polygonCell[corner].normal=polygonCellNormal;
+                   if(polygonCell[corner].normal!=Vector3.zero){
+                      polygonCell[corner].normal.Normalize();
+                   }
+                  }
+                  if(oftIdx2>=0&&
+                     vxlIdx2>=0){
+                   voxels[oftIdx2][vxlIdx2]=polygonCell[corner];
+                  }
+                  if(cache2){
+                   voxelsCache2[0][0]=polygonCell[corner];
+                   voxelsCache2[1][vCoord2.z]=polygonCell[corner];
+                   voxelsCache2[2][vCoord2.z+vCoord2.x*Depth]=polygonCell[corner];
                   }
                  }
-                 if(oftIdx2>=0&&
-                    vxlIdx2>=0){
-                  voxels[oftIdx2][vxlIdx2]=polygonCell[corner];
-                 }
-                 if(cache2){
-                  voxelsCache2[0][0]=polygonCell[corner];
-                  voxelsCache2[1][vCoord2.z]=polygonCell[corner];
-                  voxelsCache2[2][vCoord2.z+vCoord2.x*Depth]=polygonCell[corner];
-                 }
-                }
-          DoMarchingCubes(
-           polygonCell,
-            vCoord1,
-             vertices,
-              verticesCache,
-               materials,
-                normals,
-                 density,
-                  vertex,
-                   material,
-                    distance,
-                     idx,
-                      verPos,
-                       ref vertexCount,
-                        container.TempVer,
-                        container.TempTri,
-                         vertexUV
-          );
-         }}}
+           DoMarchingCubes(
+            polygonCell,
+             vCoord1,
+              vertices,
+               verticesCache,
+                materials,
+                 normals,
+                  density,
+                   vertex,
+                    material,
+                     distance,
+                      idx,
+                       verPos,
+                        ref vertexCount,
+                         container.TempVer,
+                         container.TempTri,
+                          vertexUV
+           );
+          }}}
+         }
+         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+         for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
+         }
+         }}
+         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
+         try{
+          VoxelSystem.Concurrent.terrainVoxelsOutput[container.cnkIdx]=container.voxelsOutput;
+          VoxelSystem.Concurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
+          //Log.DebugMessage("added voxelsOutput for container.cnkIdx:"+container.cnkIdx);
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
+         }
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;
          for(crdOffset.y=0,posOffset.y=0,
