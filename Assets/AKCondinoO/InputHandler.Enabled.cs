@@ -14,6 +14,8 @@ namespace AKCondinoO{
          internal static readonly EnabledState BACKWARD=new EnabledState{curState=false,lastState=false};
          internal static readonly EnabledState RIGHT   =new EnabledState{curState=false,lastState=false};
          internal static readonly EnabledState LEFT    =new EnabledState{curState=false,lastState=false};
+         internal static readonly EnabledState ACTION_1=new EnabledState{curState=false,lastState=false};
+         internal static readonly EnabledState ACTION_2=new EnabledState{curState=false,lastState=false};
         }
     }
 }

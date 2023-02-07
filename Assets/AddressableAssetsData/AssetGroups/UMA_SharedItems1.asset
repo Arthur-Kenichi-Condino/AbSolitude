@@ -16,14 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 2b20a2b6e3621d34290038944533c874
-  m_SerializeEntries:
-  - m_GUID: ffee4dd5daf4a624baff4017b50aabbf
-    m_Address: Tex-Empty
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - RaceHumanMaleMorphableUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
   m_SchemaSet:

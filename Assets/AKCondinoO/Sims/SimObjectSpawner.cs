@@ -117,6 +117,17 @@ namespace AKCondinoO.Sims{
           }
           SimObjectManager.singleton.pool.Add(t,new LinkedList<SimObject>());
          }
+         Log.DebugMessage("load thumbnails");
+         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(Texture))){
+          Log.DebugMessage("load Texture, o.name:"+o.name);
+          string typeName=o.name.Substring(0,o.name.IndexOf("."));
+          Log.DebugMessage("load Texture, typeName:"+typeName);
+          Type t=ReflectionUtil.GetTypeByName(typeName);
+          Log.DebugMessage("load Texture, t:"+t);
+          if(t!=null&&ReflectionUtil.IsTypeDerivedFrom(t,typeof(SimObject))){
+           Log.DebugMessage("register Texture for SimObject of Type t:"+t);
+          }
+         }
          if(Core.singleton.isServer){
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
