@@ -138,5 +138,11 @@ namespace AKCondinoO.Sims{
          active .Remove(simObject.id.Value);
          SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
         }
+        private void LateUpdate(){
+         foreach(var a in active){
+          var simObject=a.Value;
+          simObject.ManualLateUpdate();
+         }
+        }
     }
 }

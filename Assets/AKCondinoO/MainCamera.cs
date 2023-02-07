@@ -2,10 +2,13 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Music;
+using AKCondinoO.Sims.Actors;
+using AKCondinoO.Voxels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.GameMode;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO{
     internal class MainCamera:MonoBehaviour,ISingletonInitialization{
@@ -15,44 +18,78 @@ namespace AKCondinoO{
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;
-         tgtRot=tgtRot_Last=transform.eulerAngles;
-         tgtPos=tgtPos_Last=transform.position;
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=transform.eulerAngles;
+         posLerp.tgtPos=posLerp.tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
         }
-     bool followerCamera;
+        internal void OnStopFollowing(){
+         Log.DebugMessage("MainCamera:OnStopFollowing");
+         toFollowActor=null;
+         isFollowing=false;
+         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
+        }
+     Vector3 endOfFrameRotation;
+     Vector3 endOfFramePosition;
+      internal bool hasTransformChanges{get;private set;}
+     internal SimActor toFollowActor;
+      bool isFollowing;
+       internal Vector3 thirdPersonOffset=new Vector3(
+        .375f,//  radius+radius/2f
+        .75f,//  height/2f-radius/2f
+        -2.0f//  -radius*8f
+       );
+       internal Vector3 overTheShoulderOffset=new Vector3(
+        .375f,//  radius+radius/2f
+        .75f,//  height/2f-radius/2f
+        -.75f//  -radius*3f
+       );
         void LateUpdate(){
-         followerCamera=false;
+         isFollowing=false;
          if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
-          //  TO DO: check if is there actually something to be followed (at Gameplayer.main)
-          followerCamera=true;
+          if(toFollowActor!=null){
+           isFollowing=true;
+          }else{
+           OnStopFollowing();
+          }
          }
-         if(followerCamera){
-         }else{
-          //  TO DO: stop if paused
+         if(isFollowing){
+          Quaternion rot=Quaternion.Euler(toFollowActor.simActorCharacterController.rotLerp.tgtRot);
+          posLerp.tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
+          rotLerp.tgtRot=rot.eulerAngles;
+          UpdateTransformPosition();
+          UpdateTransformRotation();
+          //  TO DO: stop following movement if paused
          }
          BGM.singleton.transform.position=this.transform.position;
+         hasTransformChanges=false;
+         if(
+          endOfFrameRotation!=(endOfFrameRotation=transform.eulerAngles)||
+          endOfFramePosition!=(endOfFramePosition=transform.position)
+         ){
+          hasTransformChanges=true;
+         }
         }
-     Vector3 tgtRot,tgtRot_Last;
-      float tgtRotLerpTime;
-       float tgtRotLerpVal;
-        Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]float tgtRotLerpSpeed=18.75f;
-          [SerializeField]float tgtRotLerpMaxTime=.025f;
+     [SerializeField]bool DEBUG_STOP_FOLLOWING=false;
+     [SerializeField]QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
-     Vector3 tgtPos,tgtPos_Last;
-      float tgtPosLerpTime;
-       float tgtPosLerpVal;
-        Vector3 tgtPosLerpA,tgtPosLerpB;
-         [SerializeField]float tgtPosLerpSpeed=18.75f;
-          [SerializeField]float tgtPosLerpMaxTime=.025f;
+     [SerializeField]Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(.1f,.1f,.1f);
         [SerializeField]Vector3 maxMoveSpeed=new Vector3(1.0f,1.0f,1.0f);
         void Update(){
-         if(!followerCamera){
+         if(DEBUG_STOP_FOLLOWING){
+            DEBUG_STOP_FOLLOWING=false;
+          OnStopFollowing();
+         }
+         if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
+          if(toFollowActor==null){
+           OnStopFollowing();
+          }
+         }
+         if(!isFollowing){
           //Log.DebugMessage("MainCamera:camera is free");
              if(!Enabled.RELEASE_MOUSE.curState){
                  inputViewRotationEuler.x+=-Enabled.MOUSE_ROTATION_DELTA_Y[0]*viewRotationSmoothValue;
@@ -124,34 +161,10 @@ namespace AKCondinoO{
                  }
              }
              if(inputViewRotationEuler!=Vector3.zero){
-              tgtRot+=inputViewRotationEuler;
+              rotLerp.tgtRot+=inputViewRotationEuler;
                 inputViewRotationEuler=Vector3.zero;
              }
-             if(tgtRotLerpTime==0f){
-              if(tgtRot!=tgtRot_Last){
-               //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
-               tgtRotLerpVal=0f;
-               tgtRotLerpA=transform.rotation;
-               tgtRotLerpB=Quaternion.Euler(tgtRot);
-               tgtRotLerpTime+=Time.deltaTime;
-               tgtRot_Last=tgtRot;
-              }
-             }else{
-              tgtRotLerpTime+=Time.deltaTime;
-             }
-             if(tgtRotLerpTime!=0f){
-              tgtRotLerpVal+=tgtRotLerpSpeed*Time.deltaTime;
-              if(tgtRotLerpVal>=1f){
-               tgtRotLerpVal=1f;
-               tgtRotLerpTime=0f;
-              }
-              transform.rotation=Quaternion.Lerp(tgtRotLerpA,tgtRotLerpB,tgtRotLerpVal);
-              if(tgtRotLerpTime>=tgtRotLerpMaxTime){
-               if(tgtRot!=tgtRot_Last){
-                tgtRotLerpTime=0;
-               }
-              }
-             }
+             UpdateTransformRotation();
              if( inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z= maxMoveSpeed.z;}
              if(-inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z=-maxMoveSpeed.z;}
              if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
@@ -163,33 +176,16 @@ namespace AKCondinoO{
                (inputMoveVelocity.x!=0f?1f:0f)+
                (inputMoveVelocity.y!=0f?1f:0f)
               );
-              tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
+              posLerp.tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
              }
-             if(tgtPosLerpTime==0){
-              if(tgtPos!=tgtPos_Last){
-               tgtPosLerpVal=0;
-               tgtPosLerpA=transform.position;
-               tgtPosLerpB=tgtPos;
-               tgtPosLerpTime+=Time.deltaTime;
-               tgtPos_Last=tgtPos;
-              }
-             }else{
-              tgtPosLerpTime+=Time.deltaTime;
-             }
-             if(tgtPosLerpTime!=0){
-              tgtPosLerpVal+=tgtPosLerpSpeed*Time.deltaTime;
-              if(tgtPosLerpVal>=1){
-               tgtPosLerpVal=1;
-               tgtPosLerpTime=0;
-              }
-              transform.position=Vector3.Lerp(tgtPosLerpA,tgtPosLerpB,tgtPosLerpVal);
-              if(tgtPosLerpTime>tgtPosLerpMaxTime){
-               if(tgtPos!=tgtPos_Last){
-                tgtPosLerpTime=0;
-               }
-              }
-             }
+             UpdateTransformPosition();
          }
+        }
+        void UpdateTransformRotation(){
+         transform.rotation=rotLerp.UpdateRotation(transform.rotation,Time.deltaTime);
+        }
+        void UpdateTransformPosition(){
+         transform.position=posLerp.UpdatePosition(transform.position,Time.deltaTime);
         }
     }
 }

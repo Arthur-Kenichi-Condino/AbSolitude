@@ -8,13 +8,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
+using static AKCondinoO.GameMode;
+using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActor:SimObject{
+    internal partial class SimActor:SimObject{
      [SerializeField]GameObject simUMADataPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
@@ -96,7 +99,7 @@ namespace AKCondinoO.Sims.Actors{
                 slavesStringStart+=8;
               int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
               string slavesString=s.Substring(slavesStringStart,slavesStringEnd-slavesStringStart);
-              Log.DebugMessage("slavesString:"+slavesString);
+              //Log.DebugMessage("slavesString:"+slavesString);
               int slaveStringStart=0;
               while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
                int slaveSimTypeStringStart=slaveStringStart+1;
@@ -155,6 +158,12 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
+        }
+        public override void OnDestroy(){
+         if(simUMAData!=null){
+          DestroyImmediate(simUMAData.gameObject);
+         }
+         base.OnDestroy();
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
@@ -235,32 +244,15 @@ namespace AKCondinoO.Sims.Actors{
         void DisableNavMeshAgent(){
          navMeshAgent.enabled=false;
         }
+        internal void OnThirdPersonCamFollow(){
+         Log.DebugMessage("OnThirdPersonCamFollow()");
+         MainCamera.singleton.toFollowActor=this;
+         GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
+        }
         internal virtual void OnSkillUsed(Skill skill){
         }
      internal bool isUsingAI=true;
-     internal virtual float moveVelocity{
-      get{
-       if(isUsingAI){
-        float velocityMagnitude=navMeshAgent.velocity.magnitude;
-        //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
-        return velocityMagnitude/navMeshAgentRunSpeed;
-       }
-       return 0f;
-      }
-     }
      protected Vector3 lastForward=Vector3.forward;
-     internal float turnAngle{
-      get{
-       if(isUsingAI){
-        if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
-         float angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
-         //Log.DebugMessage("angle:"+angle);
-         return angle;
-        }
-       }
-       return 0f;
-      }
-     }
      internal bool crouching{
       get{
        return crouching_v;
@@ -279,7 +271,10 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
+     [SerializeField]float AFKTimeToUseAI=30f;
+      float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
@@ -290,6 +285,33 @@ namespace AKCondinoO.Sims.Actors{
          bool shouldCrouch=false;//  is crouching required?
          if(Core.singleton.isServer){
           if(IsOwner){
+           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
+              DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
+            OnThirdPersonCamFollow();
+           }
+           if(MainCamera.singleton.toFollowActor==this){
+            //Log.DebugMessage("following this:"+this);
+            if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){
+             isUsingAI=false;
+             AFKTimerToUseAI=AFKTimeToUseAI;
+             //Log.DebugMessage("start using manual control:"+this);
+            }
+           }else{
+            if(!isUsingAI){
+             isUsingAI=true;
+             AFKTimerToUseAI=0f;
+             Log.DebugMessage("camera stopped following, use AI:"+this);
+            }
+           }
+           if(!isUsingAI){
+            if(AFKTimerToUseAI>0f){
+             AFKTimerToUseAI-=Time.deltaTime;
+            }
+            if(AFKTimerToUseAI<=0f){
+             isUsingAI=true;
+             Log.DebugMessage("AFK for too long, use AI:"+this);
+            }
+           }
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
@@ -302,6 +324,9 @@ namespace AKCondinoO.Sims.Actors{
             DisableNavMeshAgent();
             if(simActorCharacterController!=null){
                simActorCharacterController.ManualUpdate();
+             transform.position+=simActorCharacterController.moveDelta;
+             simActorCharacterController.characterController.transform.position-=simActorCharacterController.moveDelta;
+             OnCharacterControllerUpdated();
             }
            }
           }else{
@@ -352,10 +377,24 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         if(simActorAnimatorController!=null){
+            simActorAnimatorController.ManualUpdate();
+         }
          lastForward=transform.forward;
          return result;
         }
         protected virtual void AI(){
+        }
+        protected virtual void OnCharacterControllerUpdated(){
+        }
+        internal Vector3 GetHeadPosition(bool fromAnimator){
+         Vector3 headPos;
+         if(fromAnimator&&simActorAnimatorController!=null&&simActorAnimatorController.animator!=null){
+          headPos=simActorAnimatorController.animator.transform.position+simActorAnimatorController.animator.transform.rotation*(new Vector3(0f,simActorCharacterController.characterController.height/2f+simActorCharacterController.characterController.radius,0f)+simActorCharacterController.headOffset);
+         }else{
+          headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
+         }
+         return headPos;
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
@@ -366,7 +405,6 @@ namespace AKCondinoO.Sims.Actors{
           var section=height/3f;
           if((section/2f)>simActorCharacterController.characterController.radius){
            var direction=Vector3.up;
-           direction=transform.rotation*direction;
            var offset=(section/2f)-simActorCharacterController.characterController.radius;
            var center=simActorCharacterController.center;
            center.y+=(height/2f)-(section/2f);
@@ -374,11 +412,17 @@ namespace AKCondinoO.Sims.Actors{
            var localPoint1=center+direction*offset;
            var point0=transform.TransformPoint(localPoint0);
            var point1=transform.TransformPoint(localPoint1);
+           Vector3 r=transform.TransformVector(
+            simActorCharacterController.characterController.radius,
+            simActorCharacterController.characterController.radius,
+            simActorCharacterController.characterController.radius
+           );
+           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==1?0:r[xyz]).Select(Mathf.Abs).Max();
            _GetUpperColliders:{
             collidersTouchingUpperCount=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             simActorCharacterController.characterController.radius,
+             radius,
              collidersTouchingUpper
             );
            }
@@ -397,7 +441,7 @@ namespace AKCondinoO.Sims.Actors{
             collidersTouchingMiddleCount=Physics.OverlapCapsuleNonAlloc(
              point0,
              point1,
-             simActorCharacterController.characterController.radius,
+             radius,
              collidersTouchingMiddle
             );
            }

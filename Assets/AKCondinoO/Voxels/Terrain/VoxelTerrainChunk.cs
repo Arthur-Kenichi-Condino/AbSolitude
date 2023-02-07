@@ -6,8 +6,10 @@ using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
+using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
@@ -15,13 +17,16 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
     internal class VoxelTerrainChunk:MonoBehaviour{
+     [SerializeField]VoxelWaterChunk _VoxelWaterChunkPrefab;
+     internal VoxelWaterChunk wCnk;
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
      internal VoxelTerrainSimObjectsPlacing simObjectsPlacing;
      internal LinkedListNode<VoxelTerrainChunk>expropriated;
-     internal (Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
+     internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      internal Bounds worldBounds=new Bounds(
       Vector3.zero,
       new Vector3(Width,Height,Depth)
@@ -60,8 +65,12 @@ namespace AKCondinoO.Voxels.Terrain{
          simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth,Allocator.Persistent);
         }
         internal void OnInstantiated(){
+         wCnk=Instantiate(_VoxelWaterChunkPrefab);
+         wCnk.tCnk=this;
+         wCnk.OnInstantiated();
         }
         internal void OnDestroyingCore(){
+         wCnk.OnDestroyingCore();
          bakeJobHandle.Complete();
          marchingCubesBG.IsCompleted(VoxelSystem.singleton.marchingCubesBGThreads[0].IsRunning,-1);
          //Log.DebugMessage("Deallocate NativeLists");
@@ -112,6 +121,7 @@ namespace AKCondinoO.Voxels.Terrain{
                     }
                 }
             }
+         wCnk.ManualUpdate();
         }
      internal static int sMarchingCubesExecutionCount;
         bool CanBeginMarchingCubes(){
