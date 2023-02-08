@@ -46,8 +46,13 @@ namespace AKCondinoO.Sims.Inventory{
           Log.DebugMessage("not enough space in the inventory");
           return;
          }
-         //if(items.Contains){
-         //}
+         if(simObject.asInventoryItem!=null){
+          Log.DebugMessage("simObject is already an inventory item");
+          if(items.Contains(simObject.asInventoryItem)){
+           Log.DebugMessage("simObject is already in this inventory");
+          }
+          return;
+         }
          SimInventoryItem simInventoryItem=null;
          if(simInventoryItemPool.Count>0){
           Log.DebugMessage("use simInventoryItemPool");
@@ -56,7 +61,9 @@ namespace AKCondinoO.Sims.Inventory{
           Log.DebugMessage("simInventoryItemPool is empty");
           simInventoryItem=new SimInventoryItem();
          }
-         simInventoryItem.SetAsInventoryItem(simObject);
+         simInventoryItem.SetAsInventoryItem(this,simObject);
+        }
+        internal virtual void Remove(SimObject simObject){
         }
     }
 }
