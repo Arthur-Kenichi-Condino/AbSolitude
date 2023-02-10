@@ -134,6 +134,8 @@ namespace AKCondinoO.Sims{
      internal LinkedListNode<SimObject>pooled; 
      internal SimInventoryItem asInventoryItem=null;
      internal readonly Dictionary<Type,List<SimInventory>>inventory=new Dictionary<Type,List<SimInventory>>();
+     internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
+     internal SpawnData inventoryItemsSpawnData;
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
@@ -179,6 +181,7 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
+         inventoryItemsToSpawn.Clear();
          if(Core.singleton.isServer){
           masterObject=GetMaster();
           if(masterObject!=null&&masterObject is SimActor masterActor){
@@ -188,11 +191,14 @@ namespace AKCondinoO.Sims{
            inventory.Add(typeof(SimInventory),new List<SimInventory>());
            inventory[typeof(SimInventory)].Add(new SimInventory(this,0));
           }
+          int totalInventorySpaces=0;
           foreach(var typeInventoryListPair in inventory){
            foreach(SimInventory simInventory in typeInventoryListPair.Value){
             simInventory.Reset();
+            totalInventorySpaces+=simInventory.maxItemsCount;
            }
           }
+          inventoryItemsSpawnData=new SpawnData(totalInventorySpaces);
          }
          TransformBoundsVertices();
          persistentData.UpdateData(this);
@@ -211,7 +217,9 @@ namespace AKCondinoO.Sims{
           }
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            ulong clientId=gameplayer.Key;
-           gameplayer.Value.OnSimObjectSpawned(this,colliders[0].gameObject.layer);
+           if(colliders.Length>0){
+            gameplayer.Value.OnSimObjectSpawned(this,colliders[0].gameObject.layer);
+           }
           }
          }
         }
