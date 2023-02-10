@@ -11,7 +11,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class PersistentDataLoadingBackgroundContainer:BackgroundContainer{
      internal readonly HashSet<int>terraincnkIdxToLoad=new HashSet<int>();
-     internal readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale)>specificIdsToLoad=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3)>();
+     internal readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simType,ulong number)?asInventoryItemOwnerId)>specificIdsToLoad=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
      internal readonly SpawnData spawnDataFromFiles=new SpawnData();
     }
     internal class PersistentDataLoadingMultithreaded:BaseMultithreaded<PersistentDataLoadingBackgroundContainer>{
