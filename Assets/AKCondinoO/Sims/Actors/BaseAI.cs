@@ -39,7 +39,12 @@ namespace AKCondinoO.Sims.Actors{
             DEBUG_TOGGLE_HOLSTER_WEAPON=false;
           if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
            if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsSettings.SimObjectSettings simInventoryItemSettings)){
-            MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
+            if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
+             inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
+             inventoryItemsSpawnData.dequeued=false;
+             SimObjectSpawner.singleton.spawnQueue.Enqueue(inventoryItemsSpawnData);
+             MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
+            }
            }
           }
          }
