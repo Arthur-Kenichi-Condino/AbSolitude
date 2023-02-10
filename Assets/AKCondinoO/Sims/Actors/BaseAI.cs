@@ -2,6 +2,8 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Inventory;
+using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +37,11 @@ namespace AKCondinoO.Sims.Actors{
         protected override void AI(){
          if(DEBUG_TOGGLE_HOLSTER_WEAPON){
             DEBUG_TOGGLE_HOLSTER_WEAPON=false;
-          MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
+          if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
+           if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsSettings.SimObjectSettings simInventoryItemSettings)){
+            MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
+           }
+          }
          }
          base.AI();
          MyPathfinding=GetPathfindingResult();

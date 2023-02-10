@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -14,6 +15,7 @@ namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
      internal static string simActorSavePath;
+     internal readonly SimInventoryItemsSettings simInventoryItemsSettings=new SimInventoryItemsSettings();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
@@ -128,6 +130,7 @@ namespace AKCondinoO.Sims{
            Log.DebugMessage("register Texture for SimObject of Type t:"+t);
           }
          }
+         simInventoryItemsSettings.Set();
          if(Core.singleton.isServer){
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
@@ -144,10 +147,10 @@ namespace AKCondinoO.Sims{
         internal void OnVoxelTerrainChunkPhysMeshBaked(VoxelTerrainChunk cnk){
          terraincnkIdxPhysMeshBaked.Add(cnk.id.Value.cnkIdx);
         }
-     readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3)>();
-        internal void OnSpecificSpawnRequestAt((Type simType,ulong number)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale){
+     readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simType,ulong number)?asInventoryItemOwnerId)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
+        internal void OnSpecificSpawnRequestAt((Type simType,ulong number)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simType,ulong number)?asInventoryItemOwnerId=null){
          Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
-         specificSpawnRequests[id]=(position,eulerAngles,localScale);
+         specificSpawnRequests[id]=(position,eulerAngles,localScale,asInventoryItemOwnerId);
         }
         internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
          Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");

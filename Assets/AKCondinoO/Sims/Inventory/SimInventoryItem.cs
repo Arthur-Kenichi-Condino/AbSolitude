@@ -7,13 +7,24 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventoryItem{
      internal SimInventory container;
-        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject){
+     internal SimObject simObject;
+     internal readonly HashSet<int>ids=new HashSet<int>();
+        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,int spaces){
          Log.DebugMessage("SetAsInventoryItem:"+simObject);
          if(simObject.asInventoryItem!=null&&simObject.asInventoryItem.container!=null){
           Log.DebugMessage("SetAsInventoryItem:Remove simObject from old inventory");
           simObject.asInventoryItem.container.Remove(simObject);
          }
          container=inventory;
+         ids.Clear();
+         for(int i=0;i<spaces;++i){
+          if(inventory.openIds.TryTake(out int id)){
+           inventory.idsItems.Add(id,this);
+           ids.Add(id);
+          }
+         }
+         inventory.items.Add(this);
+         this.simObject=simObject;
          simObject.asInventoryItem=this;
         }
     }

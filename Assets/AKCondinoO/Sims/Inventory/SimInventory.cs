@@ -41,7 +41,14 @@ namespace AKCondinoO.Sims.Inventory{
         internal virtual void Clear(){
         }
         internal virtual void Add(SimObject simObject){
-         int spaces=1;
+         int spaces=0;
+         if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsSettings.SimObjectSettings settings)){
+          spaces=settings.inventorySpaces;
+         }
+         if(spaces<=0){
+          Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings");
+          return;
+         }
          if(openIds.Count<spaces){
           Log.DebugMessage("not enough space in the inventory");
           return;
@@ -61,7 +68,7 @@ namespace AKCondinoO.Sims.Inventory{
           Log.DebugMessage("simInventoryItemPool is empty");
           simInventoryItem=new SimInventoryItem();
          }
-         simInventoryItem.SetAsInventoryItem(this,simObject);
+         simInventoryItem.SetAsInventoryItem(this,simObject,spaces);
         }
         internal virtual void Remove(SimObject simObject){
         }
