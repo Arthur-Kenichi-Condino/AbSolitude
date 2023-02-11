@@ -210,6 +210,10 @@ namespace AKCondinoO.Sims{
                if(toSpawn.masters.TryGetValue(index,out var master)){
                 masterId=master;
                }
+               (Type simType,ulong number)?asInventoryItemOwnerId=null;
+               if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwner)){
+                asInventoryItemOwnerId=asInventoryItemOwner;
+               }
                index++;
                _GetId:{}
                Type simType=at.type;
