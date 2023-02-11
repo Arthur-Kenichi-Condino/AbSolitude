@@ -41,8 +41,9 @@ namespace AKCondinoO.Sims.Actors{
            if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsSettings.SimObjectSettings simInventoryItemSettings)){
             if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
              inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
+             inventoryItemsSpawnData.asInventoryItemOwnerIds[inventoryItemsSpawnData.at.Count-1]=id.Value;
              inventoryItemsSpawnData.dequeued=false;
-             SimObjectSpawner.singleton.spawnQueue.Enqueue(inventoryItemsSpawnData);
+             SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(inventoryItemsSpawnData);
              MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
             }
            }
