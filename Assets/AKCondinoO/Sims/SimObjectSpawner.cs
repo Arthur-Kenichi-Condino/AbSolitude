@@ -211,8 +211,8 @@ namespace AKCondinoO.Sims{
                 masterId=master;
                }
                (Type simType,ulong number)?asInventoryItemOwnerId=null;
-               if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwner)){
-                asInventoryItemOwnerId=asInventoryItemOwner;
+               if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwnerIdValue)){
+                asInventoryItemOwnerId=asInventoryItemOwnerIdValue;
                }
                index++;
                _GetId:{}
@@ -254,7 +254,8 @@ namespace AKCondinoO.Sims{
                 }
                 continue;
                }
-               if(asInventoryItemOwnerId!=null&&!SimObjectManager.singleton.spawned.ContainsKey(asInventoryItemOwnerId.Value)){
+               SimObject asInventoryItemOwner=null;
+               if(asInventoryItemOwnerId!=null&&!SimObjectManager.singleton.spawned.TryGetValue(asInventoryItemOwnerId.Value,out asInventoryItemOwner)){
                 Log.DebugMessage("owner id for this inventory item is not spawned;asInventoryItemOwnerId.Value:"+asInventoryItemOwnerId.Value);
                 continue;
                }
@@ -291,6 +292,9 @@ namespace AKCondinoO.Sims{
                   //Log.DebugMessage("clear simActor.persistentSimActorData");
                   simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
                  }
+                }
+                if(asInventoryItemOwner!=null){
+                 Log.DebugMessage("add simObject asInventoryItem to Owner");
                 }
                 simObject.OnActivated();
               }
