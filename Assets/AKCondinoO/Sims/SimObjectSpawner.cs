@@ -254,6 +254,10 @@ namespace AKCondinoO.Sims{
                 }
                 continue;
                }
+               if(asInventoryItemOwnerId!=null&&!SimObjectManager.singleton.spawned.ContainsKey(asInventoryItemOwnerId.Value)){
+                Log.DebugMessage("owner id for this inventory item is not spawned;asInventoryItemOwnerId.Value:"+asInventoryItemOwnerId.Value);
+                continue;
+               }
                GameObject gameObject;
                 SimObject  simObject;
                var pool=SimObjectManager.singleton.pool[at.type];

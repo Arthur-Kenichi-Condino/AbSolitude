@@ -132,10 +132,6 @@ namespace AKCondinoO.Sims{
         }
        }
      internal LinkedListNode<SimObject>pooled; 
-     internal SimInventoryItem asInventoryItem=null;
-     internal readonly Dictionary<Type,List<SimInventory>>inventory=new Dictionary<Type,List<SimInventory>>();
-     internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
-     internal SpawnData inventoryItemsSpawnData;
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
       protected SimObject masterObject;
