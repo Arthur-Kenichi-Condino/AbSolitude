@@ -40,6 +40,8 @@ namespace AKCondinoO.Sims.Inventory{
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
         internal virtual void Clear(){
         }
+        internal virtual void Remove(SimObject simObject){
+        }
         internal virtual void Add(SimObject simObject){
          int spaces=0;
          if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsSettings.SimObjectSettings settings)){
@@ -55,9 +57,7 @@ namespace AKCondinoO.Sims.Inventory{
          }
          if(simObject.asInventoryItem!=null){
           Log.DebugMessage("simObject is already an inventory item");
-          if(items.Contains(simObject.asInventoryItem)){
-           Log.DebugMessage("simObject is already in this inventory");
-          }
+          simObject.asInventoryItem.SetAsInventoryItem(this,simObject,spaces);
           return;
          }
          SimInventoryItem simInventoryItem=null;
@@ -70,7 +70,14 @@ namespace AKCondinoO.Sims.Inventory{
          }
          simInventoryItem.SetAsInventoryItem(this,simObject,spaces);
         }
-        internal virtual void Remove(SimObject simObject){
+        internal bool Contains(SimObject simObject){
+         if(simObject.asInventoryItem.container==this){
+          return true;
+         }
+         return false;
+        }
+        internal void Materialize((Type simType,ulong number)id){
+         Log.DebugMessage("Materialize inventory item as simObject");
         }
     }
 }
