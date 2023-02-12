@@ -13,6 +13,7 @@ namespace AKCondinoO.Sims{
      internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
      internal SpawnData inventoryItemsSpawnData;
         internal bool AddToInventory(SimObject simObject){
+         Log.DebugMessage("AddToInventory");
          return false;
         }
         internal bool InventoryContains(SimObject simObject){

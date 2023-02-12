@@ -295,6 +295,8 @@ namespace AKCondinoO.Sims{
                 }
                 if(asInventoryItemOwner!=null){
                  Log.DebugMessage("add simObject asInventoryItem to Owner");
+                 if(!asInventoryItemOwner.AddToInventory(simObject)){
+                 }
                 }
                 simObject.OnActivated();
               }
