@@ -42,23 +42,23 @@ namespace AKCondinoO.Sims.Inventory{
         }
         internal virtual void Remove(SimObject simObject){
         }
-        internal virtual void Add(SimObject simObject){
+        internal virtual bool Add(SimObject simObject){
          int spaces=0;
          if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsSettings.SimObjectSettings settings)){
           spaces=settings.inventorySpaces;
          }
          if(spaces<=0){
           Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings");
-          return;
+          return(false);
          }
          if(openIds.Count<spaces){
           Log.DebugMessage("not enough space in the inventory");
-          return;
+          return(false);
          }
          if(simObject.asInventoryItem!=null){
           Log.DebugMessage("simObject is already an inventory item");
           simObject.asInventoryItem.SetAsInventoryItem(this,simObject,spaces);
-          return;
+          return(true);//  moved to this inventory
          }
          SimInventoryItem simInventoryItem=null;
          if(simInventoryItemPool.Count>0){
@@ -69,6 +69,7 @@ namespace AKCondinoO.Sims.Inventory{
           simInventoryItem=new SimInventoryItem();
          }
          simInventoryItem.SetAsInventoryItem(this,simObject,spaces);
+         return(true);//  added successfully
         }
         internal bool Contains(SimObject simObject){
          if(simObject.asInventoryItem!=null){
