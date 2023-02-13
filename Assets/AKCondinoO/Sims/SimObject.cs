@@ -290,7 +290,9 @@ namespace AKCondinoO.Sims{
          interactionsEnabled=false;
          foreach(var gameplayer in GameplayerManagement.singleton.all){
           ulong clientId=gameplayer.Key;
-          gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
+          if(colliders.Length>0){
+           gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
+          }
          }
          DisableRenderers();
         }
@@ -327,7 +329,9 @@ namespace AKCondinoO.Sims{
             transform.hasChanged=false;
           isOverlapping=IsOverlappingNonAlloc();
           foreach(var gameplayer in GameplayerManagement.singleton.all){
-           gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
+           if(colliders.Length>0){
+            gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
+           }
           }
          }
          bool returnedToSafePos=false;

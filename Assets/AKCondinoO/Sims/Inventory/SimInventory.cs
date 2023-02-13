@@ -71,8 +71,11 @@ namespace AKCondinoO.Sims.Inventory{
          simInventoryItem.SetAsInventoryItem(this,simObject,spaces);
         }
         internal bool Contains(SimObject simObject){
-         if(simObject.asInventoryItem.container==this){
-          return true;
+         if(simObject.asInventoryItem!=null){
+          if(simObject.asInventoryItem.container==this){
+           return true;
+          }
+         }else{
          }
          return false;
         }
