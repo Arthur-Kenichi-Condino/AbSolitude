@@ -296,6 +296,7 @@ namespace AKCondinoO.Sims{
                 if(asInventoryItemOwner!=null){
                  Log.DebugMessage("add simObject asInventoryItem to Owner");
                  if(!asInventoryItemOwner.AddToInventory(simObject)){
+                  Log.DebugMessage("couldn't add to inventory, set simObject as a released world object");
                  }
                 }
                 simObject.OnActivated();
