@@ -22,6 +22,7 @@ namespace AKCondinoO.Sims{
          public Quaternion rotation;
          public Vector3    position;
          public Vector3    localScale;
+         public bool isInventoryItem;
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;

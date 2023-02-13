@@ -26,6 +26,7 @@ namespace AKCondinoO.Sims{
              if(simHandsInventory.Add(simObject)){
               Log.DebugMessage("added to simHandsInventory:mark simObject to be saved as an inventory item");
               //  TO DO: create local function to save simObjects as an inventory item
+              OnAddedToInventory(simHandsInventory);
               return true;
              }
             }
@@ -33,6 +34,8 @@ namespace AKCondinoO.Sims{
           }
          }
          return false;
+         void OnAddedToInventory(SimInventory simInventory){
+         }
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
          containerData=null;
