@@ -8,6 +8,11 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
+        internal struct PersistentSimInventoryData{
+            public struct SimInventoryItemData{
+             public Type simType;public ulong number;
+            }
+        }
      internal readonly SimObject owner;
      internal(Type simType,ulong number)ownerId;
      internal readonly int maxItemsCount;
