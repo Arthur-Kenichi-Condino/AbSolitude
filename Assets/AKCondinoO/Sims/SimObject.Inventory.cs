@@ -14,15 +14,22 @@ namespace AKCondinoO.Sims{
      internal SpawnData inventoryItemsSpawnData;
         internal bool AddToInventory(SimObject simObject){
          Log.DebugMessage("AddToInventory");
+         if(InventoryContains(simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData)){
+          Log.DebugMessage("AddToInventory InventoryContains True");
+         }else{
+          Log.DebugMessage("AddToInventory InventoryContains False");
+         }
          return false;
         }
-        internal bool InventoryContains(SimObject simObject){
+        internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
+         containerData=null;
          if(simObject.asInventoryItem==null){
           return false;
          }
          foreach(var inventoryTypeList in inventory){
           foreach(SimInventory simInventory in inventoryTypeList.Value){
            if(simInventory.Contains(simObject)){
+            containerData=(simInventory,simObject.asInventoryItem);
             return true;
            }
           }
