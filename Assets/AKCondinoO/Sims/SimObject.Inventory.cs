@@ -5,6 +5,7 @@ using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
@@ -35,6 +36,7 @@ namespace AKCondinoO.Sims{
          }
          return false;
          void OnAddedToInventory(SimInventory simInventory){
+          simObject.ChangeInteractionsToActAsInventoryItem(simInventory);
          }
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
@@ -51,6 +53,11 @@ namespace AKCondinoO.Sims{
           }
          }
          return false;
+        }
+        internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory){
+         Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
+        }
+        internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
         }
     }
 }
