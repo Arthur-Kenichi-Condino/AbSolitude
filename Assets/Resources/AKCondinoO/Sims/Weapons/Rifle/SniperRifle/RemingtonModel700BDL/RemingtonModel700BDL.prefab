@@ -767,6 +767,7 @@ GameObject:
   - component: {fileID: 5619068118059489713}
   - component: {fileID: -8870923142324330951}
   - component: {fileID: -1854219316473170960}
+  - component: {fileID: -6769974653762724209}
   m_Layer: 0
   m_Name: RemingtonModel700BDL
   m_TagString: Untagged
@@ -819,6 +820,21 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
+--- !u!114 &-6769974653762724209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5619068118059489712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c38c9ab6809ad949a4a173d50a5d7f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySpace:
+  - SimInventoryType: SimHands
+    Count: 2
 --- !u!1 &5619068119356455063
 GameObject:
   m_ObjectHideFlags: 0

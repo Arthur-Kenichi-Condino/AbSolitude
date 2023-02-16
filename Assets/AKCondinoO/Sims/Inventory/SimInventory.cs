@@ -9,8 +9,11 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
         internal struct PersistentSimInventoryData{
+         public ListWrapper<SimInventoryItemData>inventoryItems;
             public struct SimInventoryItemData{
              public Type simType;public ulong number;
+            }
+            internal void UpdateData(SimInventory simInventory){
             }
         }
      internal readonly SimObject owner;
@@ -50,7 +53,7 @@ namespace AKCondinoO.Sims.Inventory{
         internal virtual bool Add(SimObject simObject){
          int spaces=0;
          if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsSettings.SimObjectSettings settings)){
-          spaces=settings.inventorySpaces;
+          settings.inventorySpaces.TryGetValue(this.GetType(),out spaces);
          }
          if(spaces<=0){
           Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings");

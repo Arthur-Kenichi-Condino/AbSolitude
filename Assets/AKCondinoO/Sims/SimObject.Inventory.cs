@@ -56,6 +56,7 @@ namespace AKCondinoO.Sims{
         }
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
+         //
         }
         internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
         }
