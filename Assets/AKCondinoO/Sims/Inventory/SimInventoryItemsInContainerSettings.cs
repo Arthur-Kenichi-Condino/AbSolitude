@@ -30,6 +30,29 @@ namespace AKCondinoO.Sims.Inventory{
         internal void Set(){
          Log.DebugMessage("Set SimInventoryItemsSettings");
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
+          SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
+          if(simObjectAsInventoryItemSettings!=null){
+           SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
+           Type simObjectType=simObject.GetType();
+           Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
+           for(int i=0;i<simObjectAsInventoryItemSettings.inventorySettings.Length;++i){
+            SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=simObjectAsInventoryItemSettings.inventorySettings[i];
+            Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.SimInventoryType);
+            if(simInventoryType!=null){
+             Log.DebugMessage("simInventoryType:"+simInventoryType);
+             int spacesUsed=inContainerData.SimInventorySpaceUse;
+             inventorySpaces.Add(simInventoryType,spacesUsed);
+            }
+           }
+           Log.DebugMessage("simObjectType:"+simObjectType);
+           allSettings.Add(simObjectType,
+            new SimObjectSettings(
+             inventorySpaces:inventorySpaces,
+             handsUsage:simObjectAsInventoryItemSettings.handsUsage,
+             leftHandGrabPos:Vector3.zero,
+             rightHandGrabPos:Vector3.zero)
+           );
+          }
           //allSettings.Add(simObjectPrefab.Key,new Dictionary<Type,SimObjectSettings>());
           //if(!typeDictionary.ContainsKey(simObjectPrefab.Key)){
           // continue;

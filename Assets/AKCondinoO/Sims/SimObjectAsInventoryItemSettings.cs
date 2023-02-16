@@ -5,12 +5,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Inventory.SimInventoryItemsInContainerSettings;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimObjectAsInventoryItemSettings:MonoBehaviour{
-        [Serializable]public struct SimInventorySpaceUse{
+     [SerializeField]internal HandsUsage handsUsage;
+        [Serializable]public struct SimInventoryItemInContainerData{
          [SerializeField]internal string SimInventoryType;
-         [SerializeField]internal int Count;
+         [SerializeField]internal int SimInventorySpaceUse;
         }
-     [SerializeField]internal SimInventorySpaceUse[]inventorySpace;
+     [SerializeField]internal SimInventoryItemInContainerData[]inventorySettings;
     }
 }
