@@ -15,7 +15,7 @@ namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
      internal static string simActorSavePath;
-     internal readonly SimInventoryItemsSettings simInventoryItemsSettings=new SimInventoryItemsSettings();
+     internal readonly SimInventoryItemsInContainerSettings simInventoryItemsInContainerSettings=new SimInventoryItemsInContainerSettings();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
@@ -130,7 +130,7 @@ namespace AKCondinoO.Sims{
            Log.DebugMessage("register Texture for SimObject of Type t:"+t);
           }
          }
-         simInventoryItemsSettings.Set();
+         simInventoryItemsInContainerSettings.Set();
          if(Core.singleton.isServer){
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
