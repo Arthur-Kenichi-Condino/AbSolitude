@@ -24,10 +24,10 @@ namespace AKCondinoO.Sims{
            foreach(SimInventory simInventory in simHandsInventories){
             if(simInventory is SimHands simHandsInventory){
              Log.DebugMessage("simHandsInventory try Add");
-             if(simHandsInventory.Add(simObject)){
+             if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings)){
               Log.DebugMessage("added to simHandsInventory:mark simObject to be saved as an inventory item");
               //  TO DO: create local function to save simObjects as an inventory item
-              OnAddedToInventory(simHandsInventory);
+              OnAddedToInventory(simHandsInventory,settings);
               return true;
              }
             }
@@ -35,8 +35,8 @@ namespace AKCondinoO.Sims{
           }
          }
          return false;
-         void OnAddedToInventory(SimInventory simInventory){
-          simObject.ChangeInteractionsToActAsInventoryItem(simInventory);
+         void OnAddedToInventory(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
+          simObject.ChangeInteractionsToActAsInventoryItem(simInventory,settings);
          }
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
@@ -54,7 +54,7 @@ namespace AKCondinoO.Sims{
          }
          return false;
         }
-        internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory){
+        internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
          //
         }
