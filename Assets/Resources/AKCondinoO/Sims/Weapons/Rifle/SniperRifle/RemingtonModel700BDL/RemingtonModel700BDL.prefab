@@ -832,9 +832,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c38c9ab6809ad949a4a173d50a5d7f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySpace:
+  handsUsage: 2
+  inventorySettings:
   - SimInventoryType: SimHands
-    Count: 2
+    SimInventorySpaceUse: 2
 --- !u!1 &5619068119356455063
 GameObject:
   m_ObjectHideFlags: 0

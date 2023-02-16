@@ -53,10 +53,13 @@ namespace AKCondinoO.Sims.Inventory{
         internal virtual bool Add(SimObject simObject){
          int spaces=0;
          if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsInContainerSettings.SimObjectSettings settings)){
-          settings.inventorySpaces.TryGetValue(this.GetType(),out spaces);
+          if(!settings.inventorySpaces.TryGetValue(this.GetType(),out spaces)){
+           Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings for this SimInventory:"+this.GetType());
+           return(false);
+          }
          }
          if(spaces<=0){
-          Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings");
+          Log.DebugMessage("SimObject uses 0 spaces in this SimInventory:"+this.GetType()+", which is not allowed");
           return(false);
          }
          if(openIds.Count<spaces){
