@@ -28,48 +28,43 @@ namespace AKCondinoO.Sims.Inventory{
         internal SimInventoryItemsInContainerSettings(){
         }
         internal void Set(){
-         Log.DebugMessage("Set SimInventoryItemsSettings");
+         Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
           if(simObjectAsInventoryItemSettings!=null){
-           SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
-           Type simObjectType=simObject.GetType();
-           Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
-           for(int i=0;i<simObjectAsInventoryItemSettings.inventorySettings.Length;++i){
-            SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=simObjectAsInventoryItemSettings.inventorySettings[i];
-            Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.SimInventoryType);
-            if(simInventoryType!=null){
-             Log.DebugMessage("simInventoryType:"+simInventoryType);
-             int spacesUsed=inContainerData.SimInventorySpaceUse;
-             inventorySpaces.Add(simInventoryType,spacesUsed);
+           if(simObjectAsInventoryItemSettings.leftHandGrabPos!=null&&
+              simObjectAsInventoryItemSettings.rightHandGrabPos!=null
+           ){
+            SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
+            Type simObjectType=simObjectPrefab.Key;
+            Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
+            for(int i=0;i<simObjectAsInventoryItemSettings.inventorySettings.Length;++i){
+             SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=simObjectAsInventoryItemSettings.inventorySettings[i];
+             Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType);
+             if(simInventoryType!=null){
+              Log.DebugMessage("simInventoryType:"+simInventoryType);
+              int spacesUsed=inContainerData.simInventorySpaceUse;
+              inventorySpaces.Add(simInventoryType,spacesUsed);
+             }
             }
+            if(typeDictionary.ContainsKey(simObjectType)){
+             switch(typeDictionary[simObjectType]){
+              case("RemingtonModel700BDL"):{
+               break;
+              }
+             }
+            }
+            Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
+            allSettings.Add(simObjectType,
+             new SimObjectSettings(
+              inventorySpaces:inventorySpaces,
+              handsUsage:simObjectAsInventoryItemSettings.handsUsage,
+              leftHandGrabPos:simObjectAsInventoryItemSettings.leftHandGrabPos.localPosition,
+              rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabPos.localPosition)
+            );
            }
-           Log.DebugMessage("simObjectType:"+simObjectType);
-           allSettings.Add(simObjectType,
-            new SimObjectSettings(
-             inventorySpaces:inventorySpaces,
-             handsUsage:simObjectAsInventoryItemSettings.handsUsage,
-             leftHandGrabPos:Vector3.zero,
-             rightHandGrabPos:Vector3.zero)
-           );
           }
-          //allSettings.Add(simObjectPrefab.Key,new Dictionary<Type,SimObjectSettings>());
-          //if(!typeDictionary.ContainsKey(simObjectPrefab.Key)){
-          // continue;
-          //}
-          //switch(typeDictionary[simObjectPrefab.Key]){
-          // case("RemingtonModel700BDL"):{
-          //  break;
-          // }
-          //}
          }
-         //allSettings.Add(
-         // typeof(RemingtonModel700BDL),
-         //  new SimObjectSettings(
-         //   inventorySpaces:2,
-         //    handsUsage:HandsUsage.TwoHanded
-         //  )
-         //);
         }
      internal static readonly Dictionary<Type,string>typeDictionary=new Dictionary<Type,string>{
       {typeof(RemingtonModel700BDL),"RemingtonModel700BDL"},
