@@ -52,7 +52,7 @@ namespace AKCondinoO.Sims.Inventory{
         }
         internal virtual bool Add(SimObject simObject){
          int spaces=0;
-         if(SimObjectSpawner.singleton.simInventoryItemsSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsSettings.SimObjectSettings settings)){
+         if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(simObject.GetType(),out SimInventoryItemsInContainerSettings.SimObjectSettings settings)){
           settings.inventorySpaces.TryGetValue(this.GetType(),out spaces);
          }
          if(spaces<=0){

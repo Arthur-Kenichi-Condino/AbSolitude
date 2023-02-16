@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
-    internal class SimInventoryItemsSettings{
+    internal class SimInventoryItemsInContainerSettings{
         internal struct SimObjectSettings{
          public readonly ReadOnlyDictionary<Type,int>inventorySpaces;
          public HandsUsage handsUsage;
@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Inventory{
          TwoHanded=2,
         }
      internal readonly Dictionary<Type,SimObjectSettings>allSettings=new Dictionary<Type,SimObjectSettings>();
-        internal SimInventoryItemsSettings(){
+        internal SimInventoryItemsInContainerSettings(){
         }
         internal void Set(){
          Log.DebugMessage("Set SimInventoryItemsSettings");
