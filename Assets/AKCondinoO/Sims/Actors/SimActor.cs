@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
@@ -139,6 +140,7 @@ namespace AKCondinoO.Sims.Actors{
           simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
           simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
           Log.DebugMessage("simUMADataPosOffset:"+simUMADataPosOffset);
+          simUMAData.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
          navMeshAgent=GetComponent<NavMeshAgent>();
@@ -158,6 +160,17 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
+        }
+        void OnUMACharacterUpdated(UMAData simActorUMAData){
+         Log.DebugMessage("OnUMACharacterUpdated");
+         if( leftHand==null){
+           leftHand=Util.FindChildRecursively(simUMAData.transform,"lHand");
+          Log.DebugMessage("lHand:"+ leftHand);
+         }
+         if(rightHand==null){
+          rightHand=Util.FindChildRecursively(simUMAData.transform,"rHand");
+          Log.DebugMessage("rHand:"+rightHand);
+         }
         }
         public override void OnDestroy(){
          if(simUMAData!=null){

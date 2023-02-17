@@ -9,8 +9,10 @@ namespace AKCondinoO.Sims.Inventory{
      internal SimInventory container;
      internal SimObject simObject;
      internal readonly HashSet<int>ids=new HashSet<int>();
-        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,int spaces){
+     internal SimInventoryItemsInContainerSettings.SimObjectSettings settings;
+        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,SimInventoryItemsInContainerSettings.SimObjectSettings settings,int spaces){
          Log.DebugMessage("SetAsInventoryItem:"+simObject);
+         this.settings=settings;
          if(simObject.asInventoryItem!=null&&simObject.asInventoryItem.container!=null){
           Log.DebugMessage("SetAsInventoryItem:Remove simObject from old inventory");
           simObject.asInventoryItem.container.Remove(simObject);

@@ -132,6 +132,8 @@ namespace AKCondinoO.Sims{
          }
         }
        }
+     internal Transform  leftHand;
+     internal Transform rightHand;
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simType,ulong number)?id=null;
      internal(Type simType,ulong number)?master=null;
@@ -311,6 +313,19 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
          int result=0;
+         if(asInventoryItem!=null){
+          result=3;
+          Log.DebugMessage("ManualUpdate asInventoryItem");
+          if(asInventoryItem.container==null){
+              Log.DebugMessage("asInventoryItem invalid container");
+          }else{
+              if(asInventoryItem.container.owner==null){
+                  Log.DebugMessage("asInventoryItem.container.owner==null");
+              }
+          }
+          SetAsInventoryItemTransform();
+          return result;
+         }
          updateRenderersFlag|=doValidationChecks;
          updateRenderersFlag|=transform.hasChanged;
          updateRenderersFlag|=Core.singleton.currentRenderingTargetCameraChanged;
