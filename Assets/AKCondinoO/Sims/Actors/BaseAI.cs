@@ -47,6 +47,9 @@ namespace AKCondinoO.Sims.Actors{
              MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
             }
            }
+          }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
+           //  TO DO: release items
+           MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
           }
          }
          base.AI();

@@ -315,7 +315,7 @@ namespace AKCondinoO.Sims{
          int result=0;
          if(asInventoryItem!=null){
           result=3;
-          Log.DebugMessage("ManualUpdate asInventoryItem");
+          //Log.DebugMessage("ManualUpdate asInventoryItem");
           if(asInventoryItem.container==null){
               Log.DebugMessage("asInventoryItem invalid container");
           }else{
