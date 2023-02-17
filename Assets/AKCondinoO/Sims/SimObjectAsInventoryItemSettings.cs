@@ -9,7 +9,7 @@ using static AKCondinoO.Sims.Inventory.SimInventoryItemsInContainerSettings;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimObjectAsInventoryItemSettings:MonoBehaviour{
      [SerializeField]internal HandsUsage handsUsage;
-     [SerializeField]internal Transform leftHandGrabPos;
+     [SerializeField]internal Transform  leftHandGrabPos;
      [SerializeField]internal Transform rightHandGrabPos;
         [Serializable]public struct SimInventoryItemInContainerData{
          [SerializeField]internal string simInventoryType;

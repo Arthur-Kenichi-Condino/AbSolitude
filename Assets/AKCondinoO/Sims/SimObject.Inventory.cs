@@ -56,9 +56,25 @@ namespace AKCondinoO.Sims{
         }
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
-         //
+         //  TO DO: disable some types of collisions and enable triggers or special collisions
         }
         internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
+        }
+        internal void SetAsInventoryItemTransform(){
+         Log.DebugMessage("SetAsInventoryItemTransform:"+id);
+         if(asInventoryItem.container is SimHands simHands){
+          if(simHands.leftHand!=null&&simHands.rightHand!=null){
+           Vector3 lineBetweenHandsDir=(simHands.leftHand.transform.position-simHands.rightHand.transform.position).normalized;
+           Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.owner.transform.up);
+           SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
+           Vector3  leftHandGrabPos=settings. leftHandGrabPos;
+           Vector3 rightHandGrabPos=settings.rightHandGrabPos;
+           Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
+           Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
+           transform.rotation=lineBetweenHandsRot;
+           transform.position=simHands.rightHand.transform.position;
+          }
+         }
         }
     }
 }

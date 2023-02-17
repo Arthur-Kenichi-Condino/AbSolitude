@@ -32,7 +32,7 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
           if(simObjectAsInventoryItemSettings!=null){
-           if(simObjectAsInventoryItemSettings.leftHandGrabPos!=null&&
+           if(simObjectAsInventoryItemSettings. leftHandGrabPos!=null&&
               simObjectAsInventoryItemSettings.rightHandGrabPos!=null
            ){
             SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
@@ -59,7 +59,7 @@ namespace AKCondinoO.Sims.Inventory{
              new SimObjectSettings(
               inventorySpaces:inventorySpaces,
               handsUsage:simObjectAsInventoryItemSettings.handsUsage,
-              leftHandGrabPos:simObjectAsInventoryItemSettings.leftHandGrabPos.localPosition,
+               leftHandGrabPos:simObjectAsInventoryItemSettings. leftHandGrabPos.localPosition,
               rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabPos.localPosition)
             );
            }
