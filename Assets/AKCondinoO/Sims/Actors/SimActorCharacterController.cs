@@ -90,10 +90,10 @@ namespace AKCondinoO.Sims.Actors{
          float bodyToHeadRotationXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(bodyRotation,viewRotation);
          //Log.DebugMessage("bodyToHeadRotationXComponentSignedAngle:"+bodyToHeadRotationXComponentSignedAngle);
          if(Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)>=headMaxHorizontalRotationAngle){
-          Log.DebugMessage("angle between viewRotation and bodyRotation is equal to or above "+headMaxHorizontalRotationAngle);
+          //Log.DebugMessage("angle between viewRotation and bodyRotation is equal to or above "+headMaxHorizontalRotationAngle);
           float angleToRotateBody=Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)-headMaxHorizontalRotationAngle;
           angleToRotateBody*=Mathf.Sign(bodyToHeadRotationYComponentSignedAngle);
-          Log.DebugMessage("rotate body in degrees:"+angleToRotateBody);
+          //Log.DebugMessage("rotate body in degrees:"+angleToRotateBody);
           bodyRotation*=Quaternion.AngleAxis(angleToRotateBody,bodyRotation*Vector3.up);
          }
          characterController.transform.rotation=bodyRotation;

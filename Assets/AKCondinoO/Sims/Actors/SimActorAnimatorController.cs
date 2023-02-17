@@ -158,7 +158,7 @@ namespace AKCondinoO.Sims.Actors{
            }
            lastLoopCount[layerIndex]=loopCount[layerIndex];
            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
-            Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
+            //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
             OnAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
            }

@@ -61,7 +61,7 @@ namespace AKCondinoO.Sims{
         internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
         }
         internal void SetAsInventoryItemTransform(){
-         Log.DebugMessage("SetAsInventoryItemTransform:"+id);
+         //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
          if(asInventoryItem.container is SimHands simHands){
           if(simHands.leftHand!=null&&simHands.rightHand!=null){
            Vector3 lineBetweenHandsDir=(simHands.leftHand.transform.position-simHands.rightHand.transform.position).normalized;
@@ -69,8 +69,8 @@ namespace AKCondinoO.Sims{
            SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
            Vector3  leftHandGrabPos=settings. leftHandGrabPos;
            Vector3 rightHandGrabPos=settings.rightHandGrabPos;
-           Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
-           Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
+           //Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
+           //Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
            transform.rotation=lineBetweenHandsRot;
            transform.position=simHands.rightHand.transform.position;
           }

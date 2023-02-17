@@ -51,7 +51,7 @@ namespace AKCondinoO.Sims.Actors{
           //  TO DO: rotating? Or moving?
           bool flag;
           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
-           Log.DebugMessage("rotating body, set target head IK to forward");
+           //Log.DebugMessage("rotating body, set target head IK to forward");
            headLookAtPosition=animHeadPos+animBodyRot*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
            if(flag){
             headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
