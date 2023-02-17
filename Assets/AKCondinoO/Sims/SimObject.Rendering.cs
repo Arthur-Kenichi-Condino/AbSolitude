@@ -18,6 +18,8 @@ namespace AKCondinoO.Sims{
           renderer.enabled=false;
          }
         }
+     [SerializeField]internal bool autoChangeMaterialsToFade=true;
+     [SerializeField]internal bool autoToggleMaterialsToFade=false;
         protected virtual void UpdateRenderers(){
          if(updateRenderersFlag){
           if(Core.singleton.currentRenderingTargetCamera!=null&&Camera.current!=null){
@@ -28,15 +30,17 @@ namespace AKCondinoO.Sims{
            //Log.DebugMessage("opacity:"+opacity);
            foreach(Renderer renderer in renderers){
             foreach(Material material in renderer.materials){
-             if(opacity!=1f){
-              if(material.shader!=RenderingUtil.StandardShader){
-               material.shader=RenderingUtil.StandardShader;
-               RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Fade);
-              }
-             }else{
-              if(material.shader==RenderingUtil.StandardShader){
-               RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Opaque);
-               material.shader=materialShader[material];
+             if(autoToggleMaterialsToFade){
+              if(opacity!=1f){
+               if(material.shader!=RenderingUtil.StandardShader){
+                material.shader=RenderingUtil.StandardShader;
+                RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Fade);
+               }
+              }else{
+               if(material.shader==RenderingUtil.StandardShader){
+                RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Opaque);
+                material.shader=materialShader[material];
+               }
               }
              }
              Color c=material.GetColor("_Color");

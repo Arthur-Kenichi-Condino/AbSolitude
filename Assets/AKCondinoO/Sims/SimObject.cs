@@ -169,6 +169,17 @@ namespace AKCondinoO.Sims{
           foreach(Material material in renderer.materials){
            materialShader[material]=material.shader;
           }
+          if(autoChangeMaterialsToFade){
+           foreach(Material material in renderer.materials){
+            if(material.shader!=RenderingUtil.StandardShader){
+             material.shader=RenderingUtil.StandardShader;
+             RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Fade);
+            }
+            Color c=material.GetColor("_Color");
+            c.a=0f;
+            material.SetColor("_Color",c);
+           }
+          }
           renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
          }
         }
