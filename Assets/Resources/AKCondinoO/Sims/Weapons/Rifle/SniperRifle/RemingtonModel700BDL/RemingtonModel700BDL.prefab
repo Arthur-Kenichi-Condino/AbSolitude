@@ -837,6 +837,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dcd1f0e508f74740a04dba9b58ae1aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ZAxisIsUp: 1
+  autoChangeMaterialsToFade: 1
+  autoToggleMaterialsToFade: 0
 --- !u!114 &-1854219316473170960
 MonoBehaviour:
   m_ObjectHideFlags: 0

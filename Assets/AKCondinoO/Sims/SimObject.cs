@@ -132,6 +132,7 @@ namespace AKCondinoO.Sims{
          }
         }
        }
+     [SerializeField]internal bool ZAxisIsUp=false;
      internal Transform  leftHand;
      internal Transform rightHand;
      internal LinkedListNode<SimObject>pooled; 

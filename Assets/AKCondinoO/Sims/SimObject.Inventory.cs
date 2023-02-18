@@ -71,7 +71,13 @@ namespace AKCondinoO.Sims{
            Vector3 rightHandGrabPos=settings.rightHandGrabPos;
            //Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
            //Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
-           transform.rotation=lineBetweenHandsRot;
+           Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
+           if(ZAxisIsUp){
+            Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.owner.transform.up).normalized;
+            transform.rotation=Quaternion.LookRotation(Quaternion.AngleAxis(-90f,lineBetweenHandsDir)*lineBetweenHandsDirPerpendicularRight,lineBetweenHandsDir);
+           }else{
+            transform.rotation=lineBetweenHandsRot;
+           }
            transform.position=simHands.rightHand.transform.position;
           }
          }
