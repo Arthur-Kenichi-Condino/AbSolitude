@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2031268244700765699}
   m_Layer: 0
-  m_Name: leftHandGrabPos
+  m_Name: leftHandGrabForAnimationIK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,13 +106,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410022980629719531}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: -0.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.15, z: -0.049999997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1247754070719359074
 GameObject:
@@ -820,8 +820,8 @@ Transform:
   m_Children:
   - {fileID: 5619068117634271608}
   - {fileID: 1498394650546069935}
-  - {fileID: 2031268244700765699}
   - {fileID: 7476013650176718565}
+  - {fileID: 2031268244700765699}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
@@ -869,8 +869,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handsUsage: 2
-  leftHandGrabPos: {fileID: 2031268244700765699}
-  rightHandGrabPos: {fileID: 7476013650176718565}
+  leftHandGrabTransform: {fileID: 2031268244700765699}
+  rightHandGrabTransform: {fileID: 7476013650176718565}
   inventorySettings:
   - simInventoryType: SimHands
     simInventorySpaceUse: 2
@@ -1134,7 +1134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7476013650176718565}
   m_Layer: 0
-  m_Name: rightHandGrabPos
+  m_Name: rightHandGrabLocalTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1147,14 +1147,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695075485846467242}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.15, z: -0.75}
+  m_LocalRotation: {x: 0.12607859, y: -0.03378266, z: 0.25660488, w: 0.9576622}
+  m_LocalPosition: {x: -0.0235, y: 0.17, z: 0.095}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 30}
 --- !u!1 &8939747737377269075
 GameObject:
   m_ObjectHideFlags: 0

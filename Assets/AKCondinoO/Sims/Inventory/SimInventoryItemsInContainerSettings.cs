@@ -13,10 +13,12 @@ namespace AKCondinoO.Sims.Inventory{
          public readonly ReadOnlyDictionary<Type,int>inventorySpaces;
          public HandsUsage handsUsage;
          public Vector3 leftHandGrabPos;public Vector3 rightHandGrabPos;
-            internal SimObjectSettings(Dictionary<Type,int>inventorySpaces,HandsUsage handsUsage,Vector3 leftHandGrabPos,Vector3 rightHandGrabPos){
+         public Quaternion rightHandGrabRot;
+            internal SimObjectSettings(Dictionary<Type,int>inventorySpaces,HandsUsage handsUsage,Vector3 leftHandGrabPos,Vector3 rightHandGrabPos,Quaternion rightHandGrabRot){
              this.inventorySpaces=new ReadOnlyDictionary<Type,int>(inventorySpaces);
              this.handsUsage=handsUsage;
              this.leftHandGrabPos=leftHandGrabPos;this.rightHandGrabPos=rightHandGrabPos;
+             this.rightHandGrabRot=rightHandGrabRot;
             }
         }
         public enum HandsUsage:int{
@@ -32,8 +34,8 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
           if(simObjectAsInventoryItemSettings!=null){
-           if(simObjectAsInventoryItemSettings. leftHandGrabPos!=null&&
-              simObjectAsInventoryItemSettings.rightHandGrabPos!=null
+           if(simObjectAsInventoryItemSettings. leftHandGrabTransform!=null&&
+              simObjectAsInventoryItemSettings.rightHandGrabTransform!=null
            ){
             SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
             Type simObjectType=simObjectPrefab.Key;
@@ -59,8 +61,9 @@ namespace AKCondinoO.Sims.Inventory{
              new SimObjectSettings(
               inventorySpaces:inventorySpaces,
               handsUsage:simObjectAsInventoryItemSettings.handsUsage,
-               leftHandGrabPos:simObjectAsInventoryItemSettings. leftHandGrabPos.localPosition,
-              rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabPos.localPosition)
+               leftHandGrabPos:simObjectAsInventoryItemSettings. leftHandGrabTransform.localPosition,
+              rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabTransform.localPosition,
+              rightHandGrabRot:simObjectAsInventoryItemSettings.rightHandGrabTransform.localRotation)
             );
            }
           }
