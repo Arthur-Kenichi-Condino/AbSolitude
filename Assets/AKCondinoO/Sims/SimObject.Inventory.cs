@@ -69,6 +69,7 @@ namespace AKCondinoO.Sims{
            SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
            Vector3  leftHandGrabPos=settings. leftHandGrabPos;
            Vector3 rightHandGrabPos=settings.rightHandGrabPos;
+           Quaternion rightHandGrabRot=settings.rightHandGrabRot;
            //Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
            //Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
            Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
@@ -78,7 +79,8 @@ namespace AKCondinoO.Sims{
            }else{
             transform.rotation=lineBetweenHandsRot;
            }
-           transform.position=simHands.rightHand.transform.position;
+           transform.position=simHands.rightHand.transform.position+transform.rotation*rightHandGrabPos;
+           transform.rotation*=rightHandGrabRot;
           }
          }
         }
