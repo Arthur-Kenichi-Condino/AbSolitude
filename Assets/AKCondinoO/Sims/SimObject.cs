@@ -27,9 +27,10 @@ namespace AKCondinoO.Sims{
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;
              localScale=simObject.transform.localScale;
+             isInventoryItem=(simObject.asInventoryItem!=null);
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , }}",position,rotation,localScale);
+             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , isInventoryItem={3} , }}",position,rotation,localScale,isInventoryItem);
             }
             internal static PersistentData Parse(string s){
              PersistentData persistentData=new PersistentData();
@@ -71,6 +72,14 @@ namespace AKCondinoO.Sims{
                 persistentData.localScale.y<=0f||
                 persistentData.localScale.z<=0f){
               persistentData.localScale=Vector3.one;
+             }
+             int isInventoryItemStringStart=s.IndexOf("isInventoryItem=");
+             if(isInventoryItemStringStart>=0){
+                isInventoryItemStringStart+=16;
+              int isInventoryItemStringEnd=s.IndexOf(" , ",isInventoryItemStringStart);
+              string isInventoryItemString=s.Substring(isInventoryItemStringStart,isInventoryItemStringEnd-isInventoryItemStringStart);
+              bool isInventoryItem=bool.Parse(isInventoryItemString);
+              persistentData.isInventoryItem=isInventoryItem;
              }
              return persistentData;
             }
@@ -336,6 +345,7 @@ namespace AKCondinoO.Sims{
               }
           }
           SetAsInventoryItemTransform();
+          persistentData.UpdateData(this);
           return result;
          }
          updateRenderersFlag|=doValidationChecks;
