@@ -5,15 +5,18 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
+     internal PersistentSimInventoryData persistentSimInventoryData;
         internal struct PersistentSimInventoryData{
          public ListWrapper<SimInventoryItemData>inventoryItems;
             public struct SimInventoryItemData{
              public Type simType;public ulong number;
             }
             internal void UpdateData(SimInventory simInventory){
+             inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.items.Where(v=>v.simObject!=null&&v.simObject.id!=null).Select(v=>{return new SimInventoryItemData{simType=v.simObject.id.Value.simType,number=v.simObject.id.Value.number};}).ToList());
             }
         }
      internal readonly SimObject owner;
@@ -50,7 +53,7 @@ namespace AKCondinoO.Sims.Inventory{
         }
         internal virtual void Remove(SimObject simObject){
         }
-        internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings){
+        internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,bool updatePersistentData=true){
          int spaces=0;
          if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(simObject.GetType(),out settings)){
           if(!settings.inventorySpaces.TryGetValue(this.GetType(),out spaces)){
@@ -69,6 +72,7 @@ namespace AKCondinoO.Sims.Inventory{
          if(simObject.asInventoryItem!=null){
           Log.DebugMessage("simObject is already an inventory item");
           simObject.asInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
+          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
           return(true);//  moved to this inventory
          }
          SimInventoryItem simInventoryItem=null;
@@ -80,6 +84,7 @@ namespace AKCondinoO.Sims.Inventory{
           simInventoryItem=new SimInventoryItem();
          }
          simInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
+         if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
          return(true);//  added successfully
         }
         internal bool Contains(SimObject simObject){
