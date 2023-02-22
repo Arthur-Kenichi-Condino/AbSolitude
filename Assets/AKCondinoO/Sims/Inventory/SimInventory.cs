@@ -72,7 +72,7 @@ namespace AKCondinoO.Sims.Inventory{
          if(simObject.asInventoryItem!=null){
           Log.DebugMessage("simObject is already an inventory item");
           simObject.asInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
-          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
+          OnAddedSimInventoryItem();
           return(true);//  moved to this inventory
          }
          SimInventoryItem simInventoryItem=null;
@@ -84,8 +84,11 @@ namespace AKCondinoO.Sims.Inventory{
           simInventoryItem=new SimInventoryItem();
          }
          simInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
-         if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
+         OnAddedSimInventoryItem();
          return(true);//  added successfully
+         void OnAddedSimInventoryItem(){
+          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
+         }
         }
         internal bool Contains(SimObject simObject){
          if(simObject.asInventoryItem!=null){
