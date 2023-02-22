@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace AKCondinoO.Sims{
     internal class PersistentDataSavingBackgroundContainer:BackgroundContainer{
      internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
       internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
+       internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>>();
      internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
