@@ -13,10 +13,10 @@ namespace AKCondinoO.Sims.Inventory{
         internal struct PersistentSimInventoryData{
          public ListWrapper<SimInventoryItemData>inventoryItems;
             public struct SimInventoryItemData{
-             public Type simType;public ulong number;
+             public Type simType;public ulong number;public int id;
             }
             internal void UpdateData(SimInventory simInventory){
-             inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.items.Where(v=>v.simObject!=null&&v.simObject.id!=null).Select(v=>{return new SimInventoryItemData{simType=v.simObject.id.Value.simType,number=v.simObject.id.Value.number};}).ToList());
+             inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
         }
      internal readonly SimObject owner;
