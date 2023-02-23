@@ -99,6 +99,7 @@ namespace AKCondinoO.Sims{
            }
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(t,new Dictionary<ulong,SimActor.PersistentSimActorData>());
           }
+          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
@@ -359,19 +360,36 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[t]=nextId;
          }
          foreach(var a in SimObjectManager.singleton.active){
-          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,  a.Value.persistentData);
-          if(a.Value is SimActor simActor){
-           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[  a.Value.id.Value.simType].Add(  a.Value.id.Value.number,simActor.persistentSimActorData);
-          }
+          GetSimObjectPersistentData(a.Value);
          }
          while(despawnQueue.Count>0){var toDespawn=despawnQueue.Dequeue();
-          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,toDespawn.persistentData);
-          if(toDespawn is SimActor simActor){
-           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[toDespawn.id.Value.simType].Add(toDespawn.id.Value.number,simActor.persistentSimActorData);
-          }
+          GetSimObjectPersistentData(toDespawn);
           if(!exitSave){
            SimObjectManager.singleton.despawning.Add(toDespawn.id.Value,toDespawn);
           }
+         }
+         void GetSimObjectPersistentData(SimObject simObject){
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simObject.persistentData);
+          if(simObject is SimActor simActor){
+           SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simActor .persistentSimActorData);
+          }
+          if(!PersistentDataSavingBackgroundContainer.simInventoryDataDictionaryPool.TryDequeue(out var simInventoryDataDictionary)){
+           simInventoryDataDictionary=new Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>();
+          }
+          foreach(var typeInventoryListPair in simObject.inventory){
+           Type inventoryType=typeInventoryListPair.Key;
+           if(!PersistentDataSavingBackgroundContainer.simInventoryDataListPool.TryDequeue(out var simInventoryDataList)){
+            simInventoryDataList=new List<SimInventory.PersistentSimInventoryData>();
+           }
+           foreach(var inventory in typeInventoryListPair.Value){
+            if(inventory.maxItemsCount<=0){
+             continue;
+            }
+            simInventoryDataList.Add(inventory.persistentSimInventoryData);
+           }
+           simInventoryDataDictionary.Add(inventoryType,simInventoryDataList);
+          }
+          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataDictionary);
          }
          while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simType].Add(toDespawnAndReleaseId.id.Value.number);
