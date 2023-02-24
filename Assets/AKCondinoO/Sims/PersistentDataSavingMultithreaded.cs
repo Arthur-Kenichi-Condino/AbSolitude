@@ -165,7 +165,7 @@ namespace AKCondinoO.Sims{
           var persistentSimActorDataToSave=typePersistentSimActorDataToSavePair.Value;
           Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
           if(!simActorFileStream.ContainsKey(t)){
-           continue;
+           goto _Skip;
           }
           FileStream fileStream=this.simActorFileStream[t];
           StreamWriter fileStreamWriter=this.simActorFileStreamWriter[t];
@@ -192,10 +192,28 @@ namespace AKCondinoO.Sims{
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
+          _Skip:{}
           persistentSimActorDataToSave.Clear();
          }
          foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
           Type t=typePersistentSimInventoryDataToSavePair.Key;
+          var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
+          Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
+          //if(!simInventoryFileStream.ContainsKey(t)){
+          // goto _Skip;
+          //}
+          _Skip:{}
+          foreach(var idInventoryPair in persistentSimInventoryDataToSave){
+           Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>dictionary=idInventoryPair.Value;
+           foreach(var simInventoryTypeListPair in dictionary){
+            List<SimInventory.PersistentSimInventoryData>list=simInventoryTypeListPair.Value;
+            list.Clear();
+            PersistentDataSavingBackgroundContainer.simInventoryDataListPool.Enqueue(list);
+           }
+           dictionary.Clear();
+           PersistentDataSavingBackgroundContainer.simInventoryDataDictionaryPool.Enqueue(dictionary);
+          }
+          persistentSimInventoryDataToSave.Clear();
          }
          #region releasedIds
          if(releasedIdsFileStream!=null){
