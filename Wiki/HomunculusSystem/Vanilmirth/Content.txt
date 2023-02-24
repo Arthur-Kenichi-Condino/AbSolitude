@@ -1,3 +1,7 @@
-Vanilmirth Concept
+\\title\\Vanilmirth Concept
 
-The Vanilmirth homunculus type is based on the homunculus of the same name present on the game Ragnarök Online.
+\\paragraph\\The Vanilmirth homunculus type is based on the homunculus of the same name present on the game Ragnarök Online.
+
+\\index\\
+
+\\topic\\
