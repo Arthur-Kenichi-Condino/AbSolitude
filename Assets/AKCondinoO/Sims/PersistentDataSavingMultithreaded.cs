@@ -194,6 +194,9 @@ namespace AKCondinoO.Sims{
           fileStreamWriter.Flush();
           persistentSimActorDataToSave.Clear();
          }
+         foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
+          Type t=typePersistentSimInventoryDataToSavePair.Key;
+         }
          #region releasedIds
          if(releasedIdsFileStream!=null){
           releasedIdsStringBuilder.Clear();
