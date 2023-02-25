@@ -7,24 +7,25 @@
                 height:100%;
                 width:20px;
                 position:fixed;
-                z-index:1000;
+                z-index:10000;
                 top:0;
                 left:0;
             }
             .MainSidebar{
                 background-color:#272727;
-                border:5px solid #545454;
+                border:1px solid #545454;
                 height:100%;
                 width:180px;
                 position:fixed;
-                z-index:1;
+                z-index:10001;
                 top:0;
                 left:0;
                 padding-top:20px;
+                padding-left:20px;
             }
             .ContentShow{
                 background-color:#272727;
-                border:5px solid #545454;
+                border:1px solid #545454;
                 height:100%;
                 width:100%;
                 position:fixed;
@@ -32,6 +33,7 @@
                 top:0;
                 left:0;
                 padding-top:20px;
+                padding-left:20px;
             }
             .Title{
                 font-weight:bold;
@@ -43,11 +45,11 @@
         <div class="BorderLeft" onmouseenter="JQueryFadeInElementByClassName('MainSidebar','0')">
             
         </div>
-        <div class="MainSidebar" onmouseout="JQueryFadeOutByClassName('MainSidebar','200')">
+        <div class="MainSidebar" onmouseout="JQueryFadeOutElementByClassName('MainSidebar','200')">
 
         </div>
         <div class="ContentShow">
-            <button type="button" onclick="ParseTextFileToHtmlSetElementInnerByClassName('HomunculusSystem/Vanilmirth/Content.txt','ContentShow')">Show</button>
+            <button type="button" onclick="ParseTextFileToWikiElementInnerHtmlByClassName('HomunculusSystem/Vanilmirth/Content.txt','ContentShow')">Show</button>
         </div>
     </body>
 </html>
