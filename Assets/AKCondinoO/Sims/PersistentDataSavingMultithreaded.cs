@@ -30,6 +30,9 @@ namespace AKCondinoO.Sims{
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamWriter>simActorFileStreamWriter=new Dictionary<Type,StreamWriter>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
+         internal readonly Dictionary<Type,FileStream>simInventoryFileStream=new Dictionary<Type,FileStream>();
+          internal readonly Dictionary<Type,StreamWriter>simInventoryFileStreamWriter=new Dictionary<Type,StreamWriter>();
+          internal readonly Dictionary<Type,StreamReader>simInventoryFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly Dictionary<Type,Dictionary<int,List<(ulong id,SimObject.PersistentData persistentData)>>>idPersistentDataListBycnkIdxByType=new Dictionary<Type,Dictionary<int,List<(ulong,SimObject.PersistentData)>>>();
         readonly Queue<List<(ulong id,SimObject.PersistentData persistentData)>>idPersistentDataListPool=new Queue<List<(ulong,SimObject.PersistentData)>>();
        readonly Dictionary<Type,List<ulong>>idListByType=new Dictionary<Type,List<ulong>>();
@@ -199,9 +202,9 @@ namespace AKCondinoO.Sims{
           Type t=typePersistentSimInventoryDataToSavePair.Key;
           var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
           Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
-          //if(!simInventoryFileStream.ContainsKey(t)){
-          // goto _Skip;
-          //}
+          if(!simInventoryFileStream.ContainsKey(t)){
+           goto _Skip;
+          }
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
            Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>dictionary=idInventoryPair.Value;
