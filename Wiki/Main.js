@@ -1,4 +1,21 @@
 console.log("I'm alive!");
+//https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file-in-the-browser
+function ParseTextFileToHtmlSetElementInnerByClassName(file,className){
+    var rawFile=new XMLHttpRequest();
+    rawFile.open("GET",file,false);
+    rawFile.onreadystatechange=function(){
+        if(rawFile.readyState===4){
+            if(rawFile.status===200||rawFile.status==0){
+                var allText=rawFile.responseText
+                    .replaceAll("[[title]]","<p class=\"Title\">")
+                    .replaceAll("\r\n","</p>");
+                console.log(allText);
+                document.getElementsByClassName(className)[0].innerHTML=allText;
+            }
+        }
+    }
+    rawFile.send(null);
+}
 function JQueryFadeOutByClassName(className,timeout){
     console.log("JQueryFadeOutByClassName:"+className+" in "+timeout+" ms");
     setTimeout(function(){
