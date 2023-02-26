@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
      internal static string simActorSavePath;
+     internal static string simInventorySavePath;
      internal readonly SimInventoryItemsInContainerSettings simInventoryItemsInContainerSettings=new SimInventoryItemsInContainerSettings();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -24,6 +25,8 @@ namespace AKCondinoO.Sims{
          if(Core.singleton.isServer){
           simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
           Directory.CreateDirectory(simActorSavePath);
+          simInventorySavePath=string.Format("{0}{1}",Core.savePath,"SimInventory/");
+          Directory.CreateDirectory(simInventorySavePath);
           FileStream releasedIdsFileStream=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStream=new FileStream(SimObjectManager.releasedIdsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           StreamWriter releasedIdsFileStreamWriter=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamWriter=new StreamWriter(releasedIdsFileStream);
           StreamReader releasedIdsFileStreamReader=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamReader=new StreamReader(releasedIdsFileStream);
@@ -98,6 +101,10 @@ namespace AKCondinoO.Sims{
             SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
            }
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(t,new Dictionary<ulong,SimActor.PersistentSimActorData>());
+          }
+          string simInventorySaveFile=null;
+          if(Core.singleton.isServer){
+           simInventorySaveFile=string.Format("{0}{1}{2}",simInventorySavePath,t,".txt");
           }
           SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());

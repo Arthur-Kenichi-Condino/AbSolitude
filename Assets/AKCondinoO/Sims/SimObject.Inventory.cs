@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
@@ -81,7 +82,24 @@ namespace AKCondinoO.Sims{
             transform.rotation=lineBetweenHandsRot;
            }
            transform.position=simHands.rightHand.transform.position+transform.rotation*rightHandGrabPos;
-           transform.rotation*=rightHandGrabRot;
+           if(simHands.owner is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
+            if(
+             baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
+             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
+            ){
+             transform.rotation*=rightHandGrabRot;
+            }else if(
+             baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
+             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE
+            ){
+             Quaternion rot=Quaternion.LookRotation(baseAI.simActorAnimatorController.animator.transform.forward,baseAI.simActorAnimatorController.animator.transform.up);
+             if(ZAxisIsUp){
+              transform.rotation=Quaternion.AngleAxis(180f,baseAI.simActorAnimatorController.animator.transform.up)*Quaternion.AngleAxis(-90f,baseAI.simActorAnimatorController.animator.transform.right)*rot;
+             }else{
+              transform.rotation=rot;
+             }
+            }
+           }
           }
          }
         }

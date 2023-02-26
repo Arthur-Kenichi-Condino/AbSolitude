@@ -8,6 +8,9 @@ function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
             if(rawFile.status===200||rawFile.status==0){
                 var allText=rawFile.responseText
                     .replaceAll("[[title]]","<p class=\"Title\">")
+                    .replaceAll("[[paragraph]]","<p class=\"Paragraph\">")
+                    .replaceAll("[[skip]]\r\n","<br/>")
+                    .replaceAll("[[skip]]","<br/>")
                     .replaceAll("\r\n","</p>");
                 console.log(allText);
                 document.getElementsByClassName(className)[0].innerHTML=allText;

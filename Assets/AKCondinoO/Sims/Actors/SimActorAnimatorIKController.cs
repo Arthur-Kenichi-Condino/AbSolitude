@@ -89,7 +89,7 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 leftToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorLeft*(disBetweenFeet/2f));
           if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit)){
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
-           Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.actor.transform.right);
+           Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
            //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
           }
@@ -102,7 +102,7 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 rightToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorRight*(disBetweenFeet/2f));
           if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit)){
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
-           Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.actor.transform.right);
+           Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
