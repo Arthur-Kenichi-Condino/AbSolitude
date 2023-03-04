@@ -1,7 +1,7 @@
 console.log("I'm alive!");
 var fileSystem=require('fs');
-function ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName(className){
-    console.log("ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName:"+className);
+function ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName(className,dir){
+    console.log("ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName:"+className+";dir:"+dir);
 }
 //https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file-in-the-browser
 function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
