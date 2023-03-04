@@ -4,26 +4,36 @@
         <script type="text/javascript" src=Main.js defer></script>
         <style>
             .BorderLeft{
+                /*background-color:#ff00003c;*/
                 height:100%;
                 width:20px;
                 position:fixed;
-                z-index:10000;
+                z-index:10001;
                 top:0;
                 left:0;
             }
-            .MainSidebar{
+            .WikiMainSidebarArea{
+                /*background-color:#ffd5003c;*/
+                height:100%;
+                width:202px;
+                position:fixed;
+                z-index:11002;
+                top:0;
+                left:0;
+            }
+            .WikiMainSidebarContent{
                 background-color:#272727;
                 border:1px solid #545454;
                 height:100%;
                 width:180px;
                 position:fixed;
-                z-index:10001;
+                z-index:11001;
                 top:0;
                 left:0;
                 padding-top:20px;
                 padding-left:20px;
             }
-            .ContentShow{
+            .WikiPageContent{
                 background-color:#272727;
                 border:1px solid #545454;
                 height:100%;
@@ -45,14 +55,16 @@
         </style>
     </head>
     <body bgcolor="#000000">
-        <div class="BorderLeft" onmouseenter="JQueryFadeInElementByClassName('MainSidebar','0')">
-            
+        <div class="BorderLeft" onmouseenter="JQueryFadeInElementByClassName('WikiMainSidebarArea','0')">
+            <!--empty-->            
         </div>
-        <div class="MainSidebar" onmouseout="JQueryFadeOutElementByClassName('MainSidebar','200')">
-
+        <div class="WikiMainSidebarArea" onmouseleave="JQueryFadeOutElementByClassName('WikiMainSidebarArea','200')">
+            <div class="WikiMainSidebarContent">
+                <button type="button" onclick="ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName('WikiMainSidebarContent')">WikiMainSidebarContent</button>
+            </div>
         </div>
-        <div class="ContentShow">
-            <button type="button" onclick="ParseTextFileToWikiElementInnerHtmlByClassName('HomunculusSystem/Vanilmirth/Content.txt','ContentShow')">Show</button>
+        <div class="WikiPageContent">
+            <button type="button" onclick="ParseTextFileToWikiElementInnerHtmlByClassName('HomunculusSystem/Vanilmirth/Content.txt','WikiPageContent')">WikiPageContent</button>
         </div>
     </body>
 </html>
