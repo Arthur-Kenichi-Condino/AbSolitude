@@ -69,11 +69,17 @@ namespace AKCondinoO.Sims{
               persistentData.rotation=Quaternion.Euler(specificIdData.eulerAngles);
               persistentData.localScale=specificIdData.localScale;
               container.specificIdsToLoad.Remove(id);
+             }else{
+              if(persistentData.isInventoryItem){
+               //Log.DebugMessage("don't load sim object that is persistentData.isInventoryItem");
+               goto _Skip;
+              }
              }
              container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,id.simType,id.number,persistentData));
              if(simActorSpawnAtIndex!=null){
               simActorSpawnAtIndex.Add(id.number,container.spawnDataFromFiles.at.Count-1);
              }
+             _Skip:{}
              simObjectStringStart=simObjectStringEnd;
             }
            }
