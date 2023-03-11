@@ -23,6 +23,9 @@ namespace AKCondinoO.Sims{
          public Vector3    position;
          public Vector3    localScale;
          public bool isInventoryItem;
+         public(Type simType,ulong number)?asInventoryItemOwnerId;
+         public(Type simInventoryType,ulong number)?simInventoryId;
+         //  TO DO: ListWrapper for all inventories
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;
