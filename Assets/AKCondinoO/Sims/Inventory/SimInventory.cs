@@ -19,9 +19,10 @@ namespace AKCondinoO.Sims.Inventory{
              inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
         }
-     internal readonly SimObject owner;
+     internal(Type simInventoryType,ulong number)simInventoryId;
+     internal SimObject owner;
      internal(Type simType,ulong number)ownerId;
-     internal readonly int maxItemsCount;
+     internal int maxItemsCount;
      internal readonly ConcurrentBag<int>openIds;
      internal readonly Dictionary<int,SimInventoryItem>idsItems;
      internal readonly HashSet<SimInventoryItem>items;
