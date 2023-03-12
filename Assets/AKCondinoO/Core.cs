@@ -6,6 +6,7 @@ using AKCondinoO.Gameplaying;
 using AKCondinoO.Music;
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Inventory;
 using AKCondinoO.UI;
 using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
@@ -96,13 +97,14 @@ namespace AKCondinoO{
           { 9,VoxelTerrainEditing .singleton},
           {10,VoxelWaterEditing   .singleton},
           {11,SimObjectManager    .singleton},
-          {12,SimObjectSpawner    .singleton},
-          {13,SkillsManager       .singleton},
-          {14,SimsMachine         .singleton},
-          {15,AutonomyCore        .singleton},
-          {16,Placeholder         .singleton},
-          {17,FixedUI             .singleton},
-          {18,ContextMenuUI       .singleton},
+          {12,SimInventoryManager .singleton},
+          {13,SimObjectSpawner    .singleton},
+          {14,SkillsManager       .singleton},
+          {15,SimsMachine         .singleton},
+          {16,AutonomyCore        .singleton},
+          {17,Placeholder         .singleton},
+          {18,FixedUI             .singleton},
+          {19,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);

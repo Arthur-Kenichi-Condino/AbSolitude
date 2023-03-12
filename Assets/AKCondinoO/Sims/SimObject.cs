@@ -23,9 +23,8 @@ namespace AKCondinoO.Sims{
          public Vector3    position;
          public Vector3    localScale;
          public bool isInventoryItem;
-         public(Type simType,ulong number)?asInventoryItemOwnerId;
-         public(Type simInventoryType,ulong number)?simInventoryId;
-         //  TO DO: ListWrapper for all inventories
+         public(Type simType,ulong number)?asInventoryItemContainerAsSimObjectId;
+         public(Type simInventoryType,ulong number)?asInventoryItemContainerAsSimObjectSimInventoryId;
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;
@@ -211,14 +210,14 @@ namespace AKCondinoO.Sims{
            masterActor.SetSlave(this);
           }
           if(!inventory.ContainsKey(typeof(SimInventory))){
-           inventory.Add(typeof(SimInventory),new List<SimInventory>());
-           inventory[typeof(SimInventory)].Add(new SimInventory(this,0));
+           inventory.Add(typeof(SimInventory),new Dictionary<ulong,SimInventory>());
+           //inventory[typeof(SimInventory)].Add(new SimInventory(this,0));
           }
           int totalInventorySpaces=0;
           foreach(var typeInventoryListPair in inventory){
-           foreach(SimInventory simInventory in typeInventoryListPair.Value){
-            simInventory.Reset();
-            totalInventorySpaces+=simInventory.maxItemsCount;
+           foreach(var simInventory in typeInventoryListPair.Value){
+            simInventory.Value.Reset();
+            totalInventorySpaces+=simInventory.Value.maxItemsCount;
            }
           }
           inventoryItemsSpawnData=new SpawnData(totalInventorySpaces);
@@ -343,8 +342,8 @@ namespace AKCondinoO.Sims{
           if(asInventoryItem.container==null){
               Log.DebugMessage("asInventoryItem invalid container");
           }else{
-              if(asInventoryItem.container.owner==null){
-                  Log.DebugMessage("asInventoryItem.container.owner==null");
+              if(asInventoryItem.container.asSimObject==null){
+                  Log.DebugMessage("asInventoryItem.container.asSimObject==null");
               }
           }
           SetAsInventoryItemTransform();

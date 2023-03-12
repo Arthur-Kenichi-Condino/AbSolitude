@@ -11,6 +11,8 @@ namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
      internal PersistentSimInventoryData persistentSimInventoryData;
         internal struct PersistentSimInventoryData{
+         public(Type simType,ulong number)asSimObjectId;
+         public(Type simInventoryType,ulong number)simInventoryId;
          public ListWrapper<SimInventoryItemData>inventoryItems;
             public struct SimInventoryItemData{
              public Type simType;public ulong number;public int id;
@@ -20,30 +22,30 @@ namespace AKCondinoO.Sims.Inventory{
             }
         }
      internal(Type simInventoryType,ulong number)simInventoryId;
-     internal SimObject owner;
-     internal(Type simType,ulong number)ownerId;
+     internal SimObject asSimObject;
+     internal(Type simType,ulong number)asSimObjectId;
      internal int maxItemsCount;
      internal readonly ConcurrentBag<int>openIds;
      internal readonly Dictionary<int,SimInventoryItem>idsItems;
      internal readonly HashSet<SimInventoryItem>items;
-        internal SimInventory(SimObject owner,int maxItemsCount){
+        internal SimInventory(SimObject asSimObject,int maxItemsCount){
          openIds=new ConcurrentBag<int>();
          idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
          items=new HashSet<SimInventoryItem>(maxItemsCount);
          simInventoryItemPool=new Queue<SimInventoryItem>(maxItemsCount);
-         this.owner=owner;
-         this.ownerId=owner.id.Value;
+         this.asSimObject=asSimObject;
+         this.asSimObjectId=asSimObject.id.Value;
          for(int id=0;id<maxItemsCount;id++){
           openIds.Add(id);
          }
          this.maxItemsCount=maxItemsCount;
-         Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and owner:"+owner);
+         Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and asSimObject:"+asSimObject);
         }
         internal virtual void Reset(bool clear=false){
          Log.DebugMessage("SimInventory Reset");
-         if(ownerId!=owner.id.Value){
-          Log.DebugMessage("ownerId!=owner.id.Value");
-          this.ownerId=owner.id.Value;
+         if(asSimObjectId!=asSimObject.id.Value){
+          Log.DebugMessage("asSimObjectId!=asSimObject.id.Value");
+          this.asSimObjectId=asSimObject.id.Value;
          }
          if(clear){
           Clear();
