@@ -11,7 +11,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
      internal SimInventoryItem asInventoryItem=null;
-     internal readonly Dictionary<Type,List<SimInventory>>inventory=new Dictionary<Type,List<SimInventory>>();
+     internal readonly Dictionary<Type,Dictionary<ulong,SimInventory>>inventory=new Dictionary<Type,Dictionary<ulong,SimInventory>>();
      internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
      internal SpawnData inventoryItemsSpawnData;
         internal bool AddToInventory(SimObject simObject){
@@ -21,9 +21,9 @@ namespace AKCondinoO.Sims{
           //  TO DO: "materialize" if needed
          }else{
           Log.DebugMessage("AddToInventory InventoryContains False");
-          if(inventory.TryGetValue(typeof(SimHands),out List<SimInventory>simHandsInventories)){
-           foreach(SimInventory simInventory in simHandsInventories){
-            if(simInventory is SimHands simHandsInventory){
+          if(inventory.TryGetValue(typeof(SimHands),out Dictionary<ulong,SimInventory>simHandsInventories)){
+           foreach(var simInventory in simHandsInventories){
+            if(simInventory.Value is SimHands simHandsInventory){
              Log.DebugMessage("simHandsInventory try Add");
              if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings)){
               Log.DebugMessage("added to simHandsInventory:mark simObject to be saved as an inventory item");
@@ -45,10 +45,10 @@ namespace AKCondinoO.Sims{
          if(simObject.asInventoryItem==null){
           return false;
          }
-         foreach(var inventoryTypeList in inventory){
-          foreach(SimInventory simInventory in inventoryTypeList.Value){
-           if(simInventory.Contains(simObject)){
-            containerData=(simInventory,simObject.asInventoryItem);
+         foreach(var inventoryTypeDictionary in inventory){
+          foreach(var simInventory in inventoryTypeDictionary.Value){
+           if(simInventory.Value.Contains(simObject)){
+            containerData=(simInventory.Value,simObject.asInventoryItem);
             return true;
            }
           }
@@ -67,7 +67,7 @@ namespace AKCondinoO.Sims{
          if(asInventoryItem.container is SimHands simHands){
           if(simHands.leftHand!=null&&simHands.rightHand!=null){
            Vector3 lineBetweenHandsDir=(simHands.leftHand.transform.position-simHands.rightHand.transform.position).normalized;
-           Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.owner.transform.up);
+           Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up);
            SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
            Vector3  leftHandGrabPos=settings. leftHandGrabPos;
            Vector3 rightHandGrabPos=settings.rightHandGrabPos;
@@ -76,13 +76,13 @@ namespace AKCondinoO.Sims{
            //Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
            Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
            if(ZAxisIsUp){
-            Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.owner.transform.up).normalized;
+            Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up).normalized;
             transform.rotation=Quaternion.LookRotation(Quaternion.AngleAxis(-90f,lineBetweenHandsDir)*lineBetweenHandsDirPerpendicularRight,lineBetweenHandsDir);
            }else{
             transform.rotation=lineBetweenHandsRot;
            }
            transform.position=simHands.rightHand.transform.position+transform.rotation*rightHandGrabPos;
-           if(simHands.owner is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
+           if(simHands.asSimObject is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
             if(
              baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
              baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND

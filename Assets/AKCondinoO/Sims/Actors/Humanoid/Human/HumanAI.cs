@@ -7,8 +7,8 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human{
         internal override void OnActivated(){
          if(Core.singleton.isServer){
           if(!inventory.ContainsKey(typeof(SimHands))){
-           inventory.Add(typeof(SimHands),new List<SimInventory>());
-           inventory[typeof(SimHands)].Add(new SimHands(this));
+           inventory.Add(typeof(SimHands),new Dictionary<ulong,SimInventory>());
+           //inventory[typeof(SimHands)].Add(new SimHands(this));
           }
          }
          base.OnActivated();

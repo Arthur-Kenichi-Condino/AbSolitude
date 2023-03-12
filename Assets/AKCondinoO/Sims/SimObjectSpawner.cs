@@ -15,7 +15,6 @@ namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
      internal static string simActorSavePath;
-     internal static string simInventorySavePath;
      internal readonly SimInventoryItemsInContainerSettings simInventoryItemsInContainerSettings=new SimInventoryItemsInContainerSettings();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -25,8 +24,6 @@ namespace AKCondinoO.Sims{
          if(Core.singleton.isServer){
           simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
           Directory.CreateDirectory(simActorSavePath);
-          simInventorySavePath=string.Format("{0}{1}",Core.savePath,"SimInventory/");
-          Directory.CreateDirectory(simInventorySavePath);
           FileStream releasedIdsFileStream=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStream=new FileStream(SimObjectManager.releasedIdsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           StreamWriter releasedIdsFileStreamWriter=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamWriter=new StreamWriter(releasedIdsFileStream);
           StreamReader releasedIdsFileStreamReader=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamReader=new StreamReader(releasedIdsFileStream);
@@ -104,9 +101,9 @@ namespace AKCondinoO.Sims{
           }
           string simInventorySaveFile=null;
           if(Core.singleton.isServer){
-           simInventorySaveFile=string.Format("{0}{1}{2}",simInventorySavePath,t,".txt");
+           simInventorySaveFile=string.Format("{0}{1}{2}",SimInventoryManager.simInventorySavePath,t,".txt");
           }
-          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>());
+          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
@@ -380,23 +377,24 @@ namespace AKCondinoO.Sims{
           if(simObject is SimActor simActor){
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simActor .persistentSimActorData);
           }
-          if(!PersistentDataSavingBackgroundContainer.simInventoryDataDictionaryPool.TryDequeue(out var simInventoryDataDictionary)){
-           simInventoryDataDictionary=new Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>();
+          if(!PersistentDataSavingBackgroundContainer.simInventoryDataTypeDictionaryPool.TryDequeue(out var simInventoryDataTypeDictionary)){
+           simInventoryDataTypeDictionary=new Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
           }
-          foreach(var typeInventoryListPair in simObject.inventory){
-           Type inventoryType=typeInventoryListPair.Key;
-           if(!PersistentDataSavingBackgroundContainer.simInventoryDataListPool.TryDequeue(out var simInventoryDataList)){
-            simInventoryDataList=new List<SimInventory.PersistentSimInventoryData>();
+         //  TO DO: save and load all inventories represented by this sim object
+          foreach(var typeIdInventoryDictionaryPair in simObject.inventory){
+           Type inventoryType=typeIdInventoryDictionaryPair.Key;
+           if(!PersistentDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.TryDequeue(out var simInventoryDataIdDictionary)){
+            simInventoryDataIdDictionary=new Dictionary<ulong,SimInventory.PersistentSimInventoryData>();
            }
-           foreach(var inventory in typeInventoryListPair.Value){
-            if(inventory.maxItemsCount<=0){
+           foreach(var inventory in typeIdInventoryDictionaryPair.Value){
+            if(inventory.Value.maxItemsCount<=0){
              continue;
             }
-            simInventoryDataList.Add(inventory.persistentSimInventoryData);
+            simInventoryDataIdDictionary.Add(inventory.Key,inventory.Value.persistentSimInventoryData);
            }
-           simInventoryDataDictionary.Add(inventoryType,simInventoryDataList);
+           simInventoryDataTypeDictionary.Add(inventoryType,simInventoryDataIdDictionary);
           }
-          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataDictionary);
+          SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataTypeDictionary);
          }
          while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simType].Add(toDespawnAndReleaseId.id.Value.number);

@@ -16,9 +16,9 @@ namespace AKCondinoO.Sims{
     internal class PersistentDataSavingBackgroundContainer:BackgroundContainer{
      internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
       internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
-      internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>>();
-       internal static readonly ConcurrentQueue<Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>simInventoryDataDictionaryPool=new ConcurrentQueue<Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>>();
-        internal static readonly ConcurrentQueue<List<SimInventory.PersistentSimInventoryData>>simInventoryDataListPool=new ConcurrentQueue<List<SimInventory.PersistentSimInventoryData>>();
+      internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
+       internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
+        internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataIdDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
      internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
@@ -207,14 +207,14 @@ namespace AKCondinoO.Sims{
           }
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
-           Dictionary<Type,List<SimInventory.PersistentSimInventoryData>>dictionary=idInventoryPair.Value;
-           foreach(var simInventoryTypeListPair in dictionary){
-            List<SimInventory.PersistentSimInventoryData>list=simInventoryTypeListPair.Value;
-            list.Clear();
-            PersistentDataSavingBackgroundContainer.simInventoryDataListPool.Enqueue(list);
+           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;
+           foreach(var simInventoryTypeDictionaryPair in typeDictionary){
+            Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
+            idDictionary.Clear();
+            PersistentDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.Enqueue(idDictionary);
            }
-           dictionary.Clear();
-           PersistentDataSavingBackgroundContainer.simInventoryDataDictionaryPool.Enqueue(dictionary);
+           typeDictionary.Clear();
+           PersistentDataSavingBackgroundContainer.simInventoryDataTypeDictionaryPool.Enqueue(typeDictionary);
           }
           persistentSimInventoryDataToSave.Clear();
          }
