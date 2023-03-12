@@ -1,8 +1,7 @@
-[[title]]Vanilmirth Concept
-[[skip]]
-[[paragraph]]The Vanilmirth homunculus type is based on the homunculus of the same name present on the game Ragnarök Online.
-[[skip]]
-[[paragraph]]
-[[skip]]
-[[paragraph]]
-[[skip]]
+\t Vanilmirth 
+\p Vanilmirth é o homunculus que deu errado... Mas acabou funcionando no fim das contas!
+\t Conceito
+\p O homunculus Vanilmirth é baseado no homunculus de mesmo nome presente no jogo Ragnarök Online.
+\t Anotações
+\t Curiosidades
+\br

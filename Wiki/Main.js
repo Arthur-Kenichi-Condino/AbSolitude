@@ -11,10 +11,10 @@ function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
         if(rawFile.readyState===4){
             if(rawFile.status===200||rawFile.status==0){
                 var allText=rawFile.responseText
-                    .replaceAll("[[title]]","<p class=\"Title\">")
-                    .replaceAll("[[paragraph]]","<p class=\"Paragraph\">")
-                    .replaceAll("[[skip]]\r\n","<br/>")
-                    .replaceAll("[[skip]]","<br/>")
+                    .replaceAll("\\br\r\n","<br/>")
+                    .replaceAll("\\br","<br/>")
+                    .replaceAll("\\t","<p class=\"Title\">")
+                    .replaceAll("\\p","<p class=\"Paragraph\">")
                     .replaceAll("\r\n","</p>");
                 console.log(allText);
                 document.getElementsByClassName(className)[0].innerHTML=allText;
