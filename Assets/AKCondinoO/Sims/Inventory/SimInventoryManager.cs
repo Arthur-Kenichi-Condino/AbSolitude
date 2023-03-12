@@ -22,5 +22,7 @@ namespace AKCondinoO.Sims.Inventory{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
         }
+        internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
+        }
     }
 }
