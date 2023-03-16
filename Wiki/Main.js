@@ -1,8 +1,36 @@
-console.log("I'm alive!");
-function ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName(className,dir){
-    console.log("ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName:"+className+";dir:"+dir);
+console.log("trying to become alive...");
+const allScripts=document.getElementsByTagName('script');
+var rootPath=null;
+for(var i=allScripts.length-1;i>=0;--i){
+    var src=allScripts[i].src;
+    //console.log("searching allScripts...src:"+src);
+    if(src.substring(src.length-'AbSolitude/Wiki/Main.js'.length)=='AbSolitude/Wiki/Main.js'){
+        //console.log("found Main.js src:"+src);
+        rootPath=src.substring(0,src.length-'Main.js'.length);
+        console.log("found Main.js rootPath:"+rootPath);
+    }
 }
-//https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file-in-the-browser
+const dirRequest=new XMLHttpRequest();
+dirRequest.open("GET",rootPath,true);
+var dirRequestResp=null;
+//  https://stackoverflow.com/questions/54857700/list-files-on-a-server-via-front-end-javascript
+dirRequest.onload=()=>{
+    //  Succesful response
+    console.log("dirRequest.status:"+dirRequest.status);
+    if(dirRequest.status>=200&&dirRequest.status<400){
+        dirRequestResp=dirRequest.responseText;
+        //console.log("dirRequestResp:"+dirRequestResp);
+    }
+};
+dirRequest.send(null);
+console.log("I'm alive!");
+function ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName(className){
+    console.log("ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName:"+className);
+    if(dirRequestResp!==null){
+        document.getElementsByClassName(className)[0].innerHTML=dirRequestResp;
+    }
+}
+//  https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file-in-the-browser
 function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
     var rawFile=new XMLHttpRequest();
     rawFile.open("GET",file,false);
