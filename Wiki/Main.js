@@ -1,5 +1,4 @@
 console.log("I'm alive!");
-var fileSystem=require('fs');
 function ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName(className,dir){
     console.log("ParseFileSystemTreeDataToWikiElementInnerHtmlByClassName:"+className+";dir:"+dir);
 }
@@ -24,16 +23,16 @@ function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
     rawFile.send(null);
 }
 function JQueryFadeOutElementByClassName(className,timeout){
-    console.log("JQueryFadeOutElementByClassName:"+className+" in "+timeout+" ms");
+    //console.log("JQueryFadeOutElementByClassName:"+className+" in "+timeout+" ms");
     setTimeout(function(){
-        console.log("JQueryFadeOutElementByClassName:running setTimeout function for "+className);
+        //console.log("JQueryFadeOutElementByClassName:running setTimeout function for "+className);
         $(document.getElementsByClassName(className)).fadeOut('fast');
     },timeout);
 }
 function JQueryFadeInElementByClassName(className,timeout){
-    console.log("JQueryFadeInElementByClassName:"+className+" in "+timeout+" ms");
+    //console.log("JQueryFadeInElementByClassName:"+className+" in "+timeout+" ms");
     setTimeout(function(){
-        console.log("JQueryFadeInElementByClassName:running setTimeout function for "+className);
+        //console.log("JQueryFadeInElementByClassName:running setTimeout function for "+className);
         $(document.getElementsByClassName(className)).fadeIn('fast');
     },timeout);
 }
