@@ -1,4 +1,5 @@
 console.log("trying to become alive...");
+//
 const allScripts=document.getElementsByTagName('script');
 var rootPath=null;
 for(var i=allScripts.length-1;i>=0;--i){
