@@ -25,6 +25,7 @@ namespace AKCondinoO.Sims{
          public bool isInventoryItem;
          public(Type simType,ulong number)?asInventoryItemContainerAsSimObjectId;
          public(Type simInventoryType,ulong number)?asInventoryItemContainerAsSimObjectSimInventoryId;
+         //  Não salvar lista de inventários aqui; ela é salva em uma pasta própria, por tipo e id de sim object
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;
