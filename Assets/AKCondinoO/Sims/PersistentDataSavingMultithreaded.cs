@@ -205,6 +205,8 @@ namespace AKCondinoO.Sims{
           if(!simInventoryFileStream.ContainsKey(t)){
            goto _Skip;
           }
+          foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
+          }
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;
