@@ -102,6 +102,10 @@ namespace AKCondinoO.Sims{
           string simInventorySaveFile=null;
           if(Core.singleton.isServer){
            simInventorySaveFile=string.Format("{0}{1}{2}",SimInventoryManager.simInventorySavePath,t,".txt");
+           FileStream simInventoryFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simInventoryFileStream[t]=simInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simInventoryFileStreamWriter[t]=new StreamWriter(simInventoryFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simInventoryFileStreamReader[t]=new StreamReader(simInventoryFileStream);
           }
           SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
@@ -380,7 +384,7 @@ namespace AKCondinoO.Sims{
           if(!PersistentDataSavingBackgroundContainer.simInventoryDataTypeDictionaryPool.TryDequeue(out var simInventoryDataTypeDictionary)){
            simInventoryDataTypeDictionary=new Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
           }
-         //  TO DO: save and load all inventories represented by this sim object
+          //  TO DO: save and load all inventories represented by this sim object
           foreach(var typeIdInventoryDictionaryPair in simObject.inventory){
            Type inventoryType=typeIdInventoryDictionaryPair.Key;
            if(!PersistentDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.TryDequeue(out var simInventoryDataIdDictionary)){

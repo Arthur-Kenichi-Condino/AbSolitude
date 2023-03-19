@@ -87,6 +87,8 @@ namespace AKCondinoO.Sims{
              persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
              persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
             }
+            persistentDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
+            persistentDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
            }
           }
           persistentDataSavingBG.Dispose();
