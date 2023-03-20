@@ -206,6 +206,11 @@ namespace AKCondinoO.Sims{
            goto _Skip;
           }
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
+           ulong id=idPersistentSimInventoryDataPair.Key;
+           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idPersistentSimInventoryDataPair.Value;
+           foreach(var simInventoryTypeDictionaryPair in typeDictionary){
+            Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
+           }
           }
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
