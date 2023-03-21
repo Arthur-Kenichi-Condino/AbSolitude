@@ -205,10 +205,18 @@ namespace AKCondinoO.Sims{
           if(!simInventoryFileStream.ContainsKey(t)){
            goto _Skip;
           }
+          FileStream fileStream=this.simInventoryFileStream[t];
+          StreamWriter fileStreamWriter=this.simInventoryFileStreamWriter[t];
+          StreamReader fileStreamReader=this.simInventoryFileStreamReader[t];
+          stringBuilder.Clear();
+          fileStream.Position=0L;
+          fileStreamReader.DiscardBufferedData();
+          string line;
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
            ulong id=idPersistentSimInventoryDataPair.Key;
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idPersistentSimInventoryDataPair.Value;
            foreach(var simInventoryTypeDictionaryPair in typeDictionary){
+            Type simInventoryType=simInventoryTypeDictionaryPair.Key;
             Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
            }
           }
