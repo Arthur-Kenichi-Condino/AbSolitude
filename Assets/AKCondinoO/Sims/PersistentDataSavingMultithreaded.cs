@@ -212,14 +212,29 @@ namespace AKCondinoO.Sims{
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
           string line;
+          while((line=fileStreamReader.ReadLine())!=null){
+           if(string.IsNullOrEmpty(line)){continue;}
+          }
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
            ulong id=idPersistentSimInventoryDataPair.Key;
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idPersistentSimInventoryDataPair.Value;
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ ",id);
            foreach(var simInventoryTypeDictionaryPair in typeDictionary){
             Type simInventoryType=simInventoryTypeDictionaryPair.Key;
             Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryType={0} , {{ ",simInventoryType);
+            foreach(var simInventoryIdDataPair in idDictionary){
+             ulong simInventoryId=simInventoryIdDataPair.Key;
+             SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdDataPair.Value;
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryId={0} , {{ {1} }} , ",simInventoryId,persistentSimInventoryData.ToString());
+            }
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
            }
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
+          fileStream.SetLength(0L);
+          fileStreamWriter.Write(stringBuilder.ToString());
+          fileStreamWriter.Flush();
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;

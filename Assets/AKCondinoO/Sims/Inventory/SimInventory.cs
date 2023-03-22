@@ -20,6 +20,10 @@ namespace AKCondinoO.Sims.Inventory{
             internal void UpdateData(SimInventory simInventory){
              inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
+            public override string ToString(){
+             string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ }}");
+             return result;
+            }
         }
      internal(Type simInventoryType,ulong number)simInventoryId;
      internal SimObject asSimObject;
