@@ -218,6 +218,9 @@ namespace AKCondinoO.Sims{
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
            ulong id=idPersistentSimInventoryDataPair.Key;
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idPersistentSimInventoryDataPair.Value;
+           if(typeDictionary.Count<=0){
+            continue;
+           }
            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ ",id);
            foreach(var simInventoryTypeDictionaryPair in typeDictionary){
             Type simInventoryType=simInventoryTypeDictionaryPair.Key;

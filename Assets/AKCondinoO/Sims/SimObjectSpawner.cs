@@ -396,7 +396,11 @@ namespace AKCondinoO.Sims{
             }
             simInventoryDataIdDictionary.Add(inventory.Key,inventory.Value.persistentSimInventoryData);
            }
-           simInventoryDataTypeDictionary.Add(inventoryType,simInventoryDataIdDictionary);
+           if(simInventoryDataIdDictionary.Count>0){
+            simInventoryDataTypeDictionary.Add(inventoryType,simInventoryDataIdDictionary);
+           }else{
+            PersistentDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.Enqueue(simInventoryDataIdDictionary);
+           }
           }
           SimObjectManager.singleton.persistentDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataTypeDictionary);
          }
