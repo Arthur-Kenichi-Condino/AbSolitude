@@ -214,6 +214,13 @@ namespace AKCondinoO.Sims{
           string line;
           while((line=fileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
+           int idStringStart=line.IndexOf("id=")+3;
+           int idStringEnd  =line.IndexOf(" , ",idStringStart);
+           ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           //Log.DebugMessage("id:"+id);
+           if(!persistentSimInventoryDataToSave.ContainsKey(id)){
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
+           }
           }
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
            ulong id=idPersistentSimInventoryDataPair.Key;
