@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
@@ -20,8 +21,14 @@ namespace AKCondinoO.Sims.Inventory{
             internal void UpdateData(SimInventory simInventory){
              inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
+         private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
             public override string ToString(){
+             if(!stringBuilderPool.TryDequeue(out StringBuilder stringBuilder)){
+              stringBuilder=new StringBuilder();
+             }
+             stringBuilder.Clear();
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ }}");
+             stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
         }
