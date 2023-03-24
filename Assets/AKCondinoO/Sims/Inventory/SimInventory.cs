@@ -46,6 +46,7 @@ namespace AKCondinoO.Sims.Inventory{
      internal readonly Dictionary<int,SimInventoryItem>idsItems;
      internal readonly HashSet<SimInventoryItem>items;
         internal SimInventory(ulong idNumber,SimObject asSimObject,int maxItemsCount){
+         this.simInventoryId=(GetType(),idNumber);
          openIds=new ConcurrentBag<int>();
          idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
          items=new HashSet<SimInventoryItem>(maxItemsCount);
