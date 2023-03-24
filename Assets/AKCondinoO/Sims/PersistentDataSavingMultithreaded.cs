@@ -236,7 +236,7 @@ namespace AKCondinoO.Sims{
             foreach(var simInventoryIdDataPair in idDictionary){
              ulong simInventoryId=simInventoryIdDataPair.Key;
              SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdDataPair.Value;
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[ simInventoryId={0} , {{ {1} }} ] , ",simInventoryId,persistentSimInventoryData.ToString());
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[ simInventoryIdNumber={0} , {{ {1} }} ] , ",simInventoryId,persistentSimInventoryData.ToString());
             }
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} ] , ");
            }
