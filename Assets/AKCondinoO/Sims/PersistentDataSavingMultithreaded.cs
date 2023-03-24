@@ -232,13 +232,13 @@ namespace AKCondinoO.Sims{
            foreach(var simInventoryTypeDictionaryPair in typeDictionary){
             Type simInventoryType=simInventoryTypeDictionaryPair.Key;
             Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
-            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryType={0} , {{ ",simInventoryType);
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[ simInventoryType={0} , {{ ",simInventoryType);
             foreach(var simInventoryIdDataPair in idDictionary){
              ulong simInventoryId=simInventoryIdDataPair.Key;
              SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdDataPair.Value;
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryId={0} , {{ {1} }} , ",simInventoryId,persistentSimInventoryData.ToString());
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[ simInventoryId={0} , {{ {1} }} ] , ",simInventoryId,persistentSimInventoryData.ToString());
             }
-            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} ] , ");
            }
            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
