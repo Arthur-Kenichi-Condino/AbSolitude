@@ -19,6 +19,8 @@ namespace AKCondinoO.Sims.Inventory{
              public Type simType;public ulong number;public int id;
             }
             internal void UpdateData(SimInventory simInventory){
+             simInventoryId=simInventory.simInventoryId;
+             asSimObjectId=simInventory.asSimObjectId;
              inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
          private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
@@ -27,7 +29,11 @@ namespace AKCondinoO.Sims.Inventory{
               stringBuilder=new StringBuilder();
              }
              stringBuilder.Clear();
-             string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ }}");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryId={0} , ",simInventoryId);
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"asSimObjectId={0} , ",asSimObjectId);
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"inventoryItems={{ ");
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
+             string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ {0}, }}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
@@ -51,6 +57,7 @@ namespace AKCondinoO.Sims.Inventory{
          }
          this.maxItemsCount=maxItemsCount;
          Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and asSimObject:"+asSimObject);
+         persistentSimInventoryData.UpdateData(this);
         }
         internal virtual void Reset(bool clear=false){
          Log.DebugMessage("SimInventory Reset");
@@ -61,6 +68,7 @@ namespace AKCondinoO.Sims.Inventory{
          if(clear){
           Clear();
          }
+         persistentSimInventoryData.UpdateData(this);
         }
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
         internal virtual void Clear(){
