@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,10 @@ namespace AKCondinoO.Sims{
      internal PersistentDataSavingMultithreaded       persistentDataSavingBGThread;
      internal PersistentDataLoadingBackgroundContainer persistentDataLoadingBG;
      internal PersistentDataLoadingMultithreaded       persistentDataLoadingBGThread;
+     internal PersistentSimInventoryDataSavingBackgroundContainer persistentSimInventoryDataSavingBG;
+     internal PersistentSimInventoryDataSavingMultithreaded       persistentSimInventoryDataSavingBGThread;
+     internal PersistentSimInventoryDataLoadingBackgroundContainer persistentSimInventoryDataLoadingBG;
+     internal PersistentSimInventoryDataLoadingMultithreaded       persistentSimInventoryDataLoadingBGThread;
      internal static string idsFile;
      internal static string releasedIdsFile;
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
