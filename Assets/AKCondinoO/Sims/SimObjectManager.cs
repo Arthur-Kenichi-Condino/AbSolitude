@@ -35,6 +35,13 @@ namespace AKCondinoO.Sims{
          PersistentDataLoadingMultithreaded.Stop=false;
          persistentDataLoadingBG=new PersistentDataLoadingBackgroundContainer();
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
+         PersistentSimInventoryDataSavingMultithreaded.Stop=false;
+         persistentSimInventoryDataSavingBG=new PersistentSimInventoryDataSavingBackgroundContainer();
+         persistentSimInventoryDataSavingBGThread=new PersistentSimInventoryDataSavingMultithreaded();
+         PersistentSimInventoryDataLoadingMultithreaded.Stop=false;
+         persistentSimInventoryDataLoadingBG=new PersistentSimInventoryDataLoadingBackgroundContainer();
+         persistentSimInventoryDataLoadingBGThread=new PersistentSimInventoryDataLoadingMultithreaded();
+         //  TO DO: dispose, update references' locations shown in errors, change directory for sim inventory values, schedule and complete sim inventory bg tasks following persistentDataSavingBG
         }
         public void Init(){
          if(Core.singleton.isServer){
@@ -92,8 +99,8 @@ namespace AKCondinoO.Sims{
              persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
              persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
             }
-            persistentDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
-            persistentDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
+            persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
+            persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
            }
           }
           persistentDataSavingBG.Dispose();
