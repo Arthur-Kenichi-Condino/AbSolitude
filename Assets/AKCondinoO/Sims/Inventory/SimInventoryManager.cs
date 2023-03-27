@@ -11,6 +11,7 @@ namespace AKCondinoO.Sims.Inventory{
     internal class SimInventoryManager:MonoBehaviour,ISingletonInitialization{
      internal static SimInventoryManager singleton{get;set;}
      internal static string simInventorySavePath;
+     internal static string simInventoryDataSavePath;
      internal static string idsFile;
      FileStream idsFileStream;
      StreamWriter idsFileStreamWriter;
@@ -24,6 +25,8 @@ namespace AKCondinoO.Sims.Inventory{
          if(Core.singleton.isServer){
           simInventorySavePath=string.Format("{0}{1}",Core.savePath,"SimInventory/");
           Directory.CreateDirectory(simInventorySavePath);
+          simInventoryDataSavePath=string.Format("{0}{1}",simInventorySavePath,"Data/");
+          Directory.CreateDirectory(simInventoryDataSavePath);
           idsFile=string.Format("{0}{1}",simInventorySavePath,"ids.txt");
           idsFileStream=new FileStream(idsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           idsFileStreamWriter=new StreamWriter(idsFileStream);
