@@ -25,6 +25,7 @@ namespace AKCondinoO.Sims.Inventory{
         protected override void Cleanup(){
         }
         protected override void Execute(){
+         Log.DebugMessage("Execute()");
          foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
           Type t=typePersistentSimInventoryDataToSavePair.Key;
           var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
