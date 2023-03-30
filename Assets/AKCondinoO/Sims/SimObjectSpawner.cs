@@ -14,7 +14,6 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
      internal static SimObjectSpawner singleton{get;set;}
-     internal static string simActorSavePath;
      internal readonly SimInventoryItemsInContainerSettings simInventoryItemsInContainerSettings=new SimInventoryItemsInContainerSettings();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -22,8 +21,6 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,GameObject>simObjectPrefabs=new Dictionary<Type,GameObject>();
         public void Init(){
          if(Core.singleton.isServer){
-          simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
-          Directory.CreateDirectory(simActorSavePath);
           FileStream releasedIdsFileStream=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStream=new FileStream(SimObjectManager.releasedIdsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           StreamWriter releasedIdsFileStreamWriter=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamWriter=new StreamWriter(releasedIdsFileStream);
           StreamReader releasedIdsFileStreamReader=SimObjectManager.singleton.persistentDataSavingBGThread.releasedIdsFileStreamReader=new StreamReader(releasedIdsFileStream);
@@ -81,7 +78,7 @@ namespace AKCondinoO.Sims{
           simObjectPrefabs.Add(t,gameObject);
           string saveFile=null;
           if(Core.singleton.isServer){
-           saveFile=string.Format("{0}{1}{2}",Core.savePath,t,".txt");
+           saveFile=string.Format("{0}{1}{2}",SimObjectManager.simObjectDataSavePath,t,".txt");
            FileStream fileStream;
            SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=fileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(fileStream);
@@ -91,7 +88,7 @@ namespace AKCondinoO.Sims{
           string simActorSaveFile=null;
           if(SimObjectUtil.IsSimActor(t)){
            if(Core.singleton.isServer){
-            simActorSaveFile=string.Format("{0}{1}{2}",simActorSavePath,t,".txt");
+            simActorSaveFile=string.Format("{0}{1}{2}",SimObjectManager.simActorDataSavePath,t,".txt");
             FileStream simActorFileStream;
             SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
             SimObjectManager.singleton.persistentDataSavingBGThread.simActorFileStreamWriter[t]=new StreamWriter(simActorFileStream);
