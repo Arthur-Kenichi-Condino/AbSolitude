@@ -5,6 +5,7 @@ using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class SimObjectManager:MonoBehaviour,ISingletonInitialization{
@@ -18,6 +19,10 @@ namespace AKCondinoO.Sims{
      internal PersistentSimInventoryDataSavingMultithreaded       persistentSimInventoryDataSavingBGThread;
      internal PersistentSimInventoryDataLoadingBackgroundContainer persistentSimInventoryDataLoadingBG;
      internal PersistentSimInventoryDataLoadingMultithreaded       persistentSimInventoryDataLoadingBGThread;
+     internal static string simObjectSavePath;
+     internal static string simObjectDataSavePath;
+     internal static string simActorSavePath;
+     internal static string simActorDataSavePath;
      internal static string idsFile;
      internal static string releasedIdsFile;
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
@@ -45,8 +50,16 @@ namespace AKCondinoO.Sims{
         }
         public void Init(){
          if(Core.singleton.isServer){
-                  idsFile=string.Format("{0}{1}",Core.savePath,        "ids.txt");
-          releasedIdsFile=string.Format("{0}{1}",Core.savePath,"releasedIds.txt");
+          simObjectSavePath=string.Format("{0}{1}",Core.savePath,"SimObject/");
+          Directory.CreateDirectory(simObjectSavePath);
+          simObjectDataSavePath=string.Format("{0}{1}",simObjectSavePath,"Data/");
+          Directory.CreateDirectory(simObjectDataSavePath);
+          simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
+          Directory.CreateDirectory(simActorSavePath);
+          simActorDataSavePath=string.Format("{0}{1}",simActorSavePath,"Data/");
+          Directory.CreateDirectory(simActorDataSavePath);
+                  idsFile=string.Format("{0}{1}",simObjectSavePath,        "ids.txt");
+          releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
