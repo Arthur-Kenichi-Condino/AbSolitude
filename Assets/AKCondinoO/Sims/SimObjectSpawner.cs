@@ -76,11 +76,11 @@ namespace AKCondinoO.Sims{
           if(simObject==null)continue;
           Type t=simObject.GetType();
           simObjectPrefabs.Add(t,gameObject);
-          string saveFile=null;
+          string simObjectSaveFile=null;
           if(Core.singleton.isServer){
-           saveFile=string.Format("{0}{1}{2}",SimObjectManager.simObjectDataSavePath,t,".txt");
+           simObjectSaveFile=string.Format("{0}{1}{2}",SimObjectManager.simObjectDataSavePath,t,".txt");
            FileStream fileStream;
-           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=fileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=fileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(fileStream);
            SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamReader[t]=new StreamReader(fileStream);
           }
@@ -110,7 +110,7 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
           if(Core.singleton.isServer){
            FileStream loaderFileStream;
-           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(saveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataLoadingBGThread.fileStreamReader[t]=new StreamReader(loaderFileStream);
           }
           if(SimObjectUtil.IsSimActor(t)){
