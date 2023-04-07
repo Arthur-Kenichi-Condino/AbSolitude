@@ -124,6 +124,8 @@ namespace AKCondinoO.Sims{
            persistentDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
            persistentDataSavingBGThread.idsFileStreamWriter.Dispose();
            persistentDataSavingBGThread.idsFileStreamReader.Dispose();
+            persistentSimInventoryDataSavingBGThread.idsFileStreamWriter.Dispose();
+            persistentSimInventoryDataSavingBGThread.idsFileStreamReader.Dispose();
           }
           foreach(var kvp in persistentDataSavingBGThread.simObjectFileStream){
            Type t=kvp.Key;
@@ -134,8 +136,8 @@ namespace AKCondinoO.Sims{
              persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
              persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
             }
-            persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
-            persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
+             persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
+             persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
            }
           }
           persistentDataSavingBG.Dispose();
