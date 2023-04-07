@@ -94,6 +94,11 @@ namespace AKCondinoO.Sims.Inventory{
          if(idsFileStream!=null){
           idsStringBuilder.Clear();
           foreach(var typeIdsPair in container.persistentIds){
+           Type t=typeIdsPair.Key;
+           ulong nextId=typeIdsPair.Value;
+           if(nextId>0){
+            Log.DebugMessage("t:"+t+";nextId:"+nextId);
+           }
           }
          }
         }

@@ -59,8 +59,8 @@ namespace AKCondinoO{
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
            RenderingUtil.SetUtil();
-         QualitySettings.vSyncCount=1;
-         Application.targetFrameRate=75;
+         QualitySettings.vSyncCount=0;
+         Application.targetFrameRate=164;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();

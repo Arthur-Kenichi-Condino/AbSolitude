@@ -384,6 +384,11 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.ids.TryGetValue(t,out ulong nextId);
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[t]=nextId;
          }
+          foreach(var kvp in SimInventoryManager.singleton.ids){
+           Type t=kvp.Key;
+           SimInventoryManager.singleton.ids.TryGetValue(t,out ulong nextId);
+           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
+          }
          foreach(var a in SimObjectManager.singleton.active){
           GetSimObjectPersistentData(a.Value);
          }
