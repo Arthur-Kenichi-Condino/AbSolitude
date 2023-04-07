@@ -12,9 +12,10 @@ using System.Text;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataSavingBackgroundContainer:BackgroundContainer{
-      internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
-       internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
-        internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataIdDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
+     internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
+      internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
+       internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataIdDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
+     internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
     }
     internal class PersistentSimInventoryDataSavingMultithreaded:BaseMultithreaded<PersistentSimInventoryDataSavingBackgroundContainer>{
      internal readonly Dictionary<Type,FileStream>simInventoryFileStream=new Dictionary<Type,FileStream>();
@@ -22,6 +23,10 @@ namespace AKCondinoO.Sims.Inventory{
       internal readonly Dictionary<Type,StreamReader>simInventoryFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
+     internal FileStream idsFileStream;
+      internal StreamWriter idsFileStreamWriter;
+      internal StreamReader idsFileStreamReader;
+       readonly StringBuilder idsStringBuilder=new StringBuilder();
         protected override void Cleanup(){
         }
         protected override void Execute(){
@@ -85,6 +90,11 @@ namespace AKCondinoO.Sims.Inventory{
            PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataTypeDictionaryPool.Enqueue(typeDictionary);
           }
           persistentSimInventoryDataToSave.Clear();
+         }
+         if(idsFileStream!=null){
+          idsStringBuilder.Clear();
+          foreach(var typeIdsPair in container.persistentIds){
+          }
          }
         }
     }

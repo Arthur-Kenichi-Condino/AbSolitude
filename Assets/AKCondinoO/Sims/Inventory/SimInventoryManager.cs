@@ -13,10 +13,6 @@ namespace AKCondinoO.Sims.Inventory{
      internal static string simInventorySavePath;
      internal static string simInventoryDataSavePath;
      internal static string idsFile;
-     FileStream idsFileStream;
-     StreamWriter idsFileStreamWriter;
-     StreamReader idsFileStreamReader;
-      readonly StringBuilder idsStringBuilder=new StringBuilder();
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -28,9 +24,9 @@ namespace AKCondinoO.Sims.Inventory{
           simInventoryDataSavePath=string.Format("{0}{1}",simInventorySavePath,"Data/");
           Directory.CreateDirectory(simInventoryDataSavePath);
           idsFile=string.Format("{0}{1}",simInventorySavePath,"ids.txt");
-          idsFileStream=new FileStream(idsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-          idsFileStreamWriter=new StreamWriter(idsFileStream);
-          idsFileStreamReader=new StreamReader(idsFileStream);
+          FileStream idsFileStream=SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.idsFileStream=new FileStream(idsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          StreamWriter idsFileStreamWriter=SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.idsFileStreamWriter=new StreamWriter(idsFileStream);
+          StreamReader idsFileStreamReader=SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.idsFileStreamReader=new StreamReader(idsFileStream);
           idsFileStream.Position=0L;
           idsFileStreamReader.DiscardBufferedData();
           string line;
@@ -44,11 +40,6 @@ namespace AKCondinoO.Sims.Inventory{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
          if(Core.singleton.isServer){
-          idsStringBuilder.Clear();
-          foreach(var typeIdsPair in ids){
-          }
-          idsFileStreamWriter.Dispose();
-          idsFileStreamReader.Dispose();
          }
         }
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
