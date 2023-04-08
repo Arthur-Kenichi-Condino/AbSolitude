@@ -32,6 +32,11 @@ namespace AKCondinoO.Sims.Inventory{
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simInventoryId={0} , ",simInventoryId);
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"asSimObjectId={0} , ",asSimObjectId);
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"inventoryItems={{ ");
+             inventoryItems.Reset();
+             while(inventoryItems.MoveNext()){
+              SimInventoryItemData inventoryItem=inventoryItems.Current;
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1},{2}], ",inventoryItem.simType,inventoryItem.number,inventoryItem.id);
+             }
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ {0}, }}",stringBuilder.ToString());
              stringBuilderPool.Enqueue(stringBuilder);

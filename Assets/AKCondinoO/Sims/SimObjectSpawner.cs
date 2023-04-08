@@ -79,10 +79,10 @@ namespace AKCondinoO.Sims{
           string simObjectSaveFile=null;
           if(Core.singleton.isServer){
            simObjectSaveFile=string.Format("{0}{1}{2}",SimObjectManager.simObjectDataSavePath,t,".txt");
-           FileStream fileStream;
-           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=fileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(fileStream);
-           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamReader[t]=new StreamReader(fileStream);
+           FileStream simObjectFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStream[t]=simObjectFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamWriter[t]=new StreamWriter(simObjectFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simObjectFileStreamReader[t]=new StreamReader(simObjectFileStream);
           }
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile.Add(t,new Dictionary<ulong,SimObject.PersistentData>());
           string simActorSaveFile=null;
@@ -109,16 +109,20 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
           if(Core.singleton.isServer){
-           FileStream loaderFileStream;
-           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStream[t]=loaderFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-           SimObjectManager.singleton.persistentDataLoadingBGThread.fileStreamReader[t]=new StreamReader(loaderFileStream);
+           FileStream loaderSimObjectFileStream;
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStream[t]=loaderSimObjectFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStreamReader[t]=new StreamReader(loaderSimObjectFileStream);
           }
           if(SimObjectUtil.IsSimActor(t)){
            if(Core.singleton.isServer){
-            FileStream simActorFileStream;
-            SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStream[t]=simActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-            SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStreamReader[t]=new StreamReader(simActorFileStream);
+            FileStream loaderSimActorFileStream;
+            SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStream[t]=loaderSimActorFileStream=new FileStream(simActorSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+            SimObjectManager.singleton.persistentDataLoadingBGThread.simActorFileStreamReader[t]=new StreamReader(loaderSimActorFileStream);
            }
+          }
+          if(Core.singleton.isServer){
+           FileStream loaderSimInventoryFileStream;
+           SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream[t]=loaderSimInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
@@ -386,7 +390,7 @@ namespace AKCondinoO.Sims{
          }
           foreach(var kvp in SimInventoryManager.singleton.ids){
            Type t=kvp.Key;
-           SimInventoryManager.singleton.ids.TryGetValue(t,out ulong nextId);
+           ulong nextId=kvp.Value;
            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
           }
          foreach(var a in SimObjectManager.singleton.active){

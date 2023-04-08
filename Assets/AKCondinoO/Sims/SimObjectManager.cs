@@ -77,22 +77,22 @@ namespace AKCondinoO.Sims{
            }
            PersistentSimInventoryDataLoadingMultithreaded.Stop=true;
            persistentSimInventoryDataLoadingBGThread.Wait();
-          foreach(var kvp in persistentDataLoadingBGThread.fileStream){
+          foreach(var kvp in persistentDataLoadingBGThread.simObjectFileStream){
            Type t=kvp.Key;
            if(Core.singleton.isServer){
-            persistentDataLoadingBGThread.fileStream      [t].Dispose();
-            persistentDataLoadingBGThread.fileStreamReader[t].Dispose();
+            persistentDataLoadingBGThread.simObjectFileStream      [t].Dispose();
+            persistentDataLoadingBGThread.simObjectFileStreamReader[t].Dispose();
             if(SimObjectUtil.IsSimActor(t)){
              persistentDataLoadingBGThread.simActorFileStream      [t].Dispose();
              persistentDataLoadingBGThread.simActorFileStreamReader[t].Dispose();
             }
            }
           }
-          foreach(var kvp in persistentSimInventoryDataLoadingBGThread.fileStream){
+          foreach(var kvp in persistentSimInventoryDataLoadingBGThread.simInventoryFileStream){
            Type t=kvp.Key;
            if(Core.singleton.isServer){
-            persistentSimInventoryDataLoadingBGThread.fileStream      [t].Dispose();
-            persistentSimInventoryDataLoadingBGThread.fileStreamReader[t].Dispose();
+            persistentSimInventoryDataLoadingBGThread.simInventoryFileStream      [t].Dispose();
+            persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t].Dispose();
            }
           }
           persistentDataLoadingBG.Dispose();

@@ -15,8 +15,8 @@ namespace AKCondinoO.Sims{
      internal readonly SpawnData spawnDataFromFiles=new SpawnData();
     }
     internal class PersistentDataLoadingMultithreaded:BaseMultithreaded<PersistentDataLoadingBackgroundContainer>{
-     internal readonly Dictionary<Type,FileStream>fileStream=new Dictionary<Type,FileStream>();
-      internal readonly Dictionary<Type,StreamReader>fileStreamReader=new Dictionary<Type,StreamReader>();
+     internal readonly Dictionary<Type,FileStream>simObjectFileStream=new Dictionary<Type,FileStream>();
+      internal readonly Dictionary<Type,StreamReader>simObjectFileStreamReader=new Dictionary<Type,StreamReader>();
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly Dictionary<Type,Dictionary<ulong,int>>simActorSpawnAtIndexByType=new Dictionary<Type,Dictionary<ulong,int>>();
@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims{
         }
         protected override void Execute(){
          container.spawnDataFromFiles.dequeued=false;
-         foreach(var typeFileStreamPair in this.fileStream){
+         foreach(var typeFileStreamPair in this.simObjectFileStream){
           Type t=typeFileStreamPair.Key;
           Dictionary<ulong,int>simActorSpawnAtIndex=null;
           if(SimObjectUtil.IsSimActor(t)){
@@ -36,7 +36,7 @@ namespace AKCondinoO.Sims{
            }
           }
           FileStream fileStream=typeFileStreamPair.Value;
-          StreamReader fileStreamReader=this.fileStreamReader[t];
+          StreamReader fileStreamReader=this.simObjectFileStreamReader[t];
           //Log.DebugMessage("loading data for type:"+t);
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
