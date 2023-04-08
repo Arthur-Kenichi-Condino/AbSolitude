@@ -98,8 +98,12 @@ namespace AKCondinoO.Sims.Inventory{
            ulong nextId=typeIdsPair.Value;
            if(nextId>0){
             Log.DebugMessage("t:"+t+";nextId:"+nextId);
+            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
            }
           }
+          idsFileStream.SetLength(0L);
+          idsFileStreamWriter.Write(idsStringBuilder.ToString());
+          idsFileStreamWriter.Flush();
          }
         }
     }

@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -32,6 +33,17 @@ namespace AKCondinoO.Sims.Inventory{
           string line;
           while((line=idsFileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
+           int typeStringStart=line.IndexOf("type=")+5;
+           int typeStringEnd  =line.IndexOf(" , ",typeStringStart);
+           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
+           Type t=Type.GetType(typeString);
+           if(t==null){continue;}
+           Log.DebugMessage("t:"+t);
+           int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
+           int nextIdStringEnd  =line.IndexOf(" } , endOfLine",nextIdStringStart);
+           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);
+           ulong nextId=ulong.Parse(nextIdString,NumberStyles.Any,CultureInfoUtil.en_US);
+           ids[t]=nextId;
           }
           idsFileStream.Position=0L;
           idsFileStreamReader.DiscardBufferedData();
