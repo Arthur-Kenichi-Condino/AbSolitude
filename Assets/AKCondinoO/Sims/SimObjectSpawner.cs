@@ -123,6 +123,7 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            FileStream loaderSimInventoryFileStream;
            SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream[t]=loaderSimInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t]=new StreamReader(loaderSimInventoryFileStream);
           }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
@@ -508,6 +509,7 @@ namespace AKCondinoO.Sims{
         bool OnPersistentSimInventoryDataPullFromFile(){
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
              SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)){
+          SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
            PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataLoadingBG);
           return true;
          }
