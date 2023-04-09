@@ -8,6 +8,7 @@ using System.IO;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataLoadingBackgroundContainer:BackgroundContainer{
+     internal SpawnData spawnDataFromFiles;
     }
     internal class PersistentSimInventoryDataLoadingMultithreaded:BaseMultithreaded<PersistentSimInventoryDataLoadingBackgroundContainer>{
      internal readonly Dictionary<Type,FileStream>simInventoryFileStream=new Dictionary<Type,FileStream>();
@@ -15,7 +16,12 @@ namespace AKCondinoO.Sims.Inventory{
         protected override void Cleanup(){
         }
         protected override void Execute(){
-         Log.DebugMessage("Execute()");
+         if(container.spawnDataFromFiles==null){
+          Log.Error("container.spawnDataFromFiles==null");
+          return;
+         }else{
+          Log.DebugMessage("Execute()");
+         }
         }
     }
 }
