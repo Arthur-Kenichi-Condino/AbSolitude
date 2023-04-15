@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
       internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
      internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
-     internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
+      internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
     }
     internal class PersistentDataSavingMultithreaded:BaseMultithreaded<PersistentDataSavingBackgroundContainer>{

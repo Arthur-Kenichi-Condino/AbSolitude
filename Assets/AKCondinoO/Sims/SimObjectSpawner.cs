@@ -393,17 +393,26 @@ namespace AKCondinoO.Sims{
            Type t=kvp.Key;
            ulong nextId=kvp.Value;
            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
+           if(SimInventoryManager.singleton.releasedIds.TryGetValue(t,out List<ulong>releasedIdsIdNumberList)){
+            if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.TryGetValue(t,out List<ulong>persistentReleasedIdsIdNumberList)){
+             SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(t,persistentReleasedIdsIdNumberList=new List<ulong>());
+            }
+            persistentReleasedIdsIdNumberList.AddRange(releasedIdsIdNumberList);
+           }
+           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.ContainsKey(t)){
+            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(t,new List<ulong>());
+           }
           }
          foreach(var a in SimObjectManager.singleton.active){
           GetSimObjectPersistentData(a.Value);
          }
          while(despawnQueue.Count>0){var toDespawn=despawnQueue.Dequeue();
-          GetSimObjectPersistentData(toDespawn);
+          GetSimObjectPersistentData(toDespawn,true);
           if(!exitSave){
            SimObjectManager.singleton.despawning.Add(toDespawn.id.Value,toDespawn);
           }
          }
-         void GetSimObjectPersistentData(SimObject simObject){
+         void GetSimObjectPersistentData(SimObject simObject,bool isDespawning=false){
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simObject.persistentData);
           if(simObject is SimActor simActor){
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simActor .persistentSimActorData);
@@ -417,11 +426,16 @@ namespace AKCondinoO.Sims{
            if(!PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.TryDequeue(out var simInventoryDataIdDictionary)){
             simInventoryDataIdDictionary=new Dictionary<ulong,SimInventory.PersistentSimInventoryData>();
            }
-           foreach(var inventory in typeIdInventoryDictionaryPair.Value){
-            if(inventory.Value.maxItemsCount<=0){
-             continue;
+           foreach(var idInventoryPair in typeIdInventoryDictionaryPair.Value){
+            //  TO DO: ignorar inventário vazio e dar release id somente se estiver dando despawn (ou saindo, porque é um despawn também)
+            if(isDespawning||exitSave){
+             if(idInventoryPair.Value.maxItemsCount<=0){
+              //  TO DO: sim inventory ids to release
+              SetSimInventoryToReleaseId(inventoryType,idInventoryPair.Key,idInventoryPair.Value);
+              continue;
+             }
             }
-            simInventoryDataIdDictionary.Add(inventory.Key,inventory.Value.persistentSimInventoryData);
+            simInventoryDataIdDictionary.Add(idInventoryPair.Key,idInventoryPair.Value.persistentSimInventoryData);
            }
            if(simInventoryDataIdDictionary.Count>0){
             simInventoryDataTypeDictionary.Add(inventoryType,simInventoryDataIdDictionary);
@@ -433,8 +447,24 @@ namespace AKCondinoO.Sims{
          }
          while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simType].Add(toDespawnAndReleaseId.id.Value.number);
+          //  TO DO: sim inventory ids to release; release inventory items' ids
+          foreach(var typeIdInventoryDictionaryPair in toDespawnAndReleaseId.inventory){
+           Type inventoryType=typeIdInventoryDictionaryPair.Key;
+           foreach(var idInventoryPair in typeIdInventoryDictionaryPair.Value){
+            SetSimInventoryToReleaseId(inventoryType,idInventoryPair.Key,idInventoryPair.Value);
+           }
+          }
           if(!exitSave){
            SimObjectManager.singleton.despawningAndReleasingId.Add(toDespawnAndReleaseId.id.Value,toDespawnAndReleaseId);
+          }
+         }
+         void SetSimInventoryToReleaseId(Type simInventoryType,ulong number,SimInventory simInventory){
+          if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList)){
+           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
+          }
+          idsToReleaseIdNumberList.Add(number);
+          if(!exitSave){
+           SimInventoryManager.singleton.releasingId.Add((simInventoryType,number),simInventory);
           }
          }
         }
@@ -445,6 +475,7 @@ namespace AKCondinoO.Sims{
          if(SimObjectManager.singleton.persistentDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentDataSavingBGThread.IsRunning)&&
              SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
+          //  TO DO: remove sim inventories
           foreach(var despawn in SimObjectManager.singleton.despawning){
            SimObjectManager.singleton.spawned.Remove(despawn.Key);
            despawn.Value.pooled=SimObjectManager.singleton.pool[despawn.Value.id.Value.simType].AddLast(despawn.Value);
@@ -458,6 +489,14 @@ namespace AKCondinoO.Sims{
            despawnAndReleaseId.Value.id=null;
           }
           SimObjectManager.singleton.despawningAndReleasingId.Clear();
+          foreach(var simInventoryReleaseId in SimInventoryManager.singleton.releasingId){
+           //  TO DO: remove id and add to pool
+           if(!SimInventoryManager.singleton.releasedIds.TryGetValue(simInventoryReleaseId.Key.simInventoryType,out List<ulong>releasedIdsIdNumberList)){
+            SimInventoryManager.singleton.releasedIds.Add(simInventoryReleaseId.Key.simInventoryType,releasedIdsIdNumberList=new List<ulong>());
+           }
+           releasedIdsIdNumberList.Add(simInventoryReleaseId.Key.number);
+          }
+          SimInventoryManager.singleton.releasingId.Clear();
           return true;
          }
          return false;
