@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
@@ -17,6 +18,9 @@ namespace AKCondinoO.Sims.Inventory{
      internal static string releasedIdsFile;
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
      internal readonly Dictionary<Type,List<ulong>>releasedIds=new Dictionary<Type,List<ulong>>();
+     internal readonly Dictionary<Type,LinkedList<SimInventory>>pool=new Dictionary<Type,LinkedList<SimInventory>>();
+     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>spawned    =new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>active     =new Dictionary<(Type,ulong),SimInventory>();
      internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>releasingId=new Dictionary<(Type,ulong),SimInventory>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -83,6 +87,10 @@ namespace AKCondinoO.Sims.Inventory{
          if(Core.singleton.isServer){
          }
         }
+     readonly Type[]simInventoryBaseCtorParamsTypes=new Type[]{typeof(int)};
+      readonly object[]simInventoryBaseCtorParams=new object[]{0};
+      readonly Type[]simInventoryCtorParamsTypes=new Type[]{};
+       readonly object[]simInventoryCtorParams=new object[]{};
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
          this.releasedIds.TryGetValue(simInventoryType,out List<ulong>releasedIds);
          if(!ids.TryGetValue(simInventoryType,out ulong idNumber)){
@@ -96,19 +104,37 @@ namespace AKCondinoO.Sims.Inventory{
            ids[simInventoryType]++;
           }
          }
+         SimInventory SpawnInventory(){
+          SimInventory result=null;
+          if(this.pool.TryGetValue(simInventoryType,out LinkedList<SimInventory>pool)){
+           if(pool.Count>0){
+            result=pool.First.Value;
+            pool.RemoveFirst();
+            result.pooled=null;
+            return result;
+           }
+          }
+          ConstructorInfo ctor=simInventoryType.GetConstructor(simInventoryCtorParamsTypes);
+          if(ctor!=null){
+           result=(SimInventory)ctor.Invoke(simInventoryCtorParams);
+           return result;
+          }
+          ctor=simInventoryType.GetConstructor(simInventoryBaseCtorParamsTypes);
+          if(ctor!=null){
+           simInventoryBaseCtorParams[0]=0;
+           result=(SimInventory)ctor.Invoke(simInventoryBaseCtorParams);
+           return result;
+          }
+          Log.Warning("adding inventory of simInventoryType "+simInventoryType+" error: type's Constructor could not be handled");
+          return result;
+         }
          if(!simObject.inventory.ContainsKey(simInventoryType)){
           simObject.inventory.Add(simInventoryType,new Dictionary<ulong,SimInventory>());
          }
-         if(
-            simInventoryType==typeof(SimInventory)
-         ){
-          simObject.inventory[typeof(SimInventory)].Add(idNumber,new SimInventory(idNumber,simObject,0));
-         }else if(
-            simInventoryType==typeof(SimHands)
-         ){
-          simObject.inventory[typeof(SimHands)].Add(idNumber,new SimHands(idNumber,simObject));
-         }else{
-          Log.Warning("add inventory of simInventoryType could not be handled:"+simInventoryType);
+         SimInventory simInventory=SpawnInventory();
+         if(simInventory!=null){
+          (Type simInventoryType,ulong number)simInventoryId=(simInventoryType,idNumber);
+          simInventory.OnAssign(simInventoryId,simObject);
          }
         }
     }

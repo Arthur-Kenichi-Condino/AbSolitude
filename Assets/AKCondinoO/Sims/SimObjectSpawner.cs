@@ -491,10 +491,18 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.despawningAndReleasingId.Clear();
           foreach(var simInventoryReleaseId in SimInventoryManager.singleton.releasingId){
            //  TO DO: remove id and add to pool
+           SimInventoryManager.singleton.spawned.Remove(simInventoryReleaseId.Key);
            if(!SimInventoryManager.singleton.releasedIds.TryGetValue(simInventoryReleaseId.Key.simInventoryType,out List<ulong>releasedIdsIdNumberList)){
             SimInventoryManager.singleton.releasedIds.Add(simInventoryReleaseId.Key.simInventoryType,releasedIdsIdNumberList=new List<ulong>());
            }
            releasedIdsIdNumberList.Add(simInventoryReleaseId.Key.number);
+           if(!SimInventoryManager.singleton.pool.TryGetValue(simInventoryReleaseId.Key.simInventoryType,out LinkedList<SimInventory>pool)){
+            SimInventoryManager.singleton.pool.Add(simInventoryReleaseId.Key.simInventoryType,pool=new LinkedList<SimInventory>());
+           }
+           simInventoryReleaseId.Value.pooled=pool.AddLast(simInventoryReleaseId.Value);
+           simInventoryReleaseId.Value.asSimObject  =null;
+           simInventoryReleaseId.Value.asSimObjectId=null;
+           simInventoryReleaseId.Value.simInventoryId=null;
           }
           SimInventoryManager.singleton.releasingId.Clear();
           return true;

@@ -210,7 +210,7 @@ namespace AKCondinoO.Sims{
           if(masterObject!=null&&masterObject is SimActor masterActor){
            masterActor.SetSlave(this);
           }
-          if(!inventory.ContainsKey(typeof(SimInventory))){
+          if(!inventory.ContainsKey(typeof(SimInventory))||inventory[typeof(SimInventory)].Count<=0){
            SimInventoryManager.singleton.AddInventoryTo(this,typeof(SimInventory));
           }
           int totalInventorySpaces=0;
