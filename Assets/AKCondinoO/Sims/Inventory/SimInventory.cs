@@ -19,8 +19,8 @@ namespace AKCondinoO.Sims.Inventory{
              public Type simType;public ulong number;public int id;
             }
             internal void UpdateData(SimInventory simInventory){
-             simInventoryId=simInventory.simInventoryId;
-             asSimObjectId=simInventory.asSimObjectId;
+             simInventoryId=simInventory.simInventoryId.Value;
+              asSimObjectId=simInventory. asSimObjectId.Value;
              inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
             }
          private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
@@ -43,26 +43,32 @@ namespace AKCondinoO.Sims.Inventory{
              return result;
             }
         }
-     internal(Type simInventoryType,ulong number)simInventoryId;
+     internal LinkedListNode<SimInventory>pooled; 
+     internal(Type simInventoryType,ulong number)?simInventoryId;
      internal SimObject asSimObject;
-     internal(Type simType,ulong number)asSimObjectId;
-     internal int maxItemsCount;
+     internal(Type simType,ulong number)?asSimObjectId;
+     internal readonly int maxItemsCount;
      internal readonly ConcurrentBag<int>openIds;
      internal readonly Dictionary<int,SimInventoryItem>idsItems;
      internal readonly HashSet<SimInventoryItem>items;
-        internal SimInventory(ulong idNumber,SimObject asSimObject,int maxItemsCount){
-         this.simInventoryId=(GetType(),idNumber);
+        internal SimInventory(int maxItemsCount){
          openIds=new ConcurrentBag<int>();
          idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
          items=new HashSet<SimInventoryItem>(maxItemsCount);
          simInventoryItemPool=new Queue<SimInventoryItem>(maxItemsCount);
-         this.asSimObject=asSimObject;
-         this.asSimObjectId=asSimObject.id.Value;
          for(int id=0;id<maxItemsCount;id++){
           openIds.Add(id);
          }
          this.maxItemsCount=maxItemsCount;
-         Log.DebugMessage("created SimInventory of size:"+maxItemsCount+"and asSimObject:"+asSimObject);
+        }
+        internal void OnAssign((Type simInventoryType,ulong number)simInventoryId,SimObject asSimObject){
+         asSimObject.inventory[simInventoryId.simInventoryType].Add(simInventoryId.number,this);
+         this.asSimObject  =asSimObject;
+         this.asSimObjectId=asSimObject.id.Value;
+         SimInventoryManager.singleton.spawned.Add(simInventoryId,this);
+         SimInventoryManager.singleton.active .Add(simInventoryId,this);
+         this.simInventoryId=simInventoryId;
+         Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
         }
         internal virtual void Reset(bool clear=false){
