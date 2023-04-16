@@ -154,8 +154,8 @@ namespace AKCondinoO.Sims{
         }
      [SerializeField]bool DEBUG_POOL_ALL_SIM_OBJECTS=false;
      [SerializeField]bool DEBUG_UNPLACE_ALL_SIM_OBJECTS=false;
-     internal readonly Queue<SimObject>            DeactivateQueue=new Queue<SimObject>();
-     internal readonly Queue<SimObject>DeactivateAndReleaseIdQueue=new Queue<SimObject>();
+     internal readonly Queue<SimObject>            deactivateQueue=new Queue<SimObject>();
+     internal readonly Queue<SimObject>deactivateAndReleaseIdQueue=new Queue<SimObject>();
         private void Update(){
          if(DEBUG_UNPLACE_ALL_SIM_OBJECTS){
             DEBUG_UNPLACE_ALL_SIM_OBJECTS=false;
@@ -176,10 +176,10 @@ namespace AKCondinoO.Sims{
           var simObject=a.Value;
           simObject.ManualUpdate(terrainMovedFlag);
          }
-         while(DeactivateQueue.Count>0){var toDeactivate=DeactivateQueue.Dequeue();
+         while(deactivateQueue.Count>0){var toDeactivate=deactivateQueue.Dequeue();
           OnDeactivate(toDeactivate);
          }
-         while(DeactivateAndReleaseIdQueue.Count>0){var toDeactivateAndReleaseId=DeactivateAndReleaseIdQueue.Dequeue();
+         while(deactivateAndReleaseIdQueue.Count>0){var toDeactivateAndReleaseId=deactivateAndReleaseIdQueue.Dequeue();
           OnDeactivateAndReleaseId(toDeactivateAndReleaseId);
          }
          terrainMovedFlag=false;
