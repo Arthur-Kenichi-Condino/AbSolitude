@@ -393,12 +393,13 @@ namespace AKCondinoO.Sims{
            Type t=kvp.Key;
            ulong nextId=kvp.Value;
            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
-           if(SimInventoryManager.singleton.releasedIds.TryGetValue(t,out List<ulong>releasedIdsIdNumberList)){
-            if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.TryGetValue(t,out List<ulong>persistentReleasedIdsIdNumberList)){
-             SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(t,persistentReleasedIdsIdNumberList=new List<ulong>());
-            }
-            persistentReleasedIdsIdNumberList.AddRange(releasedIdsIdNumberList);
+           if(!SimInventoryManager.singleton.releasedIds.TryGetValue(t,out List<ulong>releasedIdsIdNumberList)){
+            SimInventoryManager.singleton.releasedIds.Add(t,releasedIdsIdNumberList=new List<ulong>());
            }
+           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.TryGetValue(t,out List<ulong>persistentReleasedIdsIdNumberList)){
+            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(t,persistentReleasedIdsIdNumberList=new List<ulong>());
+           }
+           persistentReleasedIdsIdNumberList.AddRange(releasedIdsIdNumberList);
            if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.ContainsKey(t)){
             SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(t,new List<ulong>());
            }
@@ -459,6 +460,8 @@ namespace AKCondinoO.Sims{
           }
          }
          void SetSimInventoryToReleaseId(Type simInventoryType,ulong number,SimInventory simInventory){
+          //  active remove
+          //  release inventory items
           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList)){
            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
           }

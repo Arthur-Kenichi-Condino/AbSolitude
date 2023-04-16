@@ -384,7 +384,7 @@ namespace AKCondinoO.Sims{
                netObj.DontDestroyWithOwner=true;
                netObj.Despawn(destroy:false);
               }
-              SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+              SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
               result=2;
              }
          }else{
@@ -402,7 +402,7 @@ namespace AKCondinoO.Sims{
                     netObj.DontDestroyWithOwner=true;
                     netObj.Despawn(destroy:false);
                    }
-                   SimObjectManager.singleton.DeactivateAndReleaseIdQueue.Enqueue(this);
+                   SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
                    result=2;
                   }
                  }
@@ -431,7 +431,7 @@ namespace AKCondinoO.Sims{
                              netObj.DontDestroyWithOwner=true;
                              netObj.Despawn(destroy:false);
                             }
-                            SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                            SimObjectManager.singleton.deactivateQueue.Enqueue(this);
                             result=1;
                            }
                           }
@@ -446,7 +446,7 @@ namespace AKCondinoO.Sims{
                            netObj.DontDestroyWithOwner=true;
                            netObj.Despawn(destroy:false);
                           }
-                          SimObjectManager.singleton.DeactivateQueue.Enqueue(this);
+                          SimObjectManager.singleton.deactivateQueue.Enqueue(this);
                           result=1;
                          }
                      }

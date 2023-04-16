@@ -92,14 +92,15 @@ namespace AKCondinoO.Sims.Inventory{
       readonly Type[]simInventoryCtorParamsTypes=new Type[]{};
        readonly object[]simInventoryCtorParams=new object[]{};
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
+         ulong idNumber;
          this.releasedIds.TryGetValue(simInventoryType,out List<ulong>releasedIds);
-         if(!ids.TryGetValue(simInventoryType,out ulong idNumber)){
-          ids.Add(simInventoryType,1uL);
-          idNumber=0uL;
+         if(releasedIds!=null&&releasedIds.Count>0){
+          idNumber=releasedIds[releasedIds.Count-1];
+          releasedIds.RemoveAt(releasedIds.Count-1);
          }else{
-          if(releasedIds!=null&&releasedIds.Count>0){
-           idNumber=releasedIds[releasedIds.Count-1];
-           releasedIds.RemoveAt(releasedIds.Count-1);
+          if(!ids.TryGetValue(simInventoryType,out idNumber)){
+           ids.Add(simInventoryType,1uL);
+           idNumber=0uL;
           }else{
            ids[simInventoryType]++;
           }
@@ -114,12 +115,12 @@ namespace AKCondinoO.Sims.Inventory{
             return result;
            }
           }
-          ConstructorInfo ctor=simInventoryType.GetConstructor(simInventoryCtorParamsTypes);
+          ConstructorInfo ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryCtorParamsTypes,null);
           if(ctor!=null){
            result=(SimInventory)ctor.Invoke(simInventoryCtorParams);
            return result;
           }
-          ctor=simInventoryType.GetConstructor(simInventoryBaseCtorParamsTypes);
+          ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryBaseCtorParamsTypes,null);
           if(ctor!=null){
            simInventoryBaseCtorParams[0]=0;
            result=(SimInventory)ctor.Invoke(simInventoryBaseCtorParams);
