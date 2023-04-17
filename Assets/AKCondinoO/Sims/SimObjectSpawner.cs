@@ -460,8 +460,14 @@ namespace AKCondinoO.Sims{
           }
          }
          void SetSimInventoryToReleaseId(Type simInventoryType,ulong number,SimInventory simInventory){
-          //  active remove
+          //  active: remove
+          SimInventoryManager.singleton.active.Remove(simInventory.simInventoryId.Value);
           //  release inventory items
+          List<(Type simType,ulong number)>simObjectIdsToRelease=simInventory.OnUnassign(exitSave);
+          foreach((Type simType,ulong number)simObjectIdToRelease in simObjectIdsToRelease){
+           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectIdToRelease.simType].Add(simObjectIdToRelease.number);
+          }
+          simObjectIdsToRelease.Clear();
           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList)){
            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
           }
@@ -503,6 +509,7 @@ namespace AKCondinoO.Sims{
             SimInventoryManager.singleton.pool.Add(simInventoryReleaseId.Key.simInventoryType,pool=new LinkedList<SimInventory>());
            }
            simInventoryReleaseId.Value.pooled=pool.AddLast(simInventoryReleaseId.Value);
+           simInventoryReleaseId.Value.asSimObject.inventory[simInventoryReleaseId.Key.simInventoryType].Remove(simInventoryReleaseId.Key.number);
            simInventoryReleaseId.Value.asSimObject  =null;
            simInventoryReleaseId.Value.asSimObjectId=null;
            simInventoryReleaseId.Value.simInventoryId=null;

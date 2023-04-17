@@ -46,14 +46,16 @@ namespace AKCondinoO.Sims.Inventory{
      internal LinkedListNode<SimInventory>pooled; 
      internal(Type simInventoryType,ulong number)?simInventoryId;
      internal SimObject asSimObject;
-     internal(Type simType,ulong number)?asSimObjectId;
+      internal(Type simType,ulong number)?asSimObjectId;
      internal readonly int maxItemsCount;
      internal readonly ConcurrentBag<int>openIds;
-     internal readonly Dictionary<int,SimInventoryItem>idsItems;
+     internal readonly Dictionary<int,(Type simType,ulong number)>idsItemIds;
+      internal readonly Dictionary<int,SimInventoryItem>idsItems;
      internal readonly HashSet<SimInventoryItem>items;
         internal SimInventory(int maxItemsCount){
          openIds=new ConcurrentBag<int>();
-         idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
+         idsItemIds=new Dictionary<int,(Type simType,ulong number)>(maxItemsCount);
+          idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
          items=new HashSet<SimInventoryItem>(maxItemsCount);
          simInventoryItemPool=new Queue<SimInventoryItem>(maxItemsCount);
          for(int id=0;id<maxItemsCount;id++){
@@ -71,21 +73,31 @@ namespace AKCondinoO.Sims.Inventory{
          Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
         }
-        internal virtual void Reset(bool clear=false){
+     readonly List<(Type simType,ulong number)>simObjectIdsToRelease=new List<(Type,ulong)>();
+        internal virtual List<(Type simType,ulong number)>OnUnassign(bool exitSave=false){
          Log.DebugMessage("SimInventory Reset");
-         if(asSimObjectId!=asSimObject.id.Value){
-          Log.DebugMessage("asSimObjectId!=asSimObject.id.Value");
-          this.asSimObjectId=asSimObject.id.Value;
-         }
-         if(clear){
-          Clear();
+         foreach(var idItemIdPair in idsItemIds){
+          idsItems.TryGetValue(idItemIdPair.Key,out SimInventoryItem simInventoryItem);
+          if(!exitSave&&simInventoryItem!=null){
+           asSimObject.RemoveFromInventory(simInventoryItem.simObject,this,true,true);
+          }else{
+           simObjectIdsToRelease.Add(idItemIdPair.Value);
+          }
          }
          persistentSimInventoryData.UpdateData(this);
+         return simObjectIdsToRelease;
         }
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
         internal virtual void Clear(){
         }
-        internal virtual void Remove(SimObject simObject){
+        internal virtual void Remove(SimInventoryItem simInventoryItem,bool unplace=true,bool updatePersistentData=true){
+         if(unplace){
+          simInventoryItem.simObject.OnUnplaceRequest();
+         }
+         //  TO DO: recycle SimInventoryItem to pool
+         simInventoryItem.UnsetAsInventoryItem(this);
+         simInventoryItemPool.Enqueue(simInventoryItem);
+         if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
         }
         internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,bool updatePersistentData=true){
          int spaces=0;

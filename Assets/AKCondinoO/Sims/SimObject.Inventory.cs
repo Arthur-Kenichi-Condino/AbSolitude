@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,Dictionary<ulong,SimInventory>>inventory=new Dictionary<Type,Dictionary<ulong,SimInventory>>();
      internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
      internal SpawnData inventoryItemsSpawnData;
-        internal bool AddToInventory(SimObject simObject){
+        internal bool AddToInventory(SimObject simObject,bool addingList=false){
          Log.DebugMessage("AddToInventory");
          if(InventoryContains(simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData)){
           Log.DebugMessage("AddToInventory InventoryContains True");
@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims{
            foreach(var simInventory in simHandsInventories){
             if(simInventory.Value is SimHands simHandsInventory){
              Log.DebugMessage("simHandsInventory try Add");
-             if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings)){
+             if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,!addingList)){
               Log.DebugMessage("added to simHandsInventory:mark simObject to be saved as an inventory item");
               //  TO DO: create local function to save simObjects as an inventory item
               OnAddedToInventory(simHandsInventory,settings);
@@ -39,6 +39,10 @@ namespace AKCondinoO.Sims{
          void OnAddedToInventory(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
           simObject.ChangeInteractionsToActAsInventoryItem(simInventory,settings);
          }
+        }
+        internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
+         simInventory.Remove(simObject.asInventoryItem,delete,!removingList);
+         simObject.ChangeInteractionsToActAsNonInventorySimObject(simInventory);
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
          containerData=null;
@@ -61,6 +65,8 @@ namespace AKCondinoO.Sims{
          persistentData.UpdateData(this);
         }
         internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
+         Log.DebugMessage("ChangeInteractionsToActAsNonInventorySimObject:"+id);
+         persistentData.UpdateData(this);
         }
         internal void SetAsInventoryItemTransform(){
          //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
