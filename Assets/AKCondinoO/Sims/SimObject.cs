@@ -216,7 +216,6 @@ namespace AKCondinoO.Sims{
           int totalInventorySpaces=0;
           foreach(var typeInventoryListPair in inventory){
            foreach(var simInventory in typeInventoryListPair.Value){
-            simInventory.Value.Reset();
             totalInventorySpaces+=simInventory.Value.maxItemsCount;
            }
           }
@@ -347,7 +346,6 @@ namespace AKCondinoO.Sims{
               }
           }
           SetAsInventoryItemTransform();
-          persistentData.UpdateData(this);
           return result;
          }
          updateRenderersFlag|=doValidationChecks;
