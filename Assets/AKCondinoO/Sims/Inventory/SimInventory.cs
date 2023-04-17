@@ -79,6 +79,7 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var idItemIdPair in idsItemIds){
           idsItems.TryGetValue(idItemIdPair.Key,out SimInventoryItem simInventoryItem);
           if(!exitSave&&simInventoryItem!=null){
+           //  TO DO: ignorar objetos repetidos (que estão usando mais de uma id); e executar remoção fora do foreach
            asSimObject.RemoveFromInventory(simInventoryItem.simObject,this,true,true);
           }else{
            simObjectIdsToRelease.Add(idItemIdPair.Value);
