@@ -359,7 +359,7 @@ namespace AKCondinoO.Sims{
              SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
           CollectSavingData();
-          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryIdsToRelease=SimObjectManager.singleton.persistentDataSavingBG.waitingForSimInventoryIdsToRelease;
+          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=SimObjectManager.singleton.persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
           PersistentDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataSavingBG);
            PersistentSimInventoryDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataSavingBG);
           return true;

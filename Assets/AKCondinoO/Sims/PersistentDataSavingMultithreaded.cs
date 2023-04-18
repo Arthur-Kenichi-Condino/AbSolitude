@@ -15,7 +15,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal class PersistentDataSavingBackgroundContainer:BackgroundContainer{
-     internal readonly AutoResetEvent waitingForSimInventoryIdsToRelease=new AutoResetEvent(false);
+     internal readonly AutoResetEvent waitingForSimInventoryReleasedSimObjectsIdsToRelease=new AutoResetEvent(false);
      internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
       internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
      internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
@@ -86,7 +86,7 @@ namespace AKCondinoO.Sims{
           }
           persistentDataToSave.Clear();
          }
-         container.waitingForSimInventoryIdsToRelease.WaitOne();
+         container.waitingForSimInventoryReleasedSimObjectsIdsToRelease.WaitOne();
          foreach(var kvp1 in idPersistentDataListBycnkIdxByType){
           Type t=kvp1.Key;
           var idPersistentDataListBycnkIdx=kvp1.Value;
