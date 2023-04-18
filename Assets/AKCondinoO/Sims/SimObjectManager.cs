@@ -96,6 +96,7 @@ namespace AKCondinoO.Sims{
            }
           }
           persistentDataLoadingBG.Dispose();
+           persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData.Dispose();
            persistentSimInventoryDataLoadingBG.Dispose();
          #endregion
          #region PersistentDataSavingMultithreaded
@@ -104,6 +105,7 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
+           persistentSimInventoryDataSavingBG.waitingForSimInventoryIdsToRelease=persistentDataSavingBG.waitingForSimInventoryIdsToRelease;
            PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
             PersistentSimInventoryDataSavingMultithreaded.Schedule(persistentSimInventoryDataSavingBG);
           }
@@ -142,6 +144,7 @@ namespace AKCondinoO.Sims{
              persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
            }
           }
+          persistentDataSavingBG.waitingForSimInventoryIdsToRelease.Dispose();
           persistentDataSavingBG.Dispose();
            persistentSimInventoryDataSavingBG.Dispose();
          #endregion

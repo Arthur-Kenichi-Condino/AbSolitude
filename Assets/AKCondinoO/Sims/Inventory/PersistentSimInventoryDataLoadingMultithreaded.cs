@@ -6,9 +6,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataLoadingBackgroundContainer:BackgroundContainer{
+     internal readonly AutoResetEvent waitingForSimObjectSpawnData=new AutoResetEvent(false);
      internal SpawnData spawnDataFromFiles;
     }
     internal class PersistentSimInventoryDataLoadingMultithreaded:BaseMultithreaded<PersistentSimInventoryDataLoadingBackgroundContainer>{
@@ -24,6 +26,7 @@ namespace AKCondinoO.Sims.Inventory{
           return;
          }else{
           Log.DebugMessage("Execute()");
+          container.waitingForSimObjectSpawnData.WaitOne();
           for(int i=0;i<container.spawnDataFromFiles.at.Count;++i){
            var at=container.spawnDataFromFiles.at[i];
            if(at.id!=null){

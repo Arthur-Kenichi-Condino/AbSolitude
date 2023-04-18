@@ -7,9 +7,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class PersistentDataLoadingBackgroundContainer:BackgroundContainer{
+     internal AutoResetEvent waitingForSimObjectSpawnData;
      internal readonly HashSet<int>terraincnkIdxToLoad=new HashSet<int>();
      internal readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simType,ulong number)?asInventoryItemOwnerId)>specificIdsToLoad=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
      internal readonly SpawnData spawnDataFromFiles=new SpawnData();
@@ -112,6 +114,7 @@ namespace AKCondinoO.Sims{
           container.spawnDataFromFiles.at.Add((specificIdData.position,specificIdData.eulerAngles,specificIdData.localScale,id.simType,id.number,new SimObject.PersistentData()));
          }
          container.specificIdsToLoad.Clear();
+         container.waitingForSimObjectSpawnData.Set();
         }
     }
 }
