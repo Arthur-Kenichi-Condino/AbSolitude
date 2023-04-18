@@ -116,7 +116,7 @@ namespace AKCondinoO.Sims.Inventory{
               releasedInventoryStrings.Add(simInventoryString);
               continue;
              }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}",simInventoryString);
+             stringBuilder.Append(simInventoryString);
             }
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} ] ] , ");
            }
