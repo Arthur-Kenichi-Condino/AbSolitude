@@ -73,18 +73,22 @@ namespace AKCondinoO.Sims.Inventory{
          Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
         }
-     readonly List<(Type simType,ulong number)>simObjectIdsToRelease=new List<(Type,ulong)>();
+     protected readonly List<(Type simType,ulong number)>simObjectIdsToRelease=new List<(Type,ulong)>();
+      protected readonly List<int>idsToRemove=new List<int>();
         internal virtual List<(Type simType,ulong number)>OnUnassign(bool exitSave=false){
          Log.DebugMessage("SimInventory Reset");
-         foreach(var idItemIdPair in idsItemIds){
-          idsItems.TryGetValue(idItemIdPair.Key,out SimInventoryItem simInventoryItem);
-          if(!exitSave&&simInventoryItem!=null){
-           //  TO DO: ignorar objetos repetidos (que estão usando mais de uma id); e executar remoção fora do foreach
-           asSimObject.RemoveFromInventory(simInventoryItem.simObject,this,true,true);
-          }else{
-           simObjectIdsToRelease.Add(idItemIdPair.Value);
+         idsToRemove.AddRange(idsItemIds.Keys);
+         foreach(int id in idsToRemove){
+          if(idsItemIds.TryGetValue(id,out(Type simType,ulong number)itemId)){
+           if(!exitSave&&idsItems.TryGetValue(id,out SimInventoryItem simInventoryItem)&&simInventoryItem!=null&&simInventoryItem.simObject!=null){
+            //  TO DO: ignorar objetos repetidos (que estão usando mais de uma id); e executar remoção fora do foreach
+            asSimObject.RemoveFromInventory(simInventoryItem.simObject,this,true,true);
+           }else{
+            simObjectIdsToRelease.Add(itemId);
+           }
           }
          }
+         idsToRemove.Clear();
          persistentSimInventoryData.UpdateData(this);
          return simObjectIdsToRelease;
         }

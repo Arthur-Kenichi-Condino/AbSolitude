@@ -178,8 +178,6 @@ namespace AKCondinoO.Sims{
      internal readonly Queue<SimObject>despawnAndReleaseIdQueue=new Queue<SimObject>();
      readonly SpawnData spawnData=new SpawnData();
      bool savingPersistentData;
-     bool loadingPersistentSimInventoryData;
-     bool pendingPersistentSimInventoryData;
      bool loadingPersistentData;
      float loaderCooldown=1f;
      float loaderOnCooldownTimer;
@@ -317,52 +315,37 @@ namespace AKCondinoO.Sims{
               toSpawn.Clear();
               toSpawn.dequeued=true;
              }
-                 if(loadingPersistentSimInventoryData){
-                     Log.DebugMessage("loadingPersistentSimInventoryData");
-                     if(OnPersistentSimInventoryDataLoaded()){
-                         loadingPersistentSimInventoryData=false;
+                 if(loadingPersistentData){
+                     Log.DebugMessage("loadingPersistentData");
+                     if(OnPersistentDataLoaded()){
+                         loadingPersistentData=false;
                      }
                  }else{
-                     if(pendingPersistentSimInventoryData){
-                         Log.DebugMessage("pendingPersistentSimInventoryData");
-                         if(OnPersistentSimInventoryDataPullFromFile()){
-                             pendingPersistentSimInventoryData=false;
-                             OnPersistentSimInventoryDataPullingFromFile();
+                     if(savingPersistentData){
+                         Log.DebugMessage("savingPersistentData");
+                         if(OnPersistentDataSaved()){
+                             savingPersistentData=false;
                          }
                      }else{
-                         if(loadingPersistentData){
-                             Log.DebugMessage("loadingPersistentData");
-                             if(OnPersistentDataLoaded()){
-                                 loadingPersistentData=false;
+                         if(reloadTimer<=0f){
+                             Log.DebugMessage("reloadTimer<=0f");
+                             if(OnPersistentDataPullFromFile()){
+                                 OnPersistentDataPullingFromFile();
                              }
                          }else{
-                             if(savingPersistentData){
-                                 Log.DebugMessage("savingPersistentData");
-                                 if(OnPersistentDataSaved()){
-                                     savingPersistentData=false;
+                             if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
+                                 Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
+                                 if(OnPersistentDataPullFromFile()){
+                                     loaderOnCooldownTimer=loaderCooldown;
+                                     OnPersistentDataPullingFromFile();
                                  }
                              }else{
-                                 if(reloadTimer<=0f){
-                                     Log.DebugMessage("reloadTimer<=0f");
-                                     if(OnPersistentDataPullFromFile()){
-                                         OnPersistentDataPullingFromFile();
+                                 if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
+                                     Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
+                                     if(OnPersistentDataPushToFile()){
+                                         OnPersistentDataPushedToFile();
                                      }
                                  }else{
-                                     if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
-                                         Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
-                                         if(OnPersistentDataPullFromFile()){
-                                             loaderOnCooldownTimer=loaderCooldown;
-                                             OnPersistentDataPullingFromFile();
-                                         }
-                                     }else{
-                                         if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
-                                             Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
-                                             if(OnPersistentDataPushToFile()){
-                                                 OnPersistentDataPushedToFile();
-                                             }
-                                         }else{
-                                         }
-                                     }
                                  }
                              }
                          }
@@ -376,6 +359,7 @@ namespace AKCondinoO.Sims{
              SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
           CollectSavingData();
+          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryIdsToRelease=SimObjectManager.singleton.persistentDataSavingBG.waitingForSimInventoryIdsToRelease;
           PersistentDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataSavingBG);
            PersistentSimInventoryDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataSavingBG);
           return true;
@@ -545,7 +529,10 @@ namespace AKCondinoO.Sims{
            SimObjectManager.singleton.persistentDataLoadingBG.specificIdsToLoad.Add(id,spawnRequestData);
           }
           specificSpawnRequests.Clear();
+          SimObjectManager.singleton.persistentDataLoadingBG.waitingForSimObjectSpawnData=SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
+          SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
           PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataLoadingBG);
+           PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataLoadingBG);
           return true;
          }
          return false;
@@ -558,26 +545,6 @@ namespace AKCondinoO.Sims{
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
              SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
          ){
-          pendingPersistentSimInventoryData=true;
-          return true;
-         }
-         return false;
-        }
-        bool OnPersistentSimInventoryDataPullFromFile(){
-         if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)){
-          SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
-           PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataLoadingBG);
-          return true;
-         }
-         return false;
-        }
-        void OnPersistentSimInventoryDataPullingFromFile(){
-         loadingPersistentSimInventoryData=true;
-        }
-        bool OnPersistentSimInventoryDataLoaded(){
-         if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)){
           spawnQueue.Enqueue(SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles);
           return true;
          }
