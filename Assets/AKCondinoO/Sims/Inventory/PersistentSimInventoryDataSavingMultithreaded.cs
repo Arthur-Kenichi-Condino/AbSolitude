@@ -8,12 +8,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataSavingBackgroundContainer:BackgroundContainer{
      internal AutoResetEvent waitingForSimInventoryReleasedSimObjectsIdsToRelease;
+      internal readonly Dictionary<Type,List<ulong>>simInventoryReleasedSimObjectsIdsToRelease=new Dictionary<Type,List<ulong>>();
      internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
       internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
        internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataIdDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
@@ -27,8 +29,9 @@ namespace AKCondinoO.Sims.Inventory{
       internal readonly Dictionary<Type,StreamReader>simInventoryFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
-         readonly List<string>releasedInventoryStrings=new List<string>();
-          readonly List<string>inventoryStringsToReleaseSimObjects=new List<string>();
+         readonly List<KeyValuePair<Type,string>>releasedInventoryStrings=new List<KeyValuePair<Type,string>>();
+          readonly Dictionary<Type,string>inventoryStringsToReleaseSimObjects=new Dictionary<Type,string>();
+           readonly Dictionary<Type,List<ulong>>releasedSimObjects=new Dictionary<Type,List<ulong>>();
      internal FileStream releasedIdsFileStream;
       internal StreamWriter releasedIdsFileStreamWriter;
       internal StreamReader releasedIdsFileStreamReader;
@@ -41,6 +44,7 @@ namespace AKCondinoO.Sims.Inventory{
         }
         protected override void Execute(){
          Log.DebugMessage("Execute()");
+         _Loop:{}
          foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
           Type t=typePersistentSimInventoryDataToSavePair.Key;
           var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
@@ -83,7 +87,7 @@ namespace AKCondinoO.Sims.Inventory{
                string simInventoryIdString=simInventoryString.Substring(simInventoryIdStart,simInventoryIdEnd-simInventoryIdStart);
                ulong simInventoryId=ulong.Parse(simInventoryIdString,NumberStyles.Any,CultureInfoUtil.en_US);
                if(idsToReleaseIdNumberList.Contains(simInventoryId)){
-                releasedInventoryStrings.Add(simInventoryString);
+                releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
                 int toRemoveLength=(simInventoryListStringStart+simInventoryStringEnd)-totalCharactersRemoved-((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved);
                 lineStringBuilder.Remove((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved,toRemoveLength);
                 totalCharactersRemoved+=toRemoveLength;
@@ -114,7 +118,7 @@ namespace AKCondinoO.Sims.Inventory{
              SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdDataPair.Value;
              string simInventoryString=string.Format(CultureInfoUtil.en_US,"[ simInventoryIdNumber={0} , {{ {1} }} ] , ",simInventoryId,persistentSimInventoryData.ToString());
              if(idsToReleaseIdNumberList!=null&&idsToReleaseIdNumberList.Contains(simInventoryId)){
-              releasedInventoryStrings.Add(simInventoryString);
+              releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
               continue;
              }
              stringBuilder.Append(simInventoryString);
@@ -126,11 +130,6 @@ namespace AKCondinoO.Sims.Inventory{
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
-          inventoryStringsToReleaseSimObjects.AddRange(releasedInventoryStrings);
-          releasedInventoryStrings.Clear();
-          foreach(var releasedInventoryString in inventoryStringsToReleaseSimObjects){
-          }
-          inventoryStringsToReleaseSimObjects.Clear();
           _Skip:{}
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;
@@ -144,6 +143,18 @@ namespace AKCondinoO.Sims.Inventory{
           }
           persistentSimInventoryDataToSave.Clear();
          }
+         releasedSimObjects.Clear();
+         releasedInventoryStrings.ForEach(kvp=>inventoryStringsToReleaseSimObjects.Add(kvp.Key,kvp.Value));
+         releasedInventoryStrings.Clear();
+         foreach(var releasedInventoryString in inventoryStringsToReleaseSimObjects){
+          SimInventory.PersistentSimInventoryData persistentSimInventoryData=SimInventory.PersistentSimInventoryData.Parse(releasedInventoryString.Value);
+          persistentSimInventoryData.inventoryItems.Reset();
+          while(persistentSimInventoryData.inventoryItems.MoveNext()){
+           SimInventory.PersistentSimInventoryData.SimInventoryItemData inventoryItem=persistentSimInventoryData.inventoryItems.Current;
+           container.simInventoryReleasedSimObjectsIdsToRelease[inventoryItem.simType].Add(inventoryItem.number);
+          }
+         }
+         inventoryStringsToReleaseSimObjects.Clear();
          container.waitingForSimInventoryReleasedSimObjectsIdsToRelease.Set();
          #region releasedIds
          if(releasedIdsFileStream!=null){
