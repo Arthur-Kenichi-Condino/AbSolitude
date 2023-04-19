@@ -42,7 +42,9 @@ namespace AKCondinoO.Sims{
         }
         internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
          simInventory.Remove(simObject.asInventoryItem,delete,!removingList);
-         simObject.ChangeInteractionsToActAsNonInventorySimObject(simInventory);
+         if(!delete){
+          simObject.ChangeInteractionsToActAsNonInventorySimObject(simInventory);
+         }
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
          containerData=null;

@@ -42,6 +42,42 @@ namespace AKCondinoO.Sims.Inventory{
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }
+         private static readonly ConcurrentQueue<List<SimInventoryItemData>>parsingSimInventoryItemListPool=new ConcurrentQueue<List<SimInventoryItemData>>();
+            internal static PersistentSimInventoryData Parse(string s){
+             PersistentSimInventoryData persistentSimInventoryData=new PersistentSimInventoryData();
+             if(!parsingSimInventoryItemListPool.TryDequeue(out List<SimInventoryItemData>simInventoryItemList)){
+              simInventoryItemList=new List<SimInventoryItemData>();
+             }
+             simInventoryItemList.Clear();
+             int inventoryItemsStringStart=s.IndexOf("inventoryItems={");
+             if(inventoryItemsStringStart>=0){
+                inventoryItemsStringStart+=16;
+              int inventoryItemsStringEnd=s.IndexOf("} , ",inventoryItemsStringStart);
+              string inventoryItemsString=s.Substring(inventoryItemsStringStart,inventoryItemsStringEnd-inventoryItemsStringStart);
+              int inventoryItemStringStart=0;
+              while((inventoryItemStringStart=inventoryItemsString.IndexOf("[",inventoryItemStringStart))>=0){
+               int inventoryItemSimTypeStringStart=inventoryItemStringStart+1;
+               int inventoryItemSimTypeStringEnd  =inventoryItemsString.IndexOf(",",inventoryItemSimTypeStringStart);
+               Type inventoryItemSimType=Type.GetType(inventoryItemsString.Substring(inventoryItemSimTypeStringStart,inventoryItemSimTypeStringEnd-inventoryItemSimTypeStringStart));
+               int inventoryItemIdNumberStringStart=inventoryItemSimTypeStringEnd+1;
+               int inventoryItemIdNumberStringEnd  =inventoryItemsString.IndexOf(",",inventoryItemIdNumberStringStart);
+               ulong inventoryItemIdNumber=ulong.Parse(inventoryItemsString.Substring(inventoryItemIdNumberStringStart,inventoryItemIdNumberStringEnd-inventoryItemIdNumberStringStart));
+               int inventoryItemIdStringStart=inventoryItemIdNumberStringEnd+1;
+               int inventoryItemIdStringEnd  =inventoryItemsString.IndexOf("],",inventoryItemIdStringStart);
+               int inventoryItemId=int.Parse(inventoryItemsString.Substring(inventoryItemIdStringStart,inventoryItemIdStringEnd-inventoryItemIdStringStart));
+               SimInventoryItemData inventoryItem=new SimInventoryItemData(){
+                simType=inventoryItemSimType,
+                number=inventoryItemIdNumber,
+                id=inventoryItemId,
+               };
+               simInventoryItemList.Add(inventoryItem);
+               inventoryItemStringStart=inventoryItemIdStringEnd+2;
+              }
+             }
+             persistentSimInventoryData.inventoryItems=new ListWrapper<SimInventoryItemData>(simInventoryItemList);
+             parsingSimInventoryItemListPool.Enqueue(simInventoryItemList);
+             return persistentSimInventoryData;
+            }
         }
      internal LinkedListNode<SimInventory>pooled; 
      internal(Type simInventoryType,ulong number)?simInventoryId;
@@ -94,13 +130,14 @@ namespace AKCondinoO.Sims.Inventory{
         }
      internal readonly Queue<SimInventoryItem>simInventoryItemPool;
         internal virtual void Clear(){
+         //  TO DO: drop all items
         }
         internal virtual void Remove(SimInventoryItem simInventoryItem,bool unplace=true,bool updatePersistentData=true){
          if(unplace){
           simInventoryItem.simObject.OnUnplaceRequest();
          }
-         //  TO DO: recycle SimInventoryItem to pool
          simInventoryItem.UnsetAsInventoryItem(this);
+         //  TO DO: recycle SimInventoryItem, adding to pool
          simInventoryItemPool.Enqueue(simInventoryItem);
          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
         }

@@ -105,6 +105,7 @@ namespace AKCondinoO.Sims{
            SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t]=new StreamReader(simInventoryFileStream);
           }
           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>());
+           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
@@ -360,6 +361,7 @@ namespace AKCondinoO.Sims{
          ){
           CollectSavingData();
           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=SimObjectManager.singleton.persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
+           SimObjectManager.singleton.persistentDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease=SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease;
           PersistentDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataSavingBG);
            PersistentSimInventoryDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataSavingBG);
           return true;
@@ -530,7 +532,7 @@ namespace AKCondinoO.Sims{
           }
           specificSpawnRequests.Clear();
           SimObjectManager.singleton.persistentDataLoadingBG.waitingForSimObjectSpawnData=SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
-          SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
+           SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
           PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataLoadingBG);
            PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataLoadingBG);
           return true;
