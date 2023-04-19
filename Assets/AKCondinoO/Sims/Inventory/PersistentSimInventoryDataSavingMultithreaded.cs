@@ -48,6 +48,9 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
           Type t=typePersistentSimInventoryDataToSavePair.Key;
           var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
+          if(!this.releasedSimObjects.TryGetValue(t,out List<ulong>releasedSimObjectIds)){
+           this.releasedSimObjects.Add(t,releasedSimObjectIds=new List<ulong>());
+          }
           Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
           if(!simInventoryFileStream.ContainsKey(t)){
            goto _Skip;
@@ -131,6 +134,7 @@ namespace AKCondinoO.Sims.Inventory{
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
           _Skip:{}
+          releasedSimObjectIds.Clear();
           foreach(var idInventoryPair in persistentSimInventoryDataToSave){
            Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;
            foreach(var simInventoryTypeDictionaryPair in typeDictionary){
@@ -143,7 +147,7 @@ namespace AKCondinoO.Sims.Inventory{
           }
           persistentSimInventoryDataToSave.Clear();
          }
-         releasedSimObjects.Clear();
+         bool loop=false;
          releasedInventoryStrings.ForEach(kvp=>inventoryStringsToReleaseSimObjects.Add(kvp.Key,kvp.Value));
          releasedInventoryStrings.Clear();
          foreach(var releasedInventoryString in inventoryStringsToReleaseSimObjects){
@@ -152,9 +156,13 @@ namespace AKCondinoO.Sims.Inventory{
           while(persistentSimInventoryData.inventoryItems.MoveNext()){
            SimInventory.PersistentSimInventoryData.SimInventoryItemData inventoryItem=persistentSimInventoryData.inventoryItems.Current;
            container.simInventoryReleasedSimObjectsIdsToRelease[inventoryItem.simType].Add(inventoryItem.number);
+           loop=true;
           }
          }
          inventoryStringsToReleaseSimObjects.Clear();
+         if(loop){
+          goto _Loop;
+         }
          container.waitingForSimInventoryReleasedSimObjectsIdsToRelease.Set();
          #region releasedIds
          if(releasedIdsFileStream!=null){
