@@ -360,10 +360,7 @@ namespace AKCondinoO.Sims{
              SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
           CollectSavingData();
-          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=SimObjectManager.singleton.persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
-           SimObjectManager.singleton.persistentDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease=SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease;
-          PersistentDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataSavingBG);
-           PersistentSimInventoryDataSavingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataSavingBG);
+          SimObjectManager.singleton.SchedulePersistentDataSaving();
           return true;
          }
          return false;
@@ -531,10 +528,7 @@ namespace AKCondinoO.Sims{
            SimObjectManager.singleton.persistentDataLoadingBG.specificIdsToLoad.Add(id,spawnRequestData);
           }
           specificSpawnRequests.Clear();
-          SimObjectManager.singleton.persistentDataLoadingBG.waitingForSimObjectSpawnData=SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
-           SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles;
-          PersistentDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentDataLoadingBG);
-           PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimObjectManager.singleton.persistentSimInventoryDataLoadingBG);
+          SimObjectManager.singleton.SchedulePersistentDataLoading();
           return true;
          }
          return false;
