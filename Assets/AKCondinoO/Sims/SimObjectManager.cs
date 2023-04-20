@@ -105,9 +105,7 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
-           persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
-           PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
-            PersistentSimInventoryDataSavingMultithreaded.Schedule(persistentSimInventoryDataSavingBG);
+           SchedulePersistentDataSaving();
           }
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
            persistentSimInventoryDataSavingBG.IsCompleted(persistentSimInventoryDataSavingBGThread.IsRunning,-1);
@@ -150,6 +148,18 @@ namespace AKCondinoO.Sims{
          #endregion
         }
         void OnDestroy(){
+        }
+        internal void SchedulePersistentDataSaving(){
+         persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
+          persistentDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease=persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease;
+         PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
+          PersistentSimInventoryDataSavingMultithreaded.Schedule(persistentSimInventoryDataSavingBG);
+        }
+        internal void SchedulePersistentDataLoading(){
+         persistentDataLoadingBG.waitingForSimObjectSpawnData=persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
+          persistentSimInventoryDataLoadingBG.spawnDataFromFiles=persistentDataLoadingBG.spawnDataFromFiles;
+         PersistentDataLoadingMultithreaded.Schedule(persistentDataLoadingBG);
+          PersistentSimInventoryDataLoadingMultithreaded.Schedule(persistentSimInventoryDataLoadingBG);
         }
         bool terrainMovedFlag;
         internal void OnVoxelTerrainChunkPositionChange(Vector3 oldPos,Vector2Int newRgn){
