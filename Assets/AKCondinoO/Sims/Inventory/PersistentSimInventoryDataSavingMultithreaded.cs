@@ -70,6 +70,7 @@ namespace AKCondinoO.Sims.Inventory{
            bool releasingSimObject=releasedSimObjectIds.Contains(id);
            //Log.DebugMessage("id:"+id);
            if(!persistentSimInventoryDataToSave.ContainsKey(id)){
+            bool noInventory=true;
             int totalCharactersRemoved=0;
             lineStringBuilder.Clear();
             lineStringBuilder.Append(line);
@@ -86,8 +87,7 @@ namespace AKCondinoO.Sims.Inventory{
               if(!(toRelease=container.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList))){
                container.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
               }
-              bool releaseId;
-              if(toRelease|(releaseId=releasingSimObject)){
+              if(toRelease||releasingSimObject){
                ReleaseInventory();
               }
               void ReleaseInventory(){
@@ -99,7 +99,8 @@ namespace AKCondinoO.Sims.Inventory{
                 int simInventoryIdEnd=simInventoryString.IndexOf(" , ",simInventoryIdStart);
                 string simInventoryIdString=simInventoryString.Substring(simInventoryIdStart,simInventoryIdEnd-simInventoryIdStart);
                 ulong simInventoryId=ulong.Parse(simInventoryIdString,NumberStyles.Any,CultureInfoUtil.en_US);
-                if(releaseId|!(releaseId=!idsToReleaseIdNumberList.Contains(simInventoryId))){
+                bool releaseId;
+                if((releaseId=releasingSimObject)|!(releaseId=!idsToReleaseIdNumberList.Contains(simInventoryId))){
                  releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
                  int toRemoveLength=(simInventoryListStringStart+simInventoryStringEnd)-totalCharactersRemoved-((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved);
                  lineStringBuilder.Remove((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved,toRemoveLength);
@@ -107,6 +108,8 @@ namespace AKCondinoO.Sims.Inventory{
                  if(releaseId){
                   idsToReleaseIdNumberList.Add(simInventoryId);
                  }
+                }else{
+                 noInventory=false;
                 }
                 simInventoryStringStart=simInventoryStringEnd;
                }
@@ -114,7 +117,7 @@ namespace AKCondinoO.Sims.Inventory{
              }
              simInventoryListStringStart=simInventoryListStringEnd;
             }
-            if(!releasingSimObject){
+            if(!releasingSimObject&&!noInventory){
              line=lineStringBuilder.ToString();
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
             }
