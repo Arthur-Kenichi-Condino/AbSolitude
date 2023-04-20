@@ -67,6 +67,7 @@ namespace AKCondinoO.Sims.Inventory{
            int idStringStart=line.IndexOf("id=")+3;
            int idStringEnd  =line.IndexOf(" , ",idStringStart);
            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           bool releasingSimObject=releasedSimObjectIds.Contains(id);
            //Log.DebugMessage("id:"+id);
            if(!persistentSimInventoryDataToSave.ContainsKey(id)){
             int totalCharactersRemoved=0;
@@ -80,28 +81,43 @@ namespace AKCondinoO.Sims.Inventory{
              int simInventoryTypeStringEnd=simInventoryListString.IndexOf(" , ",simInventoryTypeStringStart);
              string simInventoryTypeString=simInventoryListString.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
              Type simInventoryType=Type.GetType(simInventoryTypeString);
-             if(simInventoryType!=null&&container.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList)){
-              int simInventoryStringStart=simInventoryTypeStringEnd+3;
-              while((simInventoryStringStart=simInventoryListString.IndexOf("[ simInventoryIdNumber=",simInventoryStringStart))>=0){
-               int simInventoryStringEnd=simInventoryListString.IndexOf("} ] , ",simInventoryStringStart)+6;
-               string simInventoryString=simInventoryListString.Substring(simInventoryStringStart,simInventoryStringEnd-simInventoryStringStart);
-               int simInventoryIdStart=simInventoryString.IndexOf("simInventoryIdNumber=")+21;
-               int simInventoryIdEnd=simInventoryString.IndexOf(" , ",simInventoryIdStart);
-               string simInventoryIdString=simInventoryString.Substring(simInventoryIdStart,simInventoryIdEnd-simInventoryIdStart);
-               ulong simInventoryId=ulong.Parse(simInventoryIdString,NumberStyles.Any,CultureInfoUtil.en_US);
-               if(idsToReleaseIdNumberList.Contains(simInventoryId)){
-                releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
-                int toRemoveLength=(simInventoryListStringStart+simInventoryStringEnd)-totalCharactersRemoved-((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved);
-                lineStringBuilder.Remove((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved,toRemoveLength);
-                totalCharactersRemoved+=toRemoveLength;
+             if(simInventoryType!=null){
+              bool toRelease;
+              if(!(toRelease=container.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList))){
+               container.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
+              }
+              bool releaseId;
+              if(toRelease|(releaseId=releasingSimObject)){
+               ReleaseInventory();
+              }
+              void ReleaseInventory(){
+               int simInventoryStringStart=simInventoryTypeStringEnd+3;
+               while((simInventoryStringStart=simInventoryListString.IndexOf("[ simInventoryIdNumber=",simInventoryStringStart))>=0){
+                int simInventoryStringEnd=simInventoryListString.IndexOf("} ] , ",simInventoryStringStart)+6;
+                string simInventoryString=simInventoryListString.Substring(simInventoryStringStart,simInventoryStringEnd-simInventoryStringStart);
+                int simInventoryIdStart=simInventoryString.IndexOf("simInventoryIdNumber=")+21;
+                int simInventoryIdEnd=simInventoryString.IndexOf(" , ",simInventoryIdStart);
+                string simInventoryIdString=simInventoryString.Substring(simInventoryIdStart,simInventoryIdEnd-simInventoryIdStart);
+                ulong simInventoryId=ulong.Parse(simInventoryIdString,NumberStyles.Any,CultureInfoUtil.en_US);
+                if(releaseId|!(releaseId=!idsToReleaseIdNumberList.Contains(simInventoryId))){
+                 releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
+                 int toRemoveLength=(simInventoryListStringStart+simInventoryStringEnd)-totalCharactersRemoved-((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved);
+                 lineStringBuilder.Remove((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved,toRemoveLength);
+                 totalCharactersRemoved+=toRemoveLength;
+                 if(releaseId){
+                  idsToReleaseIdNumberList.Add(simInventoryId);
+                 }
+                }
+                simInventoryStringStart=simInventoryStringEnd;
                }
-               simInventoryStringStart=simInventoryStringEnd;
               }
              }
              simInventoryListStringStart=simInventoryListStringEnd;
             }
-            line=lineStringBuilder.ToString();
-            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
+            if(!releasingSimObject){
+             line=lineStringBuilder.ToString();
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
+            }
            }
           }
           foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
@@ -156,6 +172,12 @@ namespace AKCondinoO.Sims.Inventory{
           while(persistentSimInventoryData.inventoryItems.MoveNext()){
            SimInventory.PersistentSimInventoryData.SimInventoryItemData inventoryItem=persistentSimInventoryData.inventoryItems.Current;
            container.simInventoryReleasedSimObjectsIdsToRelease[inventoryItem.simType].Add(inventoryItem.number);
+           Type t=inventoryItem.simType;
+           ulong idNumber=inventoryItem.number;
+           if(!this.releasedSimObjects.TryGetValue(t,out List<ulong>releasedSimObjectIds)){
+            this.releasedSimObjects.Add(t,releasedSimObjectIds=new List<ulong>());
+           }
+           releasedSimObjectIds.Add(idNumber);
            loop=true;
           }
          }
