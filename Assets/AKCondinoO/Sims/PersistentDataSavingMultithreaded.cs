@@ -15,13 +15,18 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal class PersistentDataSavingBackgroundContainer:BackgroundContainer{
-     internal readonly AutoResetEvent waitingForSimInventoryReleasedSimObjectsIdsToRelease=new AutoResetEvent(false);
-      internal Dictionary<Type,List<ulong>>simInventoryReleasedSimObjectsIdsToRelease;
-     internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
-      internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
-     internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
-      internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
-     internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
+     #region input
+         internal readonly AutoResetEvent waitingForSimInventoryReleasedSimObjectsIdsToRelease=new AutoResetEvent(false);
+          internal Dictionary<Type,List<ulong>>simInventoryReleasedSimObjectsIdsToRelease;
+         internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
+          internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
+         internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
+          internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
+         internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
+     #endregion
+     #region output
+         internal readonly Dictionary<Type,List<ulong>>onSavedReleasedIds=new Dictionary<Type,List<ulong>>();
+     #endregion
     }
     internal class PersistentDataSavingMultithreaded:BaseMultithreaded<PersistentDataSavingBackgroundContainer>{
      internal readonly Dictionary<Type,FileStream>simObjectFileStream=new Dictionary<Type,FileStream>();
@@ -91,6 +96,7 @@ namespace AKCondinoO.Sims{
          foreach(var typeIdListPair in container.simInventoryReleasedSimObjectsIdsToRelease){
           Type t=typeIdListPair.Key;
           List<ulong>idList=typeIdListPair.Value;
+          //  TO DO: add ids to be released
           idList.Clear();
          }
          foreach(var kvp1 in idPersistentDataListBycnkIdxByType){
