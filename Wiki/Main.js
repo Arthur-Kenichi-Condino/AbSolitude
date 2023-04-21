@@ -1,18 +1,17 @@
 console.log("trying to become alive...");
 //
-var rootPath=".";
-var rootURL=null;
-const allScripts=document.getElementsByTagName('script');
-for(var i=allScripts.length-1;i>=0;--i){
-    var src=allScripts[i].src;
-    console.log("searching allScripts...src:"+src);
-    if(src.substring(src.length-'/Main.js'.length)=='/Main.js'){
-        //console.log("found Main.js src:"+src);
-        rootURL=src.substring(0,src.length-'Main.js'.length);
-        console.log("found Main.js rootURL:"+rootURL);
-    }
-}
-console.log("I'm alive!");
+//var rootPath=".";
+//var rootURL=null;
+//const allScripts=document.getElementsByTagName('script');
+//for(var i=allScripts.length-1;i>=0;--i){
+//    var src=allScripts[i].src;
+//    console.log("searching allScripts...src:"+src);
+//    if(src.substring(src.length-'/Main.js'.length)=='/Main.js'){
+//        //console.log("found Main.js src:"+src);
+//        rootURL=src.substring(0,src.length-'Main.js'.length);
+//        console.log("found Main.js rootURL:"+rootURL);
+//    }
+//}
 function RequestDirectoryIndexDataRecursivelyThenParseToWikiElementInnerHtmlByClassName(dir,className){
     const dirRequest=new XMLHttpRequest();
     dirRequest.open("GET",dir,true);
@@ -32,9 +31,9 @@ function RequestDirectoryIndexDataRecursivelyThenParseToWikiElementInnerHtmlByCl
     };
     dirRequest.send(null);
 }
-function ParseDirectoryIndexDataTreeToWikiElementInnerHtmlByClassName(className){
+function ParseDirectoryIndexDataTreeToWikiElementInnerHtmlByClassName(dir,className){
     console.log("ParseDirectoryIndexDataTreeToWikiElementInnerHtmlByClassName:"+className);
-    RequestDirectoryIndexDataRecursivelyThenParseToWikiElementInnerHtmlByClassName(rootPath,className);
+    RequestDirectoryIndexDataRecursivelyThenParseToWikiElementInnerHtmlByClassName(dir,className);
 }
 //  https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file-in-the-browser
 function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
@@ -43,14 +42,14 @@ function ParseTextFileToWikiElementInnerHtmlByClassName(file,className){
     rawFileRequest.onreadystatechange=function(){
         if(rawFileRequest.readyState===4){
             if(rawFileRequest.status===200||rawFileRequest.status==0){
-                var allText=rawFileRequest.responseText
-                    .replaceAll("\\br\r\n","<br/>")
-                    .replaceAll("\\br","<br/>")
-                    .replaceAll("\\t","<p class=\"Title\">")
-                    .replaceAll("\\p","<p class=\"Paragraph\">")
-                    .replaceAll("\r\n","</p>");
-                console.log(allText);
-                document.getElementsByClassName(className)[0].innerHTML=allText;
+                //var allText=rawFileRequest.responseText
+                //    .replaceAll("\\br\r\n","<br/>")
+                //    .replaceAll("\\br","<br/>")
+                //    .replaceAll("\\t","<p class=\"Title\">")
+                //    .replaceAll("\\p","<p class=\"Paragraph\">")
+                //    .replaceAll("\r\n","</p>");
+                //console.log(allText);
+                //document.getElementsByClassName(className)[0].innerHTML=allText;
             }
         }
     }
@@ -70,3 +69,4 @@ function JQueryFadeInElementByClassName(className,timeout){
         $(document.getElementsByClassName(className)).fadeIn('fast');
     },timeout);
 }
+console.log("I'm alive!");
