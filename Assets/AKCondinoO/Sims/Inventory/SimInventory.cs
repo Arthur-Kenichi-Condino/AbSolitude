@@ -103,8 +103,8 @@ namespace AKCondinoO.Sims.Inventory{
          asSimObject.inventory[simInventoryId.simInventoryType].Add(simInventoryId.number,this);
          this.asSimObject  =asSimObject;
          this.asSimObjectId=asSimObject.id.Value;
-         SimInventoryManager.singleton.spawned.Add(simInventoryId,this);
-         SimInventoryManager.singleton.active .Add(simInventoryId,this);
+         SimInventoryManager.singleton.assigned.Add(simInventoryId,this);
+         SimInventoryManager.singleton.active  .Add(simInventoryId,this);
          this.simInventoryId=simInventoryId;
          Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
