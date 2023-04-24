@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
@@ -23,11 +24,11 @@ namespace AKCondinoO.Sims.Inventory{
      internal readonly HashSet<Type>registeredSimInventoryTypes=new HashSet<Type>();
      internal readonly List<Type>simInventoryTypesPendingRegistrationForDataSaving=new List<Type>();
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
-     internal readonly Dictionary<Type,List<ulong>>releasedIds=new Dictionary<Type,List<ulong>>();
+     internal readonly Dictionary<Type,HashSet<ulong>>releasedIds=new Dictionary<Type,HashSet<ulong>>();
      internal readonly Dictionary<Type,LinkedList<SimInventory>>pool=new Dictionary<Type,LinkedList<SimInventory>>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>assigned                 =new Dictionary<(Type,ulong),SimInventory>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>active                   =new Dictionary<(Type,ulong),SimInventory>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>unassigningAndReleasingId=new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>assigned                =new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>active                  =new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>unassignedAndReleasingId=new Dictionary<(Type,ulong),SimInventory>();
         void RegisterAsValidSimInventoryType(Type t){
          if(registeredSimInventoryTypes.Contains(t)){
           Log.DebugMessage("SimInventoryType already registered:"+t);
@@ -38,7 +39,7 @@ namespace AKCondinoO.Sims.Inventory{
           ids.Add(t,0uL);
          }
          if(!releasedIds.TryGetValue(t,out _)){
-          releasedIds.Add(t,new List<ulong>());
+          releasedIds.Add(t,new HashSet<ulong>());
          }
          pool.Add(t,new LinkedList<SimInventory>());
          simInventoryTypesPendingRegistrationForDataSaving.Add(t);
@@ -74,7 +75,7 @@ namespace AKCondinoO.Sims.Inventory{
            string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
            Type t=Type.GetType(typeString);
            if(t==null){continue;}
-           releasedIds[t]=new List<ulong>();
+           releasedIds[t]=new HashSet<ulong>();
            int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
            int releasedIdsListStringEnd  =line.IndexOf(", } , } , endOfLine",releasedIdsListStringStart);
            if(releasedIdsListStringEnd>=0){
@@ -123,10 +124,10 @@ namespace AKCondinoO.Sims.Inventory{
        readonly object[]simInventoryCtorParams=new object[]{};
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
          ulong idNumber;
-         this.releasedIds.TryGetValue(simInventoryType,out List<ulong>releasedIds);
+         this.releasedIds.TryGetValue(simInventoryType,out HashSet<ulong>releasedIds);
          if(releasedIds!=null&&releasedIds.Count>0){
-          idNumber=releasedIds[releasedIds.Count-1];
-          releasedIds.RemoveAt(releasedIds.Count-1);
+          idNumber=releasedIds.Last();
+          releasedIds.Remove(idNumber);
          }else{
           if(!ids.TryGetValue(simInventoryType,out idNumber)){
            ids.Add(simInventoryType,1uL);

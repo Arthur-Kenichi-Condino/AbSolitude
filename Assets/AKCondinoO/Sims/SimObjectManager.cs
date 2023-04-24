@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims{
      internal static string idsFile;
      internal static string releasedIdsFile;
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
-     internal readonly Dictionary<Type,List<ulong>>releasedIds=new Dictionary<Type,List<ulong>>();
+     internal readonly Dictionary<Type,HashSet<ulong>>releasedIds=new Dictionary<Type,HashSet<ulong>>();
      internal readonly Dictionary<Type,LinkedList<SimObject>>pool=new Dictionary<Type,LinkedList<SimObject>>();
      internal readonly Dictionary<(Type simType,ulong number),SimObject>spawned                 =new Dictionary<(Type,ulong),SimObject>();
      internal readonly Dictionary<(Type simType,ulong number),SimObject>active                  =new Dictionary<(Type,ulong),SimObject>();
