@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObjectSpawner:MonoBehaviour,ISingletonInitialization{
@@ -34,7 +35,7 @@ namespace AKCondinoO.Sims{
            string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
            Type t=Type.GetType(typeString);
            if(t==null){continue;}
-           SimObjectManager.singleton.releasedIds[t]=new List<ulong>();
+           SimObjectManager.singleton.releasedIds[t]=new HashSet<ulong>();
            int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
            int releasedIdsListStringEnd  =line.IndexOf(", } , } , endOfLine",releasedIdsListStringStart);
            if(releasedIdsListStringEnd>=0){
@@ -130,7 +131,7 @@ namespace AKCondinoO.Sims{
            SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t]=new StreamReader(loaderSimInventoryFileStream);
           }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
-              SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
+              SimObjectManager.singleton.releasedIds.Add(t,new HashSet<ulong>());
           }
           SimObjectManager.singleton.pool.Add(t,new LinkedList<SimObject>());
          }
@@ -245,8 +246,8 @@ namespace AKCondinoO.Sims{
                  numberIsNew=true;
                 }else{
                  if(releasedIds.Count>0){
-                  number=releasedIds[releasedIds.Count-1];
-                  releasedIds.RemoveAt(releasedIds.Count-1);
+                  number=releasedIds.Last();
+                  releasedIds.Remove(number);
                   numberIsRecycled=true;
                  }else{
                   number=ids[simType]++;
@@ -444,7 +445,7 @@ namespace AKCondinoO.Sims{
           //  active: remove
           SimInventoryManager.singleton.active.Remove(simInventory.simInventoryId.Value);
           //  release inventory items
-          List<(Type simType,ulong number)>simObjectIdsToRelease=simInventory.OnUnassign(exitSave);
+          List<(Type simType,ulong number)>simObjectIdsToRelease=simInventory.OnSetToBeUnassigned(exitSave);
           foreach((Type simType,ulong number)simObjectIdToRelease in simObjectIdsToRelease){
            SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectIdToRelease.simType].Add(simObjectIdToRelease.number);
           }
@@ -453,7 +454,7 @@ namespace AKCondinoO.Sims{
            SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Add(number);
           }
           if(!exitSave){
-           SimInventoryManager.singleton.unassigningAndReleasingId.Add((simInventoryType,number),simInventory);
+           SimInventoryManager.singleton.unassignedAndReleasingId.Add((simInventoryType,number),simInventory);
           }
          }
         }
@@ -478,7 +479,7 @@ namespace AKCondinoO.Sims{
            despawnAndReleaseId.Value.id=null;
           }
           SimObjectManager.singleton.despawningAndReleasingId.Clear();
-          foreach(var simInventoryReleaseId in SimInventoryManager.singleton.unassigningAndReleasingId){
+          foreach(var simInventoryReleaseId in SimInventoryManager.singleton.unassignedAndReleasingId){
            //  TO DO: remove id and add to pool
            SimInventoryManager.singleton.assigned.Remove(simInventoryReleaseId.Key);
            SimInventoryManager.singleton.releasedIds[simInventoryReleaseId.Key.simInventoryType].Add(simInventoryReleaseId.Key.number);
@@ -488,7 +489,7 @@ namespace AKCondinoO.Sims{
            simInventoryReleaseId.Value.asSimObjectId=null;
            simInventoryReleaseId.Value.simInventoryId=null;
           }
-          SimInventoryManager.singleton.unassigningAndReleasingId.Clear();
+          SimInventoryManager.singleton.unassignedAndReleasingId.Clear();
           foreach(var simInventoryTypeIdNumberListPair in SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds){
            Type simInventoryType=simInventoryTypeIdNumberListPair.Key;
            List<ulong>onSavedReleasedIds=simInventoryTypeIdNumberListPair.Value;

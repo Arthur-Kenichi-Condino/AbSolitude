@@ -111,7 +111,7 @@ namespace AKCondinoO.Sims.Inventory{
         }
      protected readonly List<(Type simType,ulong number)>simObjectIdsToRelease=new List<(Type,ulong)>();
       protected readonly List<int>idsToRemove=new List<int>();
-        internal virtual List<(Type simType,ulong number)>OnUnassign(bool exitSave=false){
+        internal virtual List<(Type simType,ulong number)>OnSetToBeUnassigned(bool exitSave=false){
          Log.DebugMessage("SimInventory Reset");
          idsToRemove.AddRange(idsItemIds.Keys);
          foreach(int id in idsToRemove){
