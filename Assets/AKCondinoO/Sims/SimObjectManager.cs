@@ -15,10 +15,6 @@ namespace AKCondinoO.Sims{
      internal PersistentDataSavingMultithreaded       persistentDataSavingBGThread;
      internal PersistentDataLoadingBackgroundContainer persistentDataLoadingBG;
      internal PersistentDataLoadingMultithreaded       persistentDataLoadingBGThread;
-     internal PersistentSimInventoryDataSavingBackgroundContainer persistentSimInventoryDataSavingBG;
-     internal PersistentSimInventoryDataSavingMultithreaded       persistentSimInventoryDataSavingBGThread;
-     internal PersistentSimInventoryDataLoadingBackgroundContainer persistentSimInventoryDataLoadingBG;
-     internal PersistentSimInventoryDataLoadingMultithreaded       persistentSimInventoryDataLoadingBGThread;
      internal static string simObjectSavePath;
      internal static string simObjectDataSavePath;
      internal static string simActorSavePath;
@@ -40,12 +36,14 @@ namespace AKCondinoO.Sims{
          PersistentDataLoadingMultithreaded.Stop=false;
          persistentDataLoadingBG=new PersistentDataLoadingBackgroundContainer();
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
-          PersistentSimInventoryDataSavingMultithreaded.Stop=false;
-          persistentSimInventoryDataSavingBG=new PersistentSimInventoryDataSavingBackgroundContainer();
-          persistentSimInventoryDataSavingBGThread=new PersistentSimInventoryDataSavingMultithreaded();
-          PersistentSimInventoryDataLoadingMultithreaded.Stop=false;
-          persistentSimInventoryDataLoadingBG=new PersistentSimInventoryDataLoadingBackgroundContainer();
-          persistentSimInventoryDataLoadingBGThread=new PersistentSimInventoryDataLoadingMultithreaded();
+          #region SimInventoryManager
+              PersistentSimInventoryDataSavingMultithreaded.Stop=false;
+              SimInventoryManager.singleton.persistentSimInventoryDataSavingBG=new PersistentSimInventoryDataSavingBackgroundContainer();
+              SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread=new PersistentSimInventoryDataSavingMultithreaded();
+              PersistentSimInventoryDataLoadingMultithreaded.Stop=false;
+              SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG=new PersistentSimInventoryDataLoadingBackgroundContainer();
+              SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread=new PersistentSimInventoryDataLoadingMultithreaded();
+          #endregion
          //  TO DO: dispose, update references' locations shown in errors, change directory for sim inventory values, schedule and complete sim inventory bg tasks following persistentDataSavingBG
         }
         public void Init(){
@@ -66,17 +64,21 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
          #region PersistentDataLoadingMultithreaded
           persistentDataLoadingBG.IsCompleted(persistentDataLoadingBGThread.IsRunning,-1);
-           persistentSimInventoryDataLoadingBG.IsCompleted(persistentSimInventoryDataLoadingBGThread.IsRunning,-1);
+           #region SimInventoryManager
+               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning,-1);
+           #endregion
           if(PersistentDataLoadingMultithreaded.Clear()!=0){
            Log.Error("PersistentDataLoadingMultithreaded will stop with pending work");
           }
           PersistentDataLoadingMultithreaded.Stop=true;
           persistentDataLoadingBGThread.Wait();
-           if(PersistentSimInventoryDataLoadingMultithreaded.Clear()!=0){
-            Log.Error("PersistentSimInventoryDataLoadingMultithreaded will stop with pending work");
-           }
-           PersistentSimInventoryDataLoadingMultithreaded.Stop=true;
-           persistentSimInventoryDataLoadingBGThread.Wait();
+           #region SimInventoryManager
+               if(PersistentSimInventoryDataLoadingMultithreaded.Clear()!=0){
+                Log.Error("PersistentSimInventoryDataLoadingMultithreaded will stop with pending work");
+               }
+               PersistentSimInventoryDataLoadingMultithreaded.Stop=true;
+               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.Wait();
+           #endregion
           foreach(var kvp in persistentDataLoadingBGThread.simObjectFileStream){
            Type t=kvp.Key;
            if(Core.singleton.isServer){
@@ -88,46 +90,58 @@ namespace AKCondinoO.Sims{
             }
            }
           }
-          foreach(var kvp in persistentSimInventoryDataLoadingBGThread.simInventoryFileStream){
-           Type t=kvp.Key;
-           if(Core.singleton.isServer){
-            persistentSimInventoryDataLoadingBGThread.simInventoryFileStream      [t].Dispose();
-            persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t].Dispose();
-           }
-          }
+           #region SimInventoryManager
+               foreach(var kvp in SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream){
+                Type t=kvp.Key;
+                if(Core.singleton.isServer){
+                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream      [t].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t].Dispose();
+                }
+               }
+           #endregion
           persistentDataLoadingBG.Dispose();
-           persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData.Dispose();
-           persistentSimInventoryDataLoadingBG.Dispose();
+           #region SimInventoryManager
+               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData.Dispose();
+               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.Dispose();
+           #endregion
          #endregion
          #region PersistentDataSavingMultithreaded
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
-           persistentSimInventoryDataSavingBG.IsCompleted(persistentSimInventoryDataSavingBGThread.IsRunning,-1);
+           #region SimInventoryManager
+               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning,-1);
+           #endregion
           if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
            SchedulePersistentDataSaving();
           }
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
-           persistentSimInventoryDataSavingBG.IsCompleted(persistentSimInventoryDataSavingBGThread.IsRunning,-1);
+           #region SimInventoryManager
+               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning,-1);
+           #endregion
           if(PersistentDataSavingMultithreaded.Clear()!=0){
            Log.Error("PersistentDataSavingMultithreaded will stop with pending work");
           }
           PersistentDataSavingMultithreaded.Stop=true;
           persistentDataSavingBGThread.Wait();
-           if(PersistentSimInventoryDataSavingMultithreaded.Clear()!=0){
-            Log.Error("PersistentSimInventoryDataSavingMultithreaded will stop with pending work");
-           }
-           PersistentSimInventoryDataSavingMultithreaded.Stop=true;
-           persistentSimInventoryDataSavingBGThread.Wait();
+           #region SimInventoryManager
+               if(PersistentSimInventoryDataSavingMultithreaded.Clear()!=0){
+                Log.Error("PersistentSimInventoryDataSavingMultithreaded will stop with pending work");
+               }
+               PersistentSimInventoryDataSavingMultithreaded.Stop=true;
+               SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.Wait();
+           #endregion
           if(Core.singleton.isServer){
            persistentDataSavingBGThread.releasedIdsFileStreamWriter.Dispose();
            persistentDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
            persistentDataSavingBGThread.idsFileStreamWriter.Dispose();
            persistentDataSavingBGThread.idsFileStreamReader.Dispose();
-            persistentSimInventoryDataSavingBGThread.idsFileStreamWriter.Dispose();
-            persistentSimInventoryDataSavingBGThread.idsFileStreamReader.Dispose();
-            persistentSimInventoryDataSavingBGThread.releasedIdsFileStreamWriter.Dispose();
-            persistentSimInventoryDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
+            #region SimInventoryManager
+                SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.idsFileStreamWriter.Dispose();
+                SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.idsFileStreamReader.Dispose();
+                SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.releasedIdsFileStreamWriter.Dispose();
+                SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.releasedIdsFileStreamReader.Dispose();
+            #endregion
           }
           foreach(var kvp in persistentDataSavingBGThread.simObjectFileStream){
            Type t=kvp.Key;
@@ -138,28 +152,40 @@ namespace AKCondinoO.Sims{
              persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
              persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
             }
-             persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
-             persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
+             #region SimInventoryManager
+                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
+             #endregion
            }
           }
           persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease.Dispose();
           persistentDataSavingBG.Dispose();
-           persistentSimInventoryDataSavingBG.Dispose();
+           #region SimInventoryManager
+               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.Dispose();
+           #endregion
          #endregion
         }
         void OnDestroy(){
         }
         internal void SchedulePersistentDataSaving(){
-         persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
-          persistentDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease=persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease;
+          #region SimInventoryManager
+              SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease=persistentDataSavingBG.waitingForSimInventoryReleasedSimObjectsIdsToRelease;
+          #endregion
+         persistentDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease=SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease;
          PersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
-          PersistentSimInventoryDataSavingMultithreaded.Schedule(persistentSimInventoryDataSavingBG);
+          #region SimInventoryManager
+              PersistentSimInventoryDataSavingMultithreaded.Schedule(SimInventoryManager.singleton.persistentSimInventoryDataSavingBG);
+          #endregion
         }
         internal void SchedulePersistentDataLoading(){
-         persistentDataLoadingBG.waitingForSimObjectSpawnData=persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
-          persistentSimInventoryDataLoadingBG.spawnDataFromFiles=persistentDataLoadingBG.spawnDataFromFiles;
+         persistentDataLoadingBG.waitingForSimObjectSpawnData=SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.waitingForSimObjectSpawnData;
+          #region SimInventoryManager
+              SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.spawnDataFromFiles=persistentDataLoadingBG.spawnDataFromFiles;
+          #endregion
          PersistentDataLoadingMultithreaded.Schedule(persistentDataLoadingBG);
-          PersistentSimInventoryDataLoadingMultithreaded.Schedule(persistentSimInventoryDataLoadingBG);
+          #region SimInventoryManager
+              PersistentSimInventoryDataLoadingMultithreaded.Schedule(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG);
+          #endregion
         }
         bool terrainMovedFlag;
         internal void OnVoxelTerrainChunkPositionChange(Vector3 oldPos,Vector2Int newRgn){

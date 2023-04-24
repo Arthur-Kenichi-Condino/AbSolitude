@@ -96,7 +96,8 @@ namespace AKCondinoO.Sims{
          foreach(var typeIdListPair in container.simInventoryReleasedSimObjectsIdsToRelease){
           Type t=typeIdListPair.Key;
           List<ulong>idList=typeIdListPair.Value;
-          //  TO DO: add ids to be released
+          //  TO DO: add ids to be released and to be removed from the game on saved
+          var idsToRelease=container.idsToRelease[t];
           idList.Clear();
          }
          foreach(var kvp1 in idPersistentDataListBycnkIdxByType){

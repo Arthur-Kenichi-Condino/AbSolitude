@@ -100,12 +100,15 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            simInventorySaveFile=string.Format("{0}{1}{2}",SimInventoryManager.simInventoryDataSavePath,t,".txt");
            FileStream simInventoryFileStream;
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStream[t]=simInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t]=new StreamWriter(simInventoryFileStream);
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t]=new StreamReader(simInventoryFileStream);
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStream[t]=simInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t]=new StreamWriter(simInventoryFileStream);
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t]=new StreamReader(simInventoryFileStream);
           }
-          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>());
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease.Add(t,new List<ulong>());
+          SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.releasedSimObjects.Add(t,new List<ulong>());
+          SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile.Add(t,new Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>());
+           #region output
+               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease.Add(t,new List<ulong>());
+           #endregion
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(t,new List<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(t,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
@@ -123,8 +126,8 @@ namespace AKCondinoO.Sims{
           }
           if(Core.singleton.isServer){
            FileStream loaderSimInventoryFileStream;
-           SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream[t]=loaderSimInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-           SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t]=new StreamReader(loaderSimInventoryFileStream);
+           SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream[t]=loaderSimInventoryFileStream=new FileStream(simInventorySaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t]=new StreamReader(loaderSimInventoryFileStream);
           }
           if(!SimObjectManager.singleton.releasedIds.ContainsKey(t)){
               SimObjectManager.singleton.releasedIds.Add(t,new List<ulong>());
@@ -357,7 +360,7 @@ namespace AKCondinoO.Sims{
         }
         bool OnPersistentDataPushToFile(){
          if(SimObjectManager.singleton.persistentDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentDataSavingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
+             SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
           CollectSavingData();
           SimObjectManager.singleton.SchedulePersistentDataSaving();
@@ -366,26 +369,21 @@ namespace AKCondinoO.Sims{
          return false;
         }
         internal void CollectSavingData(bool exitSave=false){
+         foreach(Type t in SimInventoryManager.singleton.simInventoryTypesPendingRegistrationForDataSaving){
+          SimInventoryManager.singleton.OnSaveSimInventoryTypeRegistration(t);
+         }
+         SimInventoryManager.singleton.simInventoryTypesPendingRegistrationForDataSaving.Clear();
          foreach(var kvp in SimObjectManager.singleton.releasedIds){
           Type t=kvp.Key;
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds[t].AddRange(kvp.Value);
           SimObjectManager.singleton.ids.TryGetValue(t,out ulong nextId);
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[t]=nextId;
          }
-          foreach(var kvp in SimInventoryManager.singleton.ids){
+          foreach(var kvp in SimInventoryManager.singleton.releasedIds){
            Type t=kvp.Key;
-           ulong nextId=kvp.Value;
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
-           if(!SimInventoryManager.singleton.releasedIds.TryGetValue(t,out List<ulong>releasedIdsIdNumberList)){
-            SimInventoryManager.singleton.releasedIds.Add(t,releasedIdsIdNumberList=new List<ulong>());
-           }
-           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.TryGetValue(t,out List<ulong>persistentReleasedIdsIdNumberList)){
-            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(t,persistentReleasedIdsIdNumberList=new List<ulong>());
-           }
-           persistentReleasedIdsIdNumberList.AddRange(releasedIdsIdNumberList);
-           if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.ContainsKey(t)){
-            SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(t,new List<ulong>());
-           }
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds[t].AddRange(kvp.Value);
+           SimInventoryManager.singleton.ids.TryGetValue(t,out ulong nextId);
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[t]=nextId;
           }
          foreach(var a in SimObjectManager.singleton.active){
           GetSimObjectPersistentData(a.Value);
@@ -427,7 +425,7 @@ namespace AKCondinoO.Sims{
             PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.Enqueue(simInventoryDataIdDictionary);
            }
           }
-          SimObjectManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataTypeDictionary);
+          SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simType].Add(simObject.id.Value.number,simInventoryDataTypeDictionary);
          }
          while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simType].Add(toDespawnAndReleaseId.id.Value.number);
@@ -451,12 +449,11 @@ namespace AKCondinoO.Sims{
            SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectIdToRelease.simType].Add(simObjectIdToRelease.number);
           }
           simObjectIdsToRelease.Clear();
-          if(!SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.TryGetValue(simInventoryType,out List<ulong>idsToReleaseIdNumberList)){
-           SimObjectManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,idsToReleaseIdNumberList=new List<ulong>());
+          if(!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds[simInventoryType].Contains(number)){
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Add(number);
           }
-          idsToReleaseIdNumberList.Add(number);
           if(!exitSave){
-           SimInventoryManager.singleton.releasingId.Add((simInventoryType,number),simInventory);
+           SimInventoryManager.singleton.unassigningAndReleasingId.Add((simInventoryType,number),simInventory);
           }
          }
         }
@@ -465,7 +462,7 @@ namespace AKCondinoO.Sims{
         }
         bool OnPersistentDataSaved(){
          if(SimObjectManager.singleton.persistentDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentDataSavingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
+             SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning)
          ){
           //  TO DO: remove sim inventories
           foreach(var despawn in SimObjectManager.singleton.despawning){
@@ -481,30 +478,36 @@ namespace AKCondinoO.Sims{
            despawnAndReleaseId.Value.id=null;
           }
           SimObjectManager.singleton.despawningAndReleasingId.Clear();
-          foreach(var simInventoryReleaseId in SimInventoryManager.singleton.releasingId){
+          foreach(var simInventoryReleaseId in SimInventoryManager.singleton.unassigningAndReleasingId){
            //  TO DO: remove id and add to pool
-           SimInventoryManager.singleton.spawned.Remove(simInventoryReleaseId.Key);
-           if(!SimInventoryManager.singleton.releasedIds.TryGetValue(simInventoryReleaseId.Key.simInventoryType,out List<ulong>releasedIdsIdNumberList)){
-            SimInventoryManager.singleton.releasedIds.Add(simInventoryReleaseId.Key.simInventoryType,releasedIdsIdNumberList=new List<ulong>());
-           }
-           releasedIdsIdNumberList.Add(simInventoryReleaseId.Key.number);
-           if(!SimInventoryManager.singleton.pool.TryGetValue(simInventoryReleaseId.Key.simInventoryType,out LinkedList<SimInventory>pool)){
-            SimInventoryManager.singleton.pool.Add(simInventoryReleaseId.Key.simInventoryType,pool=new LinkedList<SimInventory>());
-           }
-           simInventoryReleaseId.Value.pooled=pool.AddLast(simInventoryReleaseId.Value);
+           SimInventoryManager.singleton.assigned.Remove(simInventoryReleaseId.Key);
+           SimInventoryManager.singleton.releasedIds[simInventoryReleaseId.Key.simInventoryType].Add(simInventoryReleaseId.Key.number);
+           simInventoryReleaseId.Value.pooled=SimInventoryManager.singleton.pool[simInventoryReleaseId.Key.simInventoryType].AddLast(simInventoryReleaseId.Value);
            simInventoryReleaseId.Value.asSimObject.inventory[simInventoryReleaseId.Key.simInventoryType].Remove(simInventoryReleaseId.Key.number);
            simInventoryReleaseId.Value.asSimObject  =null;
            simInventoryReleaseId.Value.asSimObjectId=null;
            simInventoryReleaseId.Value.simInventoryId=null;
           }
-          SimInventoryManager.singleton.releasingId.Clear();
+          SimInventoryManager.singleton.unassigningAndReleasingId.Clear();
+          foreach(var simInventoryTypeIdNumberListPair in SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds){
+           Type simInventoryType=simInventoryTypeIdNumberListPair.Key;
+           List<ulong>onSavedReleasedIds=simInventoryTypeIdNumberListPair.Value;
+           for(int i=0;i<onSavedReleasedIds.Count;++i){ulong idNumber=onSavedReleasedIds[i];
+            (Type simInventoryType,ulong number)simInventoryId=(simInventoryType,idNumber);
+            if(SimInventoryManager.singleton.active.TryGetValue(simInventoryId,out SimInventory simInventory)){
+             simInventory.asSimObject.OnUnplaceRequest();
+            }else{
+             SimInventoryManager.singleton.releasedIds[simInventoryType].Add(idNumber);
+            }
+           }
+          }
           return true;
          }
          return false;
         }
         bool OnPersistentDataPullFromFile(){
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
+             SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
          ){
           foreach(int cnkIdx in terraincnkIdxPhysMeshBaked){
            SimObjectManager.singleton.persistentDataLoadingBG.terraincnkIdxToLoad.Add(cnkIdx);
@@ -539,7 +542,7 @@ namespace AKCondinoO.Sims{
         }
         bool OnPersistentDataLoaded(){
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
-             SimObjectManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
+             SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
          ){
           spawnQueue.Enqueue(SimObjectManager.singleton.persistentDataLoadingBG.spawnDataFromFiles);
           return true;
