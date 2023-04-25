@@ -24,10 +24,10 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
      internal readonly Dictionary<Type,HashSet<ulong>>releasedIds=new Dictionary<Type,HashSet<ulong>>();
      internal readonly Dictionary<Type,LinkedList<SimObject>>pool=new Dictionary<Type,LinkedList<SimObject>>();
-     internal readonly Dictionary<(Type simType,ulong number),SimObject>spawned                 =new Dictionary<(Type,ulong),SimObject>();
-     internal readonly Dictionary<(Type simType,ulong number),SimObject>active                  =new Dictionary<(Type,ulong),SimObject>();
-     internal readonly Dictionary<(Type simType,ulong number),SimObject>despawning              =new Dictionary<(Type,ulong),SimObject>();
-     internal readonly Dictionary<(Type simType,ulong number),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
+     internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>spawned                 =new Dictionary<(Type,ulong),SimObject>();
+     internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>active                  =new Dictionary<(Type,ulong),SimObject>();
+     internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawning              =new Dictionary<(Type,ulong),SimObject>();
+     internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          PersistentDataSavingMultithreaded.Stop=false;
@@ -80,22 +80,22 @@ namespace AKCondinoO.Sims{
                SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.Wait();
            #endregion
           foreach(var kvp in persistentDataLoadingBGThread.simObjectFileStream){
-           Type t=kvp.Key;
+           Type simObjectType=kvp.Key;
            if(Core.singleton.isServer){
-            persistentDataLoadingBGThread.simObjectFileStream      [t].Dispose();
-            persistentDataLoadingBGThread.simObjectFileStreamReader[t].Dispose();
-            if(SimObjectUtil.IsSimActor(t)){
-             persistentDataLoadingBGThread.simActorFileStream      [t].Dispose();
-             persistentDataLoadingBGThread.simActorFileStreamReader[t].Dispose();
+            persistentDataLoadingBGThread.simObjectFileStream      [simObjectType].Dispose();
+            persistentDataLoadingBGThread.simObjectFileStreamReader[simObjectType].Dispose();
+            if(SimObjectUtil.IsSimActor(simObjectType)){
+             persistentDataLoadingBGThread.simActorFileStream      [simObjectType].Dispose();
+             persistentDataLoadingBGThread.simActorFileStreamReader[simObjectType].Dispose();
             }
            }
           }
            #region SimInventoryManager
                foreach(var kvp in SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream){
-                Type t=kvp.Key;
+                Type simObjectType=kvp.Key;
                 if(Core.singleton.isServer){
-                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream      [t].Dispose();
-                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[t].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStream      [simObjectType].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.simInventoryFileStreamReader[simObjectType].Dispose();
                 }
                }
            #endregion
@@ -144,17 +144,17 @@ namespace AKCondinoO.Sims{
             #endregion
           }
           foreach(var kvp in persistentDataSavingBGThread.simObjectFileStream){
-           Type t=kvp.Key;
+           Type simObjectType=kvp.Key;
            if(Core.singleton.isServer){
-            persistentDataSavingBGThread.simObjectFileStreamWriter[t].Dispose();
-            persistentDataSavingBGThread.simObjectFileStreamReader[t].Dispose();
-            if(SimObjectUtil.IsSimActor(t)){
-             persistentDataSavingBGThread.simActorFileStreamWriter[t].Dispose();
-             persistentDataSavingBGThread.simActorFileStreamReader[t].Dispose();
+            persistentDataSavingBGThread.simObjectFileStreamWriter[simObjectType].Dispose();
+            persistentDataSavingBGThread.simObjectFileStreamReader[simObjectType].Dispose();
+            if(SimObjectUtil.IsSimActor(simObjectType)){
+             persistentDataSavingBGThread.simActorFileStreamWriter[simObjectType].Dispose();
+             persistentDataSavingBGThread.simActorFileStreamReader[simObjectType].Dispose();
             }
              #region SimInventoryManager
-                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[t].Dispose();
-                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[t].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[simObjectType].Dispose();
+                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[simObjectType].Dispose();
              #endregion
            }
           }

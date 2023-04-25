@@ -19,7 +19,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          requiredSlaves.Clear();
          requiredSlaves.Add(typeof(ArquimedesAI),
           new List<SlaveData>(){
-           new SlaveData(){simType=typeof(ArquimedesAI),},
+           new SlaveData(){simObjectType=typeof(ArquimedesAI),},
           }
          );
          base.OnActivated();

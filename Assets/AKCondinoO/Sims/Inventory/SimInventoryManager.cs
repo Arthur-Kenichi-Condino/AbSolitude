@@ -26,30 +26,31 @@ namespace AKCondinoO.Sims.Inventory{
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
      internal readonly Dictionary<Type,HashSet<ulong>>releasedIds=new Dictionary<Type,HashSet<ulong>>();
      internal readonly Dictionary<Type,LinkedList<SimInventory>>pool=new Dictionary<Type,LinkedList<SimInventory>>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>assigned                =new Dictionary<(Type,ulong),SimInventory>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>active                  =new Dictionary<(Type,ulong),SimInventory>();
-     internal readonly Dictionary<(Type simInventoryType,ulong number),SimInventory>unassignedAndReleasingId=new Dictionary<(Type,ulong),SimInventory>();
-        void RegisterAsValidSimInventoryType(Type t){
-         if(registeredSimInventoryTypes.Contains(t)){
-          Log.DebugMessage("SimInventoryType already registered:"+t);
+     internal readonly Dictionary<(Type simInventoryType,ulong idNumber),SimInventory>assigned                 =new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong idNumber),SimInventory>active                   =new Dictionary<(Type,ulong),SimInventory>();
+     internal readonly Dictionary<(Type simInventoryType,ulong idNumber),SimInventory>unassigningAndReleasingId=new Dictionary<(Type,ulong),SimInventory>();
+        void RegisterAsValidSimInventoryType(Type simInventoryType){
+         if(registeredSimInventoryTypes.Contains(simInventoryType)){
+          Log.DebugMessage("SimInventoryType already registered:"+simInventoryType);
           return;
          }
-         Log.DebugMessage("registering SimInventoryType:"+t);
-         if(!ids.TryGetValue(t,out _)){
-          ids.Add(t,0uL);
+         Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
+         if(!ids.TryGetValue(simInventoryType,out _)){
+          ids.Add(simInventoryType,0uL);
          }
-         if(!releasedIds.TryGetValue(t,out _)){
-          releasedIds.Add(t,new HashSet<ulong>());
+         if(!releasedIds.TryGetValue(simInventoryType,out _)){
+          releasedIds.Add(simInventoryType,new HashSet<ulong>());
          }
-         pool.Add(t,new LinkedList<SimInventory>());
-         simInventoryTypesPendingRegistrationForDataSaving.Add(t);
-         registeredSimInventoryTypes.Add(t);
+         pool.Add(simInventoryType,new LinkedList<SimInventory>());
+         simInventoryTypesPendingRegistrationForDataSaving.Add(simInventoryType);
+         registeredSimInventoryTypes.Add(simInventoryType);
         }
-        internal void OnSaveSimInventoryTypeRegistration(Type t){
-         Log.DebugMessage("On save SimInventoryType registration:"+t);
-         persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(t,new List<ulong>());
-         persistentSimInventoryDataSavingBG.idsToRelease.Add(t,new List<ulong>());
-         persistentSimInventoryDataSavingBG.onSavedReleasedIds.Add(t,new List<ulong>());
+        internal void OnSaveSimInventoryTypeRegistration(Type simInventoryType){
+         Log.DebugMessage("On save SimInventoryType registration:"+simInventoryType);
+         persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,new List<ulong>());
+         persistentSimInventoryDataSavingBG.persistentIds.Add(simInventoryType,0);
+         persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(simInventoryType,new List<ulong>());
+         persistentSimInventoryDataSavingBG.onSavedReleasedIds.Add(simInventoryType,new List<ulong>());
         }
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -70,24 +71,24 @@ namespace AKCondinoO.Sims.Inventory{
           string line;
           while((line=releasedIdsFileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
-           int typeStringStart=line.IndexOf("type=")+5;
-           int typeStringEnd  =line.IndexOf(" , ",typeStringStart);
-           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
-           Type t=Type.GetType(typeString);
-           if(t==null){continue;}
-           releasedIds[t]=new HashSet<ulong>();
-           int releasedIdsListStringStart=line.IndexOf("{ ",typeStringEnd)+2;
+           int simInventoryTypeStringStart=line.IndexOf("type=")+5;
+           int simInventoryTypeStringEnd  =line.IndexOf(" , ",simInventoryTypeStringStart);
+           string simInventoryTypeString=line.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
+           Type simInventoryType=Type.GetType(simInventoryTypeString);
+           if(simInventoryType==null){continue;}
+           releasedIds[simInventoryType]=new HashSet<ulong>();
+           int releasedIdsListStringStart=line.IndexOf("{ ",simInventoryTypeStringEnd)+2;
            int releasedIdsListStringEnd  =line.IndexOf(", } , } , endOfLine",releasedIdsListStringStart);
            if(releasedIdsListStringEnd>=0){
             string releasedIdsListString=line.Substring(releasedIdsListStringStart,releasedIdsListStringEnd-releasedIdsListStringStart);
-            string[]idStrings=releasedIdsListString.Split(',');
-            foreach(string idString in idStrings){
+            string[]simInventoryIdNumberStrings=releasedIdsListString.Split(',');
+            foreach(string simInventoryIdNumberString in simInventoryIdNumberStrings){
              //Log.DebugMessage("adding releasedId of "+t+": "+idString+"...");
-             ulong id=ulong.Parse(idString,NumberStyles.Any,CultureInfoUtil.en_US);
-             releasedIds[t].Add(id);
+             ulong simInventoryIdNumber=ulong.Parse(simInventoryIdNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
+             releasedIds[simInventoryType].Add(simInventoryIdNumber);
             }
            }
-           RegisterAsValidSimInventoryType(t);
+           RegisterAsValidSimInventoryType(simInventoryType);
           }
           FileStream idsFileStream=persistentSimInventoryDataSavingBGThread.idsFileStream=new FileStream(idsFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
           StreamWriter idsFileStreamWriter=persistentSimInventoryDataSavingBGThread.idsFileStreamWriter=new StreamWriter(idsFileStream);
@@ -96,18 +97,18 @@ namespace AKCondinoO.Sims.Inventory{
           idsFileStreamReader.DiscardBufferedData();
           while((line=idsFileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
-           int typeStringStart=line.IndexOf("type=")+5;
-           int typeStringEnd  =line.IndexOf(" , ",typeStringStart);
-           string typeString=line.Substring(typeStringStart,typeStringEnd-typeStringStart);
-           Type t=Type.GetType(typeString);
-           if(t==null){continue;}
-           Log.DebugMessage("t:"+t);
-           int nextIdStringStart=line.IndexOf("nextId=",typeStringEnd)+7;
-           int nextIdStringEnd  =line.IndexOf(" } , endOfLine",nextIdStringStart);
-           string nextIdString=line.Substring(nextIdStringStart,nextIdStringEnd-nextIdStringStart);
-           ulong nextId=ulong.Parse(nextIdString,NumberStyles.Any,CultureInfoUtil.en_US);
-           ids[t]=nextId;
-           RegisterAsValidSimInventoryType(t);
+           int simInventoryTypeStringStart=line.IndexOf("type=")+5;
+           int simInventoryTypeStringEnd  =line.IndexOf(" , ",simInventoryTypeStringStart);
+           string simInventoryTypeString=line.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
+           Type simInventoryType=Type.GetType(simInventoryTypeString);
+           if(simInventoryType==null){continue;}
+           Log.DebugMessage("t:"+simInventoryType);
+           int nextSimInventoryIdNumberStringStart=line.IndexOf("nextId=",simInventoryTypeStringEnd)+7;
+           int nextSimInventoryIdNumberStringEnd  =line.IndexOf(" } , endOfLine",nextSimInventoryIdNumberStringStart);
+           string nextSimInventoryIdNumberString=line.Substring(nextSimInventoryIdNumberStringStart,nextSimInventoryIdNumberStringEnd-nextSimInventoryIdNumberStringStart);
+           ulong nextSimInventoryIdNumber=ulong.Parse(nextSimInventoryIdNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
+           ids[simInventoryType]=nextSimInventoryIdNumber;
+           RegisterAsValidSimInventoryType(simInventoryType);
           }
           idsFileStream.Position=0L;
           idsFileStreamReader.DiscardBufferedData();
@@ -123,15 +124,15 @@ namespace AKCondinoO.Sims.Inventory{
       readonly Type[]simInventoryCtorParamsTypes=new Type[]{};
        readonly object[]simInventoryCtorParams=new object[]{};
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
-         ulong idNumber;
+         ulong number;
          this.releasedIds.TryGetValue(simInventoryType,out HashSet<ulong>releasedIds);
          if(releasedIds!=null&&releasedIds.Count>0){
-          idNumber=releasedIds.Last();
-          releasedIds.Remove(idNumber);
+          number=releasedIds.Last();
+          releasedIds.Remove(number);
          }else{
-          if(!ids.TryGetValue(simInventoryType,out idNumber)){
+          if(!ids.TryGetValue(simInventoryType,out number)){
            ids.Add(simInventoryType,1uL);
-           idNumber=0uL;
+           number=0uL;
           }else{
            ids[simInventoryType]++;
           }
@@ -166,7 +167,7 @@ namespace AKCondinoO.Sims.Inventory{
          SimInventory simInventory=SpawnInventory();
          if(simInventory!=null){
           RegisterAsValidSimInventoryType(simInventoryType);
-          (Type simInventoryType,ulong number)simInventoryId=(simInventoryType,idNumber);
+          (Type simInventoryType,ulong idNumber)simInventoryId=(simInventoryType,number);
           simInventory.OnAssign(simInventoryId,simObject);
          }
         }

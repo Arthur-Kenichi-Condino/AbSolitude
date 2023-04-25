@@ -29,16 +29,16 @@ namespace AKCondinoO.Sims{
         }
         protected override void Execute(){
          container.spawnDataFromFiles.dequeued=false;
-         foreach(var typeFileStreamPair in this.simObjectFileStream){
-          Type t=typeFileStreamPair.Key;
+         foreach(var simObjectTypeFileStreamPair in this.simObjectFileStream){
+          Type simObjectType=simObjectTypeFileStreamPair.Key;
           Dictionary<ulong,int>simActorSpawnAtIndex=null;
-          if(SimObjectUtil.IsSimActor(t)){
-           if(!simActorSpawnAtIndexByType.TryGetValue(t,out simActorSpawnAtIndex)){
-            simActorSpawnAtIndexByType.Add(t,simActorSpawnAtIndex=new Dictionary<ulong,int>());
+          if(SimObjectUtil.IsSimActor(simObjectType)){
+           if(!simActorSpawnAtIndexByType.TryGetValue(simObjectType,out simActorSpawnAtIndex)){
+            simActorSpawnAtIndexByType.Add(simObjectType,simActorSpawnAtIndex=new Dictionary<ulong,int>());
            }
           }
-          FileStream fileStream=typeFileStreamPair.Value;
-          StreamReader fileStreamReader=this.simObjectFileStreamReader[t];
+          FileStream fileStream=simObjectTypeFileStreamPair.Value;
+          StreamReader fileStreamReader=this.simObjectFileStreamReader[simObjectType];
           //Log.DebugMessage("loading data for type:"+t);
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
@@ -57,49 +57,50 @@ namespace AKCondinoO.Sims{
              //Log.DebugMessage("sim object found at cnkIdx:"+cnkIdx);
              int simObjectStringEnd=line.IndexOf("} , ",simObjectStringStart)+4;
              string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
-             int idNumberStringStart=simObjectString.IndexOf("id=")+3;
-             int idNumberStringEnd  =simObjectString.IndexOf(" , ",idNumberStringStart);
-             string idNumberString=simObjectString.Substring(idNumberStringStart,idNumberStringEnd-idNumberStringStart);
-             ulong idNumber=ulong.Parse(idNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
-             (Type simType,ulong number)id=(t,idNumber);
-             int persistentDataStringStart=simObjectString.IndexOf("persistentData=",idNumberStringEnd+3);
+             int simObjectIdNumberStringStart=simObjectString.IndexOf("id=")+3;
+             int simObjectIdNumberStringEnd  =simObjectString.IndexOf(" , ",simObjectIdNumberStringStart);
+             string simObjectIdNumberString=simObjectString.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart);
+             ulong simObjectIdNumber=ulong.Parse(simObjectIdNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
+             (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,simObjectIdNumber);
+             int persistentDataStringStart=simObjectString.IndexOf("persistentData=",simObjectIdNumberStringEnd+3);
              int persistentDataStringEnd  =simObjectString.IndexOf(" , }",persistentDataStringStart)+4;
              string persistentDataString=simObjectString.Substring(persistentDataStringStart,persistentDataStringEnd-persistentDataStringStart);
              SimObject.PersistentData persistentData=SimObject.PersistentData.Parse(persistentDataString);
-             if(container.specificIdsToLoad.TryGetValue(id,out var specificIdData)){
+             if(container.specificIdsToLoad.TryGetValue(simObjectId,out var specificIdData)){
               persistentData.position=specificIdData.position;
               persistentData.rotation=Quaternion.Euler(specificIdData.eulerAngles);
               persistentData.localScale=specificIdData.localScale;
-              container.specificIdsToLoad.Remove(id);
+              container.specificIdsToLoad.Remove(simObjectId);
              }else{
               if(persistentData.isInventoryItem){
                //Log.DebugMessage("don't load sim object that is persistentData.isInventoryItem");
                goto _Skip;
               }
              }
-             container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,id.simType,id.number,persistentData));
+             container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,simObjectId.simObjectType,simObjectId.idNumber,persistentData));
              if(simActorSpawnAtIndex!=null){
-              simActorSpawnAtIndex.Add(id.number,container.spawnDataFromFiles.at.Count-1);
+              simActorSpawnAtIndex.Add(simObjectId.idNumber,container.spawnDataFromFiles.at.Count-1);
              }
              _Skip:{}
              simObjectStringStart=simObjectStringEnd;
             }
            }
           }
-          if(SimObjectUtil.IsSimActor(t)){
-           fileStream      =this.simActorFileStream      [t];
-           fileStreamReader=this.simActorFileStreamReader[t];
+          if(SimObjectUtil.IsSimActor(simObjectType)){
+           Type simActorType=simObjectType;
+           fileStream      =this.simActorFileStream      [simActorType];
+           fileStreamReader=this.simActorFileStreamReader[simActorType];
            fileStream.Position=0L;
            fileStreamReader.DiscardBufferedData();
            line=null;
            while((line=fileStreamReader.ReadLine())!=null){
             if(string.IsNullOrEmpty(line)){continue;}
-            int idStringStart=line.IndexOf("id=")+3;
-            int idStringEnd  =line.IndexOf(" , ",idStringStart);
-            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-            if(simActorSpawnAtIndex.TryGetValue(id,out int index)){
+            int simActorIdNumberStringStart=line.IndexOf("id=")+3;
+            int simActorIdNumberStringEnd  =line.IndexOf(" , ",simActorIdNumberStringStart);
+            ulong simActorIdNumber=ulong.Parse(line.Substring(simActorIdNumberStringStart,simActorIdNumberStringEnd-simActorIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+            if(simActorSpawnAtIndex.TryGetValue(simActorIdNumber,out int index)){
              //Log.DebugMessage("sim actor data has to be loaded for id:"+id);
-             int persistentSimActorDataStringStart=line.IndexOf("persistentSimActorData=",idStringEnd+3);
+             int persistentSimActorDataStringStart=line.IndexOf("persistentSimActorData=",simActorIdNumberStringEnd+3);
              int persistentSimActorDataStringEnd  =line.IndexOf(" , }",persistentSimActorDataStringStart)+4;
              string persistentSimActorDataString=line.Substring(persistentSimActorDataStringStart,persistentSimActorDataStringEnd-persistentSimActorDataStringStart);
              SimActor.PersistentSimActorData persistentSimActorData=SimActor.PersistentSimActorData.Parse(persistentSimActorDataString);
@@ -109,9 +110,9 @@ namespace AKCondinoO.Sims{
           }
          }
          foreach(var specificIdToLoad in container.specificIdsToLoad){
-          (Type simType,ulong number)id=specificIdToLoad.Key;
+          (Type simObjectType,ulong idNumber)id=specificIdToLoad.Key;
           var specificIdData=specificIdToLoad.Value;
-          container.spawnDataFromFiles.at.Add((specificIdData.position,specificIdData.eulerAngles,specificIdData.localScale,id.simType,id.number,new SimObject.PersistentData()));
+          container.spawnDataFromFiles.at.Add((specificIdData.position,specificIdData.eulerAngles,specificIdData.localScale,id.simObjectType,id.idNumber,new SimObject.PersistentData()));
          }
          container.specificIdsToLoad.Clear();
          container.waitingForSimObjectSpawnData.Set();

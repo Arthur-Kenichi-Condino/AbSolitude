@@ -16,7 +16,7 @@ namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataLoadingMultithreaded:BaseMultithreaded<PersistentSimInventoryDataLoadingBackgroundContainer>{
      internal readonly Dictionary<Type,FileStream>simInventoryFileStream=new Dictionary<Type,FileStream>();
       internal readonly Dictionary<Type,StreamReader>simInventoryFileStreamReader=new Dictionary<Type,StreamReader>();
-       readonly Dictionary<(Type simType,ulong number),int>simInventorySpawnAtIndexById=new Dictionary<(Type simType,ulong number),int>();
+       readonly Dictionary<(Type simObjectType,ulong idNumber),int>simInventorySpawnAtIndexById=new Dictionary<(Type simObjectType,ulong idNumber),int>();
         protected override void Cleanup(){
          simInventorySpawnAtIndexById.Clear();
         }
@@ -29,25 +29,25 @@ namespace AKCondinoO.Sims.Inventory{
           container.waitingForSimObjectSpawnData.WaitOne();
           for(int i=0;i<container.spawnDataFromFiles.at.Count;++i){
            var at=container.spawnDataFromFiles.at[i];
-           if(at.id!=null){
-            (Type simType,ulong number)id=(at.type,at.id.Value);
+           if(at.idNumber!=null){
+            (Type simObjectType,ulong idNumber)id=(at.simObjectType,at.idNumber.Value);
             simInventorySpawnAtIndexById.Add(id,i);
            }
           }
-          foreach(var typeFileStreamPair in this.simInventoryFileStream){
-           Type t=typeFileStreamPair.Key;
-           FileStream fileStream=typeFileStreamPair.Value;
-           StreamReader fileStreamReader=this.simInventoryFileStreamReader[t];
-           Log.DebugMessage("loading sim inventory data for type:"+t);
+          foreach(var simObjectTypeFileStreamPair in this.simInventoryFileStream){
+           Type simObjectType=simObjectTypeFileStreamPair.Key;
+           FileStream fileStream=simObjectTypeFileStreamPair.Value;
+           StreamReader fileStreamReader=this.simInventoryFileStreamReader[simObjectType];
+           Log.DebugMessage("loading sim inventory data for type:"+simObjectType);
            fileStream.Position=0L;
            fileStreamReader.DiscardBufferedData();
            string line;
            while((line=fileStreamReader.ReadLine())!=null){
             if(string.IsNullOrEmpty(line)){continue;}
-            int idStringStart=line.IndexOf("id=")+3;
-            int idStringEnd  =line.IndexOf(" , ",idStringStart);
-            ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-            (Type simType,ulong number)simObjectId=(t,id);
+            int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
+            int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
+            ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+            (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,simObjectIdNumber);
             if(simInventorySpawnAtIndexById.TryGetValue(simObjectId,out int simObjectSpawnAtIndex)){
              Log.DebugMessage("found sim inventory data for simObjectId:"+simObjectId);
             }
