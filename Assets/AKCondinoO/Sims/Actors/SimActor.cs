@@ -29,12 +29,12 @@ namespace AKCondinoO.Sims.Actors{
             }
          public ListWrapper<SlaveData>slaves;
             public struct SlaveData{
-             public Type simType;public ulong number;
+             public Type simObjectType;public ulong idNumber;
             }
          public float timerToRandomMove;
             internal void UpdateData(SimActor simActor){
              skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
-             slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simType=v.simType,number=v.number  };}).ToList());
+             slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simObjectType=v.simObjectType,idNumber=v.idNumber};}).ToList());
             }
          private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
             public override string ToString(){
@@ -53,7 +53,7 @@ namespace AKCondinoO.Sims.Actors{
              slaves.Reset();
              while(slaves.MoveNext()){
               SlaveData slave=slaves.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simType,slave.number);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simObjectType,slave.idNumber);
              }
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}, }}",stringBuilder.ToString());
@@ -80,15 +80,15 @@ namespace AKCondinoO.Sims.Actors{
               string skillsString=s.Substring(skillsStringStart,skillsStringEnd-skillsStringStart);
               int skillStringStart=0;
               while((skillStringStart=skillsString.IndexOf("[",skillStringStart))>=0){
-               int skillTypeStringStart=skillStringStart+1;
-               int skillTypeStringEnd  =skillsString.IndexOf(",",skillTypeStringStart);
-               Type skillType=Type.GetType(skillsString.Substring(skillTypeStringStart,skillTypeStringEnd-skillTypeStringStart));
-               int skillLevelStringStart=skillTypeStringEnd+1;
+               int skillAssetTypeStringStart=skillStringStart+1;
+               int skillAssetTypeStringEnd  =skillsString.IndexOf(",",skillAssetTypeStringStart);
+               Type skillAssetType=Type.GetType(skillsString.Substring(skillAssetTypeStringStart,skillAssetTypeStringEnd-skillAssetTypeStringStart));
+               int skillLevelStringStart=skillAssetTypeStringEnd+1;
                int skillLevelStringEnd  =skillsString.IndexOf("],",skillLevelStringStart);
                int skillLevel=int.Parse(skillsString.Substring(skillLevelStringStart,skillLevelStringEnd-skillLevelStringStart));
                //Log.DebugMessage("skillType:"+skillType+";skillLevel:"+skillLevel);
                SkillData skill=new SkillData(){
-                skill=skillType,
+                skill=skillAssetType,
                 level=skillLevel,
                };
                skillList.Add(skill);
@@ -103,15 +103,15 @@ namespace AKCondinoO.Sims.Actors{
               //Log.DebugMessage("slavesString:"+slavesString);
               int slaveStringStart=0;
               while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
-               int slaveSimTypeStringStart=slaveStringStart+1;
-               int slaveSimTypeStringEnd  =slavesString.IndexOf(",",slaveSimTypeStringStart);
-               Type slaveSimType=Type.GetType(slavesString.Substring(slaveSimTypeStringStart,slaveSimTypeStringEnd-slaveSimTypeStringStart));
-               int slaveIdNumberStringStart=slaveSimTypeStringEnd+1;
+               int slaveSimObjectTypeStringStart=slaveStringStart+1;
+               int slaveSimObjectTypeStringEnd  =slavesString.IndexOf(",",slaveSimObjectTypeStringStart);
+               Type slaveSimObjectType=Type.GetType(slavesString.Substring(slaveSimObjectTypeStringStart,slaveSimObjectTypeStringEnd-slaveSimObjectTypeStringStart));
+               int slaveIdNumberStringStart=slaveSimObjectTypeStringEnd+1;
                int slaveIdNumberStringEnd  =slavesString.IndexOf("],",slaveIdNumberStringStart);
                ulong slaveIdNumber=ulong.Parse(slavesString.Substring(slaveIdNumberStringStart,slaveIdNumberStringEnd-slaveIdNumberStringStart));
                SlaveData slave=new SlaveData(){
-                simType=slaveSimType,
-                number=slaveIdNumber,
+                simObjectType=slaveSimObjectType,
+                idNumber=slaveIdNumber,
                };
                slaveList.Add(slave);
                slaveStringStart=slaveIdNumberStringEnd+2;
@@ -184,7 +184,7 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
-      internal readonly HashSet<(Type simType,ulong number)>slaves=new HashSet<(Type,ulong)>();
+      internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
@@ -224,12 +224,12 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.slaves.Reset();
          while(persistentSimActorData.slaves.MoveNext()){
           SlaveData slaveData=persistentSimActorData.slaves.Current;
-          slaves.Add((slaveData.simType,slaveData.number));
+          slaves.Add((slaveData.simObjectType,slaveData.idNumber));
          }
          foreach(var slave in slaves){
-          if(requiredSlaves.TryGetValue(slave.simType,out List<SlaveData>requiredSlavesForType)){
+          if(requiredSlaves.TryGetValue(slave.simObjectType,out List<SlaveData>requiredSlavesForType)){
            //  TO DO: do some checks and set variables here
-           requiredSlaves.Remove(slave.simType);
+           requiredSlaves.Remove(slave.simObjectType);
           }
          }
          persistentSimActorData.UpdateData(this);

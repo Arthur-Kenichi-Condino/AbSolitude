@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Inventory{
     internal class SimInventoryItem{
      internal SimInventory container;
      internal SimObject simObject;
-     internal readonly HashSet<int>ids=new HashSet<int>();
+     internal readonly HashSet<int>slotIdsUsed=new HashSet<int>();
      internal SimInventoryItemsInContainerSettings.SimObjectSettings settings;
         internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,SimInventoryItemsInContainerSettings.SimObjectSettings settings,int spaces){
          Log.DebugMessage("SetAsInventoryItem:"+simObject);
@@ -19,12 +19,12 @@ namespace AKCondinoO.Sims.Inventory{
           UnsetAsInventoryItem(simObject.asInventoryItem.container);
          }
          container=inventory;
-         ids.Clear();
+         slotIdsUsed.Clear();
          for(int i=0;i<spaces;++i){
-          if(inventory.openIds.TryTake(out int id)){
-           inventory.idsItemIds.Add(id,simObject.id.Value);
-            inventory.idsItems.Add(id,this);
-           ids.Add(id);
+          if(inventory.openSlotIds.TryTake(out int slotId)){
+           inventory.itemIdsBySlotIds.Add(slotId,simObject.id.Value);
+            inventory.itemsBySlotIds.Add(slotId,this);
+           slotIdsUsed.Add(slotId);
           }
          }
          inventory.items.Add(this);
@@ -35,12 +35,12 @@ namespace AKCondinoO.Sims.Inventory{
          simObject.asInventoryItem=null;
          simObject=null;
          inventory.items.Remove(this);
-         foreach(int id in ids){
-          inventory.idsItemIds.Remove(id);
-           inventory.idsItems.Remove(id);
-          inventory.openIds.Add(id);
+         foreach(int slotId in slotIdsUsed){
+          inventory.itemIdsBySlotIds.Remove(slotId);
+           inventory.itemsBySlotIds.Remove(slotId);
+          inventory.openSlotIds.Add(slotId);
          }
-         ids.Clear();
+         slotIdsUsed.Clear();
          container=null;
         }
     }

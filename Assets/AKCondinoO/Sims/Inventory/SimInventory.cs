@@ -12,16 +12,16 @@ namespace AKCondinoO.Sims.Inventory{
     internal class SimInventory{
      internal PersistentSimInventoryData persistentSimInventoryData;
         internal struct PersistentSimInventoryData{
-         public(Type simType,ulong number)asSimObjectId;
-         public(Type simInventoryType,ulong number)simInventoryId;
+         public(Type simObjectType,ulong idNumber)asSimObjectId;
+         public(Type simInventoryType,ulong idNumber)simInventoryId;
          public ListWrapper<SimInventoryItemData>inventoryItems;
             public struct SimInventoryItemData{
-             public Type simType;public ulong number;public int id;
+             public Type simObjectType;public ulong idNumber;public int slotId;
             }
             internal void UpdateData(SimInventory simInventory){
              simInventoryId=simInventory.simInventoryId.Value;
               asSimObjectId=simInventory. asSimObjectId.Value;
-             inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.idsItems.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simType=kvp.Value.simObject.id.Value.simType,number=kvp.Value.simObject.id.Value.number,id=kvp.Key};}).ToList());
+             inventoryItems=new ListWrapper<SimInventoryItemData>(simInventory.itemsBySlotIds.Where(kvp=>kvp.Value.simObject!=null&&kvp.Value.simObject.id!=null).Select(kvp=>{return new SimInventoryItemData{simObjectType=kvp.Value.simObject.id.Value.simObjectType,idNumber=kvp.Value.simObject.id.Value.idNumber,slotId=kvp.Key};}).ToList());
             }
          private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
             public override string ToString(){
@@ -35,7 +35,7 @@ namespace AKCondinoO.Sims.Inventory{
              inventoryItems.Reset();
              while(inventoryItems.MoveNext()){
               SimInventoryItemData inventoryItem=inventoryItems.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1},{2}], ",inventoryItem.simType,inventoryItem.number,inventoryItem.id);
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1},{2}], ",inventoryItem.simObjectType,inventoryItem.idNumber,inventoryItem.slotId);
              }
              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
              string result=string.Format(CultureInfoUtil.en_US,"persistentSimInventoryData={{ {0}, }}",stringBuilder.ToString());
@@ -66,9 +66,9 @@ namespace AKCondinoO.Sims.Inventory{
                int inventoryItemIdStringEnd  =inventoryItemsString.IndexOf("],",inventoryItemIdStringStart);
                int inventoryItemId=int.Parse(inventoryItemsString.Substring(inventoryItemIdStringStart,inventoryItemIdStringEnd-inventoryItemIdStringStart));
                SimInventoryItemData inventoryItem=new SimInventoryItemData(){
-                simType=inventoryItemSimType,
-                number=inventoryItemIdNumber,
-                id=inventoryItemId,
+                simObjectType=inventoryItemSimType,
+                idNumber=inventoryItemIdNumber,
+                slotId=inventoryItemId,
                };
                simInventoryItemList.Add(inventoryItem);
                inventoryItemStringStart=inventoryItemIdStringEnd+2;
@@ -80,27 +80,27 @@ namespace AKCondinoO.Sims.Inventory{
             }
         }
      internal LinkedListNode<SimInventory>pooled; 
-     internal(Type simInventoryType,ulong number)?simInventoryId;
+     internal(Type simInventoryType,ulong idNumber)?simInventoryId;
      internal SimObject asSimObject;
-      internal(Type simType,ulong number)?asSimObjectId;
+      internal(Type simObjectType,ulong idNumber)?asSimObjectId;
      internal readonly int maxItemsCount;
-     internal readonly ConcurrentBag<int>openIds;
-     internal readonly Dictionary<int,(Type simType,ulong number)>idsItemIds;
-      internal readonly Dictionary<int,SimInventoryItem>idsItems;
+     internal readonly ConcurrentBag<int>openSlotIds;
+     internal readonly Dictionary<int,(Type simObjectType,ulong idNumber)>itemIdsBySlotIds;
+      internal readonly Dictionary<int,SimInventoryItem>itemsBySlotIds;
      internal readonly HashSet<SimInventoryItem>items;
         internal SimInventory(int maxItemsCount){
-         openIds=new ConcurrentBag<int>();
-         idsItemIds=new Dictionary<int,(Type simType,ulong number)>(maxItemsCount);
-          idsItems=new Dictionary<int,SimInventoryItem>(maxItemsCount);
+         openSlotIds=new ConcurrentBag<int>();
+         itemIdsBySlotIds=new Dictionary<int,(Type simObjectType,ulong idNumber)>(maxItemsCount);
+          itemsBySlotIds=new Dictionary<int,SimInventoryItem>(maxItemsCount);
          items=new HashSet<SimInventoryItem>(maxItemsCount);
          simInventoryItemPool=new Queue<SimInventoryItem>(maxItemsCount);
          for(int id=0;id<maxItemsCount;id++){
-          openIds.Add(id);
+          openSlotIds.Add(id);
          }
          this.maxItemsCount=maxItemsCount;
         }
-        internal void OnAssign((Type simInventoryType,ulong number)simInventoryId,SimObject asSimObject){
-         asSimObject.inventory[simInventoryId.simInventoryType].Add(simInventoryId.number,this);
+        internal void OnAssign((Type simInventoryType,ulong idNumber)simInventoryId,SimObject asSimObject){
+         asSimObject.inventory[simInventoryId.simInventoryType].Add(simInventoryId.idNumber,this);
          this.asSimObject  =asSimObject;
          this.asSimObjectId=asSimObject.id.Value;
          SimInventoryManager.singleton.assigned.Add(simInventoryId,this);
@@ -109,14 +109,14 @@ namespace AKCondinoO.Sims.Inventory{
          Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
         }
-     protected readonly List<(Type simType,ulong number)>simObjectIdsToRelease=new List<(Type,ulong)>();
+     protected readonly List<(Type simObjectType,ulong idNumber)>simObjectIdsToRelease=new List<(Type,ulong)>();
       protected readonly List<int>idsToRemove=new List<int>();
-        internal virtual List<(Type simType,ulong number)>OnSetToBeUnassigned(bool exitSave=false){
+        internal virtual List<(Type simObjectType,ulong idNumber)>OnSetToBeUnassigned(bool exitSave=false){
          Log.DebugMessage("SimInventory Reset");
-         idsToRemove.AddRange(idsItemIds.Keys);
+         idsToRemove.AddRange(itemIdsBySlotIds.Keys);
          foreach(int id in idsToRemove){
-          if(idsItemIds.TryGetValue(id,out(Type simType,ulong number)itemId)){
-           if(!exitSave&&idsItems.TryGetValue(id,out SimInventoryItem simInventoryItem)&&simInventoryItem!=null&&simInventoryItem.simObject!=null){
+          if(itemIdsBySlotIds.TryGetValue(id,out(Type simObjectType,ulong idNumber)itemId)){
+           if(!exitSave&&itemsBySlotIds.TryGetValue(id,out SimInventoryItem simInventoryItem)&&simInventoryItem!=null&&simInventoryItem.simObject!=null){
             //  TO DO: ignorar objetos repetidos (que estão usando mais de uma id); e executar remoção fora do foreach
             asSimObject.RemoveFromInventory(simInventoryItem.simObject,this,true,true);
            }else{
@@ -142,24 +142,24 @@ namespace AKCondinoO.Sims.Inventory{
          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
         }
         internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,bool updatePersistentData=true){
-         int spaces=0;
+         int slots=0;
          if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(simObject.GetType(),out settings)){
-          if(!settings.inventorySpaces.TryGetValue(this.GetType(),out spaces)){
+          if(!settings.inventorySpaces.TryGetValue(this.GetType(),out slots)){
            Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings for this SimInventory:"+this.GetType());
            return(false);
           }
          }
-         if(spaces<=0){
+         if(slots<=0){
           Log.DebugMessage("SimObject uses 0 spaces in this SimInventory:"+this.GetType()+", which is not allowed");
           return(false);
          }
-         if(openIds.Count<spaces){
+         if(openSlotIds.Count<slots){
           Log.DebugMessage("not enough space in the inventory");
           return(false);
          }
          if(simObject.asInventoryItem!=null){
           Log.DebugMessage("simObject is already an inventory item");
-          simObject.asInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
+          simObject.asInventoryItem.SetAsInventoryItem(this,simObject,settings,slots);
           OnAddedSimInventoryItem();
           return(true);//  moved to this inventory
          }
@@ -171,7 +171,7 @@ namespace AKCondinoO.Sims.Inventory{
           Log.DebugMessage("simInventoryItemPool is empty");
           simInventoryItem=new SimInventoryItem();
          }
-         simInventoryItem.SetAsInventoryItem(this,simObject,settings,spaces);
+         simInventoryItem.SetAsInventoryItem(this,simObject,settings,slots);
          OnAddedSimInventoryItem();
          return(true);//  added successfully
          void OnAddedSimInventoryItem(){
@@ -187,8 +187,8 @@ namespace AKCondinoO.Sims.Inventory{
          }
          return false;
         }
-        internal void Materialize((Type simType,ulong number)id){
-         Log.DebugMessage("Materialize inventory item as simObject");
+        internal void Materialize((Type simObjectType,ulong idNumber)id){
+         Log.DebugMessage("Materialize inventory item as simObject:"+id);
         }
     }
 }

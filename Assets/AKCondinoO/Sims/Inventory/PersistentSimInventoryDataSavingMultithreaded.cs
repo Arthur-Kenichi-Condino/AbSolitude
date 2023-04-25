@@ -16,8 +16,8 @@ namespace AKCondinoO.Sims.Inventory{
     internal class PersistentSimInventoryDataSavingBackgroundContainer:BackgroundContainer{
      #region input
          internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
-          internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
-           internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataIdDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
+          internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataBySimInventoryTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
+           internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataByIdNumberDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
          internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
           internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
          internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
@@ -56,33 +56,33 @@ namespace AKCondinoO.Sims.Inventory{
           onSavedReleasedIds.Clear();
          }
          _Loop:{}
-         foreach(var typePersistentSimInventoryDataToSavePair in container.simInventoryDataToSerializeToFile){
-          Type t=typePersistentSimInventoryDataToSavePair.Key;
-          var persistentSimInventoryDataToSave=typePersistentSimInventoryDataToSavePair.Value;
+         foreach(var simInventoryDataBySimObjectTypeDictionary in container.simInventoryDataToSerializeToFile){
+          Type simObjectType=simInventoryDataBySimObjectTypeDictionary.Key;
+          var persistentSimInventoryDataToSave=simInventoryDataBySimObjectTypeDictionary.Value;
           Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
-          if(!simInventoryFileStream.ContainsKey(t)){
+          if(!simInventoryFileStream.ContainsKey(simObjectType)){
            goto _Skip;
           }
-          FileStream fileStream=this.simInventoryFileStream[t];
-          StreamWriter fileStreamWriter=this.simInventoryFileStreamWriter[t];
-          StreamReader fileStreamReader=this.simInventoryFileStreamReader[t];
+          FileStream fileStream=this.simInventoryFileStream[simObjectType];
+          StreamWriter fileStreamWriter=this.simInventoryFileStreamWriter[simObjectType];
+          StreamReader fileStreamReader=this.simInventoryFileStreamReader[simObjectType];
           stringBuilder.Clear();
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
           string line;
           while((line=fileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
-           int idStringStart=line.IndexOf("id=")+3;
-           int idStringEnd  =line.IndexOf(" , ",idStringStart);
-           ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-           bool releasingSimObject=releasedSimObjects[t].Contains(id);
+           int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
+           int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
+           ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           bool releasingSimObject=releasedSimObjects[simObjectType].Contains(simObjectIdNumber);
            //Log.DebugMessage("id:"+id);
-           if(!persistentSimInventoryDataToSave.ContainsKey(id)){
+           if(!persistentSimInventoryDataToSave.ContainsKey(simObjectIdNumber)){
             bool noInventory=true;
             int totalCharactersRemoved=0;
             lineStringBuilder.Clear();
             lineStringBuilder.Append(line);
-            int simInventoryListStringStart=idStringEnd+3;
+            int simInventoryListStringStart=simObjectIdNumberStringEnd+3;
             while((simInventoryListStringStart=line.IndexOf("[ [ simInventoryType=",simInventoryListStringStart))>=0){
              int simInventoryListStringEnd=line.IndexOf("} ] ] , ",simInventoryListStringStart)+8;
              string simInventoryListString=line.Substring(simInventoryListStringStart,simInventoryListStringEnd-simInventoryListStringStart);
@@ -91,7 +91,8 @@ namespace AKCondinoO.Sims.Inventory{
              string simInventoryTypeString=simInventoryListString.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
              Type simInventoryType=Type.GetType(simInventoryTypeString);
              if(simInventoryType!=null){
-              bool toRelease=container.idsToRelease[simInventoryType].Count>0;
+              var idsToRelease=container.idsToRelease[simInventoryType];
+              bool toRelease=idsToRelease.Count>0;
               if(toRelease||releasingSimObject){
                ReleaseInventory();
               }
@@ -100,19 +101,20 @@ namespace AKCondinoO.Sims.Inventory{
                while((simInventoryStringStart=simInventoryListString.IndexOf("[ simInventoryIdNumber=",simInventoryStringStart))>=0){
                 int simInventoryStringEnd=simInventoryListString.IndexOf("} ] , ",simInventoryStringStart)+6;
                 string simInventoryString=simInventoryListString.Substring(simInventoryStringStart,simInventoryStringEnd-simInventoryStringStart);
-                int simInventoryIdStart=simInventoryString.IndexOf("simInventoryIdNumber=")+21;
-                int simInventoryIdEnd=simInventoryString.IndexOf(" , ",simInventoryIdStart);
-                string simInventoryIdString=simInventoryString.Substring(simInventoryIdStart,simInventoryIdEnd-simInventoryIdStart);
-                ulong simInventoryId=ulong.Parse(simInventoryIdString,NumberStyles.Any,CultureInfoUtil.en_US);
+                int simInventoryIdNumberStart=simInventoryString.IndexOf("simInventoryIdNumber=")+21;
+                int simInventoryIdNumberEnd  =simInventoryString.IndexOf(" , ",simInventoryIdNumberStart);
+                string simInventoryIdNumberString=simInventoryString.Substring(simInventoryIdNumberStart,simInventoryIdNumberEnd-simInventoryIdNumberStart);
+                ulong simInventoryIdNumber=ulong.Parse(simInventoryIdNumberString,NumberStyles.Any,CultureInfoUtil.en_US);
                 bool releaseId;
-                if((releaseId=releasingSimObject)|!(releaseId=!container.idsToRelease[simInventoryType].Contains(simInventoryId))){
+                if((releaseId=releasingSimObject)|!(releaseId=!idsToRelease.Contains(simInventoryIdNumber))){
                  releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
                  int toRemoveLength=(simInventoryListStringStart+simInventoryStringEnd)-totalCharactersRemoved-((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved);
                  lineStringBuilder.Remove((simInventoryListStringStart+simInventoryStringStart)-totalCharactersRemoved,toRemoveLength);
                  totalCharactersRemoved+=toRemoveLength;
                  if(releaseId){
-                  container.idsToRelease[simInventoryType].Add(simInventoryId);
-                  container.onSavedReleasedIds[simInventoryType].Add(simInventoryId);
+                  Log.DebugMessage("releasing sim inventory during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
+                  idsToRelease.Add(simInventoryIdNumber);
+                  container.onSavedReleasedIds[simInventoryType].Add(simInventoryIdNumber);
                  }
                 }else{
                  noInventory=false;
@@ -129,22 +131,23 @@ namespace AKCondinoO.Sims.Inventory{
             }
            }
           }
-          foreach(var idPersistentSimInventoryDataPair in persistentSimInventoryDataToSave){
-           ulong id=idPersistentSimInventoryDataPair.Key;
-           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idPersistentSimInventoryDataPair.Value;
-           if(typeDictionary.Count<=0){
+          foreach(var simObjectIdNumberSimInventoryDataBySimInventoryTypeDictionaryPair in persistentSimInventoryDataToSave){
+           ulong simObjectIdNumber=simObjectIdNumberSimInventoryDataBySimInventoryTypeDictionaryPair.Key;
+           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataBySimInventoryTypeDictionary=simObjectIdNumberSimInventoryDataBySimInventoryTypeDictionaryPair.Value;
+           if(simInventoryDataBySimInventoryTypeDictionary.Count<=0){
             continue;
            }
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ ",id);
-           foreach(var simInventoryTypeDictionaryPair in typeDictionary){
-            Type simInventoryType=simInventoryTypeDictionaryPair.Key;
-            Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ ",simObjectIdNumber);
+           foreach(var simInventoryTypeSimInventoryDataByIdNumberDictionaryPair in simInventoryDataBySimInventoryTypeDictionary){
+            Type simInventoryType=simInventoryTypeSimInventoryDataByIdNumberDictionaryPair.Key;
+            var idsToRelease=container.idsToRelease[simInventoryType];
+            Dictionary<ulong,SimInventory.PersistentSimInventoryData>simInventoryDataByIdNumberDictionary=simInventoryTypeSimInventoryDataByIdNumberDictionaryPair.Value;
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[ [ simInventoryType={0} , {{ ",simInventoryType);
-            foreach(var simInventoryIdDataPair in idDictionary){
-             ulong simInventoryId=simInventoryIdDataPair.Key;
-             SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdDataPair.Value;
-             string simInventoryString=string.Format(CultureInfoUtil.en_US,"[ simInventoryIdNumber={0} , {{ {1} }} ] , ",simInventoryId,persistentSimInventoryData.ToString());
-             if(container.idsToRelease[simInventoryType].Contains(simInventoryId)){
+            foreach(var simInventoryIdNumberSimInventoryDataPair in simInventoryDataByIdNumberDictionary){
+             ulong simInventoryIdNumber=simInventoryIdNumberSimInventoryDataPair.Key;
+             SimInventory.PersistentSimInventoryData persistentSimInventoryData=simInventoryIdNumberSimInventoryDataPair.Value;
+             string simInventoryString=string.Format(CultureInfoUtil.en_US,"[ simInventoryIdNumber={0} , {{ {1} }} ] , ",simInventoryIdNumber,persistentSimInventoryData.ToString());
+             if(idsToRelease.Contains(simInventoryIdNumber)){
               releasedInventoryStrings.Add(new KeyValuePair<Type,string>(simInventoryType,simInventoryString));
               continue;
              }
@@ -158,16 +161,16 @@ namespace AKCondinoO.Sims.Inventory{
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
           _Skip:{}
-          releasedSimObjects[t].Clear();
-          foreach(var idInventoryPair in persistentSimInventoryDataToSave){
-           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>typeDictionary=idInventoryPair.Value;
-           foreach(var simInventoryTypeDictionaryPair in typeDictionary){
-            Dictionary<ulong,SimInventory.PersistentSimInventoryData>idDictionary=simInventoryTypeDictionaryPair.Value;
-            idDictionary.Clear();
-            PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataIdDictionaryPool.Enqueue(idDictionary);
+          releasedSimObjects[simObjectType].Clear();
+          foreach(var simObjectIdNumberSimInventoryDataBySimInventoryTypeDictionaryPair in persistentSimInventoryDataToSave){
+           Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataBySimInventoryTypeDictionary=simObjectIdNumberSimInventoryDataBySimInventoryTypeDictionaryPair.Value;
+           foreach(var simInventoryTypeSimInventoryDataByIdNumberDictionaryPair in simInventoryDataBySimInventoryTypeDictionary){
+            Dictionary<ulong,SimInventory.PersistentSimInventoryData>simInventoryDataByIdNumberDictionary=simInventoryTypeSimInventoryDataByIdNumberDictionaryPair.Value;
+            simInventoryDataByIdNumberDictionary.Clear();
+            PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataByIdNumberDictionaryPool.Enqueue(simInventoryDataByIdNumberDictionary);
            }
-           typeDictionary.Clear();
-           PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataTypeDictionaryPool.Enqueue(typeDictionary);
+           simInventoryDataBySimInventoryTypeDictionary.Clear();
+           PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataBySimInventoryTypeDictionaryPool.Enqueue(simInventoryDataBySimInventoryTypeDictionary);
           }
           persistentSimInventoryDataToSave.Clear();
          }
@@ -178,11 +181,11 @@ namespace AKCondinoO.Sims.Inventory{
           SimInventory.PersistentSimInventoryData persistentSimInventoryData=SimInventory.PersistentSimInventoryData.Parse(releasedInventoryString.Value);
           persistentSimInventoryData.inventoryItems.Reset();
           while(persistentSimInventoryData.inventoryItems.MoveNext()){
-           SimInventory.PersistentSimInventoryData.SimInventoryItemData inventoryItem=persistentSimInventoryData.inventoryItems.Current;
-           container.simInventoryReleasedSimObjectsIdsToRelease[inventoryItem.simType].Add(inventoryItem.number);
-           Type t=inventoryItem.simType;
-           ulong idNumber=inventoryItem.number;
-           releasedSimObjects[t].Add(idNumber);
+           SimInventory.PersistentSimInventoryData.SimInventoryItemData simInventoryItem=persistentSimInventoryData.inventoryItems.Current;
+           container.simInventoryReleasedSimObjectsIdsToRelease[simInventoryItem.simObjectType].Add(simInventoryItem.idNumber);
+           Type simObjectType=simInventoryItem.simObjectType;
+           ulong simObjectIdNumber=simInventoryItem.idNumber;
+           releasedSimObjects[simObjectType].Add(simObjectIdNumber);
            loop=true;
           }
          }
@@ -194,16 +197,16 @@ namespace AKCondinoO.Sims.Inventory{
          #region releasedIds
          if(releasedIdsFileStream!=null){
           releasedIdsStringBuilder.Clear();
-          foreach(var typeIdsToReleasePair in container.idsToRelease){
-           Type t=typeIdsToReleasePair.Key;
-           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , {{ ",t);
-           var releasedIds=container.persistentReleasedIds[t];
+          foreach(var simInventoryTypeIdNumbersToReleasePair in container.idsToRelease){
+           Type simInventoryType=simInventoryTypeIdNumbersToReleasePair.Key;
+           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , {{ ",simInventoryType);
+           var releasedIds=container.persistentReleasedIds[simInventoryType];
            foreach(ulong releasedId in releasedIds){
             //Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",releasedId);
            }
            releasedIds.Clear();
-           var idsToRelease=typeIdsToReleasePair.Value;
+           var idsToRelease=simInventoryTypeIdNumbersToReleasePair.Value;
            foreach(ulong idToRelease in idsToRelease){
             //Log.DebugMessage("type:"+t+", release id:"+idToRelease);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",idToRelease);
@@ -218,12 +221,12 @@ namespace AKCondinoO.Sims.Inventory{
          #endregion
          if(idsFileStream!=null){
           idsStringBuilder.Clear();
-          foreach(var typeIdsPair in container.persistentIds){
-           Type t=typeIdsPair.Key;
-           ulong nextId=typeIdsPair.Value;
-           if(nextId>0){
-            Log.DebugMessage("t:"+t+";nextId:"+nextId);
-            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
+          foreach(var simInventoryTypeNextIdNumberPair in container.persistentIds){
+           Type simInventoryType=simInventoryTypeNextIdNumberPair.Key;
+           ulong nextIdNumber=simInventoryTypeNextIdNumberPair.Value;
+           if(nextIdNumber>0){
+            Log.DebugMessage("t:"+simInventoryType+";nextId:"+nextIdNumber);
+            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",simInventoryType,nextIdNumber,Environment.NewLine);
            }
           }
           idsFileStream.SetLength(0L);

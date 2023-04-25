@@ -35,9 +35,9 @@ namespace AKCondinoO.Sims{
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamWriter>simActorFileStreamWriter=new Dictionary<Type,StreamWriter>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
-       readonly Dictionary<Type,Dictionary<int,List<(ulong id,SimObject.PersistentData persistentData)>>>idPersistentDataListBycnkIdxByType=new Dictionary<Type,Dictionary<int,List<(ulong,SimObject.PersistentData)>>>();
-        readonly Queue<List<(ulong id,SimObject.PersistentData persistentData)>>idPersistentDataListPool=new Queue<List<(ulong,SimObject.PersistentData)>>();
-       readonly Dictionary<Type,List<ulong>>idListByType=new Dictionary<Type,List<ulong>>();
+       readonly Dictionary<Type,Dictionary<int,List<(ulong simObjectIdNumber,SimObject.PersistentData persistentData)>>>simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType=new Dictionary<Type,Dictionary<int,List<(ulong,SimObject.PersistentData)>>>();
+        readonly Queue<List<(ulong simObjectIdNumber,SimObject.PersistentData persistentData)>>simObjectIdNumberPersistentDataListPool=new Queue<List<(ulong,SimObject.PersistentData)>>();
+       readonly Dictionary<Type,List<ulong>>simObjectIdNumberListByType=new Dictionary<Type,List<ulong>>();
        readonly List<int>processedcnkIdx=new List<int>();
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
@@ -50,66 +50,74 @@ namespace AKCondinoO.Sims{
       internal StreamReader idsFileStreamReader;
        readonly StringBuilder idsStringBuilder=new StringBuilder();
         protected override void Cleanup(){
-         foreach(var kvp1 in idPersistentDataListBycnkIdxByType){
-          var idPersistentDataListBycnkIdx=kvp1.Value;
-          foreach(var kvp2 in idPersistentDataListBycnkIdx){
-           var idPersistentDataList=kvp2.Value;
-           idPersistentDataList.Clear();
-           idPersistentDataListPool.Enqueue(idPersistentDataList);
+         foreach(var kvp1 in simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType){
+          var simObjectIdNumberPersistentDataListBycnkIdx=kvp1.Value;
+          foreach(var kvp2 in simObjectIdNumberPersistentDataListBycnkIdx){
+           var simObjectIdNumberPersistentDataList=kvp2.Value;
+           simObjectIdNumberPersistentDataList.Clear();
+           simObjectIdNumberPersistentDataListPool.Enqueue(simObjectIdNumberPersistentDataList);
           }
-          idPersistentDataListBycnkIdx.Clear();
+          simObjectIdNumberPersistentDataListBycnkIdx.Clear();
          }
-         foreach(var kvp in idListByType){
+         foreach(var kvp in simObjectIdNumberListByType){
           var idList=kvp.Value;
           idList.Clear();
          }
         }
         protected override void Execute(){
-         foreach(var typePersistentDataToSavePair in container.simObjectDataToSerializeToFile){
-          Type t=typePersistentDataToSavePair.Key;
-          if(!idListByType.ContainsKey(t)){
-           idListByType.Add(t,new List<ulong>());
+         foreach(var simObjectTypePersistentDataToSavePair in container.simObjectDataToSerializeToFile){
+          Type simObjectType=simObjectTypePersistentDataToSavePair.Key;
+          if(!simObjectIdNumberListByType.ContainsKey(simObjectType)){
+           simObjectIdNumberListByType.Add(simObjectType,new List<ulong>());
           }
-          if(!idPersistentDataListBycnkIdxByType.ContainsKey(t)){
-           idPersistentDataListBycnkIdxByType.Add(t,new Dictionary<int,List<(ulong,SimObject.PersistentData)>>());
+          if(!simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType.ContainsKey(simObjectType)){
+           simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType.Add(simObjectType,new Dictionary<int,List<(ulong,SimObject.PersistentData)>>());
           }
-          var persistentDataToSave=typePersistentDataToSavePair.Value;
-          foreach(var idPersistentDataPair in persistentDataToSave){
-           ulong id=idPersistentDataPair.Key;
-           idListByType[t].Add(id);
-           SimObject.PersistentData persistentData=idPersistentDataPair.Value;
+          var persistentDataToSave=simObjectTypePersistentDataToSavePair.Value;
+          foreach(var simObjectIdNumberPersistentDataPair in persistentDataToSave){
+           ulong simObjectIdNumber=simObjectIdNumberPersistentDataPair.Key;
+           simObjectIdNumberListByType[simObjectType].Add(simObjectIdNumber);
+           SimObject.PersistentData persistentData=simObjectIdNumberPersistentDataPair.Value;
            Vector2Int cCoord=vecPosTocCoord(persistentData.position);
            int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
-           if(!idPersistentDataListBycnkIdxByType[t].ContainsKey(cnkIdx)){
-            if(idPersistentDataListPool.Count>0){
-             idPersistentDataListBycnkIdxByType[t].Add(cnkIdx,idPersistentDataListPool.Dequeue());
+           if(!simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType[simObjectType].ContainsKey(cnkIdx)){
+            if(simObjectIdNumberPersistentDataListPool.Count>0){
+             simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType[simObjectType].Add(cnkIdx,simObjectIdNumberPersistentDataListPool.Dequeue());
             }else{
-             idPersistentDataListBycnkIdxByType[t].Add(cnkIdx,new List<(ulong id,SimObject.PersistentData persistentData)>());
+             simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType[simObjectType].Add(cnkIdx,new List<(ulong simObjectIdNumber,SimObject.PersistentData persistentData)>());
             }
            }
-           idPersistentDataListBycnkIdxByType[t][cnkIdx].Add((id,persistentData));
+           simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType[simObjectType][cnkIdx].Add((simObjectIdNumber,persistentData));
            //Log.DebugMessage("simObject of type:"+t+" and id:"+id+" needs to be saved");
           }
           persistentDataToSave.Clear();
          }
          container.waitingForSimInventoryReleasedSimObjectsIdsToRelease.WaitOne();
-         foreach(var typeIdListPair in container.simInventoryReleasedSimObjectsIdsToRelease){
-          Type t=typeIdListPair.Key;
-          List<ulong>idList=typeIdListPair.Value;
+         foreach(var simObjectTypeIdNumberListPair in container.simInventoryReleasedSimObjectsIdsToRelease){
+          Type simObjectType=simObjectTypeIdNumberListPair.Key;
+          List<ulong>simObjectIdNumberList=simObjectTypeIdNumberListPair.Value;
           //  TO DO: add ids to be released and to be removed from the game on saved
-          var idsToRelease=container.idsToRelease[t];
-          idList.Clear();
+          var releasedIds=container.persistentReleasedIds[simObjectType];
+          var idsToRelease=container.idsToRelease[simObjectType];
+          foreach(ulong simObjectIdNumber in simObjectIdNumberList){
+           if(!releasedIds.Contains(simObjectIdNumber)&&!idsToRelease.Contains(simObjectIdNumber)){
+            Log.DebugMessage("releasing sim object during save:"+simObjectType+";id:"+simObjectIdNumber);
+            idsToRelease.Add(simObjectIdNumber);//  remove all save data and add to released ids file
+            container.onSavedReleasedIds[simObjectType].Add(simObjectIdNumber);
+           }
+          }
+          simObjectIdNumberList.Clear();
          }
-         foreach(var kvp1 in idPersistentDataListBycnkIdxByType){
-          Type t=kvp1.Key;
-          var idPersistentDataListBycnkIdx=kvp1.Value;
+         foreach(var kvp1 in simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType){
+          Type simObjectType=kvp1.Key;
+          var simObjectIdNumberPersistentDataListBycnkIdx=kvp1.Value;
           processedcnkIdx.Clear();
-          if(!simObjectFileStream.ContainsKey(t)){
+          if(!simObjectFileStream.ContainsKey(simObjectType)){
            continue;
           }
-          FileStream fileStream=this.simObjectFileStream[t];
-          StreamWriter fileStreamWriter=this.simObjectFileStreamWriter[t];
-          StreamReader fileStreamReader=this.simObjectFileStreamReader[t];
+          FileStream fileStream=this.simObjectFileStream[simObjectType];
+          StreamWriter fileStreamWriter=this.simObjectFileStreamWriter[simObjectType];
+          StreamReader fileStreamReader=this.simObjectFileStreamReader[simObjectType];
           stringBuilder.Clear();
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
@@ -131,11 +139,11 @@ namespace AKCondinoO.Sims{
             int simObjectStringEnd=line.IndexOf("} , ",simObjectStringStart)+4;
             string simObjectString=line.Substring(simObjectStringStart,simObjectStringEnd-simObjectStringStart);
             //Log.DebugMessage("simObjectString:"+simObjectString);
-            int idStringStart=simObjectString.IndexOf("id=")+3;
-            int idStringEnd  =simObjectString.IndexOf(" , ",idStringStart);
-            ulong id=ulong.Parse(simObjectString.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+            int simObjectIdNumberStringStart=simObjectString.IndexOf("id=")+3;
+            int simObjectIdNumberStringEnd  =simObjectString.IndexOf(" , ",simObjectIdNumberStringStart);
+            ulong simObjectIdNumber=ulong.Parse(simObjectString.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
             //Log.DebugMessage("id:"+id);
-            if(idListByType[t].Contains(id)||container.idsToRelease[t].Contains(id)){
+            if(simObjectIdNumberListByType[simObjectType].Contains(simObjectIdNumber)||container.idsToRelease[simObjectType].Contains(simObjectIdNumber)){
              int toRemoveLength=simObjectStringEnd-totalCharactersRemoved-(simObjectStringStart-totalCharactersRemoved);
              lineStringBuilder.Remove(simObjectStringStart-totalCharactersRemoved,toRemoveLength);
              totalCharactersRemoved+=toRemoveLength;
@@ -148,24 +156,24 @@ namespace AKCondinoO.Sims{
            lineStringBuilder.Remove(endOfLineStart-totalCharactersRemoved,endOfLineEnd-totalCharactersRemoved-(endOfLineStart-totalCharactersRemoved));
            line=lineStringBuilder.ToString();
            stringBuilder.Append(line);
-           if(idPersistentDataListBycnkIdx.ContainsKey(cnkIdx)){
-            foreach(var idPersistentData in idPersistentDataListBycnkIdx[cnkIdx]){
-             ulong id=idPersistentData.id;
-             SimObject.PersistentData persistentData=idPersistentData.persistentData;
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",id,persistentData.ToString());
+           if(simObjectIdNumberPersistentDataListBycnkIdx.ContainsKey(cnkIdx)){
+            foreach(var simObjectIdNumberPersistentData in simObjectIdNumberPersistentDataListBycnkIdx[cnkIdx]){
+             ulong simObjectIdNumber=simObjectIdNumberPersistentData.simObjectIdNumber;
+             SimObject.PersistentData persistentData=simObjectIdNumberPersistentData.persistentData;
+             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",simObjectIdNumber,persistentData.ToString());
             }
            }
            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
-          foreach(var kvp2 in idPersistentDataListBycnkIdx){
+          foreach(var kvp2 in simObjectIdNumberPersistentDataListBycnkIdx){
            int cnkIdx=kvp2.Key;
-           var idPersistentDataList=kvp2.Value;
+           var simObjectIdNumberPersistentDataList=kvp2.Value;
            if(processedcnkIdx.Contains(cnkIdx)){continue;}
            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ cnkIdx={0} , {{ ",cnkIdx);
-           foreach(var idPersistentData in idPersistentDataList){
-            ulong id=idPersistentData.id;
-            SimObject.PersistentData persistentData=idPersistentData.persistentData;
-            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",id,persistentData.ToString());
+           foreach(var simObjectIdNumberPersistentData in simObjectIdNumberPersistentDataList){
+            ulong simObjectIdNumber=simObjectIdNumberPersistentData.simObjectIdNumber;
+            SimObject.PersistentData persistentData=simObjectIdNumberPersistentData.persistentData;
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"simObject={{ id={0} , {1} }} , ",simObjectIdNumber,persistentData.ToString());
            }
            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} }} , endOfLine{0}",Environment.NewLine);
           }
@@ -173,34 +181,34 @@ namespace AKCondinoO.Sims{
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
          }
-         foreach(var typePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
-          Type t=typePersistentSimActorDataToSavePair.Key;
-          var persistentSimActorDataToSave=typePersistentSimActorDataToSavePair.Value;
+         foreach(var simActorTypePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
+          Type simActorType=simActorTypePersistentSimActorDataToSavePair.Key;
+          var persistentSimActorDataToSave=simActorTypePersistentSimActorDataToSavePair.Value;
           Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
-          if(!simActorFileStream.ContainsKey(t)){
+          if(!simActorFileStream.ContainsKey(simActorType)){
            goto _Skip;
           }
-          FileStream fileStream=this.simActorFileStream[t];
-          StreamWriter fileStreamWriter=this.simActorFileStreamWriter[t];
-          StreamReader fileStreamReader=this.simActorFileStreamReader[t];
+          FileStream fileStream=this.simActorFileStream[simActorType];
+          StreamWriter fileStreamWriter=this.simActorFileStreamWriter[simActorType];
+          StreamReader fileStreamReader=this.simActorFileStreamReader[simActorType];
           stringBuilder.Clear();
           fileStream.Position=0L;
           fileStreamReader.DiscardBufferedData();
           string line;
           while((line=fileStreamReader.ReadLine())!=null){
            if(string.IsNullOrEmpty(line)){continue;}
-           int idStringStart=line.IndexOf("id=")+3;
-           int idStringEnd  =line.IndexOf(" , ",idStringStart);
-           ulong id=ulong.Parse(line.Substring(idStringStart,idStringEnd-idStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           int simActorIdNumberStringStart=line.IndexOf("id=")+3;
+           int simActorIdNumberStringEnd  =line.IndexOf(" , ",simActorIdNumberStringStart);
+           ulong simActorIdNumber=ulong.Parse(line.Substring(simActorIdNumberStringStart,simActorIdNumberStringEnd-simActorIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
            //Log.DebugMessage("id:"+id);
-           if(!persistentSimActorDataToSave.ContainsKey(id)){
+           if(!persistentSimActorDataToSave.ContainsKey(simActorIdNumber)){
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
            }
           }
-          foreach(var idPersistentSimActorDataPair in persistentSimActorDataToSave){
-           ulong id=idPersistentSimActorDataPair.Key;
-           SimActor.PersistentSimActorData persistentSimActorData=idPersistentSimActorDataPair.Value;
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",id,persistentSimActorData.ToString(),Environment.NewLine);
+          foreach(var simActorIdNumberPersistentSimActorDataPair in persistentSimActorDataToSave){
+           ulong simActorIdNumber=simActorIdNumberPersistentSimActorDataPair.Key;
+           SimActor.PersistentSimActorData persistentSimActorData=simActorIdNumberPersistentSimActorDataPair.Value;
+           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",simActorIdNumber,persistentSimActorData.ToString(),Environment.NewLine);
           }
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
@@ -211,16 +219,16 @@ namespace AKCondinoO.Sims{
          #region releasedIds
          if(releasedIdsFileStream!=null){
           releasedIdsStringBuilder.Clear();
-          foreach(var typeIdsToReleasePair in container.idsToRelease){
-           Type t=typeIdsToReleasePair.Key;
-           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , {{ ",t);
-           var releasedIds=container.persistentReleasedIds[t];
+          foreach(var simObjectTypeIdNumbersToReleasePair in container.idsToRelease){
+           Type simObjectType=simObjectTypeIdNumbersToReleasePair.Key;
+           releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , {{ ",simObjectType);
+           var releasedIds=container.persistentReleasedIds[simObjectType];
            foreach(ulong releasedId in releasedIds){
             //Log.DebugMessage("type:"+t+", id is already released:"+releasedId);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",releasedId);
            }
            releasedIds.Clear();
-           var idsToRelease=typeIdsToReleasePair.Value;
+           var idsToRelease=simObjectTypeIdNumbersToReleasePair.Value;
            foreach(ulong idToRelease in idsToRelease){
             //Log.DebugMessage("type:"+t+", release id:"+idToRelease);
             releasedIdsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0},",idToRelease);
@@ -235,11 +243,11 @@ namespace AKCondinoO.Sims{
          #endregion
          if(idsFileStream!=null){
           idsStringBuilder.Clear();
-          foreach(var typeIdsPair in container.persistentIds){
-           Type t=typeIdsPair.Key;
-           ulong nextId=typeIdsPair.Value;
-           if(nextId>0){
-            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",t,nextId,Environment.NewLine);
+          foreach(var simObjectTypeNextIdNumberPair in container.persistentIds){
+           Type simObjectType=simObjectTypeNextIdNumberPair.Key;
+           ulong nextIdNumber=simObjectTypeNextIdNumberPair.Value;
+           if(nextIdNumber>0){
+            idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",simObjectType,nextIdNumber,Environment.NewLine);
            }
           }
           idsFileStream.SetLength(0L);

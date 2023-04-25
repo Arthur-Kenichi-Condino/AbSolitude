@@ -23,8 +23,7 @@ namespace AKCondinoO.Sims{
          public Vector3    position;
          public Vector3    localScale;
          public bool isInventoryItem;
-         public(Type simType,ulong number)?asInventoryItemContainerAsSimObjectId;
-         public(Type simInventoryType,ulong number)?asInventoryItemContainerAsSimObjectSimInventoryId;
+         public(Type simInventoryType,ulong idNumber)?containerSimInventoryId;
          //  Não salvar lista de inventários aqui; ela é salva em uma pasta própria, por tipo e id de sim object
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
@@ -148,8 +147,8 @@ namespace AKCondinoO.Sims{
      internal Transform  leftHand;
      internal Transform rightHand;
      internal LinkedListNode<SimObject>pooled; 
-     internal(Type simType,ulong number)?id=null;
-     internal(Type simType,ulong number)?master=null;
+     internal(Type simObjectType,ulong idNumber)?id=null;
+     internal(Type simObjectType,ulong idNumber)?master=null;
       protected SimObject masterObject;
      //  TO DO: componente Rigidbody tem que ficar sempre no transform root
      internal Rigidbody hasRigidbody;
