@@ -415,7 +415,7 @@ namespace AKCondinoO.Sims{
             if(isDespawning||exitSave){
              if(simInventoryIdNumberSimInventoryPair.Value.maxItemsCount<=0){
               //  TO DO: sim inventory ids to release
-              SetSimInventoryToReleaseId(simInventoryType,simInventoryIdNumberSimInventoryPair.Key,simInventoryIdNumberSimInventoryPair.Value);
+              SetSimInventoryToBeUnassignedAndHaveIdReleased(simInventoryType,simInventoryIdNumberSimInventoryPair.Key,simInventoryIdNumberSimInventoryPair.Value);
               continue;
              }
             }
@@ -430,35 +430,46 @@ namespace AKCondinoO.Sims{
           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simInventoryDataBySimInventoryTypeDictionary);
          }
          while(despawnAndReleaseIdQueue.Count>0){var toDespawnAndReleaseId=despawnAndReleaseIdQueue.Dequeue();
-          SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[toDespawnAndReleaseId.id.Value.simObjectType].Add(toDespawnAndReleaseId.id.Value.idNumber);
+          SetSimObjectIdToBeReleased(toDespawnAndReleaseId.id.Value.simObjectType,toDespawnAndReleaseId.id.Value.idNumber);
           //  TO DO: sim inventory ids to release; release inventory items' ids
           foreach(var typeIdInventoryDictionaryPair in toDespawnAndReleaseId.inventory){
            Type inventoryType=typeIdInventoryDictionaryPair.Key;
            foreach(var idInventoryPair in typeIdInventoryDictionaryPair.Value){
-            SetSimInventoryToReleaseId(inventoryType,idInventoryPair.Key,idInventoryPair.Value);
+            SetSimInventoryToBeUnassignedAndHaveIdReleased(inventoryType,idInventoryPair.Key,idInventoryPair.Value);
            }
           }
           if(!exitSave){
            SimObjectManager.singleton.despawningAndReleasingId.Add(toDespawnAndReleaseId.id.Value,toDespawnAndReleaseId);
           }
          }
-         void SetSimInventoryToReleaseId(Type simInventoryType,ulong simInventoryIdNumber,SimInventory simInventory){
+         void SetSimObjectIdToBeReleased(Type simObjectType,ulong simObjectIdNumber){
+          if(!SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds[simObjectType].Contains(simObjectIdNumber)){
+           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectType].Add(simObjectIdNumber);
+           Log.DebugMessage("release sim object id and remove all related save data during save:"+simObjectType+";idNumber:"+simObjectIdNumber);
+          }else{
+           Log.DebugMessage("sim object id was already released in the previous save, so don't duplicate the released id in the save file:"+simObjectType+";idNumber:"+simObjectIdNumber);
+          }
+         }
+         void SetSimInventoryToBeUnassignedAndHaveIdReleased(Type simInventoryType,ulong simInventoryIdNumber,SimInventory simInventory){
           //  active: remove
           SimInventoryManager.singleton.active.Remove(simInventory.simInventoryId.Value);
           //  release inventory items
           List<(Type simObjectType,ulong idNumber)>simObjectIdsToRelease=simInventory.OnSetToBeUnassigned(exitSave);
           foreach((Type simObjectType,ulong idNumber)simObjectIdToRelease in simObjectIdsToRelease){
-           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectIdToRelease.simObjectType].Add(simObjectIdToRelease.idNumber);
+           SetSimObjectIdToBeReleased(simObjectIdToRelease.simObjectType,simObjectIdToRelease.idNumber);
           }
           simObjectIdsToRelease.Clear();
+          SetSimInventoryIdToBeReleased(simInventoryType,simInventoryIdNumber);
+          if(!exitSave){
+           SimInventoryManager.singleton.unassigningAndReleasingId.Add((simInventoryType,simInventoryIdNumber),simInventory);
+          }
+         }
+         void SetSimInventoryIdToBeReleased(Type simInventoryType,ulong simInventoryIdNumber){
           if(!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds[simInventoryType].Contains(simInventoryIdNumber)){
            Log.DebugMessage("release sim inventory id and remove all related save data during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
            SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Add(simInventoryIdNumber);
           }else{
            Log.DebugMessage("sim inventory id was already released in the previous save, so don't duplicate the released id in the save file:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
-          }
-          if(!exitSave){
-           SimInventoryManager.singleton.unassigningAndReleasingId.Add((simInventoryType,simInventoryIdNumber),simInventory);
           }
          }
         }
@@ -487,8 +498,15 @@ namespace AKCondinoO.Sims{
           foreach(var simObjectTypeIdNumberListPair in SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds){
            Type simObjectType=simObjectTypeIdNumberListPair.Key;
            List<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
-           foreach(ulong idNumber in onSavedReleasedIds){
-            (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,idNumber);
+           foreach(ulong simObjectIdNumber in onSavedReleasedIds){
+            (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,simObjectIdNumber);
+            if(SimObjectManager.singleton.active.TryGetValue(simObjectId,out SimObject simObject)){
+             simObject.OnUnplaceRequest();
+             Log.DebugMessage("unplace sim object released during save:"+simObjectType+";idNumber:"+simObjectIdNumber);
+            }else{
+             SimObjectManager.singleton.releasedIds[simObjectType].Add(simObjectIdNumber);
+             Log.DebugMessage("sim object released during save isn't active and the id can be reused immediately:"+simObjectType+";idNumber:"+simObjectIdNumber);
+            }
            }
           }
           foreach(var simInventoryReleaseId in SimInventoryManager.singleton.unassigningAndReleasingId){
@@ -512,7 +530,7 @@ namespace AKCondinoO.Sims{
              Log.DebugMessage("unplace sim inventory released during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
             }else{
              SimInventoryManager.singleton.releasedIds[simInventoryType].Add(simInventoryIdNumber);
-             Log.DebugMessage("sim inventory released during save isn't assigned and the id can be reused immediately:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
+             Log.DebugMessage("sim inventory released during save isn't active and the id can be reused immediately:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
             }
            }
           }

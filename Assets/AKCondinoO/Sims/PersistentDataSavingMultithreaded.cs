@@ -65,6 +65,12 @@ namespace AKCondinoO.Sims{
          }
         }
         protected override void Execute(){
+         //  TO DO: onSavedReleasedIds lists Clear;
+         foreach(var simObjectTypeIdNumberListPair in container.onSavedReleasedIds){
+          Type simObjectType=simObjectTypeIdNumberListPair.Key;
+          List<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
+          onSavedReleasedIds.Clear();
+         }
          foreach(var simObjectTypePersistentDataToSavePair in container.simObjectDataToSerializeToFile){
           Type simObjectType=simObjectTypePersistentDataToSavePair.Key;
           if(!simObjectIdNumberListByType.ContainsKey(simObjectType)){
