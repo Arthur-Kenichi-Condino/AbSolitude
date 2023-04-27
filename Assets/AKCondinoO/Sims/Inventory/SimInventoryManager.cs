@@ -123,6 +123,7 @@ namespace AKCondinoO.Sims.Inventory{
       readonly object[]simInventoryBaseCtorParams=new object[]{0};
       readonly Type[]simInventoryCtorParamsTypes=new Type[]{};
        readonly object[]simInventoryCtorParams=new object[]{};
+        readonly Dictionary<Type,(ConstructorInfo ctorInfo,object[]ctorParams)>ctorCache=new Dictionary<Type,(ConstructorInfo,object[])>();
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
          ulong number;
          this.releasedIds.TryGetValue(simInventoryType,out HashSet<ulong>releasedIds);
@@ -147,14 +148,21 @@ namespace AKCondinoO.Sims.Inventory{
             return result;
            }
           }
+          if(ctorCache.TryGetValue(simInventoryType,out(ConstructorInfo ctorInfo,object[]ctorParams)ctorCached)){
+           //Log.DebugMessage(simInventoryType+":using ctorCached:"+ctorCached);
+           result=(SimInventory)ctorCached.ctorInfo.Invoke(ctorCached.ctorParams);
+           return result;
+          }
           ConstructorInfo ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryCtorParamsTypes,null);
           if(ctor!=null){
+           ctorCache[simInventoryType]=(ctor,simInventoryCtorParams);
            result=(SimInventory)ctor.Invoke(simInventoryCtorParams);
            return result;
           }
           ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryBaseCtorParamsTypes,null);
           if(ctor!=null){
            simInventoryBaseCtorParams[0]=0;
+           ctorCache[simInventoryType]=(ctor,simInventoryBaseCtorParams);
            result=(SimInventory)ctor.Invoke(simInventoryBaseCtorParams);
            return result;
           }
