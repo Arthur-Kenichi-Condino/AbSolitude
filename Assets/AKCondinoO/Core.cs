@@ -165,7 +165,13 @@ namespace AKCondinoO{
          currentRenderingTargetCameraChanged=false;
          if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){
           currentRenderingTargetCameraChanged=true;
-          Log.DebugMessage("Camera.current changed to:"+currentRenderingTargetCamera);
+          Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.current:"+currentRenderingTargetCamera);
+         }
+         if(currentRenderingTargetCamera==null){
+          if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
+           currentRenderingTargetCameraChanged=true;
+           Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
+          }
          }
          currentRenderingTargetCameraHasTransformChanges=false;
          if(currentRenderingTargetCamera!=null){

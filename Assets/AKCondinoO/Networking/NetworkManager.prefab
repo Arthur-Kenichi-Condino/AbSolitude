@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1840801603024325852}
   - component: {fileID: 1840801603024325854}
   - component: {fileID: 1840801603024325853}
-  - component: {fileID: -7810935691095749217}
+  - component: {fileID: 3829583952512104843}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -53,22 +53,9 @@ MonoBehaviour:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1840801603024325853}
     PlayerPrefab: {fileID: 0}
-    NetworkPrefabs:
-    - Override: 0
-      Prefab: {fileID: 47513358957190350, guid: 27e0aae3b40922649b43ec001a83e2fd, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 764480898399811415, guid: c8b969b87a9e7b145a2e8596787626db, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 6282034162402426788, guid: 932a398d402fb7044840d9cb6ce63234, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
+    Prefabs:
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: 6a3db3adac343304d8e7fe8448294c4b, type: 2}
     TickRate: 540
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -84,6 +71,7 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     SpawnTimeout: 1
     EnableNetworkLogs: 1
+    OldPrefabList: []
 --- !u!114 &1840801603024325853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +85,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 0
+  m_UseWebSockets: 0
+  m_UseEncryption: 0
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 464916
   m_HeartbeatTimeoutMS: 500
@@ -106,12 +96,12 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 
+    ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
     PacketDropRate: 0
---- !u!114 &-7810935691095749217
+--- !u!114 &3829583952512104843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,10 +110,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1840801603024325851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b81d70b2c3b41142a37e631239ef533, type: 3}
+  m_Script: {fileID: 11500000, guid: fc4ccaff1920208429cca7c350560301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConnectToSteamID: 0
+  options: []
 --- !u!1 &3234103265073919694
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims{
      [SerializeField]internal bool autoToggleMaterialsToFade=false;
         protected virtual void UpdateRenderers(){
          if(updateRenderersFlag){
-          if(Core.singleton.currentRenderingTargetCamera!=null&&Camera.current!=null){
+          if((Core.singleton.currentRenderingTargetCamera!=null&&Camera.current!=null)||Core.singleton.currentRenderingTargetCamera==Camera.main){
            //Log.DebugMessage("UpdateRenderers:update");
            float viewDistance=Vector3.Distance(Core.singleton.currentRenderingTargetCamera.transform.position,transform.root.position);
            float opacity=(VoxelSystem.fadeEndDis-viewDistance)/(VoxelSystem.fadeEndDis-VoxelSystem.fadeStartDis);
