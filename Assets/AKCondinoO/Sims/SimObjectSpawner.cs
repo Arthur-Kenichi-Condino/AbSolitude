@@ -466,7 +466,7 @@ namespace AKCondinoO.Sims{
          }
          void SetSimInventoryIdToBeReleased(Type simInventoryType,ulong simInventoryIdNumber){
           if(!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds[simInventoryType].Contains(simInventoryIdNumber)){
-           Log.DebugMessage("release sim inventory id and remove all related save data during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
+           //Log.DebugMessage("release sim inventory id and remove all related save data during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
            SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Add(simInventoryIdNumber);
           }else{
            Log.DebugMessage("sim inventory id was already released in the previous save, so don't duplicate the released id in the save file:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
