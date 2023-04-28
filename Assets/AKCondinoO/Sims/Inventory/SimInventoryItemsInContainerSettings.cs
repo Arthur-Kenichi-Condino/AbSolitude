@@ -7,24 +7,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventoryItemsInContainerSettings{
         internal struct SimObjectSettings{
          public readonly ReadOnlyDictionary<Type,int>inventorySpaces;
          public HandsUsage handsUsage;
+         public WeaponTypes weaponType;
          public Vector3 leftHandGrabPos;public Vector3 rightHandGrabPos;
          public Quaternion rightHandGrabRot;
-            internal SimObjectSettings(Dictionary<Type,int>inventorySpaces,HandsUsage handsUsage,Vector3 leftHandGrabPos,Vector3 rightHandGrabPos,Quaternion rightHandGrabRot){
+            internal SimObjectSettings(Dictionary<Type,int>inventorySpaces,HandsUsage handsUsage,WeaponTypes weaponType,Vector3 leftHandGrabPos,Vector3 rightHandGrabPos,Quaternion rightHandGrabRot){
              this.inventorySpaces=new ReadOnlyDictionary<Type,int>(inventorySpaces);
              this.handsUsage=handsUsage;
+             this.weaponType=weaponType;
              this.leftHandGrabPos=leftHandGrabPos;this.rightHandGrabPos=rightHandGrabPos;
              this.rightHandGrabRot=rightHandGrabRot;
             }
-        }
-        public enum HandsUsage:int{
-         None=0,
-         OneHanded=1,
-         TwoHanded=2,
         }
      internal readonly Dictionary<Type,SimObjectSettings>allSettings=new Dictionary<Type,SimObjectSettings>();
         internal SimInventoryItemsInContainerSettings(){
@@ -61,6 +59,7 @@ namespace AKCondinoO.Sims.Inventory{
              new SimObjectSettings(
               inventorySpaces:inventorySpaces,
               handsUsage:simObjectAsInventoryItemSettings.handsUsage,
+              weaponType:simObjectAsInventoryItemSettings.weaponType,
                leftHandGrabPos:simObjectAsInventoryItemSettings. leftHandGrabTransform.localPosition,
               rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabTransform.localPosition,
               rightHandGrabRot:simObjectAsInventoryItemSettings.rightHandGrabTransform.localRotation)

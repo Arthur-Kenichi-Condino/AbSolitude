@@ -869,6 +869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handsUsage: 2
+  weaponType: 2
   leftHandGrabTransform: {fileID: 2031268244700765699}
   rightHandGrabTransform: {fileID: 7476013650176718565}
   inventorySettings:

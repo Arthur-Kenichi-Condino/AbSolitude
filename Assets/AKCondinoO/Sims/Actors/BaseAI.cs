@@ -24,8 +24,6 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-     [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
-     [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
@@ -35,23 +33,6 @@ namespace AKCondinoO.Sims.Actors{
      protected WeaponTypes MyWeaponType=WeaponTypes.None;
       internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected override void AI(){
-         if(DEBUG_TOGGLE_HOLSTER_WEAPON){
-            DEBUG_TOGGLE_HOLSTER_WEAPON=false;
-          if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
-           if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsInContainerSettings.SimObjectSettings simInventoryItemSettings)){
-            if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
-             inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
-             inventoryItemsSpawnData.asInventoryItemOwnerIds[inventoryItemsSpawnData.at.Count-1]=id.Value;
-             inventoryItemsSpawnData.dequeued=false;
-             SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(inventoryItemsSpawnData);
-             MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
-            }
-           }
-          }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
-           //  TO DO: release items
-           MyWeaponType=DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE;
-          }
-         }
          base.AI();
          MyPathfinding=GetPathfindingResult();
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
