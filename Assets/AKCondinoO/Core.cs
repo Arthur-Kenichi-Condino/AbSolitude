@@ -99,12 +99,13 @@ namespace AKCondinoO{
           {11,SimInventoryManager .singleton},
           {12,SimObjectManager    .singleton},
           {13,SimObjectSpawner    .singleton},
-          {14,SkillsManager       .singleton},
-          {15,SimsMachine         .singleton},
-          {16,AutonomyCore        .singleton},
-          {17,Placeholder         .singleton},
-          {18,FixedUI             .singleton},
-          {19,ContextMenuUI       .singleton},
+          {14,SkillEffectsManager .singleton},
+          {15,SkillsManager       .singleton},
+          {16,SimsMachine         .singleton},
+          {17,AutonomyCore        .singleton},
+          {18,Placeholder         .singleton},
+          {19,FixedUI             .singleton},
+          {20,ContextMenuUI       .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);

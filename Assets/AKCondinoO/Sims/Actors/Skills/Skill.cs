@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
       internal bool revoked;
       internal bool done;
         internal virtual bool IsAvailable(BaseAI target,int useLevel){
-         if(actor.id==null){
+         if(actor==null||actor.id==null){
           return false;
          }
          if(target!=null&&target.id==null){
@@ -78,7 +78,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
         protected virtual void Update(){
          if(!doing){
           if(revoked||done){
-           actor.OnSkillUsed(this);
+           if(actor!=null){
+            actor.OnSkillUsed(this);
+           }
            revoked=false;
            done=false;
           }

@@ -190,6 +190,9 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
+         foreach(var skill in skills){
+          skill.Value.actor=null;
+         }
          skills.Clear();//  to do: pool skills before clearing the list
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
