@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Inventory;
@@ -38,13 +38,19 @@ namespace AKCondinoO.Sims{
          return false;
          void OnAddedToInventory(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
           simObject.ChangeInteractionsToActAsInventoryItem(simInventory,settings);
+          OnInventoryItemAdded(simInventory,settings,simObject);
          }
+        }
+        protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings,SimObject simObjectAdded){
         }
         internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
          simInventory.Remove(simObject.asInventoryItem,delete,!removingList);
          if(!delete){
           simObject.ChangeInteractionsToActAsNonInventorySimObject(simInventory);
          }
+         OnInventoryItemRemoved(simInventory,simObject);
+        }
+        protected virtual void OnInventoryItemRemoved(SimInventory simInventory,SimObject simObjectRemoved){
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
          containerData=null;

@@ -2,6 +2,8 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Inventory;
+using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -286,6 +288,8 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
+     [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+     [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
      [SerializeField]float AFKTimeToUseAI=30f;
       float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
@@ -323,6 +327,21 @@ namespace AKCondinoO.Sims.Actors{
             if(AFKTimerToUseAI<=0f){
              isUsingAI=true;
              Log.DebugMessage("AFK for too long, use AI:"+this);
+            }
+           }
+           if(DEBUG_TOGGLE_HOLSTER_WEAPON){
+              DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+            if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
+             if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsInContainerSettings.SimObjectSettings simInventoryItemSettings)){
+              if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
+               inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
+               inventoryItemsSpawnData.asInventoryItemOwnerIds[inventoryItemsSpawnData.at.Count-1]=id.Value;
+               inventoryItemsSpawnData.dequeued=false;
+               SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(inventoryItemsSpawnData);
+              }
+             }
+            }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
+             //  TO DO: release items
             }
            }
            if(isUsingAI){
