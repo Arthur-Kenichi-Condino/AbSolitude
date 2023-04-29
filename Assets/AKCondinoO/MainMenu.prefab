@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   editorNetAsClient: 0
+  devBuildNetAsClient: 0
+  autoNetworkPrefabs: {fileID: 11400000, guid: fddc2117e80a13e4e8a373bcf0a7da07, type: 2}
