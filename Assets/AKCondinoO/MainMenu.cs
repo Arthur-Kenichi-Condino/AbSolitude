@@ -16,6 +16,8 @@ namespace AKCondinoO.UI{
      [SerializeField]bool editorNetAsClient;
      [SerializeField]bool devBuildNetAsClient;
      readonly Dictionary<Type,PooledPrefabInstanceHandler>prefabInstanceHandlers=new Dictionary<Type,PooledPrefabInstanceHandler>();
+     [SerializeField]NetworkPrefabsList autoNetworkPrefabs;
+      readonly List<NetworkPrefab>toRemove=new List<NetworkPrefab>();
         void Update(){
          GameObject netManagerGameObject;
          if(netManager==null&&((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
@@ -28,6 +30,11 @@ namespace AKCondinoO.UI{
           }
           if(!netManagerInitialized){
            Log.DebugMessage("initialize netManager");
+           toRemove.Clear();
+           toRemove.AddRange(autoNetworkPrefabs.PrefabList);
+           foreach(NetworkPrefab networkPrefab in toRemove){
+            autoNetworkPrefabs.Remove(networkPrefab);
+           }
            foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(GameObject))){
             GameObject gameObject=(GameObject)o;
             SimObject  simObject=gameObject.GetComponent<SimObject>();
@@ -37,7 +44,9 @@ namespace AKCondinoO.UI{
              continue;
             }
             Type t=simObject.GetType();
-            netManager.AddNetworkPrefab(simObject.gameObject);
+            //netManager.AddNetworkPrefab(simObject.gameObject);
+            NetworkPrefab networkPrefab=new NetworkPrefab{Prefab=simObject.gameObject};
+            autoNetworkPrefabs.Add(networkPrefab);
             PooledPrefabInstanceHandler prefabInstanceHandler=new PooledPrefabInstanceHandler(simObject.gameObject);
             netManager.PrefabHandler.AddHandler(simObject.gameObject,prefabInstanceHandler);
             prefabInstanceHandlers.Add(t,prefabInstanceHandler);
@@ -49,12 +58,14 @@ namespace AKCondinoO.UI{
             if(editorNetAsClient){
              if(NetworkManager.Singleton.StartClient()){
               Log.DebugMessage("NetworkManager StartClient successful");
+              OnStarted();
              }else{
               Log.Error("NetworkManager StartClient failed");
              }
             }else{
              if(NetworkManager.Singleton.StartHost()){
               Log.DebugMessage("NetworkManager StartHost successful");
+              OnStarted(true);
              }else{
               Log.Error("NetworkManager StartHost failed");
              }
@@ -63,14 +74,24 @@ namespace AKCondinoO.UI{
             if(devBuildNetAsClient){
              if(NetworkManager.Singleton.StartClient()){
               Log.DebugMessage("NetworkManager StartClient successful");
+              OnStarted();
              }else{
               Log.Error("NetworkManager StartClient failed");
              }
             }else{
              if(NetworkManager.Singleton.StartHost()){
               Log.DebugMessage("NetworkManager StartHost successful");
+              OnStarted(true);
              }else{
               Log.Error("NetworkManager StartHost failed");
+             }
+            }
+           }
+           void OnStarted(bool server=false){
+            foreach(var prefabList in netManager.NetworkConfig.Prefabs.NetworkPrefabsLists){
+             Log.DebugMessage("prefabList:"+prefabList);
+             foreach(var prefab in prefabList.PrefabList){
+              Log.DebugMessage("prefab:"+prefab.Prefab);
              }
             }
            }

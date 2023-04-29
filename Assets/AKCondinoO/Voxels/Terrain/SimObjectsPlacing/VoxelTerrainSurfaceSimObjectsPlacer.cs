@@ -90,7 +90,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                                         if(surfaceSimObjectsPlacerBG.GetGroundRays.Length<=0){
                                             OnSaveStateToFile();
                                         }else{
-                                            doRaycastsHandle=RaycastCommand.ScheduleBatch(surfaceSimObjectsPlacerBG.GetGroundRays,surfaceSimObjectsPlacerBG.GetGroundHits,surfaceSimObjectsPlacerBG.GetGroundRays.Length/Environment.ProcessorCount,default(JobHandle));
+                                            doRaycastsHandle=RaycastCommand.ScheduleBatch(surfaceSimObjectsPlacerBG.GetGroundRays.AsArray(),surfaceSimObjectsPlacerBG.GetGroundHits.AsArray(),surfaceSimObjectsPlacerBG.GetGroundRays.Length/Environment.ProcessorCount,default(JobHandle));
                                             doingRaycasts=true;
                                             //Log.DebugMessage("doingRaycasts=true;");
                                         }
