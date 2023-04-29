@@ -243,6 +243,9 @@ namespace AKCondinoO.Sims{
           }
          }
         }
+        internal virtual void OnDeactivated(){
+         Log.DebugMessage("OnDeactivated:id:"+id);
+        }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isServer){

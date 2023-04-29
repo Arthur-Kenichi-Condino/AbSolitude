@@ -226,10 +226,12 @@ namespace AKCondinoO.Sims{
         void OnDeactivate(SimObject simObject){
          active .Remove(simObject.id.Value);
          SimObjectSpawner.singleton.despawnQueue.Enqueue(simObject);
+         simObject.OnDeactivated();
         }
         void OnDeactivateAndReleaseId(SimObject simObject){
          active .Remove(simObject.id.Value);
          SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
+         simObject.OnDeactivated();
         }
         private void LateUpdate(){
          foreach(var a in active){
