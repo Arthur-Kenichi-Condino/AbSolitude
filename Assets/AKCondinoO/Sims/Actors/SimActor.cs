@@ -190,18 +190,14 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
-         foreach(var skill in skills){
-          skill.Value.actor=null;
-         }
-         skills.Clear();//  to do: pool skills before clearing the list
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
           SkillData skillData=persistentSimActorData.skills.Current;
-          GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[skillData.skill]);
+          GameObject skillGameObject=SkillsManager.singleton.SpawnSkillGameObject(skillData.skill);
           Skill skill=skillGameObject.GetComponent<Skill>();
           skill.level=skillData.level;
-          skills.Add(skill.GetType(),skill);
+          skills.Add(skillData.skill,skill);
          }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
@@ -215,10 +211,10 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("required skills missing");
          }
          foreach(var requiredSkill in requiredSkills){
-          GameObject skillGameObject=Instantiate(SkillsManager.singleton.skillPrefabs[requiredSkill.Key]);
+          GameObject skillGameObject=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key);
           Skill skill=skillGameObject.GetComponent<Skill>();
           skill.level=requiredSkill.Value.level;
-          skills.Add(skill.GetType(),skill);
+          skills.Add(requiredSkill.Key,skill);
          }
          requiredSkills.Clear();
          foreach(var skill in skills){
@@ -238,6 +234,15 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          persistentSimActorData.UpdateData(this);
+        }
+        internal override void OnDeactivated(){
+         Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
+         foreach(var skill in skills){
+          skill.Value.actor=null;
+          skill.Value.pooled=SkillsManager.singleton.pool[skill.Key].AddLast(skill.Value);
+         }
+         skills.Clear();//  to do: pool skills before clearing the list
+         base.OnDeactivated();
         }
         protected override void SetSlave(SimObject slave){
          slaves.Add(slave.id.Value);

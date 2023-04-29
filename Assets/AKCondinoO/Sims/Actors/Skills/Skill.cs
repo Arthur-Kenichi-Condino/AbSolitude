@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
          }
         }
+     internal LinkedListNode<Skill>pooled=null;
      internal SimActor actor;
      internal int level=1;
      internal bool doing;
