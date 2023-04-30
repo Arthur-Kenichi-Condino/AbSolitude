@@ -557,6 +557,13 @@ namespace AKCondinoO.Sims{
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();
         }
+        internal bool OnExitSaveLoop(){
+         if(unplaceRequested){
+          SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(this);
+          return true;
+         }
+         return false;
+        }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
              Util.DrawRotatedBounds(worldBoundsVertices,Color.white);

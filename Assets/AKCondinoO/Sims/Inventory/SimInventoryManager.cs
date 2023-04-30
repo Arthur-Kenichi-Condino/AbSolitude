@@ -47,10 +47,10 @@ namespace AKCondinoO.Sims.Inventory{
         }
         internal void OnSaveSimInventoryTypeRegistration(Type simInventoryType){
          Log.DebugMessage("On save SimInventoryType registration:"+simInventoryType);
-         persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,new List<ulong>());
+         persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,new HashSet<ulong>());
          persistentSimInventoryDataSavingBG.persistentIds.Add(simInventoryType,0);
          persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(simInventoryType,new List<ulong>());
-         persistentSimInventoryDataSavingBG.onSavedReleasedIds.Add(simInventoryType,new List<ulong>());
+         persistentSimInventoryDataSavingBG.onSavedReleasedIds.Add(simInventoryType,new HashSet<ulong>());
         }
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
