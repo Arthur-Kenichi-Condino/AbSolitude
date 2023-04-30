@@ -110,10 +110,10 @@ namespace AKCondinoO.Sims{
            #region output
                SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.simInventoryReleasedSimObjectsIdsToRelease.Add(simObjectType,new List<ulong>());
            #endregion
-          SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(simObjectType,new List<ulong>());
+          SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(simObjectType,new HashSet<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(simObjectType,0);
           SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(simObjectType,new List<ulong>());
-          SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds.Add(simObjectType,new List<ulong>());
+          SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds.Add(simObjectType,new HashSet<ulong>());
           if(Core.singleton.isServer){
            FileStream loaderSimObjectFileStream;
            SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStream[simObjectType]=loaderSimObjectFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
@@ -458,7 +458,7 @@ namespace AKCondinoO.Sims{
           }
          }
          void SetSimObjectIdToBeReleased(Type simObjectType,ulong simObjectIdNumber){
-          if(!SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds[simObjectType].Contains(simObjectIdNumber)){
+          if(!SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds[simObjectType].Contains(simObjectIdNumber)&&!SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectType].Contains(simObjectIdNumber)){
            SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectType].Add(simObjectIdNumber);
            Log.DebugMessage("release sim object id and remove all related save data during save:"+simObjectType+";idNumber:"+simObjectIdNumber);
           }else{
@@ -466,7 +466,7 @@ namespace AKCondinoO.Sims{
           }
          }
          void SetSimInventoryIdToBeReleased(Type simInventoryType,ulong simInventoryIdNumber){
-          if(!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds[simInventoryType].Contains(simInventoryIdNumber)){
+          if(!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds[simInventoryType].Contains(simInventoryIdNumber)&&!SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Contains(simInventoryIdNumber)){
            //Log.DebugMessage("release sim inventory id and remove all related save data during save:"+simInventoryType+";idNumber:"+simInventoryIdNumber);
            SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.idsToRelease[simInventoryType].Add(simInventoryIdNumber);
           }else{
@@ -491,7 +491,7 @@ namespace AKCondinoO.Sims{
           //  TO DO
           foreach(var simObjectTypeIdNumberListPair in SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds){
            Type simObjectType=simObjectTypeIdNumberListPair.Key;
-           List<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
+           HashSet<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
            foreach(ulong simObjectIdNumber in onSavedReleasedIds){
             (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,simObjectIdNumber);
             if(SimObjectManager.singleton.active.TryGetValue(simObjectId,out SimObject simObject)){
@@ -512,7 +512,7 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.despawningAndReleasingId.Clear();
           foreach(var simInventoryTypeIdNumberListPair in SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.onSavedReleasedIds){
            Type simInventoryType=simInventoryTypeIdNumberListPair.Key;
-           List<ulong>onSavedReleasedIds=simInventoryTypeIdNumberListPair.Value;
+           HashSet<ulong>onSavedReleasedIds=simInventoryTypeIdNumberListPair.Value;
            foreach(ulong simInventoryIdNumber in onSavedReleasedIds){
             (Type simInventoryType,ulong idNumber)simInventoryId=(simInventoryType,simInventoryIdNumber);
             if(SimInventoryManager.singleton.active.TryGetValue(simInventoryId,out SimInventory simInventory)){

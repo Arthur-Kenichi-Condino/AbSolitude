@@ -114,8 +114,20 @@ namespace AKCondinoO.Sims{
            #endregion
           if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
+           _Loop:{}
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
            SchedulePersistentDataSaving();
+           if(active.Count>0){
+            bool loop=false;
+            foreach(var a in active){
+             loop=loop|a.Value.OnExitSaveLoop();
+            }
+            active.Clear();
+            Log.DebugMessage("SimObjectManager exit save is loop needed:"+loop);
+            if(loop){
+             goto _Loop;
+            }
+           }
           }
           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
            #region SimInventoryManager

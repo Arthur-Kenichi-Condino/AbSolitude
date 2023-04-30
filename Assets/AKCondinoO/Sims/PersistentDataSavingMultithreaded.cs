@@ -21,11 +21,11 @@ namespace AKCondinoO.Sims{
          internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
           internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
          internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
-          internal readonly Dictionary<Type,List<ulong>>idsToRelease=new Dictionary<Type,List<ulong>>();
+          internal readonly Dictionary<Type,HashSet<ulong>>idsToRelease=new Dictionary<Type,HashSet<ulong>>();
          internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
      #endregion
      #region output
-         internal readonly Dictionary<Type,List<ulong>>onSavedReleasedIds=new Dictionary<Type,List<ulong>>();
+         internal readonly Dictionary<Type,HashSet<ulong>>onSavedReleasedIds=new Dictionary<Type,HashSet<ulong>>();
      #endregion
     }
     internal class PersistentDataSavingMultithreaded:BaseMultithreaded<PersistentDataSavingBackgroundContainer>{
@@ -68,7 +68,7 @@ namespace AKCondinoO.Sims{
          //  TO DO: onSavedReleasedIds lists Clear;
          foreach(var simObjectTypeIdNumberListPair in container.onSavedReleasedIds){
           Type simObjectType=simObjectTypeIdNumberListPair.Key;
-          List<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
+          HashSet<ulong>onSavedReleasedIds=simObjectTypeIdNumberListPair.Value;
           onSavedReleasedIds.Clear();
          }
          foreach(var simObjectTypePersistentDataToSavePair in container.simObjectDataToSerializeToFile){
