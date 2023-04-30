@@ -125,6 +125,7 @@ namespace AKCondinoO.Sims.Inventory{
        readonly object[]simInventoryCtorParams=new object[]{};
         readonly Dictionary<Type,(ConstructorInfo ctorInfo,object[]ctorParams)>ctorCache=new Dictionary<Type,(ConstructorInfo,object[])>();
         internal void AddInventoryTo(SimObject simObject,Type simInventoryType){
+         _GetId:{}
          ulong number;
          this.releasedIds.TryGetValue(simInventoryType,out HashSet<ulong>releasedIds);
          if(releasedIds!=null&&releasedIds.Count>0){
@@ -138,6 +139,15 @@ namespace AKCondinoO.Sims.Inventory{
            ids[simInventoryType]++;
           }
          }
+         (Type simInventoryType,ulong idNumber)simInventoryId=(simInventoryType,number);
+         if(assigned.ContainsKey(simInventoryId)){
+          Log.DebugMessage("AddInventoryTo...:id already assigned:"+simInventoryId);
+          goto _GetId;//  only if id is new or released, never if set from loaded data or any other way that doesn't allow a new value
+         }
+         if(!simObject.inventory.ContainsKey(simInventoryType)){
+          simObject.inventory.Add(simInventoryType,new Dictionary<ulong,SimInventory>());
+         }
+         SimInventory simInventory=SpawnInventory();
          SimInventory SpawnInventory(){
           SimInventory result=null;
           if(this.pool.TryGetValue(simInventoryType,out LinkedList<SimInventory>pool)){
@@ -169,15 +179,12 @@ namespace AKCondinoO.Sims.Inventory{
           Log.Warning("adding inventory of simInventoryType "+simInventoryType+" error: type's Constructor could not be handled");
           return result;
          }
-         if(!simObject.inventory.ContainsKey(simInventoryType)){
-          simObject.inventory.Add(simInventoryType,new Dictionary<ulong,SimInventory>());
-         }
-         SimInventory simInventory=SpawnInventory();
          if(simInventory!=null){
           RegisterAsValidSimInventoryType(simInventoryType);
-          (Type simInventoryType,ulong idNumber)simInventoryId=(simInventoryType,number);
           simInventory.OnAssign(simInventoryId,simObject);
          }
+        }
+        internal void SetLoadedInventoryFor(SimObject simObject){
         }
     }
 }
