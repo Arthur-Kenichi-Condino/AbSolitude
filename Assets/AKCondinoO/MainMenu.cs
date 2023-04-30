@@ -16,6 +16,7 @@ namespace AKCondinoO.UI{
      [SerializeField]bool editorNetAsClient;
      [SerializeField]bool devBuildNetAsClient;
      readonly Dictionary<Type,PooledPrefabInstanceHandler>prefabInstanceHandlers=new Dictionary<Type,PooledPrefabInstanceHandler>();
+     [SerializeField]NetworkPrefabsList manualNetworkPrefabs;
      [SerializeField]NetworkPrefabsList autoNetworkPrefabs;
       readonly List<NetworkPrefab>toRemove=new List<NetworkPrefab>();
         void Update(){
@@ -31,10 +32,15 @@ namespace AKCondinoO.UI{
           if(!netManagerInitialized){
            Log.DebugMessage("initialize netManager");
            toRemove.Clear();
-           toRemove.AddRange(autoNetworkPrefabs.PrefabList);
+           toRemove.AddRange(manualNetworkPrefabs.PrefabList);
+           toRemove.AddRange(  autoNetworkPrefabs.PrefabList);
            foreach(NetworkPrefab networkPrefab in toRemove){
-            autoNetworkPrefabs.Remove(networkPrefab);
+            if(autoNetworkPrefabs.Contains(networkPrefab)){
+             autoNetworkPrefabs.Remove(networkPrefab);
+            }
+            netManager.NetworkConfig.Prefabs.Remove(networkPrefab);
            }
+           toRemove.Clear();
            foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(GameObject))){
             GameObject gameObject=(GameObject)o;
             SimObject  simObject=gameObject.GetComponent<SimObject>();
