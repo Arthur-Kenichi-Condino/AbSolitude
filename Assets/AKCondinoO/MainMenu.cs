@@ -97,7 +97,7 @@ namespace AKCondinoO.UI{
             foreach(var prefabList in netManager.NetworkConfig.Prefabs.NetworkPrefabsLists){
              Log.DebugMessage("prefabList:"+prefabList);
              foreach(var prefab in prefabList.PrefabList){
-              Log.DebugMessage("prefab:"+prefab.Prefab);
+              Log.DebugMessage("prefab:"+prefab.Prefab+" is registered:"+netManager.NetworkConfig.Prefabs.Contains(prefab));
              }
             }
            }
