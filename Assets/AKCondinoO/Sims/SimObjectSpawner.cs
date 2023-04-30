@@ -291,8 +291,8 @@ namespace AKCondinoO.Sims{
                gameObject.transform.position=at.position;
                gameObject.transform.rotation=Quaternion.Euler(at.rotation);
                gameObject.transform.localScale=at.scale;
-               SimObjectManager.singleton.spawned.Add(id,simObject);
-               SimObjectManager.singleton.active .Add(id,simObject);
+               SimObjectManager.singleton.spawned    .Add(id,simObject);
+               SimObjectManager.singleton.active     .Add(id,simObject);
                 simObject.id=id;
                 if(masterId!=null){
                  Log.DebugMessage("simObject has master");
@@ -309,6 +309,7 @@ namespace AKCondinoO.Sims{
                   //Log.DebugMessage("clear simActor.persistentSimActorData");
                   simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
                  }
+                 SimObjectManager.singleton.activeActor.Add(id,simActor);
                 }
                 if(asInventoryItemOwner!=null){
                  Log.DebugMessage("add simObject asInventoryItem to Owner");
