@@ -112,7 +112,7 @@ namespace AKCondinoO.Sims{
            #endregion
           SimObjectManager.singleton.persistentDataSavingBG.idsToRelease.Add(simObjectType,new HashSet<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds.Add(simObjectType,0);
-          SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(simObjectType,new List<ulong>());
+          SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds.Add(simObjectType,new HashSet<ulong>());
           SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds.Add(simObjectType,new HashSet<ulong>());
           if(Core.singleton.isServer){
            FileStream loaderSimObjectFileStream;
@@ -378,13 +378,13 @@ namespace AKCondinoO.Sims{
          SimInventoryManager.singleton.simInventoryTypesPendingRegistrationForDataSaving.Clear();
          foreach(var kvp in SimObjectManager.singleton.releasedIds){
           Type simObjectType=kvp.Key;
-          SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds[simObjectType].AddRange(kvp.Value);
+          SimObjectManager.singleton.persistentDataSavingBG.persistentReleasedIds[simObjectType].UnionWith(kvp.Value);
           SimObjectManager.singleton.ids.TryGetValue(simObjectType,out ulong nextId);
           SimObjectManager.singleton.persistentDataSavingBG.persistentIds[simObjectType]=nextId;
          }
           foreach(var kvp in SimInventoryManager.singleton.releasedIds){
            Type simInventoryType=kvp.Key;
-           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds[simInventoryType].AddRange(kvp.Value);
+           SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.persistentReleasedIds[simInventoryType].UnionWith(kvp.Value);
            SimInventoryManager.singleton.ids.TryGetValue(simInventoryType,out ulong nextId);
            SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.persistentIds[simInventoryType]=nextId;
           }

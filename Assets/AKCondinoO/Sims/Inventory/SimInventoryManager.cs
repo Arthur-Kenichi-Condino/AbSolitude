@@ -49,7 +49,7 @@ namespace AKCondinoO.Sims.Inventory{
          Log.DebugMessage("On save SimInventoryType registration:"+simInventoryType);
          persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,new HashSet<ulong>());
          persistentSimInventoryDataSavingBG.persistentIds.Add(simInventoryType,0);
-         persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(simInventoryType,new List<ulong>());
+         persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(simInventoryType,new HashSet<ulong>());
          persistentSimInventoryDataSavingBG.onSavedReleasedIds.Add(simInventoryType,new HashSet<ulong>());
         }
         private void Awake(){
