@@ -18,7 +18,7 @@ namespace AKCondinoO.Sims.Inventory{
          internal readonly Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>simInventoryDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>>();
           internal static readonly ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>simInventoryDataBySimInventoryTypeDictionaryPool=new ConcurrentQueue<Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>>();
            internal static readonly ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>simInventoryDataByIdNumberDictionaryPool=new ConcurrentQueue<Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
-         internal readonly Dictionary<Type,List<ulong>>persistentReleasedIds=new Dictionary<Type,List<ulong>>();
+         internal readonly Dictionary<Type,HashSet<ulong>>persistentReleasedIds=new Dictionary<Type,HashSet<ulong>>();
           internal readonly Dictionary<Type,HashSet<ulong>>idsToRelease=new Dictionary<Type,HashSet<ulong>>();
          internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
      #endregion
