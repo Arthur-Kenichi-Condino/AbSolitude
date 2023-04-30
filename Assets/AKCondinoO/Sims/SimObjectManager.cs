@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
@@ -26,6 +27,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<Type,LinkedList<SimObject>>pool=new Dictionary<Type,LinkedList<SimObject>>();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>spawned                 =new Dictionary<(Type,ulong),SimObject>();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>active                  =new Dictionary<(Type,ulong),SimObject>();
+     internal readonly Dictionary<(Type  simActorType,ulong idNumber),SimActor >activeActor             =new Dictionary<(Type,ulong),SimActor >();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawning              =new Dictionary<(Type,ulong),SimObject>();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
         private void Awake(){
@@ -224,12 +226,14 @@ namespace AKCondinoO.Sims{
          terrainMovedFlag=false;
         }
         void OnDeactivate(SimObject simObject){
-         active .Remove(simObject.id.Value);
+         active     .Remove(simObject.id.Value);
+         activeActor.Remove(simObject.id.Value);
          SimObjectSpawner.singleton.despawnQueue.Enqueue(simObject);
          simObject.OnDeactivated();
         }
         void OnDeactivateAndReleaseId(SimObject simObject){
-         active .Remove(simObject.id.Value);
+         active     .Remove(simObject.id.Value);
+         activeActor.Remove(simObject.id.Value);
          SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(simObject);
          simObject.OnDeactivated();
         }
