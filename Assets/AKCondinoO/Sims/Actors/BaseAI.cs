@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
@@ -46,18 +47,13 @@ namespace AKCondinoO.Sims.Actors{
          base.OnCharacterControllerUpdated();
          UpdateMotion(false);
         }
-     protected Skill MySkill=null;
-      internal Skill skillToUse{get{return MySkill;}}
-      internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
          if(MySkill!=null){
-          if(MySkill is GenerateHomunculus generateHomunculusSkill){
-           generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
-          }
+          DoSkill();
          }
          if(
           MyPathfinding==PathfindingResult.IDLE||
@@ -79,6 +75,11 @@ namespace AKCondinoO.Sims.Actors{
             navMeshAgent.destination=result;
            }
           }
+         }
+        }
+        protected virtual void DoSkill(){
+         if(MySkill is GenerateHomunculus generateHomunculusSkill){
+          generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
          }
         }
         //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]

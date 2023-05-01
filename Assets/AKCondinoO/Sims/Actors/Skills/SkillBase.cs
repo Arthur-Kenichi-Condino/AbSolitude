@@ -30,5 +30,16 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  do deinitialization here, and clear important variables
          base.Revoke();//  the revoked flag is set here
         }
+        protected override void Update(){
+         base.Update();
+         if(doing){
+          if(revoked){//  something went wrong
+           return;
+          }
+          if(invoked){//  skill cast
+           //  run more skill code here; set doing flag to false when finished
+          }
+         }
+        }
     }
 }
