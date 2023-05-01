@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
-    internal class ArthurCondinoAI:HumanAI{
+    internal partial class ArthurCondinoAI:HumanAI{
         protected override void Awake(){
          base.Awake();
         }
@@ -25,21 +25,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
-         if(MySkill==null){
-          Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves,skillsToUse);
-          if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
-           GenerateHomunculus generateHomunculusSkill=(GenerateHomunculus)skill;
-           if(generateHomunculusSkill.IsAvailable(this,generateHomunculusSkill.level)){
-            if(requiredSlaves.Count>0){//  should Arthur generate his "homunculi friends" now?
-             MySkill=generateHomunculusSkill;
-             Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use generateHomunculusSkill");
-            }
-           }
-          }
-          if(MySkill==null){
-           //  TO DO: get other skills
-          }
-         }
+         OnIDLE_ST_SetMySkill();
          base.OnIDLE_ST();
         }
         #if UNITY_EDITOR

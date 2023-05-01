@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
-    internal class Skill:MonoBehaviour{
+    internal partial class Skill:MonoBehaviour{
         public enum SkillUseContext{
          OnCallSlaves,
          OnWillTakeDamage,
@@ -14,7 +15,20 @@ namespace AKCondinoO.Sims.Actors.Skills{
          OnIdle,
         }
         internal static void GetBest(BaseAI actor,SkillUseContext context,HashSet<Skill>skills){
+         if(actor is VanilmirthAI vanilmirth){
+          VanilmirthGetBest(vanilmirth,context,skills);
+          return;
+         }
          switch(context){
+          case SkillUseContext.OnIdle:{
+           break;
+          }
+          case SkillUseContext.OnTookDamage:{
+           break;
+          }
+          case SkillUseContext.OnWillTakeDamage:{
+           break;
+          }
           case SkillUseContext.OnCallSlaves:{
            if(actor.skills.TryGetValue(typeof(GenerateHomunculus),out Skill skill)){
             skills.Add(skill);
