@@ -3,6 +3,7 @@
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class ChaoticBlessing:SkillBase{
@@ -24,16 +25,28 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  the skill cannot be used!
          return false;
         }
-     SimActor actorTarget;
+     SimActor simActorTarget;
+     SimObject simObjectTarget;
         internal void GetRandomTarget(){
-         actorTarget=target;
+         simActorTarget=actor;
+         simObjectTarget=null;
          float random=Mathf.Clamp01((float)dice.NextDouble());
-         if(random<0.11f){
-          //
+         if(random<0.25f){
+          simObjectTarget=SimObjectManager.singleton.active.ElementAt(dice.Next(0,SimObjectManager.singleton.active.Count)).Value;
+         }else if(random<0.50f){
+          simActorTarget=SimObjectManager.singleton.activeActor.ElementAt(dice.Next(0,SimObjectManager.singleton.activeActor.Count)).Value;
+         }else if(random<0.75f&&actor.master!=null&&SimObjectManager.singleton.active.TryGetValue(actor.master.Value,out SimObject master)){
+          if(master is SimActor simActorMaster){
+           simActorTarget=simActorMaster;
+          }else{
+           simObjectTarget=master;
+          }
          }
+         Log.DebugMessage("ChaoticBlessing GetRandomTarget:"+(simObjectTarget!=null?simObjectTarget:simActorTarget));
         }
         protected override void Invoke(){
-         //  do more skill initialization here / or use to as main call of the skill
+         //  do more skill initialization here / or use this as main call of the skill
+         //
          base.Invoke();//  the invoked flag is set here
         }
         protected override void Revoke(){

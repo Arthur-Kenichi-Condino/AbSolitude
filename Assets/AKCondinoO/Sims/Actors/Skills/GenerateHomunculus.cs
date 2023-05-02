@@ -44,7 +44,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          actor.requiredSlaves.Clear();
         }
         protected override void Invoke(){
-         //  do more skill initialization here / or use to as main call of the skill
+         //  do more skill initialization here / or use this as main call of the skill
          spawnData.dequeued=false;
          SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(spawnData);
          base.Invoke();//  the invoked flag is set here
