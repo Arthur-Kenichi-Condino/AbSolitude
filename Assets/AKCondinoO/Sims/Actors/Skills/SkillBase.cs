@@ -23,7 +23,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          return false;
         }
         protected override void Invoke(){
-         //  do more skill initialization here / or use to as main call of the skill
+         //  do more skill initialization here / or use this as main call of the skill
          base.Invoke();//  the invoked flag is set here
         }
         protected override void Revoke(){

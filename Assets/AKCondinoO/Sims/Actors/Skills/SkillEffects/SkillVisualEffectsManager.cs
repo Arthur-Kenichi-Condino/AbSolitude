@@ -6,15 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
-    internal class SkillEffectsManager:MonoBehaviour,ISingletonInitialization{
-     internal static SkillEffectsManager singleton{get;set;}
+    internal class SkillVisualEffectsManager:MonoBehaviour,ISingletonInitialization{
+     internal static SkillVisualEffectsManager singleton{get;set;}
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SkillEffectsManager:OnDestroyingCoreEvent");
+         Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
         }
     }
 }
