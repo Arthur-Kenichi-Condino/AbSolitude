@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Sims.Actors.Skills{
+namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
     internal class SkillVisualEffectsManager:MonoBehaviour,ISingletonInitialization{
      internal static SkillVisualEffectsManager singleton{get;set;}
         private void Awake(){
