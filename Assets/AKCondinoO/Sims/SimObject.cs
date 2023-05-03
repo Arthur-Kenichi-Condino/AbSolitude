@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
@@ -194,6 +195,8 @@ namespace AKCondinoO.Sims{
           }
           renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
          }
+         skillBuffs=gameObject.AddComponent<SkillBuffEffectsState>();
+         skillBuffs.targetSimObject=this;
         }
         public override void OnDestroy(){
          base.OnDestroy();
@@ -337,6 +340,7 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
          int result=0;
+         skillBuffs.ManualUpdate(Time.deltaTime);
          if(asInventoryItem!=null){
           result=3;
           //Log.DebugMessage("ManualUpdate asInventoryItem");
