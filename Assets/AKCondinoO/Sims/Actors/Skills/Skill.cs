@@ -40,6 +40,12 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal LinkedListNode<Skill>pooled=null;
      internal SimActor actor;
      internal int level=1;
+        protected virtual void Awake(){
+        }
+        internal virtual void OnSpawned(){
+        }
+        internal virtual void OnPool(){
+        }
      internal bool doing;
       internal int useLevel;
       internal BaseAI target;

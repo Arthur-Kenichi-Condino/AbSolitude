@@ -1,13 +1,43 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class ChaoticBlessing:SkillBase{
-        internal readonly System.Random dice=new System.Random();
+     internal readonly System.Random dice=new System.Random();
+     internal readonly List<Type>possibleSkillTypes=new List<Type>(){
+      typeof(SpiritualHealing),
+     };
+     internal readonly List<Skill>possibleSkills=new List<Skill>();
+        protected override void Awake(){
+         base.Awake();
+        }
+        internal override void OnSpawned(){
+         base.OnSpawned();
+         foreach(Type skillType in possibleSkillTypes){
+          if(ReflectionUtil.IsTypeDerivedFrom(skillType,this.GetType())){
+           Log.Warning("invalid skill type (prevent stack overflow):"+skillType);
+           continue;
+          }
+          if(!ReflectionUtil.IsTypeDerivedFrom(skillType,typeof(Skill))){
+           Log.Warning("invalid skill type:"+skillType);
+           continue;
+          }
+          (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(skillType,level,actor);
+          possibleSkills.Add(spawnedSkill.skill);
+         }
+        }
+        internal override void OnPool(){
+         foreach(Skill possibleSkill in possibleSkills){
+          SkillsManager.singleton.Pool(possibleSkill.GetType(),possibleSkill);
+         }
+         possibleSkills.Clear();
+         base.OnPool();
+        }
         internal override bool IsAvailable(BaseAI target,int useLevel){
          if(base.IsAvailable(target,useLevel)){
           //  do more tests here

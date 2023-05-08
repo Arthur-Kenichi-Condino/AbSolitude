@@ -194,10 +194,12 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
           SkillData skillData=persistentSimActorData.skills.Current;
-          GameObject skillGameObject=SkillsManager.singleton.SpawnSkillGameObject(skillData.skill);
-          Skill skill=skillGameObject.GetComponent<Skill>();
-          skill.level=skillData.level;
-          skills.Add(skillData.skill,skill);
+          if(!ReflectionUtil.IsTypeDerivedFrom(skillData.skill,typeof(Skill))){
+           Log.Warning("invalid skill type:"+skillData.skill);
+           continue;
+          }
+          (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(skillData.skill,skillData.level,this);
+          skills.Add(skillData.skill,spawnedSkill.skill);
          }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
@@ -211,15 +213,14 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("required skills missing");
          }
          foreach(var requiredSkill in requiredSkills){
-          GameObject skillGameObject=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key);
-          Skill skill=skillGameObject.GetComponent<Skill>();
-          skill.level=requiredSkill.Value.level;
-          skills.Add(requiredSkill.Key,skill);
+          if(!ReflectionUtil.IsTypeDerivedFrom(requiredSkill.Key,typeof(Skill))){
+           Log.Warning("invalid skill type:"+requiredSkill.Key);
+           continue;
+          }
+          (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key,requiredSkill.Value.level,this);
+          skills.Add(requiredSkill.Key,spawnedSkill.skill);
          }
          requiredSkills.Clear();
-         foreach(var skill in skills){
-          skill.Value.actor=this;
-         }
          slaves.Clear();
          //  load slaves from file here:
          persistentSimActorData.slaves.Reset();
@@ -238,8 +239,7 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
          foreach(var skill in skills){
-          skill.Value.actor=null;
-          skill.Value.pooled=SkillsManager.singleton.pool[skill.Key].AddLast(skill.Value);
+          SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
          skills.Clear();//  to do: pool skills before clearing the list
          base.OnDeactivated();
