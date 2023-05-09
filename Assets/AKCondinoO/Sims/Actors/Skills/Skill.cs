@@ -52,6 +52,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
       internal bool invoked;
       internal bool revoked;
       internal bool done;
+     internal float cooldown;
         internal virtual bool IsAvailable(BaseAI target,int useLevel){
          if(actor==null||actor.id==null){
           return false;
@@ -61,6 +62,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
          if(!doing||!invoked){
           //  if the skill has not been cast yet then some other tests can still be done here, like focus points required to use the skill
+          if(cooldown>0f){
+           return false;
+          }
          }
          return true;
         }
@@ -88,7 +92,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
         ///  Can be the "initialization" or skill "main call"
         /// </summary>
         protected virtual void Invoke(){
+         OnInvokeSetCooldown();
          invoked=true;
+        }
+        protected virtual void OnInvokeSetCooldown(){
         }
         /// <summary>
         ///  Something went wrong, so cancel
@@ -101,10 +108,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(!doing){
           if(revoked||done){
            if(actor!=null){
-            actor.OnSkillUsed(this);
+            actor.OnSkillUsed(this,done,revoked);
            }
            revoked=false;
            done=false;
+          }
+          if(cooldown>0f){
+           cooldown-=Time.deltaTime;
           }
           return;
          }

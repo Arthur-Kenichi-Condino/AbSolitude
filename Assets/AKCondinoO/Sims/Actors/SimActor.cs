@@ -272,8 +272,6 @@ namespace AKCondinoO.Sims.Actors{
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
-        internal virtual void OnSkillUsed(Skill skill){
-        }
      internal bool isUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
      internal bool crouching{

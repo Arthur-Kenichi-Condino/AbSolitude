@@ -13,18 +13,6 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
      protected readonly System.Random dice=new System.Random();
-        internal override void OnSkillUsed(Skill skill){
-         base.OnSkillUsed(skill);
-         Log.DebugMessage("OnSkillUsed:"+skill);
-         if(MySkill==skill){
-          Log.DebugMessage("OnSkillUsed:MySkill==skill:clear used skill");
-          MySkill=null;
-          if(skill.revoked){
-          }
-          if(skill.done){
-          }
-         }
-        }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
@@ -75,11 +63,6 @@ namespace AKCondinoO.Sims.Actors{
             navMeshAgent.destination=result;
            }
           }
-         }
-        }
-        protected virtual void DoSkill(){
-         if(MySkill is GenerateHomunculus generateHomunculusSkill){
-          generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
          }
         }
         //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
