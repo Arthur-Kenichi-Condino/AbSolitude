@@ -27,18 +27,28 @@ namespace AKCondinoO.Sims.Actors.Skills{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
         }
-        internal GameObject SpawnSkillGameObject(Type skillType){
+        internal(GameObject skillGameObject,Skill skill)SpawnSkillGameObject(Type skillType,int level,SimActor actor){
          GameObject skillGameObject;
          var pool=this.pool[skillType];
+         Skill skill;
          if(pool.Count>0){
-          Skill skill=pool.First.Value;
+          skill=pool.First.Value;
           pool.RemoveFirst();
           skill.pooled=null;
           skillGameObject=skill.gameObject;
          }else{
           skillGameObject=Instantiate(skillPrefabs[skillType]);
+          skill=skillGameObject.GetComponent<Skill>();
          }
-         return skillGameObject;
+         skill.actor=actor;
+         skill.level=level;
+         skill.OnSpawned();
+         return(skillGameObject,skill);
+        }
+        internal void Pool(Type skillType,Skill skill){
+         skill.OnPool();
+         skill.actor=null;
+         skill.pooled=pool[skillType].AddLast(skill);
         }
     }
 }

@@ -40,13 +40,21 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal LinkedListNode<Skill>pooled=null;
      internal SimActor actor;
      internal int level=1;
+        protected virtual void Awake(){
+        }
+        internal virtual void OnSpawned(){
+        }
+        internal virtual void OnPool(){
+         cooldown=0f;
+        }
      internal bool doing;
       internal int useLevel;
-      internal BaseAI target;
+      internal SimObject target;
       internal bool invoked;
       internal bool revoked;
       internal bool done;
-        internal virtual bool IsAvailable(BaseAI target,int useLevel){
+     internal float cooldown;
+        internal virtual bool IsAvailable(SimObject target,int useLevel){
          if(actor==null||actor.id==null){
           return false;
          }
@@ -55,6 +63,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
          if(!doing||!invoked){
           //  if the skill has not been cast yet then some other tests can still be done here, like focus points required to use the skill
+          if(cooldown>0f){
+           return false;
+          }
          }
          return true;
         }
@@ -64,7 +75,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         /// <param name="target"></param>
         /// <param name="useLevel"></param>
         /// <returns></returns>
-        internal virtual bool DoSkill(BaseAI target,int useLevel){
+        internal virtual bool DoSkill(SimObject target,int useLevel){
          if(doing||done||revoked){
           return false;
          }
@@ -82,7 +93,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
         ///  Can be the "initialization" or skill "main call"
         /// </summary>
         protected virtual void Invoke(){
+         OnInvokeSetCooldown();
          invoked=true;
+        }
+        protected virtual void OnInvokeSetCooldown(){
         }
         /// <summary>
         ///  Something went wrong, so cancel
@@ -95,10 +109,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(!doing){
           if(revoked||done){
            if(actor!=null){
-            actor.OnSkillUsed(this);
+            actor.OnSkillUsed(this,done,revoked);
            }
            revoked=false;
            done=false;
+          }
+          if(cooldown>0f){
+           cooldown-=Time.deltaTime;
           }
           return;
          }
@@ -114,8 +131,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
           if(invoked){//  skill cast
            //  run more skill code here; set doing flag to false when finished
+           OnInvoked();
           }
          }
+        }
+        protected virtual void OnInvoked(){
+         Log.DebugMessage("skill "+this+" was cast gracefully");
+         done=true;
+         doing=false;
         }
     }
 }
