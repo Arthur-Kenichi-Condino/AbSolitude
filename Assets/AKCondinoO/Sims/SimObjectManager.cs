@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
@@ -62,6 +63,7 @@ namespace AKCondinoO.Sims{
           releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
          }
         }
+     readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
          #region PersistentDataLoadingMultithreaded
@@ -108,14 +110,24 @@ namespace AKCondinoO.Sims{
            #endregion
          #endregion
          #region PersistentDataSavingMultithreaded
-          persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
-           #region SimInventoryManager
-               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning,-1);
-           #endregion
           if(Core.singleton.isServer){
            Log.DebugMessage("SimObjectManager exit save");
            _Loop:{}
+           persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+            #region SimInventoryManager
+                SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning,-1);
+            #endregion
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
+           
+           foreach(var kvp in SkillBuff.allActiveBuffs){
+            foreach(SkillBuff skillBuff in kvp.Value){
+             buffsToPool.Add((kvp.Key,skillBuff));
+            }
+           }
+           foreach((Type buffType,SkillBuff skillBuff)skillBuffToPool in buffsToPool){
+            SkillBuff.Pool(skillBuffToPool.skillBuff,true);
+           }
+           buffsToPool.Clear();
            SchedulePersistentDataSaving();
            if(active.Count>0){
             bool loop=false;
@@ -123,7 +135,7 @@ namespace AKCondinoO.Sims{
              loop=loop|a.Value.OnExitSaveLoop();
             }
             active.Clear();
-            Log.DebugMessage("SimObjectManager exit save is loop needed:"+loop);
+            Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);
             if(loop){
              goto _Loop;
             }

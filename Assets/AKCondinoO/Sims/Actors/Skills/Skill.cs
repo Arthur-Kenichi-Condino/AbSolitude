@@ -45,15 +45,16 @@ namespace AKCondinoO.Sims.Actors.Skills{
         internal virtual void OnSpawned(){
         }
         internal virtual void OnPool(){
+         cooldown=0f;
         }
      internal bool doing;
       internal int useLevel;
-      internal BaseAI target;
+      internal SimObject target;
       internal bool invoked;
       internal bool revoked;
       internal bool done;
      internal float cooldown;
-        internal virtual bool IsAvailable(BaseAI target,int useLevel){
+        internal virtual bool IsAvailable(SimObject target,int useLevel){
          if(actor==null||actor.id==null){
           return false;
          }
@@ -74,7 +75,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         /// <param name="target"></param>
         /// <param name="useLevel"></param>
         /// <returns></returns>
-        internal virtual bool DoSkill(BaseAI target,int useLevel){
+        internal virtual bool DoSkill(SimObject target,int useLevel){
          if(doing||done||revoked){
           return false;
          }
@@ -130,8 +131,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
           if(invoked){//  skill cast
            //  run more skill code here; set doing flag to false when finished
+           OnInvoked();
           }
          }
+        }
+        protected virtual void OnInvoked(){
+         Log.DebugMessage("skill "+this+" was cast gracefully");
+         done=true;
+         doing=false;
         }
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class GenerateHomunculus:CallSlaveSkill{
-        internal override bool IsAvailable(BaseAI target,int useLevel){
+        internal override bool IsAvailable(SimObject target,int useLevel){
          if(base.IsAvailable(target,useLevel)){
           //  do more tests here
           return true;
@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  oops, it's not the time to use the skill, and no more tests required
          return false;
         }
-        internal override bool DoSkill(BaseAI target,int useLevel){
+        internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           //  do any other skill setting needed here
           SetHomunToBeGenerated();
@@ -65,13 +65,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
           if(invoked){//  skill cast
            //  run more skill code here; set doing flag to false when finished
-           if(spawnData.dequeued){//  spawner generated the homunculi
-            //  do any other tests here
-            Log.DebugMessage("skill "+this+" was cast gracefully");
-            done=true;
-            doing=false;
-           }
           }
+         }
+        }
+        protected override void OnInvoked(){
+         if(spawnData.dequeued){//  spawner generated the homunculi
+          //  do any other tests here
+          base.OnInvoked();
          }
         }
  }
