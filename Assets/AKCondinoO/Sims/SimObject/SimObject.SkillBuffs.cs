@@ -10,7 +10,7 @@ namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal virtual void OnSkillUsed(Skill skill,bool done,bool revoked){
         }
-     protected SkillBuffEffectsState skillBuffs;
+     internal SkillBuffEffectsState skillBuffs;
         internal bool OnTargetedBySkill(Skill skill,SimObject caster){
          return false;
         }
