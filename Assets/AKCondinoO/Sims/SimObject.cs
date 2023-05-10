@@ -247,6 +247,7 @@ namespace AKCondinoO.Sims{
          }
         }
         internal virtual void OnDeactivated(){
+         skillBuffs.Clear();
          Log.DebugMessage("OnDeactivated:id:"+id);
         }
         public override void OnNetworkSpawn(){
@@ -339,6 +340,13 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
+         if(master!=null&&(masterObject==null||masterObject.id==null||masterObject.id.Value!=master.Value)){
+          Log.DebugMessage("master sim [id:"+master+"] validation failed: renew masterObject with GetMaster(); myid:"+id);
+          masterObject=GetMaster();
+          if(masterObject!=null&&masterObject is SimActor masterActor){
+           masterActor.SetSlave(this);
+          }
+         }
          int result=0;
          skillBuffs.ManualUpdate(Time.deltaTime);
          if(asInventoryItem!=null){

@@ -398,6 +398,9 @@ namespace AKCondinoO.Sims{
           }
          }
          void GetSimObjectPersistentData(SimObject simObject,bool isDespawning=false){
+          if(exitSave){
+           simObject.skillBuffs.Clear(true);
+          }
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData);
           if(simObject is SimActor simActor){
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simActor .persistentSimActorData);

@@ -165,15 +165,19 @@ namespace AKCondinoO.Sims.Inventory{
           }
           ConstructorInfo ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryCtorParamsTypes,null);
           if(ctor!=null){
-           ctorCache[simInventoryType]=(ctor,simInventoryCtorParams);
-           result=(SimInventory)ctor.Invoke(simInventoryCtorParams);
+           object[]cacheCtorParams=new object[simInventoryCtorParams.Length];
+           Array.Copy(simInventoryCtorParams,cacheCtorParams,simInventoryCtorParams.Length);
+           ctorCache[simInventoryType]=(ctor,cacheCtorParams);
+           result=(SimInventory)ctor.Invoke(cacheCtorParams);
            return result;
           }
           ctor=simInventoryType.GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,null,simInventoryBaseCtorParamsTypes,null);
           if(ctor!=null){
            simInventoryBaseCtorParams[0]=0;
-           ctorCache[simInventoryType]=(ctor,simInventoryBaseCtorParams);
-           result=(SimInventory)ctor.Invoke(simInventoryBaseCtorParams);
+           object[]cacheCtorParams=new object[simInventoryBaseCtorParams.Length];
+           Array.Copy(simInventoryBaseCtorParams,cacheCtorParams,simInventoryBaseCtorParams.Length);
+           ctorCache[simInventoryType]=(ctor,cacheCtorParams);
+           result=(SimInventory)ctor.Invoke(cacheCtorParams);
            return result;
           }
           Log.Warning("adding inventory of simInventoryType "+simInventoryType+" error: type's Constructor could not be handled");
