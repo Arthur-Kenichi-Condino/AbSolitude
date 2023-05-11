@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
           static readonly object[]skillBuffBaseCtorParams=new object[]{};
            static readonly Dictionary<Type,(ConstructorInfo ctorInfo,object[]ctorParams)>ctorCache=new Dictionary<Type,(ConstructorInfo,object[])>();
             internal static SkillBuff Dequeue(Type buffType){
+             Log.DebugMessage("SkillBuff Dequeue buffType:"+buffType);
              if(SkillBuff.pool.TryGetValue(buffType,out Queue<SkillBuff>pool)&&pool.TryDequeue(out SkillBuff skillBuff)){
               return skillBuff;
              }
@@ -43,6 +44,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
              return skillBuff;
             }
             internal static void Pool(SkillBuff skillBuff,bool gameExiting=false){
+             Log.DebugMessage("SkillBuff Pool skillBuff:"+skillBuff);
              skillBuff.OnUnapply(true,gameExiting);
              skillBuff.OnReset();
              Type buffType=skillBuff.GetType();

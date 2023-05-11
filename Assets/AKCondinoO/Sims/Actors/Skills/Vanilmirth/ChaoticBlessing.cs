@@ -98,7 +98,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         protected override void OnInvokeSetCooldown(){
          float random=Mathf.Clamp01((float)dice.NextDouble());
          cooldown=1f+(random*2f);
-         Log.DebugMessage("ChaoticBlessing cooldown:"+cooldown);
+         //Log.DebugMessage("ChaoticBlessing cooldown:"+cooldown);
          base.OnInvokeSetCooldown();
         }
         protected override void Revoke(){
