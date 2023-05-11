@@ -18,7 +18,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
         protected override void Invoke(){
          SkillBuff buff=SkillBuff.Dequeue(typeof(SpiritualHealingSkillBuff));
          if(buff!=null){
-          target.skillBuffs.ApplyBuff(buff);
+          buff.duration=0f;
+          buff.delay=0f;
+          target.skillBuffs.Add(buff);
          }
          target.OnHitByTargetedSkill(this,actor);
          base.Invoke();//  the invoked flag is set here
