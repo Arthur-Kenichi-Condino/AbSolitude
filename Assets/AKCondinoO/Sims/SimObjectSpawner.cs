@@ -294,6 +294,7 @@ namespace AKCondinoO.Sims{
                SimObjectManager.singleton.spawned    .Add(id,simObject);
                SimObjectManager.singleton.active     .Add(id,simObject);
                 simObject.id=id;
+                simObject.OnSpawned();
                 if(masterId!=null){
                  Log.DebugMessage("simObject has master");
                  simObject.master=masterId;
@@ -487,6 +488,7 @@ namespace AKCondinoO.Sims{
           //  TO DO: remove sim inventories
           foreach(var despawn in SimObjectManager.singleton.despawning){
            SimObjectManager.singleton.spawned.Remove(despawn.Key);
+           despawn.Value.OnDespawned();
            despawn.Value.pooled=SimObjectManager.singleton.pool[despawn.Value.id.Value.simObjectType].AddLast(despawn.Value);
            despawn.Value.id=null;
           }
@@ -509,6 +511,7 @@ namespace AKCondinoO.Sims{
           foreach(var despawnAndReleaseId in SimObjectManager.singleton.despawningAndReleasingId){
            SimObjectManager.singleton.spawned.Remove(despawnAndReleaseId.Key);
            SimObjectManager.singleton.releasedIds[despawnAndReleaseId.Key.simObjectType].Add(despawnAndReleaseId.Key.idNumber);
+           despawnAndReleaseId.Value.OnDespawned();
            despawnAndReleaseId.Value.pooled=SimObjectManager.singleton.pool[despawnAndReleaseId.Value.id.Value.simObjectType].AddLast(despawnAndReleaseId.Value);
            despawnAndReleaseId.Value.id=null;
           }
