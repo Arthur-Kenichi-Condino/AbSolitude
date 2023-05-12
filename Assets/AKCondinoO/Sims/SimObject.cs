@@ -238,17 +238,16 @@ namespace AKCondinoO.Sims{
            netRotation.Value=persistentData.rotation  ;
            netScale   .Value=persistentData.localScale;
           }
-          foreach(var gameplayer in GameplayerManagement.singleton.all){
-           ulong clientId=gameplayer.Key;
-           if(colliders.Length>0){
-            gameplayer.Value.OnSimObjectSpawned(this,colliders[0].gameObject.layer);
-           }
-          }
          }
         }
         internal virtual void OnDeactivated(){
          skillBuffs.Clear();
          Log.DebugMessage("OnDeactivated:id:"+id);
+        }
+        internal virtual void OnSpawned(){
+        }
+        internal virtual void OnDespawned(){
+         stats=null;
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
@@ -312,6 +311,12 @@ namespace AKCondinoO.Sims{
          }else{
           safePosition=transform.position;
          }
+         foreach(var gameplayer in GameplayerManagement.singleton.all){
+          ulong clientId=gameplayer.Key;
+          if(colliders.Length>0){
+           gameplayer.Value.OnSimObjectEnabled(this,colliders[0].gameObject.layer);
+          }
+         }
          EnableRenderers();
         }
         protected virtual void DisableInteractions(){
@@ -322,7 +327,7 @@ namespace AKCondinoO.Sims{
          foreach(var gameplayer in GameplayerManagement.singleton.all){
           ulong clientId=gameplayer.Key;
           if(colliders.Length>0){
-           gameplayer.Value.OnSimObjectDespawned(this,colliders[0].gameObject.layer);
+           gameplayer.Value.OnSimObjectDisabled(this,colliders[0].gameObject.layer);
           }
          }
          DisableRenderers();

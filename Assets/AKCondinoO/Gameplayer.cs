@@ -98,16 +98,16 @@ namespace AKCondinoO{
          //Log.DebugMessage("OnVoxelTerrainChunkBaked:navMeshDirty=true");
          navMeshDirty=true;
         }
-        internal void OnSimObjectSpawned(SimObject simObject,int layer){
-         //Log.DebugMessage("OnSimObjectSpawned:layer:"+layer);
+        internal void OnSimObjectEnabled(SimObject simObject,int layer){
+         //Log.DebugMessage("OnSimObjectEnabled:layer:"+layer);
          OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectTransformHasChanged(SimObject simObject,int layer){
          //Log.DebugMessage("OnSimObjectTransformHasChanged:layer:"+layer);
          OnNavMeshShouldUpdate(simObject,layer);
         }
-        internal void OnSimObjectDespawned(SimObject simObject,int layer){
-         Log.DebugMessage("OnSimObjectDespawned:layer:"+layer);
+        internal void OnSimObjectDisabled(SimObject simObject,int layer){
+         Log.DebugMessage("OnSimObjectDisabled:layer:"+layer);
          OnNavMeshShouldUpdate(simObject,layer);
         }
         void OnNavMeshShouldUpdate(SimObject simObject,int layer){
