@@ -45,8 +45,11 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          elapsedTime+=deltaTime;
          hasBeenUpdatedThisFrame=true;
         }
-        internal virtual void OnApply(){
+        internal virtual void OnApply(bool gameExiting=false){
          if(!applied){
+          if(!gameExiting){
+           applyingEffectsOn.targetSimObject.stats.Value.OnAppliedSkillBuff(this);
+          }
           applied=true;
          }
         }
@@ -56,10 +59,13 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          if(pooling){
           if(!expired){
            //  should the skill be applied immediately
-           OnApply();
+           OnApply(gameExiting);
           }
          }
          if(applied){
+          if(!gameExiting){
+           applyingEffectsOn.targetSimObject.stats.Value.OnUnappliedSkillBuff(this);
+          }
           applied=false;
          }
         }

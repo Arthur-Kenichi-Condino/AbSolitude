@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
-    internal class ChaoticBlessing:SkillBase{
+    internal class ChaoticBlessing:Skill{
      internal readonly System.Random dice=new System.Random();
      internal readonly List<Type>possibleSkillTypes=new List<Type>(){
       typeof(SpiritualHealing),

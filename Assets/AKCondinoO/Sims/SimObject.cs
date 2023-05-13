@@ -204,8 +204,16 @@ namespace AKCondinoO.Sims{
         internal virtual void OnLoadingPool(){
          DisableInteractions();
         }
+        internal virtual void OnSpawned(){
+        }
+        internal virtual void OnDespawned(){
+         stats=null;
+        }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
+         if(stats==null){
+          StatsInit();
+         }
          inventoryItemsToSpawn.Clear();
          if(Core.singleton.isServer){
           masterObject=GetMaster();
@@ -243,11 +251,6 @@ namespace AKCondinoO.Sims{
         internal virtual void OnDeactivated(){
          skillBuffs.Clear();
          Log.DebugMessage("OnDeactivated:id:"+id);
-        }
-        internal virtual void OnSpawned(){
-        }
-        internal virtual void OnDespawned(){
-         stats=null;
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
