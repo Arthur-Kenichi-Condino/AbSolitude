@@ -48,9 +48,15 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
         internal virtual void OnApply(bool gameExiting=false){
          if(!applied){
           if(!gameExiting){
+           effect.Apply(applyingEffectsOn.targetSimObject.stats.Value);
            applyingEffectsOn.targetSimObject.stats.Value.OnAppliedSkillBuff(this);
           }
           applied=true;
+         }
+         if(!gameExiting){
+          if(effect.ApplyRepeating(applyingEffectsOn.targetSimObject.stats.Value)){
+           applyingEffectsOn.targetSimObject.stats.Value.OnAppliedSkillBuff(this);
+          }
          }
         }
         internal virtual void OnUnapply(bool pooling=false,bool gameExiting=false){
@@ -64,6 +70,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          }
          if(applied){
           if(!gameExiting){
+           effect.Unapply(applyingEffectsOn.targetSimObject.stats.Value);
            applyingEffectsOn.targetSimObject.stats.Value.OnUnappliedSkillBuff(this);
           }
           applied=false;
