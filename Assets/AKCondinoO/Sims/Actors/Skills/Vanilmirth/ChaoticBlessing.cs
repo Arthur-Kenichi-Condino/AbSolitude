@@ -62,7 +62,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  the skill cannot be used!
          return false;
         }
-     SimActor simActorTarget;
+     SimActor   simActorTarget;
      SimObject simObjectTarget;
         internal void GetRandomTarget(){
          simActorTarget=actor;
@@ -72,11 +72,11 @@ namespace AKCondinoO.Sims.Actors.Skills{
           simObjectTarget=SimObjectManager.singleton.active.ElementAt(dice.Next(0,SimObjectManager.singleton.active.Count)).Value;
          }else if(random<0.50f){
           simActorTarget=SimObjectManager.singleton.activeActor.ElementAt(dice.Next(0,SimObjectManager.singleton.activeActor.Count)).Value;
-         }else if(random<0.75f&&actor.master!=null&&SimObjectManager.singleton.active.TryGetValue(actor.master.Value,out SimObject master)){
-          if(master is SimActor simActorMaster){
-           simActorTarget=simActorMaster;
+         }else if(random<0.75f&&actor.masterId!=null&&SimObjectManager.singleton.active.TryGetValue(actor.masterId.Value,out SimObject masterSimObject)){
+          if(masterSimObject is SimActor masterSimActor){
+           simActorTarget=masterSimActor;
           }else{
-           simObjectTarget=master;
+           simObjectTarget=masterSimObject;
           }
          }
          Log.DebugMessage("ChaoticBlessing GetRandomTarget:"+(simObjectTarget!=null?simObjectTarget:simActorTarget));

@@ -132,7 +132,7 @@ namespace AKCondinoO.Sims{
            if(active.Count>0){
             bool loop=false;
             foreach(var a in active){
-             loop=loop|a.Value.OnExitSaveLoop();
+             loop=loop|a.Value.OnExitSaveRecursion();
             }
             active.Clear();
             Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);

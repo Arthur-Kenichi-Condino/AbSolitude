@@ -20,7 +20,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(buff!=null){
           buff.duration=0f;
           buff.delay=0f;
-          target.skillBuffs.Add(buff);
+          target.skillBuffs.Add(buff,this);
          }
          target.OnHitByTargetedSkill(this,actor);
          base.Invoke();//  the invoked flag is set here

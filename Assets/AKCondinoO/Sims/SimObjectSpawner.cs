@@ -216,16 +216,17 @@ namespace AKCondinoO.Sims{
              while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
               int index=0;
               foreach(var at in toSpawn.at){
+               SimObject.PersistentStats?persistentStats=null;
                SimActor.PersistentSimActorData?persistentSimActorData=null;
                if(SimObjectUtil.IsSimActor(at.simObjectType)){
                 //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
-                if(toSpawn.actorData.TryGetValue(index,out var data)){
-                 persistentSimActorData=data;
+                if(toSpawn.actorData.TryGetValue(index,out var persistentSimActorDataValue)){
+                 persistentSimActorData=persistentSimActorDataValue;
                 }
                }
                (Type simObjectType,ulong idNumber)?masterId=null;
-               if(toSpawn.masters.TryGetValue(index,out var master)){
-                masterId=master;
+               if(toSpawn.masters.TryGetValue(index,out var masterIdValue)){
+                masterId=masterIdValue;
                }
                (Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null;
                if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwnerIdValue)){
@@ -297,10 +298,10 @@ namespace AKCondinoO.Sims{
                 simObject.OnSpawned();
                 if(masterId!=null){
                  Log.DebugMessage("simObject has master");
-                 simObject.master=masterId;
+                 simObject.masterId=masterId;
                 }else{
                  //Log.DebugMessage("simObject has no master");
-                 simObject.master=null;
+                 simObject.masterId=null;
                 }
                 if(simObject is SimActor simActor){
                  if(persistentSimActorData!=null){
@@ -317,6 +318,15 @@ namespace AKCondinoO.Sims{
                  if(!asInventoryItemOwner.AddToInventory(simObject)){
                   Log.DebugMessage("couldn't add to inventory, set simObject as a released world object");
                  }
+                }
+                if(persistentStats!=null){
+                 Log.DebugMessage("simObject persistentStats loaded");
+                 simObject.persistentStats=persistentStats.Value;
+                 simObject.stats.InitFrom(simObject.persistentStats);
+                }else{
+                 Log.DebugMessage("simObject persistentStats must be generated");
+                 simObject.persistentStats=new SimObject.PersistentStats();
+                 simObject.stats.Generate();
                 }
                 simObject.OnActivated();
               }
@@ -400,7 +410,7 @@ namespace AKCondinoO.Sims{
          }
          void GetSimObjectPersistentData(SimObject simObject,bool isDespawning=false){
           if(exitSave){
-           simObject.skillBuffs.Clear(true);
+           simObject.OnExitSaveDataCollection();
           }
           SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData);
           if(simObject is SimActor simActor){
