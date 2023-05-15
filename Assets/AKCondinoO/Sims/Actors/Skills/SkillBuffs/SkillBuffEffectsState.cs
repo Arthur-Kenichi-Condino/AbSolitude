@@ -10,11 +10,13 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
      internal SimObject targetSimObject;
      internal readonly Dictionary<Type,List<SkillBuff>>activeBuffs=new Dictionary<Type,List<SkillBuff>>();
       readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
-        internal bool Add(SkillBuff skillBuff){
+        internal bool Add(SkillBuff skillBuff,Skill fromSkill){
          Type buffType=skillBuff.GetType();
          if(!activeBuffs.TryGetValue(buffType,out List<SkillBuff>skillBuffsList)){
           activeBuffs.Add(buffType,skillBuffsList=new List<SkillBuff>());
          }
+         skillBuff.skill=fromSkill;
+         skillBuff.applyingEffectsOn=this;
          skillBuffsList.Add(skillBuff);
          return true;
         }

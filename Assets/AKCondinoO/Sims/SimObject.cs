@@ -149,8 +149,8 @@ namespace AKCondinoO.Sims{
      internal Transform rightHand;
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simObjectType,ulong idNumber)?id=null;
-     internal(Type simObjectType,ulong idNumber)?master=null;
-      protected SimObject masterObject;
+     internal(Type simObjectType,ulong idNumber)?masterId=null;
+      protected SimObject masterSimObject;
      //  TO DO: componente Rigidbody tem que ficar sempre no transform root
      internal Rigidbody hasRigidbody;
      internal Collider[]colliders;
@@ -205,21 +205,17 @@ namespace AKCondinoO.Sims{
          DisableInteractions();
         }
         internal virtual void OnSpawned(){
+         RenewStats();
         }
         internal virtual void OnDespawned(){
-         stats=null;
+         ReleaseStats();
         }
         internal virtual void OnActivated(){
          //Log.DebugMessage("OnActivated:id:"+id);
-         if(stats==null){
-          StatsInit();
-         }
          inventoryItemsToSpawn.Clear();
          if(Core.singleton.isServer){
-          masterObject=GetMaster();
-          if(masterObject!=null&&masterObject is SimActor masterActor){
-           masterActor.SetSlave(this);
-          }
+          masterSimObject=GetMaster();
+          SetAsSlaveOf(masterSimObject);
           if(!inventory.ContainsKey(typeof(SimInventory))||inventory[typeof(SimInventory)].Count<=0){
            SimInventoryManager.singleton.AddInventoryTo(this,typeof(SimInventory));
           }
@@ -250,6 +246,7 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void OnDeactivated(){
          skillBuffs.Clear();
+         persistentStats.UpdateData(this);
          Log.DebugMessage("OnDeactivated:id:"+id);
         }
         public override void OnNetworkSpawn(){
@@ -295,10 +292,15 @@ namespace AKCondinoO.Sims{
          base.OnNetworkDespawn();
         }
         internal SimObject GetMaster(){
-         if(master!=null&&SimObjectManager.singleton.active.TryGetValue(master.Value,out SimObject masterObject)){
-          return masterObject;
+         if(masterId!=null&&SimObjectManager.singleton.active.TryGetValue(masterId.Value,out SimObject masterSimObject)){
+          return masterSimObject;
          }
          return null;
+        }
+        protected virtual void SetAsSlaveOf(SimObject masterSimObject){
+         if(masterSimObject!=null){
+          masterSimObject.SetSlave(this);
+         }
         }
         protected virtual void SetSlave(SimObject slave){
         }
@@ -348,12 +350,10 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
-         if(master!=null&&(masterObject==null||masterObject.id==null||masterObject.id.Value!=master.Value)){
-          Log.DebugMessage("master sim [id:"+master+"] validation failed: renew masterObject with GetMaster(); myid:"+id);
-          masterObject=GetMaster();
-          if(masterObject!=null&&masterObject is SimActor masterActor){
-           masterActor.SetSlave(this);
-          }
+         if(masterId!=null&&(masterSimObject==null||masterSimObject.id==null||masterSimObject.id.Value!=masterId.Value)){
+          Log.DebugMessage("master sim [id:"+masterId+"] validation failed: renew masterObject with GetMaster(); myid:"+id);
+          masterSimObject=GetMaster();
+          SetAsSlaveOf(masterSimObject);
          }
          int result=0;
          skillBuffs.ManualUpdate(Time.deltaTime);
@@ -577,7 +577,11 @@ namespace AKCondinoO.Sims{
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();
         }
-        internal bool OnExitSaveLoop(){
+        internal void OnExitSaveDataCollection(){
+         skillBuffs.Clear(true);
+         persistentStats.UpdateData(this);
+        }
+        internal bool OnExitSaveRecursion(){
          if(unplaceRequested){
           SimObjectSpawner.singleton.despawnAndReleaseIdQueue.Enqueue(this);
           return true;

@@ -8,12 +8,12 @@ using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal partial class SkillBuff{
-     internal Skill activatedBySkill;
+     internal Skill skill;
      internal SkillBuffEffectsState applyingEffectsOn;
         internal SkillBuff(){
         }
         internal virtual void OnReset(){
-         activatedBySkill=null;
+         skill=null;
          applyingEffectsOn=null;
          duration=0f;
          delay=0f;
@@ -48,14 +48,14 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
         internal virtual void OnApply(bool gameExiting=false){
          if(!applied){
           if(!gameExiting){
-           effect.Apply(applyingEffectsOn.targetSimObject.stats.Value);
-           applyingEffectsOn.targetSimObject.stats.Value.OnAppliedSkillBuff(this);
+           effect.Apply(applyingEffectsOn.targetSimObject.stats);
+           applyingEffectsOn.targetSimObject.stats.OnAppliedSkillBuff(this);
           }
           applied=true;
          }
          if(!gameExiting){
-          if(effect.ApplyRepeating(applyingEffectsOn.targetSimObject.stats.Value)){
-           applyingEffectsOn.targetSimObject.stats.Value.OnAppliedSkillBuff(this);
+          if(effect.ApplyRepeating(applyingEffectsOn.targetSimObject.stats)){
+           applyingEffectsOn.targetSimObject.stats.OnAppliedSkillBuff(this);
           }
          }
         }
@@ -70,8 +70,8 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          }
          if(applied){
           if(!gameExiting){
-           effect.Unapply(applyingEffectsOn.targetSimObject.stats.Value);
-           applyingEffectsOn.targetSimObject.stats.Value.OnUnappliedSkillBuff(this);
+           effect.Unapply(applyingEffectsOn.targetSimObject.stats);
+           applyingEffectsOn.targetSimObject.stats.OnUnappliedSkillBuff(this);
           }
           applied=false;
          }

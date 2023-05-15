@@ -2,16 +2,56 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal Stats?stats;
-        internal virtual void StatsInit(){
-         stats=new Stats();
+     internal PersistentStats persistentStats;
+        internal struct PersistentStats{
+            static readonly Dictionary<Type,PropertyInfo[]>propertiesByType=new Dictionary<Type,PropertyInfo[]>();
+            internal void UpdateData(SimObject simObject){
+             Log.DebugMessage("UpdateData");
+             if(simObject==null){
+              Log.DebugMessage("collecting persistent stats from destroyed sim on exit save");
+             }
+             simObject.stats.OnRefresh(simObject);
+             lock(propertiesByType){
+             }
+            }
         }
-        internal struct Stats{
+     internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
+     internal Stats stats;
+        internal virtual void RenewStats(){
+         Log.DebugMessage("RenewStats");
+         if(stats==null){
+          if(statsPool.TryGetValue(typeof(Stats),out Queue<Stats>pool)&&pool.Count>0){
+           stats=pool.Dequeue();
+          }else{
+           stats=new Stats();
+          }
+         }
+        }
+        internal virtual void ReleaseStats(){
+         Log.DebugMessage("ReleaseStats");
+         if(stats!=null){
+          Type statsType=stats.GetType();
+          if(!statsPool.TryGetValue(statsType,out Queue<Stats>pool)){
+           statsPool.Add(statsType,pool=new Queue<Stats>());
+          }
+          pool.Enqueue(stats);
+         }
+         stats=null;
+        }
+        internal class Stats{
+            internal virtual void InitFrom(PersistentStats persistentStats){
+             Log.DebugMessage("Stats InitFrom");
+            }
+            internal virtual void Generate(){
+             Log.DebugMessage("Stats Generate");
+            }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
             }
@@ -19,13 +59,13 @@ namespace AKCondinoO.Sims{
              pendingRefresh=true;
             }
          bool pendingRefresh;
-            void SetPendingRefresh(SimObject statsSim=null,bool forceRefresh=false){
+            internal void SetPendingRefresh(SimObject statsSim=null,bool forceRefresh=false){
              pendingRefresh=true;
              if(forceRefresh){
               OnRefresh(statsSim);
              }
             }
-            void OnRefresh(SimObject statsSim=null){
+            internal void OnRefresh(SimObject statsSim=null){
              if(pendingRefresh){
               pendingRefresh=false;
              }
