@@ -5,20 +5,30 @@ using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
      internal PersistentStats persistentStats;
         internal struct PersistentStats{
-            static readonly Dictionary<Type,PropertyInfo[]>propertiesByType=new Dictionary<Type,PropertyInfo[]>();
+            static readonly Dictionary<Type,FieldInfo[]>fieldsByType=new Dictionary<Type,FieldInfo[]>();
             internal void UpdateData(SimObject simObject){
              Log.DebugMessage("UpdateData");
              if(simObject==null){
               Log.DebugMessage("collecting persistent stats from destroyed sim on exit save");
              }
              simObject.stats.OnRefresh(simObject);
-             lock(propertiesByType){
+             Type statsType=simObject.stats.GetType();
+             FieldInfo[]statsDataFields;
+             lock(fieldsByType){
+              if(!fieldsByType.TryGetValue(statsType,out statsDataFields)){
+               statsDataFields=statsType.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{Log.DebugMessage(statsType+": get field:"+field.Name);if(field.Name.Contains("_value")){String.Intern(field.Name);return true;}return false;}).ToArray();
+               fieldsByType.Add(statsType,statsDataFields);
+              }
+             }
+             foreach(FieldInfo field in statsDataFields){
+              Log.DebugMessage(statsType+": field.Name:"+field.Name);
              }
             }
         }
