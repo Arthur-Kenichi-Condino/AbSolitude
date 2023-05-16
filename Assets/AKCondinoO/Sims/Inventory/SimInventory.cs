@@ -106,13 +106,13 @@ namespace AKCondinoO.Sims.Inventory{
          SimInventoryManager.singleton.assigned.Add(simInventoryId,this);
          SimInventoryManager.singleton.active  .Add(simInventoryId,this);
          this.simInventoryId=simInventoryId;
-         Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
+         //Log.DebugMessage("assigned SimInventory of size:"+maxItemsCount+" for asSimObject:"+asSimObject);
          persistentSimInventoryData.UpdateData(this);
         }
      protected readonly List<(Type simObjectType,ulong idNumber)>simObjectIdsToRelease=new List<(Type,ulong)>();
       protected readonly List<int>idsToRemove=new List<int>();
         internal virtual List<(Type simObjectType,ulong idNumber)>OnSetToBeUnassigned(bool exitSave=false){
-         Log.DebugMessage("SimInventory Reset");
+         //Log.DebugMessage("SimInventory Reset");
          idsToRemove.AddRange(itemIdsBySlotIds.Keys);
          foreach(int id in idsToRemove){
           if(itemIdsBySlotIds.TryGetValue(id,out(Type simObjectType,ulong idNumber)itemId)){

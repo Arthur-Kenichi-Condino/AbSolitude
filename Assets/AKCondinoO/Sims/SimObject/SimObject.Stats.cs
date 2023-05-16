@@ -12,30 +12,34 @@ namespace AKCondinoO.Sims{
     internal partial class SimObject{
      internal PersistentStats persistentStats;
         internal struct PersistentStats{
-            static readonly Dictionary<Type,FieldInfo[]>fieldsByType=new Dictionary<Type,FieldInfo[]>();
+         public ListWrapper<StatsFloatData>statsFloats;
+            public struct StatsFloatData{
+             public string fieldName;public float fieldValue;
+            }
+            static readonly Dictionary<Type,FieldInfo[]>statsFloatFields=new Dictionary<Type,FieldInfo[]>();
             internal void UpdateData(SimObject simObject){
-             Log.DebugMessage("UpdateData");
+             //Log.DebugMessage("UpdateData");
              if(simObject==null){
-              Log.DebugMessage("collecting persistent stats from destroyed sim on exit save");
+              //Log.DebugMessage("collecting persistent stats from destroyed sim on exit save");
              }
              simObject.stats.OnRefresh(simObject);
              Type statsType=simObject.stats.GetType();
-             FieldInfo[]statsDataFields;
-             lock(fieldsByType){
-              if(!fieldsByType.TryGetValue(statsType,out statsDataFields)){
-               statsDataFields=statsType.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{Log.DebugMessage(statsType+": get field:"+field.Name);if(field.Name.Contains("_value")){String.Intern(field.Name);return true;}return false;}).ToArray();
-               fieldsByType.Add(statsType,statsDataFields);
+             FieldInfo[]floatFields;
+             lock(statsFloatFields){
+              if(!statsFloatFields.TryGetValue(statsType,out floatFields)){
+               floatFields=statsType.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{if(field.FieldType==typeof(float)&&field.Name.Contains("_value")){String.Intern(field.Name);Log.DebugMessage(statsType+": got field:"+field.Name);return true;}return false;}).ToArray();
+               statsFloatFields.Add(statsType,floatFields);
               }
              }
-             foreach(FieldInfo field in statsDataFields){
-              Log.DebugMessage(statsType+": field.Name:"+field.Name);
+             foreach(FieldInfo field in floatFields){
+              //Log.DebugMessage(statsType+": field.Name:"+field.Name);
              }
             }
         }
      internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
      internal Stats stats;
         internal virtual void RenewStats(){
-         Log.DebugMessage("RenewStats");
+         //Log.DebugMessage("RenewStats");
          if(stats==null){
           if(statsPool.TryGetValue(typeof(Stats),out Queue<Stats>pool)&&pool.Count>0){
            stats=pool.Dequeue();
@@ -45,7 +49,7 @@ namespace AKCondinoO.Sims{
          }
         }
         internal virtual void ReleaseStats(){
-         Log.DebugMessage("ReleaseStats");
+         //Log.DebugMessage("ReleaseStats");
          if(stats!=null){
           Type statsType=stats.GetType();
           if(!statsPool.TryGetValue(statsType,out Queue<Stats>pool)){
@@ -57,10 +61,10 @@ namespace AKCondinoO.Sims{
         }
         internal class Stats{
             internal virtual void InitFrom(PersistentStats persistentStats){
-             Log.DebugMessage("Stats InitFrom");
+             //Log.DebugMessage("Stats InitFrom");
             }
             internal virtual void Generate(){
-             Log.DebugMessage("Stats Generate");
+             //Log.DebugMessage("Stats Generate");
             }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
