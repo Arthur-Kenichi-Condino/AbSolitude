@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims.Inventory{
      internal readonly Dictionary<(Type simInventoryType,ulong idNumber),SimInventory>unassigningAndReleasingId=new Dictionary<(Type,ulong),SimInventory>();
         void RegisterAsValidSimInventoryType(Type simInventoryType){
          if(registeredSimInventoryTypes.Contains(simInventoryType)){
-          Log.DebugMessage("SimInventoryType already registered:"+simInventoryType);
+          //Log.DebugMessage("SimInventoryType already registered:"+simInventoryType);
           return;
          }
          Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
