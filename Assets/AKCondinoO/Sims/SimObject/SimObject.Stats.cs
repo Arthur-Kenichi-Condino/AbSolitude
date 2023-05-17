@@ -14,9 +14,9 @@ namespace AKCondinoO.Sims{
         internal struct PersistentStats{
          public ListWrapper<StatsFloatData>statsFloats;
             public struct StatsFloatData{
-             public string fieldName;public float fieldValue;
+             public Type simStatsType;public string fieldName;public float fieldValue;
             }
-            static readonly Dictionary<Type,FieldInfo[]>statsFloatFields=new Dictionary<Type,FieldInfo[]>();
+            static readonly Dictionary<Type,Dictionary<Type,FieldInfo[]>>statsFloatFields=new Dictionary<Type,Dictionary<Type,FieldInfo[]>>();
             internal void UpdateData(SimObject simObject){
              //Log.DebugMessage("UpdateData");
              if(simObject==null){
@@ -24,16 +24,35 @@ namespace AKCondinoO.Sims{
              }
              simObject.stats.OnRefresh(simObject);
              Type statsType=simObject.stats.GetType();
-             FieldInfo[]floatFields;
+             Dictionary<Type,FieldInfo[]>floatFields;
              lock(statsFloatFields){
               if(!statsFloatFields.TryGetValue(statsType,out floatFields)){
-               floatFields=statsType.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{if(field.FieldType==typeof(float)&&field.Name.Contains("_value")){String.Intern(field.Name);Log.DebugMessage(statsType+": got field:"+field.Name);return true;}return false;}).ToArray();
+               floatFields=new Dictionary<Type,FieldInfo[]>();
+               Type derived=statsType;
+               do{
+                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{if(field.FieldType==typeof(float)&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){String.Intern(field.Name);Log.DebugMessage(derived+": got field:"+field.Name);return true;}return false;}).ToArray();
+                floatFields.Add(derived,fieldsGotten);
+                derived=derived.BaseType;
+               }while(derived!=null&&derived!=typeof(object));
                statsFloatFields.Add(statsType,floatFields);
               }
              }
-             foreach(FieldInfo field in floatFields){
-              //Log.DebugMessage(statsType+": field.Name:"+field.Name);
-             }
+             statsFloats=new ListWrapper<StatsFloatData>(
+              floatFields.SelectMany(
+               kvp=>{
+                return kvp.Value.Select(
+                 field=>{
+                  //Log.DebugMessage("simStatsType:"+kvp.Key+";fieldName:"+field.Name+";fieldValue:"+((float)field.GetValue(simObject.stats)));
+                  return new StatsFloatData{
+                   simStatsType=kvp.Key,
+                   fieldName=field.Name,
+                   fieldValue=(float)field.GetValue(simObject.stats),
+                  };
+                 }
+                );
+               }
+              ).ToList()
+             );
             }
         }
      internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
