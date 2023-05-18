@@ -91,7 +91,7 @@ namespace AKCondinoO.Sims{
             internal void OnUnappliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
             }
-         bool pendingRefresh;
+         protected bool pendingRefresh;
             internal void SetPendingRefresh(SimObject statsSim=null,bool forceRefresh=false){
              pendingRefresh=true;
              if(forceRefresh){
@@ -106,92 +106,80 @@ namespace AKCondinoO.Sims{
          //
          #region Integrity
          /// <summary>
-         ///  Função get da integridade física atual para o Sim
+         ///  Integridade física atual para o objeto Sim: se este valor chegar a 0f, o Sim irá morrer ou ser destruído
          /// </summary>
-         internal float IntegrityGet(SimObject statsSim=null){
-          OnRefresh(statsSim);
-          return integrity_value;
-         }
-          /// <summary>
-          ///  Função set
-          /// </summary>
-          internal void IntegritySet(float value,SimObject statsSim=null,bool forceRefresh=false){
-           integrity_value=value;
-           updatedIntegrity=true;
-           SetPendingRefresh(statsSim,forceRefresh);
+         protected float integrity_value;
+          internal float IntegrityGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return integrity_value;
           }
-           float integrity_value;
-           bool updatedIntegrity;
+           internal void IntegritySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            integrity_value=value;
+            updatedIntegrity=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedIntegrity;
           #region MaxIntegrity
           /// <summary>
-          ///  Função get da integridade física máxima do Sim
+          ///  Integridade física máxima do Sim: valor calculado com base em outros atributos
           /// </summary>
-          internal float MaxIntegrityGet(SimObject statsSim=null){
-           OnRefresh(statsSim);
-           return maxIntegrity_value_stats+maxIntegrity_value_set;
-          }
-           /// <summary>
-           /// 
-           /// </summary>
-           internal void MaxIntegritySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+          protected float maxIntegrity_value_stats;
+          protected float maxIntegrity_value_set;
+          protected float maxIntegrity_value_buffs;
+           internal float MaxIntegrityGet(SimObject statsSim=null){
             OnRefresh(statsSim);
-            maxIntegrity_value_set=value-maxIntegrity_value_stats;
-            updatedMaxIntegrity=true;
-            SetPendingRefresh(statsSim,forceRefresh);
+            return maxIntegrity_value_stats+maxIntegrity_value_set;
            }
+            internal void MaxIntegritySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+             OnRefresh(statsSim);
+             maxIntegrity_value_set=value-maxIntegrity_value_stats;
+             updatedMaxIntegrity=true;
+             SetPendingRefresh(statsSim,forceRefresh);
+            }
+            internal void MaxIntegrityReset(float value,SimObject statsSim=null,bool forceRefresh=false){
+             OnRefresh(statsSim);
+             maxIntegrity_value_set=0f;
+             updatedMaxIntegrity=true;
+             SetPendingRefresh(statsSim,forceRefresh);
+            }
+             protected bool updatedMaxIntegrity;
+           #region Stamina
            /// <summary>
-           /// 
+           ///  Energia física disponível para realizar ações
            /// </summary>
-           internal void MaxIntegrityReset(float value,SimObject statsSim=null,bool forceRefresh=false){
-            OnRefresh(statsSim);
-            maxIntegrity_value_set=0f;
-            updatedMaxIntegrity=true;
-            SetPendingRefresh(statsSim,forceRefresh);
-           }
-            float maxIntegrity_value_stats;
-            float maxIntegrity_value_set;
-            float maxIntegrity_value_buffs;
-            bool updatedMaxIntegrity;
-             #region Stamina
-             /// <summary>
-             ///  
-             /// </summary>
-             internal float StaminaGet(SimObject statsSim=null){
-              OnRefresh(statsSim);
-              return stamina_value;
+           protected float stamina_value;
+            internal float StaminaGet(SimObject statsSim=null){
+             OnRefresh(statsSim);
+             return stamina_value;
+            }
+             internal void StaminaSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+              stamina_value=value;
+              updatedStamina=true;
+              SetPendingRefresh(statsSim,forceRefresh);
              }
-              /// <summary>
-              /// 
-              /// </summary>
-              internal void StaminaSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-               stamina_value=value;
-               updatedStamina=true;
-               SetPendingRefresh(statsSim,forceRefresh);
-              }
-               float stamina_value;
-               bool updatedStamina;
-              #region MaxStamina
-              /// <summary>
-              ///  
-              /// </summary>
-              internal float MaxStaminaGet(SimObject statsSim=null){
-               OnRefresh(statsSim);
-               return maxStamina_value_stats+maxStamina_value_set;
-              }
-               /// <summary>
-               /// 
-               /// </summary>
-               internal void MaxStaminaSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-                OnRefresh(statsSim);
-                maxStamina_value_set=value-maxStamina_value_stats;
-                updatedMaxStamina=true;
-                SetPendingRefresh(statsSim,forceRefresh);
-               }
-                float maxStamina_value_stats;
-                float maxStamina_value_set;
-                bool updatedMaxStamina;
-              #endregion
-             #endregion
+              protected bool updatedStamina;
+            #region MaxStamina
+            /// <summary>
+            ///  
+            /// </summary>
+            internal float MaxStaminaGet(SimObject statsSim=null){
+             OnRefresh(statsSim);
+             return maxStamina_value_stats+maxStamina_value_set;
+            }
+             /// <summary>
+             /// 
+             /// </summary>
+             internal void MaxStaminaSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+              OnRefresh(statsSim);
+              maxStamina_value_set=value-maxStamina_value_stats;
+              updatedMaxStamina=true;
+              SetPendingRefresh(statsSim,forceRefresh);
+             }
+              float maxStamina_value_stats;
+              float maxStamina_value_set;
+              bool updatedMaxStamina;
+            #endregion
+           #endregion
           #endregion
          #endregion
          #region Sanity
