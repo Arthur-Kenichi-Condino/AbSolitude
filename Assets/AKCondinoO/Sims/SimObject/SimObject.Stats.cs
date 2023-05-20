@@ -197,7 +197,7 @@ namespace AKCondinoO.Sims{
             protected bool updatedSanity;
           #region MaxSanity
           /// <summary>
-          ///  
+          ///  Sanidade mental ou noção existencial máxima do objeto Sim: valor calculado com base em outros atributos
           /// </summary>
           protected float maxSanity_value_stats;
           protected float maxSanity_value_set;
@@ -215,7 +215,7 @@ namespace AKCondinoO.Sims{
              protected bool updatedMaxSanity;
            #region Focus
            /// <summary>
-           ///  
+           ///  Energia de concentração da mente disponível para realizar ações de valor mental, ou mágicas
            /// </summary>
            protected float focus_value;
             internal float FocusGet(SimObject statsSim=null){
@@ -230,23 +230,22 @@ namespace AKCondinoO.Sims{
               protected bool updatedFocus;
             #region MaxFocus
             /// <summary>
-            ///  
+            ///  Energia de concentração da mente máxima para realizar ações de valor mental, ou mágicas: valor calculado com base em outros atributos
             /// </summary>
-            internal float MaxFocusGet(SimObject statsSim=null){
-             OnRefresh(statsSim);
-             return maxFocus_value;
-            }
-             /// <summary>
-             /// 
-             /// </summary>
-             internal void MaxFocusSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-              maxFocus_value=value;
-              pendingRefresh=true;
-              if(forceRefresh){
-               OnRefresh(statsSim);
-              }
+            protected float maxFocus_value_stats;
+            protected float maxFocus_value_set;
+            protected float maxFocus_value_buffs;
+             internal float MaxFocusGet(SimObject statsSim=null){
+              OnRefresh(statsSim);
+              return maxFocus_value_stats+maxFocus_value_set;
              }
-              float maxFocus_value;
+              internal void MaxFocusSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+               OnRefresh(statsSim);
+               maxFocus_value_set=value-maxFocus_value_stats;
+               updatedMaxFocus=true;
+               SetPendingRefresh(statsSim,forceRefresh);
+              }
+               protected bool updatedMaxFocus;
             #endregion
            #endregion
           #endregion
@@ -256,26 +255,37 @@ namespace AKCondinoO.Sims{
          /// <summary>
          ///  
          /// </summary>
-         internal float Bodily_kinestheticGet(SimObject statsSim=null){
-          OnRefresh(statsSim);
-          return bodily_kinesthetic_value;
-         }
-          /// <summary>
-          /// 
-          /// </summary>
-          internal void Bodily_kinestheticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-           bodily_kinesthetic_value=value;
-           pendingRefresh=true;
-           if(forceRefresh){
-            OnRefresh(statsSim);
-           }
+         protected float bodily_kinesthetic_value;
+          internal float Bodily_kinestheticGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return bodily_kinesthetic_value;
           }
-           float bodily_kinesthetic_value;
+           internal void Bodily_kinestheticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            bodily_kinesthetic_value=value;
+            updatedBodily_kinesthetic=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedBodily_kinesthetic;
          #endregion
+             #region Strength
              /// <summary>
              ///  
              /// </summary>
-             float strength_value;
+             protected float strength_value_stats;
+             protected float strength_value_set;
+             protected float strength_value_buffs;
+              internal float StrengthGet(SimObject statsSim=null){
+               OnRefresh(statsSim);
+               return strength_value_stats+strength_value_set;
+              }
+               internal void StrengthSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                OnRefresh(statsSim);
+                strength_value_set=value-strength_value_stats;
+                updatedStrength=true;
+                SetPendingRefresh(statsSim,forceRefresh);
+               }
+                protected bool updatedStrength;
+             #endregion
          /// <summary>
          ///  
          /// </summary>
