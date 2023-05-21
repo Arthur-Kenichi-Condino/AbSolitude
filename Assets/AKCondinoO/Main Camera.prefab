@@ -49,12 +49,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DEBUG_STOP_FOLLOWING: 0
   rotLerp:
+    dealWithGimbalLock: 1
     tgtRotLerpSpeed: 19
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpMaxTime: 0.0001
   viewRotationSmoothValue: 0.025
   posLerp:
     tgtPosLerpSpeed: 19
-    tgtPosLerpMaxTime: 0.0005
+    tgtPosLerpMaxTime: 0.0001
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
   maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!20 &6595663811422386843
