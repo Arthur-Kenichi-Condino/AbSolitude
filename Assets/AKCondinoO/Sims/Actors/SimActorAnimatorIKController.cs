@@ -42,7 +42,7 @@ namespace AKCondinoO.Sims.Actors{
           Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
           float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
           //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
-          float verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//  vertical rotation from body to view
+          float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
           //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
           Quaternion limitedHeadRotation=
            Quaternion.AngleAxis(Mathf.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*

@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims.Actors{
        return true;
       }
      }
-     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();//  tgtRotLerpSpeed:17.8125, tgtRotLerpMaxTime:.025
+     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();//
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;

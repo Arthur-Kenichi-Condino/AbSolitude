@@ -7,7 +7,27 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class QuaternionRotLerpHelper{
-     internal Quaternion tgtRot,tgtRot_Last;
+     [SerializeField]internal bool dealWithGimbalLock=true;
+     internal Quaternion tgtRot{
+      get{
+       return tgtRot_value;
+      }
+      set{
+       if(dealWithGimbalLock){
+         float horizontalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
+         float   verticalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
+         //Log.DebugMessage("horizontalTgtRotationSignedAngle:"+horizontalTgtRotationSignedAngle+";verticalTgtRotationSignedAngle:"+verticalTgtRotationSignedAngle);
+         value=Quaternion.Euler(
+          Mathf.Clamp(   verticalTgtRotationSignedAngle, -90f, 90f),
+          Mathf.Clamp(-horizontalTgtRotationSignedAngle,-180f,180f),
+          0f
+         );
+       }
+       tgtRot_value=value;
+      }
+     }
+      Quaternion tgtRot_value;
+     internal Quaternion tgtRot_Last;
       internal float tgtRotLerpTime;
        internal float tgtRotLerpVal;
         internal Quaternion tgtRotLerpA,tgtRotLerpB;
