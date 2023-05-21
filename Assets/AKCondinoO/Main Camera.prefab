@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1410879282809439804
 MonoBehaviour:
@@ -47,11 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b7136e5f1176048b937803b3d1b128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tgtRotLerpSpeed: 18.75
-  tgtRotLerpMaxTime: 0.025
+  DEBUG_STOP_FOLLOWING: 0
+  rotLerp:
+    tgtRotLerpSpeed: 19
+    tgtRotLerpMaxTime: 0.0005
   viewRotationSmoothValue: 0.025
-  tgtPosLerpSpeed: 18.75
-  tgtPosLerpMaxTime: 0.025
+  posLerp:
+    tgtPosLerpSpeed: 19
+    tgtPosLerpMaxTime: 0.0005
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
   maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!20 &6595663811422386843
@@ -68,9 +71,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0

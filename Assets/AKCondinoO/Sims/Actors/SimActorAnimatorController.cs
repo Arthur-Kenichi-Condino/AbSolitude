@@ -59,7 +59,7 @@ namespace AKCondinoO.Sims.Actors{
             GetTransformTgtValuesFromCharacterController();
             rotLerp.tgtRot_Last=rotLerp.tgtRot;
             posLerp.tgtPos_Last=posLerp.tgtPos;
-            actor.simUMAData.transform.parent.rotation=Quaternion.Euler(rotLerp.tgtRot);
+            actor.simUMAData.transform.parent.rotation=rotLerp.tgtRot;
             actor.simUMAData.transform.parent.position=posLerp.tgtPos;
            }
           }
@@ -103,7 +103,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
-         rotLerp.tgtRot=actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f);
+         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f));
          posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
@@ -138,8 +138,8 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void SetSimUMADataTransform(){
-         actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Time.deltaTime);
-         actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Time.deltaTime);
+         actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Core.magicDeltaTimeNumber);
+         actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Core.magicDeltaTimeNumber);
         }
         protected virtual void GetAnimatorStateInfo(){
          //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
@@ -188,12 +188,12 @@ namespace AKCondinoO.Sims.Actors{
               if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
                animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
                animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocityNormalized);
+                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
                  animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
               }else{
                animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
                animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocityNormalized);
+                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
                  animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
               }
              }
@@ -215,12 +215,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=5.0f*Time.deltaTime;
+                weight-=5.0f*Core.magicDeltaTimeNumber;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=5.0f*Time.deltaTime;
+                weight+=5.0f*Core.magicDeltaTimeNumber;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }

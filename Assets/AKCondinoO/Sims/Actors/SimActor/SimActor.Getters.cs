@@ -11,7 +11,7 @@ namespace AKCondinoO.Sims.Actors{
        return false;
       }
      }
-     internal virtual float moveVelocityNormalized{
+     internal virtual float moveVelocityFlattened{
       get{
        if(isUsingAI){
         float velocityMagnitude=navMeshAgent.velocity.magnitude;
@@ -19,9 +19,22 @@ namespace AKCondinoO.Sims.Actors{
         return Mathf.Clamp01(velocityMagnitude/navMeshAgentRunSpeed);
        }
        if(simActorCharacterController!=null){
-        float velocityMagnitude=Vector3.Scale(simActorCharacterController.inputMoveVelocity,new Vector3(1f,0f,1f)).magnitude;
-        //Log.DebugMessage("characterController velocityMagnitude:"+velocityMagnitude);
-        return Mathf.Clamp01(velocityMagnitude/(simActorCharacterController.walkSpeedAverage*2f));
+        float divideBy=
+         (simActorCharacterController.inputMoveVelocity.z!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.z)/(simActorCharacterController.maxMoveSpeed.z)):0f)+
+         (simActorCharacterController.inputMoveVelocity.x!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.x)/(simActorCharacterController.maxMoveSpeed.x)):0f);
+        Vector3 velocity=
+         Vector3.Scale(
+          simActorCharacterController.inputMoveVelocity,
+          new Vector3(
+           1f/((divideBy==0f?1f:divideBy)*simActorCharacterController.walkSpeedAverage*2f),
+           0f,
+           1f/((divideBy==0f?1f:divideBy)*simActorCharacterController.walkSpeedAverage*2f)
+          )
+         );
+        //Log.DebugMessage("characterController velocity:"+velocity);
+        float velocityFlattened=Mathf.Abs(velocity.x)+Mathf.Abs(velocity.z);
+        //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
+        return Mathf.Clamp01(velocityFlattened);
        }
        return 0f;
       }

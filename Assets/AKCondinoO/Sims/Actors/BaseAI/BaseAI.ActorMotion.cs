@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Actors{
               }
           }
          }else{
-          if(moveVelocityNormalized>0f){
+          if(moveVelocityFlattened>0f){
               if(MyWeaponType==WeaponTypes.SniperRifle){
                MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
               }else{

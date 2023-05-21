@@ -43,6 +43,7 @@ namespace AKCondinoO{
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
+     internal static float magicDeltaTimeNumber=.0069f;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();

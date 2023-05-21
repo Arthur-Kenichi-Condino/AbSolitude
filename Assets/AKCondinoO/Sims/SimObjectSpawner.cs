@@ -191,10 +191,10 @@ namespace AKCondinoO.Sims{
      float reloadTimer;
         void Update(){
          if(loaderOnCooldownTimer>0f){
-            loaderOnCooldownTimer-=Time.deltaTime;
+            loaderOnCooldownTimer-=Core.magicDeltaTimeNumber;
          }
          if(reloadTimer>0f){
-            reloadTimer-=Time.deltaTime;
+            reloadTimer-=Core.magicDeltaTimeNumber;
          }
         }
         private IEnumerator SpawnCoroutine(){

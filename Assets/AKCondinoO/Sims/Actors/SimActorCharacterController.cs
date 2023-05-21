@@ -20,7 +20,7 @@ namespace AKCondinoO.Sims.Actors{
           characterController.height/2f-characterController.radius,
           0f
          );
-         rotLerp.tgtRot=rotLerp.tgtRot_Last=characterController.transform.eulerAngles;
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=characterController.transform.rotation;
          posLerp.tgtPos=posLerp.tgtPos_Last=characterController.transform.position;
          viewRotation=Quaternion.LookRotation(characterController.transform.forward,Vector3.up);
         }
@@ -40,11 +40,11 @@ namespace AKCondinoO.Sims.Actors{
        internal Quaternion bodyRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
-       [SerializeField]Vector3 moveAcceleration=new Vector3(16f,16f,16f);
-        [SerializeField]Vector3 moveDeceleration=new Vector3(32f,32f,32f);
-         [SerializeField]Vector3 maxMoveSpeed=new Vector3(256f,256f,256f);
-          [SerializeField]internal float walkSpeedAverage=256f;
-          Vector3 appliedControllerVelocity;
+       [SerializeField]Vector3 moveAcceleration=new Vector3(0.125f,0.125f,0.125f);
+        [SerializeField]Vector3 moveDeceleration=new Vector3(0.25f,0.25f,0.25f);
+         [SerializeField]internal Vector3 maxMoveSpeed=new Vector3(2f,2f,2f);
+          [SerializeField]internal float walkSpeedAverage=2f;
+          internal Vector3 appliedControllerVelocity;
      [SerializeField]float jumpTimeLength=.125f;
       [SerializeField]float jumpSpeed=8.0f;
        float jumpingTimer;
@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
          }else if(delayToConsiderNotOnGround>0f){
-          delayToConsiderNotOnGround-=Time.deltaTime;
+          delayToConsiderNotOnGround-=Core.magicDeltaTimeNumber;
          }
          beforeMovePos=characterController.transform.position;
          if(!Enabled.RELEASE_MOUSE.curState){
@@ -68,10 +68,10 @@ namespace AKCondinoO.Sims.Actors{
            inputViewRotationEuler.y=inputViewRotationEuler.y%360f;
          }
          if(inputViewRotationEuler!=Vector3.zero){
-          rotLerp.tgtRot+=inputViewRotationEuler;
+          rotLerp.tgtRot=Quaternion.Euler(rotLerp.tgtRot.eulerAngles+inputViewRotationEuler);
           inputViewRotationEuler=Vector3.zero;
          }
-         viewRotation=rotLerp.UpdateRotation(viewRotation,Time.deltaTime);
+         viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
          bodyRotation=characterController.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
           if(
@@ -139,12 +139,14 @@ namespace AKCondinoO.Sims.Actors{
          }
          if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
          if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
-         float divideBy=(inputMoveVelocity.z!=0f?1f:0f)+(inputMoveVelocity.x!=0f?1f:0f)+1f;
+         float divideBy=
+          (inputMoveVelocity.z!=0f?(Mathf.Abs(inputMoveVelocity.z)/(maxMoveSpeed.z)):0f)+
+          (inputMoveVelocity.x!=0f?(Mathf.Abs(inputMoveVelocity.x)/(maxMoveSpeed.x)):0f);
          appliedControllerVelocity=new Vector3(
-          inputMoveVelocity.x*Mathf.Min(1f,Time.deltaTime),
+          inputMoveVelocity.x,
           0f,
-          inputMoveVelocity.z*Mathf.Min(1f,Time.deltaTime)
-         )/divideBy;
+          inputMoveVelocity.z
+         )/(divideBy==0f?1f:divideBy);
          if(jumpingTimer>0f){
          }else{
           characterController.SimpleMove(characterController.transform.rotation*appliedControllerVelocity);
