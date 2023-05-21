@@ -78,12 +78,13 @@ MonoBehaviour:
   headMaxVerticalRotationAngle: 40
   headMaxHorizontalRotationAngle: 60
   rotLerp:
+    dealWithGimbalLock: 1
     tgtRotLerpSpeed: 19
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpMaxTime: 0.0001
   viewRotationSmoothValue: 0.025
   posLerp:
     tgtPosLerpSpeed: 19
-    tgtPosLerpMaxTime: 0.0005
+    tgtPosLerpMaxTime: 0.0001
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
@@ -104,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotLerp:
+    dealWithGimbalLock: 1
     tgtRotLerpSpeed: 19
     tgtRotLerpMaxTime: 0.0005
   posLerp:

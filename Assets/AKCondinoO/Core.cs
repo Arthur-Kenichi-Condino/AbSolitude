@@ -44,7 +44,7 @@ namespace AKCondinoO{
      internal static string saveName="terra";
      internal static string savePath;
      internal static Resolution[]resolutions;
-      internal static float magicDeltaTimeNumber=.0069f;
+      internal static float magicDeltaTimeNumber=.0060f;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();
