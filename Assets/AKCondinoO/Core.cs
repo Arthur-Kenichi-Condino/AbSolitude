@@ -43,7 +43,8 @@ namespace AKCondinoO{
      internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
-     internal static float magicDeltaTimeNumber=.0069f;
+     internal static Resolution[]resolutions;
+      internal static float magicDeltaTimeNumber=.0069f;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();
@@ -66,6 +67,9 @@ namespace AKCondinoO{
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
+         resolutions=Screen.resolutions;
+         magicDeltaTimeNumber=1f/(float)Screen.currentResolution.refreshRateRatio.value;
+         Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
