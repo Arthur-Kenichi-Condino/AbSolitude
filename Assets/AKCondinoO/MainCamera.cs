@@ -56,10 +56,10 @@ namespace AKCondinoO{
          }
          if(isFollowing){
           Quaternion rot=toFollowActor.simActorCharacterController.rotLerp.tgtRot;
-          posLerp.tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
           rotLerp.tgtRot=rot;
-          UpdateTransformPosition();
           UpdateTransformRotation();
+          posLerp.tgtPos=toFollowActor.transform.position+rotLerp.tgtRot*thirdPersonOffset;
+          UpdateTransformPosition();
           //  TO DO: stop following movement if paused
          }
          BGM.singleton.transform.position=this.transform.position;
