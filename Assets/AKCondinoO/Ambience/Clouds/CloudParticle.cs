@@ -40,7 +40,7 @@ namespace AKCondinoO.Ambience.Clouds{
            alpha.incrementSpeed=CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed;
           }
           if(alpha.value<CloudParticleSystem.singleton.alphaSettings.min){
-           alpha.value+=alpha.incrementSpeed*Time.deltaTime;
+           alpha.value+=alpha.incrementSpeed*Core.magicDeltaTimeNumber;
           }else{
            fadeIn=false;
            Log.DebugMessage("cloud particle spawned:fadeIn=false;");
@@ -49,7 +49,7 @@ namespace AKCondinoO.Ambience.Clouds{
           }
          }else{
           //
-             alpha.reverseTimer-=Time.deltaTime;
+             alpha.reverseTimer-=Core.magicDeltaTimeNumber;
           if(alpha.reverseTimer<=0f){
              alpha.reverseTimer=CloudParticleSystem.singleton.alphaSettings.reverseInterval;
            bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.reverseChance;
@@ -57,7 +57,7 @@ namespace AKCondinoO.Ambience.Clouds{
             alpha.RandomlyReverseSpeed();
            }
           }
-             alpha.changeIncrementSpeedValueTimer-=Time.deltaTime;
+             alpha.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
           if(alpha.changeIncrementSpeedValueTimer<=0f){
              alpha.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueInterval;
            bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueChance;
@@ -66,7 +66,7 @@ namespace AKCondinoO.Ambience.Clouds{
            }
           }
          }
-            angle.reverseTimer-=Time.deltaTime;
+            angle.reverseTimer-=Core.magicDeltaTimeNumber;
          if(angle.reverseTimer<=0f){
             angle.reverseTimer=CloudParticleSystem.singleton.angleSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.reverseChance;
@@ -75,7 +75,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle angle.incrementSpeed to:"+angle.incrementSpeed);
           }
          }
-            angle.changeIncrementSpeedValueTimer-=Time.deltaTime;
+            angle.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
          if(angle.changeIncrementSpeedValueTimer<=0f){
             angle.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueChance;
@@ -84,7 +84,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle angle.incrementSpeed value to:"+angle.incrementSpeed);
           }
          }
-            orbit.reverseTimer-=Time.deltaTime;
+            orbit.reverseTimer-=Core.magicDeltaTimeNumber;
          if(orbit.reverseTimer<=0f){
             orbit.reverseTimer=CloudParticleSystem.singleton.orbitSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.reverseChance;
@@ -93,7 +93,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle orbit.incrementSpeed to:"+orbit.incrementSpeed);
           }
          }
-            orbit.changeIncrementSpeedValueTimer-=Time.deltaTime;
+            orbit.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
          if(orbit.changeIncrementSpeedValueTimer<=0f){
             orbit.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueChance;
@@ -102,7 +102,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle orbit.incrementSpeed value to:"+orbit.incrementSpeed);
           }
          }
-            distance.reverseTimer-=Time.deltaTime;
+            distance.reverseTimer-=Core.magicDeltaTimeNumber;
          if(distance.reverseTimer<=0f){
             distance.reverseTimer=CloudParticleSystem.singleton.distanceSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.distanceSettings.reverseChance;
@@ -112,7 +112,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle distance.incrementSpeed to:"+distance.incrementSpeed);
           }
          }
-            distance.changeIncrementSpeedValueTimer-=Time.deltaTime;
+            distance.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
          if(distance.changeIncrementSpeedValueTimer<=0f){
             distance.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.distanceSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.distanceSettings.changeIncrementSpeedValueChance;
@@ -122,7 +122,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle distance.incrementSpeed value to:"+distance.incrementSpeed);
           }
          }
-            scale.reverseTimer-=Time.deltaTime;
+            scale.reverseTimer-=Core.magicDeltaTimeNumber;
          if(scale.reverseTimer<=0f){
             scale.reverseTimer=CloudParticleSystem.singleton.scaleSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.reverseChance;
@@ -131,7 +131,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle scale.incrementSpeed to:"+scale.incrementSpeed);
           }
          }
-            scale.changeIncrementSpeedValueTimer-=Time.deltaTime;
+            scale.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
          if(scale.changeIncrementSpeedValueTimer<=0f){
             scale.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.scaleSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.changeIncrementSpeedValueChance;
@@ -140,7 +140,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle scale.incrementSpeed value to:"+scale.incrementSpeed);
           }
          }
-         scale.value+=scale.incrementSpeed*Time.deltaTime;
+         scale.value+=scale.incrementSpeed*Core.magicDeltaTimeNumber;
          if(scale.value.x>=CloudParticleSystem.singleton.scaleSettings.max.x){scale.value.x=CloudParticleSystem.singleton.scaleSettings.max.x;}
          if(scale.value.x<=CloudParticleSystem.singleton.scaleSettings.min.x){scale.value.x=CloudParticleSystem.singleton.scaleSettings.min.x;}
          if(scale.value.y>=CloudParticleSystem.singleton.scaleSettings.max.y){scale.value.y=CloudParticleSystem.singleton.scaleSettings.max.y;}
@@ -148,16 +148,16 @@ namespace AKCondinoO.Ambience.Clouds{
          if(scale.value.z>=CloudParticleSystem.singleton.scaleSettings.max.z){scale.value.z=CloudParticleSystem.singleton.scaleSettings.max.z;}
          if(scale.value.z<=CloudParticleSystem.singleton.scaleSettings.min.z){scale.value.z=CloudParticleSystem.singleton.scaleSettings.min.z;}
          meshRenderer.transform.localScale=scale.value;
-         distance.value+=distance.incrementSpeed*Time.deltaTime;
+         distance.value+=distance.incrementSpeed*Core.magicDeltaTimeNumber;
          if(distance.value>=CloudParticleSystem.singleton.distanceSettings.max){distance.value=CloudParticleSystem.singleton.distanceSettings.max;}
          if(distance.value<=CloudParticleSystem.singleton.distanceSettings.min){distance.value=CloudParticleSystem.singleton.distanceSettings.min;}
-         orbit.value+=orbit.incrementSpeed*Time.deltaTime;
+         orbit.value+=orbit.incrementSpeed*Core.magicDeltaTimeNumber;
          orbit.value.x=orbit.value.x%360f;
          orbit.value.y=orbit.value.y%360f;
          orbit.value.z=orbit.value.z%360f;
          //Log.DebugMessage("orbit.value:"+orbit.value);
          transform.position=CloudParticleSystem.singleton.cloudsCamera.transform.position+Quaternion.Euler(orbit.value)*Vector3.forward*distance.value;
-         angle.value+=angle.incrementSpeed*Time.deltaTime;
+         angle.value+=angle.incrementSpeed*Core.magicDeltaTimeNumber;
          angle.value.x=angle.value.x%360f;
          angle.value.y=angle.value.y%360f;
          angle.value.z=angle.value.z%360f;

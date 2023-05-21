@@ -18,7 +18,7 @@ namespace AKCondinoO{
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;
-         rotLerp.tgtRot=rotLerp.tgtRot_Last=transform.eulerAngles;
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=transform.rotation;
          posLerp.tgtPos=posLerp.tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
@@ -55,9 +55,9 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          Quaternion rot=Quaternion.Euler(toFollowActor.simActorCharacterController.rotLerp.tgtRot);
+          Quaternion rot=toFollowActor.simActorCharacterController.rotLerp.tgtRot;
           posLerp.tgtPos=toFollowActor.transform.position+rot*thirdPersonOffset;
-          rotLerp.tgtRot=rot.eulerAngles;
+          rotLerp.tgtRot=rot;
           UpdateTransformPosition();
           UpdateTransformRotation();
           //  TO DO: stop following movement if paused
@@ -161,7 +161,7 @@ namespace AKCondinoO{
                  }
              }
              if(inputViewRotationEuler!=Vector3.zero){
-              rotLerp.tgtRot+=inputViewRotationEuler;
+              rotLerp.tgtRot=Quaternion.Euler(rotLerp.tgtRot.eulerAngles+inputViewRotationEuler);
                 inputViewRotationEuler=Vector3.zero;
              }
              UpdateTransformRotation();
@@ -182,10 +182,10 @@ namespace AKCondinoO{
          }
         }
         void UpdateTransformRotation(){
-         transform.rotation=rotLerp.UpdateRotation(transform.rotation,Time.deltaTime);
+         transform.rotation=rotLerp.UpdateRotation(transform.rotation,Core.magicDeltaTimeNumber);
         }
         void UpdateTransformPosition(){
-         transform.position=posLerp.UpdatePosition(transform.position,Time.deltaTime);
+         transform.position=posLerp.UpdatePosition(transform.position,Core.magicDeltaTimeNumber);
         }
     }
 }

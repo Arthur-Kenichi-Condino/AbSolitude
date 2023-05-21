@@ -356,7 +356,7 @@ namespace AKCondinoO.Sims{
           SetAsSlaveOf(masterSimObject);
          }
          int result=0;
-         skillBuffs.ManualUpdate(Time.deltaTime);
+         skillBuffs.ManualUpdate(Core.magicDeltaTimeNumber);
          if(asInventoryItem!=null){
           result=3;
           //Log.DebugMessage("ManualUpdate asInventoryItem");

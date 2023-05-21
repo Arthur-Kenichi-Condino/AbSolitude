@@ -7,20 +7,20 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class QuaternionRotLerpHelper{
-     internal Vector3 tgtRot,tgtRot_Last;
+     internal Quaternion tgtRot,tgtRot_Last;
       internal float tgtRotLerpTime;
        internal float tgtRotLerpVal;
         internal Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]internal float tgtRotLerpSpeed=18.75f;
-          [SerializeField]internal float tgtRotLerpMaxTime=.025f;
+         [SerializeField]internal float tgtRotLerpSpeed=19f;
+          [SerializeField]internal float tgtRotLerpMaxTime=.0005f;
         internal Quaternion UpdateRotation(Quaternion rotation,float deltaTime){
          Quaternion result=rotation;
              if(tgtRotLerpTime==0f){
-              if(tgtRot!=tgtRot_Last||rotation.eulerAngles!=tgtRot){
+              if(tgtRot!=tgtRot_Last||rotation!=tgtRot){
                //Log.DebugMessage("input rotation detected:start rotating to tgtRot:"+tgtRot);
                tgtRotLerpVal=0f;
                tgtRotLerpA=rotation;
-               tgtRotLerpB=Quaternion.Euler(tgtRot);
+               tgtRotLerpB=tgtRot;
                tgtRotLerpTime+=deltaTime;
                tgtRot_Last=tgtRot;
               }

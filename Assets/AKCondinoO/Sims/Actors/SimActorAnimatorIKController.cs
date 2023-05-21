@@ -57,11 +57,11 @@ namespace AKCondinoO.Sims.Actors{
            if(flag){
             headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
            }else{
-            headIKRotationStoppedTimer-=Time.deltaTime;
+            headIKRotationStoppedTimer-=Core.magicDeltaTimeNumber;
            }
           }
           headLookAtPositionLerp.tgtPos=headLookAtPosition;
-          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Time.deltaTime);
+          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
           Quaternion headRot=Quaternion.LookRotation((headLookAtPositionLerped-animHeadPos).normalized,animBodyRot*Vector3.up);
           float bodyToHeadRotYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,headRot);
           //Log.DebugMessage("bodyToHeadRotYComponentSignedAngle:"+bodyToHeadRotYComponentSignedAngle);

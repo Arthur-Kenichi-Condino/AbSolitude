@@ -172,7 +172,7 @@ namespace AKCondinoO{
      readonly List<NavMeshBuildSource>sources=new List<NavMeshBuildSource>();
         bool CanStartNavMeshAsyncUpdate(){
          if(navMeshDataAsyncUpdateTimer>0.0f){
-            navMeshDataAsyncUpdateTimer-=Time.deltaTime;
+            navMeshDataAsyncUpdateTimer-=Core.magicDeltaTimeNumber;
          }
          if(navMeshDataAsyncUpdateTimer<=0.0f){
             navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;

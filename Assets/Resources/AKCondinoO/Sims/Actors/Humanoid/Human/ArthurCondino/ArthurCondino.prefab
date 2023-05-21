@@ -78,16 +78,16 @@ MonoBehaviour:
   headMaxVerticalRotationAngle: 40
   headMaxHorizontalRotationAngle: 60
   rotLerp:
-    tgtRotLerpSpeed: 17.8125
-    tgtRotLerpMaxTime: 0.025
+    tgtRotLerpSpeed: 19
+    tgtRotLerpMaxTime: 0.0005
   viewRotationSmoothValue: 0.025
   posLerp:
-    tgtPosLerpSpeed: 18.75
-    tgtPosLerpMaxTime: 0.025
-  moveAcceleration: {x: 16, y: 16, z: 16}
-  moveDeceleration: {x: 32, y: 32, z: 32}
-  maxMoveSpeed: {x: 512, y: 512, z: 512}
-  walkSpeedAverage: 512
+    tgtPosLerpSpeed: 19
+    tgtPosLerpMaxTime: 0.0005
+  moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
+  moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
+  maxMoveSpeed: {x: 2, y: 2, z: 2}
+  walkSpeedAverage: 2
   jumpTimeLength: 0.125
   jumpSpeed: 8
   aimAtMaxDistance: 1000
@@ -104,11 +104,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotLerp:
-    tgtRotLerpSpeed: 18.75
-    tgtRotLerpMaxTime: 0.025
+    tgtRotLerpSpeed: 19
+    tgtRotLerpMaxTime: 0.0005
   posLerp:
-    tgtPosLerpSpeed: 18.75
-    tgtPosLerpMaxTime: 0.025
+    tgtPosLerpSpeed: 19
+    tgtPosLerpMaxTime: 0.0005
 --- !u!195 &4585911009965713821
 NavMeshAgent:
   m_ObjectHideFlags: 0

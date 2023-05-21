@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims{
      float specificSpawnRequestsCooldown=5f;
         void Update(){
          if(specificSpawnRequestsCooldown>0f){
-            specificSpawnRequestsCooldown-=Time.deltaTime;
+            specificSpawnRequestsCooldown-=Core.magicDeltaTimeNumber;
          }
          if(specificSpawnRequestsCooldown<=0f){
             specificSpawnRequestsCooldown=specificSpawnRequestsDelay;

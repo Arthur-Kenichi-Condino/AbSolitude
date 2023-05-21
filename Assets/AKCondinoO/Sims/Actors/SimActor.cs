@@ -328,7 +328,7 @@ namespace AKCondinoO.Sims.Actors{
            }
            if(!isUsingAI){
             if(AFKTimerToUseAI>0f){
-             AFKTimerToUseAI-=Time.deltaTime;
+             AFKTimerToUseAI-=Core.magicDeltaTimeNumber;
             }
             if(AFKTimerToUseAI<=0f){
              isUsingAI=true;

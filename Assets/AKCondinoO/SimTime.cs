@@ -90,7 +90,7 @@ namespace AKCondinoO{
           simYear=(ulong)timeInBrazil.Year;
           simDayOfYear=timeInBrazil.DayOfYear;
          }else{
-             simTimeOfDay+=Time.deltaTime*_DAY/(simDayInRealMinutes*_MINUTE);
+             simTimeOfDay+=Core.magicDeltaTimeNumber*_DAY/(simDayInRealMinutes*_MINUTE);
           if(simTimeOfDay>=_DAY){
              simTimeOfDay-=_DAY;
               simDay++;

@@ -97,7 +97,7 @@ namespace AKCondinoO{
                  enabled.curState=false;
                  if(command.Value.inRange&&InvokeDelegate(command,type,GetterReturnMode.HeldDown)){
                   float heldTime=enabled.heldTime;
-                        heldTime+=Time.deltaTime;
+                        heldTime+=Core.magicDeltaTimeNumber;
                   if(heldTime>=command.Value.holdDelay){
                    heldTime=0;
                    enabled.curState=true;
@@ -112,7 +112,7 @@ namespace AKCondinoO{
                  enabled.curState=false;
                  if(InvokeDelegate(command,type,GetterReturnMode.HeldDown)){
                   float heldTime=enabled.heldTime;
-                        heldTime+=Time.deltaTime;
+                        heldTime+=Core.magicDeltaTimeNumber;
                   if(heldTime>=command.Value.holdDelay){
                    heldTime=0;
                    enabled.curState=true;
