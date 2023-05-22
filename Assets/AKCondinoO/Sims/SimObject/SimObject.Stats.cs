@@ -286,18 +286,57 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedStrength;
              #endregion
+         #region Spatial
          /// <summary>
          ///  
          /// </summary>
-         public float spatial;
+         protected float spatial_value;
+          internal float SpatialGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return spatial_value;
+          }
+           internal void SpatialSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            spatial_value=value;
+            updatedSpatial=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedSpatial;
+         #endregion
+             #region Agility
              /// <summary>
              ///  
              /// </summary>
-             public float agility;
+             protected float agility_value_stats;
+             protected float agility_value_set;
+             protected float agility_value_buffs;
+              internal float AgilityGet(SimObject statsSim=null){
+               OnRefresh(statsSim);
+               return agility_value_stats+agility_value_set;
+              }
+               internal void AgilitySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                OnRefresh(statsSim);
+                agility_value_set=value-agility_value_stats;
+                updatedAgility=true;
+                SetPendingRefresh(statsSim,forceRefresh);
+               }
+                protected bool updatedAgility;
+             #endregion
+         #region Naturalistic
          /// <summary>
          ///  
          /// </summary>
-         public float naturalistic;
+         protected float naturalistic_value;
+          internal float NaturalisticGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return naturalistic_value;
+          }
+           internal void NaturalisticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            naturalistic_value=value;
+            updatedNaturalistic=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedNaturalistic;
+         #endregion
              /// <summary>
              ///  
              /// </summary>
