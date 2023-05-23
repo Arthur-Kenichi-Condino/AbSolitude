@@ -253,7 +253,7 @@ namespace AKCondinoO.Sims{
          //
          #region Bodily_kinesthetic
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
          protected float bodily_kinesthetic_value;
           internal float Bodily_kinestheticGet(SimObject statsSim=null){
@@ -288,7 +288,7 @@ namespace AKCondinoO.Sims{
              #endregion
          #region Spatial
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
          protected float spatial_value;
           internal float SpatialGet(SimObject statsSim=null){
@@ -323,7 +323,7 @@ namespace AKCondinoO.Sims{
              #endregion
          #region Naturalistic
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
          protected float naturalistic_value;
           internal float NaturalisticGet(SimObject statsSim=null){
@@ -337,58 +337,176 @@ namespace AKCondinoO.Sims{
            }
             protected bool updatedNaturalistic;
          #endregion
+             #region Vitality
              /// <summary>
              ///  
              /// </summary>
-             public float vitality;
+             protected float vitality_value_stats;
+             protected float vitality_value_set;
+             protected float vitality_value_buffs;
+              internal float VitalityGet(SimObject statsSim=null){
+               OnRefresh(statsSim);
+               return vitality_value_stats+vitality_value_set;
+              }
+               internal void VitalitySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                OnRefresh(statsSim);
+                vitality_value_set=value-vitality_value_stats;
+                updatedVitality=true;
+                SetPendingRefresh(statsSim,forceRefresh);
+               }
+                protected bool updatedVitality;
+             #endregion
+         #region Interpersonal
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float interpersonal;
+         protected float interpersonal_value;
+          internal float InterpersonalGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return interpersonal_value;
+          }
+           internal void InterpersonalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            interpersonal_value=value;
+            updatedInterpersonal=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedInterpersonal;
+         #endregion
+         #region Intrapersonal
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float intrapersonal;
+         protected float intrapersonal_value;
+          internal float IntrapersonalGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return intrapersonal_value;
+          }
+           internal void IntrapersonalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            intrapersonal_value=value;
+            updatedIntrapersonal=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedIntrapersonal;
+         #endregion
+         #region Linguistic
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float linguistic;
+         protected float linguistic_value;
+          internal float LinguisticGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return linguistic_value;
+          }
+           internal void LinguisticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            linguistic_value=value;
+            updatedLinguistic=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedLinguistic;
+         #endregion
+         #region Logical_mathematical
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float logical_mathematical;
+         protected float logical_mathematical_value;
+          internal float Logical_mathematicalGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return logical_mathematical_value;
+          }
+           internal void Logical_mathematicalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            logical_mathematical_value=value;
+            updatedLogical_mathematical=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedLogical_mathematical;
+         #endregion
+             #region Intelligence
              /// <summary>
              ///  
              /// </summary>
-             public float intelligence;
+             protected float intelligence_value_stats;
+             protected float intelligence_value_set;
+             protected float intelligence_value_buffs;
+              internal float IntelligenceGet(SimObject statsSim=null){
+               OnRefresh(statsSim);
+               return intelligence_value_stats+intelligence_value_set;
+              }
+               internal void IntelligenceSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                OnRefresh(statsSim);
+                intelligence_value_set=value-intelligence_value_stats;
+                updatedIntelligence=true;
+                SetPendingRefresh(statsSim,forceRefresh);
+               }
+                protected bool updatedIntelligence;
+             #endregion
+         #region Musical
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float musical;
+         protected float musical_value;
+          internal float MusicalGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return musical_value;
+          }
+           internal void MusicalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            musical_value=value;
+            updatedMusical=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedMusical;
+         #endregion
+             #region Dexterity
              /// <summary>
              ///  
              /// </summary>
-             public float dexterity;
+             protected float dexterity_value_stats;
+             protected float dexterity_value_set;
+             protected float dexterity_value_buffs;
+              internal float DexterityGet(SimObject statsSim=null){
+               OnRefresh(statsSim);
+               return dexterity_value_stats+dexterity_value_set;
+              }
+               internal void DexteritySet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                OnRefresh(statsSim);
+                dexterity_value_set=value-dexterity_value_stats;
+                updatedDexterity=true;
+                SetPendingRefresh(statsSim,forceRefresh);
+               }
+                protected bool updatedDexterity;
+             #endregion
          //
+         #region Luck
          /// <summary>
-         ///  
+         ///  Primary Stats
          /// </summary>
-         public float luck;
+         protected float luck_value;
+          protected float lucky_stats_refresh_cooldown_value;
+          internal float LuckGet(SimObject statsSim=null){
+           OnRefresh(statsSim);
+           return luck_value;
+          }
+           internal void LuckSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+            luck_value=value;
+            updatedLuck=true;
+            SetPendingRefresh(statsSim,forceRefresh);
+           }
+            protected bool updatedLuck;
+         #endregion
                  //
                  /// <summary>
-                 ///  
+                 ///  Substats
                  /// </summary>
                  public float physicalPowerFlatValue;
                  /// <summary>
-                 ///  
+                 ///  Substats
                  /// </summary>
                  public float physicalDefenseFlatValue;
                  /// <summary>
-                 ///  
+                 ///  Substats
                  /// </summary>
                  public float magicalPowerFlatValue;
                  /// <summary>
-                 ///  
+                 ///  Substats
                  /// </summary>
                  public float magicalDefenseFlatValue;
         }
