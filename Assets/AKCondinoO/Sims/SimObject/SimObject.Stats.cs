@@ -269,7 +269,7 @@ namespace AKCondinoO.Sims{
          #endregion
              #region Strength
              /// <summary>
-             ///  
+             ///  Secondary Stats
              /// </summary>
              protected float strength_value_stats;
              protected float strength_value_set;
@@ -304,7 +304,7 @@ namespace AKCondinoO.Sims{
          #endregion
              #region Agility
              /// <summary>
-             ///  
+             ///  Secondary Stats
              /// </summary>
              protected float agility_value_stats;
              protected float agility_value_set;
@@ -339,7 +339,7 @@ namespace AKCondinoO.Sims{
          #endregion
              #region Vitality
              /// <summary>
-             ///  
+             ///  Secondary Stats
              /// </summary>
              protected float vitality_value_stats;
              protected float vitality_value_set;
@@ -422,7 +422,7 @@ namespace AKCondinoO.Sims{
          #endregion
              #region Intelligence
              /// <summary>
-             ///  
+             ///  Secondary Stats
              /// </summary>
              protected float intelligence_value_stats;
              protected float intelligence_value_set;
@@ -457,7 +457,7 @@ namespace AKCondinoO.Sims{
          #endregion
              #region Dexterity
              /// <summary>
-             ///  
+             ///  Secondary Stats
              /// </summary>
              protected float dexterity_value_stats;
              protected float dexterity_value_set;
@@ -488,6 +488,7 @@ namespace AKCondinoO.Sims{
            internal void LuckSet(float value,SimObject statsSim=null,bool forceRefresh=false){
             luck_value=value;
             updatedLuck=true;
+            lucky_stats_refresh_cooldown_value=0f;
             SetPendingRefresh(statsSim,forceRefresh);
            }
             protected bool updatedLuck;
@@ -496,19 +497,19 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 public float physicalPowerFlatValue;
+                 protected float physicalPowerFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 public float physicalDefenseFlatValue;
+                 protected float physicalDefenseFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 public float magicalPowerFlatValue;
+                 protected float magicalPowerFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 public float magicalDefenseFlatValue;
+                 protected float magicalDefenseFlatValue;
         }
     }
 }
