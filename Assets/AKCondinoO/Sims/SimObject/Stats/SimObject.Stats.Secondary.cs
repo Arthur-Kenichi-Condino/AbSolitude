@@ -25,6 +25,10 @@ namespace AKCondinoO.Sims{
                 SetPendingRefresh(statsSim,forceRefresh);
                }
                 protected bool updatedAgility;
+             internal void OnRefresh_Agility(SimObject statsSim=null){
+              if(updatedBodily_kinesthetic){
+              }
+             }
              #endregion
              #region Dexterity
              /// <summary>
@@ -44,6 +48,8 @@ namespace AKCondinoO.Sims{
                 SetPendingRefresh(statsSim,forceRefresh);
                }
                 protected bool updatedDexterity;
+             internal void OnRefresh_Dexterity(SimObject statsSim=null){
+             }
              #endregion
              #region Intelligence
              /// <summary>
@@ -63,6 +69,8 @@ namespace AKCondinoO.Sims{
                 SetPendingRefresh(statsSim,forceRefresh);
                }
                 protected bool updatedIntelligence;
+             internal void OnRefresh_Intelligence(SimObject statsSim=null){
+             }
              #endregion
              #region Strength
              /// <summary>
@@ -82,6 +90,8 @@ namespace AKCondinoO.Sims{
                 SetPendingRefresh(statsSim,forceRefresh);
                }
                 protected bool updatedStrength;
+             internal void OnRefresh_Strength(SimObject statsSim=null){
+             }
              #endregion
              #region Vitality
              /// <summary>
@@ -101,6 +111,8 @@ namespace AKCondinoO.Sims{
                 SetPendingRefresh(statsSim,forceRefresh);
                }
                 protected bool updatedVitality;
+             internal void OnRefresh_Vitality(SimObject statsSim=null){
+             }
              #endregion
         }
     }

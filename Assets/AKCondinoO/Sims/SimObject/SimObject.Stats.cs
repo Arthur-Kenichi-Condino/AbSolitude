@@ -91,31 +91,6 @@ namespace AKCondinoO.Sims{
             internal void OnUnappliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
             }
-                 //
-                 /// <summary>
-                 ///  Substats
-                 /// </summary>
-                 protected float physicalPowerFlatValue;
-                  internal float PhysicalPowerFlatValueGet(SimObject statsSim=null){
-                   OnRefresh(statsSim);
-                   return physicalPowerFlatValue;
-                  }
-                 /// <summary>
-                 ///  Substats
-                 /// </summary>
-                 protected float physicalDefenseFlatValue;
-                  internal float PhysicalDefenseFlatValueGet(SimObject statsSim=null){
-                   OnRefresh(statsSim);
-                   return physicalDefenseFlatValue;
-                  }
-                 /// <summary>
-                 ///  Substats
-                 /// </summary>
-                 protected float magicalPowerFlatValue;
-                 /// <summary>
-                 ///  Substats
-                 /// </summary>
-                 protected float magicalDefenseFlatValue;
         }
     }
 }
