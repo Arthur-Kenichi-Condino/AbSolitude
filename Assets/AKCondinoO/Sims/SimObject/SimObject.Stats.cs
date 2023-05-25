@@ -84,10 +84,10 @@ namespace AKCondinoO.Sims{
             internal Stats(){
              math_random=new System.Random(seedGenerator.Next());
             }
-            internal virtual void InitFrom(PersistentStats persistentStats){
+            internal virtual void InitFrom(PersistentStats persistentStats,SimObject statsSim=null){
              //Log.DebugMessage("Stats InitFrom");
             }
-            internal virtual void Generate(){
+            internal virtual void Generate(SimObject statsSim=null){
              //Log.DebugMessage("Stats Generate");
             }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){

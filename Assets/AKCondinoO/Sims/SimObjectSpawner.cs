@@ -322,11 +322,11 @@ namespace AKCondinoO.Sims{
                 if(persistentStats!=null){
                  //Log.DebugMessage("simObject persistentStats loaded");
                  simObject.persistentStats=persistentStats.Value;
-                 simObject.stats.InitFrom(simObject.persistentStats);
+                 simObject.stats.InitFrom(simObject.persistentStats,simObject);
                 }else{
                  //Log.DebugMessage("simObject persistentStats must be generated");
                  simObject.persistentStats=new SimObject.PersistentStats();
-                 simObject.stats.Generate();
+                 simObject.stats.Generate(simObject);
                 }
                 simObject.OnActivated();
               }
