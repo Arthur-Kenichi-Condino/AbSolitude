@@ -79,6 +79,11 @@ namespace AKCondinoO.Sims{
          stats=null;
         }
         internal partial class Stats{
+         internal static System.Random seedGenerator;
+         internal readonly System.Random math_random;
+            internal Stats(){
+             math_random=new System.Random(seedGenerator.Next());
+            }
             internal virtual void InitFrom(PersistentStats persistentStats){
              //Log.DebugMessage("Stats InitFrom");
             }

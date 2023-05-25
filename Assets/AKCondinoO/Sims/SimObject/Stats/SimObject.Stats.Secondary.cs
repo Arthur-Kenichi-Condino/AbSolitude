@@ -26,7 +26,21 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedAgility;
              internal void OnRefresh_Agility(SimObject statsSim=null){
-              if(updatedBodily_kinesthetic){
+              if(updatedBodily_kinesthetic  ||
+                 updatedInterpersonal       ||
+                 updatedLinguistic          ||
+                 updatedLogical_mathematical||
+                 updatedMusical             ||
+                 updatedSpatial             
+              ){
+               agility_value_stats=
+                ((  bodily_kinesthetic_value*1f)/13f)+
+                ((       interpersonal_value*1f)/13f)+
+                ((          linguistic_value*1f)/13f)+
+                ((logical_mathematical_value*1f)/13f)+
+                ((             musical_value*4f)/13f)+
+                ((             spatial_value*5f)/13f)
+               ;
               }
              }
              #endregion
@@ -49,6 +63,22 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedDexterity;
              internal void OnRefresh_Dexterity(SimObject statsSim=null){
+              if(updatedBodily_kinesthetic  ||
+                 updatedInterpersonal       ||
+                 updatedLinguistic          ||
+                 updatedLogical_mathematical||
+                 updatedMusical             ||
+                 updatedSpatial             
+              ){
+               dexterity_value_stats=
+                ((  bodily_kinesthetic_value*2f)/20f)+
+                ((       interpersonal_value*3f)/20f)+
+                ((          linguistic_value*3f)/20f)+
+                ((logical_mathematical_value*3f)/20f)+
+                ((             musical_value*4f)/20f)+
+                ((             spatial_value*5f)/20f)
+               ;
+              }
              }
              #endregion
              #region Intelligence
@@ -70,6 +100,22 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedIntelligence;
              internal void OnRefresh_Intelligence(SimObject statsSim=null){
+              if(updatedInterpersonal       ||
+                 updatedIntrapersonal       ||
+                 updatedLinguistic          ||
+                 updatedLogical_mathematical||
+                 updatedMusical             ||
+                 updatedNaturalistic        
+              ){
+               intelligence_value_stats=
+                ((       interpersonal_value*6f)/28f)+
+                ((       intrapersonal_value*6f)/28f)+
+                ((          linguistic_value*6f)/28f)+
+                ((logical_mathematical_value*6f)/28f)+
+                ((             musical_value*2f)/28f)+
+                ((        naturalistic_value*2f)/28f)
+               ;
+              }
              }
              #endregion
              #region Strength
@@ -91,6 +137,12 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedStrength;
              internal void OnRefresh_Strength(SimObject statsSim=null){
+              if(updatedBodily_kinesthetic  
+              ){
+               strength_value_stats=
+                ((  bodily_kinesthetic_value*4f)/4f)
+               ;
+              }
              }
              #endregion
              #region Vitality
@@ -112,6 +164,16 @@ namespace AKCondinoO.Sims{
                }
                 protected bool updatedVitality;
              internal void OnRefresh_Vitality(SimObject statsSim=null){
+              if(updatedBodily_kinesthetic  ||
+                 updatedIntrapersonal       ||
+                 updatedNaturalistic        
+              ){
+               vitality_value_stats=
+                ((  bodily_kinesthetic_value*3f)/15f)+
+                ((       intrapersonal_value*4f)/15f)+
+                ((        naturalistic_value*8f)/15f)
+               ;
+              }
              }
              #endregion
         }

@@ -16,11 +16,14 @@ namespace AKCondinoO.Sims{
             }
             internal void OnRefresh(SimObject statsSim=null){
              if(pendingRefresh){
+              //  Luck must be applied at the start and then end so it adds random attributes
+              OnRefresh_Luck        (statsSim);
               OnRefresh_Agility     (statsSim);
               OnRefresh_Dexterity   (statsSim);
               OnRefresh_Intelligence(statsSim);
               OnRefresh_Strength    (statsSim);
               OnRefresh_Vitality    (statsSim);
+              OnRefresh_Luck_Late   (statsSim);
               pendingRefresh=false;
              }
             }

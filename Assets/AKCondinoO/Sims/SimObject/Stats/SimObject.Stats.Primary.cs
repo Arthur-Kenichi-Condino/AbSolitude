@@ -88,25 +88,6 @@ namespace AKCondinoO.Sims{
            }
             protected bool updatedLogical_mathematical;
          #endregion
-         //
-         #region Luck
-         /// <summary>
-         ///  Primary Stats LUK
-         /// </summary>
-         protected float luck_value;
-          protected float lucky_stats_refresh_cooldown_value;
-          internal float LuckGet(SimObject statsSim=null){
-           OnRefresh(statsSim);
-           return luck_value;
-          }
-           internal void LuckSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            luck_value=value;
-            updatedLuck=true;
-            lucky_stats_refresh_cooldown_value=0f;
-            SetPendingRefresh(statsSim,forceRefresh);
-           }
-            protected bool updatedLuck;
-         #endregion
          #region Musical
          /// <summary>
          ///  Primary Stats
