@@ -33,6 +33,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         SimObject.Stats.seedGenerator=new System.Random();
          PersistentDataSavingMultithreaded.Stop=false;
          persistentDataSavingBG=new PersistentDataSavingBackgroundContainer();
          persistentDataSavingBGThread=new PersistentDataSavingMultithreaded();
