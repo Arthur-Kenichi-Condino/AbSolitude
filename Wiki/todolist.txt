@@ -1,5 +1,6 @@
 ## Parser ##
 
+Splice function to remove special characters
 Create dom element
 Split line by characters based on markdown syntax
 Insert element using the ParseText
