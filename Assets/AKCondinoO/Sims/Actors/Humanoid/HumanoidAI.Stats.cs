@@ -4,9 +4,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActor{
-        internal partial class CharacterStats:Stats{
+namespace AKCondinoO.Sims.Actors.Humanoid{
+    internal partial class HumanoidAI{
+        internal partial class HumanoidAIStats:CharacterStats{
         }
     }
 }
