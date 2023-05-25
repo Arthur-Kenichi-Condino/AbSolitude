@@ -16,7 +16,9 @@ const text = await FetchText(root + homunculusSystem + selectedHomunculus + "Con
 
 function ParseText(text) {
     for (line of text) {
-        console.log(line);
+        if (line.charAt(0) == "#") {
+            console.log("Title");
+        }
     }
 }
 
