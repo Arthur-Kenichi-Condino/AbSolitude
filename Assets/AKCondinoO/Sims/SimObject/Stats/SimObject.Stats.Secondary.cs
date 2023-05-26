@@ -41,8 +41,10 @@ namespace AKCondinoO.Sims{
                 ((             musical_value*4f)/13f)+
                 ((             spatial_value*5f)/13f)
                ;
+               refreshedAgility=true;
               }
              }
+              protected bool refreshedAgility;
              #endregion
              #region Dexterity
              /// <summary>

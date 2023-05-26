@@ -17,6 +17,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human{
                           musical_value=(float)math_random.NextDouble(1d,100d);updatedMusical             =true;
                      naturalistic_value=(float)math_random.NextDouble(1d,100d);updatedNaturalistic        =true;
                           spatial_value=(float)math_random.NextDouble(1d,100d);updatedSpatial             =true;
+             SetPendingRefresh(statsSim,false);
             }
         }
     }
