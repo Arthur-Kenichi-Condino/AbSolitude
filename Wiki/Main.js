@@ -14,10 +14,14 @@ async function FetchText(path) {
 
 const text = await FetchText(root + "/" + homunculusSystem + "/" + selectedHomunculus + "/" + "Content.txt");
 
+function RemoveCharAt(string,index) {
+    return string.slice(0, index) + string.slice(index + 1);
+}
+
 function ParseText(text) {
     for (line of text) {
         if (line.charAt(0) == "#") {
-            console.log(line);
+            console.log(RemoveCharAt(line, 0));
         }
     }
 }
