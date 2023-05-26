@@ -59,7 +59,14 @@ namespace AKCondinoO{
           rotLerp.tgtRot=rot;
           UpdateTransformRotation();
           posLerp.tgtPos=toFollowActor.transform.position+rotLerp.tgtRot*thirdPersonOffset;
+          Vector3 onlyHeightOffsetTgtPos=toFollowActor.transform.position+rotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
+          //Debug.DrawLine(posLerp.tgtPos,onlyHeightOffsetTgtPos,Color.blue);
           UpdateTransformPosition();
+          float disToActor=Vector3.Distance(transform.position,onlyHeightOffsetTgtPos);
+          if(disToActor<=1f){
+           Log.DebugMessage("camera is following too close to its target");
+           transform.position=posLerp.EndPosition();
+          }
           //  TO DO: stop following movement if paused
          }
          BGM.singleton.transform.position=this.transform.position;

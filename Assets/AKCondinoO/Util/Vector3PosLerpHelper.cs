@@ -41,5 +41,10 @@ namespace AKCondinoO{
              }
          return result;
         }
+        internal Vector3 EndPosition(){
+         tgtPosLerpVal=1;
+         tgtPosLerpTime=0;
+         return tgtPos_Last=tgtPos;
+        }
     }
 }

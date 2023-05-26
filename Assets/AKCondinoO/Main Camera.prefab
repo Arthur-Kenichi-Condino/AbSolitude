@@ -50,11 +50,11 @@ MonoBehaviour:
   DEBUG_STOP_FOLLOWING: 0
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 30
+    tgtRotLerpSpeed: 40
     tgtRotLerpMaxTime: 0.0001
   viewRotationSmoothValue: 0.025
   posLerp:
-    tgtPosLerpSpeed: 31
+    tgtPosLerpSpeed: 50
     tgtPosLerpMaxTime: 0.0001
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
   maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
