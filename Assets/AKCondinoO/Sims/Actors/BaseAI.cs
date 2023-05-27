@@ -12,7 +12,12 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
-     protected readonly System.Random dice=new System.Random();
+     internal static System.Random seedGenerator;
+     internal System.Random math_random;
+        protected override void Awake(){
+         math_random=new System.Random(seedGenerator.Next());
+         base.Awake();
+        }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
       internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;
@@ -54,7 +59,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("can do random movement");
            if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
             //Log.DebugMessage("got random position:"+result);
-            bool run=Mathf.Clamp01((float)dice.NextDouble())<useRunSpeedChance;
+            bool run=Mathf.Clamp01((float)math_random.NextDouble())<useRunSpeedChance;
             if(navMeshAgentShouldUseRunSpeed||run){
              navMeshAgent.speed=navMeshAgentRunSpeed;
             }else{

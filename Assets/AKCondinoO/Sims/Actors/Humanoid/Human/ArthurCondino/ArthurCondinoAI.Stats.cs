@@ -17,8 +17,12 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          }
         }
         internal partial class ArthurCondinoAIStats:HumanAIStats{
-            internal override void Generate(SimObject statsSim=null){
+            internal override void Generate(SimObject statsSim=null,bool reset=true){
              //Log.DebugMessage("Stats Generate");
+             if(reset){
+              OnReset(statsSim);
+             }
+             base.Generate(statsSim,false);
             }
         }
     }

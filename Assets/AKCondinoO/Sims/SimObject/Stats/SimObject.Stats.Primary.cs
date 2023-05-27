@@ -7,6 +7,28 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
+            protected virtual void OnGenerate_Stats(SimObject statsSim=null,bool reset=true){
+             if(
+              reset||
+                bodily_kinesthetic_value<=0||
+                     interpersonal_value<=0||
+                     intrapersonal_value<=0||
+                        linguistic_value<=0||
+              logical_mathematical_value<=0||
+                           musical_value<=0||
+                      naturalistic_value<=0||
+                           spatial_value<=0
+             ){
+              //  bodily_kinesthetic_value=(float)math_random.Next(1,131);updatedBodily_kinesthetic  =true;
+              //       interpersonal_value=(float)math_random.Next(1,131);updatedInterpersonal       =true;
+              //       intrapersonal_value=(float)math_random.Next(1,131);updatedIntrapersonal       =true;
+              //          linguistic_value=(float)math_random.Next(1,131);updatedLinguistic          =true;
+              //logical_mathematical_value=(float)math_random.Next(1,131);updatedLogical_mathematical=true;
+              //             musical_value=(float)math_random.Next(1,131);updatedMusical             =true;
+              //        naturalistic_value=(float)math_random.Next(1,131);updatedNaturalistic        =true;
+              //             spatial_value=(float)math_random.Next(1,131);updatedSpatial             =true;
+             }
+            }
          //
          #region Bodily_kinesthetic
          /// <summary>
