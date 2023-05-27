@@ -71,7 +71,7 @@ namespace AKCondinoO.Sims{
           idsFileStream.Position=0L;
           idsFileStreamReader.DiscardBufferedData();
          }
-         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(GameObject))){
+         foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(GameObject))){
           GameObject gameObject=(GameObject)o;
            SimObject  simObject=gameObject.GetComponent<SimObject>();
           if(simObject==null)continue;
@@ -137,7 +137,7 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.pool.Add(simObjectType,new LinkedList<SimObject>());
          }
          Log.DebugMessage("load thumbnails");
-         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(Texture))){
+         foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(Texture))){
           Log.DebugMessage("load Texture, o.name:"+o.name);
           string typeName=o.name.Substring(0,o.name.IndexOf("."));
           Log.DebugMessage("load Texture, typeName:"+typeName);
