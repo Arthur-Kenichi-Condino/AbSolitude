@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
-            protected virtual void OnGenerate_Stats(SimObject statsSim=null,bool reset=true){
+            protected virtual void OnGenerateValidation_Stats(SimObject statsSim=null,bool reset=true){
              if(
               reset||
                 bodily_kinesthetic_value<=0||
