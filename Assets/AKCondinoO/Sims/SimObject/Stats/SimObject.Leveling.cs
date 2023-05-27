@@ -11,7 +11,7 @@ namespace AKCondinoO.Sims{
           protected bool isTranscendent_value;
           protected int totalStatPoints_value;
           protected int statPointsSpent_value;
-            protected virtual void OnGenerate_Level(SimObject statsSim=null,bool reset=true){
+            protected virtual void OnGenerateValidation_Level(SimObject statsSim=null,bool reset=true){
              if(
               reset||
               simLevel_value<=0

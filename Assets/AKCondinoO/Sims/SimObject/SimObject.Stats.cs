@@ -92,8 +92,8 @@ namespace AKCondinoO.Sims{
              if(reset){
               OnReset(statsSim);
              }
-             OnGenerate_Level(statsSim,reset);
-             OnGenerate_Stats(statsSim,reset);
+             OnGenerateValidation_Level(statsSim,reset);
+             OnGenerateValidation_Stats(statsSim,reset);
              SetPendingRefresh(statsSim,false);
             }
             protected virtual void OnReset(SimObject statsSim=null){
