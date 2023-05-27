@@ -326,7 +326,7 @@ namespace AKCondinoO.Sims{
                 }else{
                  //Log.DebugMessage("simObject persistentStats must be generated");
                  simObject.persistentStats=new SimObject.PersistentStats();
-                 simObject.stats.Generate(simObject);
+                 simObject.stats.Generate(simObject,true);
                 }
                 simObject.OnActivated();
               }

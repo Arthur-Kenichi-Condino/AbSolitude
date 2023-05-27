@@ -16,5 +16,16 @@ namespace AKCondinoO{
         internal static double GenerateRandomDouble(System.Random random,double minimum,double maximum){
          return random.NextDouble()*(maximum-minimum)+minimum;
         }
+        internal static bool CoinFlip(this System.Random random){
+         return DoCoinFlip(random);
+        }
+        /// <summary>
+        ///  [https://stackoverflow.com/questions/45597505/c-sharp-simple-coin-flip-algorithm-not-working]
+        /// </summary>
+        /// <param name="random"></param>
+        /// <returns></returns>
+        internal static bool DoCoinFlip(System.Random random){
+         return random.Next(1,3)==1;
+        }
     }
 }

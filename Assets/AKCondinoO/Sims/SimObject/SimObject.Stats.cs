@@ -87,8 +87,26 @@ namespace AKCondinoO.Sims{
             internal virtual void InitFrom(PersistentStats persistentStats,SimObject statsSim=null){
              //Log.DebugMessage("Stats InitFrom");
             }
-            internal virtual void Generate(SimObject statsSim=null){
+            internal virtual void Generate(SimObject statsSim=null,bool reset=true){
              //Log.DebugMessage("Stats Generate");
+             if(reset){
+              OnReset(statsSim);
+             }
+             OnGenerate_Level(statsSim,reset);
+             OnGenerate_Stats(statsSim,reset);
+             SetPendingRefresh(statsSim,false);
+            }
+            protected virtual void OnReset(SimObject statsSim=null){
+             simLevel_value=0;
+             luck_value=0f;
+               bodily_kinesthetic_value=0f;
+                    interpersonal_value=0f;
+                    intrapersonal_value=0f;
+                       linguistic_value=0f;
+             logical_mathematical_value=0f;
+                          musical_value=0f;
+                     naturalistic_value=0f;
+                          spatial_value=0f;
             }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
