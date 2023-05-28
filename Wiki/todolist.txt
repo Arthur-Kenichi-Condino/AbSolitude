@@ -1,0 +1,12 @@
+## Parser ##
+
+Splice function to remove special characters
+Create dom element
+Split line by characters based on markdown syntax
+Insert element using the ParseText
+
+## Index Tree ##
+
+Organize the index tree by paths
+Set the paths to buttons 
+Generate text on page based on the paths
