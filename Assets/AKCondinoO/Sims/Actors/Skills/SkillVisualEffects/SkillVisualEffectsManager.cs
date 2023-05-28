@@ -28,5 +28,10 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
         }
+        //internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,int level,Skill skill){
+        // GameObject skillVisualEffectGameObject;
+        // var pool=this.pool[skillVisualEffectType];
+        // SkillVisualEffect skillVisualEffect;
+        //}
     }
 }
