@@ -19,7 +19,7 @@ function RemoveCharAt(string,index) {
 }
 
 function ParseText(text) {
-    for (line of text) {
+    for (let line of text) {
         if (line.charAt(0) == "#") {
             console.log(RemoveCharAt(line, 0));
         }
