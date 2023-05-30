@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
           target.skillBuffs.Add(buff,this);
          }
          target.OnHitByTargetedSkill(this,actor);
+         (GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)skillVFX=SkillVisualEffectsManager.singleton.SpawnSkillVisualEffectGameObject(typeof(SpiritualHealingSkillVisualEffect),this);
+         skillVFX.skillVisualEffect.Activate(target,0f,1);
          base.Invoke();//  the invoked flag is set here
+        }
+        protected override void OnInvokeSetCooldown(){
+         cooldown=1f;
+         //Log.DebugMessage("SpiritualHealing cooldown:"+cooldown);
+         base.OnInvokeSetCooldown();
         }
         protected override void Update(){
          base.Update();

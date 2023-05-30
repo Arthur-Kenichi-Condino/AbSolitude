@@ -28,10 +28,25 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
         }
-        //internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,int level,Skill skill){
-        // GameObject skillVisualEffectGameObject;
-        // var pool=this.pool[skillVisualEffectType];
-        // SkillVisualEffect skillVisualEffect;
-        //}
+        internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,Skill skill){
+         GameObject skillVisualEffectGameObject;
+         var pool=this.pool[skillVisualEffectType];
+         SkillVisualEffect skillVisualEffect;
+         if(pool.Count>0){
+          skillVisualEffect=pool.First.Value;
+          pool.RemoveFirst();
+          skillVisualEffect.pooled=null;
+          skillVisualEffectGameObject=skillVisualEffect.gameObject;
+         }else{
+          skillVisualEffectGameObject=Instantiate(skillVisualEffectPrefabs[skillVisualEffectType]);
+          skillVisualEffect=skillVisualEffectGameObject.GetComponent<SkillVisualEffect>();
+         }
+         skillVisualEffect.OnSpawned();
+         return(skillVisualEffectGameObject,skillVisualEffect);
+        }
+        internal void Pool(Type skillVisualEffectType,SkillVisualEffect skillVisualEffect){
+         skillVisualEffect.OnPool();
+         skillVisualEffect.pooled=pool[skillVisualEffectType].AddLast(skillVisualEffect);
+        }
     }
 }
