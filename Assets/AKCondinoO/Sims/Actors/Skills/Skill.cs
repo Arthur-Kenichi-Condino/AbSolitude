@@ -8,6 +8,18 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal partial class Skill:MonoBehaviour{
+     /// <summary>
+     ///  After-cast Delay
+     /// </summary>
+     internal float castDelay{
+      get{
+       return castDelay_value;
+      }
+      set{
+       castDelay_value=value;
+      }
+     }
+     protected float castDelay_value=1.0f;
         public enum SkillUseContext{
          OnCallSlaves,
          OnWillTakeDamage,
@@ -97,6 +109,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          invoked=true;
         }
         protected virtual void OnInvokeSetCooldown(){
+        }
+        internal virtual float GetOnInvokeCooldown(){
+         return castDelay;
         }
         /// <summary>
         ///  Something went wrong, so cancel
