@@ -29,7 +29,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){
-         cooldown=1f;
+         cooldown=GetOnInvokeCooldown();
          //Log.DebugMessage("SpiritualHealing cooldown:"+cooldown);
          base.OnInvokeSetCooldown();
         }

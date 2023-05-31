@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal readonly List<Skill>possibleSkills=new List<Skill>();
         protected override void Awake(){
          base.Awake();
+         castDelay=3.5f;
         }
         internal override void OnSpawned(){
          base.OnSpawned();
@@ -96,10 +97,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){
-         float random=Mathf.Clamp01((float)dice.NextDouble());
-         cooldown=1f+(random*2f);
+         cooldown=GetOnInvokeCooldown();
          //Log.DebugMessage("ChaoticBlessing cooldown:"+cooldown);
          base.OnInvokeSetCooldown();
+        }
+        internal override float GetOnInvokeCooldown(){
+         float random=Mathf.Clamp01((float)dice.NextDouble());
+         return castDelay+(random*useLevel);
         }
         protected override void Revoke(){
          //  do deinitialization here, and clear important variables
