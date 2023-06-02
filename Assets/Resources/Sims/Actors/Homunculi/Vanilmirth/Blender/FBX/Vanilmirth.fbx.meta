@@ -53,11 +53,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Root|MOTION_IDLE
-      takeName: Root|MOTION_IDLE
-      internalID: -748819149627489443
+      name: Root|MOTION_MOVE
+      takeName: Root|MOTION_MOVE
+      internalID: -765710004997547030
       firstFrame: 0
-      lastFrame: 39
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -82,19 +82,19 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Root|MOTION_MOVE
-      takeName: Root|MOTION_MOVE
-      internalID: -765710004997547030
+      name: Root|MOTION_STAND
+      takeName: Root|MOTION_STAND
+      internalID: -3186899560408553148
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 39
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

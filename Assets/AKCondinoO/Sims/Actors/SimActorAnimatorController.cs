@@ -1,13 +1,15 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
+using AKCondinoO.Sims.Actors.Humanoid.Human;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActorAnimatorController:MonoBehaviour{
+    internal partial class SimActorAnimatorController:MonoBehaviour{
      internal SimActor actor;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
@@ -176,26 +178,17 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
              if(baseAI is ArthurCondinoAI arthurCondinoAI){
-              if(lastWeaponType!=baseAI.weaponType){
-               if(weaponLayer.TryGetValue(baseAI.weaponType,out int layerIndex)){
-                layerTargetWeight[layerIndex]=1.0f;
-                if(weaponLayer.TryGetValue(lastWeaponType,out int lastLayerIndex)){
-                 layerTargetWeight[lastLayerIndex]=0.0f;
-                }
-                lastWeaponType=baseAI.weaponType;
-               }
-              }
-              if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
-               animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
-               animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
-                 animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
-              }else{
-               animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
-               animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
-                 animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
-              }
+              UpdateArthurCondinoAIAnimatorWeaponLayer(baseAI,arthurCondinoAI);
+              UpdateArthurCondinoAIAnimatorMotionValue(baseAI,arthurCondinoAI);
+             }else if(baseAI is HumanAI humanAI){
+              UpdateHumanAIAnimatorWeaponLayer(baseAI,humanAI);
+              UpdateHumanAIAnimatorMotionValue(baseAI,humanAI);
+             }else if(baseAI is ArquimedesAI arquimedesAI){
+              UpdateArquimedesAIAnimatorWeaponLayer(baseAI,arquimedesAI);
+              UpdateArquimedesAIAnimatorMotionValue(baseAI,arquimedesAI);
+             }else if(baseAI is VanilmirthAI vanilmirthAI){
+              UpdateVanilmirthAIAnimatorWeaponLayer(baseAI,vanilmirthAI);
+              UpdateVanilmirthAIAnimatorMotionValue(baseAI,vanilmirthAI);
              }
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
