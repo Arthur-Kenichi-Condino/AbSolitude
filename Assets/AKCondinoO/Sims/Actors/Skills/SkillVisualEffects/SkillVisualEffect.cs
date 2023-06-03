@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      internal LinkedListNode<SkillVisualEffect>pooled=null;
      internal ParticleSystem particleSystemParent;
      internal new ParticleSystem[]particleSystem;
+     internal AudioSource[]audioSources;
      internal readonly Dictionary<ParticleSystem,float>totalDuration=new Dictionary<ParticleSystem,float>();
         void Awake(){
          Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
@@ -19,6 +20,10 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           Log.DebugMessage("particleSys:"+particleSys.name);
           totalDuration.Add(particleSys,particleSys.main.duration);
          }
+         audioSources=GetComponentsInChildren<AudioSource>();
+         waitForParticleSystemParentPlay=new WaitUntil(()=>{return playSFX;});
+         fadeTimeInterval=new WaitForSeconds(0.005f);
+         StartCoroutine(PlaySkillSFX());
         }
         internal virtual void OnSpawned(){
         }
@@ -44,6 +49,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         }
         internal virtual void OnDeactivate(){
          particleSystemParent.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
+         stopSFX=true;
          this.active=false;
          enabled=false;
          SkillVisualEffectsManager.singleton.Pool(this.GetType(),this);
@@ -62,19 +68,82 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
            }else{
             if(!particleSystem.Any(particleSys=>particleSys.isPlaying)){
              particleSystemParent.Play(true);
+             playSFX=true;
             }
            }
-          }else if(!particleSystem.Any(particleSys=>particleSys.isPlaying)){
+          }else if(!particleSystem.Any(particleSys=>particleSys.isPlaying)&&!audioSources.Any(audioSource=>audioSource.isPlaying)){
            loopCount++;
            if(loopCount>=loops){
             OnDeactivate();
             return;
            }else{
             particleSystemParent.Play(true);
+            playSFX=true;
            }
           }
          }
          timer+=Time.deltaTime;
+        }
+     protected bool playSFX=false;
+     protected bool playingSFX=false;
+     protected bool stopSFX=false;
+     protected WaitUntil waitForParticleSystemParentPlay;
+      protected WaitForSeconds fadeTimeInterval;
+        protected virtual IEnumerator PlaySkillSFX(){
+         Loop:{
+          yield return waitForParticleSystemParentPlay;
+          playSFX=false;
+          stopSFX=false;
+          playingSFX=true;
+          Log.DebugMessage("PlaySkillSFX:playingSFX");
+          foreach(AudioSource audioSource in audioSources){
+           audioSource.volume=1f;
+           audioSource.Play();
+          }
+          PlayingLoop:{}
+          if(stopSFX){
+           goto StopPlaying;
+          }
+          if(duration>0f){
+           if(timer>=duration-.05f){
+            bool anyPlaying=false;
+            foreach(AudioSource audioSource in audioSources){
+             if(audioSource.isPlaying){
+              audioSource.volume-=.1f;
+              if(audioSource.volume<=0f){
+               audioSource.Stop();
+              }else{
+               anyPlaying|=true;
+              }
+             }
+            }
+            if(anyPlaying){
+             yield return fadeTimeInterval;
+             goto PlayingLoop;
+            }
+           }else if(timer<duration){
+            yield return null;
+            goto PlayingLoop;
+           }
+          }else{
+           bool anyPlaying=false;
+           foreach(AudioSource audioSource in audioSources){
+            if(audioSource.isPlaying){
+             anyPlaying|=true;
+            }
+           }
+           if(anyPlaying){
+            yield return null;
+            goto PlayingLoop;
+           }
+          }
+          StopPlaying:{}
+          foreach(AudioSource audioSource in audioSources){
+           audioSource.Stop();
+          }
+          playingSFX=false;
+         }
+         goto Loop;
         }
     }
 }
