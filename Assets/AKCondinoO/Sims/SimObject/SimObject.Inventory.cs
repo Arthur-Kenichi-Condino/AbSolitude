@@ -67,6 +67,8 @@ namespace AKCondinoO.Sims{
          }
          return false;
         }
+        protected virtual void SetCurrentToolsOrWeapons(SimObject forAction1,SimObject forAction2){
+        }
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
          //  TO DO: disable some types of collisions and enable triggers or special collisions

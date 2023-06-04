@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Inventory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActorCharacterController:MonoBehaviour{
+    internal partial class SimActorCharacterController:MonoBehaviour{
      internal SimActor actor;
      internal CharacterController characterController;
       internal Vector3 center;
@@ -154,6 +155,7 @@ namespace AKCondinoO.Sims.Actors{
          afterMovePos=characterController.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
          aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
+         ProcessAction1();
         }
     }
 }
