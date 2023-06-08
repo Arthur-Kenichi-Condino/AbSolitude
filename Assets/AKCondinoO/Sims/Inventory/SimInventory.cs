@@ -190,5 +190,10 @@ namespace AKCondinoO.Sims.Inventory{
         internal void Materialize((Type simObjectType,ulong idNumber)id){
          Log.DebugMessage("Materialize inventory item as simObject:"+id);
         }
+        internal virtual(SimInventoryItem itemForAction1,SimInventoryItem itemForAction2)GetActionItems(){
+         if(itemsBySlotIds.Count>0){
+         }
+         return(null,null);
+        }
     }
 }
