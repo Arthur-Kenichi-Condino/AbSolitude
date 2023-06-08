@@ -42,6 +42,9 @@ namespace AKCondinoO.Sims{
          }
         }
         protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings,SimObject simObjectAdded){
+         if(simInventory is SimHands simHands){
+          SetCurrentToolsOrWeapons(null,null);
+         }
         }
         internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
          simInventory.Remove(simObject.asInventoryItem,delete,!removingList);
