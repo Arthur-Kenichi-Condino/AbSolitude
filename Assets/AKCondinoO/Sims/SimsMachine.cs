@@ -2,6 +2,8 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
+using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Biomes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,10 +19,31 @@ namespace AKCondinoO.Sims{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
         }
+     Vector3 mainCamPos,lastMainCamPos;
+      bool initMainCamPos=true;
+      Vector3Int mainCamGetCurrentBiomeInputRounded;
+       Vector3 mainCamGetCurrentBiomeInput;
+        Biomes mainCamGetCurrentBiomeOutput;
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);
      float specificSpawnRequestsDelay=5f;
      float specificSpawnRequestsCooldown=5f;
         void Update(){
+         if(initMainCamPos|(lastMainCamPos=mainCamPos)!=(mainCamPos=MainCamera.singleton.transform.position)){
+          if(initMainCamPos){
+           Log.DebugMessage("SimsMachine:mainCamPos init");
+           lastMainCamPos=mainCamPos;
+           initMainCamPos=false;
+          }
+          Log.DebugMessage("SimsMachine:mainCamPos Update");
+          mainCamGetCurrentBiomeInputRounded=new Vector3Int(
+           Mathf.RoundToInt(mainCamPos.x),
+           Mathf.RoundToInt(mainCamPos.y),
+           Mathf.RoundToInt(mainCamPos.z)
+          );
+          mainCamGetCurrentBiomeInput=mainCamGetCurrentBiomeInputRounded+VoxelSystem.biome.deround;
+          mainCamGetCurrentBiomeOutput=VoxelSystem.biome.GetCurrent(mainCamGetCurrentBiomeInput);
+          Log.DebugMessage("SimsMachine:mainCam Current Biome:"+mainCamGetCurrentBiomeOutput);
+         }
          if(specificSpawnRequestsCooldown>0f){
             specificSpawnRequestsCooldown-=Core.magicDeltaTimeNumber;
          }

@@ -10,7 +10,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 namespace AKCondinoO.Voxels.Biomes{
-    internal class BaseBiome{
+    internal partial class BaseBiome{
      internal readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
          internal BaseBiome(){
           biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
