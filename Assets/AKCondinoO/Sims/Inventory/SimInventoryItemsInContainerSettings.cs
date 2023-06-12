@@ -40,7 +40,7 @@ namespace AKCondinoO.Sims.Inventory{
             Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
             for(int i=0;i<simObjectAsInventoryItemSettings.inventorySettings.Length;++i){
              SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=simObjectAsInventoryItemSettings.inventorySettings[i];
-             Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType);
+             Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType,typeof(SimInventory));
              if(simInventoryType!=null){
               Log.DebugMessage("simInventoryType:"+simInventoryType);
               int spacesUsed=inContainerData.simInventorySpaceUse;
