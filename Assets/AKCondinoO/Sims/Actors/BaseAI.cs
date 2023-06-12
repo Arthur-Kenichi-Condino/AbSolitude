@@ -5,6 +5,7 @@ using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace AKCondinoO.Sims.Actors{
      internal System.Random math_random;
         protected override void Awake(){
          math_random=new System.Random(seedGenerator.Next());
+         foreach(int i in Enum.GetValues(typeof(GotTargetMode))){
+          targetsGotten.Add((GotTargetMode)i,new SortedList<EnemyPriority,Dictionary<(Type simType,ulong number),(float dis,float timeout)>>());
+          foreach(int j in Enum.GetValues(typeof(EnemyPriority))){
+           targetsGotten[(GotTargetMode)i].Add((EnemyPriority)j,new Dictionary<(Type simType,ulong number),(float dis,float timeout)>());
+          }
+         }
          base.Awake();
         }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
