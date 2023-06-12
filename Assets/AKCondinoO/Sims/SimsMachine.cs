@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Humanoid;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Biomes;
@@ -9,12 +10,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
-    internal class SimsMachine:MonoBehaviour,ISingletonInitialization{
+    internal partial class SimsMachine:MonoBehaviour,ISingletonInitialization{
      internal static SimsMachine singleton{get;set;}
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
+     internal readonly Dictionary<Biomes,SimsMachineSpawnSettings>spawnSettingsByBiome=new Dictionary<Biomes,SimsMachineSpawnSettings>();
         public void Init(){
+           SetDefaultSpawnSettings();
+         SetWastelandSpawnSettings();
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
@@ -53,6 +57,57 @@ namespace AKCondinoO.Sims{
            if(!SimObjectManager.singleton.active.ContainsKey(idArthurCondino)){
             Log.DebugMessage("SimsMachine:call to current location:idArthurCondino:"+idArthurCondino);
             SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(idArthurCondino,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+           }
+          }
+         }
+         switch(mainCamGetCurrentBiomeOutput){
+          case Biomes.Wasteland:{
+           OnWastelandSpawning();
+           break;
+          }
+          default:{
+             OnDefaultSpawning();
+           break;
+          }
+         }
+        }
+     internal readonly Dictionary<Type,List<(Type simType,ulong number)>>spawnControl=new Dictionary<Type,List<(Type simType,ulong number)>>();
+        internal void SetDefaultSpawnSettings(){
+         Log.DebugMessage("SetDefaultSpawnSettings()");
+         spawnSettingsByBiome.Add(Biomes.Default,
+          new SimsMachineSpawnSettings{
+           spawns=new Dictionary<Type,SimsMachineSpawnSettings.SimObjectSettings>{
+            {
+             typeof(DisfiguringHomunculusAI),
+              new SimsMachineSpawnSettings.SimObjectSettings{
+               count=5,
+               chance=1.0f,
+              }
+            },
+           },
+          }
+         );
+         spawnControl.Add(typeof(DisfiguringHomunculusAI),new List<(Type simType,ulong number)>());
+        }
+        internal void OnDefaultSpawning(){
+         //Log.DebugMessage("OnDefaultSpawning()");
+         if(spawnSettingsByBiome.TryGetValue(Biomes.Default,out SimsMachineSpawnSettings spawnSettings)){
+          foreach(var kvp in spawnSettings.spawns){
+           Type simType=kvp.Key;
+           SimsMachineSpawnSettings.SimObjectSettings simSpawnSettings=kvp.Value;
+           if(spawnControl.TryGetValue(simType,out List<(Type simType,ulong number)>spawned)){
+            if(spawned.Count<simSpawnSettings.count){
+             Log.DebugMessage("OnDefaultSpawning: needs new spawn of simType:"+simType);
+             for(int i=0;i<simSpawnSettings.count;++i){
+              (Type simType,ulong number)id;
+              if(i<spawned.Count){
+               id=spawned[i];
+              }else{
+               id=(simType,(ulong)i);
+              }
+              SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(id,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
+             }
+            }
            }
           }
          }
