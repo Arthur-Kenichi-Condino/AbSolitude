@@ -28,6 +28,7 @@ namespace AKCondinoO.Sims.Actors{
       internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected override void AI(){
          base.AI();
+         UpdateEnemiesAndAllies();
          MyPathfinding=GetPathfindingResult();
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
          if(MyState==State.FOLLOW_ST){
