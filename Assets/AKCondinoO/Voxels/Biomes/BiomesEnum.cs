@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Biomes{
     internal enum Biomes:int{
+     Default=-1,
      Wasteland=0,
     }
     internal partial class BaseBiome{
