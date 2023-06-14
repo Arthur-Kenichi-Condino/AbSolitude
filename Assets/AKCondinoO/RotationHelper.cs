@@ -65,9 +65,9 @@ namespace AKCondinoO{
         }
         //  [https://forum.unity.com/threads/how-do-i-clamp-a-quaternion.370041/#post-6531533]
         internal static Quaternion Clamp(Quaternion q,Vector3 minAxisAngle,Vector3 maxAxisAngle){
-         q.x/=(q.w==0f?1f:q.w);
-         q.y/=(q.w==0f?1f:q.w);
-         q.z/=(q.w==0f?1f:q.w);
+         q.x/=(q.w==0f?1.0f:q.w);
+         q.y/=(q.w==0f?1.0f:q.w);
+         q.z/=(q.w==0f?1.0f:q.w);
          q.w=1.0f;
          float angleX=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.x);
          angleX=Mathf.Clamp(angleX,minAxisAngle.x,maxAxisAngle.x);
