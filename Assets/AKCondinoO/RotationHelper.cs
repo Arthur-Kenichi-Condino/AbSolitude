@@ -63,5 +63,22 @@ namespace AKCondinoO{
         internal static Quaternion RotDiffFromAToB(Quaternion rotationA,Quaternion rotationB){
          return rotationB*Quaternion.Inverse(rotationA);
         }
+        //  [https://forum.unity.com/threads/how-do-i-clamp-a-quaternion.370041/#post-6531533]
+        internal static Quaternion Clamp(Quaternion q,Vector3 minAxisAngle,Vector3 maxAxisAngle){
+         q.x/=(q.w==0f?1f:q.w);
+         q.y/=(q.w==0f?1f:q.w);
+         q.z/=(q.w==0f?1f:q.w);
+         q.w=1.0f;
+         float angleX=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.x);
+         angleX=Mathf.Clamp(angleX,minAxisAngle.x,maxAxisAngle.x);
+         q.x=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleX);
+         float angleY=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.y);
+         angleY=Mathf.Clamp(angleY,minAxisAngle.y,maxAxisAngle.y);
+         q.y=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleY);
+         float angleZ=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.z);
+         angleZ=Mathf.Clamp(angleZ,minAxisAngle.z,maxAxisAngle.z);
+         q.z=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleZ);
+         return q.normalized;
+        }
     }
 }

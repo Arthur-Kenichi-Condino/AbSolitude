@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Actors.Humanoid;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using AKCondinoO.Voxels;
@@ -23,14 +24,33 @@ namespace AKCondinoO.Sims{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
         }
+     internal readonly Dictionary<(Type simType,ulong number),SimActor>actors=new Dictionary<(Type,ulong),SimActor>();
+        internal void OnActorSpawn(SimActor simActor){
+         Type simType=simActor.id.Value.simObjectType;
+         if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
+          spawned.Add(simActor.id.Value);
+          Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
+         }
+         actors.Add(simActor.id.Value,simActor);
+        }
+        internal void OnActorDespawn(SimActor simActor){
+         Type simType=simActor.id.Value.simObjectType;
+         if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
+          spawned.Remove(simActor.id.Value);
+          Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
+         }
+         actors.Remove(simActor.id.Value);
+        }
      Vector3 mainCamPos,lastMainCamPos;
       bool initMainCamPos=true;
       Vector3Int mainCamGetCurrentBiomeInputRounded;
        Vector3 mainCamGetCurrentBiomeInput;
         Biomes mainCamGetCurrentBiomeOutput;
      readonly(Type simType,ulong number)idArthurCondino=(typeof(ArthurCondinoAI),0);
-     float specificSpawnRequestsDelay=5f;
-     float specificSpawnRequestsCooldown=5f;
+     float spawningRequestsDelay=1f;
+      float spawningRequestsCooldown=10f;
+      float specificSpawnRequestsDelay=10f;
+       float specificSpawnRequestsCooldown=10f;
         void Update(){
          if(initMainCamPos|(lastMainCamPos=mainCamPos)!=(mainCamPos=MainCamera.singleton.transform.position)){
           if(initMainCamPos){
@@ -60,18 +80,24 @@ namespace AKCondinoO.Sims{
            }
           }
          }
-         switch(mainCamGetCurrentBiomeOutput){
-          case Biomes.Wasteland:{
-           OnWastelandSpawning();
-           break;
-          }
-          default:{
-             OnDefaultSpawning();
-           break;
+         if(spawningRequestsCooldown>0f){
+            spawningRequestsCooldown-=Core.magicDeltaTimeNumber;
+         }
+         if(spawningRequestsCooldown<=0f){
+            spawningRequestsCooldown=spawningRequestsDelay;
+          switch(mainCamGetCurrentBiomeOutput){
+           case Biomes.Wasteland:{
+            OnWastelandSpawning();
+            break;
+           }
+           default:{
+              OnDefaultSpawning();
+            break;
+           }
           }
          }
         }
-     internal readonly Dictionary<Type,List<(Type simType,ulong number)>>spawnControl=new Dictionary<Type,List<(Type simType,ulong number)>>();
+     internal readonly Dictionary<Type,HashSet<(Type simType,ulong number)>>spawnControl=new Dictionary<Type,HashSet<(Type simType,ulong number)>>();
         internal void SetDefaultSpawnSettings(){
          Log.DebugMessage("SetDefaultSpawnSettings()");
          spawnSettingsByBiome.Add(Biomes.Default,
@@ -87,7 +113,7 @@ namespace AKCondinoO.Sims{
            },
           }
          );
-         spawnControl.Add(typeof(DisfiguringHomunculusAI),new List<(Type simType,ulong number)>());
+         spawnControl.Add(typeof(DisfiguringHomunculusAI),new HashSet<(Type simType,ulong number)>());
         }
         internal void OnDefaultSpawning(){
          //Log.DebugMessage("OnDefaultSpawning()");
@@ -95,17 +121,15 @@ namespace AKCondinoO.Sims{
           foreach(var kvp in spawnSettings.spawns){
            Type simType=kvp.Key;
            SimsMachineSpawnSettings.SimObjectSettings simSpawnSettings=kvp.Value;
-           if(spawnControl.TryGetValue(simType,out List<(Type simType,ulong number)>spawned)){
+           if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
             if(spawned.Count<simSpawnSettings.count){
              Log.DebugMessage("OnDefaultSpawning: needs new spawn of simType:"+simType);
              for(int i=0;i<simSpawnSettings.count;++i){
-              (Type simType,ulong number)id;
-              if(i<spawned.Count){
-               id=spawned[i];
-              }else{
-               id=(simType,(ulong)i);
+              (Type simType,ulong number)id=(simType,(ulong)i);
+              if(!spawned.Contains(id)){
+               Vector3 randomPoint=Util.GetRandomPosition(MainCamera.singleton.transform.position,48.0f);
+               SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(id,randomPoint,Vector3.zero,Vector3.one);
               }
-              SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(id,MainCamera.singleton.transform.position,Vector3.zero,Vector3.one);
              }
             }
            }

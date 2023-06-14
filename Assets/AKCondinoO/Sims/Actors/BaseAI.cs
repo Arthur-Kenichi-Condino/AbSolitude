@@ -58,7 +58,8 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(
           MyPathfinding==PathfindingResult.IDLE||
-          MyPathfinding==PathfindingResult.REACHED
+          MyPathfinding==PathfindingResult.REACHED||
+          MyPathfinding==PathfindingResult.TIMEOUT
          ){
           if(timerToRandomMove>0.0f){
              timerToRandomMove-=Core.magicDeltaTimeNumber;
@@ -81,7 +82,7 @@ namespace AKCondinoO.Sims.Actors{
         //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
         protected bool GetRandomPosition(Vector3 center,float maxDis,out Vector3 result){
          for(int i=0;i<3;++i){
-          Vector3 randomPoint=center+UnityEngine.Random.insideUnitSphere*maxDis;
+          Vector3 randomPoint=Util.GetRandomPosition(center,maxDis);
           if(NavMesh.SamplePosition(randomPoint,out NavMeshHit hit,Height,navMeshQueryFilter)){
            result=hit.position;
            return true;
