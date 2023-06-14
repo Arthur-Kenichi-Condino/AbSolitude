@@ -21,6 +21,14 @@ namespace AKCondinoO.Sims.Actors{
       internal float footHeight=.075f;
      [SerializeField]float headOnIKRotationStoppedCooldown=.1f;
       float headIKRotationStoppedTimer=0f;
+     internal float  leftFootIKPositionWeight;
+     internal float  leftFootIKRotationWeight;
+      [SerializeField]internal FloatLerpHelper  leftFootIKPositionWeightLerp=new FloatLerpHelper();
+      [SerializeField]internal FloatLerpHelper  leftFootIKRotationWeightLerp=new FloatLerpHelper();
+     internal float rightFootIKPositionWeight;
+     internal float rightFootIKRotationWeight;
+      [SerializeField]internal FloatLerpHelper rightFootIKPositionWeightLerp=new FloatLerpHelper();
+      [SerializeField]internal FloatLerpHelper rightFootIKRotationWeightLerp=new FloatLerpHelper();
         //  [https://forum.unity.com/threads/setikrotation-for-feet-on-slope.510931/]
         void OnAnimatorIK(int layerIndex){
          //Log.DebugMessage("OnAnimatorIK:layerIndex:"+layerIndex);
@@ -91,6 +99,7 @@ namespace AKCondinoO.Sims.Actors{
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
+           leftFootIKRotation=RotationHelper.Clamp(leftFootIKRotation,new Vector3(-20f,-20f,-20f),new Vector3(20f,20f,20f));
            //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
           }
           Quaternion rightFootIKRotation=rightFoot.rotation;
@@ -104,6 +113,7 @@ namespace AKCondinoO.Sims.Actors{
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
+           rightFootIKRotation=RotationHelper.Clamp(rightFootIKRotation,new Vector3(-20f,-20f,-20f),new Vector3(20f,20f,20f));
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
           if(simActorAnimatorController.actor is BaseAI baseAI&&
@@ -111,19 +121,36 @@ namespace AKCondinoO.Sims.Actors{
             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
            )
           ){
-           float height=simActorAnimatorController.actor.height;
-           Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.25f);
-           simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1f);
-           simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,1f);
-           leftFootIKPosition.y=Mathf.Min(heightLimit.y,leftFootIKPosition.y);
-           simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
-           simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.LeftFoot,leftFootIKRotation);
-           simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,1f);
-           simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,1f);
-           rightFootIKPosition.y=Mathf.Min(heightLimit.y,rightFootIKPosition.y);
-           simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
-           simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
+            leftFootIKPositionWeightLerp.tgtVal=1f;
+            leftFootIKRotationWeightLerp.tgtVal=1f;
+           rightFootIKPositionWeightLerp.tgtVal=1f;
+           rightFootIKRotationWeightLerp.tgtVal=1f;
+          }else{
+            leftFootIKPositionWeightLerp.tgtVal=0f;
+            leftFootIKRotationWeightLerp.tgtVal=0f;
+           rightFootIKPositionWeightLerp.tgtVal=0f;
+           rightFootIKRotationWeightLerp.tgtVal=0f;
           }
+           leftFootIKPositionWeight= leftFootIKPositionWeightLerp.UpdateFloat( leftFootIKPositionWeight,Core.magicDeltaTimeNumber);
+           leftFootIKRotationWeight= leftFootIKRotationWeightLerp.UpdateFloat( leftFootIKRotationWeight,Core.magicDeltaTimeNumber);
+          rightFootIKPositionWeight=rightFootIKPositionWeightLerp.UpdateFloat(rightFootIKPositionWeight,Core.magicDeltaTimeNumber);
+          rightFootIKRotationWeight=rightFootIKRotationWeightLerp.UpdateFloat(rightFootIKRotationWeight,Core.magicDeltaTimeNumber);
+          float height=simActorAnimatorController.actor.height;
+          Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.65f);
+          #region LeftFoot
+              simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,leftFootIKPositionWeight);
+              simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,leftFootIKRotationWeight);
+              leftFootIKPosition.y=Mathf.Min(heightLimit.y,leftFootIKPosition.y);
+              simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
+              simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.LeftFoot,leftFootIKRotation);
+          #endregion
+          #region RightFoot
+              simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,rightFootIKPositionWeight);
+              simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,rightFootIKRotationWeight);
+              rightFootIKPosition.y=Mathf.Min(heightLimit.y,rightFootIKPosition.y);
+              simActorAnimatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
+              simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
+          #endregion
          }
         }
     }

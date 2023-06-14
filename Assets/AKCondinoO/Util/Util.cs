@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO{
     internal class Util{
      internal static int UILayer;
@@ -37,6 +38,10 @@ namespace AKCondinoO{
          float targetDistance=disX>disY?disX:disY;
          cam.transform.position=(targetTransform.position+targetTransform.rotation*boundsCenter)-Vector3.forward*(targetDistance+boundsSizeZ/2f);
          cam.transform.LookAt(targetTransform.position+targetTransform.rotation*boundsCenter);
+        }
+        //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
+        internal static Vector3 GetRandomPosition(Vector3 center,float maxDis){
+         return center+UnityEngine.Random.insideUnitSphere*maxDis;
         }
         internal static void DrawBounds(Bounds b,Color color,float duration=0){//[https://gist.github.com/unitycoder/58f4b5d80f423d29e35c814a9556f9d9]
          var p1=new Vector3(b.min.x,b.min.y,b.min.z);// bottom

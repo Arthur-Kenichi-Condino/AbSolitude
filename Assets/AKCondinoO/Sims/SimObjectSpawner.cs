@@ -312,6 +312,7 @@ namespace AKCondinoO.Sims{
                   simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
                  }
                  SimObjectManager.singleton.activeActor.Add(id,simActor);
+                 SimsMachine.singleton.OnActorSpawn(simActor);
                 }
                 if(asInventoryItemOwner!=null){
                  Log.DebugMessage("add simObject asInventoryItem to Owner");
@@ -497,6 +498,9 @@ namespace AKCondinoO.Sims{
          ){
           //  TO DO: remove sim inventories
           foreach(var despawn in SimObjectManager.singleton.despawning){
+           if(despawn.Value is SimActor simActor){
+            SimsMachine.singleton.OnActorDespawn(simActor);
+           }
            SimObjectManager.singleton.spawned.Remove(despawn.Key);
            despawn.Value.OnDespawned();
            despawn.Value.pooled=SimObjectManager.singleton.pool[despawn.Value.id.Value.simObjectType].AddLast(despawn.Value);
