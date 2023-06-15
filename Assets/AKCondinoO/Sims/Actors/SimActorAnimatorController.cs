@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
+using AKCondinoO.Sims.Actors.Humanoid;
 using AKCondinoO.Sims.Actors.Humanoid.Human;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System.Collections;
@@ -183,6 +184,9 @@ namespace AKCondinoO.Sims.Actors{
              }else if(baseAI is HumanAI humanAI){
               UpdateHumanAIAnimatorWeaponLayer(baseAI,humanAI);
               UpdateHumanAIAnimatorMotionValue(baseAI,humanAI);
+             }else if(baseAI is DisfiguringHomunculusAI disfiguringHomunculusAI){
+              UpdateDisfiguringHomunculusAIAnimatorWeaponLayer(baseAI,disfiguringHomunculusAI);
+              UpdateDisfiguringHomunculusAIAnimatorMotionValue(baseAI,disfiguringHomunculusAI);
              }else if(baseAI is ArquimedesAI arquimedesAI){
               UpdateArquimedesAIAnimatorWeaponLayer(baseAI,arquimedesAI);
               UpdateArquimedesAIAnimatorMotionValue(baseAI,arquimedesAI);
