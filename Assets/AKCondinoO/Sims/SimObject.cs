@@ -247,7 +247,7 @@ namespace AKCondinoO.Sims{
         internal virtual void OnDeactivated(){
          skillBuffs.Clear();
          persistentStats.UpdateData(this);
-         Log.DebugMessage("OnDeactivated:id:"+id);
+         //Log.DebugMessage("OnDeactivated:id:"+id);
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();

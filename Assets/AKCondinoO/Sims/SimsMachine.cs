@@ -66,7 +66,7 @@ namespace AKCondinoO.Sims{
           );
           mainCamGetCurrentBiomeInput=mainCamGetCurrentBiomeInputRounded+VoxelSystem.biome.deround;
           mainCamGetCurrentBiomeOutput=VoxelSystem.biome.GetCurrent(mainCamGetCurrentBiomeInput);
-          Log.DebugMessage("SimsMachine:mainCam Current Biome:"+mainCamGetCurrentBiomeOutput);
+          //Log.DebugMessage("SimsMachine:mainCam Current Biome:"+mainCamGetCurrentBiomeOutput);
          }
          if(specificSpawnRequestsCooldown>0f){
             specificSpawnRequestsCooldown-=Core.magicDeltaTimeNumber;

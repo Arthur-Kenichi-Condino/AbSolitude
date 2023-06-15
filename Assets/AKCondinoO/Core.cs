@@ -68,7 +68,7 @@ namespace AKCondinoO{
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
-         magicDeltaTimeNumber=1f/(float)Screen.currentResolution.refreshRateRatio.value;
+         magicDeltaTimeNumber=(1f/(float)Screen.currentResolution.refreshRateRatio.value)/((164.6f*2f)/(float)Screen.currentResolution.refreshRateRatio.value);
          Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
