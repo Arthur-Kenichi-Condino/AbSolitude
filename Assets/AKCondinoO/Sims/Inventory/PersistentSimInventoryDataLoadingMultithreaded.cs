@@ -49,7 +49,7 @@ namespace AKCondinoO.Sims.Inventory{
             ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
             (Type simObjectType,ulong idNumber)simObjectId=(simObjectType,simObjectIdNumber);
             if(simInventorySpawnAtIndexById.TryGetValue(simObjectId,out int simObjectSpawnAtIndex)){
-             Log.DebugMessage("found sim inventory data for simObjectId:"+simObjectId);
+             //Log.DebugMessage("found sim inventory data for simObjectId:"+simObjectId);
             }
            }
           }

@@ -185,9 +185,9 @@ namespace AKCondinoO.Sims{
      readonly SpawnData spawnData=new SpawnData();
      bool savingPersistentData;
      bool loadingPersistentData;
-     float loaderCooldown=1f;
+     float loaderCooldown=.5f;
      float loaderOnCooldownTimer;
-     float reloadInterval=5f;
+     float reloadInterval=1f;
      float reloadTimer;
         void Update(){
          if(loaderOnCooldownTimer>0f){
