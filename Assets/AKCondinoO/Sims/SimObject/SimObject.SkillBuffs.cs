@@ -11,10 +11,10 @@ namespace AKCondinoO.Sims{
         internal virtual void OnSkillUsed(Skill skill,bool done,bool revoked){
         }
      internal SkillBuffEffectsState skillBuffs;
-        internal bool OnTargetedBySkill(Skill skill,SimObject caster){
+        internal virtual bool OnTargetedBySkill(Skill skill,SimObject caster){
          return false;
         }
-        internal bool OnHitByTargetedSkill(Skill skill,SimObject caster){
+        internal virtual bool OnHitByTargetedSkill(Skill skill,SimObject caster){
          return false;
         }
     }
