@@ -23,6 +23,7 @@ namespace AKCondinoO.Sims.Actors{
                          Dictionary<(Type simType,ulong number),(float dis,float timeout)>
                         >
                        >targetsGotten=new();
+     internal readonly HashSet<(Type simType,ulong number)>targets=new HashSet<(Type,ulong)>();
         internal virtual void GetEnemiesAndAllies(){
         }
     }
