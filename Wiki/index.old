@@ -6,10 +6,10 @@ console.log("trying to become alive...");
 //for(var i=allScripts.length-1;i>=0;--i){
 //    var src=allScripts[i].src;
 //    console.log("searching allScripts...src:"+src);
-//    if(src.substring(src.length-'/Main.js'.length)=='/Main.js'){
-//        //console.log("found Main.js src:"+src);
-//        rootURL=src.substring(0,src.length-'Main.js'.length);
-//        console.log("found Main.js rootURL:"+rootURL);
+//    if(src.substring(src.length-'/index.js'.length)=='/index.js'){
+//        //console.log("found index.js src:"+src);
+//        rootURL=src.substring(0,src.length-'index.js'.length);
+//        console.log("found index.js rootURL:"+rootURL);
 //    }
 //}
 function RequestDirectoryIndexDataRecursivelyThenParseToWikiElementInnerHtmlByClassName(dir,className){

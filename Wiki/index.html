@@ -1,21 +1,50 @@
-<html>
-    <head>
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="Main.css">
-        <script type="text/javascript" src=Jquery.js defer></script>
-        <script type="module" src=Main.js defer></script>
-    </head>
-    <body>
-        <div class="BorderLeft" onmouseenter="JQueryFadeInElement('WikiMainSidebarArea','0')">
-            <!--empty-->            
-        </div>
-        
-        <div class="WikiMainSidebarArea" onmouseleave="JQueryFadeOutElement('WikiMainSidebarArea','200')">
-            <div class="WikiMainSidebarContent">
-            </div>
-        </div>
-
-        <div class="WikiPageContent">
-        </div>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wiki AbSolutide</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Carlito&family=Gantari:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <script type="text/javascript" src="Jquery.js" defer></script>
+    <script type="module" src="index.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h4 class="wiki_name">
+        Wiki AbSolitude
+      </h4>
+    </header>
+    <main>
+      <aside class="menu">
+      <!-- 
+        <select name="Homunculus" class="dropdown_homunculus">
+          
+        </select>
+      -->
+      </aside>
+      <section class="wiki"></section>
+    </main>
+  </body>
 </html>
+
+<!-- 
+      <div class="BorderLeft"></div>
+
+    <div class="WikiMainSidebarArea">
+      <div class="WikiMainSidebarContent"></div>
+    </div>
+
+    <div class="WikiPageContent"></div>
+-->
