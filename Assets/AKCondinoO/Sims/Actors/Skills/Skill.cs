@@ -130,7 +130,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
            done=false;
           }
           if(cooldown>0f){
-           cooldown-=Core.magicDeltaTimeNumber;
+           cooldown-=Time.deltaTime;
           }
           return;
          }

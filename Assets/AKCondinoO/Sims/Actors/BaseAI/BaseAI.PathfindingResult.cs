@@ -18,7 +18,7 @@ namespace AKCondinoO.Sims.Actors {
         }
         PathfindingResult GetPathfindingResult(){
          if(pathPendingTimer>0f){
-            pathPendingTimer-=Core.magicDeltaTimeNumber;
+            pathPendingTimer-=Time.deltaTime;
           if(pathPendingTimer<=0f){
            navMeshAgent.destination=navMeshAgent.transform.position;
            return PathfindingResult.TIMEOUT;
@@ -45,7 +45,7 @@ namespace AKCondinoO.Sims.Actors {
           return PathfindingResult.IDLE;
          }
          if(pathfindingTimer>0f){
-            pathfindingTimer-=Core.magicDeltaTimeNumber;
+            pathfindingTimer-=Time.deltaTime;
           if(pathfindingTimer<=0f){
            navMeshAgent.destination=navMeshAgent.transform.position;
            return PathfindingResult.TIMEOUT;

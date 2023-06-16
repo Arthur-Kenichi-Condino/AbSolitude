@@ -61,8 +61,8 @@ MonoBehaviour:
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 1
   AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
-    tgtValLerpSpeed: 4.75
-    tgtValLerpMaxTime: 1
+    tgtValLerpSpeed: 38
+    tgtValLerpMaxTime: 0.0001
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
@@ -84,11 +84,11 @@ MonoBehaviour:
   headMaxHorizontalRotationAngle: 60
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 19
+    tgtRotLerpSpeed: 38
     tgtRotLerpMaxTime: 0.0001
   viewRotationSmoothValue: 0.025
   posLerp:
-    tgtPosLerpSpeed: 19
+    tgtPosLerpSpeed: 38
     tgtPosLerpMaxTime: 0.0001
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
@@ -111,10 +111,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 19
+    tgtRotLerpSpeed: 76
     tgtRotLerpMaxTime: 0.0005
   posLerp:
-    tgtPosLerpSpeed: 19
+    tgtPosLerpSpeed: 76
     tgtPosLerpMaxTime: 0.0005
 --- !u!195 &4585911009965713821
 NavMeshAgent:

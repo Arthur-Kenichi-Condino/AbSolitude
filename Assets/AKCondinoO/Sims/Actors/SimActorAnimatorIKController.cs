@@ -65,7 +65,7 @@ namespace AKCondinoO.Sims.Actors{
            if(flag){
             headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
            }else{
-            headIKRotationStoppedTimer-=Core.magicDeltaTimeNumber;
+            headIKRotationStoppedTimer-=Time.deltaTime;
            }
           }
           headLookAtPositionLerp.tgtPos=headLookAtPosition;
