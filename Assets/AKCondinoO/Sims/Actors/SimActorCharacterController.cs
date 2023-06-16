@@ -59,7 +59,7 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
          }else if(delayToConsiderNotOnGround>0f){
-          delayToConsiderNotOnGround-=Core.magicDeltaTimeNumber;
+          delayToConsiderNotOnGround-=Time.deltaTime;
          }
          beforeMovePos=characterController.transform.position;
          if(!Enabled.RELEASE_MOUSE.curState){

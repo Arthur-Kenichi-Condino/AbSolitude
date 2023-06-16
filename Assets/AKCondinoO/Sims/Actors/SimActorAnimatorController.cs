@@ -72,7 +72,7 @@ namespace AKCondinoO.Sims.Actors{
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
      internal int layerCount{get;private set;}
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
-      WeaponTypes lastWeaponType=WeaponTypes.None;
+      internal WeaponTypes lastWeaponType=WeaponTypes.None;
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
      Dictionary<int,float>normalizedTime;
@@ -174,34 +174,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
         protected virtual void UpdateMotion(BaseAI baseAI){
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
-             if(baseAI is ArthurCondinoAI arthurCondinoAI){
-              UpdateArthurCondinoAIAnimatorWeaponLayer(baseAI,arthurCondinoAI);
-              UpdateArthurCondinoAIAnimatorMotionValue(baseAI,arthurCondinoAI);
-             }else if(baseAI is HumanAI humanAI){
-              UpdateHumanAIAnimatorWeaponLayer(baseAI,humanAI);
-              UpdateHumanAIAnimatorMotionValue(baseAI,humanAI);
-             }else if(baseAI is DisfiguringHomunculusAI disfiguringHomunculusAI){
-              UpdateDisfiguringHomunculusAIAnimatorWeaponLayer(baseAI,disfiguringHomunculusAI);
-              UpdateDisfiguringHomunculusAIAnimatorMotionValue(baseAI,disfiguringHomunculusAI);
-             }else if(baseAI is ArquimedesAI arquimedesAI){
-              UpdateArquimedesAIAnimatorWeaponLayer(baseAI,arquimedesAI);
-              UpdateArquimedesAIAnimatorMotionValue(baseAI,arquimedesAI);
-             }else if(baseAI is VanilmirthAI vanilmirthAI){
-              UpdateVanilmirthAIAnimatorWeaponLayer(baseAI,vanilmirthAI);
-              UpdateVanilmirthAIAnimatorMotionValue(baseAI,vanilmirthAI);
-             }
+          if(motionUpdater==null){
+           if(actor.simUMAData!=null){
+            motionUpdater=actor.simUMAData.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
+           }
+           if(motionUpdater!=null){
+            motionUpdater.controller=this;
+           }
+          }
+          if(motionUpdater!=null){
+             motionUpdater.UpdateAnimatorWeaponLayer();
+             motionUpdater.UpdateAnimatorMotionValue();
+          }
           if(lastMotion!=baseAI.motion){
            Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
           }
           lastMotion=baseAI.motion;
         }
      Coroutine layerTransitionCoroutine;
-      readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
-       readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
+      internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
+       internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
             Loop:{
              foreach(var layer in layerTargetWeight){

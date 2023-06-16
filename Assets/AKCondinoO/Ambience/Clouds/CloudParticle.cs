@@ -49,7 +49,7 @@ namespace AKCondinoO.Ambience.Clouds{
           }
          }else{
           //
-             alpha.reverseTimer-=Core.magicDeltaTimeNumber;
+             alpha.reverseTimer-=Time.deltaTime;
           if(alpha.reverseTimer<=0f){
              alpha.reverseTimer=CloudParticleSystem.singleton.alphaSettings.reverseInterval;
            bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.reverseChance;
@@ -57,7 +57,7 @@ namespace AKCondinoO.Ambience.Clouds{
             alpha.RandomlyReverseSpeed();
            }
           }
-             alpha.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
+             alpha.changeIncrementSpeedValueTimer-=Time.deltaTime;
           if(alpha.changeIncrementSpeedValueTimer<=0f){
              alpha.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueInterval;
            bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.alphaSettings.changeIncrementSpeedValueChance;
@@ -66,7 +66,7 @@ namespace AKCondinoO.Ambience.Clouds{
            }
           }
          }
-            angle.reverseTimer-=Core.magicDeltaTimeNumber;
+            angle.reverseTimer-=Time.deltaTime;
          if(angle.reverseTimer<=0f){
             angle.reverseTimer=CloudParticleSystem.singleton.angleSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.reverseChance;
@@ -75,7 +75,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle angle.incrementSpeed to:"+angle.incrementSpeed);
           }
          }
-            angle.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
+            angle.changeIncrementSpeedValueTimer-=Time.deltaTime;
          if(angle.changeIncrementSpeedValueTimer<=0f){
             angle.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.angleSettings.changeIncrementSpeedValueChance;
@@ -84,7 +84,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle angle.incrementSpeed value to:"+angle.incrementSpeed);
           }
          }
-            orbit.reverseTimer-=Core.magicDeltaTimeNumber;
+            orbit.reverseTimer-=Time.deltaTime;
          if(orbit.reverseTimer<=0f){
             orbit.reverseTimer=CloudParticleSystem.singleton.orbitSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.reverseChance;
@@ -93,7 +93,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle orbit.incrementSpeed to:"+orbit.incrementSpeed);
           }
          }
-            orbit.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
+            orbit.changeIncrementSpeedValueTimer-=Time.deltaTime;
          if(orbit.changeIncrementSpeedValueTimer<=0f){
             orbit.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.orbitSettings.changeIncrementSpeedValueChance;
@@ -102,7 +102,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle orbit.incrementSpeed value to:"+orbit.incrementSpeed);
           }
          }
-            distance.reverseTimer-=Core.magicDeltaTimeNumber;
+            distance.reverseTimer-=Time.deltaTime;
          if(distance.reverseTimer<=0f){
             distance.reverseTimer=CloudParticleSystem.singleton.distanceSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.distanceSettings.reverseChance;
@@ -112,7 +112,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle distance.incrementSpeed to:"+distance.incrementSpeed);
           }
          }
-            distance.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
+            distance.changeIncrementSpeedValueTimer-=Time.deltaTime;
          if(distance.changeIncrementSpeedValueTimer<=0f){
             distance.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.distanceSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.distanceSettings.changeIncrementSpeedValueChance;
@@ -122,7 +122,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("changed cloud particle distance.incrementSpeed value to:"+distance.incrementSpeed);
           }
          }
-            scale.reverseTimer-=Core.magicDeltaTimeNumber;
+            scale.reverseTimer-=Time.deltaTime;
          if(scale.reverseTimer<=0f){
             scale.reverseTimer=CloudParticleSystem.singleton.scaleSettings.reverseInterval;
           bool reverse=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.reverseChance;
@@ -131,7 +131,7 @@ namespace AKCondinoO.Ambience.Clouds{
            //Log.DebugMessage("reversed cloud particle scale.incrementSpeed to:"+scale.incrementSpeed);
           }
          }
-            scale.changeIncrementSpeedValueTimer-=Core.magicDeltaTimeNumber;
+            scale.changeIncrementSpeedValueTimer-=Time.deltaTime;
          if(scale.changeIncrementSpeedValueTimer<=0f){
             scale.changeIncrementSpeedValueTimer=CloudParticleSystem.singleton.scaleSettings.changeIncrementSpeedValueInterval;
           bool change=Mathf.Clamp01((float)CloudParticleSystem.singleton.random.NextDouble())<CloudParticleSystem.singleton.scaleSettings.changeIncrementSpeedValueChance;

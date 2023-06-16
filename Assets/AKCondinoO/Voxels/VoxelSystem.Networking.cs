@@ -107,7 +107,7 @@ namespace AKCondinoO.Voxels{
            clientVoxelTerrainChunkEditDataRequestsToSend.Remove(toRemove);
           }
          }else{
-          clientSendMessageTimer-=Core.magicDeltaTimeNumber;
+          clientSendMessageTimer-=Time.deltaTime;
          }
         }
      Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;

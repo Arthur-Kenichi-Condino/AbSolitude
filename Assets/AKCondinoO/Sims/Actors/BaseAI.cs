@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims.Actors{
           MyPathfinding==PathfindingResult.TIMEOUT
          ){
           if(timerToRandomMove>0.0f){
-             timerToRandomMove-=Core.magicDeltaTimeNumber;
+             timerToRandomMove-=Time.deltaTime;
           }else if(doIdleMove){
              timerToRandomMove=delayToRandomMove;
            Log.DebugMessage("can do random movement");

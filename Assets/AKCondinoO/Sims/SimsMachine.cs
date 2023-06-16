@@ -69,7 +69,7 @@ namespace AKCondinoO.Sims{
           //Log.DebugMessage("SimsMachine:mainCam Current Biome:"+mainCamGetCurrentBiomeOutput);
          }
          if(specificSpawnRequestsCooldown>0f){
-            specificSpawnRequestsCooldown-=Core.magicDeltaTimeNumber;
+            specificSpawnRequestsCooldown-=Time.deltaTime;
          }
          if(specificSpawnRequestsCooldown<=0f){
             specificSpawnRequestsCooldown=specificSpawnRequestsDelay;
@@ -81,7 +81,7 @@ namespace AKCondinoO.Sims{
           }
          }
          if(spawningRequestsCooldown>0f){
-            spawningRequestsCooldown-=Core.magicDeltaTimeNumber;
+            spawningRequestsCooldown-=Time.deltaTime;
          }
          if(spawningRequestsCooldown<=0f){
             spawningRequestsCooldown=spawningRequestsDelay;
