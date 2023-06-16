@@ -25,14 +25,10 @@ namespace AKCondinoO.Sims.Actors{
          }
          base.Awake();
         }
-     protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;
-      internal ActorMotion motion{get{return MyMotion;}}
-     protected State MyState=State.IDLE_ST;
-      internal State state{get{return MyState;}}
-     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;
-      internal PathfindingResult pathfinding{get{return MyPathfinding;}}
-     protected WeaponTypes MyWeaponType=WeaponTypes.None;
-      internal WeaponTypes weaponType{get{return MyWeaponType;}}
+     protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;internal ActorMotion motion{get{return MyMotion;}}
+     protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
+     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
+     protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected override void AI(){
          base.AI();
          GetEnemiesAndAllies();

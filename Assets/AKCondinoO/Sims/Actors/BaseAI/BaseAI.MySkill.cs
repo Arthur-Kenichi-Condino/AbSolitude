@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Skill MySkill=null;
-      internal Skill skillToUse{get{return MySkill;}}
+     protected Skill MySkill=null;internal Skill skillToUse{get{return MySkill;}}
       internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
         protected virtual void OnIDLE_ST_SetMySkill(){
          //  TO DO: skillsToUse.Clear() ao trocar de estado da AI ou em situações específicas, como depois de um delay
