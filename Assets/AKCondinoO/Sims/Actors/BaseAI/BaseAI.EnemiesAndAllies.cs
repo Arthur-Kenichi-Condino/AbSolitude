@@ -23,7 +23,7 @@ namespace AKCondinoO.Sims.Actors{
                          Dictionary<(Type simType,ulong number),(float dis,float timeout)>
                         >
                        >targetsGotten=new();
-        internal virtual void UpdateEnemiesAndAllies(){
+        internal virtual void GetEnemiesAndAllies(){
         }
     }
 }

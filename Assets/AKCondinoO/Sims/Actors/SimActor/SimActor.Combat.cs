@@ -6,5 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActor{
+        protected virtual void DoAttack(){
+        }
     }
 }
