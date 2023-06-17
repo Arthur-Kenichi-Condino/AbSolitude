@@ -590,7 +590,7 @@ namespace AKCondinoO.Sims{
         }
         protected virtual void OnDrawGizmos(){
          #if UNITY_EDITOR
-             Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
+             //Util.DrawRotatedBounds(worldBoundsVertices,Color.white);
          #endif
         }
     }
