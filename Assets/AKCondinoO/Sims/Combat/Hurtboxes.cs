@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Sims.Combat{
+namespace AKCondinoO.Sims.Actors.Combat{
     internal class Hurtboxes:MonoBehaviour{
     }
 }

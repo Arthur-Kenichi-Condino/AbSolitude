@@ -18,7 +18,7 @@ Shader"Voxels/VoxelTerrain"{
   _fadeEndDis("fade end distance",float)=40
  }
  SubShader{
-  Tags{"Queue"="AlphaTest" "RenderType"="Transparent" "IgnoreProjector"="True"}
+  Tags{"Queue"="AlphaTest" "RenderType"="Transparent" "IgnoreProjector"="True" "DisableBatching"="True"}
   LOD 200
   Pass{
    ZWrite On

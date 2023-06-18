@@ -31,8 +31,8 @@ namespace AKCondinoO{
       internal float tgtRotLerpTime;
        internal float tgtRotLerpVal;
         internal Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]internal float tgtRotLerpSpeed=19f;
-          [SerializeField]internal float tgtRotLerpMaxTime=.0001f;
+         [SerializeField]internal float tgtRotLerpSpeed=76.0f;
+          [SerializeField]internal float tgtRotLerpMaxTime=0.0005f;
         internal Quaternion UpdateRotation(Quaternion rotation,float deltaTime){
          Quaternion result=rotation;
              if(tgtRotLerpTime==0f){

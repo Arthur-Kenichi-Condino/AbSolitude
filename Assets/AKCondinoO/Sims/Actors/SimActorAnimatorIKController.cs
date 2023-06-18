@@ -88,6 +88,7 @@ namespace AKCondinoO.Sims.Actors{
          if(leftFoot!=null&&rightFoot!=null){
           float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;
           //Log.DebugMessage("disBetweenFeet:"+disBetweenFeet);
+          Vector3 leftFootIKEuler=leftFoot.eulerAngles;
           Quaternion leftFootIKRotation=leftFoot.rotation;
           Vector3 leftFootIKPosition=new Vector3(
            leftFoot.position.x,
@@ -99,9 +100,10 @@ namespace AKCondinoO.Sims.Actors{
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
-           leftFootIKRotation=RotationHelper.Clamp(leftFootIKRotation,new Vector3(-20f,-20f,-20f),new Vector3(20f,20f,20f));
+           leftFootIKRotation=RotationHelper.Clamp(leftFootIKRotation,new Vector3(-20f,-leftFoot.eulerAngles.y-20f,-20f),new Vector3(20f,-leftFoot.eulerAngles.y+20f,20f));
            //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
           }
+          Vector3 rightFootIKEuler=rightFoot.eulerAngles;
           Quaternion rightFootIKRotation=rightFoot.rotation;
           Vector3 rightFootIKPosition=new Vector3(
            rightFoot.position.x,
@@ -113,7 +115,7 @@ namespace AKCondinoO.Sims.Actors{
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
-           rightFootIKRotation=RotationHelper.Clamp(rightFootIKRotation,new Vector3(-20f,-20f,-20f),new Vector3(20f,20f,20f));
+           rightFootIKRotation=RotationHelper.Clamp(rightFootIKRotation,new Vector3(-20f,-rightFoot.eulerAngles.y-20f,-20f),new Vector3(20f,-rightFoot.eulerAngles.y+20f,20f));
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
           if(simActorAnimatorController.actor is BaseAI baseAI&&
@@ -136,7 +138,7 @@ namespace AKCondinoO.Sims.Actors{
           rightFootIKPositionWeight=rightFootIKPositionWeightLerp.UpdateFloat(rightFootIKPositionWeight,Core.magicDeltaTimeNumber);
           rightFootIKRotationWeight=rightFootIKRotationWeightLerp.UpdateFloat(rightFootIKRotationWeight,Core.magicDeltaTimeNumber);
           float height=simActorAnimatorController.actor.height;
-          Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.65f);
+          Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.75f);
           #region LeftFoot
               simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,leftFootIKPositionWeight);
               simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,leftFootIKRotationWeight);

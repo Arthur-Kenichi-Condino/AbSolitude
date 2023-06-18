@@ -114,8 +114,15 @@ MonoBehaviour:
     tgtRotLerpSpeed: 76
     tgtRotLerpMaxTime: 0.0005
   posLerp:
-    tgtPosLerpSpeed: 76
-    tgtPosLerpMaxTime: 0.0005
+    xLerp:
+      tgtValLerpSpeed: 76
+      tgtValLerpMaxTime: 0.0005
+    yLerp:
+      tgtValLerpSpeed: 38
+      tgtValLerpMaxTime: 0.0005
+    zLerp:
+      tgtValLerpSpeed: 76
+      tgtValLerpMaxTime: 0.0005
 --- !u!195 &115391049882503325
 NavMeshAgent:
   m_ObjectHideFlags: 0

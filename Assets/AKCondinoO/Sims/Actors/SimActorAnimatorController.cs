@@ -16,8 +16,8 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
-     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
-     [SerializeField]internal    Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
+     [SerializeField]internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
+     [SerializeField]internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
         }
         protected virtual void GetAnimator(){

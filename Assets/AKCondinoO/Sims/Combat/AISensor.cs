@@ -4,18 +4,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace AKCondinoO.Sims.Combat{
+namespace AKCondinoO.Sims.Actors.Combat{
     /// <summary>
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     /// </summary>
     internal class AISensor:MonoBehaviour{
+     internal SimActor actor;
      [SerializeField]internal float distance=96f;
      [SerializeField]internal float angleHorizontal=60f;
      [SerializeField]internal float height=.5f;
      [SerializeField]internal float angleVertical=25f;
      [SerializeField]internal Vector2Int segments=new Vector2Int(10,10);
       internal Mesh wedgeMesh;
+       internal MeshCollider meshCollider;
         internal void CreateWedgeMesh(){
+         meshCollider.sharedMesh=null;
          if(wedgeMesh){
           DestroyImmediate(wedgeMesh);
          }
@@ -93,19 +96,28 @@ namespace AKCondinoO.Sims.Combat{
          wedgeMesh.vertices=vertices;
          wedgeMesh.triangles=triangles;
          wedgeMesh.RecalculateNormals();
+         meshCollider.sharedMesh=wedgeMesh;
         }
         void Awake(){
+         meshCollider=GetComponent<MeshCollider>();
          CreateWedgeMesh();
         }
         void OnDestroy(){
+         meshCollider.sharedMesh=null;
          if(wedgeMesh){
           DestroyImmediate(wedgeMesh);
          }
         }
+        void OnTriggerEnter(Collider other){
+         Log.DebugMessage("AISensor:OnTriggerEnter:"+other.name);
+        }
+        void OnTriggerExit(Collider other){
+         Log.DebugMessage("AISensor:OnTriggerExit:"+other.name);
+        }
         void OnDrawGizmos(){
          #if UNITY_EDITOR
-             Gizmos.color=Color.yellow;
-             Gizmos.DrawWireMesh(wedgeMesh,transform.position,transform.rotation);
+             //Gizmos.color=Color.yellow;
+             //Gizmos.DrawWireMesh(wedgeMesh,transform.position,transform.rotation);
          #endif
         }
     }

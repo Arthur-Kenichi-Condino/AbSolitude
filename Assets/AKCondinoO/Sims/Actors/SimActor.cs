@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
 using System;
@@ -137,6 +138,7 @@ namespace AKCondinoO.Sims.Actors{
       internal float height;
        internal float heightCrouching;
      internal SimActorAnimatorController simActorAnimatorController;
+     internal AISensor aiSensor;
         protected override void Awake(){
          if(simUMADataPrefab!=null){
           simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
@@ -145,6 +147,12 @@ namespace AKCondinoO.Sims.Actors{
           simUMAData.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
+         aiSensor=GetComponentInChildren<AISensor>();
+         if(aiSensor){
+          aiSensor.actor=this;
+          aiSensor.gameObject.SetActive(false);
+          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+         }
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
           agentTypeID=navMeshAgent.agentTypeID,
@@ -165,6 +173,24 @@ namespace AKCondinoO.Sims.Actors{
         }
         void OnUMACharacterUpdated(UMAData simActorUMAData){
          Log.DebugMessage("OnUMACharacterUpdated");
+         if(head==null){
+          head=Util.FindChildRecursively(simUMAData.transform,"head");
+          Log.DebugMessage("head:"+head);
+         }
+         if( leftEye==null){
+           leftEye=Util.FindChildRecursively(simUMAData.transform,"lEye");
+          Log.DebugMessage("lEye:"+ leftEye);
+         }
+         if(rightEye==null){
+          rightEye=Util.FindChildRecursively(simUMAData.transform,"rEye");
+          Log.DebugMessage("rEye:"+rightEye);
+         }
+         if(aiSensor){
+          if(head||leftEye||rightEye){
+           Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
+           aiSensor.gameObject.SetActive(true);
+          }
+         }
          if( leftHand==null){
            leftHand=Util.FindChildRecursively(simUMAData.transform,"lHand");
           Log.DebugMessage("lHand:"+ leftHand);
@@ -348,6 +374,23 @@ namespace AKCondinoO.Sims.Actors{
              }
             }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
              //  TO DO: release items
+            }
+           }
+           if(aiSensor&&aiSensor.isActiveAndEnabled){
+            if(rightEye){
+             if(leftEye){
+              aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
+              aiSensor.transform.rotation=leftEye.transform.rotation;
+             }else{
+              aiSensor.transform.position=rightEye.transform.position;
+              aiSensor.transform.rotation=rightEye.transform.rotation;
+             }
+            }else if(leftEye){
+             aiSensor.transform.position=leftEye.transform.position;
+             aiSensor.transform.rotation=leftEye.transform.rotation;
+            }else if(head){
+             aiSensor.transform.position=head.transform.position;
+             aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
             }
            }
            if(isUsingAI){
