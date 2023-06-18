@@ -138,7 +138,7 @@ namespace AKCondinoO.Sims.Actors{
           rightFootIKPositionWeight=rightFootIKPositionWeightLerp.UpdateFloat(rightFootIKPositionWeight,Core.magicDeltaTimeNumber);
           rightFootIKRotationWeight=rightFootIKRotationWeightLerp.UpdateFloat(rightFootIKRotationWeight,Core.magicDeltaTimeNumber);
           float height=simActorAnimatorController.actor.height;
-          Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.75f);
+          Vector3 heightLimit=simActorAnimatorController.actor.transform.position+Vector3.down*(height*.5f);
           #region LeftFoot
               simActorAnimatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,leftFootIKPositionWeight);
               simActorAnimatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,leftFootIKRotationWeight);
