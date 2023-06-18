@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8354584312769127319}
   - component: {fileID: -4988789917063189567}
-  m_Layer: 0
+  - component: {fileID: 17025380081029516}
+  m_Layer: 29
   m_Name: AISensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,3 +49,26 @@ MonoBehaviour:
   angleHorizontal: 60
   height: 0.5
   angleVertical: 25
+  segments: {x: 10, y: 10}
+--- !u!64 &17025380081029516
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341367394087278572}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}

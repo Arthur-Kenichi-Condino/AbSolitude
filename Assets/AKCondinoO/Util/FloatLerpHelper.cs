@@ -11,8 +11,8 @@ namespace AKCondinoO{
       internal float tgtValLerpTime;
        internal float tgtValLerpVal;
         internal float tgtValLerpA,tgtValLerpB;
-         [SerializeField]internal float tgtValLerpSpeed=4.75f;
-          [SerializeField]internal float tgtValLerpMaxTime=1.0f;
+         [SerializeField]internal float tgtValLerpSpeed=76.0f;
+          [SerializeField]internal float tgtValLerpMaxTime=0.0005f;
         internal float UpdateFloat(float value,float deltaTime){
          float result=value;
              if(tgtValLerpTime==0){
@@ -40,6 +40,11 @@ namespace AKCondinoO{
               }
              }
          return result;
+        }
+        internal float EndFloat(){
+         tgtValLerpVal=1;
+         tgtValLerpTime=0;
+         return tgtVal_Last=tgtVal;
         }
     }
 }
