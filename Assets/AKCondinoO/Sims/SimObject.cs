@@ -329,7 +329,7 @@ namespace AKCondinoO.Sims{
          }
          interactionsEnabled=true;
          isOverlapping=IsOverlappingNonAlloc(instantCheck:true);
-         Log.DebugMessage("EnableInteractions:isOverlapping:"+isOverlapping);
+         //Log.DebugMessage("EnableInteractions:isOverlapping:"+isOverlapping);
          if(isOverlapping){
           safePosition=null;
          }else{
@@ -617,7 +617,7 @@ namespace AKCondinoO.Sims{
           if(Core.singleton.isServer){
            if(!isOverlapping&&simCollisions.simObjectCollisions.Count<=0){
             if(transform.hasChanged){
-             Log.DebugMessage("UpdateSafePosition:id:"+id+";safePosition:"+safePosition);
+             //Log.DebugMessage("UpdateSafePosition:id:"+id+";safePosition:"+safePosition);
              safePosition=transform.position;
             }
            }

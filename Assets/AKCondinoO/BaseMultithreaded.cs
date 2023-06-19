@@ -105,7 +105,7 @@ namespace AKCondinoO{
           }
          }
          _Stop:{}
-         Log.DebugMessage("Background task ending gracefully!");
+         //Log.DebugMessage("Background task ending gracefully!");
         }
         protected virtual void Renew(T next){}
         protected abstract void Execute();

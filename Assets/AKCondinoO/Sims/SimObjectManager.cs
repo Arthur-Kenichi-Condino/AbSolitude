@@ -138,7 +138,7 @@ namespace AKCondinoO.Sims{
              loop=loop|a.Value.OnExitSaveRecursion();
             }
             active.Clear();
-            Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);
+            //Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);
             if(loop){
              goto _Loop;
             }

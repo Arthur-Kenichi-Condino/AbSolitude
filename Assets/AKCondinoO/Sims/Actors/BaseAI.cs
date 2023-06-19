@@ -61,7 +61,7 @@ namespace AKCondinoO.Sims.Actors{
              timerToRandomMove-=Time.deltaTime;
           }else if(doIdleMove){
              timerToRandomMove=delayToRandomMove;
-           Log.DebugMessage("can do random movement");
+           //Log.DebugMessage("can do random movement");
            if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
             //Log.DebugMessage("got random position:"+result);
             bool run=Mathf.Clamp01((float)math_random.NextDouble())<useRunSpeedChance;

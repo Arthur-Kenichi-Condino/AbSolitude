@@ -140,14 +140,12 @@ namespace AKCondinoO.Sims.Actors{
          }
          if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
          if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
-         float divideBy=
-          (inputMoveVelocity.z!=0f?(Mathf.Abs(inputMoveVelocity.z)/(maxMoveSpeed.z)):0f)+
-          (inputMoveVelocity.x!=0f?(Mathf.Abs(inputMoveVelocity.x)/(maxMoveSpeed.x)):0f);
          appliedControllerVelocity=new Vector3(
           inputMoveVelocity.x,
           0f,
           inputMoveVelocity.z
-         )/(divideBy==0f?1f:divideBy);
+         );
+         appliedControllerVelocity=Vector3.Scale(appliedControllerVelocity,Vector3.Scale(appliedControllerVelocity.normalized,new Vector3(Mathf.Sign(appliedControllerVelocity.x),Mathf.Sign(appliedControllerVelocity.y),Mathf.Sign(appliedControllerVelocity.z))));
          if(jumpingTimer>0f){
          }else{
           characterController.SimpleMove(characterController.transform.rotation*appliedControllerVelocity);

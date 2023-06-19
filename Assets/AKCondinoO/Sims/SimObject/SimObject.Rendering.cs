@@ -19,7 +19,7 @@ namespace AKCondinoO.Sims{
          }
         }
      [SerializeField]internal bool autoChangeMaterialsToFade=true;
-     [SerializeField]internal bool autoToggleMaterialsToFade=false;
+     [SerializeField]internal bool autoToggleMaterialsToFade=true;
         protected virtual void UpdateRenderers(){
          if(updateRenderersFlag){
           if((Core.singleton.currentRenderingTargetCamera!=null)||Core.singleton.currentRenderingTargetCamera==Camera.main){
