@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,14 +53,56 @@ namespace AKCondinoO.Sims{
            }
           }else if(volumeCollider is CapsuleCollider capsule){
            CapsuleCollider trigger=this.gameObject.AddComponent<CapsuleCollider>();
+           (Vector3 direction,
+            int enumDirection,
+            float height,
+            float radius,
+            Vector3 center,
+            Vector3 localPoint0,
+            Vector3 localPoint1,
+            Vector3 point0,
+            Vector3 point1
+           )values=GetCapsuleValuesForCollisionTesting(capsule,transform.root);
            trigger.isTrigger=true;
-           trigger.direction=capsule.direction;
-           trigger.height=capsule.height;
-           trigger.radius=capsule.radius;
-           trigger.center=capsule.center;
+           trigger.direction=values.enumDirection;
+           trigger.height=values.height;
+           trigger.radius=values.radius;
+           trigger.center=values.center;
            triggers.Add(trigger);
           }
          }
+        }
+        internal(
+         Vector3 direction,
+         int enumDirection,
+         float height,
+         float radius,
+         Vector3 center,
+         Vector3 localPoint0,
+         Vector3 localPoint1,
+         Vector3 point0,
+         Vector3 point1
+        )GetCapsuleValuesForCollisionTesting(CapsuleCollider capsule,Transform transform){
+         var direction=new Vector3{[capsule.direction]=1};
+         //Log.DebugMessage("capsule direction:"+direction);
+         var offset=capsule.height/2f-capsule.radius;
+         var localPoint0=capsule.center-direction*offset;
+         var localPoint1=capsule.center+direction*offset;
+         var point0=transform.TransformPoint(localPoint0);
+         var point1=transform.TransformPoint(localPoint1);
+         Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
+         float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
+         return(
+          direction,
+          capsule.direction,
+          capsule.height,
+          radius,
+          capsule.center,
+          localPoint0,
+          localPoint1,
+          point0,
+          point1
+         );
         }
         internal void Activate(){
          this.gameObject.SetActive(true);
@@ -67,7 +110,7 @@ namespace AKCondinoO.Sims{
           childTrigger.Activate();
          }
         }
-     internal readonly HashSet<SimObject>collidedWith=new HashSet<SimObject>();
+     internal readonly Dictionary<SimObject,int>collidedWith=new Dictionary<SimObject,int>();
         internal void Deactivate(){
          this.gameObject.SetActive(false);
          //  OnTriggerExit will not be called
@@ -75,11 +118,13 @@ namespace AKCondinoO.Sims{
           childTrigger.Deactivate();
          }
          simObjectCollisions.Clear();
-         foreach(SimObject simObjectCollidedWith in collidedWith){
+         foreach(var kvp in collidedWith){
+          SimObject simObjectCollidedWith=kvp.Key;
           if(simObjectCollidedWith.simCollisions!=null){
-           simObjectCollidedWith.simCollisions.simObjectCollisions.RemoveWhere(collider=>{return triggers.Contains(collider)||simObject.volumeColliders.Contains(collider);});
+           simObjectCollidedWith.simCollisions.simObjectCollisions.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
           }
          }
+         collidedWith.Clear();
         }
       internal readonly HashSet<Collider>simObjectCollisions=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
@@ -92,14 +137,29 @@ namespace AKCondinoO.Sims{
           simObjectCollisions.Add(other);
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){
-           otherSimObject.simCollisions.collidedWith.Add(simObject);
+           if(!otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
+            otherSimObject.simCollisions.collidedWith.Add(simObject,0);
+           }else{
+            otherSimObject.simCollisions.collidedWith[simObject]++;
+           }
           }
-          simObject.OnOverlapped(other);
+          simObject.OnOverlapping(other);
          }
         }
         void OnTriggerExit(Collider other){
          //Log.DebugMessage("SimCollisions:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectCollisions.Remove(other);
+         if(other.CompareTag("SimObjectVolume")){
+          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
+          if(otherSimObject.simCollisions!=null){
+           if(otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
+            otherSimObject.simCollisions.collidedWith[simObject]--;
+            if(otherSimObject.simCollisions.collidedWith[simObject]<0){
+             otherSimObject.simCollisions.collidedWith.Remove(simObject);
+            }
+           }
+          }
+         }
         }
     }
 }
