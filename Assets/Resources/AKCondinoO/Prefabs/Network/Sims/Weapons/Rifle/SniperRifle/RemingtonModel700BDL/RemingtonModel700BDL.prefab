@@ -838,6 +838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ZAxisIsUp: 1
+  simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   autoChangeMaterialsToFade: 1
   autoToggleMaterialsToFade: 0
 --- !u!114 &-1854219316473170960
@@ -854,6 +855,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
 --- !u!114 &-6769974653762724209

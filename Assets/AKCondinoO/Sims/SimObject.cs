@@ -158,6 +158,8 @@ namespace AKCondinoO.Sims{
      internal Rigidbody hasRigidbody;
      internal Collider[]colliders;
      internal readonly List<Collider>volumeColliders=new List<Collider>();
+      [SerializeField]internal SimCollisions simCollisionsPrefab;
+      internal SimCollisions simCollisions;
      internal NavMeshObstacle[]navMeshObstacles;
       internal bool navMeshObstacleCarving;
      internal Bounds localBounds;
@@ -175,6 +177,11 @@ namespace AKCondinoO.Sims{
            }
            volumeColliders.Add(collider);
           }
+         }
+         if(volumeColliders.Count>0&&simCollisionsPrefab){
+          simCollisions=Instantiate(simCollisionsPrefab,transform).GetComponent<SimCollisions>();
+          simCollisions.simObject=this;
+          simCollisions.AddTriggers();
          }
          foreach(NavMeshObstacle navMeshObstacle in navMeshObstacles=GetComponentsInChildren<NavMeshObstacle>()){
           navMeshObstacleCarving|=navMeshObstacle.carving;
@@ -313,7 +320,7 @@ namespace AKCondinoO.Sims{
           collider.enabled=true;
          }
          interactionsEnabled=true;
-         isOverlapping=IsOverlappingNonAlloc();
+         isOverlapping=IsOverlappingNonAlloc(instantCheck:true);
          if(isOverlapping){
           safePosition=null;
          }else{
@@ -324,6 +331,9 @@ namespace AKCondinoO.Sims{
           if(colliders.Length>0){
            gameplayer.Value.OnSimObjectEnabled(this,colliders[0].gameObject.layer);
           }
+         }
+         if(simCollisions!=null){
+          simCollisions.Activate();
          }
          EnableRenderers();
         }
@@ -337,6 +347,9 @@ namespace AKCondinoO.Sims{
           if(colliders.Length>0){
            gameplayer.Value.OnSimObjectDisabled(this,colliders[0].gameObject.layer);
           }
+         }
+         if(simCollisions!=null){
+          simCollisions.Deactivate();
          }
          DisableRenderers();
         }
@@ -390,7 +403,7 @@ namespace AKCondinoO.Sims{
            }
           }
             transform.hasChanged=false;
-          isOverlapping=IsOverlappingNonAlloc();
+          isOverlapping=IsOverlappingNonAlloc(instantCheck:false);
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            if(colliders.Length>0){
             gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
@@ -398,7 +411,7 @@ namespace AKCondinoO.Sims{
           }
          }
          bool returnedToSafePos=false;
-         GetCollidersTouchingNonAlloc();
+         GetCollidersTouchingNonAlloc(instantCheck:false);
          if(unplaceRequested){
             unplaceRequested=false;
              if(Core.singleton.isServer){
@@ -416,7 +429,7 @@ namespace AKCondinoO.Sims{
                  if(Core.singleton.isServer){
                   if(safePosition!=null){
                    transform.position=safePosition.Value;
-                   returnedToSafePos=!IsOverlappingNonAlloc();
+                   returnedToSafePos=!IsOverlappingNonAlloc(instantCheck:true);
                   }
                   if(!returnedToSafePos){
                    Log.DebugMessage("simObject isOverlapping:id:"+id);
@@ -522,11 +535,14 @@ namespace AKCondinoO.Sims{
          );
         }
      protected Collider[]overlappedColliders=new Collider[8];
-        protected virtual bool IsOverlappingNonAlloc(){
+        protected virtual bool IsOverlappingNonAlloc(bool instantCheck){
          if(hasRigidbody!=null){
           return false;
          }
          if(this is SimActor){
+          return false;
+         }
+         if(simCollisions&&!instantCheck){
           return false;
          }
          bool result=false;
@@ -561,21 +577,28 @@ namespace AKCondinoO.Sims{
           void ProcessOverlappings(Collider volumeCollider){
            for(int j=0;j<overlappingsLength;++j){
             Collider overlappedCollider=overlappedColliders[j];
-            if(overlappedCollider.transform.root!=transform.root){//  it's not myself
-             SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
-             if(overlappedSimObject!=null){
-              if(!(overlappedSimObject is SimActor||overlappedSimObject.hasRigidbody!=null)){
-               result=true;
-              }
-             }
+            if(overlappedCollider.transform.root!=this.transform.root){//  it's not myself
+             result=SetOverlapResult(overlappedCollider);
             }
            }
           }
          }
          return result;
         }
+        internal void OnOverlapped(Collider overlappedCollider){
+         isOverlapping=SetOverlapResult(overlappedCollider);
+        }
+        bool SetOverlapResult(Collider overlappedCollider){
+         SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
+         if(overlappedSimObject!=null){
+          if(!(overlappedSimObject is SimActor||overlappedSimObject.hasRigidbody!=null)){
+           return true;
+          }
+         }
+         return false;
+        }
      protected Collider[]collidersTouching=new Collider[8];
-        protected virtual void GetCollidersTouchingNonAlloc(){
+        protected virtual void GetCollidersTouchingNonAlloc(bool instantCheck){
         }
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();
