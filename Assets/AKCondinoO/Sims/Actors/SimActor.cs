@@ -415,7 +415,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(transform.hasChanged){
-          GetCollidersTouchingNonAlloc();
+          GetCollidersTouchingNonAlloc(instantCheck:true);
          }
          for(int i=0;i<collidersTouchingUpperCount;++i){
           Collider colliderTouchingUpper=collidersTouchingUpper[i];
@@ -481,7 +481,10 @@ namespace AKCondinoO.Sims.Actors{
       protected int collidersTouchingUpperCount=0;
      protected Collider[]collidersTouchingMiddle=new Collider[8];
       protected int collidersTouchingMiddleCount=0;
-        protected override void GetCollidersTouchingNonAlloc(){
+        protected override void GetCollidersTouchingNonAlloc(bool instantCheck){
+         if(simCollisions&&!instantCheck){
+          return;
+         }
          if(simActorCharacterController!=null){
           var section=height/3f;
           if((section/2f)>simActorCharacterController.characterController.radius){

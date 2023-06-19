@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ZAxisIsUp: 0
+  simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   autoChangeMaterialsToFade: 1
   autoToggleMaterialsToFade: 0
   simUMADataPrefab: {fileID: 3290482251516891750, guid: 6f5fd54ff986cf149baab03c924a292a, type: 3}

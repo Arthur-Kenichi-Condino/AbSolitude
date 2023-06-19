@@ -109,10 +109,10 @@ namespace AKCondinoO.Sims.Actors.Combat{
          }
         }
         void OnTriggerEnter(Collider other){
-         Log.DebugMessage("AISensor:OnTriggerEnter:"+other.name);
+         Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
         }
         void OnTriggerExit(Collider other){
-         Log.DebugMessage("AISensor:OnTriggerExit:"+other.name);
+         Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
         }
         void OnDrawGizmos(){
          #if UNITY_EDITOR
