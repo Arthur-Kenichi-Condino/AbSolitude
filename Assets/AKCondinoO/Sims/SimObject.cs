@@ -207,6 +207,7 @@ namespace AKCondinoO.Sims{
          }
          skillBuffs=gameObject.AddComponent<SkillBuffEffectsState>();
          skillBuffs.targetSimObject=this;
+         waitForFixedUpdate=new WaitForFixedUpdate();
         }
         public override void OnDestroy(){
          base.OnDestroy();
@@ -253,8 +254,15 @@ namespace AKCondinoO.Sims{
            netScale   .Value=persistentData.localScale;
           }
          }
+         if(updateSafePositionCoroutine!=null){
+          StopCoroutine(updateSafePositionCoroutine);updateSafePositionCoroutine=null;
+         }
+         updateSafePositionCoroutine=StartCoroutine(UpdateSafePosition());
         }
         internal virtual void OnDeactivated(){
+         if(updateSafePositionCoroutine!=null){
+          StopCoroutine(updateSafePositionCoroutine);updateSafePositionCoroutine=null;
+         }
          skillBuffs.Clear();
          persistentStats.UpdateData(this);
          //Log.DebugMessage("OnDeactivated:id:"+id);
@@ -321,6 +329,7 @@ namespace AKCondinoO.Sims{
          }
          interactionsEnabled=true;
          isOverlapping=IsOverlappingNonAlloc(instantCheck:true);
+         Log.DebugMessage("EnableInteractions:isOverlapping:"+isOverlapping);
          if(isOverlapping){
           safePosition=null;
          }else{
@@ -403,7 +412,7 @@ namespace AKCondinoO.Sims{
            }
           }
             transform.hasChanged=false;
-          isOverlapping=IsOverlappingNonAlloc(instantCheck:false);
+          isOverlapping|=IsOverlappingNonAlloc(instantCheck:false);
           foreach(var gameplayer in GameplayerManagement.singleton.all){
            if(colliders.Length>0){
             gameplayer.Value.OnSimObjectTransformHasChanged(this,colliders[0].gameObject.layer);
@@ -428,6 +437,7 @@ namespace AKCondinoO.Sims{
                 isOverlapping=false;
                  if(Core.singleton.isServer){
                   if(safePosition!=null){
+                   Log.DebugMessage(id+":return to safe pos;"+"safePosition:"+safePosition+";transform.position:"+transform.position);
                    transform.position=safePosition.Value;
                    returnedToSafePos=!IsOverlappingNonAlloc(instantCheck:true);
                   }
@@ -440,6 +450,8 @@ namespace AKCondinoO.Sims{
                    }
                    SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
                    result=2;
+                  }else{
+                   Log.DebugMessage("returnedToSafePos:id:"+id);
                   }
                  }
              }else{
@@ -490,7 +502,6 @@ namespace AKCondinoO.Sims{
              }
          }
          if(result==0){
-          safePosition=transform.position;
          }
          return result;
         }
@@ -542,27 +553,31 @@ namespace AKCondinoO.Sims{
          if(this is SimActor){
           return false;
          }
-         if(simCollisions&&!instantCheck){
-          return false;
-         }
          bool result=false;
+         if(simCollisions&&!instantCheck){
+          foreach(Collider overlappedCollider in simCollisions.simObjectCollisions){
+           result|=SetOverlapResult(overlappedCollider);
+          }
+          return result;
+         }
          for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
           if(volumeColliders[i]is CapsuleCollider capsule){
-           var direction=new Vector3{[capsule.direction]=1};
-           //Log.DebugMessage("capsule direction:"+direction);
-           var offset=capsule.height/2f-capsule.radius;
-           var localPoint0=capsule.center-direction*offset;
-           var localPoint1=capsule.center+direction*offset;
-           var point0=transform.TransformPoint(localPoint0);
-           var point1=transform.TransformPoint(localPoint1);
-           Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
-           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
+           (Vector3 direction,
+            int enumDirection,
+            float height,
+            float radius,
+            Vector3 center,
+            Vector3 localPoint0,
+            Vector3 localPoint1,
+            Vector3 point0,
+            Vector3 point1
+           )values=simCollisions.GetCapsuleValuesForCollisionTesting(capsule,transform.root);
            _GetOverlappedColliders:{
             overlappingsLength=Physics.OverlapCapsuleNonAlloc(
-             point0,
-             point1,
-             radius-0.001f,
+             values.point0,
+             values.point1,
+             values.radius,
              overlappedColliders
             );
            }
@@ -578,15 +593,37 @@ namespace AKCondinoO.Sims{
            for(int j=0;j<overlappingsLength;++j){
             Collider overlappedCollider=overlappedColliders[j];
             if(overlappedCollider.transform.root!=this.transform.root){//  it's not myself
-             result=SetOverlapResult(overlappedCollider);
+             result|=SetOverlapResult(overlappedCollider);
             }
            }
           }
          }
          return result;
         }
-        internal void OnOverlapped(Collider overlappedCollider){
-         isOverlapping=SetOverlapResult(overlappedCollider);
+        internal void OnOverlapping(Collider overlappedCollider){
+         Log.DebugMessage("OnOverlapping:"+this.transform.root.gameObject.name+"-> overlapping <-"+overlappedCollider.transform.root.gameObject.name);
+         if(Core.singleton.isServer){
+          if(!overlappedCollider.transform.root.hasChanged){
+           isOverlapping|=SetOverlapResult(overlappedCollider);
+          }
+         }
+        }
+     protected Coroutine updateSafePositionCoroutine;
+     protected WaitForFixedUpdate waitForFixedUpdate;
+        protected IEnumerator UpdateSafePosition(){
+         Loop:{
+          yield return null;
+          yield return waitForFixedUpdate;
+          if(Core.singleton.isServer){
+           if(!isOverlapping&&simCollisions.simObjectCollisions.Count<=0){
+            if(transform.hasChanged){
+             Log.DebugMessage("UpdateSafePosition:id:"+id+";safePosition:"+safePosition);
+             safePosition=transform.position;
+            }
+           }
+          }
+         }
+         goto Loop;
         }
         bool SetOverlapResult(Collider overlappedCollider){
          SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
