@@ -30,7 +30,16 @@ namespace AKCondinoO.Sims{
                floatFields=new Dictionary<Type,FieldInfo[]>();
                Type derived=statsType;
                do{
-                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(field=>{if(field.FieldType==typeof(float)&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){String.Intern(field.Name);Log.DebugMessage(derived+": got field:"+field.Name);return true;}return false;}).ToArray();
+                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(
+                 field=>{
+                  if(field.FieldType==typeof(float)&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){
+                   String.Intern(field.Name);
+                   //Log.DebugMessage(derived+": got field:"+field.Name);
+                   return true;
+                  }
+                  return false;
+                 }
+                ).ToArray();
                 floatFields.Add(derived,fieldsGotten);
                 derived=derived.BaseType;
                }while(derived!=null&&derived!=typeof(object));

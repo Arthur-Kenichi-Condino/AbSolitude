@@ -24,6 +24,7 @@ namespace AKCondinoO{
          //standardShaderMaterial.SetFloat("_Mode",(float)blendMode);//  causes error message
          switch(blendMode){
           case BlendMode.Opaque:{
+           standardShaderMaterial.SetFloat("_Mode",0);
            standardShaderMaterial.SetInt("_SrcBlend",(int)UnityEngine.Rendering.BlendMode.One);
            standardShaderMaterial.SetInt("_DstBlend",(int)UnityEngine.Rendering.BlendMode.Zero);
            standardShaderMaterial.SetInt("_ZWrite",1);
@@ -34,6 +35,7 @@ namespace AKCondinoO{
            break;
           }
           case BlendMode.Cutout:{
+           standardShaderMaterial.SetFloat("_Mode",1);
            standardShaderMaterial.SetInt("_SrcBlend",(int)UnityEngine.Rendering.BlendMode.One);
            standardShaderMaterial.SetInt("_DstBlend",(int)UnityEngine.Rendering.BlendMode.Zero);
            standardShaderMaterial.SetInt("_ZWrite",1);
@@ -44,6 +46,7 @@ namespace AKCondinoO{
            break;
           }
           case BlendMode.Fade:{
+           standardShaderMaterial.SetFloat("_Mode",2);
            standardShaderMaterial.SetInt("_SrcBlend",(int)UnityEngine.Rendering.BlendMode.SrcAlpha);
            standardShaderMaterial.SetInt("_DstBlend",(int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
            standardShaderMaterial.SetInt("_ZWrite",0);
@@ -54,6 +57,7 @@ namespace AKCondinoO{
            break;
           }
           case BlendMode.Transparent:{
+           standardShaderMaterial.SetFloat("_Mode",3);
            standardShaderMaterial.SetInt("_SrcBlend",(int)UnityEngine.Rendering.BlendMode.One);
            standardShaderMaterial.SetInt("_DstBlend",(int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
            standardShaderMaterial.SetInt("_ZWrite",0);

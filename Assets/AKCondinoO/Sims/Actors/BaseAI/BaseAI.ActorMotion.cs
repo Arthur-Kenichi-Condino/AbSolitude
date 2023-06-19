@@ -41,7 +41,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnShouldSetNextMotion(int layerIndex,string lastClipName,string currentClipName){
-         Log.DebugMessage("OnShouldSetNextMotion");
+         //Log.DebugMessage("OnShouldSetNextMotion");
         }
     }
 }

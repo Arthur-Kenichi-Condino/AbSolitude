@@ -131,7 +131,7 @@ namespace AKCondinoO.Sims{
          if(other.transform.root==this.transform.root){
           return;
          }
-         Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
+         //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
          if(other.CompareTag("SimObjectVolume")){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectCollisions.Add(other);

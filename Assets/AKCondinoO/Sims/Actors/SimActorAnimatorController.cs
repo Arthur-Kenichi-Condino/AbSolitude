@@ -154,7 +154,7 @@ namespace AKCondinoO.Sims.Actors{
                                           animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
           if(clipList.Count>0){
            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
-            Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
+            //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
             OnAnimationChanged(layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
@@ -177,7 +177,7 @@ namespace AKCondinoO.Sims.Actors{
      internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
         protected virtual void UpdateMotion(BaseAI baseAI){
           if(lastMotion!=baseAI.motion){
-           Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
+           //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
           if(motionUpdater==null){
            if(actor.simUMAData!=null){
@@ -192,7 +192,7 @@ namespace AKCondinoO.Sims.Actors{
              motionUpdater.UpdateAnimatorMotionValue();
           }
           if(lastMotion!=baseAI.motion){
-           Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
+           //Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
           }
           lastMotion=baseAI.motion;
         }

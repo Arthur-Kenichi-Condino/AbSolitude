@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims{
            lastMainCamPos=mainCamPos;
            initMainCamPos=false;
           }
-          Log.DebugMessage("SimsMachine:mainCamPos Update");
+          //Log.DebugMessage("SimsMachine:mainCamPos Update");
           mainCamGetCurrentBiomeInputRounded=new Vector3Int(
            Mathf.RoundToInt(mainCamPos.x),
            Mathf.RoundToInt(mainCamPos.y),

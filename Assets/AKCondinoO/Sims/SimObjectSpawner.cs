@@ -335,7 +335,7 @@ namespace AKCondinoO.Sims{
               toSpawn.dequeued=true;
              }
                  if(loadingPersistentData){
-                     Log.DebugMessage("loadingPersistentData");
+                     //Log.DebugMessage("loadingPersistentData");
                      if(OnPersistentDataLoaded()){
                          loadingPersistentData=false;
                      }
@@ -347,13 +347,13 @@ namespace AKCondinoO.Sims{
                          }
                      }else{
                          if(reloadTimer<=0f){
-                             Log.DebugMessage("reloadTimer<=0f");
+                             //Log.DebugMessage("reloadTimer<=0f");
                              if(OnPersistentDataPullFromFile()){
                                  OnPersistentDataPullingFromFile();
                              }
                          }else{
                              if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
-                                 Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
+                                 //Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
                                  if(OnPersistentDataPullFromFile()){
                                      loaderOnCooldownTimer=loaderCooldown;
                                      OnPersistentDataPullingFromFile();

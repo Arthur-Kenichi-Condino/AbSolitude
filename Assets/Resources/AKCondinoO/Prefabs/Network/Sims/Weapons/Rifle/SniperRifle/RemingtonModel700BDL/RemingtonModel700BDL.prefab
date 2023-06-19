@@ -840,7 +840,7 @@ MonoBehaviour:
   ZAxisIsUp: 1
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   autoChangeMaterialsToFade: 1
-  autoToggleMaterialsToFade: 0
+  autoToggleMaterialsToFade: 1
 --- !u!114 &-1854219316473170960
 MonoBehaviour:
   m_ObjectHideFlags: 0

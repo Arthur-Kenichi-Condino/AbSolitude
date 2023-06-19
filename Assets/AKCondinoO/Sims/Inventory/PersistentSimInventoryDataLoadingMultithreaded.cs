@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Inventory{
           Log.Error("container.spawnDataFromFiles==null");
           return;
          }else{
-          Log.DebugMessage("Execute()");
+          //Log.DebugMessage("Execute()");
           container.waitingForSimObjectSpawnData.WaitOne();
           for(int i=0;i<container.spawnDataFromFiles.at.Count;++i){
            var at=container.spawnDataFromFiles.at[i];
@@ -38,7 +38,7 @@ namespace AKCondinoO.Sims.Inventory{
            Type simObjectType=simObjectTypeFileStreamPair.Key;
            FileStream fileStream=simObjectTypeFileStreamPair.Value;
            StreamReader fileStreamReader=this.simInventoryFileStreamReader[simObjectType];
-           Log.DebugMessage("loading sim inventory data for type:"+simObjectType);
+           //Log.DebugMessage("loading sim inventory data for type:"+simObjectType);
            fileStream.Position=0L;
            fileStreamReader.DiscardBufferedData();
            string line;

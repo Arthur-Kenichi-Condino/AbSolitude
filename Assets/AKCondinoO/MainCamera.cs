@@ -177,13 +177,7 @@ namespace AKCondinoO{
              if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
              if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
              if(inputMoveVelocity!=Vector3.zero){
-              float divideBy=Mathf.Max(
-               1f,
-               (inputMoveVelocity.z!=0f?1f:0f)+
-               (inputMoveVelocity.x!=0f?1f:0f)+
-               (inputMoveVelocity.y!=0f?1f:0f)
-              );
-              posLerp.tgtPos+=transform.rotation*(inputMoveVelocity/divideBy);
+              posLerp.tgtPos+=transform.rotation*(Vector3.Scale(inputMoveVelocity,Vector3.Scale(inputMoveVelocity.normalized,new Vector3(Mathf.Sign(inputMoveVelocity.x),Mathf.Sign(inputMoveVelocity.y),Mathf.Sign(inputMoveVelocity.z)))));
              }
              UpdateTransformPosition();
          }
