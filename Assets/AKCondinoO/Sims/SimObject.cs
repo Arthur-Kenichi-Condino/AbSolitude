@@ -189,19 +189,25 @@ namespace AKCondinoO.Sims{
          localBounds.center=transform.InverseTransformPoint(localBounds.center);
          TransformBoundsVertices();
          foreach(Renderer renderer in renderers=GetComponentsInChildren<Renderer>()){
+          derivedMaterials.Add(renderer,new Dictionary<int,Dictionary<int,Material>>());
+          derivedMaterialsBlendModeOpaque.Add(renderer,new List<Material>(renderer.materials.Length));
+          derivedMaterialsBlendModeFade  .Add(renderer,new List<Material>(renderer.materials.Length));
+          int i=0;
           foreach(Material material in renderer.materials){
            materialShader[material]=material.shader;
+           derivedMaterials[renderer].Add(i,new Dictionary<int,Material>());
+           Material derivedMaterial=new Material(material);
+           derivedMaterials[renderer][i].Add(0,derivedMaterial);
+           derivedMaterialsBlendModeOpaque[renderer].Add(derivedMaterial);
+           derivedMaterial=new Material(material);
+           derivedMaterial.shader=RenderingUtil.StandardShader;
+           RenderingUtil.SetupStandardShaderMaterialBlendMode(derivedMaterial,RenderingUtil.BlendMode.Fade,true);
+           derivedMaterials[renderer][i].Add(2,derivedMaterial);
+           derivedMaterialsBlendModeFade  [renderer].Add(derivedMaterial);
+           ++i;
           }
-          if(autoChangeMaterialsToFade){
-           foreach(Material material in renderer.materials){
-            if(material.shader!=RenderingUtil.StandardShader){
-             material.shader=RenderingUtil.StandardShader;
-             RenderingUtil.SetupStandardShaderMaterialBlendMode(material,RenderingUtil.BlendMode.Fade);
-            }
-            Color c=material.GetColor("_Color");
-            c.a=0f;
-            material.SetColor("_Color",c);
-           }
+          if(useMultipleMaterials){
+           renderer.SetMaterials(derivedMaterialsBlendModeOpaque[renderer]);
           }
           renderer.enabled=false;//  to prevent a "flashing" of the object when it's created
          }
@@ -210,6 +216,13 @@ namespace AKCondinoO.Sims{
          waitForFixedUpdate=new WaitForFixedUpdate();
         }
         public override void OnDestroy(){
+         foreach(var kvp1 in derivedMaterials){
+          foreach(var kvp2 in kvp1.Value){
+           foreach(var kvp3 in kvp2.Value){
+            DestroyImmediate(kvp3.Value);
+           }
+          }
+         }
          base.OnDestroy();
         }
         internal virtual void OnLoadingPool(){

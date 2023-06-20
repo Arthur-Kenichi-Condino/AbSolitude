@@ -20,7 +20,7 @@ namespace AKCondinoO{
         ///  [https://stackoverflow.com/questions/72309866/how-to-change-material-rendering-mode-to-fade-by-script]
         ///  [https://answers.unity.com/questions/1004666/change-material-rendering-mode-in-runtime.html]
         /// </summary>
-        internal static void SetupStandardShaderMaterialBlendMode(Material standardShaderMaterial,BlendMode blendMode){
+        internal static void SetupStandardShaderMaterialBlendMode(Material standardShaderMaterial,BlendMode blendMode,bool enableInstancing){
          //standardShaderMaterial.SetFloat("_Mode",(float)blendMode);//  causes error message
          switch(blendMode){
           case BlendMode.Opaque:{
@@ -68,6 +68,7 @@ namespace AKCondinoO{
            break;
           }
          }
+         standardShaderMaterial.enableInstancing=enableInstancing;
          //Log.DebugMessage("standardShaderMaterial.renderQueue:"+standardShaderMaterial.renderQueue);
         }
     }
