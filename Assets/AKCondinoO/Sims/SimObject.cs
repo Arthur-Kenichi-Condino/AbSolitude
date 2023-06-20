@@ -634,8 +634,10 @@ namespace AKCondinoO.Sims{
          }
          return false;
         }
+     protected bool gotCollidersTouchingFromInstantCheck;
      protected Collider[]collidersTouching=new Collider[8];
         protected virtual void GetCollidersTouchingNonAlloc(bool instantCheck){
+         gotCollidersTouchingFromInstantCheck=false;
         }
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();

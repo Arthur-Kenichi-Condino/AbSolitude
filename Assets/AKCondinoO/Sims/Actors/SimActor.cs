@@ -479,29 +479,22 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
+     protected SimCollisionsChildTrigger simCollisionsTouchingUpper;
      protected Collider[]collidersTouchingMiddle=new Collider[8];
       protected int collidersTouchingMiddleCount=0;
+     protected SimCollisionsChildTrigger simCollisionsTouchingMiddle;
         protected override void GetCollidersTouchingNonAlloc(bool instantCheck){
+         gotCollidersTouchingFromInstantCheck=false;
          if(simCollisions&&!instantCheck){
           return;
          }
          if(simActorCharacterController!=null){
-          var section=height/3f;
-          if((section/2f)>simActorCharacterController.characterController.radius){
-           var direction=Vector3.up;
-           var offset=(section/2f)-simActorCharacterController.characterController.radius;
-           var center=simActorCharacterController.center;
-           center.y+=(height/2f)-(section/2f);
-           var localPoint0=center-direction*offset;
-           var localPoint1=center+direction*offset;
-           var point0=transform.TransformPoint(localPoint0);
-           var point1=transform.TransformPoint(localPoint1);
-           Vector3 r=transform.TransformVector(
-            simActorCharacterController.characterController.radius,
-            simActorCharacterController.characterController.radius,
-            simActorCharacterController.characterController.radius
-           );
-           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==1?0:r[xyz]).Select(Mathf.Abs).Max();
+          gotCollidersTouchingFromInstantCheck=true;
+          var upperMiddleLowerValues=simCollisions.GetCapsuleValuesForUpperMiddleLowerCollisionTesting(simActorCharacterController.characterController,transform.root,height,simActorCharacterController.center);
+          if(upperMiddleLowerValues!=null){
+           var point0=upperMiddleLowerValues.Value.upperValues.point0;
+           var point1=upperMiddleLowerValues.Value.upperValues.point1;
+           float radius=upperMiddleLowerValues.Value.upperValues.radius;
            _GetUpperColliders:{
             collidersTouchingUpperCount=Physics.OverlapCapsuleNonAlloc(
              point0,
@@ -516,11 +509,8 @@ namespace AKCondinoO.Sims.Actors{
              goto _GetUpperColliders;
             }
            }
-           center=simActorCharacterController.center;
-           localPoint0=center-direction*offset;
-           localPoint1=center+direction*offset;
-           point0=transform.TransformPoint(localPoint0);
-           point1=transform.TransformPoint(localPoint1);
+           point0=upperMiddleLowerValues.Value.middleValues.point0;
+           point1=upperMiddleLowerValues.Value.middleValues.point1;
            _GetMiddleColliders:{
             collidersTouchingMiddleCount=Physics.OverlapCapsuleNonAlloc(
              point0,

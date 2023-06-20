@@ -24,45 +24,34 @@ namespace AKCondinoO.Sims{
          foreach(var volumeCollider in simObject.volumeColliders){
           if(volumeCollider is CharacterController characterController){
            CapsuleCollider trigger=this.gameObject.AddComponent<CapsuleCollider>();
+           var values=GetCapsuleValuesForCollisionTesting(characterController,transform.root);
            trigger.isTrigger=true;
-           trigger.height=characterController.height;
-           trigger.radius=characterController.radius;
-           trigger.center=characterController.center;
+           trigger.height=values.height;
+           trigger.radius=values.radius;
+           trigger.center=values.center;
            triggers.Add(trigger);
            if(simCollisionsChildTriggerPrefab){
-            var height=characterController.height;
-            var section=height/3f;
-            if((section/2f)>characterController.radius){
-             var offset=(section/2f)-characterController.radius;
-             var center=characterController.center;
-             center.y+=(height/2f)-(section/2f);
-             Vector3 r=transform.TransformVector(
-              characterController.radius,
-              characterController.radius,
-              characterController.radius
-             );
-             float radius=Enumerable.Range(0,3).Select(xyz=>xyz==1?0:r[xyz]).Select(Mathf.Abs).Max();
+            var upperMiddleLowerValues=GetCapsuleValuesForUpperMiddleLowerCollisionTesting(characterController,transform.root,characterController.height,characterController.center);
+            if(upperMiddleLowerValues!=null){
              SimCollisionsChildTrigger simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
              CapsuleCollider upperTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              upperTrigger.isTrigger=true;
-             upperTrigger.height=(offset+radius)*2f;
-             upperTrigger.radius=radius;
-             upperTrigger.center=center;
+             upperTrigger.height=upperMiddleLowerValues.Value.upperValues.height;
+             upperTrigger.radius=upperMiddleLowerValues.Value.upperValues.radius;
+             upperTrigger.center=upperMiddleLowerValues.Value.upperValues.center;
+             childTriggers.Add(simCollisionsChild);
+             simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
+             CapsuleCollider middleTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
+             middleTrigger.isTrigger=true;
+             middleTrigger.height=upperMiddleLowerValues.Value.middleValues.height;
+             middleTrigger.radius=upperMiddleLowerValues.Value.middleValues.radius;
+             middleTrigger.center=upperMiddleLowerValues.Value.middleValues.center;
              childTriggers.Add(simCollisionsChild);
             }
            }
           }else if(volumeCollider is CapsuleCollider capsule){
            CapsuleCollider trigger=this.gameObject.AddComponent<CapsuleCollider>();
-           (Vector3 direction,
-            int enumDirection,
-            float height,
-            float radius,
-            Vector3 center,
-            Vector3 localPoint0,
-            Vector3 localPoint1,
-            Vector3 point0,
-            Vector3 point1
-           )values=GetCapsuleValuesForCollisionTesting(capsule,transform.root);
+           var values=GetCapsuleValuesForCollisionTesting(capsule,transform.root);
            trigger.isTrigger=true;
            trigger.direction=values.enumDirection;
            trigger.height=values.height;
@@ -104,6 +93,103 @@ namespace AKCondinoO.Sims{
           point1
          );
         }
+         internal(
+          Vector3 direction,
+          int enumDirection,
+          float height,
+          float radius,
+          Vector3 center,
+          Vector3 localPoint0,
+          Vector3 localPoint1,
+          Vector3 point0,
+          Vector3 point1
+         )GetCapsuleValuesForCollisionTesting(CharacterController capsule,Transform transform){
+          var direction=Vector3.up;
+          //Log.DebugMessage("capsule direction:"+direction);
+          var offset=capsule.height/2f-capsule.radius;
+          var localPoint0=capsule.center-direction*offset;
+          var localPoint1=capsule.center+direction*offset;
+          var point0=transform.TransformPoint(localPoint0);
+          var point1=transform.TransformPoint(localPoint1);
+          float radius=capsule.radius;
+          return(
+           direction,
+           1,
+           capsule.height,
+           radius,
+           capsule.center,
+           localPoint0,
+           localPoint1,
+           point0,
+           point1
+          );
+         }
+          internal(
+           (
+            Vector3 direction,
+            int enumDirection,
+            float height,
+            float radius,
+            Vector3 center,
+            Vector3 localPoint0,
+            Vector3 localPoint1,
+            Vector3 point0,
+            Vector3 point1
+           )upperValues,
+           (
+            Vector3 direction,
+            int enumDirection,
+            float height,
+            float radius,
+            Vector3 center,
+            Vector3 localPoint0,
+            Vector3 localPoint1,
+            Vector3 point0,
+            Vector3 point1
+           )middleValues
+          )?GetCapsuleValuesForUpperMiddleLowerCollisionTesting(CharacterController capsule,Transform transform,float capsuleHeight,Vector3 capsuleCenter){
+           var section=capsuleHeight/3f;
+           if(!((section/2f)>capsule.radius)){
+            return null;
+           }
+           var direction=Vector3.up;
+           var offset=(section/2f)-capsule.radius;
+           var center=capsuleCenter;
+               center.y+=(capsuleHeight/2f)-(section/2f);
+           float radius=capsule.radius;
+           var localPoint0=center-direction*offset;
+           var localPoint1=center+direction*offset;
+           var point0=transform.TransformPoint(localPoint0);
+           var point1=transform.TransformPoint(localPoint1);
+           var upper=(
+            direction,
+            1,
+            (offset+radius)*2f,
+            radius,
+            center,
+            localPoint0,
+            localPoint1,
+            point0,
+            point1
+           );
+           center=capsuleCenter;
+           localPoint0=center-direction*offset;
+           localPoint1=center+direction*offset;
+           point0=transform.TransformPoint(localPoint0);
+           point1=transform.TransformPoint(localPoint1);
+           var middle=(
+            direction,
+            1,
+            (offset+radius)*2f,
+            radius,
+            center,
+            localPoint0,
+            localPoint1,
+            point0,
+            point1
+           );
+           return(upper,middle);
+          }
         internal void Activate(){
          this.gameObject.SetActive(true);
          foreach(SimCollisionsChildTrigger childTrigger in childTriggers){
