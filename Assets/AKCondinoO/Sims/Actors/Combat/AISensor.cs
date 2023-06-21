@@ -108,6 +108,8 @@ namespace AKCondinoO.Sims.Actors.Combat{
           DestroyImmediate(wedgeMesh);
          }
         }
+     internal readonly Dictionary<SimObject,int>gotInSightOf=new Dictionary<SimObject,int>();
+     internal readonly HashSet<Collider>simObjectCollidersInSight=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
          Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
         }
