@@ -109,8 +109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ZAxisIsUp: 0
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
-  autoChangeMaterialsToFade: 1
-  autoToggleMaterialsToFade: 1
+  useMultipleMaterials: 1
+  autoSetMaterialsToFade: 1
   simUMADataPrefab: {fileID: 2461128663094476801, guid: 49d00260215b5494381f6fb86baff6b6, type: 3}
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
@@ -177,7 +177,7 @@ MonoBehaviour:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
     yLerp:
-      tgtValLerpSpeed: 38
+      tgtValLerpSpeed: 19
       tgtValLerpMaxTime: 0.0005
     zLerp:
       tgtValLerpSpeed: 76
