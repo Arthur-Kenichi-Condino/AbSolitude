@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace AKCondinoO.Sims{
          kinematicRigidbody.isKinematic=true;
          foreach(var volumeCollider in simObject.volumeColliders){
           if(volumeCollider is CharacterController characterController){
+           SimActor simActor=simObject as SimActor;
            CapsuleCollider trigger=this.gameObject.AddComponent<CapsuleCollider>();
            var values=GetCapsuleValuesForCollisionTesting(characterController,transform.root);
            trigger.isTrigger=true;
@@ -34,6 +36,7 @@ namespace AKCondinoO.Sims{
             var upperMiddleLowerValues=GetCapsuleValuesForUpperMiddleLowerCollisionTesting(characterController,transform.root,characterController.height,characterController.center);
             if(upperMiddleLowerValues!=null){
              SimCollisionsChildTrigger simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
+             simCollisionsChild.gameObject.layer=simObject.gameObject.layer;
              simCollisionsChild.simCollisions=this;
              CapsuleCollider upperTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              upperTrigger.isTrigger=true;
@@ -41,7 +44,11 @@ namespace AKCondinoO.Sims{
              upperTrigger.radius=upperMiddleLowerValues.Value.upperValues.radius;
              upperTrigger.center=upperMiddleLowerValues.Value.upperValues.center;
              childTriggers.Add(simCollisionsChild);
+             if(simActor!=null){
+              simActor.simCollisionsTouchingUpper=simCollisionsChild;
+             }
              simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
+             simCollisionsChild.gameObject.layer=simObject.gameObject.layer;
              simCollisionsChild.simCollisions=this;
              CapsuleCollider middleTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              middleTrigger.isTrigger=true;
@@ -49,6 +56,9 @@ namespace AKCondinoO.Sims{
              middleTrigger.radius=upperMiddleLowerValues.Value.middleValues.radius;
              middleTrigger.center=upperMiddleLowerValues.Value.middleValues.center;
              childTriggers.Add(simCollisionsChild);
+             if(simActor!=null){
+              simActor.simCollisionsTouchingMiddle=simCollisionsChild;
+             }
             }
            }
           }else if(volumeCollider is CapsuleCollider capsule){
@@ -209,20 +219,20 @@ namespace AKCondinoO.Sims{
          }
          foreach(var kvp in collidedWithChildTrigger){
           SimCollisionsChildTrigger simObjectCollidedWithChildTrigger=kvp.Key;
-          simObjectCollidedWithChildTrigger.simObjectCollisions.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
+          simObjectCollidedWithChildTrigger.simObjectColliders.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
          }
          collidedWithChildTrigger.Clear();
          //  OnTriggerExit will not be called
-         simObjectCollisions.Clear();
+         simObjectColliders.Clear();
          foreach(var kvp in collidedWith){
           SimObject simObjectCollidedWith=kvp.Key;
           if(simObjectCollidedWith.simCollisions!=null){
-           simObjectCollidedWith.simCollisions.simObjectCollisions.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
+           simObjectCollidedWith.simCollisions.simObjectColliders.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
           }
          }
          collidedWith.Clear();
         }
-     internal readonly HashSet<Collider>simObjectCollisions=new HashSet<Collider>();
+     internal readonly HashSet<Collider>simObjectColliders=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
          if(other.transform.root==this.transform.root){
           return;
@@ -230,7 +240,7 @@ namespace AKCondinoO.Sims{
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
          if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
-          simObjectCollisions.Add(other);
+          simObjectColliders.Add(other);
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){
            if(!otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
@@ -244,7 +254,7 @@ namespace AKCondinoO.Sims{
         }
         void OnTriggerExit(Collider other){
          //Log.DebugMessage("SimCollisions:OnTriggerExit:"+other.transform.root.gameObject.name);
-         simObjectCollisions.Remove(other);
+         simObjectColliders.Remove(other);
          if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){

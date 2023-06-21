@@ -567,11 +567,13 @@ namespace AKCondinoO.Sims{
           return false;
          }
          bool result=false;
-         if(simCollisions&&!instantCheck){
-          foreach(Collider overlappedCollider in simCollisions.simObjectCollisions){
-           result|=SetOverlapResult(overlappedCollider);
+         if(!instantCheck){
+          if(simCollisions){
+           foreach(Collider overlappedCollider in simCollisions.simObjectColliders){
+            result|=SetOverlapResult(overlappedCollider);
+           }
+           return result;
           }
-          return result;
          }
          for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
@@ -628,7 +630,7 @@ namespace AKCondinoO.Sims{
           yield return null;
           yield return waitForFixedUpdate;
           if(Core.singleton.isServer){
-           if(!isOverlapping&&simCollisions.simObjectCollisions.Count<=0){
+           if(!isOverlapping&&simCollisions.simObjectColliders.Count<=0){
             if(transform.hasChanged){
              //Log.DebugMessage("UpdateSafePosition:id:"+id+";safePosition:"+safePosition);
              safePosition=transform.position;

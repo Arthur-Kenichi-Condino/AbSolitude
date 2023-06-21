@@ -16,9 +16,9 @@ namespace AKCondinoO.Sims{
         internal void Deactivate(){
          this.gameObject.SetActive(false);
          //  OnTriggerExit will not be called
-         simObjectCollisions.Clear();
+         simObjectColliders.Clear();
         }
-     internal readonly HashSet<Collider>simObjectCollisions=new HashSet<Collider>();
+     internal readonly HashSet<Collider>simObjectColliders=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
          if(other.transform.root==this.transform.root){
           return;
@@ -26,7 +26,7 @@ namespace AKCondinoO.Sims{
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
          if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
-          simObjectCollisions.Add(other);
+          simObjectColliders.Add(other);
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){
            if(!otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
@@ -38,7 +38,7 @@ namespace AKCondinoO.Sims{
          }
         }
         void OnTriggerExit(Collider other){
-         simObjectCollisions.Remove(other);
+         simObjectColliders.Remove(other);
          if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){

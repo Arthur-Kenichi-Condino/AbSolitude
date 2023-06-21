@@ -417,16 +417,29 @@ namespace AKCondinoO.Sims.Actors{
          if(transform.hasChanged){
           GetCollidersTouchingNonAlloc(instantCheck:true);
          }
-         for(int i=0;i<collidersTouchingUpperCount;++i){
-          Collider colliderTouchingUpper=collidersTouchingUpper[i];
-          if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
-           shouldCrouch=true;
+         if(gotCollidersTouchingFromInstantCheck){
+          for(int i=0;i<collidersTouchingUpperCount;++i){
+           Collider colliderTouchingUpper=collidersTouchingUpper[i];
+           if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
           }
-         }
-         for(int i=0;i<collidersTouchingMiddleCount;++i){
-          Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
-          if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
-           shouldCrouch=true;
+          for(int i=0;i<collidersTouchingMiddleCount;++i){
+           Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
+           if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
+          }
+         }else{
+          if(simCollisionsTouchingUpper !=null){
+           foreach(Collider colliderTouchingUpper  in simCollisionsTouchingUpper .simObjectColliders){
+            shouldCrouch=true;
+           }
+          }
+          if(simCollisionsTouchingMiddle!=null){
+           foreach(Collider colliderTouchingMiddle in simCollisionsTouchingMiddle.simObjectColliders){
+            shouldCrouch=true;
+           }
           }
          }
          if(Core.singleton.isServer){
@@ -479,14 +492,20 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
-     protected SimCollisionsChildTrigger simCollisionsTouchingUpper;
+     internal SimCollisionsChildTrigger simCollisionsTouchingUpper;
      protected Collider[]collidersTouchingMiddle=new Collider[8];
       protected int collidersTouchingMiddleCount=0;
-     protected SimCollisionsChildTrigger simCollisionsTouchingMiddle;
+     internal SimCollisionsChildTrigger simCollisionsTouchingMiddle;
         protected override void GetCollidersTouchingNonAlloc(bool instantCheck){
          gotCollidersTouchingFromInstantCheck=false;
-         if(simCollisions&&!instantCheck){
-          return;
+         if(!instantCheck){
+          if(
+           simCollisions&&
+           simCollisionsTouchingUpper &&
+           simCollisionsTouchingMiddle
+          ){
+           return;
+          }
          }
          if(simActorCharacterController!=null){
           gotCollidersTouchingFromInstantCheck=true;
