@@ -34,6 +34,7 @@ namespace AKCondinoO.Sims{
             var upperMiddleLowerValues=GetCapsuleValuesForUpperMiddleLowerCollisionTesting(characterController,transform.root,characterController.height,characterController.center);
             if(upperMiddleLowerValues!=null){
              SimCollisionsChildTrigger simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
+             simCollisionsChild.simCollisions=this;
              CapsuleCollider upperTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              upperTrigger.isTrigger=true;
              upperTrigger.height=upperMiddleLowerValues.Value.upperValues.height;
@@ -41,6 +42,7 @@ namespace AKCondinoO.Sims{
              upperTrigger.center=upperMiddleLowerValues.Value.upperValues.center;
              childTriggers.Add(simCollisionsChild);
              simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
+             simCollisionsChild.simCollisions=this;
              CapsuleCollider middleTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              middleTrigger.isTrigger=true;
              middleTrigger.height=upperMiddleLowerValues.Value.middleValues.height;
@@ -61,135 +63,137 @@ namespace AKCondinoO.Sims{
           }
          }
         }
-        internal(
-         Vector3 direction,
-         int enumDirection,
-         float height,
-         float radius,
-         Vector3 center,
-         Vector3 localPoint0,
-         Vector3 localPoint1,
-         Vector3 point0,
-         Vector3 point1
-        )GetCapsuleValuesForCollisionTesting(CapsuleCollider capsule,Transform transform){
-         var direction=new Vector3{[capsule.direction]=1};
-         //Log.DebugMessage("capsule direction:"+direction);
-         var offset=capsule.height/2f-capsule.radius;
-         var localPoint0=capsule.center-direction*offset;
-         var localPoint1=capsule.center+direction*offset;
-         var point0=transform.TransformPoint(localPoint0);
-         var point1=transform.TransformPoint(localPoint1);
-         Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
-         float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
-         return(
-          direction,
-          capsule.direction,
-          capsule.height,
-          radius,
-          capsule.center,
-          localPoint0,
-          localPoint1,
-          point0,
-          point1
-         );
-        }
-         internal(
-          Vector3 direction,
-          int enumDirection,
-          float height,
-          float radius,
-          Vector3 center,
-          Vector3 localPoint0,
-          Vector3 localPoint1,
-          Vector3 point0,
-          Vector3 point1
-         )GetCapsuleValuesForCollisionTesting(CharacterController capsule,Transform transform){
-          var direction=Vector3.up;
-          //Log.DebugMessage("capsule direction:"+direction);
-          var offset=capsule.height/2f-capsule.radius;
-          var localPoint0=capsule.center-direction*offset;
-          var localPoint1=capsule.center+direction*offset;
-          var point0=transform.TransformPoint(localPoint0);
-          var point1=transform.TransformPoint(localPoint1);
-          float radius=capsule.radius;
-          return(
-           direction,
-           1,
-           capsule.height,
-           radius,
-           capsule.center,
-           localPoint0,
-           localPoint1,
-           point0,
-           point1
-          );
-         }
-          internal(
-           (
-            Vector3 direction,
-            int enumDirection,
-            float height,
-            float radius,
-            Vector3 center,
-            Vector3 localPoint0,
-            Vector3 localPoint1,
-            Vector3 point0,
-            Vector3 point1
-           )upperValues,
-           (
-            Vector3 direction,
-            int enumDirection,
-            float height,
-            float radius,
-            Vector3 center,
-            Vector3 localPoint0,
-            Vector3 localPoint1,
-            Vector3 point0,
-            Vector3 point1
-           )middleValues
-          )?GetCapsuleValuesForUpperMiddleLowerCollisionTesting(CharacterController capsule,Transform transform,float capsuleHeight,Vector3 capsuleCenter){
-           var section=capsuleHeight/3f;
-           if(!((section/2f)>capsule.radius)){
-            return null;
-           }
-           var direction=Vector3.up;
-           var offset=(section/2f)-capsule.radius;
-           var center=capsuleCenter;
-               center.y+=(capsuleHeight/2f)-(section/2f);
-           float radius=capsule.radius;
-           var localPoint0=center-direction*offset;
-           var localPoint1=center+direction*offset;
-           var point0=transform.TransformPoint(localPoint0);
-           var point1=transform.TransformPoint(localPoint1);
-           var upper=(
-            direction,
-            1,
-            (offset+radius)*2f,
-            radius,
-            center,
-            localPoint0,
-            localPoint1,
-            point0,
-            point1
-           );
-           center=capsuleCenter;
-           localPoint0=center-direction*offset;
-           localPoint1=center+direction*offset;
-           point0=transform.TransformPoint(localPoint0);
-           point1=transform.TransformPoint(localPoint1);
-           var middle=(
-            direction,
-            1,
-            (offset+radius)*2f,
-            radius,
-            center,
-            localPoint0,
-            localPoint1,
-            point0,
-            point1
-           );
-           return(upper,middle);
-          }
+        #region Get Values For Collision Testing
+            internal(
+             Vector3 direction,
+             int enumDirection,
+             float height,
+             float radius,
+             Vector3 center,
+             Vector3 localPoint0,
+             Vector3 localPoint1,
+             Vector3 point0,
+             Vector3 point1
+            )GetCapsuleValuesForCollisionTesting(CapsuleCollider capsule,Transform transform){
+             var direction=new Vector3{[capsule.direction]=1};
+             //Log.DebugMessage("capsule direction:"+direction);
+             var offset=capsule.height/2f-capsule.radius;
+             var localPoint0=capsule.center-direction*offset;
+             var localPoint1=capsule.center+direction*offset;
+             var point0=transform.TransformPoint(localPoint0);
+             var point1=transform.TransformPoint(localPoint1);
+             Vector3 r=transform.TransformVector(capsule.radius,capsule.radius,capsule.radius);
+             float radius=Enumerable.Range(0,3).Select(xyz=>xyz==capsule.direction?0:r[xyz]).Select(Mathf.Abs).Max();
+             return(
+              direction,
+              capsule.direction,
+              capsule.height,
+              radius,
+              capsule.center,
+              localPoint0,
+              localPoint1,
+              point0,
+              point1
+             );
+            }
+             internal(
+              Vector3 direction,
+              int enumDirection,
+              float height,
+              float radius,
+              Vector3 center,
+              Vector3 localPoint0,
+              Vector3 localPoint1,
+              Vector3 point0,
+              Vector3 point1
+             )GetCapsuleValuesForCollisionTesting(CharacterController capsule,Transform transform){
+              var direction=Vector3.up;
+              //Log.DebugMessage("capsule direction:"+direction);
+              var offset=capsule.height/2f-capsule.radius;
+              var localPoint0=capsule.center-direction*offset;
+              var localPoint1=capsule.center+direction*offset;
+              var point0=transform.TransformPoint(localPoint0);
+              var point1=transform.TransformPoint(localPoint1);
+              float radius=capsule.radius;
+              return(
+               direction,
+               1,
+               capsule.height,
+               radius,
+               capsule.center,
+               localPoint0,
+               localPoint1,
+               point0,
+               point1
+              );
+             }
+              internal(
+               (
+                Vector3 direction,
+                int enumDirection,
+                float height,
+                float radius,
+                Vector3 center,
+                Vector3 localPoint0,
+                Vector3 localPoint1,
+                Vector3 point0,
+                Vector3 point1
+               )upperValues,
+               (
+                Vector3 direction,
+                int enumDirection,
+                float height,
+                float radius,
+                Vector3 center,
+                Vector3 localPoint0,
+                Vector3 localPoint1,
+                Vector3 point0,
+                Vector3 point1
+               )middleValues
+              )?GetCapsuleValuesForUpperMiddleLowerCollisionTesting(CharacterController capsule,Transform transform,float capsuleHeight,Vector3 capsuleCenter){
+               var section=capsuleHeight/3f;
+               if(!((section/2f)>capsule.radius)){
+                return null;
+               }
+               var direction=Vector3.up;
+               var offset=(section/2f)-capsule.radius;
+               var center=capsuleCenter;
+                   center.y+=(capsuleHeight/2f)-(section/2f);
+               float radius=capsule.radius;
+               var localPoint0=center-direction*offset;
+               var localPoint1=center+direction*offset;
+               var point0=transform.TransformPoint(localPoint0);
+               var point1=transform.TransformPoint(localPoint1);
+               var upper=(
+                direction,
+                1,
+                (offset+radius)*2f,
+                radius,
+                center,
+                localPoint0,
+                localPoint1,
+                point0,
+                point1
+               );
+               center=capsuleCenter;
+               localPoint0=center-direction*offset;
+               localPoint1=center+direction*offset;
+               point0=transform.TransformPoint(localPoint0);
+               point1=transform.TransformPoint(localPoint1);
+               var middle=(
+                direction,
+                1,
+                (offset+radius)*2f,
+                radius,
+                center,
+                localPoint0,
+                localPoint1,
+                point0,
+                point1
+               );
+               return(upper,middle);
+              }
+        #endregion
         internal void Activate(){
          this.gameObject.SetActive(true);
          foreach(SimCollisionsChildTrigger childTrigger in childTriggers){
@@ -197,12 +201,18 @@ namespace AKCondinoO.Sims{
          }
         }
      internal readonly Dictionary<SimObject,int>collidedWith=new Dictionary<SimObject,int>();
+      internal readonly Dictionary<SimCollisionsChildTrigger,int>collidedWithChildTrigger=new Dictionary<SimCollisionsChildTrigger,int>();
         internal void Deactivate(){
          this.gameObject.SetActive(false);
-         //  OnTriggerExit will not be called
          foreach(SimCollisionsChildTrigger childTrigger in childTriggers){
           childTrigger.Deactivate();
          }
+         foreach(var kvp in collidedWithChildTrigger){
+          SimCollisionsChildTrigger simObjectCollidedWithChildTrigger=kvp.Key;
+          simObjectCollidedWithChildTrigger.simObjectCollisions.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
+         }
+         collidedWithChildTrigger.Clear();
+         //  OnTriggerExit will not be called
          simObjectCollisions.Clear();
          foreach(var kvp in collidedWith){
           SimObject simObjectCollidedWith=kvp.Key;
@@ -212,13 +222,13 @@ namespace AKCondinoO.Sims{
          }
          collidedWith.Clear();
         }
-      internal readonly HashSet<Collider>simObjectCollisions=new HashSet<Collider>();
+     internal readonly HashSet<Collider>simObjectCollisions=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
          if(other.transform.root==this.transform.root){
           return;
          }
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
-         if(other.CompareTag("SimObjectVolume")){
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectCollisions.Add(other);
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
@@ -235,7 +245,7 @@ namespace AKCondinoO.Sims{
         void OnTriggerExit(Collider other){
          //Log.DebugMessage("SimCollisions:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectCollisions.Remove(other);
-         if(other.CompareTag("SimObjectVolume")){
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
           SimObject otherSimObject=other.GetComponentInParent<SimObject>();
           if(otherSimObject.simCollisions!=null){
            if(otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
