@@ -24,6 +24,14 @@ namespace AKCondinoO.Sims.Actors{
                         >
                        >targetsGotten=new();
      internal readonly HashSet<(Type simType,ulong number)>targets=new HashSet<(Type,ulong)>();
+        internal virtual void InitEnemiesAndAllies(){
+         foreach(int i in Enum.GetValues(typeof(GotTargetMode))){
+          targetsGotten.Add((GotTargetMode)i,new SortedList<EnemyPriority,Dictionary<(Type simType,ulong number),(float dis,float timeout)>>());
+          foreach(int j in Enum.GetValues(typeof(EnemyPriority))){
+           targetsGotten[(GotTargetMode)i].Add((EnemyPriority)j,new Dictionary<(Type simType,ulong number),(float dis,float timeout)>());
+          }
+         }
+        }
         internal virtual void GetEnemiesAndAllies(){
         }
     }

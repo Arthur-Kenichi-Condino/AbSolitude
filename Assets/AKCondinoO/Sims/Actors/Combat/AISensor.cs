@@ -108,13 +108,56 @@ namespace AKCondinoO.Sims.Actors.Combat{
           DestroyImmediate(wedgeMesh);
          }
         }
+        internal void Activate(){
+         this.gameObject.SetActive(true);
+        }
+        internal void Deactivate(){
+         this.gameObject.SetActive(false);
+         //  OnTriggerExit will not be called
+         simObjectCollidersInSight.Clear();
+         foreach(var kvp in gotInSightOf){
+          SimObject simObjectGotInSightOf=kvp.Key;
+          if(simObjectGotInSightOf is SimActor simActor&&simActor.aiSensor!=null){
+           simActor.aiSensor.simObjectCollidersInSight.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
+          }
+         }
+         gotInSightOf.Clear();
+        }
      internal readonly Dictionary<SimObject,int>gotInSightOf=new Dictionary<SimObject,int>();
      internal readonly HashSet<Collider>simObjectCollidersInSight=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
-         Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
+         if(other.transform.root==this.transform.root){
+          return;
+         }
+         //Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
+          Log.DebugMessage("AISensor:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
+          simObjectCollidersInSight.Add(other);
+          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
+          if(otherSimObject is SimActor simActor&&simActor.aiSensor!=null){
+           if(!simActor.aiSensor.gotInSightOf.ContainsKey(actor)){
+            simActor.aiSensor.gotInSightOf.Add(actor,0);
+           }else{
+            simActor.aiSensor.gotInSightOf[actor]++;
+           }
+          }
+          //actor.OnTargetFound(other);
+         }
         }
         void OnTriggerExit(Collider other){
-         Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
+         //Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
+         simObjectCollidersInSight.Remove(other);
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
+          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
+          if(otherSimObject is SimActor simActor&&simActor.aiSensor!=null){
+           if(simActor.aiSensor.gotInSightOf.ContainsKey(actor)){
+            simActor.aiSensor.gotInSightOf[actor]--;
+            if(simActor.aiSensor.gotInSightOf[actor]<0){
+             simActor.aiSensor.gotInSightOf.Remove(actor);
+            }
+           }
+          }
+         }
         }
         void OnDrawGizmos(){
          #if UNITY_EDITOR

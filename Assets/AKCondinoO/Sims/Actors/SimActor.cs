@@ -216,6 +216,7 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
+         aiSensor.Activate();
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
@@ -264,6 +265,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
+         aiSensor.Deactivate();
          foreach(var skill in skills){
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
