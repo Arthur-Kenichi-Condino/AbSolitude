@@ -8,5 +8,9 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
+        internal override void AggressionModeFor(SimObject simObject){
+        }
+        protected override void DoAttack(){
+        }
     }
 }
