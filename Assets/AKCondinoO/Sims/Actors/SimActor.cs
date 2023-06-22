@@ -150,7 +150,7 @@ namespace AKCondinoO.Sims.Actors{
          aiSensor=GetComponentInChildren<AISensor>();
          if(aiSensor){
           aiSensor.actor=this;
-          aiSensor.gameObject.SetActive(false);
+          aiSensor.Deactivate();
           Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
          }
          navMeshAgent=GetComponent<NavMeshAgent>();
@@ -171,6 +171,7 @@ namespace AKCondinoO.Sims.Actors{
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
+     protected bool canSense;
         void OnUMACharacterUpdated(UMAData simActorUMAData){
          Log.DebugMessage("OnUMACharacterUpdated");
          if(head==null){
@@ -188,7 +189,7 @@ namespace AKCondinoO.Sims.Actors{
          if(aiSensor){
           if(head||leftEye||rightEye){
            Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
-           aiSensor.gameObject.SetActive(true);
+           canSense=true;
           }
          }
          if( leftHand==null){
@@ -216,7 +217,6 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          lastForward=transform.forward;
-         aiSensor.Activate();
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
@@ -265,7 +265,9 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
-         aiSensor.Deactivate();
+         if(aiSensor){
+          aiSensor.Deactivate();
+         }
          foreach(var skill in skills){
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
@@ -378,21 +380,28 @@ namespace AKCondinoO.Sims.Actors{
              //  TO DO: release items
             }
            }
-           if(aiSensor&&aiSensor.isActiveAndEnabled){
-            if(rightEye){
-             if(leftEye){
-              aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
-              aiSensor.transform.rotation=leftEye.transform.rotation;
-             }else{
-              aiSensor.transform.position=rightEye.transform.position;
-              aiSensor.transform.rotation=rightEye.transform.rotation;
+           if(aiSensor){
+            if(canSense){
+             if(!aiSensor.isActiveAndEnabled){
+              aiSensor.Activate();
              }
-            }else if(leftEye){
-             aiSensor.transform.position=leftEye.transform.position;
-             aiSensor.transform.rotation=leftEye.transform.rotation;
-            }else if(head){
-             aiSensor.transform.position=head.transform.position;
-             aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+             if(aiSensor.isActiveAndEnabled){
+              if(rightEye){
+               if(leftEye){
+                aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
+                aiSensor.transform.rotation=leftEye.transform.rotation;
+               }else{
+                aiSensor.transform.position=rightEye.transform.position;
+                aiSensor.transform.rotation=rightEye.transform.rotation;
+               }
+              }else if(leftEye){
+               aiSensor.transform.position=leftEye.transform.position;
+               aiSensor.transform.rotation=leftEye.transform.rotation;
+              }else if(head){
+               aiSensor.transform.position=head.transform.position;
+               aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+              }
+             }
             }
            }
            if(isUsingAI){
