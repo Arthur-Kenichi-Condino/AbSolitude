@@ -32,7 +32,9 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-        internal virtual void GetEnemiesAndAllies(){
+        internal virtual void ReleaseEnemiesAndAllies(){
+        }
+        internal virtual void RenewEnemiesAndAllies(){
         }
     }
 }

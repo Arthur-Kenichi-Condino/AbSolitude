@@ -141,7 +141,9 @@ namespace AKCondinoO.Sims.Actors.Combat{
             simActor.aiSensor.gotInSightOf[actor]++;
            }
           }
-          //actor.OnTargetFound(other);
+          if(otherSimObject!=null){
+           actor.OnSimObjectIsInSight(otherSimObject);
+          }
          }
         }
         void OnTriggerExit(Collider other){
