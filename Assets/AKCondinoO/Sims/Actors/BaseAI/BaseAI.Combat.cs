@@ -8,7 +8,16 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
-        internal override void AggressionModeFor(SimObject simObject){
+        internal enum AggressionMode:int{
+         Defensive=0,
+         AggressiveToPotentialEnemies=1,
+         AggressiveToAll=2,
+        }
+     protected AggressionMode MyAggressionMode=AggressionMode.Defensive;internal AggressionMode aggression{get{return MyAggressionMode;}}
+        internal override void OnSimObjectIsInSight(SimObject simObject){
+         ApplyAggressionModeAndAddTarget(simObject);
+        }
+        internal virtual void ApplyAggressionModeAndAddTarget(SimObject simObject){
         }
         protected override void DoAttack(){
         }
