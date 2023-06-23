@@ -10,5 +10,8 @@ using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
+        internal virtual bool IsMonster(){
+         return false;
+        }
     }
 }
