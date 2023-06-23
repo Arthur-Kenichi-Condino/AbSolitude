@@ -13,11 +13,13 @@ namespace AKCondinoO.Sims.Actors{
          AggressiveToPotentialEnemies=1,
          AggressiveToAll=2,
         }
-     protected AggressionMode MyAggressionMode=AggressionMode.Defensive;internal AggressionMode aggression{get{return MyAggressionMode;}}
+     [SerializeField]protected AggressionMode MyAggressionMode=AggressionMode.Defensive;internal AggressionMode aggression{get{return MyAggressionMode;}}
         internal override void OnSimObjectIsInSight(SimObject simObject){
-         ApplyAggressionModeAndAddTarget(simObject);
+         ApplyAggressionModeForThenAddAsTarget(simObject);
         }
-        internal virtual void ApplyAggressionModeAndAddTarget(SimObject simObject){
+        internal virtual void ApplyAggressionModeForThenAddAsTarget(SimObject target){
+         if(target is SimActor targetSimActor){
+         }
         }
         protected override void DoAttack(){
         }
