@@ -176,6 +176,9 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnUMACharacterUpdated");
          if(head==null){
           head=Util.FindChildRecursively(simUMAData.transform,"head");
+          if(head==null){
+           head=Util.FindChildRecursively(simUMAData.transform,"face");
+          }
           Log.DebugMessage("head:"+head);
          }
          if( leftEye==null){
@@ -398,8 +401,13 @@ namespace AKCondinoO.Sims.Actors{
                aiSensor.transform.position=leftEye.transform.position;
                aiSensor.transform.rotation=leftEye.transform.rotation;
               }else if(head){
-               aiSensor.transform.position=head.transform.position;
-               aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+               if(aiSensor.zIsUp){
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.LookRotation(head.up,head.forward);
+               }else{
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+               }
               }
              }
             }
