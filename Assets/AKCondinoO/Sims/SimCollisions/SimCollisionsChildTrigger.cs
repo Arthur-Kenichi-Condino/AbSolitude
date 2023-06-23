@@ -24,29 +24,23 @@ namespace AKCondinoO.Sims{
           return;
          }
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
-         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
+         if(simCollisions.IsValidForCollision(other,out SimObject otherSimObject)){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectColliders.Add(other);
-          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
-          if(otherSimObject.simCollisions!=null){
-           if(!otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
-            otherSimObject.simCollisions.collidedWithChildTrigger.Add(this,0);
-           }else{
-            otherSimObject.simCollisions.collidedWithChildTrigger[this]++;
-           }
+          if(!otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
+           otherSimObject.simCollisions.collidedWithChildTrigger.Add(this,0);
+          }else{
+           otherSimObject.simCollisions.collidedWithChildTrigger[this]++;
           }
          }
         }
         void OnTriggerExit(Collider other){
          simObjectColliders.Remove(other);
-         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
-          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
-          if(otherSimObject.simCollisions!=null){
-           if(otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
-            otherSimObject.simCollisions.collidedWithChildTrigger[this]--;
-            if(otherSimObject.simCollisions.collidedWithChildTrigger[this]<0){
-             otherSimObject.simCollisions.collidedWithChildTrigger.Remove(this);
-            }
+         if(simCollisions.IsValidForCollision(other,out SimObject otherSimObject)){
+          if(otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
+           otherSimObject.simCollisions.collidedWithChildTrigger[this]--;
+           if(otherSimObject.simCollisions.collidedWithChildTrigger[this]<0){
+            otherSimObject.simCollisions.collidedWithChildTrigger.Remove(this);
            }
           }
          }

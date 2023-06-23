@@ -238,16 +238,13 @@ namespace AKCondinoO.Sims{
           return;
          }
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
-         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
+         if(IsValidForCollision(other,out SimObject otherSimObject)){
           Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectColliders.Add(other);
-          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
-          if(otherSimObject.simCollisions!=null){
-           if(!otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
-            otherSimObject.simCollisions.collidedWith.Add(simObject,0);
-           }else{
-            otherSimObject.simCollisions.collidedWith[simObject]++;
-           }
+          if(!otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
+           otherSimObject.simCollisions.collidedWith.Add(simObject,0);
+          }else{
+           otherSimObject.simCollisions.collidedWith[simObject]++;
           }
           simObject.OnOverlapping(other);
          }
@@ -255,17 +252,21 @@ namespace AKCondinoO.Sims{
         void OnTriggerExit(Collider other){
          //Log.DebugMessage("SimCollisions:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectColliders.Remove(other);
-         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger){
-          SimObject otherSimObject=other.GetComponentInParent<SimObject>();
-          if(otherSimObject.simCollisions!=null){
-           if(otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
-            otherSimObject.simCollisions.collidedWith[simObject]--;
-            if(otherSimObject.simCollisions.collidedWith[simObject]<0){
-             otherSimObject.simCollisions.collidedWith.Remove(simObject);
-            }
+         if(IsValidForCollision(other,out SimObject otherSimObject)){
+          if(otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
+           otherSimObject.simCollisions.collidedWith[simObject]--;
+           if(otherSimObject.simCollisions.collidedWith[simObject]<0){
+            otherSimObject.simCollisions.collidedWith.Remove(simObject);
            }
           }
          }
+        }
+        internal bool IsValidForCollision(Collider other,out SimObject otherSimObject){
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger&&(otherSimObject=other.GetComponentInParent<SimObject>())!=null&&otherSimObject.simCollisions!=null){
+          return true;
+         }
+         otherSimObject=null;
+         return false;
         }
     }
 }

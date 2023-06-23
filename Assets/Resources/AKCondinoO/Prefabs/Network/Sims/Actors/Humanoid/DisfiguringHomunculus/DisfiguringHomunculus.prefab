@@ -125,6 +125,7 @@ MonoBehaviour:
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
+  MyAggressionMode: 2
   pathfindingTimeout: 12
   pathPendingTimeout: 12
 --- !u!114 &-5906123023762645204
