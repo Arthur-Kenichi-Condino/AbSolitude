@@ -124,7 +124,7 @@ namespace AKCondinoO.Sims.Actors{
          Vector3 minLeft=actor.simActorCharacterController.characterController.transform.position+actor.simActorCharacterController.characterController.transform.rotation*(Vector3.left*minLeftDis);
          if(actor.navMeshAgent.enabled||actor.simActorCharacterController.isGrounded){
           Debug.DrawRay(maxRight,Vector3.down,Color.blue);
-          if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f)){
+          if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f,PhysUtil.considerGroundLayer)){
            Debug.DrawRay(rightFloorHit.point,rightFloorHit.normal);
            Vector3 bottom=actor.simActorCharacterController.characterController.bounds.center;
                    bottom.y=actor.simActorCharacterController.characterController.bounds.min.y;
