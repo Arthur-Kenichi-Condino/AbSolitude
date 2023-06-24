@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid{
     internal class DisfiguringHomunculusAI:HumanoidAI{
+        internal override bool IsMonster(){
+         return true;
+        }
         internal override void OnActivated(){
          if(Core.singleton.isServer){
           if(!inventory.ContainsKey(typeof(SimHands))||inventory[typeof(SimHands)].Count<=0){

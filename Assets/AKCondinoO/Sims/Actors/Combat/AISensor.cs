@@ -146,6 +146,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
          //Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectCollidersInSight.Remove(other);
          if(IsValidForSensing(other,out SimObject otherSimObject,out SimActor otherSimActor)){
+          actor.OnSimObjectIsOutOfSight(otherSimObject);
           if(otherSimActor.aiSensor.gotInSightOf.ContainsKey(actor)){
            otherSimActor.aiSensor.gotInSightOf[actor]--;
            if(otherSimActor.aiSensor.gotInSightOf[actor]<0){

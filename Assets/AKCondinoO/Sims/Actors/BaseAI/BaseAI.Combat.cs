@@ -18,7 +18,34 @@ namespace AKCondinoO.Sims.Actors{
          ApplyAggressionModeForThenAddAsTarget(simObject);
         }
         internal virtual void ApplyAggressionModeForThenAddAsTarget(SimObject target){
-         if(target is SimActor targetSimActor){
+         if(target.id==null){
+          return;
+         }
+         if(MyAggressionMode==AggressionMode.AggressiveToAll){
+          if(target is SimActor targetSimActor&&!target.IsMonster()){
+           ApplyEnemyPriorityForThenAddAsTarget(target,GotTargetMode.Aggressively);
+          }
+         }else{
+         }
+        }
+        internal virtual void ApplyEnemyPriorityForThenAddAsTarget(SimObject target,GotTargetMode gotTargetMode){
+         if(target.id==null){
+          return;
+         }
+         EnemyPriority enemyPriority=EnemyPriority.Low;
+         Log.DebugMessage("target to add:"+target.id.Value);
+         OnAddAsTarget(target,gotTargetMode,enemyPriority);
+        }
+        internal override void OnSimObjectIsOutOfSight(SimObject simObject){
+         SetToBeRemovedFromAsTarget(simObject);
+        }
+        internal virtual void SetToBeRemovedFromAsTarget(SimObject target){
+         if(target.id==null){
+          return;
+         }
+         if(targetsByPriority.TryGetValue(target.id.Value,out _)){
+          Log.DebugMessage("target set to be removed:"+target.id.Value);
+          targetTimeouts[target.id.Value]=30f;
          }
         }
         protected override void DoAttack(){
