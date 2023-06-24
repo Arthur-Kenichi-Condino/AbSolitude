@@ -20,6 +20,9 @@ namespace AKCondinoO.Sims.Actors{
          InitEnemiesAndAllies();
          base.Awake();
         }
+        internal override bool IsMonster(){
+         return MyAggressionMode==AggressionMode.AggressiveToAll;
+        }
         internal override void OnActivated(){
          base.OnActivated();
         }
@@ -36,15 +39,26 @@ namespace AKCondinoO.Sims.Actors{
          RenewEnemiesAndAllies();
          MyPathfinding=GetPathfindingResult();
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
-         if(MyState==State.FOLLOW_ST){
+         if(MyEnemy!=null){
+          MyState=State.CHASE_ST;
          }else{
-          OnIDLE_ST();
+          MyState=State. IDLE_ST;
+         }
+         if      (MyState==State.FOLLOW_ST){
+         }else if(MyState==State. CHASE_ST){
+          OnCHASE_ST();
+         }else if(MyState==State.ATTACK_ST){
+         }else{
+           OnIDLE_ST();
          }
          UpdateMotion(true);
         }
         protected override void OnCharacterControllerUpdated(){
          base.OnCharacterControllerUpdated();
          UpdateMotion(false);
+        }
+        protected virtual void OnCHASE_ST(){
+         navMeshAgent.destination=MyEnemy.transform.position;
         }
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;

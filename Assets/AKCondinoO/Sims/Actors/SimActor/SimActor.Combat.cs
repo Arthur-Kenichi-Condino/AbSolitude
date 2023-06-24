@@ -8,6 +8,8 @@ namespace AKCondinoO.Sims.Actors{
     internal partial class SimActor{
         internal virtual void OnSimObjectIsInSight(SimObject simObject){
         }
+        internal virtual void OnSimObjectIsOutOfSight(SimObject simObject){
+        }
         protected virtual void DoAttack(){
         }
     }
