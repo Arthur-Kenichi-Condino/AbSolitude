@@ -61,6 +61,7 @@ namespace AKCondinoO{
          GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
+                PhysUtil.SetUtil();
            RenderingUtil.SetUtil();
          QualitySettings.vSyncCount=0;
          Application.targetFrameRate=164;
