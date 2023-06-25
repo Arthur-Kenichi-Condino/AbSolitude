@@ -58,7 +58,17 @@ namespace AKCondinoO.Sims.Actors{
          UpdateMotion(false);
         }
         protected virtual void OnCHASE_ST(){
-         navMeshAgent.destination=MyEnemy.transform.position;
+         bool moveToDestination=false;
+         if(
+          MyPathfinding==PathfindingResult.IDLE||
+          MyPathfinding==PathfindingResult.REACHED||
+          MyPathfinding==PathfindingResult.TIMEOUT
+         ){
+          moveToDestination|=true;
+         }
+         if(moveToDestination){
+          navMeshAgent.destination=MyEnemy.transform.position;
+         }
         }
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
