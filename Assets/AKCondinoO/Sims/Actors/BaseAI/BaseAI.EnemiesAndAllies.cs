@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
@@ -25,27 +26,50 @@ namespace AKCondinoO.Sims.Actors{
         internal readonly HashSet<(Type simType,ulong number)>targetsToRemove=new HashSet<(Type,ulong)>();
         protected void OnAddAsTarget(SimObject target,GotTargetMode gotTargetMode,EnemyPriority enemyPriority){
          if(targetsByPriority.TryGetValue(target.id.Value,out _)){
-          OnRemoveFromAsTarget(target.id.Value);
+          OnRemoveFromAsTarget(target.id.Value,false);
          }
          targetsGotten[gotTargetMode][enemyPriority].Add(target.id.Value,target);
          targetsByPriority.Add(target.id.Value,(gotTargetMode,enemyPriority));
          targetTimeouts[target.id.Value]=-1;
          targetDis     [target.id.Value]=Vector3.Distance(transform.position,target.transform.position);
         }
-        protected void OnRemoveFromAsTarget((Type simType,ulong number)id){
+        protected void OnRemoveFromAsTarget((Type simType,ulong number)id,bool validateMyEnemy=true){
          if(targetsByPriority.TryGetValue(id,out(GotTargetMode mode,EnemyPriority priority)modeAndPriority)){
           targetsGotten[modeAndPriority.mode][modeAndPriority.priority].Remove(id);
           targetsByPriority.Remove(id);
           targetTimeouts.Remove(id);
           targetDis     .Remove(id);
          }
+         if(validateMyEnemy){
+          if(MyEnemy!=null){
+           if(MyEnemy.id==id){
+            MyEnemy=null;
+           }
+          }
+         }
         }
+     [SerializeField]protected float renewEnemyInterval=3f;
+      protected float renewEnemyTimer=3f;
         internal virtual void RenewEnemiesAndAllies(){
-         MyEnemy=null;
+         if(MyEnemy!=null){
+          if(MyEnemy.id==null||(targetTimeouts.TryGetValue(MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)){
+           MyEnemy=null;
+          }else{
+           renewEnemyTimer-=Time.deltaTime;
+           if(renewEnemyTimer<=0f){
+            renewEnemyTimer=renewEnemyInterval;
+            MyEnemy=null;
+           }
+          }
+         }else{
+          renewEnemyTimer=renewEnemyInterval;
+         }
+         SimObject myEnemy=MyEnemy;
          foreach(var targetsByGottenMode in targetsGotten){
           GotTargetMode gotTargetMode=targetsByGottenMode.Key;
           foreach(var targetsByPriority in targetsByGottenMode.Value){
            EnemyPriority priority=targetsByPriority.Key;
+           float closestDis=float.MaxValue;
            foreach(var idTargetPair in targetsByPriority.Value){
             (Type simType,ulong number)id=idTargetPair.Key;
             if(idTargetPair.Value==null||idTargetPair.Value.id==null||idTargetPair.Value.id.Value!=id){
@@ -60,10 +84,13 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
             SimObject target=idTargetPair.Value;
-            if(MyEnemy==null){
+            targetDis[id]=Vector3.Distance(transform.position,target.transform.position);
+            if(myEnemy==null&&targetDis[id]<closestDis){
+             closestDis=targetDis[id];
              MyEnemy=target;
             }
            }
+           myEnemy=MyEnemy;
           }
          }
          foreach((Type simType,ulong number)id in targetsToRemove){
@@ -86,6 +113,7 @@ namespace AKCondinoO.Sims.Actors{
           OnRemoveFromAsTarget(id);
          }
          targetsToRemove.Clear();
+         MyEnemy=null;
         }
         internal virtual void InitEnemiesAndAllies(){
          foreach(int i in Enum.GetValues(typeof(GotTargetMode))){

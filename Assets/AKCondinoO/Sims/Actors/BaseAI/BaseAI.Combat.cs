@@ -48,6 +48,9 @@ namespace AKCondinoO.Sims.Actors{
           targetTimeouts[target.id.Value]=30f;
          }
         }
+        internal virtual bool IsInAttackRange(SimObject simObject){
+         return false;
+        }
         protected override void DoAttack(){
         }
     }
