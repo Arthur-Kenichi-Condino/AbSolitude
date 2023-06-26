@@ -40,16 +40,21 @@ namespace AKCondinoO.Sims.Actors{
          MyPathfinding=GetPathfindingResult();
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
          if(MyEnemy!=null){
-          MyState=State.CHASE_ST;
+          if(IsInAttackRange(MyEnemy)){
+           MyState=State.ATTACK_ST;
+          }else{
+           MyState=State.CHASE_ST;
+          }
          }else{
           MyState=State. IDLE_ST;
          }
          if      (MyState==State.FOLLOW_ST){
          }else if(MyState==State. CHASE_ST){
-          OnCHASE_ST();
+           OnCHASE_ST();
          }else if(MyState==State.ATTACK_ST){
+          OnATTACK_ST();
          }else{
-           OnIDLE_ST();
+            OnIDLE_ST();
          }
          UpdateMotion(true);
         }
@@ -60,14 +65,19 @@ namespace AKCondinoO.Sims.Actors{
         protected virtual void OnCHASE_ST(){
          bool moveToDestination=false;
          if(
-          MyPathfinding==PathfindingResult.IDLE||
-          MyPathfinding==PathfindingResult.REACHED||
-          MyPathfinding==PathfindingResult.TIMEOUT
+          !IsTraversingPath()
          ){
           moveToDestination|=true;
          }
          if(moveToDestination){
           navMeshAgent.destination=MyEnemy.transform.position;
+         }
+        }
+        protected virtual void OnATTACK_ST(){
+         if(
+          IsTraversingPath()
+         ){
+          navMeshAgent.destination=navMeshAgent.transform.position;
          }
         }
      [SerializeField]protected bool doIdleMove=true;
@@ -79,9 +89,7 @@ namespace AKCondinoO.Sims.Actors{
           DoSkill();
          }
          if(
-          MyPathfinding==PathfindingResult.IDLE||
-          MyPathfinding==PathfindingResult.REACHED||
-          MyPathfinding==PathfindingResult.TIMEOUT
+          !IsTraversingPath()
          ){
           if(timerToRandomMove>0.0f){
              timerToRandomMove-=Time.deltaTime;

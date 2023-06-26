@@ -49,6 +49,18 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual bool IsInAttackRange(SimObject simObject){
+         Vector3 delta=new Vector3(
+          Mathf.Abs(simObject.transform.position.x-transform.position.x),
+          Mathf.Abs(simObject.transform.position.y-transform.position.y),
+          Mathf.Abs(simObject.transform.position.z-transform.position.z)
+         );
+         float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
+         float radius=Mathf.Max(localBounds.extents.x,localBounds.extents.z);
+         float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
+         if(disXZPlane<=radius+simObjectRadius){
+          Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
+          return true;
+         }
          return false;
         }
         protected override void DoAttack(){
