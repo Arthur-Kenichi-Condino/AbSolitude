@@ -63,5 +63,12 @@ namespace AKCondinoO.Sims.Actors {
          pathfindingTimer=0f;
          return PathfindingResult.REACHED;
         }
+        internal virtual bool IsTraversingPath(){
+         return!(
+          MyPathfinding==PathfindingResult.IDLE||
+          MyPathfinding==PathfindingResult.REACHED||
+          MyPathfinding==PathfindingResult.TIMEOUT
+         );
+        }
     }
 }
