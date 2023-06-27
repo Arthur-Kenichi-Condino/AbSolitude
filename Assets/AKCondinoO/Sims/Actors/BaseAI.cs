@@ -43,6 +43,9 @@ namespace AKCondinoO.Sims.Actors{
           if(IsInAttackRange(MyEnemy)){
            MyState=State.ATTACK_ST;
           }else{
+           if(MyState!=State.CHASE_ST){
+            OnCHASE_ST_START();
+           }
            MyState=State.CHASE_ST;
           }
          }else{
@@ -62,18 +65,50 @@ namespace AKCondinoO.Sims.Actors{
          base.OnCharacterControllerUpdated();
          UpdateMotion(false);
         }
+     protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
+     protected float onChaseRenewDestinationTimeInterval=2f;
+      protected float onChaseRenewDestinationTimer=2f;
+     protected float onChaseMyEnemyMovedSoChangeDestinationTimeInterval=.2f;
+      protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
+       protected bool onChaseMyEnemyMovedSoChangeDestination=true;
+        protected virtual void OnCHASE_ST_START(){
+         onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
+         onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
+         onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
+          onChaseMyEnemyMovedSoChangeDestination=true;
+        }
         protected virtual void OnCHASE_ST(){
+         if((onChaseMyEnemyPos_Last=onChaseMyEnemyPos)!=(onChaseMyEnemyPos=MyEnemy.transform.position)){
+          onChaseMyEnemyMovedSoChangeDestination=true;
+         }
          bool moveToDestination=false;
+         if(onChaseRenewDestinationTimer>0f){
+          onChaseRenewDestinationTimer-=Time.deltaTime;
+         }
+         if(onChaseRenewDestinationTimer<=0f){
+          onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
+          moveToDestination|=true;
+         }
          if(
           !IsTraversingPath()
          ){
           moveToDestination|=true;
          }
+         if(onChaseMyEnemyMovedSoChangeDestinationTimer>0f){
+          onChaseMyEnemyMovedSoChangeDestinationTimer-=Time.deltaTime;
+         }
+         if(onChaseMyEnemyMovedSoChangeDestination){
+          if(onChaseMyEnemyMovedSoChangeDestinationTimer<=0f){
+           onChaseMyEnemyMovedSoChangeDestinationTimer=onChaseMyEnemyMovedSoChangeDestinationTimeInterval;
+           onChaseMyEnemyMovedSoChangeDestination=false;
+           moveToDestination|=true;
+          }
+         }
          if(moveToDestination){
           navMeshAgent.destination=MyEnemy.transform.position;
          }
         }
-     [SerializeField]internal QuaternionRotLerpHelper toAttackMyEnemyPlanarLookRotLerp=new QuaternionRotLerpHelper();
+     internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
         protected virtual void OnATTACK_ST(){
          if(
           IsTraversingPath()
@@ -84,8 +119,8 @@ namespace AKCondinoO.Sims.Actors{
            Vector3 lookDir=MyEnemy.transform.position-transform.position;
            Vector3 planarLookDir=lookDir;
            planarLookDir.y=0f;
-           toAttackMyEnemyPlanarLookRotLerp.tgtRot=Quaternion.LookRotation(planarLookDir);
-           simActorCharacterController.characterController.transform.rotation=toAttackMyEnemyPlanarLookRotLerp.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
+           onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
+           simActorCharacterController.characterController.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
           }
          }
         }

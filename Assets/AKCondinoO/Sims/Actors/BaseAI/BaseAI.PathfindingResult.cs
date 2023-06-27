@@ -4,9 +4,9 @@
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors {
     internal partial class BaseAI{
-     [SerializeField]protected float pathfindingTimeout=12f;
+     [SerializeField]protected float pathfindingTimeout=3f;
       protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=12f;
+      [SerializeField]protected float pathPendingTimeout=6f;
        protected float pathPendingTimer;
         internal enum PathfindingResult:int{
          IDLE                   =0,

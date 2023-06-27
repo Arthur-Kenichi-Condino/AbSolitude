@@ -64,11 +64,17 @@ MonoBehaviour:
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 38
     tgtValLerpMaxTime: 0.0001
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
-  pathfindingTimeout: 12
-  pathPendingTimeout: 12
+  MyAggressionMode: 0
+  renewEnemyInterval: 3
+  pathfindingTimeout: 3
+  pathPendingTimeout: 6
 --- !u!114 &2273105198794575747
 MonoBehaviour:
   m_ObjectHideFlags: 0

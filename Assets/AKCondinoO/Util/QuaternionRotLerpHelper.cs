@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class QuaternionRotLerpHelper{
+        internal QuaternionRotLerpHelper(){
+        }
+        internal QuaternionRotLerpHelper(float tgtRotLerpSpeed,float tgtRotLerpMaxTime):this(){
+         this.tgtRotLerpSpeed  =tgtRotLerpSpeed  ;
+         this.tgtRotLerpMaxTime=tgtRotLerpMaxTime;
+        }
      [SerializeField]internal bool dealWithGimbalLock=true;
      internal Quaternion tgtRot{
       get{
