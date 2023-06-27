@@ -65,6 +65,7 @@ namespace AKCondinoO.Sims.Actors{
          return false;
         }
         protected override void DoAttack(){
+         //Log.DebugMessage("DoAttack()");
         }
     }
 }

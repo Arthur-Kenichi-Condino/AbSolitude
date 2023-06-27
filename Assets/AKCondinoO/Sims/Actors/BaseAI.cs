@@ -121,6 +121,20 @@ namespace AKCondinoO.Sims.Actors{
            planarLookDir.y=0f;
            onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
            simActorCharacterController.characterController.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
+           Debug.DrawRay(simActorCharacterController.characterController.transform.position,simActorCharacterController.characterController.transform.forward,Color.gray);
+           if(simUMAData!=null){
+            Vector3 animatorLookDir=-simUMAData.transform.parent.forward;
+            Vector3 animatorLookEuler=simUMAData.transform.parent.eulerAngles;
+            animatorLookEuler.y+=180f;
+            Vector3 animatorPlanarLookEuler=animatorLookEuler;
+            animatorPlanarLookEuler.x=0f;
+            animatorPlanarLookEuler.z=0f;
+            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
+            Debug.DrawRay(simActorCharacterController.characterController.transform.position,animatorPlanarLookDir,Color.white);
+            if(Vector3.Angle(simActorCharacterController.characterController.transform.forward,animatorPlanarLookDir)<=5f){
+             DoAttack();
+            }
+           }
           }
          }
         }
