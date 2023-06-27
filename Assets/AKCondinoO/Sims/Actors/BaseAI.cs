@@ -73,11 +73,20 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.destination=MyEnemy.transform.position;
          }
         }
+     [SerializeField]internal QuaternionRotLerpHelper toAttackMyEnemyPlanarLookRotLerp=new QuaternionRotLerpHelper();
         protected virtual void OnATTACK_ST(){
          if(
           IsTraversingPath()
          ){
           navMeshAgent.destination=navMeshAgent.transform.position;
+         }else{
+          if(simActorCharacterController!=null){
+           Vector3 lookDir=MyEnemy.transform.position-transform.position;
+           Vector3 planarLookDir=lookDir;
+           planarLookDir.y=0f;
+           toAttackMyEnemyPlanarLookRotLerp.tgtRot=Quaternion.LookRotation(planarLookDir);
+           simActorCharacterController.characterController.transform.rotation=toAttackMyEnemyPlanarLookRotLerp.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
+          }
          }
         }
      [SerializeField]protected bool doIdleMove=true;
