@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+     protected Vector3 MyAttackRange=new Vector3(0f,0f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
         internal enum AggressionMode:int{
          Defensive=0,
@@ -57,8 +58,8 @@ namespace AKCondinoO.Sims.Actors{
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
          float radius=Mathf.Max(localBounds.extents.x,localBounds.extents.z);
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
-         if(disXZPlane<=radius+simObjectRadius){
-          Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
+         if(disXZPlane<=radius+simObjectRadius+MyAttackRange.z){
+          //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
           return true;
          }
          return false;
