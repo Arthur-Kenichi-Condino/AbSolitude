@@ -288,12 +288,20 @@ namespace AKCondinoO.Sims.Actors{
         protected override void DisableInteractions(){
          interactionsEnabled=false;
         }
+     protected float onEnableNavMeshAgentProximityTimeout=10f;
+      protected float onEnableNavMeshAgentProximityTimer=10f;
         void EnableNavMeshAgent(){
          if(!navMeshAgent.enabled){
           if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
-           transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
-           navMeshAgent.enabled=true;
-           //Log.DebugMessage("navMeshAgent is enabled");
+           if(onEnableNavMeshAgentProximityTimer>0f){
+            onEnableNavMeshAgentProximityTimer-=Time.deltaTime;
+           }
+           if(onEnableNavMeshAgentProximityTimer<=0f||(new Vector3(hitResult.position.x,0f,hitResult.position.z)-new Vector3(transform.position.x,0f,transform.position.z)).magnitude<=2f){
+            transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
+            navMeshAgent.enabled=true;
+            onEnableNavMeshAgentProximityTimer=onEnableNavMeshAgentProximityTimeout;
+            //Log.DebugMessage("navMeshAgent is enabled");
+           }
           }
          }
         }
