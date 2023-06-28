@@ -49,7 +49,10 @@ namespace AKCondinoO.Sims.Actors{
            MyState=State.CHASE_ST;
           }
          }else{
-          MyState=State. IDLE_ST;
+          if(MyState!=State.IDLE_ST){
+           OnIDLE_ST_START();
+          }
+          MyState=State.IDLE_ST;
          }
          if      (MyState==State.FOLLOW_ST){
          }else if(MyState==State. CHASE_ST){
@@ -72,6 +75,7 @@ namespace AKCondinoO.Sims.Actors{
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
         protected virtual void OnCHASE_ST_START(){
+         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
          onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
          onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
          onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
@@ -142,6 +146,9 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
+        protected virtual void OnIDLE_ST_START(){
+         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+        }
         protected virtual void OnIDLE_ST(){
          if(MySkill!=null){
           DoSkill();
