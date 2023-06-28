@@ -65,6 +65,7 @@ namespace AKCondinoO.Sims{
                   idsFile=string.Format("{0}{1}",simObjectSavePath,        "ids.txt");
           releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
          }
+         BaseAI.animatorClipNameToActorMotion.Clear();
         }
      readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
