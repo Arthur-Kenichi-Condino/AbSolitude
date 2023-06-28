@@ -104,12 +104,12 @@ namespace AKCondinoO.Sims{
            if(simHands.asSimObject is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
             if(
              baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
+             baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
             ){
              transform.rotation*=rightHandGrabRot;
             }else if(
              baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE
+             baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE
             ){
              Quaternion rot=Quaternion.LookRotation(baseAI.simActorAnimatorController.animator.transform.forward,baseAI.simActorAnimatorController.animator.transform.up);
              if(ZAxisIsUp){

@@ -97,12 +97,12 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected void OnAnimationLooped(int layerIndex,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:currentClipName,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName);
          }
         }
         protected void OnAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){

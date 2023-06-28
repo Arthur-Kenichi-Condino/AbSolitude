@@ -26,10 +26,10 @@ namespace AKCondinoO.Sims.Actors{
          if(controller.actor is BaseAI baseAI){
           if(baseAI is HumanAI humanAI){
               if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
-               controller.animator.SetBool("MOTION_RIFLE_STAND",humanAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
-               controller.animator.SetBool("MOTION_RIFLE_MOVE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-                controller.animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",humanAI.moveVelocityFlattened);
-                 controller.animator.SetFloat("MOTION_RIFLE_MOVE_TURN",humanAI.turnAngle/180f);
+               controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
+               controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );
+                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY",humanAI.moveVelocityFlattened);
+                 controller.animator.SetFloat("MOTION_MOVE_RIFLE_TURN",humanAI.turnAngle/180f);
               }else{
                controller.animator.SetBool("MOTION_STAND",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND);
                controller.animator.SetBool("MOTION_MOVE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE );

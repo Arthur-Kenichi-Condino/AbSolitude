@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: MOTION_RIFLE_MOVE
+    m_ConditionEvent: MOTION_MOVE_RIFLE
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3048364883452897380}
@@ -199,55 +199,55 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 9100000}
-  - m_Name: MOTION_STAND2
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_STAND_RIFLE
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: MOTION_MOVE
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: MOTION_MOVE_VELOCITY
     m_Type: 1
     m_DefaultFloat: 0.5
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: MOTION_MOVE_TURN
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: MOTION_RIFLE_STAND
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_MOVE_RIFLE
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: MOTION_RIFLE_MOVE
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: MOTION_RIFLE_MOVE_VELOCITY
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_MOVE_RIFLE_VELOCITY
     m_Type: 1
     m_DefaultFloat: 0.5
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: MOTION_RIFLE_MOVE_TURN
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_MOVE_RIFLE_TURN
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_STAND2
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -352,8 +352,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
-  m_BlendParameter: MOTION_RIFLE_MOVE_TURN
-  m_BlendParameterY: MOTION_RIFLE_MOVE_VELOCITY
+  m_BlendParameter: MOTION_MOVE_RIFLE_TURN
+  m_BlendParameterY: MOTION_MOVE_RIFLE_VELOCITY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -502,7 +502,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: MOTION_RIFLE_STAND
+    m_ConditionEvent: MOTION_STAND_RIFLE
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -778691694717363284}

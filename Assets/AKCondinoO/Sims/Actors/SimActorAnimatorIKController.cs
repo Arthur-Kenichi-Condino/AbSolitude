@@ -120,7 +120,7 @@ namespace AKCondinoO.Sims.Actors{
           }
           if(simActorAnimatorController.actor is BaseAI baseAI&&
            (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-            baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
+            baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
            )
           ){
             leftFootIKPositionWeightLerp.tgtVal=1f;

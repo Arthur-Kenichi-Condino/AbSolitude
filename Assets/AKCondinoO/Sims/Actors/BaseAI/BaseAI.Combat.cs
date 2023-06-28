@@ -64,8 +64,10 @@ namespace AKCondinoO.Sims.Actors{
          }
          return false;
         }
+     protected bool onDoAttackSetMotion=false;
         protected override void DoAttack(){
          //Log.DebugMessage("DoAttack()");
+         onDoAttackSetMotion=true;
         }
     }
 }
