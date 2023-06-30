@@ -558,7 +558,7 @@ namespace AKCondinoO.Sims{
           }
          );
         }
-     protected Collider[]overlappedColliders=new Collider[8];
+     [NonSerialized]private Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(bool instantCheck){
          if(hasRigidbody!=null){
           return false;
@@ -578,16 +578,7 @@ namespace AKCondinoO.Sims{
          for(int i=0;i<volumeColliders.Count;++i){
           int overlappingsLength=0;
           if(volumeColliders[i]is CapsuleCollider capsule){
-           (Vector3 direction,
-            int enumDirection,
-            float height,
-            float radius,
-            Vector3 center,
-            Vector3 localPoint0,
-            Vector3 localPoint1,
-            Vector3 point0,
-            Vector3 point1
-           )values=simCollisions.GetCapsuleValuesForCollisionTesting(capsule,transform.root);
+           var values=simCollisions.GetCapsuleValuesForCollisionTesting(capsule,transform.root);
            _GetOverlappedColliders:{
             overlappingsLength=Physics.OverlapCapsuleNonAlloc(
              values.point0,
