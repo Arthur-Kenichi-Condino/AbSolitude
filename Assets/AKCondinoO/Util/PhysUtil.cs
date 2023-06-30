@@ -9,12 +9,25 @@ namespace AKCondinoO{
        "VoxelTerrain",
        "Construction",
       };
+     internal static int physObstaclesLayer;
+      internal static readonly string[]physObstaclesLayerNames=new string[]{
+       "Default",
+       "VoxelTerrain",
+       "Construction",
+      };
         internal static void SetUtil(){
          for(int i=0;i<considerGroundLayerNames.Length;++i){
           if(i==0){
            considerGroundLayer=1<<LayerMask.NameToLayer(considerGroundLayerNames[i]);
           }else{
            considerGroundLayer=considerGroundLayer|(1<<LayerMask.NameToLayer(considerGroundLayerNames[i]));
+          }
+         }
+         for(int i=0;i<physObstaclesLayerNames.Length;++i){
+          if(i==0){
+           physObstaclesLayer=1<<LayerMask.NameToLayer(physObstaclesLayerNames[i]);
+          }else{
+           physObstaclesLayer=physObstaclesLayer|(1<<LayerMask.NameToLayer(physObstaclesLayerNames[i]));
           }
          }
         }
