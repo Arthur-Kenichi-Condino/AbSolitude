@@ -25,8 +25,15 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void OnActivated(){
          base.OnActivated();
+         if(onChaseGetDataCoroutine!=null){
+          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         }
+         onChaseGetDataCoroutine=StartCoroutine(OnChaseGetDataCoroutine());
         }
         internal override void OnDeactivated(){
+         if(onChaseGetDataCoroutine!=null){
+          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         }
          base.OnDeactivated();
          ReleaseEnemiesAndAllies();
         }
@@ -68,19 +75,92 @@ namespace AKCondinoO.Sims.Actors{
          base.OnCharacterControllerUpdated();
          UpdateMotion(false);
         }
+        protected virtual void OnCHASE_ST_START(){
+         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+         onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
+         onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
+         onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
+         onChaseMyEnemyMovedSoChangeDestination=true;
+        }
+     protected Coroutine onChaseGetDataCoroutine;
+     protected WaitUntil onChaseGetDataThrottler;
+      protected float onChaseGetDataThrottlerInterval=1f;
+       protected float onChaseGetDataThrottlerTimer;
+     protected RaycastHit[]onChaseInTheWayColliderHits=new RaycastHit[8];
+      protected int onChaseInTheWayColliderHitsCount=0;
+        protected virtual IEnumerator OnChaseGetDataCoroutine(){
+         onChaseGetDataThrottler=new WaitUntil(
+          ()=>{
+           if(onChaseGetDataThrottlerTimer>0f){
+            onChaseGetDataThrottlerTimer-=Time.deltaTime;
+           }
+           if(MyState==State.CHASE_ST){
+            if(MyEnemy==null){
+             return false;
+            }
+            if(onChaseGetDataThrottlerTimer<=0f){
+             onChaseGetDataThrottlerTimer=onChaseGetDataThrottlerInterval;
+             return true;
+            }
+           }
+           return false;
+          }
+         );
+         Loop:{
+          yield return onChaseGetDataThrottler;
+          Log.DebugMessage("OnChaseGetDataCoroutine");
+          if(simActorCharacterController!=null){
+           var values=simCollisions.GetCapsuleValuesForCollisionTesting(simActorCharacterController.characterController,transform.root);
+           int inTheWayLength=0;
+           _GetInTheWayColliderHits:{
+            inTheWayLength=Physics.CapsuleCastNonAlloc(
+             values.point0,
+             values.point1,
+             values.radius,
+             (MyEnemy.transform.position-transform.root.position).normalized,
+             onChaseInTheWayColliderHits
+            );
+           }
+           if(inTheWayLength>0){
+            if(inTheWayLength>=onChaseInTheWayColliderHits.Length){
+             Array.Resize(ref onChaseInTheWayColliderHits,inTheWayLength*2);
+             goto _GetInTheWayColliderHits;
+            }
+           }
+           onChaseInTheWayColliderHitsCount=inTheWayLength;
+           if(onChaseInTheWayColliderHitsCount>0){
+            for(int i=onChaseInTheWayColliderHitsCount-1;i>=0;--i){
+             RaycastHit hit=onChaseInTheWayColliderHits[i];
+             if(hit.collider.transform.root==this.transform.root){
+              onChaseInTheWayColliderHits[i]=new RaycastHit();
+              onChaseInTheWayColliderHitsCount--;
+             }
+            }
+            Array.Sort(onChaseInTheWayColliderHits,onChaseInTheWayColliderHitsArraySortComparer);
+           }
+          }
+         }
+         goto Loop;
+        }
+        private int onChaseInTheWayColliderHitsArraySortComparer(RaycastHit a,RaycastHit b){
+         if(a.collider==null&&b.collider==null){
+          return 0;
+         }
+         if(a.collider==null&&b.collider!=null){
+          return 1;
+         }
+         if(a.collider!=null&&b.collider==null){
+          return -1;
+         }
+         return Vector3.Distance(transform.root.position,a.collider.transform.root.position).CompareTo(Vector3.Distance(transform.root.position,b.collider.transform.root.position));
+        }
      protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
      protected float onChaseRenewDestinationTimeInterval=2f;
       protected float onChaseRenewDestinationTimer=2f;
      protected float onChaseMyEnemyMovedSoChangeDestinationTimeInterval=.2f;
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
-        protected virtual void OnCHASE_ST_START(){
-         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
-         onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
-         onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
-         onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
-          onChaseMyEnemyMovedSoChangeDestination=true;
-        }
+     protected int onChaseTimeoutReactionCode=0;
         protected virtual void OnCHASE_ST(){
          if((onChaseMyEnemyPos_Last=onChaseMyEnemyPos)!=(onChaseMyEnemyPos=MyEnemy.transform.position)){
           onChaseMyEnemyMovedSoChangeDestination=true;
@@ -96,6 +176,9 @@ namespace AKCondinoO.Sims.Actors{
          if(
           !IsTraversingPath()
          ){
+          if(MyPathfinding==PathfindingResult.TIMEOUT){
+           onChaseTimeoutReactionCode++;
+          }
           moveToDestination|=true;
          }
          if(onChaseMyEnemyMovedSoChangeDestinationTimer>0f){
@@ -109,6 +192,15 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(moveToDestination){
+          if(onChaseInTheWayColliderHitsCount>0){
+           for(int i=0;i<onChaseInTheWayColliderHitsCount;++i){
+            RaycastHit hit=onChaseInTheWayColliderHits[i];
+            if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.simActorCharacterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
+             Vector3 actorRight=Vector3.Cross(transform.root.position,actorHit.transform.root.position+Vector3.up);
+             Debug.DrawRay(actorHit.transform.root.position,actorRight,Color.gray,5f);
+            }
+           }
+          }
           navMeshAgent.destination=MyEnemy.transform.position;
          }
         }
@@ -142,13 +234,13 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+        protected virtual void OnIDLE_ST_START(){
+         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+        }
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
-        protected virtual void OnIDLE_ST_START(){
-         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
-        }
         protected virtual void OnIDLE_ST(){
          if(MySkill!=null){
           DoSkill();
