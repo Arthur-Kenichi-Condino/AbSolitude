@@ -39,6 +39,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
+     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
      protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected override void AI(){
@@ -111,6 +112,7 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("OnChaseGetDataCoroutine");
           if(simActorCharacterController!=null){
            var values=simCollisions.GetCapsuleValuesForCollisionTesting(simActorCharacterController.characterController,transform.root);
+           float maxDis=Vector3.Distance(MyEnemy.transform.position,transform.root.position);
            int inTheWayLength=0;
            _GetInTheWayColliderHits:{
             inTheWayLength=Physics.CapsuleCastNonAlloc(
@@ -118,7 +120,9 @@ namespace AKCondinoO.Sims.Actors{
              values.point1,
              values.radius,
              (MyEnemy.transform.position-transform.root.position).normalized,
-             onChaseInTheWayColliderHits
+             onChaseInTheWayColliderHits,
+             maxDis,
+             PhysUtil.physObstaclesLayer
             );
            }
            if(inTheWayLength>0){
@@ -192,16 +196,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(moveToDestination){
+          MyDest=MyEnemy.transform.position;
           if(onChaseInTheWayColliderHitsCount>0){
-           for(int i=0;i<onChaseInTheWayColliderHitsCount;++i){
-            RaycastHit hit=onChaseInTheWayColliderHits[i];
-            if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.simActorCharacterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
-             Vector3 actorRight=Vector3.Cross(transform.root.position,actorHit.transform.root.position+Vector3.up);
-             Debug.DrawRay(actorHit.transform.root.position,actorRight,Color.gray,5f);
+           if(simActorCharacterController!=null){
+            for(int i=0;i<onChaseInTheWayColliderHitsCount;++i){
+             RaycastHit hit=onChaseInTheWayColliderHits[i];
+             if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.simActorCharacterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
+              Vector3 cross=Vector3.Cross(transform.root.position,actorHit.transform.root.position);
+              Debug.DrawLine(actorHit.transform.root.position,transform.root.position,Color.blue,1f);
+              //Debug.DrawRay(actorHit.transform.root.position,cross,Color.cyan,1f);
+              Vector3 right=cross;
+              right.y=actorHit.transform.root.position.y;
+              right.Normalize();
+              //Debug.DrawRay(actorHit.transform.root.position,right,Color.cyan,1f);
+              Vector3 cross2=Vector3.Cross(actorHit.transform.root.position+right,actorHit.transform.root.position+Vector3.up);
+              Vector3 forward=cross2;
+              forward.y=actorHit.transform.root.position.y;
+              forward.Normalize();
+              Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
+              MyDest=actorHit.transform.root.position+(right*3.0f-forward*1.5f)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
+              break;
+             }
             }
            }
           }
-          navMeshAgent.destination=MyEnemy.transform.position;
+          navMeshAgent.destination=MyDest;
          }
         }
      internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
