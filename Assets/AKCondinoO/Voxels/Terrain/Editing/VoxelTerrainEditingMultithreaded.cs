@@ -236,7 +236,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
            dataForSavingToFile.Add(cCoord,editData);
           }
           dataForSavingToFile[cCoord][vCoord]=new TerrainEditOutputData(resultDensity,-resultDensity>=-isoLevel?MaterialId.Air:material);
-          //  TO DO: add neighbours that are dirty too
+          //  add neighbours that are dirty too
           for(int ngbx=-1;ngbx<=1;ngbx++){
           for(int ngby=-1;ngby<=1;ngby++){
            Vector2Int cCoord4=cCoord+new Vector2Int(ngbx,ngby);

@@ -4,6 +4,7 @@ using UnityEngine;
 namespace AKCondinoO.Voxels.Water.MarchingCubes{
     //  marching cubes functions
     internal class MarchingCubesWater{
+     internal const double isoLevel=-50.0d;
         internal struct VoxelWater{
          public double density;
          public double previousDensity;
