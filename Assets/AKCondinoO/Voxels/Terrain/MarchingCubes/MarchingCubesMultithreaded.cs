@@ -22,21 +22,31 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
      internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal NativeList<Vertex>TempVer;[StructLayout(LayoutKind.Sequential)]internal struct Vertex{
-          internal Vector3 pos;
+          internal Vector4 pos;
           internal Vector3 normal;
           internal Color color;
-          internal Vector2 texCoord0;
-          internal Vector2 texCoord1;
-          internal Vector2 texCoord2;
-          internal Vector2 texCoord3;
+          internal Vector4 texCoord0;
+          internal Vector4 texCoord1;
+          internal Vector4 texCoord2;
+          internal Vector4 texCoord3;
+          internal Vector4 texCoord4;
+          internal Vector4 texCoord5;
+          internal Vector4 texCoord6;
+          internal Vector4 texCoord7;
              internal Vertex(Vector3 p,Vector3 n,Vector2 uv0){
               pos=p;
               normal=n;
-              color=new Color(1f,0f,0f,0f);
-              texCoord0=uv0;
+              color=new Color(0f,0f,0f,0f);
+              texCoord0=emptyUV;
+              texCoord0.x=uv0.x;
+              texCoord0.y=uv0.y;
               texCoord1=emptyUV;
               texCoord2=emptyUV;
               texCoord3=emptyUV;
+              texCoord4=emptyUV;
+              texCoord5=emptyUV;
+              texCoord6=new Vector4(1f,0f,0f,0f);
+              texCoord7=new Vector4(0f,0f,0f,0f);
              }
      }
      internal NativeList<UInt32>TempTri;
@@ -59,6 +69,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     }
     internal class MarchingCubesMultithreaded:BaseMultithreaded<MarchingCubesBackgroundContainer>{
      readonly Dictionary<int,Voxel>[]voxels=new Dictionary<int,Voxel>[9];
+     readonly Dictionary<int,bool>[]isSolid=new Dictionary<int,bool>[9];
      readonly Voxel[][][]voxelsCache1=new Voxel[3][][]{
       new Voxel[1            ][]{new Voxel[4],},
       new Voxel[Depth        ][],//  inicializar no construtor e limpar com Cleanup...
@@ -512,37 +523,204 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
             bool add;
             if(uv0==uv){
              total+=weights[0]=materialId.Key.Item1;
-            }else if(((add=container.TempVer[idx[j]].texCoord1==emptyUV)&&container.TempVer[idx[j]].texCoord2!=uv&&container.TempVer[idx[j]].texCoord3!=uv)||container.TempVer[idx[j]].texCoord1==uv){
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord0.z==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord0.w==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord1.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord1.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord1.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord1.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord2.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord2.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord0.z==uv.x&&
+              container.TempVer[idx[j]].texCoord0.w==uv.y
+             )
+            ){
              if(add){
-              var vertex=container.TempVer[idx[0]];vertex.texCoord1=uv;container.TempVer[idx[0]]=vertex;
-                  vertex=container.TempVer[idx[1]];vertex.texCoord1=uv;container.TempVer[idx[1]]=vertex;
-                  vertex=container.TempVer[idx[2]];vertex.texCoord1=uv;container.TempVer[idx[2]]=vertex;
+              var vertex=container.TempVer[idx[0]];vertex.texCoord0.z=uv.x;vertex.texCoord0.w=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord0.z=uv.x;vertex.texCoord0.w=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord0.z=uv.x;vertex.texCoord0.w=uv.y;container.TempVer[idx[2]]=vertex;
              }
              total+=weights[1]=materialId.Key.Item1;
-            }else if(((add=container.TempVer[idx[j]].texCoord2==emptyUV)&&container.TempVer[idx[j]].texCoord3!=uv                                         )||container.TempVer[idx[j]].texCoord2==uv){
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord1.x==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord1.y==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord1.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord1.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord2.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord2.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord1.x==uv.x&&
+              container.TempVer[idx[j]].texCoord1.y==uv.y
+             )
+            ){
              if(add){
-              var vertex=container.TempVer[idx[0]];vertex.texCoord2=uv;container.TempVer[idx[0]]=vertex;
-                  vertex=container.TempVer[idx[1]];vertex.texCoord2=uv;container.TempVer[idx[1]]=vertex;
-                  vertex=container.TempVer[idx[2]];vertex.texCoord2=uv;container.TempVer[idx[2]]=vertex;
+              var vertex=container.TempVer[idx[0]];vertex.texCoord1.x=uv.x;vertex.texCoord1.y=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord1.x=uv.x;vertex.texCoord1.y=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord1.x=uv.x;vertex.texCoord1.y=uv.y;container.TempVer[idx[2]]=vertex;
              }
              total+=weights[2]=materialId.Key.Item1;
-            }else if(  add=container.TempVer[idx[j]].texCoord3==emptyUV                                                                                    ||container.TempVer[idx[j]].texCoord3==uv){
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord1.z==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord1.w==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord2.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord2.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord1.z==uv.x&&
+              container.TempVer[idx[j]].texCoord1.w==uv.y
+             )
+            ){
              if(add){
-              var vertex=container.TempVer[idx[0]];vertex.texCoord3=uv;container.TempVer[idx[0]]=vertex;
-                  vertex=container.TempVer[idx[1]];vertex.texCoord3=uv;container.TempVer[idx[1]]=vertex;
-                  vertex=container.TempVer[idx[2]];vertex.texCoord3=uv;container.TempVer[idx[2]]=vertex;
+              var vertex=container.TempVer[idx[0]];vertex.texCoord1.z=uv.x;vertex.texCoord1.w=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord1.z=uv.x;vertex.texCoord1.w=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord1.z=uv.x;vertex.texCoord1.w=uv.y;container.TempVer[idx[2]]=vertex;
              }
              total+=weights[3]=materialId.Key.Item1;
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord2.x==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord2.y==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord2.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord2.w!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord2.x==uv.x&&
+              container.TempVer[idx[j]].texCoord2.y==uv.y
+             )
+            ){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord2.x=uv.x;vertex.texCoord2.y=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord2.x=uv.x;vertex.texCoord2.y=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord2.x=uv.x;vertex.texCoord2.y=uv.y;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[4]=materialId.Key.Item1;
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord2.z==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord2.w==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord3.x!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.y!=uv.y&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord2.z==uv.x&&
+              container.TempVer[idx[j]].texCoord2.w==uv.y
+             )
+            ){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord2.z=uv.x;vertex.texCoord2.w=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord2.z=uv.x;vertex.texCoord2.w=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord2.z=uv.x;vertex.texCoord2.w=uv.y;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[5]=materialId.Key.Item1;
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord3.x==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord3.y==emptyUV.y
+               )
+              )&&
+              container.TempVer[idx[j]].texCoord3.z!=uv.x&&
+              container.TempVer[idx[j]].texCoord3.w!=uv.y
+             )||
+             (
+              container.TempVer[idx[j]].texCoord3.x==uv.x&&
+              container.TempVer[idx[j]].texCoord3.y==uv.y
+             )
+            ){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord3.x=uv.x;vertex.texCoord3.y=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord3.x=uv.x;vertex.texCoord3.y=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord3.x=uv.x;vertex.texCoord3.y=uv.y;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[6]=materialId.Key.Item1;
+            }else if(
+             (
+              (
+               add=(
+                container.TempVer[idx[j]].texCoord3.z==emptyUV.x&&
+                container.TempVer[idx[j]].texCoord3.w==emptyUV.y
+               )
+              )
+             )||
+             (
+              container.TempVer[idx[j]].texCoord3.z==uv.x&&
+              container.TempVer[idx[j]].texCoord3.w==uv.y
+             )
+            ){
+             if(add){
+              var vertex=container.TempVer[idx[0]];vertex.texCoord3.z=uv.x;vertex.texCoord3.w=uv.y;container.TempVer[idx[0]]=vertex;
+                  vertex=container.TempVer[idx[1]];vertex.texCoord3.z=uv.x;vertex.texCoord3.w=uv.y;container.TempVer[idx[1]]=vertex;
+                  vertex=container.TempVer[idx[2]];vertex.texCoord3.z=uv.x;vertex.texCoord3.w=uv.y;container.TempVer[idx[2]]=vertex;
+             }
+             total+=weights[7]=materialId.Key.Item1;
             }
            }
            if(weights.Count>1){
             var vertex2=container.TempVer[idx[j]];
-            Color col=vertex2.color;
-                                       col.r=(weights[0]/(float)total);
-            if(weights.ContainsKey(1)){col.g=(weights[1]/(float)total);}
-            if(weights.ContainsKey(2)){col.b=(weights[2]/(float)total);}
-            if(weights.ContainsKey(3)){col.a=(weights[3]/(float)total);}
-            vertex2.color=col;
+            Vector4 texCoord6=vertex2.texCoord6;
+            Vector4 texCoord7=vertex2.texCoord7;
+                                       texCoord6.x=(weights[0]/(float)total);
+            if(weights.ContainsKey(1)){texCoord6.y=(weights[1]/(float)total);}
+            if(weights.ContainsKey(2)){texCoord6.z=(weights[2]/(float)total);}
+            if(weights.ContainsKey(3)){texCoord6.w=(weights[3]/(float)total);}
+            if(weights.ContainsKey(4)){texCoord7.x=(weights[4]/(float)total);}
+            if(weights.ContainsKey(5)){texCoord7.y=(weights[5]/(float)total);}
+            if(weights.ContainsKey(6)){texCoord7.z=(weights[6]/(float)total);}
+            if(weights.ContainsKey(7)){texCoord7.w=(weights[7]/(float)total);}
+            vertex2.texCoord6=texCoord6;
+            vertex2.texCoord7=texCoord7;
             container.TempVer[idx[j]]=vertex2;
            }
           }
