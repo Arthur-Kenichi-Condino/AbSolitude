@@ -142,13 +142,17 @@ namespace AKCondinoO.Voxels.Terrain{
         }
      #region Rendering
          static readonly VertexAttributeDescriptor[]layout=new[]{
-          new VertexAttributeDescriptor(VertexAttribute.Position ,VertexAttributeFormat.Float32,3),
+          new VertexAttributeDescriptor(VertexAttribute.Position ,VertexAttributeFormat.Float32,4),
           new VertexAttributeDescriptor(VertexAttribute.Normal   ,VertexAttributeFormat.Float32,3),
           new VertexAttributeDescriptor(VertexAttribute.Color    ,VertexAttributeFormat.Float32,4),
-          new VertexAttributeDescriptor(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,2),
-          new VertexAttributeDescriptor(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,2),
-          new VertexAttributeDescriptor(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,2),
-          new VertexAttributeDescriptor(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,2),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord4,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord5,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord6,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.TexCoord7,VertexAttributeFormat.Float32,4),
          };
          MeshUpdateFlags meshFlags=MeshUpdateFlags.DontValidateIndices|
                                    MeshUpdateFlags.DontNotifyMeshUsers|
