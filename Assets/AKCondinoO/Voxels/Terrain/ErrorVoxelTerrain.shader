@@ -16,7 +16,7 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlendError"{
   Tags{"Queue"="AlphaTest""RenderType"="Transparent""IgnoreProjector"="True""DisableBatching"="True"}
   LOD 200
   ZWrite On
-  ColorMask 0
+  //ColorMask 0
   Blend SrcAlpha OneMinusSrcAlpha
   Pass{
    Name"FORWARD"
@@ -404,6 +404,7 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlendError"{
         //  realtime lighting: call lighting function
         c+=LightingStandard(output,worldViewDir,gi);
         applyFixedFog(surfaceFunInput,output,c);
+        c.a=1;
         return c;
        }
    //#endif

@@ -6,7 +6,7 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
    _bumps  ("Bumps"  ,2DArray)="bump" {}
    _heights("Heights",2DArray)="white"{}
     _heightDistortion("Height map distortion",Range(0,.125))=.05//  "distortion" level
-  _scale("Scale",float)=1  
+  _scale("Scale",float)=1
   _sharpness("Triplanar blend sharpness",float)=1
   _fadeStartDis("Fade start distance",float)=32
    _fadeEndDis("Fade end distance",float)=40
@@ -14,9 +14,43 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
  SubShader{
   Tags{"Queue"="AlphaTest""RenderType"="Transparent""IgnoreProjector"="True""DisableBatching"="True""LightMode"="ForwardBase"}
   LOD 200
-  ZWrite On
-  Blend SrcAlpha OneMinusSrcAlpha
   Pass{
+   ZWrite On
+   ColorMask 0
+   CGPROGRAM
+    #pragma vertex vert
+    #pragma fragment frag
+    #include "UnityCG.cginc"
+       struct AppVertexData{
+        float4 pos:POSITION;
+        float3 normal:NORMAL;
+        float4 tangent:TANGENT;
+        fixed4 color:COLOR;
+        float4 uv0:TEXCOORD0;
+        float4 uv1:TEXCOORD1;
+        float4 uv2:TEXCOORD2;
+        float4 uv3:TEXCOORD3;
+        float4 uv4:TEXCOORD4;
+        float4 uv5:TEXCOORD5;
+        float4 uv6:TEXCOORD6;
+        float4 uv7:TEXCOORD7;
+       };
+       struct v2f{
+        float4 pos:SV_POSITION;
+       };
+       v2f vert(AppVertexData v){
+        v2f o;
+        o.pos=UnityObjectToClipPos(v.pos);
+        return o;
+       }
+       fixed4 frag(v2f i):COLOR{
+        return fixed4(0,0,0,0);
+       }
+   ENDCG
+  }
+  Pass{
+   ZWrite On
+   Blend SrcAlpha OneMinusSrcAlpha
    CGPROGRAM
     #pragma target 5.0
     #pragma require 2darray
@@ -51,7 +85,6 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
        };
        struct FragmentData{
         float4 pos:SV_POSITION;
-        float3 normal:NORMAL;
         fixed4 color:COLOR0;
         float4 uv0:TEXCOORD0;
         float4 uv1:TEXCOORD1;
@@ -64,9 +97,10 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
         float4 tSpace0:TEXCOORD8;
         float4 tSpace1:TEXCOORD9;
         float4 tSpace2:TEXCOORD10;
-        float3 vertexPos:TEXCOORD11;
-        float3 vertexNormal:TEXCOORD12;
-        UNITY_FOG_COORDS(13)
+        float3 vertexWorldPos:POSITION1;
+        float3 vertexNormal:NORMAL0;
+        float3 vertexWorldNormal:NORMAL1;
+        UNITY_FOG_COORDS(11)
        };
        FragmentData VertexToFragment(AppVertexData appVertexData){
         float3 worldPos=mul(unity_ObjectToWorld,appVertexData.pos).xyz;
@@ -76,7 +110,7 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
         fixed3 worldBinormal=cross(worldNormal,worldTangent)*tangentSign;
         FragmentData fragmentData;
         fragmentData.pos=UnityObjectToClipPos(appVertexData.pos);
-        fragmentData.normal=worldNormal;
+        fragmentData.color=appVertexData.color;
         fragmentData.uv0=appVertexData.uv0;
         fragmentData.uv1=appVertexData.uv1;
         fragmentData.uv2=appVertexData.uv2;
@@ -88,9 +122,9 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
         fragmentData.tSpace0=float4(worldTangent.x,worldBinormal.x,worldNormal.x,worldPos.x);
         fragmentData.tSpace1=float4(worldTangent.y,worldBinormal.y,worldNormal.y,worldPos.y);
         fragmentData.tSpace2=float4(worldTangent.z,worldBinormal.z,worldNormal.z,worldPos.z);
-        fragmentData.color=appVertexData.color;
-        fragmentData.vertexPos=worldPos;
+        fragmentData.vertexWorldPos=worldPos;
         fragmentData.vertexNormal=appVertexData.normal;
+        fragmentData.vertexWorldNormal=worldNormal;
         UNITY_TRANSFER_FOG(fragmentData,fragmentData.pos);
         return fragmentData;
        }
@@ -128,16 +162,20 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
        }
        fixed4 FragmentToColor(FragmentData fragmentData):SV_Target{
         UNITY_EXTRACT_TBN(fragmentData);
-        float3 worldPos=float3(fragmentData.tSpace0.w,fragmentData.tSpace1.w,fragmentData.tSpace2.w);
+        float3 worldPos=float3(
+         fragmentData.tSpace0.w,
+         fragmentData.tSpace1.w,
+         fragmentData.tSpace2.w
+        );
         fixed3 lightDir=normalize(UnityWorldSpaceLightDir(worldPos));
         float3 worldViewDir=normalize(UnityWorldSpaceViewDir(worldPos));
         float3 viewDir=_unity_tbn_0*worldViewDir.x+
                        _unity_tbn_1*worldViewDir.y+
                        _unity_tbn_2*worldViewDir.z;
         //
-        half2 uv_x=fragmentData.vertexPos.yz*_scale;
-        half2 uv_y=fragmentData.vertexPos.xz*_scale;
-        half2 uv_z=fragmentData.vertexPos.xy*_scale;
+        half2 uv_x=worldPos.yz*_scale;
+        half2 uv_y=worldPos.xz*_scale;
+        half2 uv_z=worldPos.xy*_scale;
         half3 blendingWeights=pow(abs(fragmentData.vertexNormal),_sharpness);
               blendingWeights=blendingWeights/(blendingWeights.x+blendingWeights.y+blendingWeights.z);
         fixed4 color_x=fixed4(0,0,0,0);
@@ -197,13 +235,15 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
         fixed3 Normal=UnpackNormal(bump);
  
  
+ 
         //fixed4 c=fixed4(fragmentData.uv6.x,fragmentData.uv6.x,fragmentData.uv6.x,1.0);
-        fixed4 c=fixed4(Albedo.rgb,1.0);
+        fixed4 c=Albedo;
  
  
  
         //  apply fog
         UNITY_APPLY_FOG(fragmentData.fogCoord,c);
+        //c.a=1.0;
         return c;
  
  
@@ -211,5 +251,32 @@ Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
        }
    ENDCG
   }
+        Pass
+        {
+            Tags {"LightMode"="ShadowCaster"}
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_shadowcaster
+            #include "UnityCG.cginc"
+
+            struct v2f { 
+                V2F_SHADOW_CASTER;
+            };
+
+            v2f vert(appdata_base v)
+            {
+                v2f o;
+                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)
+                return o;
+            }
+
+            float4 frag(v2f i) : SV_Target
+            {
+                SHADOW_CASTER_FRAGMENT(i)
+            }
+            ENDCG
+        }
  }
 }
