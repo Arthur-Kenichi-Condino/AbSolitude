@@ -1,4 +1,4 @@
-Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend"{
+Shader"Voxels/VoxelTerrainFloodFillLightingTextureBlend2"{
  Properties{
   _columns("Atlas columns",float)=3
   _rows   ("Atlas rows"   ,float)=3
