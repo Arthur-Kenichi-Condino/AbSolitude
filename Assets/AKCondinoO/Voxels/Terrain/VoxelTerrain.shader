@@ -13,7 +13,7 @@ Shader"Voxels/VoxelTerrain"{
  }
  SubShader{
   Tags{"Queue"="AlphaTest""RenderType"="Transparent""IgnoreProjector"="True""DisableBatching"="True"}
-  LOD 200
+  LOD 100
   ZWrite On
   Blend SrcAlpha OneMinusSrcAlpha
   Pass{
@@ -25,7 +25,11 @@ Shader"Voxels/VoxelTerrain"{
     #pragma multi_compile_fog//  make fog work
     #pragma vertex VertexToFragment
     #pragma fragment FragmentToColor
-    #include "UnityCG.cginc"
+    #include"UnityCG.cginc"
+    #include"UnityLightingCommon.cginc"//  for _LightColor0
+    #include"Lighting.cginc"
+    #pragma multi_compile_fwdbase
+    #include"AutoLight.cginc"
     float _columns;
     float _rows;
      UNITY_DECLARE_TEX2DARRAY(_albedos);
@@ -64,11 +68,17 @@ Shader"Voxels/VoxelTerrain"{
         float4 tSpace1:TEXCOORD9;
         float4 tSpace2:TEXCOORD10;
         fixed4 color:COLOR0;
+        float3 vPos:POSITION1;
+        float3 vWorldPos:POSITION2;
         float3 vNormal:NORMAL0;
-        UNITY_FOG_COORDS(11)
+        fixed4 diffuse:COLOR1;//  diffuse lighting color
+        fixed3 ambient:COLOR2;
+        SHADOW_COORDS(11)//  put shadows data into TEXCOORD11
+        UNITY_FOG_COORDS(12)
        };
        FragmentData VertexToFragment(AppVertexData v){
         FragmentData o;
+        o.vPos=v.pos;
         o.pos=UnityObjectToClipPos(v.pos);
         o.uv0=v.texCoord0;
         o.uv1=v.texCoord1;
@@ -79,6 +89,7 @@ Shader"Voxels/VoxelTerrain"{
         o.uv6=v.texCoord6;
         o.uv7=v.texCoord7;
         float3 worldPos=mul(unity_ObjectToWorld,v.pos).xyz;
+        o.vWorldPos=worldPos;
         float3 worldNormal=UnityObjectToWorldNormal(v.normal);
         fixed3 worldTangent=UnityObjectToWorldDir(v.tangent.xyz);
         fixed tangentSign=v.tangent.w*unity_WorldTransformParams.w;
@@ -88,6 +99,10 @@ Shader"Voxels/VoxelTerrain"{
         o.tSpace2=float4(worldTangent.z,worldBinormal.z,worldNormal.z,worldPos.z);
         o.color=v.color;
         o.vNormal=v.normal;
+        half nl=max(0,dot(worldNormal,_WorldSpaceLightPos0.xyz));
+        o.diffuse=nl*_LightColor0;
+        o.ambient=ShadeSH9(half4(worldNormal,1));
+        TRANSFER_SHADOW(o);
         UNITY_TRANSFER_FOG(o,o.pos);
         return o;
        }
@@ -148,9 +163,9 @@ Shader"Voxels/VoxelTerrain"{
         float3 viewDir=_unity_tbn_0*worldViewDir.x+
                        _unity_tbn_1*worldViewDir.y+
                        _unity_tbn_2*worldViewDir.z;
-        half2 sample_x=worldPos.yz*_scale;
-        half2 sample_y=worldPos.xz*_scale;
-        half2 sample_z=worldPos.xy*_scale;
+        half2 sample_x=i.vWorldPos.yz*_scale;
+        half2 sample_y=i.vWorldPos.xz*_scale;
+        half2 sample_z=i.vWorldPos.xy*_scale;
         half3 blend=pow(abs(i.vNormal),_sharpness);
               blend=blend/(blend.x+blend.y+blend.z);
         fixed4 color_x=fixed4(0,0,0,0);
@@ -170,11 +185,82 @@ Shader"Voxels/VoxelTerrain"{
         fixed4 color=color_x*blend.x
                     +color_y*blend.y
                     +color_z*blend.z;
+        color=fixed4(1,1,1,1);
         fixed4 o=color;
+        fixed shadow=SHADOW_ATTENUATION(i);
+        fixed3 lighting=i.diffuse*shadow+i.ambient;
+        o.rgb=o.rgb*lighting;
+        float alpha=o.a;
+        float viewDistance=distance(_WorldSpaceCameraPos.xyz,i.vWorldPos);
+        float opacity=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
+        clip(opacity);
+        alpha=alpha*saturate(opacity);
+        o.a=alpha;
         UNITY_APPLY_FOG(i.fogCoord,o);
         return o;
        }
    ENDCG
   }
+  //  [https://forum.unity.com/threads/using-alphatest-greater-0-5-how-to-cast-shadow.130565/]
+  Pass{
+   Name"Caster"
+   Tags{"LightMode"="ShadowCaster"}
+   Offset 1,1
+   Fog{Mode Off}
+   ZWrite On ZTest LEqual Cull Off
+   CGPROGRAM
+    #pragma vertex vert
+    #pragma fragment frag
+    #pragma multi_compile_shadowcaster
+    #pragma fragmentoption ARB_precision_hint_fastest
+    #include"UnityCG.cginc"
+       struct v2f{
+        V2F_SHADOW_CASTER;
+       };
+       v2f vert(appdata_base v){
+        v2f o;
+        TRANSFER_SHADOW_CASTER(o)
+        return o;
+       }
+    uniform fixed _Cutoff;
+    uniform fixed4 _Color;
+       float4 frag(v2f i):COLOR{
+        fixed4 texcol=fixed4(0,0,0,0);
+        clip(texcol.a*_Color.a-_Cutoff);
+        SHADOW_CASTER_FRAGMENT(i)
+       }
+   ENDCG
+  }
+  //  Pass to render object as a shadow collector
+  Pass{
+   Name"ShadowCollector"
+   Tags{"LightMode"="ShadowCollector"}
+   Fog{Mode Off}
+   ZWrite On ZTest LEqual
+   CGPROGRAM
+    #pragma vertex vert
+    #pragma fragment frag
+    #pragma fragmentoption ARB_precision_hint_fastest
+    #pragma multi_compile_shadowcollector
+    #define SHADOW_COLLECTOR_PASS
+    #include"UnityCG.cginc"
+       struct v2f{
+        V2F_SHADOW_COLLECTOR;
+       };
+       v2f vert(appdata_base v){
+        v2f o;
+        TRANSFER_SHADOW_COLLECTOR(o)
+        return o;
+       }
+    uniform fixed _Cutoff;
+    uniform fixed4 _Color;
+       fixed4 frag(v2f i):COLOR{
+        fixed4 texcol=fixed4(0,0,0,0);
+        clip(texcol.a*_Color.a-_Cutoff);
+        SHADOW_COLLECTOR_FRAGMENT(i)
+       }
+   ENDCG
+  }
  }
+ FallBack"Transparent/VertexLit"
 }
