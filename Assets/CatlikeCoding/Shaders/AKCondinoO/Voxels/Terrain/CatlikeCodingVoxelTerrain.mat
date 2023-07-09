@@ -139,7 +139,7 @@ Material:
     - _BlendHeightStrength: 0.5
     - _BlendOffset: 0.25
     - _BumpScale: 1
-    - _Cutoff: 0.5
+    - _Cutoff: 0
     - _DetailBumpScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
