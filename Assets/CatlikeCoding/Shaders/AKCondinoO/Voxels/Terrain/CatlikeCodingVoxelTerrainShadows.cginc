@@ -115,7 +115,7 @@ InterpolatorsVertex MyShadowVertexProgram (VertexData v) {
 		v.vertex.xyz += v.normal * displacement;
 	#endif
 
-	#if defined(SHADOWS_CUBE)
+	#if defined(GetTangentSpaceNormal)
 		i.position = UnityObjectToClipPos(v.vertex);
 		i.lightVec =
 			mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
