@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class MyBaseShaderGUI : ShaderGUI {
+public class CatlikeCodingBaseShaderGUI : ShaderGUI {
 
 	static GUIContent staticLabel = new GUIContent();
 

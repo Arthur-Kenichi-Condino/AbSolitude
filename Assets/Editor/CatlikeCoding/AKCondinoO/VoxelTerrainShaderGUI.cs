@@ -2,7 +2,7 @@
 using UnityEngine.Rendering;
 using UnityEditor;
 
-public class VoxelTerrainShaderGUI : MyBaseShaderGUI {
+public class VoxelTerrainShaderGUI : CatlikeCodingBaseShaderGUI {
 
 	enum SmoothnessSource {
 		Uniform, Albedo, Metallic

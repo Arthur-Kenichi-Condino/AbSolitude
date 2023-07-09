@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class MyTriplanarShaderGUI : MyBaseShaderGUI {
+public class MyTriplanarShaderGUI : CatlikeCodingBaseShaderGUI {
 
 	public override void OnGUI (
 		MaterialEditor editor, MaterialProperty[] properties

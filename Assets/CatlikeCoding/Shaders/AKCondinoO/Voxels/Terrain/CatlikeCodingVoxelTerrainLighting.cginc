@@ -1,28 +1,4 @@
 ﻿#include"CatlikeCodingVoxelTerrainUtil.cginc"
-
-
-#if !defined(MY_LIGHTING_INCLUDED)
-#define MY_LIGHTING_INCLUDED
-
-//#include "My Lighting Input.cginc"
-
-#if !defined(ALBEDO_FUNCTION)
-	#define ALBEDO_FUNCTION GetAlbedo
-#endif
-
-//void ComputeVertexLightColor (inout InterpolatorsVertex i) {
-//	#if defined(VERTEXLIGHT_ON)
-//		i.vertexLightColor = Shade4PointLights(
-//			unity_4LightPosX0, unity_4LightPosY0, unity_4LightPosZ0,
-//			unity_LightColor[0].rgb, unity_LightColor[1].rgb,
-//			unity_LightColor[2].rgb, unity_LightColor[3].rgb,
-//			unity_4LightAtten0, i.worldPos.xyz, i.normal
-//		);
-//	#endif
-//}
-
-
-
     InterpolatorsVertex VertexToFragmentProgram(VertexData v){
      InterpolatorsVertex i;
      UNITY_INITIALIZE_OUTPUT(InterpolatorsVertex,i);
@@ -251,126 +227,21 @@ UnityIndirect CreateIndirectLight (
 
 
 
-float4 ApplyFog (float4 color, Interpolators i) {
-	#if FOG_ON
-		float viewDistance = length(_WorldSpaceCameraPos - i.worldPos.xyz);
-		#if FOG_DEPTH
-			viewDistance = UNITY_Z_0_FAR_FROM_CLIPSPACE(i.worldPos.w);
-		#endif
-		UNITY_CALC_FOG_FACTOR_RAW(viewDistance);
-		float3 fogColor = 0;
-		#if defined(FORWARD_BASE_PASS)
-			fogColor = unity_FogColor.rgb;
-		#endif
-		color.rgb = lerp(fogColor, color.rgb, saturate(unityFogFactor));
-	#endif
-	return color;
-}
-
-float GetParallaxHeight (float2 uv) {
-	return tex2D(_ParallaxMap, uv).g;
-}
-
-float2 ParallaxOffset (float2 uv, float2 viewDir) {
-	float height = GetParallaxHeight(uv);
-	height -= 0.5;
-	height *= _ParallaxStrength;
-	return viewDir * height;
-}
-
-float2 ParallaxRaymarching (float2 uv, float2 viewDir) {
-	#if !defined(PARALLAX_RAYMARCHING_STEPS)
-		#define PARALLAX_RAYMARCHING_STEPS 10
-	#endif
-	float2 uvOffset = 0;
-	float stepSize = 1.0 / PARALLAX_RAYMARCHING_STEPS;
-	float2 uvDelta = viewDir * (stepSize * _ParallaxStrength);
-
-	float stepHeight = 1;
-	float surfaceHeight = GetParallaxHeight(uv);
-
-	float2 prevUVOffset = uvOffset;
-	float prevStepHeight = stepHeight;
-	float prevSurfaceHeight = surfaceHeight;
-
-	for (
-		int i = 1;
-		i < PARALLAX_RAYMARCHING_STEPS && stepHeight > surfaceHeight;
-		i++
-	) {
-		prevUVOffset = uvOffset;
-		prevStepHeight = stepHeight;
-		prevSurfaceHeight = surfaceHeight;
-		
-		uvOffset -= uvDelta;
-		stepHeight -= stepSize;
-		surfaceHeight = GetParallaxHeight(uv + uvOffset);
-	}
-
-	#if !defined(PARALLAX_RAYMARCHING_SEARCH_STEPS)
-		#define PARALLAX_RAYMARCHING_SEARCH_STEPS 0
-	#endif
-	#if PARALLAX_RAYMARCHING_SEARCH_STEPS > 0
-		for (int i = 0; i < PARALLAX_RAYMARCHING_SEARCH_STEPS; i++) {
-			uvDelta *= 0.5;
-			stepSize *= 0.5;
-
-			if (stepHeight < surfaceHeight) {
-				uvOffset += uvDelta;
-				stepHeight += stepSize;
-			}
-			else {
-				uvOffset -= uvDelta;
-				stepHeight -= stepSize;
-			}
-			surfaceHeight = GetParallaxHeight(uv + uvOffset);
-		}
-	#elif defined(PARALLAX_RAYMARCHING_INTERPOLATE)
-		float prevDifference = prevStepHeight - prevSurfaceHeight;
-		float difference = surfaceHeight - stepHeight;
-		float t = prevDifference / (prevDifference + difference);
-		uvOffset = prevUVOffset - uvDelta * t;
-	#endif
-
-	return uvOffset;
-}
-
-//void ApplyParallax (inout Interpolators i) {
-//	#if defined(_PARALLAX_MAP) && !defined(NO_DEFAULT_UV)
-//		i.tangentViewDir = normalize(i.tangentViewDir);
-//		#if !defined(PARALLAX_OFFSET_LIMITING)
-//			#if !defined(PARALLAX_BIAS)
-//				#define PARALLAX_BIAS 0.42
-//			#endif
-//			i.tangentViewDir.xy /= (i.tangentViewDir.z + PARALLAX_BIAS);
-//		#endif
-
-//		#if !defined(PARALLAX_FUNCTION)
-//			#define PARALLAX_FUNCTION ParallaxOffset
-//		#endif
-//		float2 uvOffset = PARALLAX_FUNCTION(i.uv.xy, i.tangentViewDir.xy);
-//		i.uv.xy += uvOffset;
-//		i.uv.zw += uvOffset * (_DetailTex_ST.xy / _MainTex_ST.xy);
-//	#endif
-//}
-
-struct FragmentOutput {
-	#if defined(DEFERRED_PASS)
-		float4 gBuffer0 : SV_Target0;
-		float4 gBuffer1 : SV_Target1;
-		float4 gBuffer2 : SV_Target2;
-		float4 gBuffer3 : SV_Target3;
-
-		#if defined(SHADOWS_SHADOWMASK) && (UNITY_ALLOWED_MRT_COUNT > 4)
-			float4 gBuffer4 : SV_Target4;
-		#endif
-	#else
-		float4 color : SV_Target;
-	#endif
-};
-
-
-
+    float4 ApplyFog(float4 color,Interpolators i){
+     //#if FOG_ON
+      float viewDistance=length(_WorldSpaceCameraPos-i.worldPos.xyz);
+         //#if FOG_DEPTH
+          viewDistance=UNITY_Z_0_FAR_FROM_CLIPSPACE(i.worldPos.w);
+         //#endif
+      UNITY_CALC_FOG_FACTOR_RAW(viewDistance);
+      float3 fogColor=0;
+         #if defined(FORWARD_BASE_PASS)
+          fogColor=unity_FogColor.rgb;
+         #endif
+      color.rgb=lerp(fogColor,color.rgb,saturate(unityFogFactor));
+     //#endif
+     return color;
+    }
     void AddSample(float x,float y,float strenght,TriplanarUV triUV,float3 triW,float3 tViewDir,
      inout float3 albedoX,
      inout float3 albedoY,
@@ -379,28 +250,26 @@ struct FragmentOutput {
      inout float4 bumpY,
      inout float4 bumpZ
     ){
-        float textureIndex=x+_columns*y;
-        fixed4 heightX=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.x),textureIndex));
-        fixed4 heightY=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.y),textureIndex));
-        fixed4 heightZ=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.z),textureIndex));
-        fixed4 h=(heightX)*triW.x
-                +(heightY)*triW.y
-                +(heightZ)*triW.z;
-               float2 texOffset=ParallaxOffset(h.r,_heightDistortion,tViewDir);
-	 albedoX += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,textureIndex)).rgb;
-	 albedoY += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,textureIndex)).rgb;
-	 albedoZ += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,textureIndex)).rgb;
-	bumpX += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.x)+texOffset,textureIndex));
-	bumpY += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.y)+texOffset,textureIndex));
-	bumpZ += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.z)+texOffset,textureIndex));
+     float textureIndex=x+_columns*y;
+     fixed4 heightX=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.x),textureIndex));
+     fixed4 heightY=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.y),textureIndex));
+     fixed4 heightZ=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.z),textureIndex));
+     fixed4 h=heightX*triW.x+
+              heightY*triW.y+
+              heightZ*triW.z;
+     float2 texOffset=ParallaxOffset(h.r,_heightDistortion,tViewDir);
+     albedoX+=strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,textureIndex)).rgb;
+     albedoY+=strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,textureIndex)).rgb;
+     albedoZ+=strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,textureIndex)).rgb;
+     bumpX  +=strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps  ,float3(frac(triUV.x)+texOffset,textureIndex));
+     bumpY  +=strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps  ,float3(frac(triUV.y)+texOffset,textureIndex));
+     bumpZ  +=strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps  ,float3(frac(triUV.z)+texOffset,textureIndex));
     }
-
-
-
-    FragmentOutput FragmentToColorProgram(Interpolators i){
+    float4 FragmentToColorProgram(Interpolators i):SV_Target{
      UNITY_SETUP_INSTANCE_ID(i);
      UNITY_EXTRACT_TBN(i);
      InitializeFragmentNormal(i);
+     float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos.xyz);
      SurfaceData surface;
      surface.normal=i.normal;
      surface.albedo=1;
@@ -422,143 +291,55 @@ struct FragmentOutput {
      float3 tViewDir;
      tViewDir.x=1.0;
      tViewDir=_unity_tbn_0*tWorldViewDir.x+_unity_tbn_1*tWorldViewDir.y+_unity_tbn_2*tWorldViewDir.z;
- 
- 
- 
-     float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos.xyz);
- 
- 
- 
-        fixed4 heightX=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.x),3.0));
-        fixed4 heightY=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.y),3.0));
-        fixed4 heightZ=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.z),3.0));
-        fixed4 h=(heightX)*triW.x
-                +(heightY)*triW.y
-                +(heightZ)*triW.z;
-               float2 texOffset=ParallaxOffset(h.r,_heightDistortion,tViewDir);
- 
- 
- 
-	float4 bumpX = 0;
-	float4 bumpY = 0;
-	float4 bumpZ = 0;
- 
- 
- 
-	float3 albedoX = 0;
-	float3 albedoY = 0;
-	float3 albedoZ = 0;
- 
- AddSample(i.uv0.x,i.uv0.y,i.uv6.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv0.z,i.uv0.w,i.uv6.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv1.x,i.uv1.y,i.uv6.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv1.z,i.uv1.w,i.uv6.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv2.x,i.uv2.y,i.uv7.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv2.z,i.uv2.w,i.uv7.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv3.x,i.uv3.y,i.uv7.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- AddSample(i.uv3.z,i.uv3.w,i.uv7.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
- 
-	//float3 albedoX = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,3.0)).rgb;
-	//float3 albedoY = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,3.0)).rgb;
-	//float3 albedoZ = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,3.0)).rgb;
- 
-	float3 tangentNormalX = UnpackNormal(bumpX);//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.x)+texOffset,3.0)));
-	float4 rawNormalY = bumpY;//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.y)+texOffset,3.0));
-	float3 tangentNormalZ = UnpackNormal(bumpZ);//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.z)+texOffset,3.0)));
- 
-	float3 tangentNormalY = UnpackNormal(rawNormalY);
- 
-	if (parameters.normal.x < 0) {
-		tangentNormalX.x = -tangentNormalX.x;
-	}
-	if (parameters.normal.y < 0) {
-		tangentNormalY.x = -tangentNormalY.x;
-	}
-	if (parameters.normal.z >= 0) {
-		tangentNormalZ.x = -tangentNormalZ.x;
-	}
- 
-	float3 worldNormalX =
-		BlendTriplanarNormal(tangentNormalX, parameters.normal.zyx).zyx;
-	float3 worldNormalY =
-		BlendTriplanarNormal(tangentNormalY, parameters.normal.xzy).xzy;
-	float3 worldNormalZ =
-		BlendTriplanarNormal(tangentNormalZ, parameters.normal);
-
-	//float3 triW = GetTriplanarWeights(parameters, mohsX.z, mohsY.z, mohsZ.z);
- 
-	surface.albedo = albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z;
-
-	//float4 mohs = mohsX * triW.x + mohsY * triW.y + mohsZ * triW.z;
-	//surface.metallic = mohs.x;
-	//surface.occlusion = mohs.y;
-	//surface.smoothness = mohs.a;
-
-	surface.normal = normalize(
-		worldNormalX * triW.x + worldNormalY * triW.y + worldNormalZ * triW.z
-	);
- 
- 
- 
-		//SurfaceParameters sp;
-		//sp.normal = i.normal;
-		//sp.position = i.worldPos.xyz;
-		//sp.uv = UV_FUNCTION(i);
- 
- 
- 
-	//SurfaceData surface;
-	#if defined(SURFACE_FUNCTION)
-		//surface.normal = i.normal;
-		//surface.albedo = 1;
-		//surface.alpha = 1;
-		//surface.emission = 0;
-		//surface.metallic = 0;
-		//surface.occlusion = 1;
-		//surface.smoothness = 0.5;
-
-		SurfaceParameters sp;
-		sp.normal = i.normal;
-		sp.position = i.worldPos.xyz;
-		sp.uv = UV_FUNCTION(i);
-
-		SURFACE_FUNCTION(surface, sp);
-	#else
-		//surface.normal = i.normal;
-		//surface.albedo = ALBEDO_FUNCTION(i);
-		//surface.alpha = GetAlpha(i);
-		//surface.emission = GetEmission(i);
-		//surface.metallic = GetMetallic(i);
-		//surface.occlusion = GetOcclusion(i);
-		//surface.smoothness = GetSmoothness(i);
-	#endif
-	i.normal = surface.normal;
- 
- 
- 
-        float viewDistance=distance(_WorldSpaceCameraPos,i.worldPos);
-        float opacity=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
-        clip(opacity);
- 
- 
- 
-	float alpha = surface.alpha;
- alpha=alpha*saturate(opacity);
-	#if defined(_RENDERING_CUTOUT)
-		clip(alpha - _Cutoff);
-	#endif
-
-	//float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos.xyz);
-
-	float3 specularTint;
-	float oneMinusReflectivity;
-	float3 albedo = DiffuseAndSpecularFromMetallic(
-		surface.albedo, surface.metallic, specularTint, oneMinusReflectivity
-	);
-	//#if defined(_RENDERING_TRANSPARENT)
-		albedo *= alpha;
-		alpha = 1 - oneMinusReflectivity + alpha * oneMinusReflectivity;
-	//#endif
+     float3 albedoX=0;
+     float3 albedoY=0;
+     float3 albedoZ=0;
+     float4 bumpX=0;
+     float4 bumpY=0;
+     float4 bumpZ=0;
+     AddSample(i.uv0.x,i.uv0.y,i.uv6.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv0.z,i.uv0.w,i.uv6.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv1.x,i.uv1.y,i.uv6.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv1.z,i.uv1.w,i.uv6.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv2.x,i.uv2.y,i.uv7.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv2.z,i.uv2.w,i.uv7.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv3.x,i.uv3.y,i.uv7.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     AddSample(i.uv3.z,i.uv3.w,i.uv7.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+     float3 tangentNormalX=UnpackNormal(bumpX);
+     float4 rawNormalY=bumpY;
+     float3 tangentNormalZ=UnpackNormal(bumpZ);
+     float3 tangentNormalY=UnpackNormal(rawNormalY);
+     if(parameters.normal.x<0 ){tangentNormalX.x=-tangentNormalX.x;}
+     if(parameters.normal.y<0 ){tangentNormalY.x=-tangentNormalY.x;}
+     if(parameters.normal.z>=0){tangentNormalZ.x=-tangentNormalZ.x;}
+     float3 worldNormalX=BlendTriplanarNormal(tangentNormalX,parameters.normal.zyx).zyx;
+     float3 worldNormalY=BlendTriplanarNormal(tangentNormalY,parameters.normal.xzy).xzy;
+     float3 worldNormalZ=BlendTriplanarNormal(tangentNormalZ,parameters.normal);
+     surface.albedo=albedoX*triW.x+
+                    albedoY*triW.y+
+                    albedoZ*triW.z;
+     surface.normal=normalize(
+      worldNormalX*triW.x+
+      worldNormalY*triW.y+
+      worldNormalZ*triW.z
+     );
+     i.normal=surface.normal;
+     float viewDistance=distance(_WorldSpaceCameraPos,i.worldPos);
+     float opacity=(_fadeEndDis-viewDistance)/(_fadeEndDis-_fadeStartDis);
+     clip(opacity);
+     float alpha=surface.alpha;
+     alpha=alpha*saturate(opacity);
+     clip(alpha-_Cutoff);
+     float3 specularTint;
+     float oneMinusReflectivity;
+     float3 albedo=DiffuseAndSpecularFromMetallic(
+      surface.albedo,
+      surface.metallic,
+      specularTint,
+      oneMinusReflectivity
+     );
+    albedo*=alpha;
+    alpha=1-oneMinusReflectivity+alpha*oneMinusReflectivity;
 
 	float4 color = UNITY_BRDF_PBS(
 		albedo, specularTint,
@@ -567,34 +348,13 @@ struct FragmentOutput {
 		CreateLight(i), CreateIndirectLight(i, viewDir, surface)
 	);
 	color.rgb += surface.emission;
-	#if defined(_RENDERING_FADE) || defined(_RENDERING_TRANSPARENT)
+	//#if defined(_RENDERING_FADE) || defined(_RENDERING_TRANSPARENT)
 		color.a = alpha;
-	#endif
+	//#endif
 
-	FragmentOutput output;
-	#if defined(DEFERRED_PASS)
-		#if !defined(UNITY_HDR_ON)
-			color.rgb = exp2(-color.rgb);
-		#endif
-		output.gBuffer0.rgb = albedo;
-		output.gBuffer0.a = surface.occlusion;
-		output.gBuffer1.rgb = specularTint;
-		output.gBuffer1.a = surface.smoothness;
-		output.gBuffer2 = float4(i.normal * 0.5 + 0.5, 1);
-		output.gBuffer3 = color;
-
-		#if defined(SHADOWS_SHADOWMASK) && (UNITY_ALLOWED_MRT_COUNT > 4)
-			float2 shadowUV = 0;
-			#if defined(LIGHTMAP_ON)
-				shadowUV = i.lightmapUV;
-			#endif
-			output.gBuffer4 =
-				UnityGetRawBakedOcclusions(shadowUV, i.worldPos.xyz);
-		#endif
-	#else
-		output.color = ApplyFog(color, i);
-	#endif
-	return output;
+  
+  color =ApplyFog(color, i);
+	return color;
 }
 
-#endif
+//#endif

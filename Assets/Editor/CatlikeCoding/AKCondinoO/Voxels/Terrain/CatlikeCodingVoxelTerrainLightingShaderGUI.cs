@@ -2,7 +2,7 @@
 using UnityEngine.Rendering;
 using UnityEditor;
 
-public class MyLightingShaderGUI : CatlikeCodingBaseShaderGUI {
+public class CatlikeCodingVoxelTerrainLightingShaderGUI : CatlikeCodingBaseShaderGUI {
 
 	enum SmoothnessSource {
 		Uniform, Albedo, Metallic
@@ -64,15 +64,15 @@ public class MyLightingShaderGUI : CatlikeCodingBaseShaderGUI {
 	) {
 		base.OnGUI(editor, properties);
 		DoRenderingMode();
-		if (target.HasProperty("_TessellationUniform")) {
-			DoTessellation();
-		}
-		if (target.HasProperty("_WireframeColor")) {
-			DoWireframe();
-		}
-		DoMain();
-		DoSecondary();
-		DoAdvanced();
+		//if (target.HasProperty("_TessellationUniform")) {
+		//	DoTessellation();
+		//}
+		//if (target.HasProperty("_WireframeColor")) {
+		//	DoWireframe();
+		//}
+		//DoMain();
+		//DoSecondary();
+		//DoAdvanced();
 	}
 
 	void DoRenderingMode () {
