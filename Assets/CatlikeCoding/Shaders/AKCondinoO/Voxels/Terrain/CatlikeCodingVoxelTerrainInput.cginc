@@ -1,13 +1,15 @@
 ﻿#pragma require 2darray
+#include"UnityPBSLighting.cginc"
+#include"AutoLight.cginc"
 
 
 
-#if !defined(MY_LIGHTING_INPUT_INCLUDED)
-#define MY_LIGHTING_INPUT_INCLUDED
+//#if !defined(MY_LIGHTING_INPUT_INCLUDED)
+//#define MY_LIGHTING_INPUT_INCLUDED
 
-#include "UnityPBSLighting.cginc"
-#include "AutoLight.cginc"
-#include "MySurface.cginc"
+//#include "UnityPBSLighting.cginc"
+//#include "AutoLight.cginc"
+//#include "MySurface.cginc"
 
 #if defined(_NORMAL_MAP) || defined(_DETAIL_NORMAL_MAP) || defined(_PARALLAX_MAP)
 	#define REQUIRES_TANGENT_SPACE 1
@@ -344,4 +346,4 @@ float3 GetEmission (Interpolators i) {
 	#endif
 }
 
-#endif
+//#endif
