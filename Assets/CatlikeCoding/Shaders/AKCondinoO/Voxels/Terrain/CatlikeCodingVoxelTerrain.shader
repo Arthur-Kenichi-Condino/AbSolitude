@@ -36,8 +36,8 @@
         }
         Pass{
          Tags{"LightMode"="ForwardAdd"}
-			Blend [_SrcBlend] One
-			ZWrite Off
+         Blend[_SrcBlend]One
+         ZWrite Off
 
 			CGPROGRAM
 
@@ -93,7 +93,9 @@
 
 			ENDCG
 		}
-	}
 
-	CustomEditor "CatlikeCodingVoxelTerrainLightingShaderGUI"
+
+
+    }
+    CustomEditor"CatlikeCodingVoxelTerrainLightingShaderGUI"
 }

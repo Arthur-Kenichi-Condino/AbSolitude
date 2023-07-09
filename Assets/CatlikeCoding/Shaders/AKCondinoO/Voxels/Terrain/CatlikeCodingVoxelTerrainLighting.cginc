@@ -33,51 +33,21 @@
      i.tangentViewDir=mul(objectToTangent,ObjSpaceViewDir(v.vertex));
      return i;
     }
-
-
-
-float FadeShadows (Interpolators i, float attenuation) {
-	#if HANDLE_SHADOWS_BLENDING_IN_GI || ADDITIONAL_MASKED_DIRECTIONAL_SHADOWS
-		// UNITY_LIGHT_ATTENUATION doesn't fade shadows for us.
-		#if ADDITIONAL_MASKED_DIRECTIONAL_SHADOWS
-			attenuation = SHADOW_ATTENUATION(i);
-		#endif
-		float viewZ =
-			dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-		float shadowFadeDistance =
-			UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-		float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-		float bakedAttenuation =
-			UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
-		attenuation = UnityMixRealtimeAndBakedShadows(
-			attenuation, bakedAttenuation, shadowFade
-		);
-	#endif
-
-	return attenuation;
-}
-
-UnityLight CreateLight (Interpolators i) {
-	UnityLight light;
-
-	#if defined(DEFERRED_PASS) || SUBTRACTIVE_LIGHTING
-		light.dir = float3(0, 1, 0);
-		light.color = 0;
-	#else
-		#if defined(POINT) || defined(POINT_COOKIE) || defined(SPOT)
-			light.dir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz);
-		#else
-			light.dir = _WorldSpaceLightPos0.xyz;
-		#endif
-
-		UNITY_LIGHT_ATTENUATION(attenuation, i, i.worldPos.xyz);
-		attenuation = FadeShadows(i, attenuation);
-
-		light.color = _LightColor0.rgb * attenuation;
-	#endif
-
-	return light;
-}
+    float FadeShadows(Interpolators i,float attenuation){
+     return attenuation;
+    }
+    UnityLight CreateLight(Interpolators i){
+     UnityLight light;
+        #if defined(POINT)||defined(POINT_COOKIE)||defined(SPOT)
+         light.dir=normalize(_WorldSpaceLightPos0.xyz-i.worldPos.xyz);
+        #else
+         light.dir=_WorldSpaceLightPos0.xyz;
+        #endif
+     UNITY_LIGHT_ATTENUATION(attenuation,i,i.worldPos.xyz);
+     attenuation=FadeShadows(i,attenuation);
+     light.color=_LightColor0.rgb*attenuation;
+     return light;
+    }
 
 float3 BoxProjection (
 	float3 direction, float3 position,
@@ -95,94 +65,32 @@ float3 BoxProjection (
 	return direction;
 }
 
-void ApplySubtractiveLighting (
-	Interpolators i, inout UnityIndirect indirectLight
-) {
-	#if SUBTRACTIVE_LIGHTING
-		UNITY_LIGHT_ATTENUATION(attenuation, i, i.worldPos.xyz);
-		attenuation = FadeShadows(i, attenuation);
-
-		float ndotl = saturate(dot(i.normal, _WorldSpaceLightPos0.xyz));
-		float3 shadowedLightEstimate =
-			ndotl * (1 - attenuation) * _LightColor0.rgb;
-		float3 subtractedLight = indirectLight.diffuse - shadowedLightEstimate;
-		subtractedLight = max(subtractedLight, unity_ShadowColor.rgb);
-		subtractedLight =
-			lerp(subtractedLight, indirectLight.diffuse, _LightShadowData.x);
-		indirectLight.diffuse = min(subtractedLight, indirectLight.diffuse);
-	#endif
-}
-
-UnityIndirect CreateIndirectLight (
-	Interpolators i, float3 viewDir, SurfaceData surface
-) {
-	UnityIndirect indirectLight;
-	indirectLight.diffuse = 0;
-	indirectLight.specular = 0;
-
-	#if defined(VERTEXLIGHT_ON)
-		indirectLight.diffuse = i.vertexLightColor;
-	#endif
-
-	#if defined(FORWARD_BASE_PASS) || defined(DEFERRED_PASS)
-		#if defined(LIGHTMAP_ON)
-			indirectLight.diffuse =
-				DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, i.lightmapUV));
-			
-			#if defined(DIRLIGHTMAP_COMBINED)
-				float4 lightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(
-					unity_LightmapInd, unity_Lightmap, i.lightmapUV
-				);
-				indirectLight.diffuse = DecodeDirectionalLightmap(
-					indirectLight.diffuse, lightmapDirection, i.normal
-				);
-			#endif
-
-			ApplySubtractiveLighting(i, indirectLight);
-		#endif
-
-		#if defined(DYNAMICLIGHTMAP_ON)
-			float3 dynamicLightDiffuse = DecodeRealtimeLightmap(
-				UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, i.dynamicLightmapUV)
-			);
-
-			#if defined(DIRLIGHTMAP_COMBINED)
-				float4 dynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(
-					unity_DynamicDirectionality, unity_DynamicLightmap,
-					i.dynamicLightmapUV
-				);
-            	indirectLight.diffuse += DecodeDirectionalLightmap(
-            		dynamicLightDiffuse, dynamicLightmapDirection, i.normal
-            	);
-			#else
-				indirectLight.diffuse += dynamicLightDiffuse;
-			#endif
-		#endif
-
-		#if !defined(LIGHTMAP_ON) && !defined(DYNAMICLIGHTMAP_ON)
-			#if UNITY_LIGHT_PROBE_PROXY_VOLUME
-				if (unity_ProbeVolumeParams.x == 1) {
-					indirectLight.diffuse = SHEvalLinearL0L1_SampleProbeVolume(
-						float4(i.normal, 1), i.worldPos
-					);
-					indirectLight.diffuse = max(0, indirectLight.diffuse);
-					#if defined(UNITY_COLORSPACE_GAMMA)
-			            indirectLight.diffuse =
-			            	LinearToGammaSpace(indirectLight.diffuse);
-			        #endif
-				}
-				else {
-					indirectLight.diffuse +=
-						max(0, ShadeSH9(float4(i.normal, 1)));
-				}
-			#else
-				indirectLight.diffuse += max(0, ShadeSH9(float4(i.normal, 1)));
-			#endif
-		#endif
-
-		float3 reflectionDir = reflect(-viewDir, i.normal);
-		Unity_GlossyEnvironmentData envData;
-		envData.roughness = 1 - surface.smoothness;
+    UnityIndirect CreateIndirectLight(Interpolators i,float3 viewDir,SurfaceData surface){
+     UnityIndirect indirectLight;
+     indirectLight.diffuse=0;
+     indirectLight.specular=0;
+        #if defined(VERTEXLIGHT_ON)
+         indirectLight.diffuse=i.vertexLightColor;
+        #endif
+        #if defined(FORWARD_BASE_PASS)
+            #if UNITY_LIGHT_PROBE_PROXY_VOLUME
+             if(unity_ProbeVolumeParams.x==1){
+              indirectLight.diffuse=SHEvalLinearL0L1_SampleProbeVolume(
+               float4(i.normal,1),i.worldPos
+              );
+              indirectLight.diffuse=max(0,indirectLight.diffuse);
+                 #if defined(UNITY_COLORSPACE_GAMMA)
+                  indirectLight.diffuse=LinearToGammaSpace(indirectLight.diffuse);
+                 #endif
+             }else{
+              indirectLight.diffuse+=max(0,ShadeSH9(float4(i.normal,1)));
+             }
+            #else
+             indirectLight.diffuse+=max(0,ShadeSH9(float4(i.normal,1)));
+            #endif
+         float3 reflectionDir=reflect(-viewDir,i.normal);
+         Unity_GlossyEnvironmentData envData;
+         envData.roughness = 1 - surface.smoothness;
 		envData.reflUVW = BoxProjection(
 			reflectionDir, i.worldPos.xyz,
 			unity_SpecCube0_ProbePosition,
@@ -216,10 +124,7 @@ UnityIndirect CreateIndirectLight (
 		float occlusion = surface.occlusion;
 		indirectLight.diffuse *= occlusion;
 		indirectLight.specular *= occlusion;
-
-		#if defined(DEFERRED_PASS) && UNITY_ENABLE_REFLECTION_BUFFERS
-			indirectLight.specular = 0;
-		#endif
+ 
 	#endif
 
 	return indirectLight;
@@ -338,23 +243,20 @@ UnityIndirect CreateIndirectLight (
       specularTint,
       oneMinusReflectivity
      );
-    albedo*=alpha;
-    alpha=1-oneMinusReflectivity+alpha*oneMinusReflectivity;
-
-	float4 color = UNITY_BRDF_PBS(
-		albedo, specularTint,
-		oneMinusReflectivity, surface.smoothness,
-		i.normal, viewDir,
-		CreateLight(i), CreateIndirectLight(i, viewDir, surface)
-	);
-	color.rgb += surface.emission;
-	//#if defined(_RENDERING_FADE) || defined(_RENDERING_TRANSPARENT)
-		color.a = alpha;
-	//#endif
-
-  
-  color =ApplyFog(color, i);
-	return color;
-}
-
-//#endif
+     albedo*=alpha;
+     alpha=1-oneMinusReflectivity+alpha*oneMinusReflectivity;
+     float4 color=UNITY_BRDF_PBS(
+      albedo,
+      specularTint,
+      oneMinusReflectivity,
+      surface.smoothness,
+      i.normal,
+      viewDir,
+      CreateLight(i),
+      CreateIndirectLight(i,viewDir,surface)
+     );
+     color.rgb+=surface.emission;
+     color.a=alpha;
+     color=ApplyFog(color,i);
+     return color;
+    }
