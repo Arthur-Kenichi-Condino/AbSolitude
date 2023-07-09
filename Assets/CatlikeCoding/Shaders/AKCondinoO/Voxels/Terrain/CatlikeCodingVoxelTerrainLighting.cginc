@@ -48,23 +48,23 @@
      light.color=_LightColor0.rgb*attenuation;
      return light;
     }
-
-float3 BoxProjection (
-	float3 direction, float3 position,
-	float4 cubemapPosition, float3 boxMin, float3 boxMax
-) {
-	#if UNITY_SPECCUBE_BOX_PROJECTION
-		UNITY_BRANCH
-		if (cubemapPosition.w > 0) {
-			float3 factors =
-				((direction > 0 ? boxMax : boxMin) - position) / direction;
-			float scalar = min(min(factors.x, factors.y), factors.z);
-			direction = direction * scalar + (position - cubemapPosition);
-		}
-	#endif
-	return direction;
-}
-
+    float3 BoxProjection(
+     float3 direction,
+     float3 position,
+     float4 cubemapPosition,
+     float3 boxMin,
+     float3 boxMax
+    ){
+        #if UNITY_SPECCUBE_BOX_PROJECTION
+         UNITY_BRANCH
+         if(cubemapPosition.w>0){
+          float3 factors=((direction>0?boxMax:boxMin)-position)/direction;
+          float scalar=min(min(factors.x,factors.y),factors.z);
+          direction=direction*scalar+(position-cubemapPosition);
+         }
+        #endif
+     return direction;
+    }
     UnityIndirect CreateIndirectLight(Interpolators i,float3 viewDir,SurfaceData surface){
      UnityIndirect indirectLight;
      indirectLight.diffuse=0;

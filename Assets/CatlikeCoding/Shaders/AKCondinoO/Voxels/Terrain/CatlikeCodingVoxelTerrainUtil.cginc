@@ -29,18 +29,16 @@
      triUV.z.x+=0.5;
      return triUV;
     }
-float3 GetTriplanarWeights (
-	SurfaceParameters parameters, float heightX, float heightY, float heightZ
-) {
-	float3 triW = abs(parameters.normal);
-	triW = saturate(triW - .5);
-	triW *= lerp(1, float3(heightX, heightY, heightZ), .5);
-	triW = pow(triW, 8);
-	return triW / (triW.x + triW.y + triW.z);
-}
-float3 BlendTriplanarNormal (float3 mappedNormal, float3 surfaceNormal) {
-	float3 n;
-	n.xy = mappedNormal.xy + surfaceNormal.xy;
-	n.z = mappedNormal.z * surfaceNormal.z;
-	return n;
-}
+    float3 GetTriplanarWeights(SurfaceParameters parameters,float heightX,float heightY,float heightZ){
+     float3 triW=abs(parameters.normal);
+     triW=saturate(triW-.5);
+     triW*=lerp(1,float3(heightX,heightY,heightZ),.5);
+     triW=pow(triW,8);
+     return triW/(triW.x+triW.y+triW.z);
+    }
+    float3 BlendTriplanarNormal(float3 mappedNormal,float3 surfaceNormal){
+     float3 n;
+     n.xy=mappedNormal.xy+surfaceNormal.xy;
+     n.z=mappedNormal.z*surfaceNormal.z;
+     return n;
+    }
