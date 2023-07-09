@@ -35,6 +35,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
           internal Vector4 texCoord7;
              internal Vertex(Vector3 p,Vector3 n,Vector2 uv0){
               pos=p;
+              pos.w=1f;
               normal=n;
               color=new Color(0f,0f,0f,0f);
               texCoord0=emptyUV;

@@ -2,31 +2,20 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 8
+  serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_Name: Circuitry
   m_Shader: {fileID: 4800000, guid: 507e5419769c64e00932f47c2307f9fa, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _DETAIL_MASK
-  - _DETAIL_NORMAL_MAP
-  - _EMISSION_MAP
-  - _METALLIC_MAP
-  - _NORMAL_MAP
-  - _OCCLUSION_MAP
-  - _SMOOTHNESS_METALLIC
-  m_InvalidKeywords: []
+  m_ShaderKeywords: _DETAIL_ALBEDO_MAP _DETAIL_MASK _DETAIL_NORMAL_MAP _EMISSION_MAP
+    _METALLIC_MAP _NORMAL_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -47,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: a4ce85ee15d9d4f1482777e9745c606a, type: 3}
         m_Scale: {x: 3, y: 3}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -63,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
-        m_Texture: {fileID: 2800000, guid: d57f91c7f266e40c2a36031d8b891b19, type: 3}
+        m_Texture: {fileID: 2800000, guid: bdaec9e6ff36f4cbeacf12cce0af0b44, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -78,7 +67,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
     - _BumpScale: 1
@@ -93,6 +81,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ParallaxStrength: 0
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -105,4 +94,3 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionTint: {r: 0, g: 0, b: 0, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
