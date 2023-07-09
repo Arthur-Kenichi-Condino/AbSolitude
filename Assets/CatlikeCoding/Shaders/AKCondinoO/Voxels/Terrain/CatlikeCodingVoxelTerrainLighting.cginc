@@ -90,48 +90,48 @@ float3 BoxProjection (
             #endif
          float3 reflectionDir=reflect(-viewDir,i.normal);
          Unity_GlossyEnvironmentData envData;
-         envData.roughness = 1 - surface.smoothness;
-		envData.reflUVW = BoxProjection(
-			reflectionDir, i.worldPos.xyz,
-			unity_SpecCube0_ProbePosition,
-			unity_SpecCube0_BoxMin, unity_SpecCube0_BoxMax
-		);
-		float3 probe0 = Unity_GlossyEnvironment(
-			UNITY_PASS_TEXCUBE(unity_SpecCube0), unity_SpecCube0_HDR, envData
-		);
-		envData.reflUVW = BoxProjection(
-			reflectionDir, i.worldPos.xyz,
-			unity_SpecCube1_ProbePosition,
-			unity_SpecCube1_BoxMin, unity_SpecCube1_BoxMax
-		);
-		#if UNITY_SPECCUBE_BLENDING
-			float interpolator = unity_SpecCube0_BoxMin.w;
-			UNITY_BRANCH
-			if (interpolator < 0.99999) {
-				float3 probe1 = Unity_GlossyEnvironment(
-					UNITY_PASS_TEXCUBE_SAMPLER(unity_SpecCube1, unity_SpecCube0),
-					unity_SpecCube0_HDR, envData
-				);
-				indirectLight.specular = lerp(probe1, probe0, interpolator);
-			}
-			else {
-				indirectLight.specular = probe0;
-			}
-		#else
-			indirectLight.specular = probe0;
-		#endif
-
-		float occlusion = surface.occlusion;
-		indirectLight.diffuse *= occlusion;
-		indirectLight.specular *= occlusion;
- 
-	#endif
-
-	return indirectLight;
-}
-
-
-
+         envData.roughness=1-surface.smoothness;
+         envData.reflUVW=BoxProjection(
+          reflectionDir,
+          i.worldPos.xyz,
+          unity_SpecCube0_ProbePosition,
+          unity_SpecCube0_BoxMin,
+          unity_SpecCube0_BoxMax
+         );
+         float3 probe0=Unity_GlossyEnvironment(
+          UNITY_PASS_TEXCUBE(unity_SpecCube0),
+          unity_SpecCube0_HDR,
+          envData
+         );
+         envData.reflUVW=BoxProjection(
+          reflectionDir,
+          i.worldPos.xyz,
+          unity_SpecCube1_ProbePosition,
+          unity_SpecCube1_BoxMin,
+          unity_SpecCube1_BoxMax
+         );
+            #if UNITY_SPECCUBE_BLENDING
+             float interpolator=unity_SpecCube0_BoxMin.w;
+             UNITY_BRANCH
+             if(interpolator<0.99999){
+              float3 probe1=Unity_GlossyEnvironment(
+               UNITY_PASS_TEXCUBE_SAMPLER(unity_SpecCube1,unity_SpecCube0),
+               unity_SpecCube0_HDR,
+               envData
+              );
+              indirectLight.specular=lerp(probe1,probe0,interpolator);
+             }else{
+              indirectLight.specular=probe0;
+             }
+            #else
+             indirectLight.specular=probe0;
+            #endif
+         float occlusion=surface.occlusion;
+         indirectLight.diffuse*=occlusion;
+         indirectLight.specular*=occlusion;
+        #endif
+     return indirectLight;
+    }
     float4 ApplyFog(float4 color,Interpolators i){
      //#if FOG_ON
       float viewDistance=length(_WorldSpaceCameraPos-i.worldPos.xyz);
