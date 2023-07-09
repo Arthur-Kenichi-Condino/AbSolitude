@@ -47,38 +47,16 @@
              #include"CatlikeCodingVoxelTerrainLighting.cginc"
             ENDCG
         }
-
-
-
-		Pass {
-			Tags {
-				"LightMode" = "ShadowCaster"
-			}
-
-			CGPROGRAM
-
-			#pragma target 5.0
-
-			#pragma shader_feature _ _RENDERING_CUTOUT _RENDERING_FADE _RENDERING_TRANSPARENT
-			#pragma shader_feature _SEMITRANSPARENT_SHADOWS
-			#pragma shader_feature _SMOOTHNESS_ALBEDO
-
-			#pragma multi_compile _ LOD_FADE_CROSSFADE
-
-			#pragma multi_compile_shadowcaster
-			#pragma multi_compile_instancing
-			#pragma instancing_options lodfade force_same_maxcount_for_gl
-
-			#pragma vertex ShadowVertexToFragmentProgram
-			#pragma fragment ShadowFragmentToColorProgram
-
-			#include "CatlikeCodingVoxelTerrainShadows.cginc"
-
-			ENDCG
-		}
-
-
-
+        Pass{
+         Tags{"LightMode"="ShadowCaster"}
+            CGPROGRAM
+             #pragma target 5.0
+             #pragma multi_compile_shadowcaster
+             #pragma vertex ShadowVertexToFragmentProgram
+             #pragma fragment ShadowFragmentToColorProgram
+             #include"CatlikeCodingVoxelTerrainShadows.cginc"
+            ENDCG
+        }
     }
     CustomEditor"CatlikeCodingVoxelTerrainLightingShaderGUI"
 }
