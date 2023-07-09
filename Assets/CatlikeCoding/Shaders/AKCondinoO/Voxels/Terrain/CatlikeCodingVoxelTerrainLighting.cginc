@@ -371,6 +371,32 @@ struct FragmentOutput {
 
 
 
+    void AddSample(float x,float y,float strenght,TriplanarUV triUV,float3 triW,float3 tViewDir,
+     inout float3 albedoX,
+     inout float3 albedoY,
+     inout float3 albedoZ,
+     inout float4 bumpX,
+     inout float4 bumpY,
+     inout float4 bumpZ
+    ){
+        float textureIndex=x+_columns*y;
+        fixed4 heightX=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.x),textureIndex));
+        fixed4 heightY=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.y),textureIndex));
+        fixed4 heightZ=strenght*UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.z),textureIndex));
+        fixed4 h=(heightX)*triW.x
+                +(heightY)*triW.y
+                +(heightZ)*triW.z;
+               float2 texOffset=ParallaxOffset(h.r,_heightDistortion,tViewDir);
+	 albedoX += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,textureIndex)).rgb;
+	 albedoY += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,textureIndex)).rgb;
+	 albedoZ += strenght*UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,textureIndex)).rgb;
+	bumpX += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.x)+texOffset,textureIndex));
+	bumpY += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.y)+texOffset,textureIndex));
+	bumpZ += strenght*UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.z)+texOffset,textureIndex));
+    }
+
+
+
     FragmentOutput FragmentToColorProgram(Interpolators i){
      UNITY_SETUP_INSTANCE_ID(i);
      UNITY_EXTRACT_TBN(i);
@@ -399,6 +425,10 @@ struct FragmentOutput {
  
  
  
+     float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos.xyz);
+ 
+ 
+ 
         fixed4 heightX=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.x),3.0));
         fixed4 heightY=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.y),3.0));
         fixed4 heightZ=UNITY_SAMPLE_TEX2DARRAY(_heights,float3(frac(triUV.z),3.0));
@@ -409,17 +439,32 @@ struct FragmentOutput {
  
  
  
-     float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos.xyz);
+	float4 bumpX = 0;
+	float4 bumpY = 0;
+	float4 bumpZ = 0;
  
  
  
-	float3 albedoX = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,3.0)).rgb;
-	float3 albedoY = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,3.0)).rgb;
-	float3 albedoZ = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,3.0)).rgb;
+	float3 albedoX = 0;
+	float3 albedoY = 0;
+	float3 albedoZ = 0;
  
-	float3 tangentNormalX = UnpackNormal(UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.x)+texOffset,3.0)));
-	float4 rawNormalY = UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.y)+texOffset,3.0));
-	float3 tangentNormalZ = UnpackNormal(UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.z)+texOffset,3.0)));
+ AddSample(i.uv0.x,i.uv0.y,i.uv6.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv0.z,i.uv0.w,i.uv6.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv1.x,i.uv1.y,i.uv6.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv1.z,i.uv1.w,i.uv6.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv2.x,i.uv2.y,i.uv7.x,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv2.z,i.uv2.w,i.uv7.y,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv3.x,i.uv3.y,i.uv7.z,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ AddSample(i.uv3.z,i.uv3.w,i.uv7.w,triUV,triW,tViewDir,albedoX,albedoY,albedoZ,bumpX,bumpY,bumpZ);
+ 
+	//float3 albedoX = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.x)+texOffset,3.0)).rgb;
+	//float3 albedoY = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.y)+texOffset,3.0)).rgb;
+	//float3 albedoZ = UNITY_SAMPLE_TEX2DARRAY(_albedos,float3(frac(triUV.z)+texOffset,3.0)).rgb;
+ 
+	float3 tangentNormalX = UnpackNormal(bumpX);//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.x)+texOffset,3.0)));
+	float4 rawNormalY = bumpY;//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.y)+texOffset,3.0));
+	float3 tangentNormalZ = UnpackNormal(bumpZ);//UNITY_SAMPLE_TEX2DARRAY(_bumps, float3(frac(triUV.z)+texOffset,3.0)));
  
 	float3 tangentNormalY = UnpackNormal(rawNormalY);
  
