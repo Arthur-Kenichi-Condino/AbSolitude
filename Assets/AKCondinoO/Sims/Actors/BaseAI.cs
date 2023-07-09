@@ -140,13 +140,13 @@ namespace AKCondinoO.Sims.Actors{
               onChaseInTheWayColliderHitsCount--;
              }
             }
-            Array.Sort(onChaseInTheWayColliderHits,onChaseInTheWayColliderHitsArraySortComparer);
+            Array.Sort(onChaseInTheWayColliderHits,OnChaseInTheWayColliderHitsArraySortComparer);
            }
           }
          }
          goto Loop;
         }
-        private int onChaseInTheWayColliderHitsArraySortComparer(RaycastHit a,RaycastHit b){
+        private int OnChaseInTheWayColliderHitsArraySortComparer(RaycastHit a,RaycastHit b){
          if(a.collider==null&&b.collider==null){
           return 0;
          }
