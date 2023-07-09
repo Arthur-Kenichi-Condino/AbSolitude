@@ -69,8 +69,8 @@
 			#pragma multi_compile_instancing
 			#pragma instancing_options lodfade force_same_maxcount_for_gl
 
-			#pragma vertex MyShadowVertexProgram
-			#pragma fragment MyShadowFragmentProgram
+			#pragma vertex ShadowVertexToFragmentProgram
+			#pragma fragment ShadowFragmentToColorProgram
 
 			#include "CatlikeCodingVoxelTerrainShadows.cginc"
 
