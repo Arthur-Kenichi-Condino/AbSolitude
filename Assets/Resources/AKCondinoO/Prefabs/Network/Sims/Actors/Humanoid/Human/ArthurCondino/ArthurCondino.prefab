@@ -65,7 +65,7 @@ MonoBehaviour:
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 38
     tgtValLerpMaxTime: 0.0001
-  doIdleMove: 0
+  doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
   MyAggressionMode: 0

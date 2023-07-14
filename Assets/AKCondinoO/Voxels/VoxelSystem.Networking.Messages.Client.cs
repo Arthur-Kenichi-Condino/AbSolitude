@@ -29,7 +29,7 @@ namespace AKCondinoO.Voxels{
      internal readonly Dictionary<int,Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer=new Dictionary<int,Dictionary<int,(int,FastBufferReader)>>();
       internal static readonly ConcurrentQueue<Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>clientVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,(int,FastBufferReader)>>();
         void OnClientSideReceivedVoxelTerrainChunkEditDataSegment(ulong clientId,FastBufferReader reader){
-         //Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataSegment");
+         Log.DebugMessage("OnClientSideReceivedVoxelTerrainChunkEditDataSegment");
          FastBufferReader dataReceivedFromServer=new FastBufferReader(reader,Allocator.Persistent,-1,0,Allocator.Persistent);
          //  creating a buffer from a buffer puts the reading position on beginning again
          var messageType=(int)UnnamedMessageTypes.Undefined;
