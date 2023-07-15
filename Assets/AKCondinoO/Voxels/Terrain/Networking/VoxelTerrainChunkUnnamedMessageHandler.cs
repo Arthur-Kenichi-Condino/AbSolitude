@@ -33,7 +33,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      internal const int HeaderSize=sizeof(int)*5;
      internal const int VoxelEditDataSize=sizeof(int)+sizeof(double)+sizeof(ushort);
      //  
-     internal const int Splits=1;
+     internal const int Splits=8;
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -184,7 +184,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        WaitUntil waitForDelayToSendNewMessages;//  delay with WaitUntil and a cooldown
         internal float minTimeInSecondsToStartDelayToSendNewMessages=1.5f;
          internal float delayToSendNewMessages;//  writer.Length*segmentSizeToTimeInSecondsDelayRatio
-      internal static int maxMessagesPerFrame=1;//  a value around Splits so it stops sending messages and starts a global cooldown early
+      internal static int maxMessagesPerFrame=2;//  a value around Splits so it stops sending messages and starts a global cooldown early
        internal static int messagesSent;
         internal static int totalLengthOfDataSent;
          internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent*segmentSizeToTimeInSecondsDelayRatio
