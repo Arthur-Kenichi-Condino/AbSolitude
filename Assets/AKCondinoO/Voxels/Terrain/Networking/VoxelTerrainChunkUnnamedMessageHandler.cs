@@ -15,14 +15,25 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      internal static readonly ConcurrentQueue<Dictionary<int,FastBufferWriter>>dataToSendDictionaryPool=new ConcurrentQueue<Dictionary<int,FastBufferWriter>>();
+     //  sizeof(int): 32 bits
+     //  sizeof(double): 64 bits
+     //  sizeof(ushort): 16 bits
      //add sizeof(int) for the message type
      //add sizeof(int) for the cnkIdx
      //add sizeof(int) for the current segment
      //add sizeof(int) for the total segments (segment count)
      //add sizeof(int) for the segment writes count
+     //add sizeof(int) for voxel index
+     //add sizeof(double) for voxel density
+     //add sizeof(ushort) for voxel material id
+     //  HeaderSize plus VoxelEditDataSize: 5*32+32+64+16=272 bits
+     //  VoxelsPerChunk: 16*16*256=65536 voxels
+     //  VoxelsPerChunk*VoxelEditDataSize is all edit data size if whole chunk is edited:
+     //  65536*272=17825792 bits: 2228224 bytes: 2.228224 Megabytes
      internal const int HeaderSize=sizeof(int)*5;
-     internal const int VoxelEditDataSize=sizeof(int)+sizeof(double)+sizeof(ushort);// VoxelsPerChunk*VoxelEditDataSize is all edit data size if whole chunk is edited: 720,896.0 if height is 128
-     internal const int Splits=164;
+     internal const int VoxelEditDataSize=sizeof(int)+sizeof(double)+sizeof(ushort);
+     //  
+     internal const int Splits=8;
      internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -53,7 +64,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         void Awake(){
          netObj=GetComponent<NetworkObject>();
          waitUntilGetFileData=new WaitUntil(()=>{return segmentCount>=0;});
-         waitForDelayToSendNewMessages=new WaitForSeconds(0.1f);
+         waitForDelayToSendNewMessages=new WaitUntil(()=>{if(delayToSendNewMessages>0f){delayToSendNewMessages-=Time.deltaTime;}return delayToSendNewMessages<=0f;});
         }
         internal void OnInstantiated(){
          if(Core.singleton.isServer){
@@ -122,6 +133,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          clientIdsRequestingData.Add(clientId);
          pendingGetFileEditData=true;
         }
+     [SerializeField]bool DEBUG_SEND_UNCHANGED_VOXEL_DATA=false;
      bool waitingGetFileEditData;
      bool pendingGetFileEditData;
         internal void ManualUpdate(){
@@ -142,6 +154,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         bool CanGetFileEditData(){
          if(clientIdsRequestingData.Count>0){
+          terrainGetFileEditDataToNetSyncBG.DEBUG_SEND_UNCHANGED_VOXEL_DATA=DEBUG_SEND_UNCHANGED_VOXEL_DATA;
           terrainGetFileEditDataToNetSyncBG.cCoord=id.Value.cCoord;
           terrainGetFileEditDataToNetSyncBG.cnkRgn=id.Value.cnkRgn;
           terrainGetFileEditDataToNetSyncBG.cnkIdx=id.Value.cnkIdx;
@@ -166,11 +179,16 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
      Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
       WaitUntil waitUntilGetFileData;
-      WaitForSeconds waitForDelayToSendNewMessages;
       readonly List<ulong>clientIdsToSendData=new List<ulong>();
-      internal static int maxMessagesPerFrame=5;
+      internal static float segmentSizeToTimeInSecondsDelayRatio=.1f/VoxelsPerChunk;//  turns segment Length into seconds to wait
+       WaitUntil waitForDelayToSendNewMessages;//  delay with WaitUntil and a cooldown
+        internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
+         internal float delayToSendNewMessages;//  writer.Length*segmentSizeToTimeInSecondsDelayRatio
+      internal static int maxMessagesPerFrame=2;//  a value around Splits so it stops sending messages and starts a global cooldown early
        internal static int messagesSent;
-      internal static double sendingMaxExecutionTime=5.0;
+        internal static int totalLengthOfDataSent;
+         internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent*segmentSizeToTimeInSecondsDelayRatio
+      internal static double sendingMaxExecutionTime=1.0;
        internal static double sendingExecutionTime;
       int segmentSize;
       int segmentCount=-1;
@@ -180,9 +198,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
             //Log.DebugMessage("writingMaxExecutionTime:"+writingMaxExecutionTime);
             bool LimitMessagesSentPerFrame(){
-             if(messagesSent++>=maxMessagesPerFrame){
+             if(messagesSent>=maxMessagesPerFrame){
               return true;
              }
+             messagesSent++;
              return false;
             }
             System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
@@ -199,20 +218,27 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              FastBufferWriter writer;
              stopwatch.Restart();
              foreach(var segmentBufferPair in sendingDataToClients){
-              while(LimitExecutionTime()){
-               yield return null;
-               stopwatch.Restart();
-              }
               int segment=segmentBufferPair.Key;
               //Log.DebugMessage("send segment:"+segment);
               writer=segmentBufferPair.Value;
               if(writer.IsInitialized){
                foreach(ulong clientId in clientIdsToSendData){
                 if(NetworkManager.ConnectedClientsIds.Contains(clientId)){
+                 while(LimitExecutionTime()){
+                  yield return null;
+                  stopwatch.Restart();
+                 }
+                 while(LimitMessagesSentPerFrame()){
+                  yield return null;
+                 }
+                 totalLengthOfDataSent+=writer.Length;
+                 delayToSendNewMessages+=writer.Length*segmentSizeToTimeInSecondsDelayRatio;
+                 //Log.DebugMessage("sending segment FastBufferWriter writer.Length:"+writer.Length);
                  NetworkManager.CustomMessagingManager.SendUnnamedMessage(clientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
-                }
-                while(LimitMessagesSentPerFrame()){
-                 yield return waitForDelayToSendNewMessages;
+                 if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
+                  //Log.DebugMessage("waitForDelayToSendNewMessages:"+delayToSendNewMessages+" seconds");
+                  yield return waitForDelayToSendNewMessages;
+                 }
                 }
                }
                writer.Dispose();
@@ -223,6 +249,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              dataToSendDictionaryPool.Enqueue(sendingDataToClients);
              sendingDataToClients=null;
              sentSegments.Clear();
+             if(delayToSendNewMessages>0f){
+              yield return waitForDelayToSendNewMessages;
+             }
              Log.DebugMessage("sent all segments:"+segmentCount);
              clientIdsToSendData.Clear();
              segmentCount=-1;//  restart loop but don't repeat for the same edit data file

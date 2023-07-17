@@ -142,7 +142,7 @@ Transform:
   m_Children:
   - {fileID: 1910782930702313609}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-4340606579224055553
 MonoBehaviour:
@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSun: {fileID: 3419431286494342690}
+  useRealTime: 1
   simDayInRealMinutes: 60
 --- !u!1 &6486018392043608168
 GameObject:

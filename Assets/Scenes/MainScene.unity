@@ -436,6 +436,10 @@ PrefabInstance:
       propertyPath: useRealTime
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4340606579224055553, guid: b94606b97c5a86c46b64bab270e85a60, type: 3}
+      propertyPath: simDayInRealMinutes
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3316915610132260738, guid: b94606b97c5a86c46b64bab270e85a60, type: 3}
       propertyPath: m_Name
       value: SimTime

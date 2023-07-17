@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class QuaternionRotLerpHelper{
+        internal QuaternionRotLerpHelper(){
+        }
+        internal QuaternionRotLerpHelper(float tgtRotLerpSpeed,float tgtRotLerpMaxTime):this(){
+         this.tgtRotLerpSpeed  =tgtRotLerpSpeed  ;
+         this.tgtRotLerpMaxTime=tgtRotLerpMaxTime;
+        }
      [SerializeField]internal bool dealWithGimbalLock=true;
      internal Quaternion tgtRot{
       get{
@@ -31,8 +37,8 @@ namespace AKCondinoO{
       internal float tgtRotLerpTime;
        internal float tgtRotLerpVal;
         internal Quaternion tgtRotLerpA,tgtRotLerpB;
-         [SerializeField]internal float tgtRotLerpSpeed=19f;
-          [SerializeField]internal float tgtRotLerpMaxTime=.0001f;
+         [SerializeField]internal float tgtRotLerpSpeed=76.0f;
+          [SerializeField]internal float tgtRotLerpMaxTime=0.0005f;
         internal Quaternion UpdateRotation(Quaternion rotation,float deltaTime){
          Quaternion result=rotation;
              if(tgtRotLerpTime==0f){

@@ -7,10 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Skill MySkill=null;
-      internal Skill skillToUse{get{return MySkill;}}
+     protected Skill MySkill=null;internal Skill skillToUse{get{return MySkill;}}
       internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
-        protected virtual void OnIDLE_ST_SetMySkill(){
+        protected virtual void SetMySkill(){
          //  TO DO: skillsToUse.Clear() ao trocar de estado da AI ou em situações específicas, como depois de um delay
          if(MySkill==null){
           //  TO DO: get other skills
@@ -26,7 +25,7 @@ namespace AKCondinoO.Sims.Actors{
 }
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI{
-        protected override void OnIDLE_ST_SetMySkill(){
+        protected override void SetMySkill(){
          if(MySkill==null&&skillsToUse.Count<=0){
           Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves,skillsToUse);
          }
@@ -69,7 +68,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
 }
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
     internal partial class ArthurCondinoAI{
-        protected override void OnIDLE_ST_SetMySkill(){
+        protected override void SetMySkill(){
          if(MySkill==null&&skillsToUse.Count<=0){
           Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves,skillsToUse);
          }

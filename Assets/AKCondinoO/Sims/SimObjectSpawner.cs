@@ -71,7 +71,7 @@ namespace AKCondinoO.Sims{
           idsFileStream.Position=0L;
           idsFileStreamReader.DiscardBufferedData();
          }
-         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(GameObject))){
+         foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(GameObject))){
           GameObject gameObject=(GameObject)o;
            SimObject  simObject=gameObject.GetComponent<SimObject>();
           if(simObject==null)continue;
@@ -137,13 +137,13 @@ namespace AKCondinoO.Sims{
           SimObjectManager.singleton.pool.Add(simObjectType,new LinkedList<SimObject>());
          }
          Log.DebugMessage("load thumbnails");
-         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(Texture))){
+         foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(Texture))){
           Log.DebugMessage("load Texture, o.name:"+o.name);
           string typeName=o.name.Substring(0,o.name.IndexOf("."));
           Log.DebugMessage("load Texture, typeName:"+typeName);
-          Type t=ReflectionUtil.GetTypeByName(typeName);
+          Type t=ReflectionUtil.GetTypeByName(typeName,typeof(SimObject));
           Log.DebugMessage("load Texture, t:"+t);
-          if(t!=null&&ReflectionUtil.IsTypeDerivedFrom(t,typeof(SimObject))){
+          if(t!=null){
            Log.DebugMessage("register Texture for SimObject of Type t:"+t);
           }
          }
@@ -185,16 +185,16 @@ namespace AKCondinoO.Sims{
      readonly SpawnData spawnData=new SpawnData();
      bool savingPersistentData;
      bool loadingPersistentData;
-     float loaderCooldown=1f;
+     float loaderCooldown=.5f;
      float loaderOnCooldownTimer;
-     float reloadInterval=5f;
+     float reloadInterval=1f;
      float reloadTimer;
         void Update(){
          if(loaderOnCooldownTimer>0f){
-            loaderOnCooldownTimer-=Core.magicDeltaTimeNumber;
+            loaderOnCooldownTimer-=Time.deltaTime;
          }
          if(reloadTimer>0f){
-            reloadTimer-=Core.magicDeltaTimeNumber;
+            reloadTimer-=Time.deltaTime;
          }
         }
         private IEnumerator SpawnCoroutine(){
@@ -312,6 +312,7 @@ namespace AKCondinoO.Sims{
                   simActor.persistentSimActorData=new SimActor.PersistentSimActorData();
                  }
                  SimObjectManager.singleton.activeActor.Add(id,simActor);
+                 SimsMachine.singleton.OnActorSpawn(simActor);
                 }
                 if(asInventoryItemOwner!=null){
                  Log.DebugMessage("add simObject asInventoryItem to Owner");
@@ -322,11 +323,11 @@ namespace AKCondinoO.Sims{
                 if(persistentStats!=null){
                  //Log.DebugMessage("simObject persistentStats loaded");
                  simObject.persistentStats=persistentStats.Value;
-                 simObject.stats.InitFrom(simObject.persistentStats);
+                 simObject.stats.InitFrom(simObject.persistentStats,simObject);
                 }else{
                  //Log.DebugMessage("simObject persistentStats must be generated");
                  simObject.persistentStats=new SimObject.PersistentStats();
-                 simObject.stats.Generate();
+                 simObject.stats.Generate(simObject,true);
                 }
                 simObject.OnActivated();
               }
@@ -334,7 +335,7 @@ namespace AKCondinoO.Sims{
               toSpawn.dequeued=true;
              }
                  if(loadingPersistentData){
-                     Log.DebugMessage("loadingPersistentData");
+                     //Log.DebugMessage("loadingPersistentData");
                      if(OnPersistentDataLoaded()){
                          loadingPersistentData=false;
                      }
@@ -346,13 +347,13 @@ namespace AKCondinoO.Sims{
                          }
                      }else{
                          if(reloadTimer<=0f){
-                             Log.DebugMessage("reloadTimer<=0f");
+                             //Log.DebugMessage("reloadTimer<=0f");
                              if(OnPersistentDataPullFromFile()){
                                  OnPersistentDataPullingFromFile();
                              }
                          }else{
                              if(loaderOnCooldownTimer<=0f&&(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)){
-                                 Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
+                                 //Log.DebugMessage("(terraincnkIdxPhysMeshBaked.Count>0||specificSpawnRequests.Count>0)");
                                  if(OnPersistentDataPullFromFile()){
                                      loaderOnCooldownTimer=loaderCooldown;
                                      OnPersistentDataPullingFromFile();
@@ -497,6 +498,9 @@ namespace AKCondinoO.Sims{
          ){
           //  TO DO: remove sim inventories
           foreach(var despawn in SimObjectManager.singleton.despawning){
+           if(despawn.Value is SimActor simActor){
+            SimsMachine.singleton.OnActorDespawn(simActor);
+           }
            SimObjectManager.singleton.spawned.Remove(despawn.Key);
            despawn.Value.OnDespawned();
            despawn.Value.pooled=SimObjectManager.singleton.pool[despawn.Value.id.Value.simObjectType].AddLast(despawn.Value);

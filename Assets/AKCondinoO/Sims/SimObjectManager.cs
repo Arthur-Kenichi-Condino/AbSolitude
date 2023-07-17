@@ -33,6 +33,9 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         System.Random seedGenerator=new System.Random();
+         SimObject.Stats.seedGenerator=new System.Random(seedGenerator.Next());
+         BaseAI         .seedGenerator=new System.Random(seedGenerator.Next());
          PersistentDataSavingMultithreaded.Stop=false;
          persistentDataSavingBG=new PersistentDataSavingBackgroundContainer();
          persistentDataSavingBGThread=new PersistentDataSavingMultithreaded();
@@ -62,6 +65,7 @@ namespace AKCondinoO.Sims{
                   idsFile=string.Format("{0}{1}",simObjectSavePath,        "ids.txt");
           releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
          }
+         BaseAI.animatorClipNameToActorMotion.Clear();
         }
      readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
@@ -135,7 +139,7 @@ namespace AKCondinoO.Sims{
              loop=loop|a.Value.OnExitSaveRecursion();
             }
             active.Clear();
-            Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);
+            //Log.DebugMessage("SimObjectManager exit save: is loop needed:"+loop);
             if(loop){
              goto _Loop;
             }

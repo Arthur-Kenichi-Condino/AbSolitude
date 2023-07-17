@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Sims.Weapons.Rifle.SniperRifle;
 using System;
@@ -137,6 +138,7 @@ namespace AKCondinoO.Sims.Actors{
       internal float height;
        internal float heightCrouching;
      internal SimActorAnimatorController simActorAnimatorController;
+     internal AISensor aiSensor;
         protected override void Awake(){
          if(simUMADataPrefab!=null){
           simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
@@ -145,6 +147,12 @@ namespace AKCondinoO.Sims.Actors{
           simUMAData.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
+         aiSensor=GetComponentInChildren<AISensor>();
+         if(aiSensor){
+          aiSensor.actor=this;
+          aiSensor.Deactivate();
+          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+         }
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
           agentTypeID=navMeshAgent.agentTypeID,
@@ -163,8 +171,30 @@ namespace AKCondinoO.Sims.Actors{
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
+     protected bool canSense;
         void OnUMACharacterUpdated(UMAData simActorUMAData){
          Log.DebugMessage("OnUMACharacterUpdated");
+         if(head==null){
+          head=Util.FindChildRecursively(simUMAData.transform,"head");
+          if(head==null){
+           head=Util.FindChildRecursively(simUMAData.transform,"face");
+          }
+          Log.DebugMessage("head:"+head);
+         }
+         if( leftEye==null){
+           leftEye=Util.FindChildRecursively(simUMAData.transform,"lEye");
+          Log.DebugMessage("lEye:"+ leftEye);
+         }
+         if(rightEye==null){
+          rightEye=Util.FindChildRecursively(simUMAData.transform,"rEye");
+          Log.DebugMessage("rEye:"+rightEye);
+         }
+         if(aiSensor){
+          if(head||leftEye||rightEye){
+           Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
+           canSense=true;
+          }
+         }
          if( leftHand==null){
            leftHand=Util.FindChildRecursively(simUMAData.transform,"lHand");
           Log.DebugMessage("lHand:"+ leftHand);
@@ -238,6 +268,9 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
+         if(aiSensor){
+          aiSensor.Deactivate();
+         }
          foreach(var skill in skills){
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
@@ -255,12 +288,20 @@ namespace AKCondinoO.Sims.Actors{
         protected override void DisableInteractions(){
          interactionsEnabled=false;
         }
+     protected float onEnableNavMeshAgentProximityTimeout=10f;
+      protected float onEnableNavMeshAgentProximityTimer=10f;
         void EnableNavMeshAgent(){
          if(!navMeshAgent.enabled){
           if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
-           transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
-           navMeshAgent.enabled=true;
-           //Log.DebugMessage("navMeshAgent is enabled");
+           if(onEnableNavMeshAgentProximityTimer>0f){
+            onEnableNavMeshAgentProximityTimer-=Time.deltaTime;
+           }
+           if(onEnableNavMeshAgentProximityTimer<=0f||(new Vector3(hitResult.position.x,0f,hitResult.position.z)-new Vector3(transform.position.x,0f,transform.position.z)).magnitude<=2f){
+            transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
+            navMeshAgent.enabled=true;
+            onEnableNavMeshAgentProximityTimer=onEnableNavMeshAgentProximityTimeout;
+            //Log.DebugMessage("navMeshAgent is enabled");
+           }
           }
          }
         }
@@ -328,7 +369,7 @@ namespace AKCondinoO.Sims.Actors{
            }
            if(!isUsingAI){
             if(AFKTimerToUseAI>0f){
-             AFKTimerToUseAI-=Core.magicDeltaTimeNumber;
+             AFKTimerToUseAI-=Time.deltaTime;
             }
             if(AFKTimerToUseAI<=0f){
              isUsingAI=true;
@@ -348,6 +389,35 @@ namespace AKCondinoO.Sims.Actors{
              }
             }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
              //  TO DO: release items
+            }
+           }
+           if(aiSensor){
+            if(canSense){
+             if(!aiSensor.isActiveAndEnabled){
+              aiSensor.Activate();
+             }
+             if(aiSensor.isActiveAndEnabled){
+              if(rightEye){
+               if(leftEye){
+                aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
+                aiSensor.transform.rotation=leftEye.transform.rotation;
+               }else{
+                aiSensor.transform.position=rightEye.transform.position;
+                aiSensor.transform.rotation=rightEye.transform.rotation;
+               }
+              }else if(leftEye){
+               aiSensor.transform.position=leftEye.transform.position;
+               aiSensor.transform.rotation=leftEye.transform.rotation;
+              }else if(head){
+               if(aiSensor.zIsUp){
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.LookRotation(head.up,head.forward);
+               }else{
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+               }
+              }
+             }
             }
            }
            if(isUsingAI){
@@ -372,18 +442,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if(transform.hasChanged){
-          GetCollidersTouchingNonAlloc();
+          GetCollidersTouchingNonAlloc(instantCheck:true);
          }
-         for(int i=0;i<collidersTouchingUpperCount;++i){
-          Collider colliderTouchingUpper=collidersTouchingUpper[i];
-          if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
-           shouldCrouch=true;
+         if(gotCollidersTouchingFromInstantCheck){
+          for(int i=0;i<collidersTouchingUpperCount;++i){
+           Collider colliderTouchingUpper=collidersTouchingUpper[i];
+           if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
           }
-         }
-         for(int i=0;i<collidersTouchingMiddleCount;++i){
-          Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
-          if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
-           shouldCrouch=true;
+          for(int i=0;i<collidersTouchingMiddleCount;++i){
+           Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
+           if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
+          }
+         }else{
+          if(simCollisionsTouchingUpper !=null){
+           foreach(Collider colliderTouchingUpper  in simCollisionsTouchingUpper .simObjectColliders){
+            shouldCrouch=true;
+           }
+          }
+          if(simCollisionsTouchingMiddle!=null){
+           foreach(Collider colliderTouchingMiddle in simCollisionsTouchingMiddle.simObjectColliders){
+            shouldCrouch=true;
+           }
           }
          }
          if(Core.singleton.isServer){
@@ -436,26 +519,28 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected Collider[]collidersTouchingUpper=new Collider[8];
       protected int collidersTouchingUpperCount=0;
+     internal SimCollisionsChildTrigger simCollisionsTouchingUpper;
      protected Collider[]collidersTouchingMiddle=new Collider[8];
       protected int collidersTouchingMiddleCount=0;
-        protected override void GetCollidersTouchingNonAlloc(){
+     internal SimCollisionsChildTrigger simCollisionsTouchingMiddle;
+        protected override void GetCollidersTouchingNonAlloc(bool instantCheck){
+         gotCollidersTouchingFromInstantCheck=false;
+         if(!instantCheck){
+          if(
+           simCollisions&&
+           simCollisionsTouchingUpper &&
+           simCollisionsTouchingMiddle
+          ){
+           return;
+          }
+         }
          if(simActorCharacterController!=null){
-          var section=height/3f;
-          if((section/2f)>simActorCharacterController.characterController.radius){
-           var direction=Vector3.up;
-           var offset=(section/2f)-simActorCharacterController.characterController.radius;
-           var center=simActorCharacterController.center;
-           center.y+=(height/2f)-(section/2f);
-           var localPoint0=center-direction*offset;
-           var localPoint1=center+direction*offset;
-           var point0=transform.TransformPoint(localPoint0);
-           var point1=transform.TransformPoint(localPoint1);
-           Vector3 r=transform.TransformVector(
-            simActorCharacterController.characterController.radius,
-            simActorCharacterController.characterController.radius,
-            simActorCharacterController.characterController.radius
-           );
-           float radius=Enumerable.Range(0,3).Select(xyz=>xyz==1?0:r[xyz]).Select(Mathf.Abs).Max();
+          gotCollidersTouchingFromInstantCheck=true;
+          var upperMiddleLowerValues=simCollisions.GetCapsuleValuesForUpperMiddleLowerCollisionTesting(simActorCharacterController.characterController,transform.root,height,simActorCharacterController.center);
+          if(upperMiddleLowerValues!=null){
+           var point0=upperMiddleLowerValues.Value.upperValues.point0;
+           var point1=upperMiddleLowerValues.Value.upperValues.point1;
+           float radius=upperMiddleLowerValues.Value.upperValues.radius;
            _GetUpperColliders:{
             collidersTouchingUpperCount=Physics.OverlapCapsuleNonAlloc(
              point0,
@@ -470,11 +555,8 @@ namespace AKCondinoO.Sims.Actors{
              goto _GetUpperColliders;
             }
            }
-           center=simActorCharacterController.center;
-           localPoint0=center-direction*offset;
-           localPoint1=center+direction*offset;
-           point0=transform.TransformPoint(localPoint0);
-           point1=transform.TransformPoint(localPoint1);
+           point0=upperMiddleLowerValues.Value.middleValues.point0;
+           point1=upperMiddleLowerValues.Value.middleValues.point1;
            _GetMiddleColliders:{
             collidersTouchingMiddleCount=Physics.OverlapCapsuleNonAlloc(
              point0,

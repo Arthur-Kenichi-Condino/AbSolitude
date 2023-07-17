@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
-         OnIDLE_ST_SetMySkill();
+         SetMySkill();
          base.OnIDLE_ST();
         }
         protected override void DoSkill(){

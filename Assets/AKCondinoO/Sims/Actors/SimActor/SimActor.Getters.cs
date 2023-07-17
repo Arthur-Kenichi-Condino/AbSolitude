@@ -11,12 +11,14 @@ namespace AKCondinoO.Sims.Actors{
        return false;
       }
      }
+     [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
      internal virtual float moveVelocityFlattened{
       get{
        if(isUsingAI){
         float velocityMagnitude=navMeshAgent.velocity.magnitude;
         //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
-        return Mathf.Clamp01(velocityMagnitude/navMeshAgentRunSpeed);
+        moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityMagnitude/navMeshAgentRunSpeed);
+        return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
        }
        if(simActorCharacterController!=null){
         float divideBy=
@@ -34,11 +36,13 @@ namespace AKCondinoO.Sims.Actors{
         //Log.DebugMessage("characterController velocity:"+velocity);
         float velocityFlattened=Mathf.Abs(velocity.x)+Mathf.Abs(velocity.z);
         //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
-        return Mathf.Clamp01(velocityFlattened);
+        moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityFlattened);
+        return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
        }
        return 0f;
       }
      }
+      protected float moveVelocityFlattened_value;
      internal float turnAngle{
       get{
        if(isUsingAI){

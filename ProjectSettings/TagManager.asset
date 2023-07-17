@@ -35,9 +35,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Sight
+  - Hitbox
+  - Hurtbox
   m_SortingLayers:
   - name: Default
     uniqueID: 0

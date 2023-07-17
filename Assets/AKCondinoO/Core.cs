@@ -61,6 +61,7 @@ namespace AKCondinoO{
          GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
+                PhysUtil.SetUtil();
            RenderingUtil.SetUtil();
          QualitySettings.vSyncCount=0;
          Application.targetFrameRate=164;
@@ -68,7 +69,7 @@ namespace AKCondinoO{
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
-         magicDeltaTimeNumber=1f/(float)Screen.currentResolution.refreshRateRatio.value;
+         magicDeltaTimeNumber=(1f/(float)Screen.currentResolution.refreshRateRatio.value)/((164.6f*2f)/(float)Screen.currentResolution.refreshRateRatio.value);
          Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
@@ -170,14 +171,14 @@ namespace AKCondinoO{
      internal bool currentRenderingTargetCameraChanged{get;private set;}
         void Update(){
          currentRenderingTargetCameraChanged=false;
-         if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){
+         if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
           currentRenderingTargetCameraChanged=true;
-          Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.current:"+currentRenderingTargetCamera);
+          Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
          }
          if(currentRenderingTargetCamera==null){
-          if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
+          if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){
            currentRenderingTargetCameraChanged=true;
-           Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
+           Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.current:"+currentRenderingTargetCamera);
           }
          }
          currentRenderingTargetCameraHasTransformChanges=false;

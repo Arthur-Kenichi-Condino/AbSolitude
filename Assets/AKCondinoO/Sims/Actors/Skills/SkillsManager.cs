@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
      internal readonly Dictionary<Type,GameObject>skillPrefabs=new Dictionary<Type,GameObject>();
         public void Init(){
-         foreach(var o in Resources.LoadAll("AKCondinoO/Sims/Actors/Skills/",typeof(GameObject))){
+         foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Skills/",typeof(GameObject))){
           GameObject gameObject=(GameObject)o;
           Skill skill=gameObject.GetComponent<Skill>();
           if(skill==null)continue;
