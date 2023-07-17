@@ -180,9 +180,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
       WaitUntil waitUntilGetFileData;
       readonly List<ulong>clientIdsToSendData=new List<ulong>();
-      internal static float segmentSizeToTimeInSecondsDelayRatio=.165f/VoxelsPerChunk;//  turns segment Length into seconds to wait
+      internal static float segmentSizeToTimeInSecondsDelayRatio=.1f/VoxelsPerChunk;//  turns segment Length into seconds to wait
        WaitUntil waitForDelayToSendNewMessages;//  delay with WaitUntil and a cooldown
-        internal float minTimeInSecondsToStartDelayToSendNewMessages=1.5f;
+        internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
          internal float delayToSendNewMessages;//  writer.Length*segmentSizeToTimeInSecondsDelayRatio
       internal static int maxMessagesPerFrame=2;//  a value around Splits so it stops sending messages and starts a global cooldown early
        internal static int messagesSent;
@@ -233,10 +233,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  }
                  totalLengthOfDataSent+=writer.Length;
                  delayToSendNewMessages+=writer.Length*segmentSizeToTimeInSecondsDelayRatio;
-                 Log.DebugMessage("sending segment FastBufferWriter writer.Length:"+writer.Length);
+                 //Log.DebugMessage("sending segment FastBufferWriter writer.Length:"+writer.Length);
                  NetworkManager.CustomMessagingManager.SendUnnamedMessage(clientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
                  if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
-                  Log.DebugMessage("waitForDelayToSendNewMessages:"+delayToSendNewMessages+" seconds");
+                  //Log.DebugMessage("waitForDelayToSendNewMessages:"+delayToSendNewMessages+" seconds");
                   yield return waitForDelayToSendNewMessages;
                  }
                 }

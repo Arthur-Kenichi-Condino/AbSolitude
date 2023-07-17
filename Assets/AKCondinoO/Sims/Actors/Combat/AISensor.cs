@@ -127,12 +127,15 @@ namespace AKCondinoO.Sims.Actors.Combat{
      internal readonly Dictionary<SimObject,int>gotInSightOf=new Dictionary<SimObject,int>();
      internal readonly HashSet<Collider>simObjectCollidersInSight=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
+         if(!Core.singleton.isServer){
+          return;
+         }
          if(other.transform.root==this.transform.root){
           return;
          }
          //Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
          if(IsValidForSensing(other,out SimObject otherSimObject,out SimActor otherSimActor)){
-          Log.DebugMessage("AISensor:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
+          //Log.DebugMessage("AISensor:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
           simObjectCollidersInSight.Add(other);
           if(!otherSimActor.aiSensor.gotInSightOf.ContainsKey(actor)){
            otherSimActor.aiSensor.gotInSightOf.Add(actor,0);
@@ -143,6 +146,9 @@ namespace AKCondinoO.Sims.Actors.Combat{
          }
         }
         void OnTriggerExit(Collider other){
+         if(!Core.singleton.isServer){
+          return;
+         }
          //Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectCollidersInSight.Remove(other);
          if(IsValidForSensing(other,out SimObject otherSimObject,out SimActor otherSimActor)){
