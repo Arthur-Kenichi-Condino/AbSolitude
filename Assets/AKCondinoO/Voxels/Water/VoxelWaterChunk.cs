@@ -38,7 +38,7 @@ namespace AKCondinoO.Voxels.Water{
          }
         }
         bool CanSpreadWater(){
-         spreadTimer-=Core.magicDeltaTimeNumber;
+         spreadTimer-=Time.deltaTime;
          if(spreadTimer<=0f){
           //Log.DebugMessage("CanSpreadWater");
           spreadTimer=spreadTimeInterval;

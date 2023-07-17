@@ -24,11 +24,15 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
       }
      );
         internal enum MaterialId:ushort{
-         Air=0,//  Default value
-         Bedrock=1,//  Indestrutível
-         Dirt=2,
-         Rock=3,
-         Sand=4,
+         Air         =0,//  Default value
+         Bedrock     =1,//  Indestrutível
+         Dirt        =2,
+         Rock        =3,
+         Sand        =4,
+         Mud         =5,
+         MudGrassy   =6,
+         Gravel      =7,
+         GravelMossy =8,
         }
         internal struct Voxel{
          internal double density;
@@ -46,7 +50,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
       (Height/2.0f)-0.5f,
       (Depth /2.0f)-0.5f
      );
-     internal static Vector2 emptyUV{get;}=new Vector2(-1f,-1f);
+     internal static Vector4 emptyUV{get;}=new Vector4(-1f,-1f,-1f,-1f);
      internal static ConcurrentQueue<List<Vector2>>vertexUVListPool=new ConcurrentQueue<List<Vector2>>();
         internal static void DoMarchingCubes(
          Voxel[]polygonCell,

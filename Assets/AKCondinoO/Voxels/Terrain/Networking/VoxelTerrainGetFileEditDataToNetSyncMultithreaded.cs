@@ -17,6 +17,7 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkUnnamedMessag
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainGetFileEditDataToNetSyncContainer:BackgroundContainer{
+     internal bool DEBUG_SEND_UNCHANGED_VOXEL_DATA=false;
      internal int segmentSize;
      internal int voxelsPerSegment;
      internal Vector2Int cCoord;
@@ -39,7 +40,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainGetFileEditDataToNetSyncMultithreaded:BaseMultithreaded<VoxelTerrainGetFileEditDataToNetSyncContainer>{
      internal static readonly ConcurrentQueue<Dictionary<Vector3Int,TerrainEditOutputData>>terrainEditOutputDataPool=new ConcurrentQueue<Dictionary<Vector3Int,TerrainEditOutputData>>();
         protected override void Execute(){
-         //Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.voxelsPerSegment:"+container.voxelsPerSegment);
+         Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:DEBUG_SEND_UNCHANGED_VOXEL_DATA:"+container.DEBUG_SEND_UNCHANGED_VOXEL_DATA+";container.voxelsPerSegment:"+container.voxelsPerSegment);
          if(!dataToSendDictionaryPool.TryDequeue(out container.dataToSendToClients)){
           container.dataToSendToClients=new Dictionary<int,FastBufferWriter>();
          }
@@ -49,6 +50,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
          try{
+          Vector2Int cnkRgn1=container.cnkRgn;
           Vector2Int cCoord1=container.cCoord;
           string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
           if(container.editsFileStream==null||container.editsFileName!=editsFileName){
@@ -65,36 +67,60 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             container.editsFileStreamReader=new StreamReader(container.editsFileStream);
            }
           }
-          if(container.editsFileStream!=null){
+          if(container.editsFileStream!=null||container.DEBUG_SEND_UNCHANGED_VOXEL_DATA){
            if(!terrainEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,TerrainEditOutputData>editData)){
             editData=new Dictionary<Vector3Int,TerrainEditOutputData>();
            }
-           FileStream fileStream=container.editsFileStream;
-           StreamReader fileStreamReader=container.editsFileStreamReader;
-           fileStream.Position=0L;
-           fileStreamReader.DiscardBufferedData();
-           string line;
-           while((line=fileStreamReader.ReadLine())!=null){
-            if(string.IsNullOrEmpty(line)){continue;}
-            int vCoordStringStart=line.IndexOf("vCoord=(");
-            if(vCoordStringStart>=0){
-               vCoordStringStart+=8;
-             int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
-             string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
-             string[]xyzString=vCoordString.Split(',');
-             int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
-             Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
-             int editStringStart=vCoordStringEnd+4;
-             editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
-             if(editStringStart>=0){
-              int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
-              string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
-              TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
-              editData.Add(vCoord,edit);
+           if(container.editsFileStream!=null){
+            FileStream fileStream=container.editsFileStream;
+            StreamReader fileStreamReader=container.editsFileStreamReader;
+            fileStream.Position=0L;
+            fileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=fileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int vCoordStringStart=line.IndexOf("vCoord=(");
+             if(vCoordStringStart>=0){
+                vCoordStringStart+=8;
+              int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+              string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+              string[]xyzString=vCoordString.Split(',');
+              int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+              int editStringStart=vCoordStringEnd+4;
+              editStringStart=line.IndexOf("terrainEditOutputData=",editStringStart);
+              if(editStringStart>=0){
+               int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+               string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+               TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
+               editData.Add(vCoord,edit);
+              }
              }
             }
+           }
+           if(container.DEBUG_SEND_UNCHANGED_VOXEL_DATA){
+            Vector3Int vCoord1;
+            for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+            for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+            for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+             if(!editData.ContainsKey(vCoord1)){
+              int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+              Voxel voxel1=new Voxel();
+              Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
+                                            noiseInput.z+=cnkRgn1.y;
+              VoxelSystem.biome.Setvxl(
+               noiseInput,
+                null,
+                 null,
+                  0,
+                   vCoord1.z+vCoord1.x*Depth,
+                    ref voxel1
+              );
+              editData.Add(vCoord1,new TerrainEditOutputData(voxel1.density,voxel1.material));
+             }
+            }}}
            }
            int totalSegments=Mathf.CeilToInt((float)editData.Count/(float)container.voxelsPerSegment);
            int lastSegmentWriteDataCount=editData.Count%container.voxelsPerSegment;

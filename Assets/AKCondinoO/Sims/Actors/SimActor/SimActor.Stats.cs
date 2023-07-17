@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActor{
-        internal class CharacterStats:Stats{
+        internal partial class CharacterStats:Stats{
         }
     }
 }

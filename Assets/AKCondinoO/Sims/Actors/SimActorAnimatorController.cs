@@ -1,20 +1,23 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
+using AKCondinoO.Sims.Actors.Humanoid;
+using AKCondinoO.Sims.Actors.Humanoid.Human;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActorAnimatorController:MonoBehaviour{
+    internal partial class SimActorAnimatorController:MonoBehaviour{
      internal SimActor actor;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
-     [SerializeField]internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
-     [SerializeField]internal    Vector3PosLerpHelper posLerp=new    Vector3PosLerpHelper();
+     [SerializeField]internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
+     [SerializeField]internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
         }
         protected virtual void GetAnimator(){
@@ -69,7 +72,7 @@ namespace AKCondinoO.Sims.Actors{
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
      internal int layerCount{get;private set;}
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
-      WeaponTypes lastWeaponType=WeaponTypes.None;
+      internal WeaponTypes lastWeaponType=WeaponTypes.None;
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
      Dictionary<int,float>normalizedTime;
@@ -94,12 +97,12 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected void OnAnimationLooped(int layerIndex,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:currentClipName,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName);
          }
         }
         protected void OnAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotion(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
@@ -121,7 +124,7 @@ namespace AKCondinoO.Sims.Actors{
          Vector3 minLeft=actor.simActorCharacterController.characterController.transform.position+actor.simActorCharacterController.characterController.transform.rotation*(Vector3.left*minLeftDis);
          if(actor.navMeshAgent.enabled||actor.simActorCharacterController.isGrounded){
           Debug.DrawRay(maxRight,Vector3.down,Color.blue);
-          if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit)){
+          if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f,PhysUtil.considerGroundLayer)){
            Debug.DrawRay(rightFloorHit.point,rightFloorHit.normal);
            Vector3 bottom=actor.simActorCharacterController.characterController.bounds.center;
                    bottom.y=actor.simActorCharacterController.characterController.bounds.min.y;
@@ -151,7 +154,7 @@ namespace AKCondinoO.Sims.Actors{
                                           animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
           if(clipList.Count>0){
            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
-            Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
+            //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
             OnAnimationChanged(layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
@@ -171,40 +174,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
         protected virtual void UpdateMotion(BaseAI baseAI){
           if(lastMotion!=baseAI.motion){
-           Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
+           //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
-             if(baseAI is ArthurCondinoAI arthurCondinoAI){
-              if(lastWeaponType!=baseAI.weaponType){
-               if(weaponLayer.TryGetValue(baseAI.weaponType,out int layerIndex)){
-                layerTargetWeight[layerIndex]=1.0f;
-                if(weaponLayer.TryGetValue(lastWeaponType,out int lastLayerIndex)){
-                 layerTargetWeight[lastLayerIndex]=0.0f;
-                }
-                lastWeaponType=baseAI.weaponType;
-               }
-              }
-              if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
-               animator.SetBool("MOTION_RIFLE_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND);
-               animator.SetBool("MOTION_RIFLE_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE );
-                animator.SetFloat("MOTION_RIFLE_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
-                 animator.SetFloat("MOTION_RIFLE_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
-              }else{
-               animator.SetBool("MOTION_STAND",arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_STAND);
-               animator.SetBool("MOTION_MOVE" ,arthurCondinoAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-                animator.SetFloat("MOTION_MOVE_VELOCITY",arthurCondinoAI.moveVelocityFlattened);
-                 animator.SetFloat("MOTION_MOVE_TURN",arthurCondinoAI.turnAngle/180f);
-              }
-             }
+          if(motionUpdater==null){
+           if(actor.simUMAData!=null){
+            motionUpdater=actor.simUMAData.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
+           }
+           if(motionUpdater!=null){
+            motionUpdater.controller=this;
+           }
+          }
+          if(motionUpdater!=null){
+             motionUpdater.UpdateAnimatorWeaponLayer();
+             motionUpdater.UpdateAnimatorMotionValue();
+          }
           if(lastMotion!=baseAI.motion){
-           Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
+           //Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
           }
           lastMotion=baseAI.motion;
         }
      Coroutine layerTransitionCoroutine;
-      readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
-       readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
+      internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
+       internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
         IEnumerator LayerTransition(){
             Loop:{
              foreach(var layer in layerTargetWeight){
@@ -215,12 +209,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=5.0f*Core.magicDeltaTimeNumber;
+                weight-=8.0f*Core.magicDeltaTimeNumber;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=5.0f*Core.magicDeltaTimeNumber;
+                weight+=8.0f*Core.magicDeltaTimeNumber;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }

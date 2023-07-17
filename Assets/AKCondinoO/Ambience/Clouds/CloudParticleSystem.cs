@@ -32,7 +32,7 @@ namespace AKCondinoO.Ambience.Clouds{
      [SerializeField]float spawnInterval=20f;
       float spawnTimer;
         void Update(){
-         spawnTimer+=Core.magicDeltaTimeNumber;
+         spawnTimer+=Time.deltaTime;
          if(spawnTimer>=spawnInterval){
             spawnTimer=0f;
           OnSpawnParticle();

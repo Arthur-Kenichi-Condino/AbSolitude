@@ -41,7 +41,7 @@ namespace AKCondinoO.UI{
             netManager.NetworkConfig.Prefabs.Remove(networkPrefab);
            }
            toRemove.Clear();
-           foreach(var o in Resources.LoadAll("AKCondinoO/Sims/",typeof(GameObject))){
+           foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/",typeof(GameObject))){
             GameObject gameObject=(GameObject)o;
             SimObject  simObject=gameObject.GetComponent<SimObject>();
             if(simObject==null)continue;

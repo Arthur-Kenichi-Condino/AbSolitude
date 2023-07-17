@@ -1,47 +1,84 @@
 ﻿#if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using System.Collections.Generic;
+
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal enum ActorMotion:int{
-         MOTION_STAND=0,
-         MOTION_MOVE =1,
-         MOTION_RIFLE_STAND=50,
-         MOTION_RIFLE_MOVE =51,
+         MOTION_STAND =0,
+         MOTION_STAND_RIFLE =50,
+         MOTION_MOVE  =1,
+         MOTION_MOVE_RIFLE  =51,
+         MOTION_ATTACK=2,
+         MOTION_ATTACK_RIFLE=52,
         }
         internal virtual void UpdateMotion(bool fromAI){
          if(fromAI){
-          if(MyPathfinding==PathfindingResult.TRAVELLING){
+          if(onDoAttackSetMotion){
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
+               MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
               }else{
-               MyMotion=ActorMotion.MOTION_MOVE;
+               MyMotion=ActorMotion.MOTION_ATTACK;
               }
           }else{
-              if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_RIFLE_STAND;
+              if(MyPathfinding==PathfindingResult.TRAVELLING){
+                  if(MyWeaponType==WeaponTypes.SniperRifle){
+                   MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+                  }else{
+                   MyMotion=ActorMotion.MOTION_MOVE;
+                  }
               }else{
-               MyMotion=ActorMotion.MOTION_STAND;
+                  if(MyWeaponType==WeaponTypes.SniperRifle){
+                   MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                  }else{
+                   MyMotion=ActorMotion.MOTION_STAND;
+                  }
               }
           }
          }else{
           if(moveVelocityFlattened>0f){
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_RIFLE_MOVE;
+               MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
               }else{
                MyMotion=ActorMotion.MOTION_MOVE;
               }
           }else{
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_RIFLE_STAND;
+               MyMotion=ActorMotion.MOTION_STAND_RIFLE;
               }else{
                MyMotion=ActorMotion.MOTION_STAND;
               }
           }
          }
         }
-        internal virtual void OnShouldSetNextMotion(int layerIndex,string lastClipName,string currentClipName){
-         Log.DebugMessage("OnShouldSetNextMotion");
+     internal static readonly Dictionary<string,ActorMotion>animatorClipNameToActorMotion=new Dictionary<string,ActorMotion>();
+        internal bool MapAnimatorClipNameToActorMotion(string clipName,out ActorMotion?motion){
+         motion=null;
+         if(animatorClipNameToActorMotion.TryGetValue(clipName,out ActorMotion clipToMotion)){
+          motion=clipToMotion;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
+          return true;
+         }
+         if(clipName.Contains("MOTION_ATTACK")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
+          return true;
+         }
+         return false;
+        }
+        internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(int layerIndex,string currentClipName){
+         //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped");
+         if(onDoAttackSetMotion){
+          Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
+          if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){
+           Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
+           onDoAttackSetMotion=false;
+           MyMotion=ActorMotion.MOTION_STAND;
+          }
+         }
+        }
+        internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
         }
     }
 }

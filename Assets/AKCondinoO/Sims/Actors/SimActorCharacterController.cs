@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Inventory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal class SimActorCharacterController:MonoBehaviour{
+    internal partial class SimActorCharacterController:MonoBehaviour{
      internal SimActor actor;
      internal CharacterController characterController;
       internal Vector3 center;
@@ -58,7 +59,7 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
          }else if(delayToConsiderNotOnGround>0f){
-          delayToConsiderNotOnGround-=Core.magicDeltaTimeNumber;
+          delayToConsiderNotOnGround-=Time.deltaTime;
          }
          beforeMovePos=characterController.transform.position;
          if(!Enabled.RELEASE_MOUSE.curState){
@@ -139,14 +140,12 @@ namespace AKCondinoO.Sims.Actors{
          }
          if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
          if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
-         float divideBy=
-          (inputMoveVelocity.z!=0f?(Mathf.Abs(inputMoveVelocity.z)/(maxMoveSpeed.z)):0f)+
-          (inputMoveVelocity.x!=0f?(Mathf.Abs(inputMoveVelocity.x)/(maxMoveSpeed.x)):0f);
          appliedControllerVelocity=new Vector3(
           inputMoveVelocity.x,
           0f,
           inputMoveVelocity.z
-         )/(divideBy==0f?1f:divideBy);
+         );
+         appliedControllerVelocity=Vector3.Scale(appliedControllerVelocity,Vector3.Scale(appliedControllerVelocity.normalized,new Vector3(Mathf.Sign(appliedControllerVelocity.x),Mathf.Sign(appliedControllerVelocity.y),Mathf.Sign(appliedControllerVelocity.z))));
          if(jumpingTimer>0f){
          }else{
           characterController.SimpleMove(characterController.transform.rotation*appliedControllerVelocity);
@@ -154,6 +153,7 @@ namespace AKCondinoO.Sims.Actors{
          afterMovePos=characterController.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
          aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
+         ProcessAction1();
         }
     }
 }

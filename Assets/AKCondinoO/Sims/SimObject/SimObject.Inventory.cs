@@ -42,6 +42,9 @@ namespace AKCondinoO.Sims{
          }
         }
         protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings,SimObject simObjectAdded){
+         if(simInventory is SimHands simHands){
+          SetCurrentToolsOrWeapons(null,null);
+         }
         }
         internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
          simInventory.Remove(simObject.asInventoryItem,delete,!removingList);
@@ -66,6 +69,8 @@ namespace AKCondinoO.Sims{
           }
          }
          return false;
+        }
+        protected virtual void SetCurrentToolsOrWeapons(SimObject forAction1,SimObject forAction2){
         }
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
@@ -99,12 +104,12 @@ namespace AKCondinoO.Sims{
            if(simHands.asSimObject is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
             if(
              baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_STAND
+             baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
             ){
              transform.rotation*=rightHandGrabRot;
             }else if(
              baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_RIFLE_MOVE
+             baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE
             ){
              Quaternion rot=Quaternion.LookRotation(baseAI.simActorAnimatorController.animator.transform.forward,baseAI.simActorAnimatorController.animator.transform.up);
              if(ZAxisIsUp){

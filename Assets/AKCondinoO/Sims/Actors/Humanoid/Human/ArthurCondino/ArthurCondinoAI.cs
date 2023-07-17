@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
-         OnIDLE_ST_SetMySkill();
+         SetMySkill();
          base.OnIDLE_ST();
         }
         #if UNITY_EDITOR

@@ -48,7 +48,7 @@ namespace AKCondinoO.Sims.Inventory{
         protected override void Cleanup(){
         }
         protected override void Execute(){
-         Log.DebugMessage("Execute()");
+         //Log.DebugMessage("Execute()");
          //  TO DO: onSavedReleasedIds lists Clear;
          foreach(var simInventoryTypeIdNumberListPair in container.onSavedReleasedIds){
           Type simInventoryType=simInventoryTypeIdNumberListPair.Key;
@@ -59,7 +59,7 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var simInventoryDataBySimObjectTypeDictionary in container.simInventoryDataToSerializeToFile){
           Type simObjectType=simInventoryDataBySimObjectTypeDictionary.Key;
           var persistentSimInventoryDataToSave=simInventoryDataBySimObjectTypeDictionary.Value;
-          Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
+          //Log.DebugMessage("persistentSimInventoryDataToSave.Count:"+persistentSimInventoryDataToSave.Count);
           if(!simInventoryFileStream.ContainsKey(simObjectType)){
            goto _Skip;
           }
@@ -225,7 +225,7 @@ namespace AKCondinoO.Sims.Inventory{
            Type simInventoryType=simInventoryTypeNextIdNumberPair.Key;
            ulong nextIdNumber=simInventoryTypeNextIdNumberPair.Value;
            if(nextIdNumber>0){
-            Log.DebugMessage("t:"+simInventoryType+";nextId:"+nextIdNumber);
+            //Log.DebugMessage("t:"+simInventoryType+";nextId:"+nextIdNumber);
             idsStringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ type={0} , nextId={1} }} , endOfLine{2}",simInventoryType,nextIdNumber,Environment.NewLine);
            }
           }
