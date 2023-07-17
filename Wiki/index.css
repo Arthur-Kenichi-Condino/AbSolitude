@@ -1,0 +1,63 @@
+/* Reset CSS */
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  vertical-align: baseline;
+  list-style: none;
+}
+
+html,
+body {
+  color: white;
+  font-size: 18px ;
+  height: 100%;
+  font-family: "Carlito",sans-serif;
+  background-color: rgb(33, 33, 33);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  font-family: "Gantari";
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 8%;
+  background-color: rgb(57, 57, 57);
+}
+
+.wiki_name{
+  margin-left: 1rem;
+}
+
+.menu {
+  position: fixed;
+  width: 20vw;
+  border-right: 3px solid rgb(57, 57, 57);
+  height: 100vh;
+}
+
+.wiki {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20vw;
+  margin-top: 8vh;
+  padding: 1rem 3rem;
+  width: fit-content;
+}
+
+.title {
+  font-family: "Gantari";
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.title_0 {
+  font-size: 3rem;
+}
+
+.text {
+  color: rgb(224, 228, 235);
+  text-align: justify;
+}
