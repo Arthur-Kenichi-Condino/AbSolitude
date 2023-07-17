@@ -45,45 +45,47 @@ namespace AKCondinoO.Sims.Actors{
           initialized=true;
          }
          if(head!=null){
-          Vector3 animHeadPos=simActorAnimatorController.actor.GetHeadPosition(fromAnimator:true);
-          Quaternion animBodyRot=simActorAnimatorController.animator.transform.rotation;
-          Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
-          float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
-          //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
-          float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
-          //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
-          Quaternion limitedHeadRotation=
-           Quaternion.AngleAxis(Mathf.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
-           Quaternion.AngleAxis(Mathf.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
-           animBodyRot;
-          Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
-          //  TO DO: rotating? Or moving?
-          bool flag;
-          if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
-           //Log.DebugMessage("rotating body, set target head IK to forward");
-           headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
-           if(flag){
-            headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
-           }else{
-            headIKRotationStoppedTimer-=Time.deltaTime;
+          if(!simActorAnimatorController.actor.navMeshAgent.enabled){
+           Vector3 animHeadPos=simActorAnimatorController.actor.GetHeadPosition(fromAnimator:true);
+           Quaternion animBodyRot=simActorAnimatorController.animator.transform.rotation;
+           Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+           float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
+           //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
+           float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
+           //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
+           Quaternion limitedHeadRotation=
+            Quaternion.AngleAxis(Mathf.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
+            Quaternion.AngleAxis(Mathf.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
+            animBodyRot;
+           Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+           //  TO DO: rotating? Or moving?
+           bool flag;
+           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
+            //Log.DebugMessage("rotating body, set target head IK to forward");
+            headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+            if(flag){
+             headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
+            }else{
+             headIKRotationStoppedTimer-=Time.deltaTime;
+            }
            }
+           headLookAtPositionLerp.tgtPos=headLookAtPosition;
+           headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+           Quaternion headRot=Quaternion.LookRotation((headLookAtPositionLerped-animHeadPos).normalized,animBodyRot*Vector3.up);
+           float bodyToHeadRotYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,headRot);
+           //Log.DebugMessage("bodyToHeadRotYComponentSignedAngle:"+bodyToHeadRotYComponentSignedAngle);
+           float bodyToHeadRotXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,headRot);
+           //Log.DebugMessage("bodyToHeadRotXComponentSignedAngle:"+bodyToHeadRotXComponentSignedAngle);
+           if(Mathf.Abs(bodyToHeadRotYComponentSignedAngle)>headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance||
+              Mathf.Abs(bodyToHeadRotXComponentSignedAngle)>headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance//  tolerance
+           ){
+            Log.DebugMessage("angle between body and target head IK "+bodyToHeadRotYComponentSignedAngle+" is above "+(headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance)+" (or, vertically, "+bodyToHeadRotXComponentSignedAngle+", "+(headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance)+")");
+            headLookAtPositionLerp.tgtPosLerpTime=0f;
+            headLookAtPositionLerped=headLookAtPosition;
+           }
+           simActorAnimatorController.animator.SetLookAtWeight(1f);
+           simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
           }
-          headLookAtPositionLerp.tgtPos=headLookAtPosition;
-          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
-          Quaternion headRot=Quaternion.LookRotation((headLookAtPositionLerped-animHeadPos).normalized,animBodyRot*Vector3.up);
-          float bodyToHeadRotYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,headRot);
-          //Log.DebugMessage("bodyToHeadRotYComponentSignedAngle:"+bodyToHeadRotYComponentSignedAngle);
-          float bodyToHeadRotXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,headRot);
-          //Log.DebugMessage("bodyToHeadRotXComponentSignedAngle:"+bodyToHeadRotXComponentSignedAngle);
-          if(Mathf.Abs(bodyToHeadRotYComponentSignedAngle)>headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance||
-             Mathf.Abs(bodyToHeadRotXComponentSignedAngle)>headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance//  tolerance
-          ){
-           Log.DebugMessage("angle between body and target head IK "+bodyToHeadRotYComponentSignedAngle+" is above "+(headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance)+" (or, vertically, "+bodyToHeadRotXComponentSignedAngle+", "+(headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance)+")");
-           headLookAtPositionLerp.tgtPosLerpTime=0f;
-           headLookAtPositionLerped=headLookAtPosition;
-          }
-          simActorAnimatorController.animator.SetLookAtWeight(1f);
-          simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
          }
          if(leftFoot!=null&&rightFoot!=null){
           float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;

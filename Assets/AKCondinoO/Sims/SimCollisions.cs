@@ -234,6 +234,9 @@ namespace AKCondinoO.Sims{
         }
      internal readonly HashSet<Collider>simObjectColliders=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
+         if(!Core.singleton.isServer){
+          return;
+         }
          if(other.transform.root==this.transform.root){
           return;
          }
@@ -250,6 +253,9 @@ namespace AKCondinoO.Sims{
          }
         }
         void OnTriggerExit(Collider other){
+         if(!Core.singleton.isServer){
+          return;
+         }
          //Log.DebugMessage("SimCollisions:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectColliders.Remove(other);
          if(IsValidForCollision(other,out SimObject otherSimObject)){
