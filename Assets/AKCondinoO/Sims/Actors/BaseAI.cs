@@ -237,7 +237,9 @@ namespace AKCondinoO.Sims.Actors{
               if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.Random){
                rightSign=math_random.CoinFlip()?-1:1;
               }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoLeft){
+               rightSign=-1;
               }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoRight){
+               rightSign=1;
               }
               MyDest=actorHit.transform.root.position+((right*rightSign)*3.0f-forward*1.5f)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
               break;
