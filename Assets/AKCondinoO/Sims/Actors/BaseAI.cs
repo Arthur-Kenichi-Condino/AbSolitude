@@ -158,13 +158,32 @@ namespace AKCondinoO.Sims.Actors{
          }
          return Vector3.Distance(transform.root.position,a.collider.transform.root.position).CompareTo(Vector3.Distance(transform.root.position,b.collider.transform.root.position));
         }
+        internal enum OnChaseTimeoutReactionCodes:int{
+         Random=0,
+         GoLeft=22,
+         GoRight=30,
+         ResetCounter=38,
+        }
+     protected int onChaseTimeoutFailCount=0;
+      protected OnChaseTimeoutReactionCodes onChaseTimeoutReactionCode;
+        protected virtual void OnChaseTimeoutFail(){
+         if(++onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.ResetCounter){
+          onChaseTimeoutFailCount=0;
+         }
+         if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoLeft){
+          onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.GoLeft;
+         }else if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoRight){
+          onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.GoRight;
+         }else{
+          onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.Random;
+         }
+        }
      protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
      protected float onChaseRenewDestinationTimeInterval=2f;
       protected float onChaseRenewDestinationTimer=2f;
      protected float onChaseMyEnemyMovedSoChangeDestinationTimeInterval=.2f;
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
-     protected int onChaseTimeoutReactionCode=0;
         protected virtual void OnCHASE_ST(){
          if((onChaseMyEnemyPos_Last=onChaseMyEnemyPos)!=(onChaseMyEnemyPos=MyEnemy.transform.position)){
           onChaseMyEnemyMovedSoChangeDestination=true;
@@ -181,7 +200,7 @@ namespace AKCondinoO.Sims.Actors{
           !IsTraversingPath()
          ){
           if(MyPathfinding==PathfindingResult.TIMEOUT){
-           onChaseTimeoutReactionCode++;
+           OnChaseTimeoutFail();
           }
           moveToDestination|=true;
          }
@@ -214,7 +233,13 @@ namespace AKCondinoO.Sims.Actors{
               forward.y=actorHit.transform.root.position.y;
               forward.Normalize();
               Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
-              MyDest=actorHit.transform.root.position+(right*3.0f-forward*1.5f)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
+              int rightSign=1;
+              if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.Random){
+               rightSign=math_random.CoinFlip()?-1:1;
+              }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoLeft){
+              }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoRight){
+              }
+              MyDest=actorHit.transform.root.position+((right*rightSign)*3.0f-forward*1.5f)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
               break;
              }
             }

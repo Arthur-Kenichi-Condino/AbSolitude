@@ -79,7 +79,16 @@ namespace AKCondinoO.Voxels{
           }
             DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
          }
-         VoxelTerrainChunkUnnamedMessageHandler.messagesSent=0;
+         if(VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages>0f){
+          VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages-=Time.deltaTime;
+          if(VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages<=0f){
+           VoxelTerrainChunkUnnamedMessageHandler.messagesSent=0;
+          }
+         }else if(VoxelTerrainChunkUnnamedMessageHandler.messagesSent>0){
+          VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages=VoxelTerrainChunkUnnamedMessageHandler.totalLengthOfDataSent*VoxelTerrainChunkUnnamedMessageHandler.segmentSizeToTimeInSecondsDelayRatio;
+          VoxelTerrainChunkUnnamedMessageHandler.totalLengthOfDataSent=0;
+          Log.DebugMessage("VoxelSystem.Networking start globalCooldownToSendNewMessages:"+VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages);
+         }
          VoxelTerrainChunkUnnamedMessageHandler.sendingExecutionTime=0d;
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
