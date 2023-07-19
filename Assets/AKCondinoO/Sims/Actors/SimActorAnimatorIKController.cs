@@ -60,7 +60,7 @@ namespace AKCondinoO.Sims.Actors{
            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
            //  TO DO: rotating? Or moving?
            bool flag;
-           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
+           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
             //Log.DebugMessage("rotating body, set target head IK to forward");
             headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
             if(flag){

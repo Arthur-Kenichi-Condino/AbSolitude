@@ -222,7 +222,7 @@ namespace AKCondinoO.Sims.Actors{
              RaycastHit hit=onChaseInTheWayColliderHits[i];
              if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.simActorCharacterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
               Vector3 cross=Vector3.Cross(transform.root.position,actorHit.transform.root.position);
-              Debug.DrawLine(actorHit.transform.root.position,transform.root.position,Color.blue,1f);
+              //Debug.DrawLine(actorHit.transform.root.position,transform.root.position,Color.blue,1f);
               //Debug.DrawRay(actorHit.transform.root.position,cross,Color.cyan,1f);
               Vector3 right=cross;
               right.y=actorHit.transform.root.position.y;
@@ -232,8 +232,9 @@ namespace AKCondinoO.Sims.Actors{
               Vector3 forward=cross2;
               forward.y=actorHit.transform.root.position.y;
               forward.Normalize();
-              Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
+              //Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
               int rightSign=1;
+              float rightDis=1.0f;
               if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.Random){
                rightSign=math_random.CoinFlip()?-1:1;
               }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoLeft){
@@ -264,9 +265,9 @@ namespace AKCondinoO.Sims.Actors{
            onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
            simActorCharacterController.characterController.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
            Debug.DrawRay(simActorCharacterController.characterController.transform.position,simActorCharacterController.characterController.transform.forward,Color.gray);
-           if(simUMAData!=null){
-            Vector3 animatorLookDir=-simUMAData.transform.parent.forward;
-            Vector3 animatorLookEuler=simUMAData.transform.parent.eulerAngles;
+           if(simUMA!=null){
+            Vector3 animatorLookDir=-simUMA.transform.parent.forward;
+            Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles;
             animatorLookEuler.y+=180f;
             Vector3 animatorPlanarLookEuler=animatorLookEuler;
             animatorPlanarLookEuler.x=0f;

@@ -57,13 +57,13 @@ namespace AKCondinoO.Sims.Actors{
            weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
-           if(actor.simUMAData!=null){
-            actor.simUMAData.transform.parent.SetParent(null);
+           if(actor.simUMA!=null){
+            actor.simUMA.transform.parent.SetParent(null);
             GetTransformTgtValuesFromCharacterController();
             rotLerp.tgtRot_Last=rotLerp.tgtRot;
             posLerp.tgtPos_Last=posLerp.tgtPos;
-            actor.simUMAData.transform.parent.rotation=rotLerp.tgtRot;
-            actor.simUMAData.transform.parent.position=posLerp.tgtPos;
+            actor.simUMA.transform.parent.rotation=rotLerp.tgtRot;
+            actor.simUMA.transform.parent.position=posLerp.tgtPos;
            }
           }
          }
@@ -88,7 +88,7 @@ namespace AKCondinoO.Sims.Actors{
          if(animator!=null&&actor is BaseAI baseAI){
           GetTransformTgtValuesFromCharacterController();
           SetTransformTgtValuesUsingActorAndPhysicData();
-          if(actor.simUMAData!=null){
+          if(actor.simUMA!=null){
            SetSimUMADataTransform();
           }
           GetAnimatorStateInfo();
@@ -107,7 +107,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
          rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f));
-         posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMADataPosOffset;
+         posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMAPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
          actorLeft=-actor.transform.right;
@@ -141,8 +141,8 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void SetSimUMADataTransform(){
-         actor.simUMAData.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMAData.transform.parent.rotation,Core.magicDeltaTimeNumber);
-         actor.simUMAData.transform.parent.position=posLerp.UpdatePosition(actor.simUMAData.transform.parent.position,Core.magicDeltaTimeNumber);
+         actor.simUMA.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMA.transform.parent.rotation,Core.magicDeltaTimeNumber);
+         actor.simUMA.transform.parent.position=posLerp.UpdatePosition(actor.simUMA.transform.parent.position,Core.magicDeltaTimeNumber);
         }
         protected virtual void GetAnimatorStateInfo(){
          //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
@@ -180,8 +180,8 @@ namespace AKCondinoO.Sims.Actors{
            //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
           }
           if(motionUpdater==null){
-           if(actor.simUMAData!=null){
-            motionUpdater=actor.simUMAData.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
+           if(actor.simUMA!=null){
+            motionUpdater=actor.simUMA.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
            }
            if(motionUpdater!=null){
             motionUpdater.controller=this;

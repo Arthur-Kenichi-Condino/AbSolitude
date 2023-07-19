@@ -22,7 +22,7 @@ using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActor:SimObject{
-     [SerializeField]GameObject simUMADataPrefab;
+     [SerializeField]GameObject simUMAPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
         internal struct PersistentSimActorData{
@@ -127,8 +127,8 @@ namespace AKCondinoO.Sims.Actors{
              return persistentSimActorData;
             }
         }
-     internal DynamicCharacterAvatar simUMAData;
-      internal Vector3 simUMADataPosOffset;
+     internal DynamicCharacterAvatar simUMA;
+      internal Vector3 simUMAPosOffset;
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
@@ -140,11 +140,11 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActorAnimatorController simActorAnimatorController;
      internal AISensor aiSensor;
         protected override void Awake(){
-         if(simUMADataPrefab!=null){
-          simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
-          simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
-          Log.DebugMessage("simUMADataPosOffset:"+simUMADataPosOffset);
-          simUMAData.CharacterUpdated.AddAction(OnUMACharacterUpdated);
+         if(simUMAPrefab!=null){
+          simUMAPosOffset=simUMAPrefab.transform.localPosition;
+          simUMA=Instantiate(simUMAPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
+          Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
+          simUMA.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
          aiSensor=GetComponentInChildren<AISensor>();
@@ -172,21 +172,21 @@ namespace AKCondinoO.Sims.Actors{
          simActorAnimatorController.actor=this;
         }
      protected bool canSense;
-        void OnUMACharacterUpdated(UMAData simActorUMAData){
+        void OnUMACharacterUpdated(UMAData simUMAData){
          Log.DebugMessage("OnUMACharacterUpdated");
          if(head==null){
-          head=Util.FindChildRecursively(simUMAData.transform,"head");
+          head=Util.FindChildRecursively(simUMA.transform,"head");
           if(head==null){
-           head=Util.FindChildRecursively(simUMAData.transform,"face");
+           head=Util.FindChildRecursively(simUMA.transform,"face");
           }
           Log.DebugMessage("head:"+head);
          }
          if( leftEye==null){
-           leftEye=Util.FindChildRecursively(simUMAData.transform,"lEye");
+           leftEye=Util.FindChildRecursively(simUMA.transform,"lEye");
           Log.DebugMessage("lEye:"+ leftEye);
          }
          if(rightEye==null){
-          rightEye=Util.FindChildRecursively(simUMAData.transform,"rEye");
+          rightEye=Util.FindChildRecursively(simUMA.transform,"rEye");
           Log.DebugMessage("rEye:"+rightEye);
          }
          if(aiSensor){
@@ -196,17 +196,18 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          if( leftHand==null){
-           leftHand=Util.FindChildRecursively(simUMAData.transform,"lHand");
+           leftHand=Util.FindChildRecursively(simUMA.transform,"lHand");
           Log.DebugMessage("lHand:"+ leftHand);
          }
          if(rightHand==null){
-          rightHand=Util.FindChildRecursively(simUMAData.transform,"rHand");
+          rightHand=Util.FindChildRecursively(simUMA.transform,"rHand");
           Log.DebugMessage("rHand:"+rightHand);
          }
+         OnCreateHitHurtBoxes(simUMA,simUMAData);
         }
         public override void OnDestroy(){
-         if(simUMAData!=null){
-          DestroyImmediate(simUMAData.gameObject);
+         if(simUMA!=null){
+          DestroyImmediate(simUMA.gameObject);
          }
          base.OnDestroy();
         }
