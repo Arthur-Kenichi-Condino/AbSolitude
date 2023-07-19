@@ -1,63 +1,78 @@
-/* Reset CSS */
-* {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  vertical-align: baseline;
-  list-style: none;
+/*Reset CSS:*/
+*{
+  border:0;
+  list-style:none;
+  margin:0;
+  padding:0;
+  vertical-align:baseline;
 }
-
-html,
-body {
-  color: white;
-  font-size: 18px ;
-  height: 100%;
-  font-family: "Carlito",sans-serif;
-  background-color: rgb(33, 33, 33);
+html,body{
+  background-color:rgb(33,33,33);
+  color:white;
+  font-family:"Carlito",sans-serif;
+  font-size:18px;
+  height:100%;
 }
-
-header {
-  display: flex;
-  align-items: center;
-  font-family: "Gantari";
-  position: fixed;
-  width: 100%;
-  top: 0;
-  height: 8%;
-  background-color: rgb(57, 57, 57);
+header{
+  align-items:center;
+  background-color:rgb(57,57,57);
+  display:flex;
+  font-family:"Gantari";
+  height:8%;
+  position:fixed;
+  top:0;
+  width:100%;
 }
-
 .wiki_name{
-  margin-left: 1rem;
+  margin-left:1rem;
 }
-
-.menu {
-  position: fixed;
-  width: 20vw;
-  border-right: 3px solid rgb(57, 57, 57);
-  height: 100vh;
+.wiki_menu{
+  border-right:3px solid rgb(57,57,57);
+  height:91vh;
+  overflow:auto;
+  position:fixed;
+  top:8vh;
+  width:20vw;
 }
-
-.wiki {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20vw;
-  margin-top: 8vh;
-  padding: 1rem 3rem;
-  width: fit-content;
+.wiki_menu::-webkit-scrollbar{
+  background:rgb(33,33,33);
+  height:10px;
+  width:10px;
 }
-
-.title {
-  font-family: "Gantari";
-  font-size: 2rem;
-  margin: 1rem 0;
+.wiki_menu::-webkit-scrollbar-track{
+  background:rgb(33,33,33);
 }
-
-.title_0 {
-  font-size: 3rem;
+.wiki_menu::-webkit-scrollbar-thumb{
+  background:#888;
+  border-radius:10px;
 }
-
-.text {
-  color: rgb(224, 228, 235);
-  text-align: justify;
+.wiki_menu::-webkit-scrollbar-thumb:hover{
+  background:#555;
+}
+.wiki_menu::-webkit-scrollbar-thumb:horizontal{
+  background:#888;
+  border-radius:10px;
+}
+.wiki_menu::-webkit-scrollbar-thumb:horizontal:hover{
+  background:#555;
+}
+.wiki_content{
+  display:flex;
+  flex-direction:column;
+  margin-left:20vw;
+  margin-top:8vh;
+  padding:1rem 3rem;
+  width:fit-content;
+}
+.title{
+  font-family:"Gantari";
+  font-size:2rem;
+  margin:1rem 0;
+}
+.title_0{
+  font-size:3rem;
+}
+.text{
+  color:rgb(224,228,235);
+  text-align:justify;
 }
