@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims{
          this.tag="SimObjectVolume";
         }
      internal SimCollisions simCollisions;
+     internal Rigidbody kinematicRigidbody;
         internal void Activate(){
          this.gameObject.SetActive(true);
         }
