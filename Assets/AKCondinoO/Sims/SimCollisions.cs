@@ -37,6 +37,8 @@ namespace AKCondinoO.Sims{
             if(upperMiddleLowerValues!=null){
              SimCollisionsChildTrigger simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
              simCollisionsChild.gameObject.layer=simObject.gameObject.layer;
+             simCollisionsChild.kinematicRigidbody=simCollisionsChild.gameObject.AddComponent<Rigidbody>();
+             simCollisionsChild.kinematicRigidbody.isKinematic=true;
              simCollisionsChild.simCollisions=this;
              CapsuleCollider upperTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              upperTrigger.isTrigger=true;
@@ -49,6 +51,8 @@ namespace AKCondinoO.Sims{
              }
              simCollisionsChild=Instantiate(simCollisionsChildTriggerPrefab,transform).GetComponent<SimCollisionsChildTrigger>();
              simCollisionsChild.gameObject.layer=simObject.gameObject.layer;
+             simCollisionsChild.kinematicRigidbody=simCollisionsChild.gameObject.AddComponent<Rigidbody>();
+             simCollisionsChild.kinematicRigidbody.isKinematic=true;
              simCollisionsChild.simCollisions=this;
              CapsuleCollider middleTrigger=simCollisionsChild.AddComponent<CapsuleCollider>();
              middleTrigger.isTrigger=true;

@@ -560,7 +560,7 @@ namespace AKCondinoO.Sims{
         }
      [NonSerialized]private Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(bool instantCheck){
-         if(hasRigidbody!=null){
+         if(hasRigidbody!=null&&!hasRigidbody.isKinematic){
           return false;
          }
          if(this is SimActor){
@@ -634,7 +634,7 @@ namespace AKCondinoO.Sims{
         bool SetOverlapResult(Collider overlappedCollider){
          SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
          if(overlappedSimObject!=null){
-          if(!(overlappedSimObject is SimActor||overlappedSimObject.hasRigidbody!=null)){
+          if(!(overlappedSimObject is SimActor||(overlappedSimObject.hasRigidbody!=null&&!overlappedSimObject.hasRigidbody.isKinematic))){
            return true;
           }
          }
