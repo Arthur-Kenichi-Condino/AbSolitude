@@ -29,27 +29,27 @@ namespace AKCondinoO.Sims.Actors.Combat{
          Vector3[]vertices=new Vector3[verticesCount];
           int[]triangles=new int[verticesCount];
          float deltaHeight=height/segments.y;
-         float currentHeight1=-height/2f;
-         Vector2 deltaAngle=new Vector2(angleHorizontal*2f/segments.x,angleVertical*2f/segments.y);
-         Vector2 currentAngle1=new Vector2(-angleHorizontal,-angleVertical);
+         float height1=-height/2f;
+         Vector2 deltaAngle=new Vector2(angleHorizontal*2f/segments.x,-angleVertical*2f/segments.y);
+         Vector2 angles1=new Vector2(-angleHorizontal,angleVertical);
          int v=0;
-         Vector3 bottomBack ;//=Vector3.down*(-height/2f);
-         Vector3 bottomLeft ;//=Vector3.down*(height/2f)+Quaternion.Euler(-angleVertical,-angleHorizontal,0)*Vector3.forward*distance;
-         Vector3 bottomRight;//=Vector3.down*(height/2f)+Quaternion.Euler(-angleVertical, angleHorizontal,0)*Vector3.forward*distance;
-         Vector3 topBack ;//=Vector3.up*(height/2f);
-         Vector3 topLeft ;//=Vector3.up*(height/2f)+Quaternion.Euler(angleVertical,-angleHorizontal,0)*Vector3.forward*distance;
-         Vector3 topRight;//=Vector3.up*(height/2f)+Quaternion.Euler(angleVertical, angleHorizontal,0)*Vector3.forward*distance;
+         Vector3 bottomBack ;
+         Vector3 bottomLeft ;
+         Vector3 bottomRight;
+         Vector3 topBack ;
+         Vector3 topLeft ;
+         Vector3 topRight;
          for(int y=0;y<segments.y;++y){
-          bottomBack =Vector3.up*currentHeight1;
-          float currentHeight2=currentHeight1;
-          currentHeight1+=deltaHeight;
-          topBack =Vector3.up*currentHeight1;
-          bottomLeft =bottomBack+Quaternion.Euler(currentAngle1.y,-angleHorizontal,0)*Vector3.forward*distance;
-          bottomRight=bottomBack+Quaternion.Euler(currentAngle1.y, angleHorizontal,0)*Vector3.forward*distance;
-          Vector2 currentAngle2=currentAngle1;
-          currentAngle1.y+=deltaAngle.y;
-          topLeft =topBack+Quaternion.Euler(currentAngle1.y,-angleHorizontal,0)*Vector3.forward*distance;
-          topRight=topBack+Quaternion.Euler(currentAngle1.y, angleHorizontal,0)*Vector3.forward*distance;
+          bottomBack =Vector3.up*height1;
+          float height2=height1;
+          height2+=deltaHeight;
+          topBack =Vector3.up*height2;
+          bottomLeft =bottomBack+Quaternion.Euler(angles1.y,-angleHorizontal,0)*Vector3.forward*distance;
+          bottomRight=bottomBack+Quaternion.Euler(angles1.y, angleHorizontal,0)*Vector3.forward*distance;
+          Vector2 angles2=angles1;
+          angles2.y+=deltaAngle.y;
+          topLeft =topBack+Quaternion.Euler(angles2.y,-angleHorizontal,0)*Vector3.forward*distance;
+          topRight=topBack+Quaternion.Euler(angles2.y, angleHorizontal,0)*Vector3.forward*distance;
           //  left side
           vertices[v++]=bottomBack;
           vertices[v++]=bottomLeft;
@@ -64,12 +64,14 @@ namespace AKCondinoO.Sims.Actors.Combat{
           vertices[v++]=topRight;
           vertices[v++]=bottomRight;
           vertices[v++]=bottomBack;
+          Vector2 angles3=angles1;
+          Vector2 angles4=angles2;
           for(int x=0;x<segments.x;++x){
-           bottomLeft =bottomBack+Quaternion.Euler(currentAngle2.y,currentAngle2.x,0)*Vector3.forward*distance;
-           topLeft =topBack+Quaternion.Euler(currentAngle1.y,currentAngle2.x,0)*Vector3.forward*distance;
-           currentAngle2.x+=deltaAngle.x;
-           bottomRight=bottomBack+Quaternion.Euler(currentAngle2.y,currentAngle2.x,0)*Vector3.forward*distance;
-           topRight=topBack+Quaternion.Euler(currentAngle1.y,currentAngle2.x,0)*Vector3.forward*distance;
+           bottomLeft =bottomBack+Quaternion.Euler(angles4.y,angles4.x,0)*Vector3.forward*distance;
+              topLeft =   topBack+Quaternion.Euler(angles3.y,angles4.x,0)*Vector3.forward*distance;
+           angles4.x+=deltaAngle.x;
+           bottomRight=bottomBack+Quaternion.Euler(angles4.y,angles4.x,0)*Vector3.forward*distance;
+              topRight=   topBack+Quaternion.Euler(angles3.y,angles4.x,0)*Vector3.forward*distance;
            //  far side
            vertices[v++]=bottomLeft;
            vertices[v++]=bottomRight;
@@ -90,6 +92,8 @@ namespace AKCondinoO.Sims.Actors.Combat{
             vertices[v++]=topRight;
            }
           }
+          height1=height2;
+          angles1=angles2;
          }
          for(int i=0;i<verticesCount;++i){
           triangles[i]=i;
