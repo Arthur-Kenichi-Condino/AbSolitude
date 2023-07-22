@@ -173,61 +173,12 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal readonly Dictionary<string,Transform>nameToBodyPart=new Dictionary<string,Transform>();
      protected bool canSense;
-        void OnUMACharacterUpdated(UMAData simUMAData){
-         Log.DebugMessage("OnUMACharacterUpdated");
-         if(head==null){
-          head=Util.FindChildRecursively(simUMA.transform,"head");
-          if(head==null){
-           head=Util.FindChildRecursively(simUMA.transform,"face");
-          }
-          if(head!=null){
-           nameToBodyPart["head"]=head;
-          }
-          Log.DebugMessage("head:"+head);
-         }
-         if( leftEye==null){
-           leftEye=Util.FindChildRecursively(simUMA.transform,"lEye");
-          if( leftEye!=null){
-           nameToBodyPart[ "leftEye"]= leftEye;
-          }
-          Log.DebugMessage( "leftEye:"+ leftEye);
-         }
-         if(rightEye==null){
-          rightEye=Util.FindChildRecursively(simUMA.transform,"rEye");
-          if(rightEye!=null){
-           nameToBodyPart["rightEye"]=rightEye;
-          }
-          Log.DebugMessage("rightEye:"+rightEye);
-         }
+        protected virtual void OnUMACharacterUpdated(UMAData simUMAData){
          if(aiSensor){
           if(head||leftEye||rightEye){
            Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
            canSense=true;
           }
-         }
-         if( leftHand==null){
-           leftHand=Util.FindChildRecursively(simUMA.transform,"lHand");
-          if( leftHand!=null){
-           nameToBodyPart[ "leftHand"]= leftHand;
-          }
-          Log.DebugMessage( "leftHand:"+ leftHand);
-         }
-         if(rightHand==null){
-          rightHand=Util.FindChildRecursively(simUMA.transform,"rHand");
-          if(rightHand!=null){
-           nameToBodyPart["rightHand"]=rightHand;
-          }
-          Log.DebugMessage("rightHand:"+rightHand);
-         }
-         Transform abdomen=null;
-         abdomen=Util.FindChildRecursively(simUMA.transform,"abdomenLower");
-         if(abdomen!=null){
-          nameToBodyPart.Add("abdomen",abdomen);
-         }
-         Transform chest=null;
-         chest=Util.FindChildRecursively(simUMA.transform,"chestUpper");
-         if(chest!=null){
-          nameToBodyPart.Add("chest",chest);
          }
          OnCreateHitHurtBoxes(simUMA,simUMAData);
         }
