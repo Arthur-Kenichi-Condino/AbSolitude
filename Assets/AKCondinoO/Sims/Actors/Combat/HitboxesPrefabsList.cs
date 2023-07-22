@@ -6,5 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     internal class HitboxesPrefabsList:MonoBehaviour{
+     [SerializeField]internal Hitboxes[]prefabs;
     }
 }
