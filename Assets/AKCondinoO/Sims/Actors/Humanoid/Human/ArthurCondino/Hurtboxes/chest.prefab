@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8343810164730002960}
   - component: {fileID: 6140848864193200562}
   m_Layer: 31
-  m_Name: abdomen
+  m_Name: chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7718159086325061795}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.13960512, y: 0, z: 0, w: 0.99020725}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 24
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -16.05, y: 0, z: 0}
 --- !u!114 &8343810164730002960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,5 +64,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.27, y: 0.335, z: 0.175}
-  m_Center: {x: 0, y: 0.065, z: 0.027}
+  m_Size: {x: 0.32528052, y: 0.20875, z: 0.1755}
+  m_Center: {x: 0, y: 0, z: 0.0425}
