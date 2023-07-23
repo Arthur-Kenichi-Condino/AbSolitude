@@ -165,7 +165,7 @@ Material:
     - _fogIntensity: 1
     - _fogStartDis: 88
     - _height: 0.02
-    - _heightDistortion: 0.0125
+    - _heightDistortion: 0.03
     - _rows: 3
     - _scale: 0.25
     - _sharpness: 1.25
