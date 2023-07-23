@@ -182,6 +182,17 @@ namespace AKCondinoO.Sims.Actors{
          }
          OnCreateHitHurtBoxes(simUMA,simUMAData);
         }
+        protected void SetBodyPart(string name,string transformChildName,out Transform bodyPart){
+         if(!nameToBodyPart.TryGetValue(name,out bodyPart)||bodyPart==null){
+          bodyPart=Util.FindChildRecursively(simUMA.transform,transformChildName);
+          if(bodyPart!=null){
+           nameToBodyPart[name]=bodyPart;
+          }else{
+           nameToBodyPart.Remove(name);
+          }
+         }
+         Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
+        }
         public override void OnDestroy(){
          if(simUMA!=null){
           DestroyImmediate(simUMA.gameObject);
