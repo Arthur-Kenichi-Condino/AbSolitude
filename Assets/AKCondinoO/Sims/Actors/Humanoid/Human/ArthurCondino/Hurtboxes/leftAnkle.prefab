@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8343810164730002960}
   - component: {fileID: 6140848864193200562}
   m_Layer: 31
-  m_Name: leftShin
+  m_Name: leftAnkle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7718159086325061795}
-  m_LocalRotation: {x: 0.008208626, y: 0.9854703, z: -0.009125984, w: 0.16940382}
+  m_LocalRotation: {x: 0.03158332, y: 0.9764284, z: -0.01875962, w: 0.21269263}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 1.19, y: 160.5, z: 0.75}
+  m_LocalEulerAnglesHint: {x: 2.87, y: 155.5, z: 3.082}
 --- !u!114 &8343810164730002960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,5 +64,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.11383808, y: 0.26855946, z: 0.13495587}
-  m_Center: {x: 0.01710038, y: 0.13671012, z: -0.01298206}
+  m_Size: {x: 0.09030228, y: 0.18354863, z: 0.0985778}
+  m_Center: {x: 0.0191301, y: 0.33775198, z: -0.03539619}
