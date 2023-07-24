@@ -150,6 +150,8 @@ namespace AKCondinoO.Sims{
      internal Transform rightEye;
      internal Transform  leftHand;
      internal Transform rightHand;
+     internal Transform  leftFoot;
+     internal Transform rightFoot;
      internal LinkedListNode<SimObject>pooled; 
      internal(Type simObjectType,ulong idNumber)?id=null;
      internal(Type simObjectType,ulong idNumber)?masterId=null;
