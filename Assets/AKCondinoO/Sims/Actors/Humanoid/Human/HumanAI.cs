@@ -18,6 +18,10 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human{
          SetBodyPart("pelvis","pelvis",out _);
          SetBodyPart( "leftThigh","lThighTwist",out _);
          SetBodyPart("rightThigh","rThighTwist",out _);
+         SetBodyPart( "leftKnee","lShin",out _);
+         SetBodyPart("rightKnee","rShin",out _);
+         SetBodyPart( "leftShin","lShin",out _);
+         SetBodyPart("rightShin","rShin",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
         internal override void OnActivated(){
