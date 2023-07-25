@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.size
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.data[0]
@@ -68,6 +68,14 @@ PrefabInstance:
       propertyPath: prefabs.Array.data[13]
       value: 
       objectReference: {fileID: 8343810164730002960, guid: 7b778d5f4435b094da76af0735991b7f, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[14]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: c96625c08a8b95247a8166c716ebee38, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[15]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 80a5b252a7e805349a1eeec69127d1a9, type: 3}
     - target: {fileID: 6394357566084382521, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: m_Name
       value: ArthurCondinoHurtboxesPrefabsList
