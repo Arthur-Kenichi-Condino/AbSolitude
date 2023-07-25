@@ -28,6 +28,8 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human{
          SetBodyPart("rightFoot","rFoot",out rightFoot);
          SetBodyPart( "leftArm","lShldrBend",out _);
          SetBodyPart("rightArm","rShldrBend",out _);
+         SetBodyPart( "leftForearm","lForearmTwist",out _);
+         SetBodyPart("rightForearm","rForearmTwist",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
         internal override void OnActivated(){
