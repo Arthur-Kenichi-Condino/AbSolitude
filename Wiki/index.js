@@ -1,4 +1,39 @@
-//Paths
+const rootPath=".\\WikiContent/";
+const hierarchy={};
+import{RequestDirectoryHierarchyRecursivelyExport as RequestDirectoryHierarchyRecursively}from"./hierarchy.js"
+RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
+const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_text");
+var sentRequestsCount=1;
+function ParseMenuText(newRequestsCount){
+  sentRequestsCount+=newRequestsCount;
+  sentRequestsCount--;
+  console.log("ParseMenuText:sentRequestsCount:"+sentRequestsCount);
+  if(sentRequestsCount<=0){
+    var menuText=[];
+    function DoForEachRecursively(hierarchyObj){
+      for(var key in hierarchyObj){
+        if(key=="files"){
+          console.log("ParseMenuText for files");
+          for(var key2 in hierarchyObj[key]){
+            var fileInHierarchy=hierarchyObj[key][key2];
+            console.log("ParseMenuText:fileInHierarchy:"+fileInHierarchy);
+          }
+          continue;
+        }
+        if(typeof key=="string"&&key.endsWith("/")){
+          console.log("ParseMenuText:doing parse:next key"+key);
+          menuText.push(key+"\n");
+          DoForEachRecursively(hierarchyObj[key]);
+        }
+      }
+    }
+    console.log("ParseMenuText:do parsing now");
+    DoForEachRecursively(hierarchy);
+    CreateDOMelement(menuObj,menuText.join(),0);
+  }
+  //document.getElementsByClassName("menu_text")[0].innerHTML=string;
+  //console.log(document.getElementsByClassName("menu_text")[0].innerHTML);
+}
 
 const root = "WikiContent";
 const homunculusSystem = "HomunculusSystem";
@@ -59,19 +94,10 @@ function ParseText(text) {
 
 ParseText(text);
 
-const menuObj = new CreateDOMobject(".wiki_menu", "menu_section", "menu_text");
-
-function testthis(string){
-  console.log("testthis");
-  CreateDOMelement(menuObj, string, 0);
-  document.getElementsByClassName("menu_text")[0].innerHTML=string;
-  console.log(document.getElementsByClassName("menu_text")[0].innerHTML);
-}
 //testthis();
 //export const testthisExport=testthis;
 //const module = {};
-import { RequestDirectoryHierarchyRecursivelyExport as RequestDirectoryHierarchyRecursively } from "./hierarchy.js"
-RequestDirectoryHierarchyRecursively(0,testthis)
+
 //window.onload=function(){
 //const hierarchy1 = require("./hierarchy.js"); 
 //hierarchy1.RequestDirectoryHierarchyRecursivelyHTML(0);
