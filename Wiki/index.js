@@ -1,15 +1,21 @@
 const rootPath=".\\WikiContent/";
 const hierarchy={};
 import{RequestDirectoryHierarchyRecursivelyExport as RequestDirectoryHierarchyRecursively}from"./hierarchy.js"
-RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
+//  create DOM element object
+function CreateDOMobject(parent,child,className){
+  this.parent=parent;
+  this.child=child;
+  this.className=className;
+}
 const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_text");
+RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
 var sentRequestsCount=1;
 function ParseMenuText(newRequestsCount){
   sentRequestsCount+=newRequestsCount;
   sentRequestsCount--;
   console.log("ParseMenuText:sentRequestsCount:"+sentRequestsCount);
   if(sentRequestsCount<=0){
-    var menuText=[];
+    //var menuText=[];
     function DoForEachRecursively(hierarchyObj){
       for(var key in hierarchyObj){
         if(key=="files"){
@@ -22,18 +28,32 @@ function ParseMenuText(newRequestsCount){
         }
         if(typeof key=="string"&&key.endsWith("/")){
           console.log("ParseMenuText:doing parse:next key"+key);
-          menuText.push(key+"\n");
+          //menuText.push(key+"\n");
+          CreateMenuDOMelement(menuObj,key,0);
           DoForEachRecursively(hierarchyObj[key]);
         }
       }
     }
     console.log("ParseMenuText:do parsing now");
     DoForEachRecursively(hierarchy);
-    CreateDOMelement(menuObj,menuText.join(),0);
+    //CreateDOMelement(menuObj,menuText.join(),0);
   }
+}
+//  DOM element, using Jquery
+function CreateMenuDOMelement(options,content,index){
+  const element=document.createElement(options.child);
+  $(options.parent).append(element);
+  $(element).addClass(`${options.className} ${options.className}_${index}`);
+  const button=document.createElement("BUTTON");
+  $(element).append(button);
+  const buttonText=document.createTextNode(content);
+  $(button).append(buttonText);
+  console.log(`wiki menu:DOM element created: ${options.child} ;element classes: ${element.className} ;button: ${button}`);
+}
+
   //document.getElementsByClassName("menu_text")[0].innerHTML=string;
   //console.log(document.getElementsByClassName("menu_text")[0].innerHTML);
-}
+
 
 const root = "WikiContent";
 const homunculusSystem = "HomunculusSystem";
@@ -64,13 +84,6 @@ function CreateDOMelement(options, content, index) {
   //console.log(`Element created: ${options.child} - ${index}`);
 }
 
-// DOM create element object 
-
-function CreateDOMobject(parent, child, className) {
-  this.parent = parent;
-  this.child = child;
-  this.className = className;
-}
 
 //Parse text
 

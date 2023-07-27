@@ -28,6 +28,8 @@ header{
 }
 .wiki_menu{
   border-right:3px solid rgb(57,57,57);
+  display:flex;
+  flex-direction:column;
   height:91vh;
   overflow:auto;
   position:fixed;
@@ -55,6 +57,15 @@ header{
 }
 .wiki_menu::-webkit-scrollbar-thumb:horizontal:hover{
   background:#555;
+}
+.menu_section{
+  background:rgb(33,33,33);
+}
+.menu_text{
+  background:rgb(33,33,33);
+}
+.menu_text_0{
+  background:rgb(33,33,33);
 }
 .wiki_content{
   display:flex;
