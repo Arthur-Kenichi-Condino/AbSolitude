@@ -13,11 +13,11 @@ namespace AKCondinoO.Sims.Actors{
       internal float headMaxHorizontalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxHorizontalRotationAngle;}}
        internal float headIKLimitedHorizontalRotationAngleTolerance=7f;
      bool initialized=false;
-     internal Transform      head;
+     internal Transform      head{get{return simActorAnimatorController.actor.head;}}
      [SerializeField]internal Vector3PosLerpHelper headLookAtPositionLerp=new Vector3PosLerpHelper();
       Vector3 headLookAtPositionLerped;
-     internal Transform  leftFoot;
-     internal Transform rightFoot;
+     internal Transform  leftFoot{get{return simActorAnimatorController.actor. leftFoot;}}
+     internal Transform rightFoot{get{return simActorAnimatorController.actor.rightFoot;}}
       internal float footHeight=.075f;
      [SerializeField]float headOnIKRotationStoppedCooldown=.1f;
       float headIKRotationStoppedTimer=0f;
@@ -33,12 +33,12 @@ namespace AKCondinoO.Sims.Actors{
         void OnAnimatorIK(int layerIndex){
          //Log.DebugMessage("OnAnimatorIK:layerIndex:"+layerIndex);
          if(!initialized){
-               head=Util.FindChildRecursively(transform, "head");
+               //head=Util.FindChildRecursively(transform, "head");
           if(head!=null){
            Log.DebugMessage("OnAnimatorIK:found head Bone");
           }
-           leftFoot=Util.FindChildRecursively(transform,"lFoot");
-          rightFoot=Util.FindChildRecursively(transform,"rFoot");
+          // leftFoot=Util.FindChildRecursively(transform,"lFoot");
+          //rightFoot=Util.FindChildRecursively(transform,"rFoot");
           if(leftFoot!=null&&rightFoot!=null){
            Log.DebugMessage("OnAnimatorIK:found feet Bones");
           }
@@ -60,7 +60,7 @@ namespace AKCondinoO.Sims.Actors{
            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
            //  TO DO: rotating? Or moving?
            bool flag;
-           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMAData.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
+           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
             //Log.DebugMessage("rotating body, set target head IK to forward");
             headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
             if(flag){
@@ -98,7 +98,7 @@ namespace AKCondinoO.Sims.Actors{
            leftFoot.position.z
           );
           Vector3 leftToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorLeft*(disBetweenFeet/2f));
-          if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit)){
+          if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit,simActorAnimatorController.actor.height,PhysUtil.considerGroundLayer)){
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
@@ -113,7 +113,7 @@ namespace AKCondinoO.Sims.Actors{
            rightFoot.position.z
           );
           Vector3 rightToFloorRaycastOrigin=simActorAnimatorController.actor.transform.position+(simActorAnimatorController.actorRight*(disBetweenFeet/2f));
-          if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit)){
+          if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit,simActorAnimatorController.actor.height,PhysUtil.considerGroundLayer)){
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);

@@ -6,6 +6,7 @@ using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UMA;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{

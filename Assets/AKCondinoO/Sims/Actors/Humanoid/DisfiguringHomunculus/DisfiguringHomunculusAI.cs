@@ -4,9 +4,15 @@
 using AKCondinoO.Sims.Inventory;
 using System.Collections;
 using System.Collections.Generic;
+using UMA;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid{
     internal class DisfiguringHomunculusAI:HumanoidAI{
+        protected override void OnUMACharacterUpdated(UMAData simUMAData){
+         Log.DebugMessage("OnUMACharacterUpdated");
+         SetBodyPart("head","face",out head);
+         base.OnUMACharacterUpdated(simUMAData);
+        }
         internal override bool IsMonster(){
          return true;
         }
