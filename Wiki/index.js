@@ -55,11 +55,12 @@ function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
   const element=document.createElement(options.child);
   $(options.parent).append(element);
   $(element).addClass(`${options.className} ${options.className}_${index}`);
+  var menuItemText=path.substring(path.lastIndexOf("\\")+1,path.lastIndexOf("/"));
   var button=null;
   if(contentTxtFile!=null){
     button=document.createElement("BUTTON");
     $(element).append(button);
-    const buttonText=document.createTextNode(path);
+    const buttonText=document.createTextNode(menuItemText);
     $(button).append(buttonText);
     $(button).addClass(`${options.className}_button ${options.className}_button_${index}`);
     button.onclick=async function(){
@@ -69,7 +70,7 @@ function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
       ParseContentText(contentText);
     };
   }else{
-    $(element).text(path);
+    $(element).text(menuItemText);
   }
   console.log(`wiki menu:DOM element created: ${options.child} ;element classes: ${element.className} ;button: ${button}`);
 }
@@ -78,9 +79,9 @@ function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
   //console.log(document.getElementsByClassName("menu_text")[0].innerHTML);
 
 
-const root = "WikiContent";
-const homunculusSystem = "HomunculusSystem";
-const selectedHomunculus = "Vanilmirth";
+//const root = "WikiContent";
+//const homunculusSystem = "HomunculusSystem";
+//const selectedHomunculus = "Vanilmirth";
 
 async function FetchTextFromFile(path) {
   const response = await fetch(path);
@@ -90,9 +91,9 @@ async function FetchTextFromFile(path) {
   return splitedText;
 }
 
-const text = await FetchTextFromFile(
-  root + "/" + homunculusSystem + "/" + selectedHomunculus + "/" + "Content.txt"
-);
+//const text = await FetchTextFromFile(
+//  root + "/" + homunculusSystem + "/" + selectedHomunculus + "/" + "Content.txt"
+//);
 
 //Parse text functions
 
