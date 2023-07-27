@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.size
-      value: 16
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.data[0]
@@ -76,6 +76,34 @@ PrefabInstance:
       propertyPath: prefabs.Array.data[15]
       value: 
       objectReference: {fileID: 8343810164730002960, guid: 80a5b252a7e805349a1eeec69127d1a9, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[16]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: dfeb2e942801cf84e948c7284d5ffbae, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[17]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 2c07880ef56469442ae2b0f4b49836f6, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[18]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 50f80dafd30fa4e41b4f22bd7b433252, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[19]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 2eb08393e9defda4ab2cc3cdc105dabb, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[20]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: b017b755c40f05a4391a4a94815c11a5, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[21]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: e61c912a8dc658649a4df41ba4fa5eea, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[22]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: f2756ae00cf59924691e47957eed0ef6, type: 3}
     - target: {fileID: 6394357566084382521, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: m_Name
       value: ArthurCondinoHurtboxesPrefabsList
