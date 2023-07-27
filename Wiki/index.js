@@ -15,7 +15,7 @@ function ParseMenuText(newRequestsCount){
   sentRequestsCount--;
   console.log("ParseMenuText:sentRequestsCount:"+sentRequestsCount);
   if(sentRequestsCount<=0){
-    function DoForEachRecursively(hierarchyObj,hierarchyPath){
+    function DoForEachRecursively(hierarchyObj,hierarchyPath,hierarchyParentElement){
       var contentTxtFile=null;
       for(var key in hierarchyObj){
         if(key=="files"){
@@ -32,7 +32,7 @@ function ParseMenuText(newRequestsCount){
         }
       }
       if(hierarchyPath!=null){
-        CreateMenuDOMelement(menuObj,hierarchyPath,0,contentTxtFile);
+        hierarchyParentElement=CreateMenuDOMelement(menuObj,hierarchyPath,0,hierarchyParentElement,contentTxtFile);
       }
       for(var key in hierarchyObj){
         if(key=="files"){
@@ -40,20 +40,24 @@ function ParseMenuText(newRequestsCount){
         }
         if(typeof key=="string"&&key.endsWith("/")){
           console.log("ParseMenuText:doing parse:next key:"+key);
-          DoForEachRecursively(hierarchyObj[key],key);
+          DoForEachRecursively(hierarchyObj[key],key,hierarchyParentElement);
           continue;
         }
       }
     }
     console.log("ParseMenuText:do parsing now!");
-    DoForEachRecursively(hierarchy,null);
+    DoForEachRecursively(hierarchy,null,null);
   }
 }
 //  DOM element, using Jquery
-function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
-  console.log("CreateMenuDOMelement:path:"+path+";contentTxtFile:"+contentTxtFile);
+function CreateMenuDOMelement(options,path,index,parent=null,contentTxtFile=null){
+  console.log("CreateMenuDOMelement:path:"+path+";parent:"+parent+";contentTxtFile:"+contentTxtFile);
   const element=document.createElement(options.child);
-  $(options.parent).append(element);
+  if(parent!=null){
+    $(parent).append(element);
+  }else{
+    $(options.parent).append(element);
+  }
   $(element).addClass(`${options.className} ${options.className}_${index}`);
   var menuItemText=path.substring(path.lastIndexOf("\\")+1,path.lastIndexOf("/"));
   var button=null;
@@ -73,6 +77,7 @@ function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
     $(element).text(menuItemText);
   }
   console.log(`wiki menu:DOM element created: ${options.child} ;element classes: ${element.className} ;button: ${button}`);
+  return element;
 }
 
   //document.getElementsByClassName("menu_text")[0].innerHTML=string;
