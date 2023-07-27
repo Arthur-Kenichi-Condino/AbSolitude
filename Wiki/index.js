@@ -66,7 +66,7 @@ function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
       var contentTxtFilePathToFetch=contentTxtFile.substring(1).replaceAll("\\","/");
       console.log("contentTxtFilePathToFetch:"+contentTxtFilePathToFetch);
       const contentText=await FetchTextFromFile(contentTxtFilePathToFetch);
-      ParseContentText(text);
+      ParseContentText(contentText);
     };
   }else{
     $(element).text(path);
