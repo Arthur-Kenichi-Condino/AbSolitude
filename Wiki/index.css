@@ -61,11 +61,27 @@ header{
 .menu_section{
   background:rgb(33,33,33);
 }
-.menu_text{
+.menu_item{
+  background:rgb(33,33,33);
+  color:rgb(224,228,235);
+  font-family:"Gantari";
+  font-size:16px;
+  font-weight:bold;
+  padding:4px 4px;
+}
+.menu_item_0{
   background:rgb(33,33,33);
 }
-.menu_text_0{
-  background:rgb(33,33,33);
+.menu_item_button{
+  background:rgb(224,228,235);
+  border-radius: 8px;
+  color:rgb(33,33,33);
+  font-family:"Gantari";
+  font-size:16px;
+  font-weight:bold;
+}
+.menu_item_button_0{
+  background:rgb(224,228,235);
 }
 .wiki_content{
   display:flex;

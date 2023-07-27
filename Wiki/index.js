@@ -7,7 +7,7 @@ function CreateDOMobject(parent,child,className){
   this.child=child;
   this.className=className;
 }
-const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_text");
+const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_item");
 RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
 var sentRequestsCount=1;
 function ParseMenuText(newRequestsCount){
@@ -15,39 +15,62 @@ function ParseMenuText(newRequestsCount){
   sentRequestsCount--;
   console.log("ParseMenuText:sentRequestsCount:"+sentRequestsCount);
   if(sentRequestsCount<=0){
-    //var menuText=[];
-    function DoForEachRecursively(hierarchyObj){
+    function DoForEachRecursively(hierarchyObj,hierarchyPath){
+      var contentTxtFile=null;
       for(var key in hierarchyObj){
         if(key=="files"){
           console.log("ParseMenuText for files");
           for(var key2 in hierarchyObj[key]){
             var fileInHierarchy=hierarchyObj[key][key2];
             console.log("ParseMenuText:fileInHierarchy:"+fileInHierarchy);
+            if(contentTxtFile==null&&fileInHierarchy.endsWith("Content.txt")){
+              contentTxtFile=fileInHierarchy;
+              continue;
+            }
           }
           continue;
         }
+      }
+      if(hierarchyPath!=null){
+        CreateMenuDOMelement(menuObj,hierarchyPath,0,contentTxtFile);
+      }
+      for(var key in hierarchyObj){
+        if(key=="files"){
+          continue;
+        }
         if(typeof key=="string"&&key.endsWith("/")){
-          console.log("ParseMenuText:doing parse:next key"+key);
-          //menuText.push(key+"\n");
-          CreateMenuDOMelement(menuObj,key,0);
-          DoForEachRecursively(hierarchyObj[key]);
+          console.log("ParseMenuText:doing parse:next key:"+key);
+          DoForEachRecursively(hierarchyObj[key],key);
+          continue;
         }
       }
     }
-    console.log("ParseMenuText:do parsing now");
-    DoForEachRecursively(hierarchy);
-    //CreateDOMelement(menuObj,menuText.join(),0);
+    console.log("ParseMenuText:do parsing now!");
+    DoForEachRecursively(hierarchy,null);
   }
 }
 //  DOM element, using Jquery
-function CreateMenuDOMelement(options,content,index){
+function CreateMenuDOMelement(options,path,index,contentTxtFile=null){
+  console.log("CreateMenuDOMelement:path:"+path+";contentTxtFile:"+contentTxtFile);
   const element=document.createElement(options.child);
   $(options.parent).append(element);
   $(element).addClass(`${options.className} ${options.className}_${index}`);
-  const button=document.createElement("BUTTON");
-  $(element).append(button);
-  const buttonText=document.createTextNode(content);
-  $(button).append(buttonText);
+  var button=null;
+  if(contentTxtFile!=null){
+    button=document.createElement("BUTTON");
+    $(element).append(button);
+    const buttonText=document.createTextNode(path);
+    $(button).append(buttonText);
+    $(button).addClass(`${options.className}_button ${options.className}_button_${index}`);
+    button.onclick=async function(){
+      var contentTxtFilePathToFetch=contentTxtFile.substring(1).replaceAll("\\","/");
+      console.log("contentTxtFilePathToFetch:"+contentTxtFilePathToFetch);
+      const contentText=await FetchTextFromFile(contentTxtFilePathToFetch);
+      ParseContentText(text);
+    };
+  }else{
+    $(element).text(path);
+  }
   console.log(`wiki menu:DOM element created: ${options.child} ;element classes: ${element.className} ;button: ${button}`);
 }
 
@@ -59,7 +82,7 @@ const root = "WikiContent";
 const homunculusSystem = "HomunculusSystem";
 const selectedHomunculus = "Vanilmirth";
 
-async function FetchText(path) {
+async function FetchTextFromFile(path) {
   const response = await fetch(path);
   const rawText = await response.text();
   const stringText = rawText.toString();
@@ -67,7 +90,7 @@ async function FetchText(path) {
   return splitedText;
 }
 
-const text = await FetchText(
+const text = await FetchTextFromFile(
   root + "/" + homunculusSystem + "/" + selectedHomunculus + "/" + "Content.txt"
 );
 
@@ -90,7 +113,7 @@ function CreateDOMelement(options, content, index) {
 const titleObj = new CreateDOMobject(".wiki_content", "h2", "title");
 const textObj = new CreateDOMobject(".wiki_content", "section", "text");
 
-function ParseText(text) {
+function ParseContentText(text) {
   let titleIndex = 0,
     textIndex = 0;
   for (const line of text) {
@@ -105,7 +128,7 @@ function ParseText(text) {
   }
 }
 
-ParseText(text);
+//ParseText(text);
 
 //testthis();
 //export const testthisExport=testthis;
