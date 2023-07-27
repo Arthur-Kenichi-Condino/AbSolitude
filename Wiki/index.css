@@ -64,6 +64,8 @@ header{
 .menu_item{
   background:rgb(33,33,33);
   color:rgb(224,228,235);
+  display:flex;
+  flex-direction:column;
   font-family:"Gantari";
   font-size:16px;
   font-weight:bold;
