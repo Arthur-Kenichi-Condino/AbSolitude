@@ -54,7 +54,7 @@ MonoBehaviour:
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
-  simUMADataPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
+  simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
@@ -65,6 +65,8 @@ MonoBehaviour:
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 38
     tgtValLerpMaxTime: 0.0001
+  hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
+  hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 8

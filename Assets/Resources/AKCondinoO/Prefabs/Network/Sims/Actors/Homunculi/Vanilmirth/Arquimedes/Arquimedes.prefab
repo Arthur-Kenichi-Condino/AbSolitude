@@ -53,7 +53,7 @@ MonoBehaviour:
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
-  simUMADataPrefab: {fileID: 3290482251516891750, guid: 6f5fd54ff986cf149baab03c924a292a, type: 3}
+  simUMAPrefab: {fileID: 3290482251516891750, guid: 6f5fd54ff986cf149baab03c924a292a, type: 3}
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0

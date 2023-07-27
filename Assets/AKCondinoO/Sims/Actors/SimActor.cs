@@ -22,7 +22,7 @@ using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActor:SimObject{
-     [SerializeField]GameObject simUMADataPrefab;
+     [SerializeField]GameObject simUMAPrefab;
      internal PersistentSimActorData persistentSimActorData;
         //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
         internal struct PersistentSimActorData{
@@ -127,8 +127,8 @@ namespace AKCondinoO.Sims.Actors{
              return persistentSimActorData;
             }
         }
-     internal DynamicCharacterAvatar simUMAData;
-      internal Vector3 simUMADataPosOffset;
+     internal DynamicCharacterAvatar simUMA;
+      internal Vector3 simUMAPosOffset;
      internal NavMeshAgent navMeshAgent;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
@@ -140,11 +140,11 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActorAnimatorController simActorAnimatorController;
      internal AISensor aiSensor;
         protected override void Awake(){
-         if(simUMADataPrefab!=null){
-          simUMADataPosOffset=simUMADataPrefab.transform.localPosition;
-          simUMAData=Instantiate(simUMADataPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
-          Log.DebugMessage("simUMADataPosOffset:"+simUMADataPosOffset);
-          simUMAData.CharacterUpdated.AddAction(OnUMACharacterUpdated);
+         if(simUMAPrefab!=null){
+          simUMAPosOffset=simUMAPrefab.transform.localPosition;
+          simUMA=Instantiate(simUMAPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
+          Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
+          simUMA.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
          aiSensor=GetComponentInChildren<AISensor>();
@@ -171,42 +171,31 @@ namespace AKCondinoO.Sims.Actors{
          simActorAnimatorController=GetComponent<SimActorAnimatorController>();
          simActorAnimatorController.actor=this;
         }
+     internal readonly Dictionary<string,Transform>nameToBodyPart=new Dictionary<string,Transform>();
      protected bool canSense;
-        void OnUMACharacterUpdated(UMAData simActorUMAData){
-         Log.DebugMessage("OnUMACharacterUpdated");
-         if(head==null){
-          head=Util.FindChildRecursively(simUMAData.transform,"head");
-          if(head==null){
-           head=Util.FindChildRecursively(simUMAData.transform,"face");
-          }
-          Log.DebugMessage("head:"+head);
-         }
-         if( leftEye==null){
-           leftEye=Util.FindChildRecursively(simUMAData.transform,"lEye");
-          Log.DebugMessage("lEye:"+ leftEye);
-         }
-         if(rightEye==null){
-          rightEye=Util.FindChildRecursively(simUMAData.transform,"rEye");
-          Log.DebugMessage("rEye:"+rightEye);
-         }
+        protected virtual void OnUMACharacterUpdated(UMAData simUMAData){
          if(aiSensor){
           if(head||leftEye||rightEye){
            Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
            canSense=true;
           }
          }
-         if( leftHand==null){
-           leftHand=Util.FindChildRecursively(simUMAData.transform,"lHand");
-          Log.DebugMessage("lHand:"+ leftHand);
+         OnCreateHitHurtBoxes(simUMA,simUMAData);
+        }
+        protected void SetBodyPart(string name,string transformChildName,out Transform bodyPart){
+         if(!nameToBodyPart.TryGetValue(name,out bodyPart)||bodyPart==null){
+          bodyPart=Util.FindChildRecursively(simUMA.transform,transformChildName);
+          if(bodyPart!=null){
+           nameToBodyPart[name]=bodyPart;
+          }else{
+           nameToBodyPart.Remove(name);
+          }
          }
-         if(rightHand==null){
-          rightHand=Util.FindChildRecursively(simUMAData.transform,"rHand");
-          Log.DebugMessage("rHand:"+rightHand);
-         }
+         Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
         }
         public override void OnDestroy(){
-         if(simUMAData!=null){
-          DestroyImmediate(simUMAData.gameObject);
+         if(simUMA!=null){
+          DestroyImmediate(simUMA.gameObject);
          }
          base.OnDestroy();
         }
