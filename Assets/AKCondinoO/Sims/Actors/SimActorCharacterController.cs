@@ -38,7 +38,7 @@ namespace AKCondinoO.Sims.Actors{
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
-       internal Quaternion bodyRotation;
+       internal Quaternion bodyRotation,lastBodyRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(0.125f,0.125f,0.125f);
@@ -73,7 +73,7 @@ namespace AKCondinoO.Sims.Actors{
           inputViewRotationEuler=Vector3.zero;
          }
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
-         bodyRotation=characterController.transform.rotation;
+         bodyRotation=lastBodyRotation=characterController.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
           if(
            Enabled.FORWARD .curState||

@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Actors{
           return;
          }
          EnemyPriority enemyPriority=EnemyPriority.Low;
-         Log.DebugMessage("target to add:"+target.id.Value);
+         //Log.DebugMessage("target to add:"+target.id.Value);
          OnAddAsTarget(target,gotTargetMode,enemyPriority);
         }
         internal override void OnSimObjectIsOutOfSight(SimObject simObject){
@@ -45,7 +45,7 @@ namespace AKCondinoO.Sims.Actors{
           return;
          }
          if(targetsByPriority.TryGetValue(target.id.Value,out _)){
-          Log.DebugMessage("target set to be removed:"+target.id.Value);
+          //Log.DebugMessage("target set to be removed:"+target.id.Value);
           targetTimeouts[target.id.Value]=30f;
          }
         }

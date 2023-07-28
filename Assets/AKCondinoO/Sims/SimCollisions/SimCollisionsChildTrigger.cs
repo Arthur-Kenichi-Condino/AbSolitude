@@ -29,7 +29,7 @@ namespace AKCondinoO.Sims{
          }
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
          if(simCollisions.IsValidForCollision(other,out SimObject otherSimObject)){
-          Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
+          //Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectColliders.Add(other);
           if(!otherSimObject.simCollisions.collidedWithChildTrigger.ContainsKey(this)){
            otherSimObject.simCollisions.collidedWithChildTrigger.Add(this,0);

@@ -52,6 +52,10 @@ namespace AKCondinoO.Sims.Actors{
          return angle;
         }
        }
+       if(simActorCharacterController!=null){
+        float angle=Vector3.SignedAngle(simActorCharacterController.lastBodyRotation*Vector3.forward,simActorCharacterController.bodyRotation*Vector3.forward,transform.up)*20f;
+        return angle;
+       }
        return 0f;
       }
      }

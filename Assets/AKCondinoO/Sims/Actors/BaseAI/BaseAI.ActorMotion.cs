@@ -57,12 +57,12 @@ namespace AKCondinoO.Sims.Actors{
          motion=null;
          if(animatorClipNameToActorMotion.TryGetValue(clipName,out ActorMotion clipToMotion)){
           motion=clipToMotion;
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
+          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
           return true;
          }
          if(clipName.Contains("MOTION_ATTACK")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
+          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
           return true;
          }
          return false;
@@ -70,9 +70,9 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped");
          if(onDoAttackSetMotion){
-          Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
+          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
           if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){
-           Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
+           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
            onDoAttackSetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND;
           }
