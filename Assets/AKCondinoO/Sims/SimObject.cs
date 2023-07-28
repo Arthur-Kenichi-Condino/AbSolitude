@@ -609,7 +609,7 @@ namespace AKCondinoO.Sims{
          return result;
         }
         internal void OnOverlapping(Collider overlappedCollider){
-         Log.DebugMessage("OnOverlapping:"+this.transform.root.gameObject.name+"-> overlapping <-"+overlappedCollider.transform.root.gameObject.name);
+         //Log.DebugMessage("OnOverlapping:"+this.transform.root.gameObject.name+"-> overlapping <-"+overlappedCollider.transform.root.gameObject.name);
          if(Core.singleton.isServer){
           if(!overlappedCollider.transform.root.hasChanged){
            isOverlapping|=SetOverlapResult(overlappedCollider);

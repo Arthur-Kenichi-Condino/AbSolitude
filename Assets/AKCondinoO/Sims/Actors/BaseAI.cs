@@ -109,7 +109,7 @@ namespace AKCondinoO.Sims.Actors{
          );
          Loop:{
           yield return onChaseGetDataThrottler;
-          Log.DebugMessage("OnChaseGetDataCoroutine");
+          //Log.DebugMessage("OnChaseGetDataCoroutine");
           if(simActorCharacterController!=null){
            var values=simCollisions.GetCapsuleValuesForCollisionTesting(simActorCharacterController.characterController,transform.root);
            float maxDis=Vector3.Distance(MyEnemy.transform.position,transform.root.position);
