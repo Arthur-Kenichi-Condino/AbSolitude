@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
@@ -54,11 +55,11 @@ namespace AKCondinoO.Sims.Actors{
            float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
            //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
            Quaternion limitedHeadRotation=
-            Quaternion.AngleAxis(Mathf.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
-            Quaternion.AngleAxis(Mathf.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
+            Quaternion.AngleAxis(Math.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
+            Quaternion.AngleAxis(Math.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
             animBodyRot;
            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
-           //  TO DO: rotating? Or moving?
+           //  TO DO: rotating? Or moving? handle special conditions and rotations
            bool flag;
            if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
             //Log.DebugMessage("rotating body, set target head IK to forward");
