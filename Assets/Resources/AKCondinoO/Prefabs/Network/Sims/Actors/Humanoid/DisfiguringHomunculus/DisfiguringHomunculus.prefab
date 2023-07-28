@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6981179888990186329}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2391910679848875198}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2279937484341268737
 CharacterController:
@@ -86,6 +86,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7492074268408741665}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -94,7 +95,6 @@ Transform:
   - {fileID: 2038362109403775518}
   - {fileID: 9108433346734121604}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-4222640111688762353
 MonoBehaviour:
@@ -123,6 +123,11 @@ MonoBehaviour:
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 38
     tgtValLerpMaxTime: 0.0001
+  turnAngleLerp:
+    tgtValLerpSpeed: 38
+    tgtValLerpMaxTime: 0.0001
+  hitboxesPrefabs: {fileID: 0}
+  hurtboxesPrefabs: {fileID: 0}
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
@@ -224,6 +229,7 @@ MonoBehaviour:
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
 --- !u!1001 &979205220679500051

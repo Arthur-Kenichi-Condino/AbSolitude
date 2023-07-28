@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,21 +44,22 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
       protected float moveVelocityFlattened_value;
+     [SerializeField]internal FloatLerpHelper turnAngleLerp=new FloatLerpHelper();
      internal float turnAngle{
       get{
+       float angle=0f;
        if(isUsingAI){
         if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
-         float angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
+         angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up)/180f;
          //Log.DebugMessage("angle:"+angle);
-         return angle;
         }
+       }else if(simActorCharacterController!=null){
+        angle=Vector3.SignedAngle(simActorCharacterController.lastBodyRotation*Vector3.forward,simActorCharacterController.bodyRotation*Vector3.forward,transform.up);
        }
-       if(simActorCharacterController!=null){
-        float angle=Vector3.SignedAngle(simActorCharacterController.lastBodyRotation*Vector3.forward,simActorCharacterController.bodyRotation*Vector3.forward,transform.up)*20f;
-        return angle;
-       }
-       return 0f;
+       turnAngleLerp.tgtVal=Math.Clamp(angle,-.5f,.5f);
+       return turnAngle_value=turnAngleLerp.UpdateFloat(turnAngle_value,Core.magicDeltaTimeNumber);
       }
      }
+      protected float turnAngle_value;
     }
 }

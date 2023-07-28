@@ -24,8 +24,8 @@ namespace AKCondinoO{
          float   verticalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
          //Log.DebugMessage("horizontalTgtRotationSignedAngle:"+horizontalTgtRotationSignedAngle+";verticalTgtRotationSignedAngle:"+verticalTgtRotationSignedAngle);
          value=Quaternion.Euler(
-          Mathf.Clamp(   verticalTgtRotationSignedAngle, -90f, 90f),
-          Mathf.Clamp(-horizontalTgtRotationSignedAngle,-180f,180f),
+          Math.Clamp(   verticalTgtRotationSignedAngle, -90f, 90f),
+          Math.Clamp(-horizontalTgtRotationSignedAngle,-180f,180f),
           0f
          );
        }

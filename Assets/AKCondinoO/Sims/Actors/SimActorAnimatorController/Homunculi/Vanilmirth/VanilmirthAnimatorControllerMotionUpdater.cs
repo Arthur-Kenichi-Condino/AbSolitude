@@ -15,7 +15,7 @@ namespace AKCondinoO.Sims.Actors{
                controller.animator.SetBool("MOTION_STAND",vanilmirthAI.motion==BaseAI.ActorMotion.MOTION_STAND);
                controller.animator.SetBool("MOTION_MOVE" ,vanilmirthAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
                 controller.animator.SetFloat("MOTION_MOVE_VELOCITY",vanilmirthAI.moveVelocityFlattened);
-                 controller.animator.SetFloat("MOTION_MOVE_TURN",vanilmirthAI.turnAngle/180f);
+                 controller.animator.SetFloat("MOTION_MOVE_TURN",vanilmirthAI.turnAngle);
          }
         }
     }
