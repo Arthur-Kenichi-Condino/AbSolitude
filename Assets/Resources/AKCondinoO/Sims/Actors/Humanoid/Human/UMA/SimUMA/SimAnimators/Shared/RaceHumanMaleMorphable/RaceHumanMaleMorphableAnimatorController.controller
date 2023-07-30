@@ -20,7 +20,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 3814e96095086774ba9d31a33e48d33d, type: 2}
     m_Threshold: 0.5
     m_Position: {x: -0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -28,7 +28,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f34ed5b98c7c4ad49a0811906aea1350, type: 2}
     m_Threshold: 1
     m_Position: {x: 0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -162,7 +162,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 3814e96095086774ba9d31a33e48d33d, type: 2}
     m_Threshold: 0.5
     m_Position: {x: -0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -170,7 +170,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f34ed5b98c7c4ad49a0811906aea1350, type: 2}
     m_Threshold: 1
     m_Position: {x: 0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -598,7 +598,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 3814e96095086774ba9d31a33e48d33d, type: 2}
     m_Threshold: 0.125
     m_Position: {x: -0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -606,7 +606,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f34ed5b98c7c4ad49a0811906aea1350, type: 2}
     m_Threshold: 0.25
     m_Position: {x: 0.5, y: 0}
-    m_TimeScale: 1.35
+    m_TimeScale: 1.8
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -614,7 +614,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 80a230344247a144fbdd40869ac87bbd, type: 2}
     m_Threshold: 0.375
     m_Position: {x: 0, y: 0.5}
-    m_TimeScale: 1.25
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_SPEED
     m_Mirror: 0

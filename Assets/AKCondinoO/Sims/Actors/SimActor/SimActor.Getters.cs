@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors{
        float angle=0f;
        if(isUsingAI){
         if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
-         angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up)/180f;
+         angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
          //Log.DebugMessage("angle:"+angle);
         }
        }else if(simActorCharacterController!=null){
