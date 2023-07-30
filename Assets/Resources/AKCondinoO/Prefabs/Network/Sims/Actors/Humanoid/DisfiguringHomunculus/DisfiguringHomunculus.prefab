@@ -121,11 +121,11 @@ MonoBehaviour:
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
   AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
-    tgtValLerpSpeed: 38
-    tgtValLerpMaxTime: 0.0001
+    tgtValLerpSpeed: 48
+    tgtValLerpMaxTime: 0
   turnAngleLerp:
-    tgtValLerpSpeed: 38
-    tgtValLerpMaxTime: 0.0001
+    tgtValLerpSpeed: 48
+    tgtValLerpMaxTime: 0
   hitboxesPrefabs: {fileID: 0}
   hurtboxesPrefabs: {fileID: 0}
   doIdleMove: 1

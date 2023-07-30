@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
      internal virtual float moveVelocityFlattened{
       get{
+       float velocityFlattened=0f;
        if(isUsingAI){
         float velocityMagnitude=navMeshAgent.velocity.magnitude;
         //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
@@ -35,11 +36,17 @@ namespace AKCondinoO.Sims.Actors{
           )
          );
         //Log.DebugMessage("characterController velocity:"+velocity);
-        float velocityFlattened=Mathf.Abs(velocity.x)+Mathf.Abs(velocity.z);
+        velocityFlattened=Mathf.Abs(velocity.x)+Mathf.Abs(velocity.z);
         //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
         moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityFlattened);
         return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
        }
+       moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityFlattened);
+       return velocityFlattened;
+      }
+     }
+     internal virtual float moveStrafeVelocityFlattened{
+      get{
        return 0f;
       }
      }
@@ -50,7 +57,7 @@ namespace AKCondinoO.Sims.Actors{
        float angle=0f;
        if(isUsingAI){
         if(!Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
-         angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up);
+         angle=Vector3.SignedAngle(transform.forward,navMeshAgent.velocity.normalized,transform.up)/180f;
          //Log.DebugMessage("angle:"+angle);
         }
        }else if(simActorCharacterController!=null){
