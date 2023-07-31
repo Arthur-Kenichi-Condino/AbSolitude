@@ -183,6 +183,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: MOTION_MOVE_VELOCITY_STRAFE
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: MOTION_MOVE_TURN
     m_Type: 1
     m_DefaultFloat: 0

@@ -28,12 +28,14 @@ namespace AKCondinoO.Sims.Actors{
               if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
                controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
                controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );
-                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY",humanAI.moveVelocityFlattened);
+                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY"       ,humanAI.      moveVelocityFlattened);
+                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY_STRAFE",humanAI.moveStrafeVelocityFlattened);
                  controller.animator.SetFloat("MOTION_MOVE_RIFLE_TURN",humanAI.turnAngle);
               }else{
                controller.animator.SetBool("MOTION_STAND",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND);
                controller.animator.SetBool("MOTION_MOVE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
-                controller.animator.SetFloat("MOTION_MOVE_VELOCITY",humanAI.moveVelocityFlattened);
+                controller.animator.SetFloat("MOTION_MOVE_VELOCITY"       ,humanAI.      moveVelocityFlattened);
+                controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",humanAI.moveStrafeVelocityFlattened);
                  controller.animator.SetFloat("MOTION_MOVE_TURN",humanAI.turnAngle);
               }
           }
