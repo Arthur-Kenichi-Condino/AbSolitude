@@ -12,17 +12,11 @@ namespace AKCondinoO.Sims.Actors{
        return false;
       }
      }
-     [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
-     internal virtual float moveVelocityFlattened{
+     internal virtual Vector3 moveVelocity{
       get{
-       float velocityFlattened=0f;
        if(isUsingAI){
-        float velocityMagnitude=navMeshAgent.velocity.magnitude;
-        //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
-        moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityMagnitude/navMeshAgentRunSpeed);
-        return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
-       }
-       if(simActorCharacterController!=null){
+        return navMeshAgent.velocity;
+       }else if(simActorCharacterController!=null){
         float divideBy=
          (simActorCharacterController.inputMoveVelocity.z!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.z)/(simActorCharacterController.maxMoveSpeed.z)):0f)+
          (simActorCharacterController.inputMoveVelocity.x!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.x)/(simActorCharacterController.maxMoveSpeed.x)):0f);
@@ -36,21 +30,34 @@ namespace AKCondinoO.Sims.Actors{
           )
          );
         //Log.DebugMessage("characterController velocity:"+velocity);
-        velocityFlattened=Mathf.Abs(velocity.x)+Mathf.Abs(velocity.z);
-        //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
-        moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityFlattened);
-        return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
+        return velocity;
        }
-       moveVelocityFlattenedLerp.tgtVal=Mathf.Clamp01(velocityFlattened);
-       return velocityFlattened;
+       return Vector3.zero;
       }
      }
+     [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
+     internal virtual float moveVelocityFlattened{
+      get{
+       float velocityFlattened=0f;
+       if(isUsingAI){
+        float velocityMagnitude=moveVelocity.magnitude;
+        //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
+        velocityFlattened=velocityMagnitude/navMeshAgentRunSpeed;
+       }else if(simActorCharacterController!=null){
+        velocityFlattened=moveVelocity.z;
+        //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
+       }
+       moveVelocityFlattenedLerp.tgtVal=Math.Clamp(velocityFlattened,-1f,1f);
+       return moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
+      }
+     }
+      protected float moveVelocityFlattened_value;
      internal virtual float moveStrafeVelocityFlattened{
       get{
        return 0f;
       }
      }
-      protected float moveVelocityFlattened_value;
+      protected float moveStrafeVelocityFlattened_value;
      [SerializeField]internal FloatLerpHelper turnAngleLerp=new FloatLerpHelper();
      internal float turnAngle{
       get{
