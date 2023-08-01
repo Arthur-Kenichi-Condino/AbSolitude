@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0a8454cfe678e434d9d88a8a34de3568
+guid: 38845e5b481123b4eb8058d87603e264
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: mixamo.com
+      name: Walking Left Turn
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 56
+      lastFrame: 71
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
