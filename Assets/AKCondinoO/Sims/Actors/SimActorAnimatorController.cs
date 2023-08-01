@@ -79,6 +79,7 @@ namespace AKCondinoO.Sims.Actors{
      internal int layerCount{get;private set;}
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
       internal WeaponTypes lastWeaponType=WeaponTypes.None;
+      internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
      Dictionary<int,float>normalizedTime;
