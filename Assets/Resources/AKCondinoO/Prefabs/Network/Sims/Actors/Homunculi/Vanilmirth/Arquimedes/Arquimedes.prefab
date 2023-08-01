@@ -28,6 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1065888385727663275}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,7 +36,6 @@ Transform:
   m_Children:
   - {fileID: 6683752426998207080}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-4455510629419889334
 MonoBehaviour:
@@ -62,8 +62,13 @@ MonoBehaviour:
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
   AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
-    tgtValLerpSpeed: 38
-    tgtValLerpMaxTime: 0.0001
+    tgtValLerpSpeed: 48
+    tgtValLerpMaxTime: 0
+  turnAngleLerp:
+    tgtValLerpSpeed: 48
+    tgtValLerpMaxTime: 0
+  hitboxesPrefabs: {fileID: 0}
+  hurtboxesPrefabs: {fileID: 0}
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
@@ -165,6 +170,7 @@ MonoBehaviour:
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
 --- !u!1 &2270665923506917325
@@ -191,13 +197,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2270665923506917325}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 907142613423581965}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &8879777815243079835
 CharacterController:

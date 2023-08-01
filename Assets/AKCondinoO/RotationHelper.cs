@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,13 +71,13 @@ namespace AKCondinoO{
          q.z/=(q.w==0f?1.0f:q.w);
          q.w=1.0f;
          float angleX=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.x);
-         angleX=Mathf.Clamp(angleX,minAxisAngle.x,maxAxisAngle.x);
+         angleX=Math.Clamp(angleX,minAxisAngle.x,maxAxisAngle.x);
          q.x=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleX);
          float angleY=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.y);
-         angleY=Mathf.Clamp(angleY,minAxisAngle.y,maxAxisAngle.y);
+         angleY=Math.Clamp(angleY,minAxisAngle.y,maxAxisAngle.y);
          q.y=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleY);
          float angleZ=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.z);
-         angleZ=Mathf.Clamp(angleZ,minAxisAngle.z,maxAxisAngle.z);
+         angleZ=Math.Clamp(angleZ,minAxisAngle.z,maxAxisAngle.z);
          q.z=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleZ);
          return q.normalized;
         }

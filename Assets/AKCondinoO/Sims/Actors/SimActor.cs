@@ -487,6 +487,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         UpdateGetters();
          if(simActorAnimatorController!=null){
             simActorAnimatorController.ManualUpdate();
          }
