@@ -102,31 +102,6 @@ namespace AKCondinoO.Sims{
                 transform.rotation=bodyPart.rotation*grabRot;
                 transform.position=bodyPart.position+bodyPart.rotation*grabPos;
                }else{
-                if(ZAxisIsUp){
-                 Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up).normalized;
-                 transform.rotation=Quaternion.LookRotation(Quaternion.AngleAxis(-90f,lineBetweenHandsDir)*lineBetweenHandsDirPerpendicularRight,lineBetweenHandsDir);
-                }else{
-                 transform.rotation=lineBetweenHandsRot;
-                }
-                transform.position=simHands.rightHand.transform.position+transform.rotation*grabPos;
-                if(containerAsBaseAI.simActorAnimatorController!=null&&containerAsBaseAI.simActorAnimatorController.animator!=null){
-                 if(
-                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
-                 ){
-                  transform.rotation*=grabRot;
-                 }else if(
-                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
-                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE
-                 ){
-                  Quaternion rot=Quaternion.LookRotation(containerAsBaseAI.simActorAnimatorController.animator.transform.forward,containerAsBaseAI.simActorAnimatorController.animator.transform.up);
-                  if(ZAxisIsUp){
-                   transform.rotation=Quaternion.AngleAxis(180f,containerAsBaseAI.simActorAnimatorController.animator.transform.up)*Quaternion.AngleAxis(-90f,containerAsBaseAI.simActorAnimatorController.animator.transform.right)*rot;
-                  }else{
-                   transform.rotation=rot;
-                  }
-                 }
-                }
                }
               }
              }
