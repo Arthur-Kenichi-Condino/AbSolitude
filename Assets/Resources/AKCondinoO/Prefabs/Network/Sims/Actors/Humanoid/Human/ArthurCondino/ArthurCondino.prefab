@@ -59,18 +59,21 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 4
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
-  DEBUG_TOGGLE_HOLSTER_WEAPON: 0
-  DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 1
+  DEBUG_TOGGLE_HOLSTER_WEAPON: 1
+  DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
   AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  moveStrafeVelocityFlattenedLerp:
+    tgtValLerpSpeed: 76
+    tgtValLerpMaxTime: 0.0005
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
-  doIdleMove: 1
+  doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
   MyAggressionMode: 0

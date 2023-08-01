@@ -85,37 +85,50 @@ namespace AKCondinoO.Sims{
          //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
          if(asInventoryItem.container is SimHands simHands){
           if(simHands.leftHand!=null&&simHands.rightHand!=null){
+           Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
            Vector3 lineBetweenHandsDir=(simHands.leftHand.transform.position-simHands.rightHand.transform.position).normalized;
            Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up);
            SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
-           Vector3  leftHandGrabPos=settings. leftHandGrabPos;
-           Vector3 rightHandGrabPos=settings.rightHandGrabPos;
-           Quaternion rightHandGrabRot=settings.rightHandGrabRot;
-           //Log.DebugMessage( "leftHandGrabPos:"+ leftHandGrabPos);
-           //Log.DebugMessage("rightHandGrabPos:"+rightHandGrabPos);
-           Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
-           if(ZAxisIsUp){
-            Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up).normalized;
-            transform.rotation=Quaternion.LookRotation(Quaternion.AngleAxis(-90f,lineBetweenHandsDir)*lineBetweenHandsDirPerpendicularRight,lineBetweenHandsDir);
-           }else{
-            transform.rotation=lineBetweenHandsRot;
-           }
-           transform.position=simHands.rightHand.transform.position+transform.rotation*rightHandGrabPos;
-           if(simHands.asSimObject is BaseAI baseAI&&baseAI.simActorAnimatorController!=null&&baseAI.simActorAnimatorController.animator!=null){
-            if(
-             baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
-            ){
-             transform.rotation*=rightHandGrabRot;
-            }else if(
-             baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
-             baseAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE
-            ){
-             Quaternion rot=Quaternion.LookRotation(baseAI.simActorAnimatorController.animator.transform.forward,baseAI.simActorAnimatorController.animator.transform.up);
-             if(ZAxisIsUp){
-              transform.rotation=Quaternion.AngleAxis(180f,baseAI.simActorAnimatorController.animator.transform.up)*Quaternion.AngleAxis(-90f,baseAI.simActorAnimatorController.animator.transform.right)*rot;
-             }else{
-              transform.rotation=rot;
+           if(asInventoryItem.container.asSimObject is BaseAI containerAsBaseAI){
+            if(settings.inventoryTransformSettingsForMotion.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
+             if(transformSettingsForSimHands.TryGetValue(containerAsBaseAI.motion,out var transformSettingsForMotion)&&transformSettingsForMotion.transform!=null){
+              Vector3 grabPos=transformSettingsForMotion.transform.localPosition;
+              Quaternion grabRot=transformSettingsForMotion.transform.localRotation;
+              if(containerAsBaseAI.nameToBodyPart.TryGetValue(transformSettingsForMotion.parentBodyPartName,out Transform bodyPart)){
+               if(transformSettingsForMotion.transformIsDeterminant){
+                if(ZAxisIsUp){
+                 grabRot*=Quaternion.AngleAxis(-90f,Vector3.right);
+                }
+                transform.rotation=bodyPart.rotation*grabRot;
+                transform.position=bodyPart.position+bodyPart.rotation*grabPos;
+               }else{
+                if(ZAxisIsUp){
+                 Vector3 lineBetweenHandsDirPerpendicularRight=Vector3.Cross(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up).normalized;
+                 transform.rotation=Quaternion.LookRotation(Quaternion.AngleAxis(-90f,lineBetweenHandsDir)*lineBetweenHandsDirPerpendicularRight,lineBetweenHandsDir);
+                }else{
+                 transform.rotation=lineBetweenHandsRot;
+                }
+                transform.position=simHands.rightHand.transform.position+transform.rotation*grabPos;
+                if(containerAsBaseAI.simActorAnimatorController!=null&&containerAsBaseAI.simActorAnimatorController.animator!=null){
+                 if(
+                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
+                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
+                 ){
+                  transform.rotation*=grabRot;
+                 }else if(
+                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_MOVE||
+                  containerAsBaseAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE
+                 ){
+                  Quaternion rot=Quaternion.LookRotation(containerAsBaseAI.simActorAnimatorController.animator.transform.forward,containerAsBaseAI.simActorAnimatorController.animator.transform.up);
+                  if(ZAxisIsUp){
+                   transform.rotation=Quaternion.AngleAxis(180f,containerAsBaseAI.simActorAnimatorController.animator.transform.up)*Quaternion.AngleAxis(-90f,containerAsBaseAI.simActorAnimatorController.animator.transform.right)*rot;
+                  }else{
+                   transform.rotation=rot;
+                  }
+                 }
+                }
+               }
+              }
              }
             }
            }
