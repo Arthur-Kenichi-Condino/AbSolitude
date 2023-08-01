@@ -246,7 +246,7 @@ namespace AKCondinoO.Sims{
          }
          //Log.DebugMessage("SimCollisions:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
          if(IsValidForCollision(other,out SimObject otherSimObject)){
-          Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
+          //Log.DebugMessage("SimCollisions:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> collision <-"+other.transform.root.gameObject.name);
           simObjectColliders.Add(other);
           if(!otherSimObject.simCollisions.collidedWith.ContainsKey(simObject)){
            otherSimObject.simCollisions.collidedWith.Add(simObject,0);

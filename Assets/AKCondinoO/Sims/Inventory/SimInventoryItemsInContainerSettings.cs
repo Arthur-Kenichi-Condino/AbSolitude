@@ -7,21 +7,36 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Inventory{
     internal class SimInventoryItemsInContainerSettings{
-        internal struct SimObjectSettings{
+        internal class SimObjectSettings{
          public readonly ReadOnlyDictionary<Type,int>inventorySpaces;
+          public readonly ReadOnlyDictionary<Type,ReadOnlyDictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>>inventoryTransformSettingsForMotion;
          public HandsUsage handsUsage;
          public WeaponTypes weaponType;
-         public Vector3 leftHandGrabPos;public Vector3 rightHandGrabPos;
-         public Quaternion rightHandGrabRot;
-            internal SimObjectSettings(Dictionary<Type,int>inventorySpaces,HandsUsage handsUsage,WeaponTypes weaponType,Vector3 leftHandGrabPos,Vector3 rightHandGrabPos,Quaternion rightHandGrabRot){
+            internal SimObjectSettings(HandsUsage handsUsage,WeaponTypes weaponType,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData[]inventorySettings){
+             Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
+             Dictionary<Type,ReadOnlyDictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>>inventoryTransformSettingsForMotion=new Dictionary<Type,ReadOnlyDictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>>();
+             for(int i=0;i<inventorySettings.Length;++i){
+              SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=inventorySettings[i];
+              Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType,typeof(SimInventory));
+              if(simInventoryType!=null){
+               Log.DebugMessage("simInventoryType:"+simInventoryType);
+               int spacesUsed=inContainerData.simInventorySpaceUse;
+               inventorySpaces.Add(simInventoryType,spacesUsed);
+               Dictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>transformSettingsForMotion=new Dictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>();
+               foreach(var transformSettings in inContainerData.transformSettingsForMotion){
+                transformSettingsForMotion[transformSettings.motion]=transformSettings;
+               }
+               inventoryTransformSettingsForMotion.Add(simInventoryType,new ReadOnlyDictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>(transformSettingsForMotion));
+              }
+             }
              this.inventorySpaces=new ReadOnlyDictionary<Type,int>(inventorySpaces);
+             this.inventoryTransformSettingsForMotion=new ReadOnlyDictionary<Type,ReadOnlyDictionary<ActorMotion,SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion>>(inventoryTransformSettingsForMotion);
              this.handsUsage=handsUsage;
              this.weaponType=weaponType;
-             this.leftHandGrabPos=leftHandGrabPos;this.rightHandGrabPos=rightHandGrabPos;
-             this.rightHandGrabRot=rightHandGrabRot;
             }
         }
      internal readonly Dictionary<Type,SimObjectSettings>allSettings=new Dictionary<Type,SimObjectSettings>();
@@ -32,39 +47,22 @@ namespace AKCondinoO.Sims.Inventory{
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
           if(simObjectAsInventoryItemSettings!=null){
-           if(simObjectAsInventoryItemSettings. leftHandGrabTransform!=null&&
-              simObjectAsInventoryItemSettings.rightHandGrabTransform!=null
-           ){
-            SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
-            Type simObjectType=simObjectPrefab.Key;
-            Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
-            for(int i=0;i<simObjectAsInventoryItemSettings.inventorySettings.Length;++i){
-             SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData inContainerData=simObjectAsInventoryItemSettings.inventorySettings[i];
-             Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType,typeof(SimInventory));
-             if(simInventoryType!=null){
-              Log.DebugMessage("simInventoryType:"+simInventoryType);
-              int spacesUsed=inContainerData.simInventorySpaceUse;
-              inventorySpaces.Add(simInventoryType,spacesUsed);
+           SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
+           Type simObjectType=simObjectPrefab.Key;
+           if(typeDictionary.ContainsKey(simObjectType)){
+            switch(typeDictionary[simObjectType]){
+             case("RemingtonModel700BDL"):{
+              break;
              }
             }
-            if(typeDictionary.ContainsKey(simObjectType)){
-             switch(typeDictionary[simObjectType]){
-              case("RemingtonModel700BDL"):{
-               break;
-              }
-             }
-            }
-            Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
-            allSettings.Add(simObjectType,
-             new SimObjectSettings(
-              inventorySpaces:inventorySpaces,
-              handsUsage:simObjectAsInventoryItemSettings.handsUsage,
-              weaponType:simObjectAsInventoryItemSettings.weaponType,
-               leftHandGrabPos:simObjectAsInventoryItemSettings. leftHandGrabTransform.localPosition,
-              rightHandGrabPos:simObjectAsInventoryItemSettings.rightHandGrabTransform.localPosition,
-              rightHandGrabRot:simObjectAsInventoryItemSettings.rightHandGrabTransform.localRotation)
-            );
            }
+           Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
+           allSettings.Add(simObjectType,
+            new SimObjectSettings(
+             handsUsage:simObjectAsInventoryItemSettings.handsUsage,
+             weaponType:simObjectAsInventoryItemSettings.weaponType,
+             inventorySettings:simObjectAsInventoryItemSettings.inventorySettings)
+           );
           }
          }
         }

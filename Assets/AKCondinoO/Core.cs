@@ -45,6 +45,13 @@ namespace AKCondinoO{
      internal static string savePath;
      internal static Resolution[]resolutions;
       internal static float magicDeltaTimeNumber=.0060f;
+        internal void SetMagicDeltaTimeNumber(int fps=-1){
+         if(fps>0){
+          magicDeltaTimeNumber=(1f/(float)fps)/((164.6f*2f)/(float)fps);
+         }else{
+          magicDeltaTimeNumber=(1f/(float)Screen.currentResolution.refreshRateRatio.value)/((164.6f*2f)/(float)Screen.currentResolution.refreshRateRatio.value);
+         }
+        }
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          LoadSceneParameters simObjectToSpriteToolLoadSceneParameters=new LoadSceneParameters();
@@ -69,12 +76,13 @@ namespace AKCondinoO{
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
-         magicDeltaTimeNumber=(1f/(float)Screen.currentResolution.refreshRateRatio.value)/((164.6f*2f)/(float)Screen.currentResolution.refreshRateRatio.value);
          Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
+         SetMagicDeltaTimeNumber();
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
      IEnumerable<KeyValuePair<int,ISingletonInitialization>>singletonInitReversedOrder;
         private void Start(){
+         fpsNextMeasurementRefresh=Time.realtimeSinceStartup+fpsMeasurementTimeInterval;
          isServer=false;
          isClient=false;
          GameObject netManagerGameObject;
@@ -164,12 +172,23 @@ namespace AKCondinoO{
      internal event EventHandler OnDestroyingCoreEvent;
         internal class OnDestroyingCoreEventArgs:EventArgs{
         }
+     internal static int currentFps;
+     const float fpsMeasurementTimeInterval=0.01f;
+      private static float fpsNextMeasurementRefresh=0;
+       private static int framesAccumulator=0;
      internal Camera currentRenderingTargetCamera{get;private set;}
       Vector3 currentRenderingTargetCameraRotation;
       Vector3 currentRenderingTargetCameraPosition;
        internal bool currentRenderingTargetCameraHasTransformChanges{get;private set;}
      internal bool currentRenderingTargetCameraChanged{get;private set;}
         void Update(){
+         framesAccumulator++;
+         if(Time.realtimeSinceStartup>fpsNextMeasurementRefresh){
+          currentFps=(int)(framesAccumulator/fpsMeasurementTimeInterval);
+          framesAccumulator=0;
+          fpsNextMeasurementRefresh+=fpsMeasurementTimeInterval;
+          SetMagicDeltaTimeNumber(currentFps);
+         }
          currentRenderingTargetCameraChanged=false;
          if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
           currentRenderingTargetCameraChanged=true;

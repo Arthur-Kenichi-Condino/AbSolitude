@@ -113,6 +113,22 @@ MonoBehaviour:
     - UMA_Default
     - RaceHumanMaleMorphableUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0d0b5e34a7f37c48aa80f619a2c909e
+    m_Address: UMA/OverlayDataAsset-DisfiguringHomunculus_Body_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - DisfiguringHomunculusUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2abc5dfae0b5f3b4fb3a78258d3b09f9
+    m_Address: UMA/SlotDataAsset-DisfiguringHomunculus_Body
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - DisfiguringHomunculusUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8cf77b216f780448fa289b30eca968
     m_Address: UMA/OverlayDataAsset-Vanilmirth_Cards_Overlay
     m_ReadOnly: 0
@@ -176,22 +192,6 @@ MonoBehaviour:
     - UMA_Base
     - UMA_Default
     - VanilmirthUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2abc5dfae0b5f3b4fb3a78258d3b09f9
-    m_Address: UMA/SlotDataAsset-DisfiguringHomunculus_Body
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - DisfiguringHomunculusUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c0d0b5e34a7f37c48aa80f619a2c909e
-    m_Address: UMA/OverlayDataAsset-DisfiguringHomunculus_Body_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - DisfiguringHomunculusUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
