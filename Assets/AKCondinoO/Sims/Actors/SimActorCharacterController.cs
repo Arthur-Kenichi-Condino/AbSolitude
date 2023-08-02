@@ -45,6 +45,14 @@ namespace AKCondinoO.Sims.Actors{
         [SerializeField]Vector3 moveDeceleration=new Vector3(0.25f,0.25f,0.25f);
          [SerializeField]internal Vector3 maxMoveSpeed=new Vector3(2f,2f,2f);
           [SerializeField]internal float walkSpeedAverage=2f;
+           [SerializeField]internal float moveSpeedRunMultiplier=2f;
+            [SerializeField]internal FloatLerpHelper isRunningMoveSpeedMultiplierLerp=new FloatLerpHelper();
+             float isRunningMoveSpeedMultiplier_value=1f;
+            internal float isRunningMoveSpeedMultiplier{
+             get{
+              return isRunningMoveSpeedMultiplier_value;
+             }
+            }
           internal Vector3 appliedControllerVelocity;
      [SerializeField]float jumpTimeLength=.125f;
       [SerializeField]float jumpSpeed=8.0f;
@@ -56,6 +64,12 @@ namespace AKCondinoO.Sims.Actors{
      internal Vector3 aimingAt;
       [SerializeField]internal float aimAtMaxDistance=1000f;
         internal void ManualUpdate(){
+         if(Enabled.WALK.curState){
+          isRunningMoveSpeedMultiplierLerp.tgtVal=1f;
+         }else{
+          isRunningMoveSpeedMultiplierLerp.tgtVal=moveSpeedRunMultiplier;
+         }
+         isRunningMoveSpeedMultiplier_value=isRunningMoveSpeedMultiplierLerp.UpdateFloat(isRunningMoveSpeedMultiplier_value,Core.magicDeltaTimeNumber);
          if(characterController.isGrounded){
           delayToConsiderNotOnGround=.2f;
          }else if(delayToConsiderNotOnGround>0f){
@@ -99,47 +113,47 @@ namespace AKCondinoO.Sims.Actors{
          }
          characterController.transform.rotation=bodyRotation;
          if(!Enabled.RELEASE_MOUSE.curState){
-          if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z;}else{inputMoveVelocity.z+=moveAcceleration.z;}}
-          if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z;}else{inputMoveVelocity.z-=moveAcceleration.z;}}
+          if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.z+=moveAcceleration.z*isRunningMoveSpeedMultiplier;}}
+          if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.z-=moveAcceleration.z*isRunningMoveSpeedMultiplier;}}
          }
          if(Enabled.RELEASE_MOUSE.curState||(!Enabled.FORWARD .curState&&!Enabled.BACKWARD.curState)){
              if(inputMoveVelocity.z!=0f){
               if(inputMoveVelocity.z>0f){
-                 inputMoveVelocity.z-=moveDeceleration.z;
+                 inputMoveVelocity.z-=moveDeceleration.z*isRunningMoveSpeedMultiplier;
                  if(inputMoveVelocity.z<=0f){
                     inputMoveVelocity.z=0f;
                  }
               }else{
-                 inputMoveVelocity.z+=moveDeceleration.z;
+                 inputMoveVelocity.z+=moveDeceleration.z*isRunningMoveSpeedMultiplier;
                  if(inputMoveVelocity.z>=0f){
                     inputMoveVelocity.z=0f;
                  }
               }
              }
          }
-         if( inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z= maxMoveSpeed.z;}
-         if(-inputMoveVelocity.z>maxMoveSpeed.z){inputMoveVelocity.z=-maxMoveSpeed.z;}
+         if( inputMoveVelocity.z>maxMoveSpeed.z*isRunningMoveSpeedMultiplier){inputMoveVelocity.z= maxMoveSpeed.z*isRunningMoveSpeedMultiplier;}
+         if(-inputMoveVelocity.z>maxMoveSpeed.z*isRunningMoveSpeedMultiplier){inputMoveVelocity.z=-maxMoveSpeed.z*isRunningMoveSpeedMultiplier;}
          if(!Enabled.RELEASE_MOUSE.curState){
-          if(Enabled.RIGHT   .curState){if(inputMoveVelocity.x<0f){inputMoveVelocity.x+=moveDeceleration.x;}else{inputMoveVelocity.x+=moveAcceleration.x;}}
-          if(Enabled.LEFT    .curState){if(inputMoveVelocity.x>0f){inputMoveVelocity.x-=moveDeceleration.x;}else{inputMoveVelocity.x-=moveAcceleration.x;}}
+          if(Enabled.RIGHT   .curState){if(inputMoveVelocity.x<0f){inputMoveVelocity.x+=moveDeceleration.x*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.x+=moveAcceleration.x*isRunningMoveSpeedMultiplier;}}
+          if(Enabled.LEFT    .curState){if(inputMoveVelocity.x>0f){inputMoveVelocity.x-=moveDeceleration.x*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.x-=moveAcceleration.x*isRunningMoveSpeedMultiplier;}}
          }
          if(Enabled.RELEASE_MOUSE.curState||(!Enabled.RIGHT   .curState&&!Enabled.LEFT    .curState)){
              if(inputMoveVelocity.x!=0f){
               if(inputMoveVelocity.x>0f){
-                 inputMoveVelocity.x-=moveDeceleration.x;
+                 inputMoveVelocity.x-=moveDeceleration.x*isRunningMoveSpeedMultiplier;
                  if(inputMoveVelocity.x<=0f){
                     inputMoveVelocity.x=0f;
                  }
               }else{
-                 inputMoveVelocity.x+=moveDeceleration.x;
+                 inputMoveVelocity.x+=moveDeceleration.x*isRunningMoveSpeedMultiplier;
                  if(inputMoveVelocity.x>=0f){
                     inputMoveVelocity.x=0f;
                  }
               }
              }
          }
-         if( inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x= maxMoveSpeed.x;}
-         if(-inputMoveVelocity.x>maxMoveSpeed.x){inputMoveVelocity.x=-maxMoveSpeed.x;}
+         if( inputMoveVelocity.x>maxMoveSpeed.x*isRunningMoveSpeedMultiplier){inputMoveVelocity.x= maxMoveSpeed.x*isRunningMoveSpeedMultiplier;}
+         if(-inputMoveVelocity.x>maxMoveSpeed.x*isRunningMoveSpeedMultiplier){inputMoveVelocity.x=-maxMoveSpeed.x*isRunningMoveSpeedMultiplier;}
          appliedControllerVelocity=new Vector3(
           inputMoveVelocity.x,
           0f,
@@ -154,6 +168,7 @@ namespace AKCondinoO.Sims.Actors{
          moveDelta=afterMovePos-beforeMovePos;
          aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
          ProcessAction1();
+         ProcessAction2();
         }
     }
 }

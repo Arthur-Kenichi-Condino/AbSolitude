@@ -59,7 +59,7 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 4
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
-  DEBUG_TOGGLE_HOLSTER_WEAPON: 1
+  DEBUG_TOGGLE_HOLSTER_WEAPON: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
   AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
@@ -106,6 +106,7 @@ MonoBehaviour:
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
+  moveSpeedRunMultiplier: 2
   jumpTimeLength: 0.125
   jumpSpeed: 8
   aimAtMaxDistance: 1000

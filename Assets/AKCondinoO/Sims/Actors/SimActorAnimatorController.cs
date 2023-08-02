@@ -36,6 +36,7 @@ namespace AKCondinoO.Sims.Actors{
            );
            layerCount=animator.layerCount;
            weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
+            weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
            animationTime=new Dictionary<int,float>(layerCount);
             animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
            normalizedTime=new Dictionary<int,float>(layerCount);
@@ -58,9 +59,11 @@ namespace AKCondinoO.Sims.Actors{
             currentClipInstanceID[i]=0;
              currentClipName[i]="";
            }
-           weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
+              weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
+           weaponAimLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
-           weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
+              weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle"    );
+           weaponAimLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle_Aim");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
            if(actor.simUMA!=null){
