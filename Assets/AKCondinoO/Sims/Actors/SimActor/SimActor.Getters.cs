@@ -45,8 +45,8 @@ namespace AKCondinoO.Sims.Actors{
         return navMeshAgent.velocity;
        }else if(simActorCharacterController!=null){
         float divideBy=
-         (simActorCharacterController.inputMoveVelocity.z!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.z)/(simActorCharacterController.maxMoveSpeed.z)):0f)+
-         (simActorCharacterController.inputMoveVelocity.x!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.x)/(simActorCharacterController.maxMoveSpeed.x)):0f);
+         (simActorCharacterController.inputMoveVelocity.z!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.z)/(simActorCharacterController.maxMoveSpeed.z*simActorCharacterController.isRunningMoveSpeedMultiplier)):0f)+
+         (simActorCharacterController.inputMoveVelocity.x!=0f?(Mathf.Abs(simActorCharacterController.inputMoveVelocity.x)/(simActorCharacterController.maxMoveSpeed.x*simActorCharacterController.isRunningMoveSpeedMultiplier)):0f);
         Vector3 velocity=
          Vector3.Scale(
           simActorCharacterController.inputMoveVelocity,
@@ -68,25 +68,25 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
      [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
+      protected float moveVelocityFlattened_value;
      internal virtual float moveVelocityFlattened{
       get{
        return moveVelocityFlattened_value;
       }
      }
-      protected float moveVelocityFlattened_value;
      [SerializeField]internal FloatLerpHelper moveStrafeVelocityFlattenedLerp=new FloatLerpHelper();
+      protected float moveStrafeVelocityFlattened_value;
      internal virtual float moveStrafeVelocityFlattened{
       get{
        return moveStrafeVelocityFlattened_value;
       }
      }
-      protected float moveStrafeVelocityFlattened_value;
      [SerializeField]internal FloatLerpHelper turnAngleLerp=new FloatLerpHelper();
+      protected float turnAngle_value;
      internal float turnAngle{
       get{
        return turnAngle_value;
       }
      }
-      protected float turnAngle_value;
     }
 }
