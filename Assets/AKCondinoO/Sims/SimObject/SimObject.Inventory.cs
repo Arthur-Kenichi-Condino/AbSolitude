@@ -6,6 +6,7 @@ using AKCondinoO.Sims.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 namespace AKCondinoO.Sims{
@@ -92,8 +93,22 @@ namespace AKCondinoO.Sims{
            if(asInventoryItem.container.asSimObject is BaseAI containerAsBaseAI){
             if(settings.inventoryTransformSettingsForMotion.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
              if(transformSettingsForSimHands.TryGetValue(containerAsBaseAI.motion,out var transformSettingsForMotion)&&transformSettingsForMotion.transform!=null){
-              Vector3 grabPos=transformSettingsForMotion.transform.localPosition;
-              Quaternion grabRot=transformSettingsForMotion.transform.localRotation;
+              int transformIndex=0;
+              int priority=int.MaxValue;
+              if(containerAsBaseAI.simActorAnimatorController!=null){
+               if(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex!=null){
+                if(containerAsBaseAI.simActorAnimatorController.layerIndexToName.TryGetValue(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value,out string layerName)){
+                 int index=Array.IndexOf(transformSettingsForMotion.layer,layerName);
+                 if(index>=0){
+                  if(containerAsBaseAI.isAiming){
+                   Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
+                  }
+                 }
+                }
+               }
+              }
+              Vector3 grabPos=transformSettingsForMotion.transform[transformIndex].localPosition;
+              Quaternion grabRot=transformSettingsForMotion.transform[transformIndex].localRotation;
               if(containerAsBaseAI.nameToBodyPart.TryGetValue(transformSettingsForMotion.parentBodyPartName,out Transform bodyPart)){
                if(transformSettingsForMotion.transformIsDeterminant){
                 if(ZAxisIsUp){

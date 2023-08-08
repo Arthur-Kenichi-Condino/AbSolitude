@@ -8,9 +8,15 @@ using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorCharacterController{
+     internal bool isAiming;
         internal void ProcessAction2(){
+         isAiming=false;
          if(actor is BaseAI baseAI){
           if(Enabled.ACTION_2.curState){
+           if(MainCamera.singleton.toFollowActor==actor){
+            //Log.DebugMessage("Enabled.ACTION_2.curState:mouse aim");
+            isAiming=true;
+           }
           }
          }
         }

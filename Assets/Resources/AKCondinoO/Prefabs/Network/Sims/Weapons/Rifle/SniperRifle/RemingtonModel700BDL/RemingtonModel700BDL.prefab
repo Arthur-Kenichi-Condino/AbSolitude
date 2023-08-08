@@ -936,11 +936,23 @@ MonoBehaviour:
     - motion: 50
       parentBodyPartName: rightHand
       transformIsDeterminant: 1
-      transform: {fileID: 7476013650176718565}
+      layer:
+      - Rifle
+      - Rifle_Aim
+      layerPriority: 0200000001000000
+      transform:
+      - {fileID: 7476013650176718565}
+      - {fileID: 7476013650176718565}
     - motion: 51
       parentBodyPartName: rightHand
       transformIsDeterminant: 1
-      transform: {fileID: 5574443840501539311}
+      layer:
+      - Rifle
+      - Rifle_Aim
+      layerPriority: 0200000001000000
+      transform:
+      - {fileID: 5574443840501539311}
+      - {fileID: 5574443840501539311}
 --- !u!1 &5619068119356455063
 GameObject:
   m_ObjectHideFlags: 0

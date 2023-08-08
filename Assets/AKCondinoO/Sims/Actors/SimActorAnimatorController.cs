@@ -59,11 +59,16 @@ namespace AKCondinoO.Sims.Actors{
             currentClipInstanceID[i]=0;
              currentClipName[i]="";
            }
-              weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
-           weaponAimLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
+           int GetLayer(string layerName){
+            int layerIndex=animator.GetLayerIndex(layerName);
+            layerIndexToName[layerIndex]=layerName;
+            return layerIndex;
+           }
+              weaponLayer[WeaponTypes.None       ]=GetLayer("Base Layer");
+           weaponAimLayer[WeaponTypes.None       ]=GetLayer("Base Layer");
            Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
-              weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle"    );
-           weaponAimLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle_Aim");
+              weaponLayer[WeaponTypes.SniperRifle]=GetLayer("Rifle"    );
+           weaponAimLayer[WeaponTypes.SniperRifle]=GetLayer("Rifle_Aim");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
            if(actor.simUMA!=null){
@@ -80,8 +85,11 @@ namespace AKCondinoO.Sims.Actors{
      bool synced=true;
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
      internal int layerCount{get;private set;}
+     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
       internal WeaponTypes lastWeaponType=WeaponTypes.None;
+       internal int?currentWeaponLayerIndex=null;
+        internal int?currentWeaponAimLayerIndex=null;
       internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
@@ -219,12 +227,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=8.0f*Core.magicDeltaTimeNumber;
+                weight-=16.0f*Core.magicDeltaTimeNumber;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=8.0f*Core.magicDeltaTimeNumber;
+                weight+=16.0f*Core.magicDeltaTimeNumber;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }
