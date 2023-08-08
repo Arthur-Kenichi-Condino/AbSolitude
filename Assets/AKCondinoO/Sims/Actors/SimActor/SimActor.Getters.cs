@@ -88,5 +88,20 @@ namespace AKCondinoO.Sims.Actors{
        return turnAngle_value;
       }
      }
+     internal bool isAiming{
+      get{
+       if(simActorCharacterController!=null){
+        return simActorCharacterController.isAiming;
+       }
+       return false;
+      }
+     }
+     internal bool isShooting{
+      get{
+       if(simActorCharacterController!=null){
+       }
+       return false;
+      }
+     }
     }
 }

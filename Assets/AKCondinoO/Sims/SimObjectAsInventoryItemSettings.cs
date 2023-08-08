@@ -22,7 +22,9 @@ namespace AKCondinoO.Sims.Inventory{
              [SerializeField]internal ActorMotion motion;
              [SerializeField]internal string parentBodyPartName;
              [SerializeField]internal bool transformIsDeterminant;
-             [SerializeField]internal Transform transform;
+             [SerializeField]internal string[]layer;
+             [SerializeField]internal int[]layerPriority;
+             [SerializeField]internal Transform[]transform;
             }
         }
     }
