@@ -214,5 +214,6 @@ namespace AKCondinoO.Voxels.Terrain{
                 //DebugGizmos.DrawBounds(worldBounds,Color.gray);
             }
         #endif
+        [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY=false;
     }
 }
