@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -115,6 +116,25 @@ namespace AKCondinoO.Voxels.Water{
            while((line=fileStreamReader.ReadLine())!=null){
             if(string.IsNullOrEmpty(line)){continue;}
             int vCoordStringStart=line.IndexOf("vCoord=(");
+            if(vCoordStringStart>=0){
+               vCoordStringStart+=8;
+             int vCoordStringEnd=line.IndexOf(") , ",vCoordStringStart);
+             string vCoordString=line.Substring(vCoordStringStart,vCoordStringEnd-vCoordStringStart);
+             //Log.DebugMessage("vCoordString:"+vCoordString);
+             string[]xyzString=vCoordString.Split(',');
+             int vCoordx=int.Parse(xyzString[0].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int vCoordy=int.Parse(xyzString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             int vCoordz=int.Parse(xyzString[2].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+             Vector3Int vCoord=new Vector3Int(vCoordx,vCoordy,vCoordz);
+             int editStringStart=vCoordStringEnd+4;
+             editStringStart=line.IndexOf("waterEditOutputData=",editStringStart);
+             if(editStringStart>=0){
+              int editStringEnd=line.IndexOf(" , }",editStringStart)+4;
+              string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
+              WaterEditOutputData edit=WaterEditOutputData.Parse(editString);
+              voxels[GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new VoxelWater(edit.density,edit.previousDensity,edit.sleeping,edit.evaporateAfter);
+             }
+            }
            }
           }
          }catch{
