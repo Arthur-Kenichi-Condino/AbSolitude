@@ -45,6 +45,7 @@ namespace AKCondinoO.Voxels.Water{
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
      internal const double stopSpreadingDensity=30.0d;
      readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
+      readonly Voxel[][]terrainVoxels=new Voxel[9][];
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>>absorbing=new();
      readonly Dictionary<int,Dictionary<Vector3Int,(double spread,VoxelWater voxel)>>spreading=new();
      internal readonly Queue<Dictionary<Vector3Int,WaterEditOutputData>>waterEditOutputDataPool=new Queue<Dictionary<Vector3Int,WaterEditOutputData>>();
@@ -109,6 +110,13 @@ namespace AKCondinoO.Voxels.Water{
            VoxelSystem.Concurrent.water_rwl.ExitReadLock();
           }
           LoadDataFromFile(cCoord1,editData1,null);
+         }
+         VoxelSystem.Concurrent.terrain_rwl.EnterReadLock();
+         try{
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.terrain_rwl.ExitReadLock();
          }
          Vector3Int vCoord1;
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
