@@ -60,26 +60,41 @@ namespace AKCondinoO.Voxels.Water{
         }
         void OnDrawGizmos(){
          #if UNITY_EDITOR
+          DrawVoxelsDensity();
+         #endif
+        }
+        #if UNITY_EDITOR
+        void DrawVoxelsDensity(){
+         if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null){
+          VoxelWater?[]voxels=null;
           if(VoxelSystem.Concurrent.water_rwl.TryEnterReadLock(0)){
            try{
-            DrawVoxelsDensity();
+            if(!VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out voxels)){
+             return;
+            }
            }catch{
+            voxels=null;
             throw;
            }finally{
             VoxelSystem.Concurrent.water_rwl.ExitReadLock();
            }
           }
-         #endif
-        }
-        #if UNITY_EDITOR
-        void DrawVoxelsDensity(){
-         if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null&&VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out VoxelWater[]voxels)){
+          if(voxels==null){
+           return;
+          }
           Vector3Int vCoord1;
           for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
           for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
           for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
            int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
-           VoxelWater voxel=voxels[vxlIdx1];
+           VoxelWater voxel;
+           lock(voxels){
+            if(voxels[vxlIdx1]!=null){
+             voxel=voxels[vxlIdx1].Value;
+            }else{
+             continue;
+            }
+           }
            double density=voxel.density;
            if(density==0d){
             continue;
