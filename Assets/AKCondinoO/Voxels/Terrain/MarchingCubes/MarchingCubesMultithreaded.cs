@@ -387,11 +387,12 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            );
           }}}
          }
-         for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-         for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-         for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
-         }
-         }}
+         //  TO DO: luz e oclusão de ambiente neste "for":
+         //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+         //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+         //for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
+         //}
+         //}}
          VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
          try{
           VoxelSystem.Concurrent.terrainVoxelsOutput[container.cnkIdx]=container.voxelsOutput;

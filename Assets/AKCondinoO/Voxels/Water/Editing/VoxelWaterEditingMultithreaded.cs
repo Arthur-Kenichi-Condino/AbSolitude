@@ -98,6 +98,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
           MergeEdits(cCoord1,vCoord1,cnkRgn1,resultDensity,previousDensity,sleeping,evaporateAfter);
          }
          void MergeEdits(Vector2Int cCoord,Vector3Int vCoord,Vector2Int cnkRgn,double resultDensity,double previousDensity,bool sleeping,float evaporateAfter){
+          resultDensity=Math.Clamp(resultDensity,0.0d,100.0d);
           if(!dataFromFileToMerge.ContainsKey(cCoord)){
            if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
             editData=new Dictionary<Vector3Int,WaterEditOutputData>();
@@ -111,15 +112,11 @@ namespace AKCondinoO.Voxels.Water.Editing{
            WaterEditOutputData voxelData=dataFromFileToMerge[cCoord][vCoord];
            currentVoxel=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping,voxelData.evaporateAfter);
           }else{
-           currentVoxel=new VoxelWater();
+           //  TO DO: valor do bioma
+           currentVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
           }
-          if(previousDensity<0d){
-           previousDensity=currentVoxel.density;
-          }
-          sleeping=(sleeping&&currentVoxel.sleeping);
-          if(evaporateAfter<0f){
-           evaporateAfter=Mathf.Max(evaporateAfter,currentVoxel.evaporateAfter);
-          }
+          previousDensity=currentVoxel.density;
+          sleeping=false;
           if(!dataForSavingToFile.ContainsKey(cCoord)){
            if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
             editData=new Dictionary<Vector3Int,WaterEditOutputData>();

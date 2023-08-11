@@ -55,7 +55,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
      [SerializeField]Vector3    DEBUG_ADD_WATER_SOURCE_AT=new Vector3(0,60,0);
      [SerializeField]Vector3Int DEBUG_ADD_WATER_SOURCE_SIZE=new Vector3Int(1,1,1);
      [SerializeField]double     DEBUG_ADD_WATER_SOURCE_DENSITY=100.0;
-     [SerializeField]double     DEBUG_ADD_WATER_SOURCE_PREVIOUS_DENSITY=-1.0;
+     [SerializeField]double     DEBUG_ADD_WATER_SOURCE_PREVIOUS_DENSITY=0.0;
      [SerializeField]bool       DEBUG_ADD_WATER_SOURCE_SLEEPING=false;
      [SerializeField]float      DEBUG_ADD_WATER_SOURCE_EVAPORATE_AFTER=-1f;
      readonly Queue<WaterEditRequest>editRequests=new Queue<WaterEditRequest>();
