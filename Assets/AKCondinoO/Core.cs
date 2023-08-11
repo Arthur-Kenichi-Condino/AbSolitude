@@ -70,8 +70,11 @@ namespace AKCondinoO{
          CultureInfoUtil.SetUtil();
                 PhysUtil.SetUtil();
            RenderingUtil.SetUtil();
-         QualitySettings.vSyncCount=0;
-         Application.targetFrameRate=164;
+         #if UNITY_STANDALONE_WIN
+          QualitySettings.vSyncCount=1;
+         #else
+          Application.targetFrameRate=164;
+         #endif
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();

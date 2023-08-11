@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39478444107433478}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2861845273881161631
 MonoBehaviour:
@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22287950ce36dbd4689924e2a29b0fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_ADD_WATER_SOURCE: 0
+  DEBUG_ADD_WATER_SOURCE_AT: {x: 0, y: 60, z: 0}
+  DEBUG_ADD_WATER_SOURCE_SIZE: {x: 1, y: 1, z: 1}
+  DEBUG_ADD_WATER_SOURCE_DENSITY: 100
+  DEBUG_ADD_WATER_SOURCE_PREVIOUS_DENSITY: 0
+  DEBUG_ADD_WATER_SOURCE_SLEEPING: 0
+  DEBUG_ADD_WATER_SOURCE_EVAPORATE_AFTER: -1
