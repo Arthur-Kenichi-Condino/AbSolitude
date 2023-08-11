@@ -20,7 +20,7 @@ namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingContainer:BackgroundContainer{
-     internal readonly VoxelWater[]voxelsOutput=new VoxelWater[VoxelsPerChunk];
+     internal readonly VoxelWater?[]voxelsOutput=new VoxelWater?[VoxelsPerChunk];
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
@@ -44,7 +44,7 @@ namespace AKCondinoO.Voxels.Water{
     }
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
      internal const double stopSpreadingDensity=30.0d;
-     readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
+     readonly VoxelWater?[][]voxels=new VoxelWater?[9][];
       readonly Voxel[][]terrainVoxels=new Voxel[9][];
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>>absorbing=new();
      readonly Dictionary<int,Dictionary<Vector3Int,(double spread,VoxelWater voxel)>>spreading=new();
@@ -53,13 +53,11 @@ namespace AKCondinoO.Voxels.Water{
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataForSavingToFile=new();
         internal WaterSpreadingMultithreaded(){
          for(int i=0;i<voxels.Length;++i){
-                       voxels[i]=new Dictionary<int,VoxelWater>();
                        absorbing[i]=new Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>();
                        spreading[i]=new Dictionary<Vector3Int,(double spread,VoxelWater voxel)>();
          }
         }
         protected override void Cleanup(){
-         foreach(var voxelsDictionary in voxels){voxelsDictionary.Clear();}
          foreach(var cnkIdxAbsorbingPair in absorbing){cnkIdxAbsorbingPair.Value.Clear();}
          foreach(var cnkIdxSpreadingPair in spreading){cnkIdxSpreadingPair.Value.Clear();}
          foreach(var editData in dataFromFileToMerge){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
@@ -74,6 +72,7 @@ namespace AKCondinoO.Voxels.Water{
          //Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          Vector2Int cCoord1=container.cCoord.Value;
          int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
+         voxels[oftIdx1]=container.voxelsOutput;
          if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData1)){
           editData1=new Dictionary<Vector3Int,WaterEditOutputData>();
          }
@@ -85,7 +84,7 @@ namespace AKCondinoO.Voxels.Water{
           VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
           try{
            if(VoxelSystem.Concurrent.waterVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
-            if(VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out VoxelWater[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
+            if(VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out VoxelWater?[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
              VoxelSystem.Concurrent.waterVoxelsOutput.Remove(voxelsOutputOldId.cnkIdx);
              Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
             }
@@ -95,15 +94,16 @@ namespace AKCondinoO.Voxels.Water{
           }finally{
            VoxelSystem.Concurrent.water_rwl.ExitWriteLock();
           }
+          Array.Clear(voxels[oftIdx1],0,voxels[oftIdx1].Length);
           LoadDataFromFile(cCoord1,editData1,voxels[oftIdx1]);
          }else{
           VoxelSystem.Concurrent.water_rwl.EnterReadLock();
           try{
-           lock(container.voxelsOutput){
-            for(int i=0;i<container.voxelsOutput.Length;++i){
-             voxels[oftIdx1][i]=container.voxelsOutput[i];
-            }
-           }
+           //lock(container.voxelsOutput){
+           // for(int i=0;i<container.voxelsOutput.Length;++i){
+           //  voxels[oftIdx1][i]=container.voxelsOutput[i];
+           // }
+           //}
           }catch{
            throw;
           }finally{
@@ -125,11 +125,14 @@ namespace AKCondinoO.Voxels.Water{
           //  carregar dados do bioma aqui em voxels,
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           VoxelWater voxel;
-          if(!voxels[oftIdx1].TryGetValue(vxlIdx1,out voxel)){
-           //  TO DO: valor do bioma
-           voxel=new VoxelWater(0.0d,0.0d,true,-1f);
+          lock(voxels[oftIdx1]){
+           if(voxels[oftIdx1][vxlIdx1]!=null){
+            voxel=voxels[oftIdx1][vxlIdx1].Value;
+           }else{
+            //  TO DO: valor do bioma
+            voxel=new VoxelWater(0.0d,0.0d,true,-1f);
+           }
           }
-          voxels[oftIdx1].Remove(vxlIdx1);
           if(editData1.ContainsKey(vCoord1)){
            WaterEditOutputData voxelData=editData1[vCoord1];
            //VoxelWater voxelFromFile=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping,voxelData.evaporateAfter);
@@ -161,7 +164,13 @@ namespace AKCondinoO.Voxels.Water{
              spreading[oftIdx1][vCoord1]=(voxel.density-voxel.previousDensity,voxel);
             }
            }
-           voxels[oftIdx1][vxlIdx1]=voxel;
+           lock(voxels[oftIdx1]){
+            voxels[oftIdx1][vxlIdx1]=voxel;
+           }
+          }else{
+           lock(voxels[oftIdx1]){
+            voxels[oftIdx1][vxlIdx1]=null;
+           }
           }
           //if(!voxel.sleeping){
           // voxel.previousDensity=voxel.density;
@@ -186,9 +195,13 @@ namespace AKCondinoO.Voxels.Water{
             bool Absorb(){
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
-             if(!voxels[oftIdx1].TryGetValue(vxlIdx3,out oldVoxel)){
-              //  TO DO: valor do bioma
-              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+             lock(voxels[oftIdx1]){
+              if(voxels[oftIdx1][vxlIdx3]!=null){
+               oldVoxel=voxels[oftIdx1][vxlIdx3].Value;
+              }else{
+               //  TO DO: valor do bioma
+               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+              }
              }
              VoxelWater newVoxel=new VoxelWater(oldVoxel.density-absorbValue,oldVoxel.density,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
@@ -196,14 +209,18 @@ namespace AKCondinoO.Voxels.Water{
               newVoxel.density=oldVoxel.density;
              }
              Log.DebugMessage("VerticalAbsorb:Absorb:"+vxlIdx3);
-             voxels[oftIdx1][vxlIdx3]=newVoxel;
+             lock(voxels[oftIdx1]){
+              voxels[oftIdx1][vxlIdx3]=newVoxel;
+             }
              return true;
             }
            }
           }
           absorbVoxel.previousDensity=absorbVoxel.density;
           absorbVoxel.sleeping=true;
-          voxels[oftIdx1][vxlIdx2]=absorbVoxel;
+          lock(voxels[oftIdx1]){
+           voxels[oftIdx1][vxlIdx2]=absorbVoxel;
+          }
          }
          foreach(var vCoordSpreadingPair in spreading[oftIdx1]){
           Vector3Int vCoord2=vCoordSpreadingPair.Key;
@@ -222,9 +239,13 @@ namespace AKCondinoO.Voxels.Water{
             bool Spread(){
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
-             if(!voxels[oftIdx1].TryGetValue(vxlIdx3,out oldVoxel)){
-              //  TO DO: valor do bioma
-              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+             lock(voxels[oftIdx1]){
+              if(voxels[oftIdx1][vxlIdx3]!=null){
+               oldVoxel=voxels[oftIdx1][vxlIdx3].Value;
+              }else{
+               //  TO DO: valor do bioma
+               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+              }
              }
              VoxelWater newVoxel=new VoxelWater(spreadVoxel.density/* sem perda porque é vertical */,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
@@ -232,14 +253,18 @@ namespace AKCondinoO.Voxels.Water{
               return true;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
              }
              Log.DebugMessage("VerticalSpread:Spread:"+vxlIdx3);
-             voxels[oftIdx1][vxlIdx3]=newVoxel;
+             lock(voxels[oftIdx1]){
+              voxels[oftIdx1][vxlIdx3]=newVoxel;
+             }
              return true;
             }
            }
           }
           spreadVoxel.previousDensity=spreadVoxel.density;
           spreadVoxel.sleeping=true;
-          voxels[oftIdx1][vxlIdx2]=spreadVoxel;
+          lock(voxels[oftIdx1]){
+           voxels[oftIdx1][vxlIdx2]=spreadVoxel;
+          }
          }
          bool HasBlockageAt(Vector3Int vCoord){//  testar com array de voxels do terreno ou array de bool para objetos de estruturas
           return false;
@@ -261,14 +286,14 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.water_rwl.EnterReadLock();
          try{
-          lock(container.voxelsOutput){
-           for(int i=0;i<container.voxelsOutput.Length;++i){
-            if(!voxels[oftIdx1].TryGetValue(i,out VoxelWater voxel)){
-             continue;
-            }
-            container.voxelsOutput[i]=voxel;
-           }
-          }
+          //lock(container.voxelsOutput){
+          // for(int i=0;i<container.voxelsOutput.Length;++i){
+          //  if(!voxels[oftIdx1].TryGetValue(i,out VoxelWater voxel)){
+          //   continue;
+          //  }
+          //  container.voxelsOutput[i]=voxel;
+          // }
+          //}
          }catch{
           throw;
          }finally{
@@ -288,7 +313,7 @@ namespace AKCondinoO.Voxels.Water{
           container.lastcnkRgn=container.cnkRgn;
           container.lastcnkIdx=container.cnkIdx;
          }
-         void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData,Dictionary<int,VoxelWater>voxelsDictionary){
+         void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData,VoxelWater?[]voxels){
           VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
           try{
            int oftIdx=GetoftIdx(cCoord-container.cCoord.Value);
@@ -334,8 +359,10 @@ namespace AKCondinoO.Voxels.Water{
                if(editData!=null&&!editData.ContainsKey(vCoord)){
                 editData.Add(vCoord,edit);
                }
-               if(voxelsDictionary!=null){
-                voxelsDictionary[GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new VoxelWater(edit.density,edit.previousDensity,edit.sleeping,edit.evaporateAfter);
+               if(voxels!=null){
+                lock(voxels){
+                 voxels[GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new VoxelWater(edit.density,edit.previousDensity,edit.sleeping,edit.evaporateAfter);
+                }
                }
               }
              }
