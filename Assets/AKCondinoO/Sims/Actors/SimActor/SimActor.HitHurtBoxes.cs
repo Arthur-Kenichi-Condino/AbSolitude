@@ -31,5 +31,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+        internal void HitHurtBoxesUpdate(){
+        }
     }
 }

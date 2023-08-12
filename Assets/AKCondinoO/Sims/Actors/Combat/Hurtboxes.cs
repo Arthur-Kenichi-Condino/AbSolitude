@@ -7,5 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     internal class Hurtboxes:MonoBehaviour{
      internal Rigidbody kinematicRigidbody;
+        internal void OnTriggerEnter(Collider other){
+        }
     }
 }
