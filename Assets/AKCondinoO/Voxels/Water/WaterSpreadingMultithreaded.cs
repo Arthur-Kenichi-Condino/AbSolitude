@@ -97,18 +97,18 @@ namespace AKCondinoO.Voxels.Water{
           Array.Clear(voxels[oftIdx1],0,voxels[oftIdx1].Length);
           LoadDataFromFile(cCoord1,editData1,voxels[oftIdx1]);
          }else{
-          VoxelSystem.Concurrent.water_rwl.EnterReadLock();
-          try{
-           //lock(container.voxelsOutput){
-           // for(int i=0;i<container.voxelsOutput.Length;++i){
-           //  voxels[oftIdx1][i]=container.voxelsOutput[i];
-           // }
-           //}
-          }catch{
-           throw;
-          }finally{
-           VoxelSystem.Concurrent.water_rwl.ExitReadLock();
-          }
+          //VoxelSystem.Concurrent.water_rwl.EnterReadLock();
+          //try{
+          // //lock(container.voxelsOutput){
+          // // for(int i=0;i<container.voxelsOutput.Length;++i){
+          // //  voxels[oftIdx1][i]=container.voxelsOutput[i];
+          // // }
+          // //}
+          //}catch{
+          // throw;
+          //}finally{
+          // VoxelSystem.Concurrent.water_rwl.ExitReadLock();
+          //}
           LoadDataFromFile(cCoord1,editData1,null);
          }
          VoxelSystem.Concurrent.terrain_rwl.EnterReadLock();
@@ -284,21 +284,21 @@ namespace AKCondinoO.Voxels.Water{
          }finally{
           VoxelSystem.Concurrent.waterFileData_rwl.ExitWriteLock();
          }
-         VoxelSystem.Concurrent.water_rwl.EnterReadLock();
-         try{
-          //lock(container.voxelsOutput){
-          // for(int i=0;i<container.voxelsOutput.Length;++i){
-          //  if(!voxels[oftIdx1].TryGetValue(i,out VoxelWater voxel)){
-          //   continue;
-          //  }
-          //  container.voxelsOutput[i]=voxel;
-          // }
-          //}
-         }catch{
-          throw;
-         }finally{
-          VoxelSystem.Concurrent.water_rwl.ExitReadLock();
-         }
+         //VoxelSystem.Concurrent.water_rwl.EnterReadLock();
+         //try{
+         // //lock(container.voxelsOutput){
+         // // for(int i=0;i<container.voxelsOutput.Length;++i){
+         // //  if(!voxels[oftIdx1].TryGetValue(i,out VoxelWater voxel)){
+         // //   continue;
+         // //  }
+         // //  container.voxelsOutput[i]=voxel;
+         // // }
+         // //}
+         //}catch{
+         // throw;
+         //}finally{
+         // VoxelSystem.Concurrent.water_rwl.ExitReadLock();
+         //}
          if(hasChangedIndex){
           VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
           try{
