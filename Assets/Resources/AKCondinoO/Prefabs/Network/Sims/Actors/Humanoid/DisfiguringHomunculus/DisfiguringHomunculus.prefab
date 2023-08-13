@@ -123,10 +123,13 @@ MonoBehaviour:
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  moveStrafeVelocityFlattenedLerp:
+    tgtValLerpSpeed: 76
+    tgtValLerpMaxTime: 0.0005
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
-  hitboxesPrefabs: {fileID: 0}
+  hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 0}
   doIdleMove: 1
   useRunSpeedChance: 0.5
@@ -161,6 +164,10 @@ MonoBehaviour:
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
+  moveSpeedRunMultiplier: 2
+  isRunningMoveSpeedMultiplierLerp:
+    tgtValLerpSpeed: 76
+    tgtValLerpMaxTime: 0.0005
   jumpTimeLength: 0.125
   jumpSpeed: 8
   aimAtMaxDistance: 1000
