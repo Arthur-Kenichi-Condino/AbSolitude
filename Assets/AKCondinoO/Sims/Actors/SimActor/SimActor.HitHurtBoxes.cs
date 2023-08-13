@@ -14,6 +14,23 @@ namespace AKCondinoO.Sims.Actors{
      protected readonly List<Hitboxes>hitboxes=new List<Hitboxes>();
       protected readonly List<Hurtboxes>hurtboxes=new List<Hurtboxes>();
         protected virtual void OnCreateHitHurtBoxes(DynamicCharacterAvatar simUMA,UMAData simUMAData){
+         if(hitboxesPrefabs!=null&&hitboxesPrefabs.prefabs.Length>0){
+          foreach(Hitboxes hitboxPrefab in hitboxesPrefabs.prefabs){
+           if(nameToBodyPart.TryGetValue(hitboxPrefab.name,out Transform bodyPart)){
+            Log.DebugMessage("create Hitbox from hitboxPrefab.name:"+hitboxPrefab.name);
+            Vector3 offset=hitboxPrefab.transform.localPosition;
+            Quaternion rotation=hitboxPrefab.transform.localRotation;
+            Hitboxes hitbox=Instantiate(hitboxPrefab);
+            hitbox.transform.SetParent(bodyPart,false);
+            offset=Vector3.Scale(offset,hitbox.transform.lossyScale);
+            hitbox.transform.localPosition=offset;
+            hitbox.transform.localRotation=rotation;
+            hitbox.kinematicRigidbody=hitbox.gameObject.AddComponent<Rigidbody>();
+            hitbox.kinematicRigidbody.isKinematic=true;
+            hitbox.actor=this;
+           }
+          }
+         }
          if(hurtboxesPrefabs!=null&&hurtboxesPrefabs.prefabs.Length>0){
           foreach(Hurtboxes hurtboxPrefab in hurtboxesPrefabs.prefabs){
            if(nameToBodyPart.TryGetValue(hurtboxPrefab.name,out Transform bodyPart)){
@@ -27,6 +44,7 @@ namespace AKCondinoO.Sims.Actors{
             hurtbox.transform.localRotation=rotation;
             hurtbox.kinematicRigidbody=hurtbox.gameObject.AddComponent<Rigidbody>();
             hurtbox.kinematicRigidbody.isKinematic=true;
+            hurtbox.actor=this;
            }
           }
          }
