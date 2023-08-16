@@ -101,7 +101,12 @@ namespace AKCondinoO.Sims{
                  int index=Array.IndexOf(transformSettingsForMotion.layer,layerName);
                  if(index>=0){
                   if(containerAsBaseAI.isAiming){
-                   Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
+                   int layerPriority=transformSettingsForMotion.layerPriority[index];
+                   if(layerPriority<=priority){
+                    priority=layerPriority;
+                    transformIndex=index;
+                    Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
+                   }
                   }
                  }
                 }

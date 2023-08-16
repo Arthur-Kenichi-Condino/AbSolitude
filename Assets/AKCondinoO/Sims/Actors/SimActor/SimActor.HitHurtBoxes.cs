@@ -13,6 +13,7 @@ namespace AKCondinoO.Sims.Actors{
       [SerializeField]protected HurtboxesPrefabsList hurtboxesPrefabs;
      protected readonly List<Hitboxes>hitboxes=new List<Hitboxes>();
       protected readonly List<Hurtboxes>hurtboxes=new List<Hurtboxes>();
+     internal readonly Dictionary<string,Hitboxes>nameToHitboxes=new Dictionary<string,Hitboxes>();
         protected virtual void OnCreateHitHurtBoxes(DynamicCharacterAvatar simUMA,UMAData simUMAData){
          foreach(Hitboxes hitbox in hitboxes){
           if(hitbox!=null){
@@ -20,6 +21,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          hitboxes.Clear();
+         nameToHitboxes.Clear();
          foreach(Hurtboxes hurtbox in hurtboxes){
           if(hurtbox!=null){
            DestroyImmediate(hurtbox);
@@ -41,6 +43,7 @@ namespace AKCondinoO.Sims.Actors{
             hitbox.kinematicRigidbody.isKinematic=true;
             hitbox.actor=this;
             hitboxes.Add(hitbox);
+            nameToHitboxes.Add(hitboxPrefab.name,hitbox);
            }
           }
          }
