@@ -71,6 +71,7 @@ namespace AKCondinoO.Sims.Actors{
            weaponAimLayer[WeaponTypes.SniperRifle]=GetLayer("Rifle_Aim");
            Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
+           AddAnimationEventsHandler();
            if(actor.simUMA!=null){
             actor.simUMA.transform.parent.SetParent(null);
             GetTransformTgtValuesFromCharacterController();

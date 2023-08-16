@@ -16,8 +16,7 @@ namespace AKCondinoO.UI{
      [SerializeField]bool editorNetAsClient;
      [SerializeField]bool devBuildNetAsClient;
      readonly Dictionary<Type,PooledPrefabInstanceHandler>prefabInstanceHandlers=new Dictionary<Type,PooledPrefabInstanceHandler>();
-     [SerializeField]NetworkPrefabsList manualNetworkPrefabs;
-     [SerializeField]NetworkPrefabsList autoNetworkPrefabs;
+     [SerializeField]GameObject[]manuallyAddedPrefabs;
       readonly List<NetworkPrefab>toRemove=new List<NetworkPrefab>();
         void Update(){
          GameObject netManagerGameObject;
@@ -32,15 +31,14 @@ namespace AKCondinoO.UI{
           if(!netManagerInitialized){
            Log.DebugMessage("initialize netManager");
            toRemove.Clear();
-           toRemove.AddRange(manualNetworkPrefabs.PrefabList);
-           toRemove.AddRange(  autoNetworkPrefabs.PrefabList);
+           toRemove.AddRange(netManager.NetworkConfig.Prefabs.Prefabs);
            foreach(NetworkPrefab networkPrefab in toRemove){
-            if(autoNetworkPrefabs.Contains(networkPrefab)){
-             autoNetworkPrefabs.Remove(networkPrefab);
-            }
             netManager.NetworkConfig.Prefabs.Remove(networkPrefab);
            }
            toRemove.Clear();
+           foreach(var gO in manuallyAddedPrefabs){
+            netManager.AddNetworkPrefab(gO);
+           }
            foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/",typeof(GameObject))){
             GameObject gameObject=(GameObject)o;
             SimObject  simObject=gameObject.GetComponent<SimObject>();
@@ -50,9 +48,7 @@ namespace AKCondinoO.UI{
              continue;
             }
             Type t=simObject.GetType();
-            //netManager.AddNetworkPrefab(simObject.gameObject);
-            NetworkPrefab networkPrefab=new NetworkPrefab{Prefab=simObject.gameObject};
-            autoNetworkPrefabs.Add(networkPrefab);
+            netManager.AddNetworkPrefab(simObject.gameObject);
             PooledPrefabInstanceHandler prefabInstanceHandler=new PooledPrefabInstanceHandler(simObject.gameObject);
             netManager.PrefabHandler.AddHandler(simObject.gameObject,prefabInstanceHandler);
             prefabInstanceHandlers.Add(t,prefabInstanceHandler);
@@ -94,11 +90,8 @@ namespace AKCondinoO.UI{
             }
            }
            void OnStarted(bool server=false){
-            foreach(var prefabList in netManager.NetworkConfig.Prefabs.NetworkPrefabsLists){
-             Log.DebugMessage("prefabList:"+prefabList);
-             foreach(var prefab in prefabList.PrefabList){
-              Log.DebugMessage("prefab:"+prefab.Prefab+" is registered:"+netManager.NetworkConfig.Prefabs.Contains(prefab));
-             }
+            foreach(var prefab in netManager.NetworkConfig.Prefabs.Prefabs){
+             Log.DebugMessage("prefab:"+prefab.Prefab+" is registered");
             }
            }
           }

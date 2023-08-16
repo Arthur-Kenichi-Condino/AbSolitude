@@ -31,6 +31,7 @@ namespace AKCondinoO.Sims{
      internal readonly Dictionary<(Type  simActorType,ulong idNumber),SimActor >activeActor             =new Dictionary<(Type,ulong),SimActor >();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawning              =new Dictionary<(Type,ulong),SimObject>();
      internal readonly Dictionary<(Type simObjectType,ulong idNumber),SimObject>despawningAndReleasingId=new Dictionary<(Type,ulong),SimObject>();
+      internal readonly HashSet<SimObject>netActive=new HashSet<SimObject>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          System.Random seedGenerator=new System.Random();
@@ -269,6 +270,9 @@ namespace AKCondinoO.Sims{
          foreach(var a in active){
           var simObject=a.Value;
           simObject.ManualLateUpdate();
+         }
+         foreach(var nA in netActive){
+          nA.ManualLateUpdate();
          }
         }
     }

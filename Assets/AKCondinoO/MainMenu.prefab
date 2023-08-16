@@ -46,5 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   editorNetAsClient: 0
   devBuildNetAsClient: 0
-  manualNetworkPrefabs: {fileID: 11400000, guid: 6a3db3adac343304d8e7fe8448294c4b, type: 2}
-  autoNetworkPrefabs: {fileID: 11400000, guid: ce2ef88cb0d35e746b2f77c4f6d4883a, type: 2}
+  manuallyAddedPrefabs:
+  - {fileID: 47513358957190350, guid: 27e0aae3b40922649b43ec001a83e2fd, type: 3}
+  - {fileID: 764480898399811415, guid: c8b969b87a9e7b145a2e8596787626db, type: 3}
+  - {fileID: 6282034162402426788, guid: 932a398d402fb7044840d9cb6ce63234, type: 3}
