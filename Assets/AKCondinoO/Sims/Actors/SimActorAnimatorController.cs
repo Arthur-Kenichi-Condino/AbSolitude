@@ -125,6 +125,9 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
+         if(actor.leftEye!=null){
+          Debug.DrawLine(actor.leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+         }
          rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f));
          posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMAPosOffset;
         }
