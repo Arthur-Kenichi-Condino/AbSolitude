@@ -8,7 +8,12 @@ namespace AKCondinoO.Sims.Actors.Combat{
     internal class Hitboxes:MonoBehaviour{
      internal Rigidbody kinematicRigidbody;
      internal SimActor actor;
-        internal void OnTriggerEnter(Collider other){
+      bool canDamage=false;
+        internal void OnTriggerStay(Collider other){
+        }
+        internal void OnCanDamage(){
+        }
+        internal void OnCantDamage(){
         }
     }
 }

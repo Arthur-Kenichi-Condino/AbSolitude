@@ -307,6 +307,10 @@ namespace AKCondinoO.Sims{
           netRotation.OnValueChanged+=OnClientSideNetRotationValueChanged;
           OnClientSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
           netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged   ;
+          if(!IsOwner){
+           SimObjectManager.singleton.netActive.Add(this);
+           EnableRenderers();
+          }
          }
         }
         public override void OnNetworkDespawn(){
@@ -321,6 +325,10 @@ namespace AKCondinoO.Sims{
           netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
           netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
+          if(!IsOwner){
+           DisableRenderers();
+           SimObjectManager.singleton.netActive.Remove(this);
+          }
          }
          base.OnNetworkDespawn();
         }

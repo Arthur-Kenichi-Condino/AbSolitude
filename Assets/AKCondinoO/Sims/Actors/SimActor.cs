@@ -409,6 +409,7 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
            }
+           HitHurtBoxesUpdate();
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
