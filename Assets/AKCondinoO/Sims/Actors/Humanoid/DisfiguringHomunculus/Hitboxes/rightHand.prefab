@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4402426908289804514}
   - component: {fileID: -5941629597017304619}
   - component: {fileID: -4973580256835194845}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: rightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c7a7f376b229c4b9235047f2e37875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxCanDamageTime: 0.5
+  gracePeriod: 0.2
 --- !u!65 &-4973580256835194845
 BoxCollider:
   m_ObjectHideFlags: 0
