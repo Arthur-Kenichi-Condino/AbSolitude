@@ -12,27 +12,38 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_MOVE_RIFLE  =51,
          MOTION_ATTACK=2,
          MOTION_ATTACK_RIFLE=52,
+         MOTION_HIT   =4,
+         MOTION_HIT_RIFLE   =54,
         }
         internal virtual void UpdateMotion(bool fromAI){
          if(fromAI){
-          if(onDoAttackSetMotion){
+          if(onHitSetMotion){
+              onDoAttackSetMotion=false;
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
+               MyMotion=ActorMotion.MOTION_HIT_RIFLE;
               }else{
-               MyMotion=ActorMotion.MOTION_ATTACK;
+               MyMotion=ActorMotion.MOTION_HIT;
               }
           }else{
-              if(MyPathfinding==PathfindingResult.TRAVELLING){
+              if(onDoAttackSetMotion){
                   if(MyWeaponType==WeaponTypes.SniperRifle){
-                   MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+                   MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
                   }else{
-                   MyMotion=ActorMotion.MOTION_MOVE;
+                   MyMotion=ActorMotion.MOTION_ATTACK;
                   }
               }else{
-                  if(MyWeaponType==WeaponTypes.SniperRifle){
-                   MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                  if(MyPathfinding==PathfindingResult.TRAVELLING){
+                      if(MyWeaponType==WeaponTypes.SniperRifle){
+                       MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+                      }else{
+                       MyMotion=ActorMotion.MOTION_MOVE;
+                      }
                   }else{
-                   MyMotion=ActorMotion.MOTION_STAND;
+                      if(MyWeaponType==WeaponTypes.SniperRifle){
+                       MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                      }else{
+                       MyMotion=ActorMotion.MOTION_STAND;
+                      }
                   }
               }
           }
@@ -60,6 +71,16 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
           return true;
          }
+         if(clipName.Contains("MOTION_HIT_RIFLE")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT_RIFLE;
+          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT_RIFLE");
+          return true;
+         }
+         if(clipName.Contains("MOTION_HIT")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT;
+          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
+          return true;
+         }
          if(clipName.Contains("MOTION_ATTACK")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
           //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
@@ -69,6 +90,15 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped");
+         if(onHitSetMotion){
+          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
+           onHitSetMotion=false;
+           MyMotion=ActorMotion.MOTION_STAND;
+          }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
+           onHitSetMotion=false;
+           MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+          }
+         }
          if(onDoAttackSetMotion){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
           if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){

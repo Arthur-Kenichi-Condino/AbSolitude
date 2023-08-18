@@ -5,9 +5,11 @@ using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Humanoid;
 using AKCondinoO.Sims.Actors.Humanoid.Human;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorAnimatorController:MonoBehaviour{
@@ -16,9 +18,20 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
+     [SerializeField]TransformAdjustment[]transformAdjustments;
+      internal readonly Dictionary<ActorMotion,TransformAdjustment>motionTransformAdjustment=new Dictionary<ActorMotion,TransformAdjustment>();
+        [Serializable]internal class TransformAdjustment{
+         [SerializeField]internal ActorMotion motion;
+         [SerializeField]internal Transform adjustment;
+        }
      [SerializeField]internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
      [SerializeField]internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
+         foreach(TransformAdjustment transformAdjustment in transformAdjustments){
+          if(transformAdjustment.adjustment!=null){
+           motionTransformAdjustment.Add(transformAdjustment.motion,transformAdjustment);
+          }
+         }
         }
         protected virtual void GetAnimator(){
          if(animator==null){
@@ -128,7 +141,11 @@ namespace AKCondinoO.Sims.Actors{
          if(actor.leftEye!=null){
           Debug.DrawLine(actor.leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
          }
-         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f));
+         Quaternion rotAdjustment=Quaternion.identity;
+         if(actor is BaseAI baseAI&&motionTransformAdjustment.TryGetValue(baseAI.motion,out TransformAdjustment adjustment)){
+          rotAdjustment=adjustment.adjustment.localRotation;
+         }
+         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f))*rotAdjustment;
          posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMAPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
