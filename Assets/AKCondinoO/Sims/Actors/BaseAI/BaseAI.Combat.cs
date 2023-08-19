@@ -73,6 +73,10 @@ namespace AKCondinoO.Sims.Actors{
      protected bool onHitSetMotion=false;
       protected bool onHitResetMotion=false;
         internal override void OnHit(Hitboxes hitbox){
+         if(onHitSetMotion){
+          onHitResetMotion=true;
+          Log.DebugMessage("onHitResetMotion="+onHitResetMotion);
+         }
          onHitSetMotion=true;
         }
     }
