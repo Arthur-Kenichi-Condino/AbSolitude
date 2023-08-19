@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using System.Collections.Generic;
-
+using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal enum ActorMotion:int{
@@ -88,9 +88,10 @@ namespace AKCondinoO.Sims.Actors{
          }
          return false;
         }
-        internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(int layerIndex,string currentClipName){
+        internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped");
          if(onHitSetMotion){
+          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
            onHitSetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND;
@@ -108,7 +109,17 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-        internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
+        internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
+        }
+        internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
+         if(onHitSetMotion){
+          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
+          }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
+           string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);
+           //Log.DebugMessage("fullPath:"+fullPath);
+           //simActorAnimatorController.animator.Play(fullPath,layerIndex,0f);
+          }
+         }
         }
     }
 }
