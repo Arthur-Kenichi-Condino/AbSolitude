@@ -201,6 +201,16 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
+  weaponLayerNames:
+  - weaponType: 0
+    layerName: Base Layer
+  - weaponType: 2
+    layerName: Carrying Rifle
+  weaponAimLayerNames:
+  - weaponType: 0
+    layerName: Base Layer
+  - weaponType: 2
+    layerName: Aiming with Rifle
 --- !u!195 &-897908923207528447
 NavMeshAgent:
   m_ObjectHideFlags: 0
