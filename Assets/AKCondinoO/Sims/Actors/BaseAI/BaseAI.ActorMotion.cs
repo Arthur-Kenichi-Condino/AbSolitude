@@ -94,9 +94,11 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
            onHitSetMotion=false;
+            onHitResetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND;
           }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
            onHitSetMotion=false;
+            onHitResetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND_RIFLE;
           }
          }
@@ -113,11 +115,16 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          if(onHitSetMotion){
-          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
-          }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
-           string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);
-           //Log.DebugMessage("fullPath:"+fullPath);
-           //simActorAnimatorController.animator.Play(fullPath,layerIndex,0f);
+          Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
+          if(onHitResetMotion){
+           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
+            onHitResetMotion=false;
+           }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
+            string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);
+            Log.DebugMessage("fullPath:"+fullPath);
+            simActorAnimatorController.animator.Play(fullPath,layerIndex,0f);
+            onHitResetMotion=false;
+           }
           }
          }
         }
