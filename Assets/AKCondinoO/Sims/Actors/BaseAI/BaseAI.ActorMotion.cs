@@ -24,6 +24,7 @@ namespace AKCondinoO.Sims.Actors{
               }else{
                MyMotion=ActorMotion.MOTION_HIT;
               }
+              OnMotionHitSet();
           }else{
               if(onDoAttackSetMotion){
                   if(MyWeaponType==WeaponTypes.SniperRifle){
@@ -96,18 +97,21 @@ namespace AKCondinoO.Sims.Actors{
            onHitSetMotion=false;
             onHitResetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND;
+           OnMotionHitAnimationEnd();
           }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
            onHitSetMotion=false;
             onHitResetMotion=false;
            MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+           OnMotionHitAnimationEnd();
           }
-         }
-         if(onDoAttackSetMotion){
-          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
-          if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){
-           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
-           onDoAttackSetMotion=false;
-           MyMotion=ActorMotion.MOTION_STAND;
+         }else{
+          if(onDoAttackSetMotion){
+           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
+           if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){
+            //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
+            onDoAttackSetMotion=false;
+            MyMotion=ActorMotion.MOTION_STAND;
+           }
           }
          }
         }
@@ -118,12 +122,17 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
           if(onHitResetMotion){
            if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
+            string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);
+            Log.DebugMessage("fullPath:"+fullPath);
+            simActorAnimatorController.animator.Play(fullPath,layerIndex,0f);
             onHitResetMotion=false;
+            OnMotionHitReset();
            }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
             string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);
             Log.DebugMessage("fullPath:"+fullPath);
             simActorAnimatorController.animator.Play(fullPath,layerIndex,0f);
             onHitResetMotion=false;
+            OnMotionHitReset();
            }
           }
          }

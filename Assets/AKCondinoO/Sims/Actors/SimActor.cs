@@ -254,6 +254,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          persistentSimActorData.UpdateData(this);
+         OnResetMotion();
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
@@ -301,6 +302,26 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnThirdPersonCamFollow()");
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
+        }
+        protected virtual void OnResetMotion(){
+         if(navMeshAgent!=null){
+          navMeshAgent.isStopped=false;
+         }
+        }
+        protected virtual void OnMotionHitSet(){
+         if(navMeshAgent!=null){
+          navMeshAgent.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitReset(){
+         if(navMeshAgent!=null){
+          navMeshAgent.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitAnimationEnd(){
+         if(navMeshAgent!=null){
+          navMeshAgent.isStopped=false;
+         }
         }
      internal bool isUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
