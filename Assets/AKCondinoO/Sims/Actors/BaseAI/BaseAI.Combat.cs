@@ -73,11 +73,21 @@ namespace AKCondinoO.Sims.Actors{
      protected bool onHitSetMotion=false;
       protected bool onHitResetMotion=false;
         internal override void OnHit(Hitboxes hitbox){
-         if(onHitSetMotion){
-          onHitResetMotion=true;
-          Log.DebugMessage("onHitResetMotion="+onHitResetMotion);
+         if(onHitSetMotionGracePeriod<=0f){
+          if(onHitSetMotion){
+           if(onHitResetMotionGracePeriod<=0f){
+            onHitResetMotion=true;
+            onHitResetMotionGracePeriod=onHitResetMotionGracePeriodDuration;
+            Log.DebugMessage("onHitResetMotion="+onHitResetMotion+";onHitResetMotionGracePeriod="+onHitResetMotionGracePeriod);
+           }
+          }
+          onHitSetMotion=true;
+          if(onHitSetMotionVulnerablePeriod<=0f){
+           Log.DebugMessage("onHitSetMotionVulnerablePeriod="+onHitSetMotionVulnerablePeriod);
+           onHitSetMotionVulnerablePeriod=onHitSetMotionVulnerablePeriodDuration;
+          }
+          Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
          }
-         onHitSetMotion=true;
         }
     }
 }

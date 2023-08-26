@@ -146,20 +146,28 @@ namespace AKCondinoO.Sims.Actors{
            Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
-          if(simActorAnimatorController.actor is BaseAI baseAI&&
-           (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-            baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
-           )
-          ){
-            leftFootIKPositionWeightLerp.tgtVal=1f;
-            leftFootIKRotationWeightLerp.tgtVal=1f;
-           rightFootIKPositionWeightLerp.tgtVal=1f;
-           rightFootIKRotationWeightLerp.tgtVal=1f;
-          }else{
-            leftFootIKPositionWeightLerp.tgtVal=0f;
-            leftFootIKRotationWeightLerp.tgtVal=0f;
-           rightFootIKPositionWeightLerp.tgtVal=0f;
-           rightFootIKRotationWeightLerp.tgtVal=0f;
+          if(simActorAnimatorController.actor is BaseAI baseAI){
+           if(baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
+              baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
+           ){
+             leftFootIKPositionWeightLerp.tgtVal=1f;
+             leftFootIKRotationWeightLerp.tgtVal=1f;
+            rightFootIKPositionWeightLerp.tgtVal=1f;
+            rightFootIKRotationWeightLerp.tgtVal=1f;
+           }else{
+             leftFootIKPositionWeightLerp.tgtVal=0f;
+             leftFootIKRotationWeightLerp.tgtVal=0f;
+            rightFootIKPositionWeightLerp.tgtVal=0f;
+            rightFootIKRotationWeightLerp.tgtVal=0f;
+            if(baseAI.motion==BaseAI.ActorMotion.MOTION_HIT||
+               baseAI.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE
+            ){
+              leftFootIKPositionWeight= leftFootIKPositionWeightLerp.EndFloat();
+              leftFootIKRotationWeight= leftFootIKRotationWeightLerp.EndFloat();
+             rightFootIKPositionWeight=rightFootIKPositionWeightLerp.EndFloat();
+             rightFootIKRotationWeight=rightFootIKRotationWeightLerp.EndFloat();
+            }
+           }
           }
            leftFootIKPositionWeight= leftFootIKPositionWeightLerp.UpdateFloat( leftFootIKPositionWeight,Core.magicDeltaTimeNumber);
            leftFootIKRotationWeight= leftFootIKRotationWeightLerp.UpdateFloat( leftFootIKRotationWeight,Core.magicDeltaTimeNumber);

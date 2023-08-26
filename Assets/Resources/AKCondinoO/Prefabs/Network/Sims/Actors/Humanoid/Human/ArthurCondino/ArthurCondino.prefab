@@ -76,6 +76,9 @@ MonoBehaviour:
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
+  onHitSetMotionVulnerablePeriodDuration: 2
+  onHitResetMotionGracePeriodDuration: 0.2
+  onHitSetMotionGracePeriodDuration: 5
   MyAggressionMode: 0
   renewEnemyInterval: 3
   pathfindingTimeout: 3
