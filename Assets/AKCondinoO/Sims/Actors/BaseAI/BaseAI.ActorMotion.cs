@@ -15,7 +15,29 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_HIT   =4,
          MOTION_HIT_RIFLE   =54,
         }
+     [SerializeField]internal float onHitSetMotionVulnerablePeriodDuration=2f;
+      [SerializeField]internal float onHitResetMotionGracePeriodDuration=.2f;
+       [SerializeField]internal float onHitSetMotionGracePeriodDuration=5f;
+     internal float onHitSetMotionVulnerablePeriod;
+      internal float onHitResetMotionGracePeriod;
+       internal float onHitSetMotionGracePeriod;
         internal virtual void UpdateMotion(bool fromAI){
+         if(onHitResetMotionGracePeriod>0f){
+          //Log.DebugMessage("onHitResetMotionGracePeriod=="+onHitResetMotionGracePeriod);
+          onHitResetMotionGracePeriod-=Time.deltaTime;
+         }
+         if(onHitSetMotionGracePeriod>0f){
+          //Log.DebugMessage("onHitSetMotionGracePeriod=="+onHitSetMotionGracePeriod);
+          onHitSetMotionGracePeriod-=Time.deltaTime;
+         }
+         if(onHitSetMotionVulnerablePeriod>0f){
+          //Log.DebugMessage("onHitSetMotionVulnerablePeriod=="+onHitSetMotionVulnerablePeriod);
+          onHitSetMotionVulnerablePeriod-=Time.deltaTime;
+          if(onHitSetMotionVulnerablePeriod<=0f){
+           onHitSetMotionGracePeriod=onHitSetMotionGracePeriodDuration;
+           Log.DebugMessage("onHitSetMotionGracePeriod="+onHitSetMotionGracePeriod);
+          }
+         }
          if(fromAI){
           if(onHitSetMotion){
               onDoAttackSetMotion=false;
@@ -49,17 +71,27 @@ namespace AKCondinoO.Sims.Actors{
               }
           }
          }else{
-          if(moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f){
+          if(onHitSetMotion){
+              onDoAttackSetMotion=false;
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+               MyMotion=ActorMotion.MOTION_HIT_RIFLE;
               }else{
-               MyMotion=ActorMotion.MOTION_MOVE;
+               MyMotion=ActorMotion.MOTION_HIT;
               }
+              OnMotionHitSet();
           }else{
-              if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+              if(moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f){
+                  if(MyWeaponType==WeaponTypes.SniperRifle){
+                   MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+                  }else{
+                   MyMotion=ActorMotion.MOTION_MOVE;
+                  }
               }else{
-               MyMotion=ActorMotion.MOTION_STAND;
+                  if(MyWeaponType==WeaponTypes.SniperRifle){
+                   MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                  }else{
+                   MyMotion=ActorMotion.MOTION_STAND;
+                  }
               }
           }
          }
@@ -119,7 +151,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          if(onHitSetMotion){
-          Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
+          //Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
           if(onHitResetMotion){
            if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
             string fullPath=simActorAnimatorController.GetFullPath(layerIndex,currentClipName);

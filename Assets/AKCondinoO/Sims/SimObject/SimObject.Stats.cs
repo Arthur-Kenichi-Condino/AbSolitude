@@ -107,15 +107,15 @@ namespace AKCondinoO.Sims{
             }
             protected virtual void OnReset(SimObject statsSim=null){
              simLevel_value=0;
-             luck_value=0f;
-               bodily_kinesthetic_value=0f;
-                    interpersonal_value=0f;
-                    intrapersonal_value=0f;
-                       linguistic_value=0f;
-             logical_mathematical_value=0f;
-                          musical_value=0f;
-                     naturalistic_value=0f;
-                          spatial_value=0f;
+             //luck_value=0f;
+             //  bodily_kinesthetic_value=0f;
+             //       interpersonal_value=0f;
+             //       intrapersonal_value=0f;
+             //          linguistic_value=0f;
+             //logical_mathematical_value=0f;
+             //             musical_value=0f;
+             //        naturalistic_value=0f;
+             //             spatial_value=0f;
             }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;

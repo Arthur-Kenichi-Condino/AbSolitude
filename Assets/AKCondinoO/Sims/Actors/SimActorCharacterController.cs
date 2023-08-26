@@ -11,6 +11,7 @@ namespace AKCondinoO.Sims.Actors{
      internal SimActor actor;
      internal CharacterController characterController;
       internal Vector3 center;
+     internal bool isStopped=false;
      [SerializeField]internal float headMaxVerticalRotationAngle=40f;
       [SerializeField]internal float headMaxHorizontalRotationAngle=60f;
         void Awake(){
@@ -154,6 +155,9 @@ namespace AKCondinoO.Sims.Actors{
          }
          if( inputMoveVelocity.x>maxMoveSpeed.x*isRunningMoveSpeedMultiplier){inputMoveVelocity.x= maxMoveSpeed.x*isRunningMoveSpeedMultiplier;}
          if(-inputMoveVelocity.x>maxMoveSpeed.x*isRunningMoveSpeedMultiplier){inputMoveVelocity.x=-maxMoveSpeed.x*isRunningMoveSpeedMultiplier;}
+         if(isStopped){
+          inputMoveVelocity=Vector3.zero;
+         }
          appliedControllerVelocity=new Vector3(
           inputMoveVelocity.x,
           0f,

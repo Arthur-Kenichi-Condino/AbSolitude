@@ -7,6 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
+         //
          #region Sanity
          /// <summary>
          ///  Sanidade mental ou noção existencial atual para o objeto Sim: se este valor chegar a 0f, o Sim irá desmaiar ou perder o controle das ações

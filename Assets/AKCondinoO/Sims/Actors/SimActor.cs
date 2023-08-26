@@ -130,6 +130,7 @@ namespace AKCondinoO.Sims.Actors{
      internal DynamicCharacterAvatar simUMA;
       internal Vector3 simUMAPosOffset;
      internal NavMeshAgent navMeshAgent;
+      internal bool navMeshAgentShouldBeStopped=false;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
         [SerializeField]protected float navMeshAgentRunSpeed=4f;
@@ -304,23 +305,27 @@ namespace AKCondinoO.Sims.Actors{
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
         protected virtual void OnResetMotion(){
-         if(navMeshAgent!=null){
-          navMeshAgent.isStopped=false;
+         navMeshAgentShouldBeStopped=false;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=false;
          }
         }
         protected virtual void OnMotionHitSet(){
-         if(navMeshAgent!=null){
-          navMeshAgent.isStopped=true;
+         navMeshAgentShouldBeStopped=true;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=true;
          }
         }
         protected virtual void OnMotionHitReset(){
-         if(navMeshAgent!=null){
-          navMeshAgent.isStopped=true;
+         navMeshAgentShouldBeStopped=true;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=true;
          }
         }
         protected virtual void OnMotionHitAnimationEnd(){
-         if(navMeshAgent!=null){
-          navMeshAgent.isStopped=false;
+         navMeshAgentShouldBeStopped=false;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=false;
          }
         }
      internal bool isUsingAI=true;
@@ -437,6 +442,9 @@ namespace AKCondinoO.Sims.Actors{
              DisableNavMeshAgent();
             }
             if(navMeshAgent.enabled){
+             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
+              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
+             }
              AI();
             }
            }else{

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,12 @@ namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
             protected virtual void OnGenerateValidation_Stats(SimObject statsSim=null,bool reset=true){
+             OnRefresh(statsSim);
+             //Log.DebugMessage("GetStatPointsSpentFor:"+GetStatPointsSpentFor(130));
+             //Log.DebugMessage("GetStatPointsRequired:"+GetStatPointsRequired(119,120));
              if(
               reset||
+              statPointsSpent_value>totalStatPoints_value||
                 bodily_kinesthetic_value<=0||
                      interpersonal_value<=0||
                      intrapersonal_value<=0||
@@ -17,7 +22,16 @@ namespace AKCondinoO.Sims{
               logical_mathematical_value<=0||
                            musical_value<=0||
                       naturalistic_value<=0||
-                           spatial_value<=0
+                           spatial_value<=0||
+              (GetStatPointsSpentFor(  bodily_kinesthetic_value)+
+               GetStatPointsSpentFor(       interpersonal_value)+
+               GetStatPointsSpentFor(       intrapersonal_value)+
+               GetStatPointsSpentFor(          linguistic_value)+
+               GetStatPointsSpentFor(logical_mathematical_value)+
+               GetStatPointsSpentFor(             musical_value)+
+               GetStatPointsSpentFor(        naturalistic_value)+
+               GetStatPointsSpentFor(             spatial_value)
+               !=statPointsSpent_value)
              ){
               //  bodily_kinesthetic_value=(float)math_random.Next(1,131);updatedBodily_kinesthetic  =true;
               //       interpersonal_value=(float)math_random.Next(1,131);updatedInterpersonal       =true;
@@ -28,6 +42,45 @@ namespace AKCondinoO.Sims{
               //        naturalistic_value=(float)math_random.Next(1,131);updatedNaturalistic        =true;
               //             spatial_value=(float)math_random.Next(1,131);updatedSpatial             =true;
              }
+            }
+            int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
+             int statPoints=0;
+             for(int level=Mathf.FloorToInt(fromStatLevel)+1;level<=Mathf.FloorToInt(toStatLevel);level++){
+              if(level<=99){
+               statPoints+=RaiseStatPointInFrom1To99Interval(level);
+              }else{
+               statPoints+=RaiseStatPointInFrom100To130Interval(level);
+              }
+             }
+             return statPoints;
+            }
+            int RaiseStatPointInFrom1To99Interval(int level){
+             return Mathf.FloorToInt(((level-1)-1)/10f)+2;
+            }
+            int GetStatPointsRequiredFrom1To99(float statLevel){
+             int statPoints=0;
+             for(int level=2;level<=Math.Min(statLevel,99);level++){
+              statPoints+=RaiseStatPointInFrom1To99Interval(level);
+             }
+             return statPoints;
+            }
+            int RaiseStatPointInFrom100To130Interval(int level){
+             if(level==100){
+              return 11;
+             }
+             return 4*Mathf.FloorToInt(((level-1)-100)/5f)+16;
+            }
+            int GetStatPointsRequiredFrom100To130(float statLevel){
+             int statPoints=0;
+             for(int level=100;level<=Math.Min(statLevel,130);level++){
+              statPoints+=RaiseStatPointInFrom100To130Interval(level);
+             }
+             return statPoints;
+            }
+            int GetStatPointsSpentFor(float stat){
+             int statPoints=GetStatPointsRequiredFrom1To99(stat);
+             statPoints+=GetStatPointsRequiredFrom100To130(stat);
+             return statPoints;
             }
          //
          #region Bodily_kinesthetic
