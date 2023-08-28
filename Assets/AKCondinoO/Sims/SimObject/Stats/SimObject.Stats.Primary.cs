@@ -10,8 +10,6 @@ namespace AKCondinoO.Sims{
         internal partial class Stats{
             protected virtual void OnGenerateValidation_Stats(SimObject statsSim=null,bool reset=true){
              OnRefresh(statsSim);
-             //Log.DebugMessage("GetStatPointsSpentFor:"+GetStatPointsSpentFor(130));
-             //Log.DebugMessage("GetStatPointsRequired:"+GetStatPointsRequired(119,120));
              if(
               reset||
               statPointsSpent_value>totalStatPoints_value||
@@ -43,41 +41,69 @@ namespace AKCondinoO.Sims{
               //             spatial_value=(float)math_random.Next(1,131);updatedSpatial             =true;
              }
             }
-            int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
+         static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
+            internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
+             int fromStatLevelFloor=Mathf.FloorToInt(fromStatLevel);
+             int   toStatLevelFloor=Mathf.FloorToInt(  toStatLevel);
+             lock(statPointsRequired){
+              if(statPointsRequired.TryGetValue((fromStatLevelFloor,toStatLevelFloor),out int cached)){
+               return cached;
+              }
+             }
              int statPoints=0;
-             for(int level=Mathf.FloorToInt(fromStatLevel)+1;level<=Mathf.FloorToInt(toStatLevel);level++){
+             for(int level=fromStatLevelFloor+1;level<=toStatLevelFloor;level++){
               if(level<=99){
                statPoints+=RaiseStatPointInFrom1To99Interval(level);
               }else{
                statPoints+=RaiseStatPointInFrom100To130Interval(level);
               }
+              lock(statPointsRequired){
+               statPointsRequired[(fromStatLevelFloor,toStatLevelFloor)]=statPoints;
+              }
              }
              return statPoints;
             }
-            int RaiseStatPointInFrom1To99Interval(int level){
+         static readonly Dictionary<float,int>totalStatPointsRequired=new Dictionary<float,int>();
+            internal static int RaiseStatPointInFrom1To99Interval(int level){
              return Mathf.FloorToInt(((level-1)-1)/10f)+2;
             }
-            int GetStatPointsRequiredFrom1To99(float statLevel){
+            internal static int GetStatPointsRequiredFrom1To99(float statLevel){
+             lock(totalStatPointsRequired){
+              if(totalStatPointsRequired.TryGetValue(statLevel,out int cached)){
+               return cached;
+              }
+             }
              int statPoints=0;
              for(int level=2;level<=Math.Min(statLevel,99);level++){
               statPoints+=RaiseStatPointInFrom1To99Interval(level);
+              lock(totalStatPointsRequired){
+               totalStatPointsRequired[level]=statPoints;
+              }
              }
              return statPoints;
             }
-            int RaiseStatPointInFrom100To130Interval(int level){
+            internal static int RaiseStatPointInFrom100To130Interval(int level){
              if(level==100){
               return 11;
              }
              return 4*Mathf.FloorToInt(((level-1)-100)/5f)+16;
             }
-            int GetStatPointsRequiredFrom100To130(float statLevel){
+            internal static int GetStatPointsRequiredFrom100To130(float statLevel){
+             lock(totalStatPointsRequired){
+              if(totalStatPointsRequired.TryGetValue(statLevel,out int cached)){
+               return cached;
+              }
+             }
              int statPoints=0;
              for(int level=100;level<=Math.Min(statLevel,130);level++){
               statPoints+=RaiseStatPointInFrom100To130Interval(level);
+              lock(totalStatPointsRequired){
+               totalStatPointsRequired[level]=statPoints;
+              }
              }
              return statPoints;
             }
-            int GetStatPointsSpentFor(float stat){
+            internal static int GetStatPointsSpentFor(float stat){
              int statPoints=GetStatPointsRequiredFrom1To99(stat);
              statPoints+=GetStatPointsRequiredFrom100To130(stat);
              return statPoints;
