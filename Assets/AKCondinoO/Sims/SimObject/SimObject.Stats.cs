@@ -88,6 +88,20 @@ namespace AKCondinoO.Sims{
          stats=null;
         }
         internal partial class Stats{
+            static Stats(){
+             int statPoints=GetStatPointsSpentFor(130);
+             Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
+             for(int statLevel=1;statLevel<130;++statLevel){
+              statPoints=GetStatPointsRequired(statLevel,statLevel+1);
+              Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
+             }
+             int totalStatPoints=AddStatPointsFrom1To99(99,false);
+             Log.DebugMessage("static Stats():AddStatPointsFrom1To99(99,false):"+totalStatPoints);
+             totalStatPoints=AddStatPointsFrom1To99(200,true);
+             totalStatPoints=AddStatPointsFrom100To150(200,true,totalStatPoints);
+             totalStatPoints=AddStatPointsFrom151To200(200,true,totalStatPoints);
+             Log.DebugMessage("static Stats():AddStatPointsFrom1To99(200,true),AddStatPointsFrom100To150(200,true,totalStatPoints),AddStatPointsFrom151To200(200,true,totalStatPoints):"+totalStatPoints);
+            }
          internal static System.Random seedGenerator;
          internal readonly System.Random math_random;
             internal Stats(){
