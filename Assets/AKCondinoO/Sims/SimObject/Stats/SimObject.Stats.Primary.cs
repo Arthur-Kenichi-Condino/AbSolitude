@@ -31,6 +31,15 @@ namespace AKCondinoO.Sims{
                GetStatPointsSpentFor(             spatial_value)
                !=statPointsSpent_value)
              ){
+              statPointsSpent_value=0;
+                 bodily_kinesthetic_value=0f;
+                      interpersonal_value=0f;
+                      intrapersonal_value=0f;
+                         linguistic_value=0f;
+               logical_mathematical_value=0f;
+                            musical_value=0f;
+                       naturalistic_value=0f;
+                            spatial_value=0f;
               //  bodily_kinesthetic_value=(float)math_random.Next(1,131);updatedBodily_kinesthetic  =true;
               //       interpersonal_value=(float)math_random.Next(1,131);updatedInterpersonal       =true;
               //       intrapersonal_value=(float)math_random.Next(1,131);updatedIntrapersonal       =true;
@@ -42,6 +51,7 @@ namespace AKCondinoO.Sims{
              }
             }
          static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
+          static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
             internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
              int fromStatLevelFloor=Mathf.FloorToInt(fromStatLevel);
              int   toStatLevelFloor=Mathf.FloorToInt(  toStatLevel);
@@ -94,7 +104,7 @@ namespace AKCondinoO.Sims{
                return cached;
               }
              }
-             int statPoints=0;
+             int statPoints=GetStatPointsRequiredFrom1To99(statLevel);
              for(int level=100;level<=Math.Min(statLevel,130);level++){
               statPoints+=RaiseStatPointInFrom100To130Interval(level);
               lock(totalStatPointsRequired){
@@ -104,8 +114,7 @@ namespace AKCondinoO.Sims{
              return statPoints;
             }
             internal static int GetStatPointsSpentFor(float stat){
-             int statPoints=GetStatPointsRequiredFrom1To99(stat);
-             statPoints+=GetStatPointsRequiredFrom100To130(stat);
+             int statPoints=GetStatPointsRequiredFrom100To130(stat);
              return statPoints;
             }
          //
