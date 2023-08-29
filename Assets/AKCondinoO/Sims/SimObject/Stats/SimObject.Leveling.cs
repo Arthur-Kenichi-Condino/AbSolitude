@@ -42,9 +42,7 @@ namespace AKCondinoO.Sims{
           if(updatedSimLevel||
              refreshedIsTranscendent
           ){
-           totalStatPoints_value=AddStatPointsFrom1To99(simLevel_value,isTranscendent_value);
-           totalStatPoints_value=AddStatPointsFrom100To150(simLevel_value,isTranscendent_value,totalStatPoints_value);
-           totalStatPoints_value=AddStatPointsFrom151To200(simLevel_value,isTranscendent_value,totalStatPoints_value);
+           totalStatPoints_value=AddStatPointsFrom151To200(simLevel_value,isTranscendent_value);
            Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
           }
          }
@@ -69,13 +67,13 @@ namespace AKCondinoO.Sims{
            }
            return statPoints;
           }
-          internal static int AddStatPointsFrom100To150(int currentLevel,bool transcendent,int currentTotal){
+          internal static int AddStatPointsFrom100To150(int currentLevel,bool transcendent){
            lock(totalStatPointsAtLevel){
             if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
              return cached;
             }
            }
-           int statPoints=currentTotal;
+           int statPoints=AddStatPointsFrom1To99(currentLevel,transcendent);
            for(int level=100;level<=Math.Min(currentLevel,150);level++){
             statPoints+=Mathf.FloorToInt((level-1)/10f)+13;
             lock(totalStatPointsAtLevel){
@@ -84,13 +82,13 @@ namespace AKCondinoO.Sims{
            }
            return statPoints;
           }
-          internal static int AddStatPointsFrom151To200(int currentLevel,bool transcendent,int currentTotal){
+          internal static int AddStatPointsFrom151To200(int currentLevel,bool transcendent){
            lock(totalStatPointsAtLevel){
             if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
              return cached;
             }
            }
-           int statPoints=currentTotal;
+           int statPoints=AddStatPointsFrom100To150(currentLevel,transcendent);
            for(int level=151;level<=Math.Min(currentLevel,200);level++){
             statPoints+=Mathf.FloorToInt(((level-1)-150)/7f)+28;
             lock(totalStatPointsAtLevel){
