@@ -40,6 +40,7 @@ namespace AKCondinoO.Sims{
                             musical_value=0f;
                        naturalistic_value=0f;
                             spatial_value=0f;
+              Bodily_kinestheticSet((float)math_random.Next(1,131));
               //  bodily_kinesthetic_value=(float)math_random.Next(1,131);updatedBodily_kinesthetic  =true;
               //       interpersonal_value=(float)math_random.Next(1,131);updatedInterpersonal       =true;
               //       intrapersonal_value=(float)math_random.Next(1,131);updatedIntrapersonal       =true;
@@ -50,8 +51,50 @@ namespace AKCondinoO.Sims{
               //             spatial_value=(float)math_random.Next(1,131);updatedSpatial             =true;
              }
             }
+            protected static void TryRaiseStatLevelTo(ref float stat,int toLevel,ref int statPointsSpent,int totalStatPoints){
+            }
+            protected static void SpendAllRemainingPointsOn(ref float stat,ref int statPointsSpent,int totalStatPoints){
+             if(stat>=130){
+              return;
+             }
+             int availablePoints=totalStatPoints-statPointsSpent;
+             if(availablePoints<GetStatPointsRequired(1,2)){
+              return;
+             }
+             if(availablePoints<GetStatPointsRequired(stat,stat+1)){
+              return;
+             }
+             int statPointsAlreadySpentOnStat=GetStatPointsSpentFor(stat);
+             int statPointsTheStatWillConsume=statPointsAlreadySpentOnStat+availablePoints;
+             int statPointsFor130=GetStatPointsSpentFor(130);
+             if(statPointsTheStatWillConsume>=statPointsFor130){
+              stat=130;
+              int statPointsConsumed=statPointsFor130-statPointsAlreadySpentOnStat;
+              statPointsSpent+=statPointsConsumed;
+              return;
+             }
+             bool cached;
+             int cachedLevel;
+             lock(maxStatLevelByStatPointsAvailable){
+              cached=maxStatLevelByStatPointsAvailable.TryGetValue(statPointsTheStatWillConsume,out cachedLevel);
+             }
+             if(cached){
+              stat=cachedLevel;
+              int statPointsConsumed=GetStatPointsSpentFor(stat)-statPointsAlreadySpentOnStat;
+              statPointsSpent+=statPointsConsumed;
+              return;
+             }
+             int statFloor=Mathf.FloorToInt(stat);
+             for(int level=statFloor+1;level<=130;level++){
+              int consumed=GetStatPointsRequired(level-1,level);
+              if(consumed>availablePoints){
+               return;
+              }
+              stat=level;
+              statPointsSpent+=consumed;
+             }
+            }
          static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
-          static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
             internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
              int fromStatLevelFloor=Mathf.FloorToInt(fromStatLevel);
              int   toStatLevelFloor=Mathf.FloorToInt(  toStatLevel);
@@ -74,6 +117,23 @@ namespace AKCondinoO.Sims{
              return statPoints;
             }
          static readonly Dictionary<float,int>totalStatPointsRequired=new Dictionary<float,int>();
+          static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
+            static void CacheMaxStatLevelByStatPointsAvailable(int level,int statPoints){
+             lock(maxStatLevelByStatPointsAvailable){
+              maxStatLevelByStatPointsAvailable[statPoints]=level;
+             }
+             int oneLevelLowerTotalStatPointsRequired;
+             lock(totalStatPointsRequired){
+              if(!totalStatPointsRequired.TryGetValue(level-1,out oneLevelLowerTotalStatPointsRequired)){
+               return;
+              }
+             }
+             lock(maxStatLevelByStatPointsAvailable){
+              for(int sP=oneLevelLowerTotalStatPointsRequired;sP<statPoints;++sP){
+               maxStatLevelByStatPointsAvailable[sP]=level-1;
+              }
+             }
+            }
             internal static int RaiseStatPointInFrom1To99Interval(int level){
              return Mathf.FloorToInt(((level-1)-1)/10f)+2;
             }
@@ -89,6 +149,7 @@ namespace AKCondinoO.Sims{
               lock(totalStatPointsRequired){
                totalStatPointsRequired[level]=statPoints;
               }
+              CacheMaxStatLevelByStatPointsAvailable(level,statPoints);
              }
              return statPoints;
             }
@@ -110,6 +171,7 @@ namespace AKCondinoO.Sims{
               lock(totalStatPointsRequired){
                totalStatPointsRequired[level]=statPoints;
               }
+              CacheMaxStatLevelByStatPointsAvailable(level,statPoints);
              }
              return statPoints;
             }
