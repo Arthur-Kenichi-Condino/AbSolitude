@@ -89,6 +89,23 @@ namespace AKCondinoO.Sims{
         }
         internal partial class Stats{
             static Stats(){
+             //  Testando funcionamento de funções
+             //int assertingStatPointsSpent=0;
+             //int assertingtotalStatPoints=AddStatPointsFrom151To200(200,true);
+             //float assertingStat=128;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=89;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //Log.DebugMessage("static Stats():assertingStat:"+assertingStat+";assertingStatPointsSpent:"+assertingStatPointsSpent);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //Log.DebugMessage("static Stats():assertingStat:"+assertingStat+";assertingStatPointsSpent:"+assertingStatPointsSpent);
              int statPointsFor99=GetStatPointsSpentFor(99);
              Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
              Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):wrong cached value");
@@ -106,6 +123,23 @@ namespace AKCondinoO.Sims{
              totalStatPoints=AddStatPointsFrom151To200(200,true);
              Log.DebugMessage("static Stats():AddStatPointsFrom151To200(200,true):"+totalStatPoints);
              Debug.Assert(AddStatPointsFrom151To200(200,true)==totalStatPoints,"static Stats():AddStatPointsFrom151To200(200,true):wrong cached value");
+             //  Testando funcionamento de funções (pós-cache)
+             //int assertingStatPointsSpent=0;
+             //int assertingtotalStatPoints=AddStatPointsFrom151To200(200,true);
+             //float assertingStat=128;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=89;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //Log.DebugMessage("static Stats():assertingStat:"+assertingStat+";assertingStatPointsSpent:"+assertingStatPointsSpent);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //assertingStat=1;
+             //SpendAllRemainingPointsOn(ref assertingStat,ref assertingStatPointsSpent,assertingtotalStatPoints);
+             //Log.DebugMessage("static Stats():assertingStat:"+assertingStat+";assertingStatPointsSpent:"+assertingStatPointsSpent);
             }
          internal static System.Random seedGenerator;
          internal readonly System.Random math_random;
