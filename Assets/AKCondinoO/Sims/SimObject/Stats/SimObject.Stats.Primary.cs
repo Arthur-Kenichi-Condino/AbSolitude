@@ -52,9 +52,11 @@ namespace AKCondinoO.Sims{
              }
             }
             protected static void TryRaiseStatLevelTo(ref float stat,int toLevel,ref int statPointsSpent,int totalStatPoints){
-            }
-            protected static void SpendAllRemainingPointsOn(ref float stat,ref int statPointsSpent,int totalStatPoints){
+             toLevel=Math.Min(toLevel,130);
              if(stat>=130){
+              return;
+             }
+             if(toLevel<=stat){
               return;
              }
              int availablePoints=totalStatPoints-statPointsSpent;
@@ -65,9 +67,16 @@ namespace AKCondinoO.Sims{
               return;
              }
              int statPointsAlreadySpentOnStat=GetStatPointsSpentFor(stat);
-             int statPointsTheStatWillConsume=statPointsAlreadySpentOnStat+availablePoints;
+             int raisingStatToLevelWillResultOnThisMuchTotalStatPointsSpent=GetStatPointsSpentFor(toLevel);
+             int statPointsTheStatWillConsumeOnRaisingStatToLevel=raisingStatToLevelWillResultOnThisMuchTotalStatPointsSpent-statPointsAlreadySpentOnStat;
+             if(statPointsTheStatWillConsumeOnRaisingStatToLevel<=availablePoints){
+              stat=toLevel;
+              statPointsSpent+=statPointsTheStatWillConsumeOnRaisingStatToLevel;
+              return;
+             }
+             int totalStatPointsThatAreSpentOnTryRaiseStatToLevel=statPointsAlreadySpentOnStat+Math.Min(statPointsTheStatWillConsumeOnRaisingStatToLevel,availablePoints);
              int statPointsFor130=GetStatPointsSpentFor(130);
-             if(statPointsTheStatWillConsume>=statPointsFor130){
+             if(totalStatPointsThatAreSpentOnTryRaiseStatToLevel>=statPointsFor130){
               stat=130;
               int statPointsConsumed=statPointsFor130-statPointsAlreadySpentOnStat;
               statPointsSpent+=statPointsConsumed;
@@ -76,7 +85,7 @@ namespace AKCondinoO.Sims{
              bool cached;
              int cachedLevel;
              lock(maxStatLevelByStatPointsAvailable){
-              cached=maxStatLevelByStatPointsAvailable.TryGetValue(statPointsTheStatWillConsume,out cachedLevel);
+              cached=maxStatLevelByStatPointsAvailable.TryGetValue(totalStatPointsThatAreSpentOnTryRaiseStatToLevel,out cachedLevel);
              }
              if(cached){
               stat=cachedLevel;
@@ -85,7 +94,7 @@ namespace AKCondinoO.Sims{
               return;
              }
              int statFloor=Mathf.FloorToInt(stat);
-             for(int level=statFloor+1;level<=130;level++){
+             for(int level=statFloor+1;level<=toLevel;level++){
               int consumed=GetStatPointsRequired(level-1,level);
               if(consumed>availablePoints){
                return;
@@ -93,6 +102,37 @@ namespace AKCondinoO.Sims{
               stat=level;
               statPointsSpent+=consumed;
              }
+            }
+            protected static void SpendAllRemainingPointsOn(ref float stat,ref int statPointsSpent,int totalStatPoints){
+             TryRaiseStatLevelTo(ref stat,130,ref statPointsSpent,totalStatPoints);
+             //int statPointsTheStatWillConsume=statPointsAlreadySpentOnStat+availablePoints;
+             //int statPointsFor130=GetStatPointsSpentFor(130);
+             //if(statPointsTheStatWillConsume>=statPointsFor130){
+             // stat=130;
+             // int statPointsConsumed=statPointsFor130-statPointsAlreadySpentOnStat;
+             // statPointsSpent+=statPointsConsumed;
+             // return;
+             //}
+             //bool cached;
+             //int cachedLevel;
+             //lock(maxStatLevelByStatPointsAvailable){
+             // cached=maxStatLevelByStatPointsAvailable.TryGetValue(statPointsTheStatWillConsume,out cachedLevel);
+             //}
+             //if(cached){
+             // stat=cachedLevel;
+             // int statPointsConsumed=GetStatPointsSpentFor(stat)-statPointsAlreadySpentOnStat;
+             // statPointsSpent+=statPointsConsumed;
+             // return;
+             //}
+             //int statFloor=Mathf.FloorToInt(stat);
+             //for(int level=statFloor+1;level<=130;level++){
+             // int consumed=GetStatPointsRequired(level-1,level);
+             // if(consumed>availablePoints){
+             //  return;
+             // }
+             // stat=level;
+             // statPointsSpent+=consumed;
+             //}
             }
          static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
             internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
