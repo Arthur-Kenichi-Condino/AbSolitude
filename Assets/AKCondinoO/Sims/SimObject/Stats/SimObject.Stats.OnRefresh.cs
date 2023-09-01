@@ -28,6 +28,14 @@ namespace AKCondinoO.Sims{
               OnRefresh_Luck_Late     (statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
               updatedSimLevel      =false;refreshedSimLevel      =false;
+              updatedBodily_kinesthetic  =false;
+              updatedInterpersonal       =false;
+              updatedIntrapersonal       =false;
+              updatedLinguistic          =false;
+              updatedLogical_mathematical=false;
+              updatedMusical             =false;
+              updatedNaturalistic        =false;
+              updatedSpatial             =false;
               pendingRefresh=false;
              }
             }
