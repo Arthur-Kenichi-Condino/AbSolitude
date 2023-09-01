@@ -25,6 +25,7 @@ using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Scripting;
 namespace AKCondinoO{
     internal class Core:MonoBehaviour{
      internal static Core singleton;
@@ -65,18 +66,28 @@ namespace AKCondinoO{
          ThreadPool.GetMaxThreads(out int maxWorkerThreads,out int maxIOCThreads);
          Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
          Thread.CurrentThread.Priority=System.Threading.ThreadPriority.Normal;
-         GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
+         #if !UNITY_EDITOR
+          GarbageCollector.GCMode=GarbageCollector.Mode.Manual;
+         #endif
+         GCSettings.LatencyMode=GCLatencyMode.Batch;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
                 PhysUtil.SetUtil();
            RenderingUtil.SetUtil();
-         QualitySettings.vSyncCount=0;
-         Application.targetFrameRate=164;
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
          Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
+         #if UNITY_STANDALONE_WIN
+          if(Screen.currentResolution.refreshRateRatio.value>=144){
+           QualitySettings.vSyncCount=2;
+          }else{
+           QualitySettings.vSyncCount=1;
+          }
+         #else
+          Application.targetFrameRate=74;
+         #endif
          SetMagicDeltaTimeNumber();
         }
      SortedDictionary<int,ISingletonInitialization>singletonInitOrder;
@@ -182,6 +193,7 @@ namespace AKCondinoO{
        internal bool currentRenderingTargetCameraHasTransformChanges{get;private set;}
      internal bool currentRenderingTargetCameraChanged{get;private set;}
         void Update(){
+         MemoryManagement.CallGC(Time.time);
          framesAccumulator++;
          if(Time.realtimeSinceStartup>fpsNextMeasurementRefresh){
           currentFps=(int)(framesAccumulator/fpsMeasurementTimeInterval);

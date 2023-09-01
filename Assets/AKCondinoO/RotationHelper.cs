@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,22 +67,39 @@ namespace AKCondinoO{
         internal static Quaternion RotDiffFromAToB(Quaternion rotationA,Quaternion rotationB){
          return rotationB*Quaternion.Inverse(rotationA);
         }
-        //  [https://forum.unity.com/threads/how-do-i-clamp-a-quaternion.370041/#post-6531533]
-        internal static Quaternion Clamp(Quaternion q,Vector3 minAxisAngle,Vector3 maxAxisAngle){
-         q.x/=(q.w==0f?1.0f:q.w);
-         q.y/=(q.w==0f?1.0f:q.w);
-         q.z/=(q.w==0f?1.0f:q.w);
-         q.w=1.0f;
-         float angleX=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.x);
-         angleX=Math.Clamp(angleX,minAxisAngle.x,maxAxisAngle.x);
-         q.x=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleX);
-         float angleY=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.y);
-         angleY=Math.Clamp(angleY,minAxisAngle.y,maxAxisAngle.y);
-         q.y=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleY);
-         float angleZ=2.0f*Mathf.Rad2Deg*Mathf.Atan(q.z);
-         angleZ=Math.Clamp(angleZ,minAxisAngle.z,maxAxisAngle.z);
-         q.z=Mathf.Tan(0.5f*Mathf.Deg2Rad*angleZ);
-         return q.normalized;
+        internal enum Axis{
+         x,y,z
+        }
+        internal static float GetAngle(Quaternion q,Axis axis){
+         float angle=0f;
+         switch(axis){
+          case Axis.x:
+           angle=q.eulerAngles.x;if(angle==180f){angle*=Mathf.Sign(q.x);}
+           break;
+          case Axis.y:
+           angle=q.eulerAngles.y;if(angle==180f){angle*=Mathf.Sign(q.y);}
+           break;
+          case Axis.z:
+           angle=q.eulerAngles.z;if(angle==180f){angle*=Mathf.Sign(q.z);}
+           break;
+         }
+         if(angle>180f){
+          angle-=360f;
+         }
+         return angle;
+        }
+        internal static Quaternion Clamp(Quaternion q,Quaternion min,Quaternion max){
+         //Log.DebugMessage("q:"+q+";min:"+min+";max:"+max);
+         Vector3    angle=new Vector3(GetAngle(q  ,Axis.x),GetAngle(q  ,Axis.y),GetAngle(q  ,Axis.z));
+         Vector3 minAngle=new Vector3(GetAngle(min,Axis.x),GetAngle(min,Axis.y),GetAngle(min,Axis.z));
+         Vector3 maxAngle=new Vector3(GetAngle(max,Axis.x),GetAngle(max,Axis.y),GetAngle(max,Axis.z));
+         //Log.DebugMessage("angle:"+angle+";minAngle:"+minAngle+";maxAngle:"+maxAngle);
+         if(angle.x<minAngle.x){angle.x=minAngle.x;}else if(angle.x>maxAngle.x){angle.x=maxAngle.x;}
+         if(angle.y<minAngle.y){angle.y=minAngle.y;}else if(angle.y>maxAngle.y){angle.y=maxAngle.y;}
+         if(angle.z<minAngle.z){angle.z=minAngle.z;}else if(angle.z>maxAngle.z){angle.z=maxAngle.z;}
+         //Log.DebugMessage("result angle:"+angle);
+         q=Quaternion.Euler(angle);
+         return q;
         }
     }
 }

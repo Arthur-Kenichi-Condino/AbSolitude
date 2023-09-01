@@ -122,8 +122,8 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystem.Concurrent.terrain_rwl=new ReaderWriterLockSlim();VoxelSystem.Concurrent.terrainFileData_rwl=new ReaderWriterLockSlim();
-         VoxelSystem.Concurrent.water_rwl  =new ReaderWriterLockSlim();VoxelSystem.Concurrent.waterFileData_rwl  =new ReaderWriterLockSlim();
+         VoxelSystem.Concurrent.terrain_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);VoxelSystem.Concurrent.terrainFileData_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.water_rwl  =new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);VoxelSystem.Concurrent.waterFileData_rwl  =new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;

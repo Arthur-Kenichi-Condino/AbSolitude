@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,10 @@ namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
             protected virtual void OnGenerateValidation_Stats(SimObject statsSim=null,bool reset=true){
+             OnRefresh(statsSim);
              if(
               reset||
+              statPointsSpent_value>totalStatPoints_value||
                 bodily_kinesthetic_value<=0||
                      interpersonal_value<=0||
                      intrapersonal_value<=0||
@@ -17,17 +20,175 @@ namespace AKCondinoO.Sims{
               logical_mathematical_value<=0||
                            musical_value<=0||
                       naturalistic_value<=0||
-                           spatial_value<=0
+                           spatial_value<=0||
+              (GetStatPointsSpentFor(  bodily_kinesthetic_value)+
+               GetStatPointsSpentFor(       interpersonal_value)+
+               GetStatPointsSpentFor(       intrapersonal_value)+
+               GetStatPointsSpentFor(          linguistic_value)+
+               GetStatPointsSpentFor(logical_mathematical_value)+
+               GetStatPointsSpentFor(             musical_value)+
+               GetStatPointsSpentFor(        naturalistic_value)+
+               GetStatPointsSpentFor(             spatial_value)
+               !=statPointsSpent_value)
              ){
-              //  bodily_kinesthetic_value=(float)math_random.Next(1,131);updatedBodily_kinesthetic  =true;
-              //       interpersonal_value=(float)math_random.Next(1,131);updatedInterpersonal       =true;
-              //       intrapersonal_value=(float)math_random.Next(1,131);updatedIntrapersonal       =true;
-              //          linguistic_value=(float)math_random.Next(1,131);updatedLinguistic          =true;
-              //logical_mathematical_value=(float)math_random.Next(1,131);updatedLogical_mathematical=true;
-              //             musical_value=(float)math_random.Next(1,131);updatedMusical             =true;
-              //        naturalistic_value=(float)math_random.Next(1,131);updatedNaturalistic        =true;
-              //             spatial_value=(float)math_random.Next(1,131);updatedSpatial             =true;
+              statPointsSpent_value=0;
+                 bodily_kinesthetic_value=0f;
+                      interpersonal_value=0f;
+                      intrapersonal_value=0f;
+                         linguistic_value=0f;
+               logical_mathematical_value=0f;
+                            musical_value=0f;
+                       naturalistic_value=0f;
+                            spatial_value=0f;
+                Bodily_kinestheticSet((float)math_random.Next(1,131));
+                     InterpersonalSet((float)math_random.Next(1,131));
+                     IntrapersonalSet((float)math_random.Next(1,131));
+                        LinguisticSet((float)math_random.Next(1,131));
+              Logical_mathematicalSet((float)math_random.Next(1,131));
+                           MusicalSet((float)math_random.Next(1,131));
+                      NaturalisticSet((float)math_random.Next(1,131));
+                           SpatialSet((float)math_random.Next(1,131));
              }
+            }
+            protected static void TryRaiseStatLevelTo(ref float stat,int toLevel,ref int statPointsSpent,int totalStatPoints){
+             toLevel=Math.Min(toLevel,130);
+             if(stat>=130){
+              return;
+             }
+             if(toLevel<=stat){
+              return;
+             }
+             int availablePoints=totalStatPoints-statPointsSpent;
+             if(availablePoints<GetStatPointsRequired(1,2)){
+              return;
+             }
+             if(availablePoints<GetStatPointsRequired(stat,stat+1)){
+              return;
+             }
+             int statPointsAlreadySpentOnStat=GetStatPointsSpentFor(stat);
+             int raisingStatToLevelWillResultOnThisMuchTotalStatPointsSpent=GetStatPointsSpentFor(toLevel);
+             int statPointsTheStatWillConsumeOnRaisingStatToLevel=raisingStatToLevelWillResultOnThisMuchTotalStatPointsSpent-statPointsAlreadySpentOnStat;
+             if(statPointsTheStatWillConsumeOnRaisingStatToLevel<=availablePoints){
+              stat=toLevel;
+              statPointsSpent+=statPointsTheStatWillConsumeOnRaisingStatToLevel;
+              return;
+             }
+             int totalStatPointsThatAreSpentOnTryRaiseStatToLevel=statPointsAlreadySpentOnStat+Math.Min(statPointsTheStatWillConsumeOnRaisingStatToLevel,availablePoints);
+             int statPointsFor130=GetStatPointsSpentFor(130);
+             if(totalStatPointsThatAreSpentOnTryRaiseStatToLevel>=statPointsFor130){
+              stat=130;
+              int statPointsConsumed=statPointsFor130-statPointsAlreadySpentOnStat;
+              statPointsSpent+=statPointsConsumed;
+              return;
+             }
+             bool cached;
+             int cachedLevel;
+             lock(maxStatLevelByStatPointsAvailable){
+              cached=maxStatLevelByStatPointsAvailable.TryGetValue(totalStatPointsThatAreSpentOnTryRaiseStatToLevel,out cachedLevel);
+             }
+             if(cached){
+              stat=cachedLevel;
+              int statPointsConsumed=GetStatPointsSpentFor(stat)-statPointsAlreadySpentOnStat;
+              statPointsSpent+=statPointsConsumed;
+              return;
+             }
+             int statFloor=Mathf.FloorToInt(stat);
+             for(int level=statFloor+1;level<=toLevel;level++){
+              int consumed=GetStatPointsRequired(level-1,level);
+              if(consumed>availablePoints){
+               return;
+              }
+              stat=level;
+              statPointsSpent+=consumed;
+             }
+            }
+            protected static void SpendAllRemainingPointsOn(ref float stat,ref int statPointsSpent,int totalStatPoints){
+             TryRaiseStatLevelTo(ref stat,130,ref statPointsSpent,totalStatPoints);
+            }
+         static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
+            internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
+             int fromStatLevelFloor=Mathf.FloorToInt(fromStatLevel);
+             int   toStatLevelFloor=Mathf.FloorToInt(  toStatLevel);
+             lock(statPointsRequired){
+              if(statPointsRequired.TryGetValue((fromStatLevelFloor,toStatLevelFloor),out int cached)){
+               return cached;
+              }
+             }
+             int statPoints=0;
+             for(int level=fromStatLevelFloor+1;level<=toStatLevelFloor;level++){
+              if(level<=99){
+               statPoints+=RaiseStatPointInFrom1To99Interval(level);
+              }else{
+               statPoints+=RaiseStatPointInFrom100To130Interval(level);
+              }
+              lock(statPointsRequired){
+               statPointsRequired[(fromStatLevelFloor,toStatLevelFloor)]=statPoints;
+              }
+             }
+             return statPoints;
+            }
+         static readonly Dictionary<float,int>totalStatPointsRequired=new Dictionary<float,int>();
+          static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
+            static void CacheMaxStatLevelByStatPointsAvailable(int level,int statPoints){
+             lock(maxStatLevelByStatPointsAvailable){
+              maxStatLevelByStatPointsAvailable[statPoints]=level;
+             }
+             int oneLevelLowerTotalStatPointsRequired;
+             lock(totalStatPointsRequired){
+              if(!totalStatPointsRequired.TryGetValue(level-1,out oneLevelLowerTotalStatPointsRequired)){
+               return;
+              }
+             }
+             lock(maxStatLevelByStatPointsAvailable){
+              for(int sP=oneLevelLowerTotalStatPointsRequired;sP<statPoints;++sP){
+               maxStatLevelByStatPointsAvailable[sP]=level-1;
+              }
+             }
+            }
+            internal static int RaiseStatPointInFrom1To99Interval(int level){
+             return Mathf.FloorToInt(((level-1)-1)/10f)+2;
+            }
+            internal static int GetStatPointsRequiredFrom1To99(float statLevel){
+             lock(totalStatPointsRequired){
+              if(totalStatPointsRequired.TryGetValue(statLevel,out int cached)){
+               return cached;
+              }
+             }
+             int statPoints=0;
+             for(int level=2;level<=Math.Min(statLevel,99);level++){
+              statPoints+=RaiseStatPointInFrom1To99Interval(level);
+              lock(totalStatPointsRequired){
+               totalStatPointsRequired[level]=statPoints;
+              }
+              CacheMaxStatLevelByStatPointsAvailable(level,statPoints);
+             }
+             return statPoints;
+            }
+            internal static int RaiseStatPointInFrom100To130Interval(int level){
+             if(level==100){
+              return 11;
+             }
+             return 4*Mathf.FloorToInt(((level-1)-100)/5f)+16;
+            }
+            internal static int GetStatPointsRequiredFrom100To130(float statLevel){
+             lock(totalStatPointsRequired){
+              if(totalStatPointsRequired.TryGetValue(statLevel,out int cached)){
+               return cached;
+              }
+             }
+             int statPoints=GetStatPointsRequiredFrom1To99(statLevel);
+             for(int level=100;level<=Math.Min(statLevel,130);level++){
+              statPoints+=RaiseStatPointInFrom100To130Interval(level);
+              lock(totalStatPointsRequired){
+               totalStatPointsRequired[level]=statPoints;
+              }
+              CacheMaxStatLevelByStatPointsAvailable(level,statPoints);
+             }
+             return statPoints;
+            }
+            internal static int GetStatPointsSpentFor(float stat){
+             int statPoints=GetStatPointsRequiredFrom100To130(stat);
+             return statPoints;
             }
          //
          #region Bodily_kinesthetic
@@ -40,7 +201,7 @@ namespace AKCondinoO.Sims{
            return bodily_kinesthetic_value;
           }
            internal void Bodily_kinestheticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            bodily_kinesthetic_value=value;
+            TryRaiseStatLevelTo(ref bodily_kinesthetic_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedBodily_kinesthetic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -56,7 +217,7 @@ namespace AKCondinoO.Sims{
            return interpersonal_value;
           }
            internal void InterpersonalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            interpersonal_value=value;
+            TryRaiseStatLevelTo(ref interpersonal_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedInterpersonal=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -72,7 +233,7 @@ namespace AKCondinoO.Sims{
            return intrapersonal_value;
           }
            internal void IntrapersonalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            intrapersonal_value=value;
+            TryRaiseStatLevelTo(ref intrapersonal_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedIntrapersonal=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -88,7 +249,7 @@ namespace AKCondinoO.Sims{
            return linguistic_value;
           }
            internal void LinguisticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            linguistic_value=value;
+            TryRaiseStatLevelTo(ref linguistic_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedLinguistic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -104,7 +265,7 @@ namespace AKCondinoO.Sims{
            return logical_mathematical_value;
           }
            internal void Logical_mathematicalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            logical_mathematical_value=value;
+            TryRaiseStatLevelTo(ref logical_mathematical_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedLogical_mathematical=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -120,7 +281,7 @@ namespace AKCondinoO.Sims{
            return musical_value;
           }
            internal void MusicalSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            musical_value=value;
+            TryRaiseStatLevelTo(ref musical_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedMusical=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -136,7 +297,7 @@ namespace AKCondinoO.Sims{
            return naturalistic_value;
           }
            internal void NaturalisticSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            naturalistic_value=value;
+            TryRaiseStatLevelTo(ref naturalistic_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedNaturalistic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
@@ -152,7 +313,7 @@ namespace AKCondinoO.Sims{
            return spatial_value;
           }
            internal void SpatialSet(float value,SimObject statsSim=null,bool forceRefresh=false){
-            spatial_value=value;
+            TryRaiseStatLevelTo(ref spatial_value,Mathf.FloorToInt(value),ref statPointsSpent_value,totalStatPoints_value);
             updatedSpatial=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
