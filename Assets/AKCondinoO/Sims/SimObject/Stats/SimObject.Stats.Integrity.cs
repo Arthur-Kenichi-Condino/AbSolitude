@@ -47,6 +47,10 @@ namespace AKCondinoO.Sims{
              SetPendingRefresh(statsSim,forceRefresh);
             }
              protected bool updatedMaxIntegrity;
+          internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
+           float baseMaxIntegrity=35f;
+          }
+           protected bool refreshedMaxIntegrity;
            #region Stamina
            /// <summary>
            ///  Energia física disponível para realizar ações
