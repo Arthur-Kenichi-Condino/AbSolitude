@@ -72,7 +72,14 @@ namespace AKCondinoO.Sims{
               }
              }
             }
-            renderer.enabled=interactionsEnabled;
+            if(Core.singleton.isServer){
+             renderer.enabled=interactionsEnabled;
+            }
+            if(Core.singleton.isClient){
+             if(!IsOwner){
+              renderer.enabled=true;
+             }
+            }
            }
            updateRenderersFlag=false;
           }

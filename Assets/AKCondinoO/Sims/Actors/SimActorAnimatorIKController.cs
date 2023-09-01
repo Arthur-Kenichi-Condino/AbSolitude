@@ -45,47 +45,56 @@ namespace AKCondinoO.Sims.Actors{
           }
           initialized=true;
          }
-         if(head!=null){
-          if(!simActorAnimatorController.actor.navMeshAgent.enabled){
-           Vector3 animHeadPos=simActorAnimatorController.actor.GetHeadPosition(fromAnimator:true);
-           Quaternion animBodyRot=simActorAnimatorController.animator.transform.rotation;
-           Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
-           float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
-           //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
-           float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
-           //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
-           Quaternion limitedHeadRotation=
-            Quaternion.AngleAxis(Math.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
-            Quaternion.AngleAxis(Math.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
-            animBodyRot;
-           Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
-           //  TO DO: rotating? Or moving? handle special conditions and rotations
-           bool flag;
-           if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
-            //Log.DebugMessage("rotating body, set target head IK to forward");
-            headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
-            if(flag){
-             headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
-            }else{
-             headIKRotationStoppedTimer-=Time.deltaTime;
+         if(simActorAnimatorController.actor.simActorCharacterController.isAiming){
+          headLookAtPositionLerp.tgtPos=simActorAnimatorController.actor.simActorCharacterController.aimingAt;
+          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+          //  [https://discussions.unity.com/t/upper-torso-ik/133564/2]
+          //m_Anim.SetLookAtWeight(m_LookWeight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight); 
+          simActorAnimatorController.animator.SetLookAtWeight(1f,1f,1f,1f,0f);
+          simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
+         }else{
+          if(head!=null){
+           if(!simActorAnimatorController.actor.navMeshAgent.enabled){
+            Vector3 animHeadPos=simActorAnimatorController.actor.GetHeadPosition(fromAnimator:true);
+            Quaternion animBodyRot=simActorAnimatorController.animator.transform.rotation;
+            Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+            float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
+            //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
+            float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
+            //Log.DebugMessage("verticalRotSignedAngle:"+verticalRotSignedAngle);
+            Quaternion limitedHeadRotation=
+             Quaternion.AngleAxis(Math.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
+             Quaternion.AngleAxis(Math.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
+             animBodyRot;
+            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+            //  TO DO: rotating? Or moving? handle special conditions and rotations
+            bool flag;
+            if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
+             //Log.DebugMessage("rotating body, set target head IK to forward");
+             headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+             if(flag){
+              headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
+             }else{
+              headIKRotationStoppedTimer-=Time.deltaTime;
+             }
             }
+            headLookAtPositionLerp.tgtPos=headLookAtPosition;
+            headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+            Quaternion headRot=Quaternion.LookRotation((headLookAtPositionLerped-animHeadPos).normalized,animBodyRot*Vector3.up);
+            float bodyToHeadRotYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,headRot);
+            //Log.DebugMessage("bodyToHeadRotYComponentSignedAngle:"+bodyToHeadRotYComponentSignedAngle);
+            float bodyToHeadRotXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,headRot);
+            //Log.DebugMessage("bodyToHeadRotXComponentSignedAngle:"+bodyToHeadRotXComponentSignedAngle);
+            if(Mathf.Abs(bodyToHeadRotYComponentSignedAngle)>headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance||
+               Mathf.Abs(bodyToHeadRotXComponentSignedAngle)>headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance//  tolerance
+            ){
+             //Log.DebugMessage("angle between body and target head IK "+bodyToHeadRotYComponentSignedAngle+" is above "+(headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance)+" (or, vertically, "+bodyToHeadRotXComponentSignedAngle+", "+(headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance)+")");
+             headLookAtPositionLerp.tgtPosLerpTime=0f;
+             headLookAtPositionLerped=headLookAtPosition;
+            }
+            simActorAnimatorController.animator.SetLookAtWeight(1f);
+            simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
            }
-           headLookAtPositionLerp.tgtPos=headLookAtPosition;
-           headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
-           Quaternion headRot=Quaternion.LookRotation((headLookAtPositionLerped-animHeadPos).normalized,animBodyRot*Vector3.up);
-           float bodyToHeadRotYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,headRot);
-           //Log.DebugMessage("bodyToHeadRotYComponentSignedAngle:"+bodyToHeadRotYComponentSignedAngle);
-           float bodyToHeadRotXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,headRot);
-           //Log.DebugMessage("bodyToHeadRotXComponentSignedAngle:"+bodyToHeadRotXComponentSignedAngle);
-           if(Mathf.Abs(bodyToHeadRotYComponentSignedAngle)>headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance||
-              Mathf.Abs(bodyToHeadRotXComponentSignedAngle)>headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance//  tolerance
-           ){
-            //Log.DebugMessage("angle between body and target head IK "+bodyToHeadRotYComponentSignedAngle+" is above "+(headMaxHorizontalRotationAngle+headIKLimitedHorizontalRotationAngleTolerance)+" (or, vertically, "+bodyToHeadRotXComponentSignedAngle+", "+(headMaxVerticalRotationAngle+headIKLimitedVerticalRotationAngleTolerance)+")");
-            headLookAtPositionLerp.tgtPosLerpTime=0f;
-            headLookAtPositionLerped=headLookAtPosition;
-           }
-           simActorAnimatorController.animator.SetLookAtWeight(1f);
-           simActorAnimatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
           }
          }
          if(leftFoot!=null&&rightFoot!=null){
@@ -103,7 +112,15 @@ namespace AKCondinoO.Sims.Actors{
            leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
-           leftFootIKRotation=RotationHelper.Clamp(leftFootIKRotation,new Vector3(-20f,-leftFoot.eulerAngles.y-20f,-20f),new Vector3(20f,-leftFoot.eulerAngles.y+20f,20f));
+           Debug.DrawRay(leftFootIKPosition,-simActorAnimatorController.animator.transform.right,Color.blue);
+           Quaternion leftFootIKRotationClamped;
+           leftFootIKRotationClamped=RotationHelper.Clamp(
+            leftFootIKRotation,
+            Quaternion.Euler(-5f,-180f,-5f),
+            Quaternion.Euler( 5f, 180f, 5f)
+           );
+           leftFootIKRotation=leftFootIKRotationClamped;
+           Debug.DrawRay(leftFootIKPosition,leftFootIKRotation*-Vector3.right,Color.green);
            //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
           }
           Vector3 rightFootIKEuler=rightFoot.eulerAngles;
@@ -118,23 +135,39 @@ namespace AKCondinoO.Sims.Actors{
            rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
            Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,simActorAnimatorController.animator.transform.right);
            rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
-           rightFootIKRotation=RotationHelper.Clamp(rightFootIKRotation,new Vector3(-20f,-rightFoot.eulerAngles.y-20f,-20f),new Vector3(20f,-rightFoot.eulerAngles.y+20f,20f));
+           Debug.DrawRay(rightFootIKPosition,simActorAnimatorController.animator.transform.right,Color.blue);
+           Quaternion rightFootIKRotationClamped;
+           rightFootIKRotationClamped=RotationHelper.Clamp(
+            rightFootIKRotation,
+            Quaternion.Euler(-15f,-180f,-15f),
+            Quaternion.Euler( 15f, 180f, 15f)
+           );
+           rightFootIKRotation=rightFootIKRotationClamped;
+           Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);
            //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
           }
-          if(simActorAnimatorController.actor is BaseAI baseAI&&
-           (baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
-            baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
-           )
-          ){
-            leftFootIKPositionWeightLerp.tgtVal=1f;
-            leftFootIKRotationWeightLerp.tgtVal=1f;
-           rightFootIKPositionWeightLerp.tgtVal=1f;
-           rightFootIKRotationWeightLerp.tgtVal=1f;
-          }else{
-            leftFootIKPositionWeightLerp.tgtVal=0f;
-            leftFootIKRotationWeightLerp.tgtVal=0f;
-           rightFootIKPositionWeightLerp.tgtVal=0f;
-           rightFootIKRotationWeightLerp.tgtVal=0f;
+          if(simActorAnimatorController.actor is BaseAI baseAI){
+           if(baseAI.motion==BaseAI.ActorMotion.MOTION_STAND||
+              baseAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
+           ){
+             leftFootIKPositionWeightLerp.tgtVal=1f;
+             leftFootIKRotationWeightLerp.tgtVal=1f;
+            rightFootIKPositionWeightLerp.tgtVal=1f;
+            rightFootIKRotationWeightLerp.tgtVal=1f;
+           }else{
+             leftFootIKPositionWeightLerp.tgtVal=0f;
+             leftFootIKRotationWeightLerp.tgtVal=0f;
+            rightFootIKPositionWeightLerp.tgtVal=0f;
+            rightFootIKRotationWeightLerp.tgtVal=0f;
+            if(baseAI.motion==BaseAI.ActorMotion.MOTION_HIT||
+               baseAI.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE
+            ){
+              leftFootIKPositionWeight= leftFootIKPositionWeightLerp.EndFloat();
+              leftFootIKRotationWeight= leftFootIKRotationWeightLerp.EndFloat();
+             rightFootIKPositionWeight=rightFootIKPositionWeightLerp.EndFloat();
+             rightFootIKRotationWeight=rightFootIKRotationWeightLerp.EndFloat();
+            }
+           }
           }
            leftFootIKPositionWeight= leftFootIKPositionWeightLerp.UpdateFloat( leftFootIKPositionWeight,Core.magicDeltaTimeNumber);
            leftFootIKRotationWeight= leftFootIKRotationWeightLerp.UpdateFloat( leftFootIKRotationWeight,Core.magicDeltaTimeNumber);

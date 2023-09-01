@@ -76,6 +76,9 @@ MonoBehaviour:
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
+  onHitSetMotionVulnerablePeriodDuration: 2
+  onHitResetMotionGracePeriodDuration: 0.2
+  onHitSetMotionGracePeriodDuration: 5
   MyAggressionMode: 0
   renewEnemyInterval: 3
   pathfindingTimeout: 3
@@ -106,6 +109,10 @@ MonoBehaviour:
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
+  moveSpeedRunMultiplier: 2
+  isRunningMoveSpeedMultiplierLerp:
+    tgtValLerpSpeed: 76
+    tgtValLerpMaxTime: 0.0005
   jumpTimeLength: 0.125
   jumpSpeed: 8
   aimAtMaxDistance: 1000
@@ -121,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustments: []
   rotLerp:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 76
@@ -135,6 +143,16 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
+  weaponLayerNames:
+  - weaponType: 0
+    layerName: Base Layer
+  - weaponType: 2
+    layerName: Carrying Rifle
+  weaponAimLayerNames:
+  - weaponType: 0
+    layerName: Base Layer
+  - weaponType: 2
+    layerName: Aiming with Rifle
 --- !u!195 &4585911009965713821
 NavMeshAgent:
   m_ObjectHideFlags: 0

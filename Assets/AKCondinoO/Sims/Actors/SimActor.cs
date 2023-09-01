@@ -130,6 +130,7 @@ namespace AKCondinoO.Sims.Actors{
      internal DynamicCharacterAvatar simUMA;
       internal Vector3 simUMAPosOffset;
      internal NavMeshAgent navMeshAgent;
+      internal bool navMeshAgentShouldBeStopped=false;
       internal NavMeshQueryFilter navMeshQueryFilter;
        [SerializeField]protected float navMeshAgentWalkSpeed=2f;
         [SerializeField]protected float navMeshAgentRunSpeed=4f;
@@ -254,6 +255,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          persistentSimActorData.UpdateData(this);
+         OnResetMotion();
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
@@ -301,6 +303,30 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnThirdPersonCamFollow()");
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
+        }
+        protected virtual void OnResetMotion(){
+         navMeshAgentShouldBeStopped=false;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=false;
+         }
+        }
+        protected virtual void OnMotionHitSet(){
+         navMeshAgentShouldBeStopped=true;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitReset(){
+         navMeshAgentShouldBeStopped=true;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitAnimationEnd(){
+         navMeshAgentShouldBeStopped=false;
+         if(simActorCharacterController!=null){
+          simActorCharacterController.isStopped=false;
+         }
         }
      internal bool isUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
@@ -409,12 +435,16 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
            }
+           HitHurtBoxesUpdate();
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
              DisableNavMeshAgent();
             }
             if(navMeshAgent.enabled){
+             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
+              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
+             }
              AI();
             }
            }else{

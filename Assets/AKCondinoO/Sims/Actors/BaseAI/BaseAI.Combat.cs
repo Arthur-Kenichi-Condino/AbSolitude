@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,6 +69,25 @@ namespace AKCondinoO.Sims.Actors{
         protected override void DoAttack(){
          //Log.DebugMessage("DoAttack()");
          onDoAttackSetMotion=true;
+        }
+     protected bool onHitSetMotion=false;
+      protected bool onHitResetMotion=false;
+        internal override void OnHit(Hitboxes hitbox){
+         if(onHitSetMotionGracePeriod<=0f){
+          if(onHitSetMotion){
+           if(onHitResetMotionGracePeriod<=0f){
+            onHitResetMotion=true;
+            onHitResetMotionGracePeriod=onHitResetMotionGracePeriodDuration;
+            Log.DebugMessage("onHitResetMotion="+onHitResetMotion+";onHitResetMotionGracePeriod="+onHitResetMotionGracePeriod);
+           }
+          }
+          onHitSetMotion=true;
+          if(onHitSetMotionVulnerablePeriod<=0f){
+           Log.DebugMessage("onHitSetMotionVulnerablePeriod="+onHitSetMotionVulnerablePeriod);
+           onHitSetMotionVulnerablePeriod=onHitSetMotionVulnerablePeriodDuration;
+          }
+          Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
+         }
         }
     }
 }

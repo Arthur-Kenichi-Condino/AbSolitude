@@ -88,6 +88,26 @@ namespace AKCondinoO.Sims{
          stats=null;
         }
         internal partial class Stats{
+            static Stats(){
+             Log.DebugMessage("static Stats():cache values");
+             int statPointsFor99=GetStatPointsSpentFor(99);
+             Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
+             Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):wrong cached value");
+             int statPoints=GetStatPointsSpentFor(130);
+             Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
+             Debug.Assert(GetStatPointsSpentFor(130)==statPoints,"static Stats():GetStatPointsSpentFor(130):wrong cached value");
+             for(int statLevel=1;statLevel<130;++statLevel){
+              statPoints=GetStatPointsRequired(statLevel,statLevel+1);
+              Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
+              Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):wrong cached value");
+             }
+             int totalStatPoints=AddStatPointsFrom1To99(99,false);
+             Log.DebugMessage("static Stats():AddStatPointsFrom1To99(99,false):"+totalStatPoints);
+             Debug.Assert(AddStatPointsFrom1To99(99,false)==totalStatPoints,"static Stats():AddStatPointsFrom1To99(99,false):wrong cached value");
+             totalStatPoints=AddStatPointsFrom151To200(200,true);
+             Log.DebugMessage("static Stats():AddStatPointsFrom151To200(200,true):"+totalStatPoints);
+             Debug.Assert(AddStatPointsFrom151To200(200,true)==totalStatPoints,"static Stats():AddStatPointsFrom151To200(200,true):wrong cached value");
+            }
          internal static System.Random seedGenerator;
          internal readonly System.Random math_random;
             internal Stats(){
@@ -107,15 +127,16 @@ namespace AKCondinoO.Sims{
             }
             protected virtual void OnReset(SimObject statsSim=null){
              simLevel_value=0;
-             luck_value=0f;
-               bodily_kinesthetic_value=0f;
-                    interpersonal_value=0f;
-                    intrapersonal_value=0f;
-                       linguistic_value=0f;
-             logical_mathematical_value=0f;
-                          musical_value=0f;
-                     naturalistic_value=0f;
-                          spatial_value=0f;
+              statPointsSpent_value=0;
+                 bodily_kinesthetic_value=0f;
+                      interpersonal_value=0f;
+                      intrapersonal_value=0f;
+                         linguistic_value=0f;
+               logical_mathematical_value=0f;
+                            musical_value=0f;
+                       naturalistic_value=0f;
+                            spatial_value=0f;
+                luck_value=0f;
             }
             internal void OnAppliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;

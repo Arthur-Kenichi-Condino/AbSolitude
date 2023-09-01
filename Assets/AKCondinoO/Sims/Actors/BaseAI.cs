@@ -37,6 +37,13 @@ namespace AKCondinoO.Sims.Actors{
          base.OnDeactivated();
          ReleaseEnemiesAndAllies();
         }
+        protected override void OnResetMotion(){
+         onHitSetMotion=false;
+          onHitResetMotion=false;
+         onDoAttackSetMotion=false;
+         MyMotion=ActorMotion.MOTION_STAND;
+         base.OnResetMotion();
+        }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
      protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}

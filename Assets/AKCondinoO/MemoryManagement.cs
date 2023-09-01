@@ -9,11 +9,19 @@ using System.Runtime;
 using UnityEngine;
 namespace AKCondinoO{
     internal static class MemoryManagement{
-     internal static float lastManualGarbageCollectionTime;
+     internal static float lastManualGarbageCollectionTime=-1;
+     const float manualGarbageCollectionTimeInterval=30.0f;
         internal static void CallGC(float time){
+         if(lastManualGarbageCollectionTime>=0f){
+          if(time-lastManualGarbageCollectionTime<=manualGarbageCollectionTimeInterval){
+           return;
+          }
+         }
+         Log.DebugMessage("CallGC");
          GCSettings.LargeObjectHeapCompactionMode=GCLargeObjectHeapCompactionMode.CompactOnce;
          GC.Collect(GC.MaxGeneration,GCCollectionMode.Forced,true,true);
          GC.WaitForPendingFinalizers();
+         lastManualGarbageCollectionTime=time;
         }
         internal static void SuperDestroy(this object @this,BindingFlags flags){
          foreach(FieldInfo field in @this.GetType().GetFields(flags)){

@@ -5,9 +5,11 @@ using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Humanoid;
 using AKCondinoO.Sims.Actors.Humanoid.Human;
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorAnimatorController:MonoBehaviour{
@@ -16,9 +18,47 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorRight;
      internal Animator animator;
      internal SimActorAnimatorIKController animatorIKController;
+     [SerializeField]TransformAdjustment[]transformAdjustments;
+      internal readonly Dictionary<ActorMotion,TransformAdjustment>motionTransformAdjustment=new Dictionary<ActorMotion,TransformAdjustment>();
+        [Serializable]internal class TransformAdjustment{
+         [SerializeField]internal ActorMotion motion;
+         [SerializeField]internal Transform adjustment;
+        }
      [SerializeField]internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
      [SerializeField]internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
+         foreach(TransformAdjustment transformAdjustment in transformAdjustments){
+          if(transformAdjustment.adjustment!=null){
+           motionTransformAdjustment.Add(transformAdjustment.motion,transformAdjustment);
+          }
+         }
+        }
+     internal readonly Dictionary<(int layer,string clipName),string>layerClipToFullPath=new Dictionary<(int,string),string>();
+        internal string GetFullPath(int layerIndex,string currentClipName){
+         (int layer,string clipName)layerClip=(layerIndex,currentClipName);
+         if(layerClipToFullPath.TryGetValue(layerClip,out string fullPath)){
+          return fullPath;
+         }
+         string layerName=animator.GetLayerName(layerIndex);
+         fullPath=layerName+"."+currentClipName;
+         layerClipToFullPath.Add(layerClip,fullPath);
+         return fullPath;
+        }
+     [SerializeField]internal WeaponLayer[]weaponLayerNames=new WeaponLayer[]{
+      new WeaponLayer{weaponType=WeaponTypes.None,layerName="Base Layer"},
+      new WeaponLayer{weaponType=WeaponTypes.SniperRifle,layerName="Carrying Rifle"},
+     };
+        [Serializable]internal class WeaponLayer{
+         [SerializeField]internal WeaponTypes weaponType;
+         [SerializeField]internal string layerName;
+        }
+     [SerializeField]internal WeaponAimLayer[]weaponAimLayerNames=new WeaponAimLayer[]{
+      new WeaponAimLayer{weaponType=WeaponTypes.None,layerName="Base Layer"},
+      new WeaponAimLayer{weaponType=WeaponTypes.SniperRifle,layerName="Aiming with Rifle"},
+     };
+        [Serializable]internal class WeaponAimLayer{
+         [SerializeField]internal WeaponTypes weaponType;
+         [SerializeField]internal string layerName;
         }
         protected virtual void GetAnimator(){
          if(animator==null){
@@ -36,6 +76,7 @@ namespace AKCondinoO.Sims.Actors{
            );
            layerCount=animator.layerCount;
            weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
+            weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
            animationTime=new Dictionary<int,float>(layerCount);
             animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
            normalizedTime=new Dictionary<int,float>(layerCount);
@@ -58,11 +99,21 @@ namespace AKCondinoO.Sims.Actors{
             currentClipInstanceID[i]=0;
              currentClipName[i]="";
            }
-           weaponLayer[WeaponTypes.None       ]=animator.GetLayerIndex("Base Layer");
-           Log.DebugMessage("weaponLayer[WeaponTypes.None]:"+weaponLayer[WeaponTypes.None]);
-           weaponLayer[WeaponTypes.SniperRifle]=animator.GetLayerIndex("Rifle");
-           Log.DebugMessage("weaponLayer[WeaponTypes.SniperRifle]:"+weaponLayer[WeaponTypes.SniperRifle]);
+           int GetLayer(string layerName){
+            int layerIndex=animator.GetLayerIndex(layerName);
+            layerIndexToName[layerIndex]=layerName;
+            return layerIndex;
+           }
+           foreach(WeaponLayer weaponLayerName in weaponLayerNames){
+               weaponLayer[   weaponLayerName.weaponType]=GetLayer(   weaponLayerName.layerName);
+            Log.DebugMessage(   "weaponLayer["+   weaponLayerName.weaponType+"]="+   weaponLayerName.layerName);
+           }
+           foreach(WeaponAimLayer weaponAimLayerName in weaponAimLayerNames){
+            weaponAimLayer[weaponAimLayerName.weaponType]=GetLayer(weaponAimLayerName.layerName);
+            Log.DebugMessage("weaponAimLayer["+weaponAimLayerName.weaponType+"]="+weaponAimLayerName.layerName);
+           }
            layerTransitionCoroutine=StartCoroutine(LayerTransition());
+           AddAnimationEventsHandler();
            if(actor.simUMA!=null){
             actor.simUMA.transform.parent.SetParent(null);
             GetTransformTgtValuesFromCharacterController();
@@ -77,8 +128,11 @@ namespace AKCondinoO.Sims.Actors{
      bool synced=true;
      BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
      internal int layerCount{get;private set;}
+     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
      internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
       internal WeaponTypes lastWeaponType=WeaponTypes.None;
+       internal int?currentWeaponLayerIndex=null;
+        internal int?currentWeaponAimLayerIndex=null;
       internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
@@ -102,18 +156,30 @@ namespace AKCondinoO.Sims.Actors{
           UpdateMotion(baseAI);
          }
         }
-        protected void OnAnimationLooped(int layerIndex,string currentClipName){
+        protected void OnAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
          }
         }
-        protected void OnAnimationChanged(int layerIndex,string lastClipName,string currentClipName){
+        protected void OnAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
          if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
+          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
+         }
+        }
+        protected void OnAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
+         if(actor is BaseAI baseAI){
+          baseAI.OnShouldSetNextMotionAnimatorAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
-         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f));
+         if(actor.leftEye!=null){
+          Debug.DrawLine(actor.leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+         }
+         Quaternion rotAdjustment=Quaternion.identity;
+         if(actor is BaseAI baseAI&&motionTransformAdjustment.TryGetValue(baseAI.motion,out TransformAdjustment adjustment)){
+          rotAdjustment=adjustment.adjustment.localRotation;
+         }
+         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f))*rotAdjustment;
          posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMAPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
@@ -162,7 +228,7 @@ namespace AKCondinoO.Sims.Actors{
           if(clipList.Count>0){
            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
             //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
-            OnAnimationChanged(layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
+            OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
            }
@@ -170,7 +236,7 @@ namespace AKCondinoO.Sims.Actors{
            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
             //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
-            OnAnimationLooped(layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
+            OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
            }
            normalizedTime[layerIndex]=animatorState.normalizedTime;
             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
@@ -178,6 +244,7 @@ namespace AKCondinoO.Sims.Actors{
            animationTime[layerIndex]=clipList[0].clip.length*normalizedTime[layerIndex];
             animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
            //Log.DebugMessage("current animationTime:"+animationTime[layerIndex]);
+           OnAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
           }
          }
         }
@@ -216,12 +283,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=8.0f*Core.magicDeltaTimeNumber;
+                weight-=16.0f*Core.magicDeltaTimeNumber;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=8.0f*Core.magicDeltaTimeNumber;
+                weight+=16.0f*Core.magicDeltaTimeNumber;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }

@@ -3,6 +3,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels.Terrain;
+using AKCondinoO.Voxels.Water.MarchingCubes;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -57,5 +58,62 @@ namespace AKCondinoO.Voxels.Water{
          }
          return false;
         }
+        void OnDrawGizmos(){
+         #if UNITY_EDITOR
+          DrawVoxelsDensity();
+         #endif
+        }
+        #if UNITY_EDITOR
+        void DrawVoxelsDensity(){
+         if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null){
+          VoxelWater?[]voxels=null;
+          if(VoxelSystem.Concurrent.water_rwl.TryEnterReadLock(0)){
+           try{
+            if(!VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out voxels)){
+             return;
+            }
+           }catch{
+            voxels=null;
+            throw;
+           }finally{
+            VoxelSystem.Concurrent.water_rwl.ExitReadLock();
+           }
+          }
+          if(voxels==null){
+           return;
+          }
+          Vector3Int vCoord1;
+          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
+           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+           VoxelWater voxel;
+           lock(voxels){
+            if(voxels[vxlIdx1]!=null){
+             voxel=voxels[vxlIdx1].Value;
+            }else{
+             continue;
+            }
+           }
+           double density=voxel.density;
+           if(density==0d){
+            continue;
+           }
+           //Log.DebugMessage("density:"+density);
+           if(-density<MarchingCubesWater.isoLevel){
+            Gizmos.color=Color.white;
+           }else{
+            Gizmos.color=Color.black;
+           }
+           Vector3 center=new Vector3(
+             tCnk.id.Value.cnkRgn.x-Mathf.FloorToInt(Width/2.0f),
+             -Mathf.FloorToInt(Height/2.0f),
+             tCnk.id.Value.cnkRgn.y-Mathf.FloorToInt(Depth/2.0f)
+            )+vCoord1;
+           Gizmos.DrawCube(center,Vector3.one*(float)(density*.01d));
+          }}}
+         }
+        }
+        #endif
     }
 }
