@@ -43,6 +43,10 @@ namespace AKCondinoO.Sims{
                ;
                refreshedAgility=true;
               }
+              if(updatedAgility
+              ){
+               refreshedAgility=true;
+              }
              }
               protected bool refreshedAgility;
              #endregion
@@ -80,8 +84,14 @@ namespace AKCondinoO.Sims{
                 ((             musical_value*4f)/20f)+
                 ((             spatial_value*5f)/20f)
                ;
+               refreshedDexterity=true;
+              }
+              if(updatedDexterity
+              ){
+               refreshedDexterity=true;
               }
              }
+              protected bool refreshedDexterity;
              #endregion
              #region Intelligence
              /// <summary>
@@ -117,8 +127,14 @@ namespace AKCondinoO.Sims{
                 ((             musical_value*2f)/28f)+
                 ((        naturalistic_value*2f)/28f)
                ;
+               refreshedIntelligence=true;
+              }
+              if(updatedIntelligence
+              ){
+               refreshedIntelligence=true;
               }
              }
+              protected bool refreshedIntelligence;
              #endregion
              #region Strength
              /// <summary>
@@ -144,8 +160,14 @@ namespace AKCondinoO.Sims{
                strength_value_stats=
                 ((  bodily_kinesthetic_value*4f)/4f)
                ;
+               refreshedStrength=true;
+              }
+              if(updatedStrength
+              ){
+               refreshedStrength=true;
               }
              }
+              protected bool refreshedStrength;
              #endregion
              #region Vitality
              /// <summary>
@@ -175,8 +197,14 @@ namespace AKCondinoO.Sims{
                 ((       intrapersonal_value*4f)/15f)+
                 ((        naturalistic_value*8f)/15f)
                ;
+               refreshedVitality=true;
+              }
+              if(updatedVitality
+              ){
+               refreshedVitality=true;
               }
              }
+              protected bool refreshedVitality;
              #endregion
         }
     }

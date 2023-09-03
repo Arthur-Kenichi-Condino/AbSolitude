@@ -24,6 +24,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
              }
              IsTranscendentSet(true,statsSim,false);
              SimLevelSet(200,statsSim,false);
+             AgeLevelSet(30,statsSim,false);
              base.Generate(statsSim,false);
             }
         }
