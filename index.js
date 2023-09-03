@@ -125,7 +125,9 @@ function ParseContentText(text) {
   for(var index in contentDOMelementsCreated){
     console.log("contentDOMelementCreated:"+contentDOMelementsCreated[index]);
     contentDOMelementsCreated[index].remove();
+    delete contentDOMelementsCreated[index];
   }
+  contentDOMelementsCreated={};
   contentDOMelementsCreatedCount=0;
   let titleIndex = 0,
     textIndex = 0;
