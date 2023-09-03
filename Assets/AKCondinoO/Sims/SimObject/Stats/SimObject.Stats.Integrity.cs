@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,7 +49,36 @@ namespace AKCondinoO.Sims{
             }
              protected bool updatedMaxIntegrity;
           internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
-           float baseMaxIntegrity=35f;
+           if(refreshedSimLevel||
+              refreshedAgeLevel||
+              updatedBodily_kinesthetic||
+              refreshedVitality
+           ){
+            float maxIntegrity=35f;
+            float maxIntegrityModifierB=5f;
+            maxIntegrityModifierB=Math.Max(maxIntegrityModifierB,bodily_kinesthetic_value*.035f);
+            maxIntegrity+=(simLevel_value*maxIntegrityModifierB);
+            float maxIntegrityModifierA=(bodily_kinesthetic_value/200f)+((simLevel_value/200f)*.1f);
+            for(int level=2;level<=Mathf.FloorToInt(simLevel_value);++level){
+             maxIntegrity+=(level*maxIntegrityModifierA);
+            }
+            maxIntegrity*=(1f+(vitality_value_stats+vitality_value_set)*.01f);
+            if(isTranscendent_value){
+             maxIntegrity*=1.25f;
+            }
+            //Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
+            float previousMaxIntegrity=maxIntegrity_value_stats;
+            float scaleIntegrity;
+            if(previousMaxIntegrity<=0f){
+             scaleIntegrity=0f;
+            }else{
+             scaleIntegrity=maxIntegrity/previousMaxIntegrity;
+            }
+            refreshedMaxIntegrity=true;
+           }
+           if(updatedMaxIntegrity){
+            refreshedMaxIntegrity=true;
+           }
           }
            protected bool refreshedMaxIntegrity;
            #region Stamina
