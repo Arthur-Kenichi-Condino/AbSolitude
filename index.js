@@ -1,4 +1,4 @@
-const rootPath=".\\WikiContent/"; //aaa//aaa
+const rootPath=".\\WikiContent/";
 const hierarchy={};
 import{RequestDirectoryHierarchyRecursivelyExport as RequestDirectoryHierarchyRecursively}from"./hierarchy.js"
 //  create DOM element object
