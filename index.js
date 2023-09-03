@@ -7,7 +7,7 @@ function CreateDOMobject(parent,child,className){
   this.child=child;
   this.className=className;
 }
-const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_item");
+const menuObj=new CreateDOMobject(".wiki_menu","div","menu_item");
 RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
 var sentRequestsCount=1;
 function ParseMenuText(newRequestsCount){
@@ -150,7 +150,7 @@ function ParseContentText(text) {
 //const module = {};
 
 //window.onload=function(){
-//const hierarchy1 = require("./hierarchy.js"); 
+//const hierarchy1 = require("./hierarchy.js");
 //hierarchy1.RequestDirectoryHierarchyRecursivelyHTML(0);
   //RequestDirectoryHierarchyRecursivelyHTML(0);
 //}
