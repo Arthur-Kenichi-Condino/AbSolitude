@@ -7,6 +7,7 @@ function RequestDirectoryHierarchyRecursively(path,hierarchy,depth=0,onloadFunc=
   //  https://stackoverflow.com/questions/54857700/list-files-on-a-server-via-front-end-javascript
   const dirRequest=new XMLHttpRequest();
   dirRequest.open("GET",path,true);
+  dirRequest.responseType='text';
   dirRequest.onload=()=>{
     console.log("dirRequest.status:"+dirRequest.status);
     var newRequestsCount=0;
