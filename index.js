@@ -124,7 +124,9 @@ const textObj = new CreateDOMobject(".wiki_content", "section", "text");
 function ParseContentText(text) {
   for(var index in contentDOMelementsCreated){
     console.log("contentDOMelementCreated:"+contentDOMelementsCreated[index]);
+    contentDOMelementsCreated[index].remove();
   }
+  contentDOMelementsCreatedCount=0;
   let titleIndex = 0,
     textIndex = 0;
   for (const line of text) {
