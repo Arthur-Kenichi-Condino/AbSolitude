@@ -17,32 +17,33 @@ namespace AKCondinoO.Sims{
             internal void OnRefresh(SimObject statsSim=null){
              if(pendingRefresh){
               OnRefresh_IsTranscendent(statsSim);
-              OnRefresh_SimLevel      (statsSim);
-              OnRefresh_AgeLevel      (statsSim);
-              OnRefresh_Luck          (statsSim);//  Luck must be applied at the start and then at the end so it adds random attributes
-              OnRefresh_Agility       (statsSim);
-              OnRefresh_Dexterity     (statsSim);
-              OnRefresh_Intelligence  (statsSim);
-              OnRefresh_Strength      (statsSim);
-              OnRefresh_Vitality      (statsSim);
-              OnRefresh_Luck_Late     (statsSim);
-              OnRefresh_MaxIntegrity  (statsSim);
+               OnRefresh_SimLevel(statsSim);
+               OnRefresh_AgeLevel(statsSim);
+                 OnRefresh_Luck(statsSim);//  Luck must be applied at the start and then at the end so it adds random attributes
+                  OnRefresh_Agility     (statsSim);
+                  OnRefresh_Dexterity   (statsSim);
+                  OnRefresh_Intelligence(statsSim);
+                  OnRefresh_Strength    (statsSim);
+                  OnRefresh_Vitality    (statsSim);
+                   OnRefresh_Luck_Late(statsSim);
+                    OnRefresh_MaxIntegrity(statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
-              updatedSimLevel      =false;refreshedSimLevel      =false;
-              updatedAgeLevel      =false;refreshedAgeLevel      =false;
-              updatedBodily_kinesthetic  =false;
-              updatedInterpersonal       =false;
-              updatedIntrapersonal       =false;
-              updatedLinguistic          =false;
-              updatedLogical_mathematical=false;
-              updatedMusical             =false;
-              updatedNaturalistic        =false;
-              updatedSpatial             =false;
-              updatedAgility     =false;refreshedAgility     =false;
-              updatedDexterity   =false;refreshedDexterity   =false;
-              updatedIntelligence=false;refreshedIntelligence=false;
-              updatedStrength    =false;refreshedStrength    =false;
-              updatedVitality    =false;refreshedVitality    =false;
+               updatedSimLevel      =false;refreshedSimLevel      =false;
+               updatedAgeLevel      =false;refreshedAgeLevel      =false;
+                updatedBodily_kinesthetic  =false;
+                updatedInterpersonal       =false;
+                updatedIntrapersonal       =false;
+                updatedLinguistic          =false;
+                updatedLogical_mathematical=false;
+                updatedMusical             =false;
+                updatedNaturalistic        =false;
+                updatedSpatial             =false;
+                  updatedAgility     =false;refreshedAgility     =false;
+                  updatedDexterity   =false;refreshedDexterity   =false;
+                  updatedIntelligence=false;refreshedIntelligence=false;
+                  updatedStrength    =false;refreshedStrength    =false;
+                  updatedVitality    =false;refreshedVitality    =false;
+                    updatedMaxIntegrity=false;refreshedMaxIntegrity=false;
               pendingRefresh=false;
              }
             }

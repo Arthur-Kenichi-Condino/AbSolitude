@@ -13,8 +13,8 @@ namespace AKCondinoO.Sims{
              if(
               reset||
               simLevel_value<=0||
-              (!isTranscendent_value&&simLevel_value>99)||
-              ageLevel_value<=0
+              ageLevel_value<=0||
+              (!isTranscendent_value&&simLevel_value>99)
              ){
               IsTranscendentSet(math_random.CoinFlip(),statsSim,false);
               if(isTranscendent_value){
@@ -40,10 +40,7 @@ namespace AKCondinoO.Sims{
             protected bool updatedIsTranscendent;
          internal void OnRefresh_IsTranscendent(SimObject statsSim=null){
           if(updatedIsTranscendent){
-           if(!isTranscendent_value&&simLevel_value>99){
-            simLevel_value=99;
-            refreshedIsTranscendent=true;
-           }
+           refreshedIsTranscendent=true;
           }
          }
           protected bool refreshedIsTranscendent;
