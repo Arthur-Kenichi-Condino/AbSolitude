@@ -34,7 +34,6 @@ header{
   overflow:auto;
   position:fixed;
   top:8vh;
-  width:20vw;
 }
 .wiki_menu::-webkit-scrollbar{
   background:rgb(33,33,33);

@@ -7,7 +7,7 @@ function CreateDOMobject(parent,child,className){
   this.child=child;
   this.className=className;
 }
-const menuObj=new CreateDOMobject(".wiki_menu","menu_section","menu_item");
+const menuObj=new CreateDOMobject(".wiki_menu","div","menu_item");
 RequestDirectoryHierarchyRecursively(rootPath,hierarchy,0,ParseMenuText);
 var sentRequestsCount=1;
 function ParseMenuText(newRequestsCount){
@@ -103,10 +103,12 @@ async function FetchTextFromFile(path) {
 //Parse text functions
 
 // DOM element using Jquery
-
+let contentDOMelementsCreated={};
+let contentDOMelementsCreatedCount=0;
 function CreateDOMelement(options, content, index) {
   
   const element = document.createElement(options.child);
+  contentDOMelementsCreated[contentDOMelementsCreatedCount++]=element;
   $(options.parent).append(element);
   $(element).text(content);
   $(element).addClass(`${options.className} ${options.className}_${index}`);
@@ -120,6 +122,13 @@ const titleObj = new CreateDOMobject(".wiki_content", "h2", "title");
 const textObj = new CreateDOMobject(".wiki_content", "section", "text");
 
 function ParseContentText(text) {
+  for(var index in contentDOMelementsCreated){
+    console.log("contentDOMelementCreated:"+contentDOMelementsCreated[index]);
+    contentDOMelementsCreated[index].remove();
+    delete contentDOMelementsCreated[index];
+  }
+  contentDOMelementsCreated={};
+  contentDOMelementsCreatedCount=0;
   let titleIndex = 0,
     textIndex = 0;
   for (const line of text) {
@@ -141,7 +150,7 @@ function ParseContentText(text) {
 //const module = {};
 
 //window.onload=function(){
-//const hierarchy1 = require("./hierarchy.js"); 
+//const hierarchy1 = require("./hierarchy.js");
 //hierarchy1.RequestDirectoryHierarchyRecursivelyHTML(0);
   //RequestDirectoryHierarchyRecursivelyHTML(0);
 //}
