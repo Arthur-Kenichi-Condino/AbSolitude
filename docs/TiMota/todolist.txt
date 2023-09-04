@@ -5,3 +5,17 @@ based on homunculus in a list
 ## menu system ##
 
 Menu to change the wiki content based on options 
+
+
+
+Arthur e Tiago
+  - fazer um design da página 
+  - fazer um escritor em Phyton que atualiza o projeto com 
+arquivos de conteúdo de página novo
+
+Arthur
+1 arquivo de texto com "legenda" para o que cada símbolo faz com a linha
+arquivos de texto com um processo de formatação
+
+Tiago
+faz parser do python
