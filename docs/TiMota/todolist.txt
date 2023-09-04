@@ -7,15 +7,17 @@ based on homunculus in a list
 Menu to change the wiki content based on options 
 
 
-
+2023 03 09
 Arthur e Tiago
   - fazer um design da página 
-  - fazer um escritor em Phyton que atualiza o projeto com 
-arquivos de conteúdo de página novo
+  - fazer um escritor em node js que atualiza o projeto com 
+arquivos de conteúdo de página novo dinâmico mas também com 
+um comando gera ("imprime") páginas estáticas
+  - "semi-estático"
 
 Arthur
 1 arquivo de texto com "legenda" para o que cada símbolo faz com a linha
-arquivos de texto com um processo de formatação
+arquivos de texto com o processo de formatação usando os documentos
 
 Tiago
-faz parser do python
+faz parser do node js
