@@ -9,11 +9,14 @@ using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI:HomunculusAI{   
         internal override void OnActivated(){
+         Log.DebugMessage("VanilmirthAI:OnActivated():masterId:"+masterId);
          requiredSkills.Clear();
          requiredSkills.Add(typeof(ChaoticBlessing),new SkillData(){skill=typeof(ChaoticBlessing),level=10,});
          base.OnActivated();
         }
         protected override void OnIDLE_ST(){
+         //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);
+         Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
          SetMySkill();
          base.OnIDLE_ST();
         }

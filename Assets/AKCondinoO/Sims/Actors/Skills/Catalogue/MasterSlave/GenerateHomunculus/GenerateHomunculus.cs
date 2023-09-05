@@ -20,14 +20,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           //  do any other skill setting needed here
-          SetHomunToBeGenerated();
+          SetHomunToBeGenerated(actor,spawnData);
           return true;
          }
          //  the skill cannot be used!
          return false;
         }
      readonly SpawnData spawnData=new SpawnData();
-        protected void SetHomunToBeGenerated(){
+        internal static void SetHomunToBeGenerated(SimActor actor,SpawnData spawnData){
          spawnData.Clear();
          //  add data to spawn
          if(actor is ArthurCondinoAI arthurCondino){
@@ -39,6 +39,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
             //  TO DO: fill SimActorPersistentData
             spawnData.masters[spawnData.at.Count-1]=actor.id.Value;
            }
+          }
+          foreach(var slave in arthurCondino.slaves){
           }
          }
          actor.requiredSlaves.Clear();
@@ -74,5 +76,5 @@ namespace AKCondinoO.Sims.Actors.Skills{
           base.OnInvoked();
          }
         }
- }
+    }
 }
