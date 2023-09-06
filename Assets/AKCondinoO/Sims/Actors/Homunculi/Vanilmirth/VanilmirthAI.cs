@@ -16,7 +16,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
         }
         protected override void OnIDLE_ST(){
          //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);
-         Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
+         //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
          base.OnIDLE_ST();
         }
     }
