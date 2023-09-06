@@ -35,6 +35,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         protected override void Update(){
          base.Update();
+        }
+        protected override void OnUpdate(){
+         base.OnUpdate();
          if(doing){
           if(revoked){//  something went wrong
            return;

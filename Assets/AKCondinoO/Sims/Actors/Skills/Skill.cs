@@ -78,6 +78,11 @@ namespace AKCondinoO.Sims.Actors.Skills{
          doing=true;
          return true;
         }
+        internal virtual bool DoSkillImmediate(SimObject target,int useLevel){
+         bool result=DoSkill(target,useLevel);
+         OnUpdate();
+         return result;
+        }
         /// <summary>
         ///  Can be the "initialization" or skill "main call"
         /// </summary>
@@ -98,6 +103,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          doing=false;
         }
         protected virtual void Update(){
+         OnUpdate();
+        }
+        protected virtual void OnUpdate(){
          if(!doing){
           if(revoked||done){
            if(actor!=null){
