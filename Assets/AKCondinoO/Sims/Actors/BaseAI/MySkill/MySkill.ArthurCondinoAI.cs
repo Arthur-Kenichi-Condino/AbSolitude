@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
     internal partial class ArthurCondinoAI{
         protected override void SetBestSkillToUse(){
          if(MySkill==null&&skillsToUse.Count<=0){
-          Skill.GetBest(this,Skill.SkillUseContext.OnCallSlaves,skillsToUse);
+          GetBest(Skill.SkillUseContext.OnCallSlaves,skillsToUse);
          }
          if(MySkill==null){
           if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){

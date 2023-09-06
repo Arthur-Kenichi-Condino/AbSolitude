@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,25 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(MySkill==null){
           skillsToUse.Clear();
+         }
+        }
+        internal virtual void GetBest(Skill.SkillUseContext context,HashSet<Skill>skills){
+         switch(context){
+          case Skill.SkillUseContext.OnIdle:{
+           break;
+          }
+          case Skill.SkillUseContext.OnTookDamage:{
+           break;
+          }
+          case Skill.SkillUseContext.OnWillTakeDamage:{
+           break;
+          }
+          case Skill.SkillUseContext.OnCallSlaves:{
+           if(this.skills.TryGetValue(typeof(GenerateHomunculus),out Skill skill)){
+            skills.Add(skill);
+           }
+           break;
+          }
          }
         }
     }
