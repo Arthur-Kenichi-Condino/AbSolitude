@@ -8,7 +8,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         protected virtual void DoSkill(){
-         if(MySkill is GenerateHomunculus generateHomunculusSkill){
+         if(ReflectionUtil.IsTypeDerivedFrom(MySkill.GetType(),typeof(GenerateHomunculus))&&MySkill is GenerateHomunculus generateHomunculusSkill){
           generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
          }
         }
