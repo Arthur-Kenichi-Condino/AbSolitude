@@ -69,6 +69,10 @@ namespace AKCondinoO.Sims.Actors{
           }
           MyState=State.IDLE_ST;
          }
+         SetBestSkillToUse();
+         if(MySkill!=null){
+          DoSkill();
+         }
          if      (MyState==State.FOLLOW_ST){
          }else if(MyState==State. CHASE_ST){
            OnCHASE_ST();
@@ -296,9 +300,6 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
         protected virtual void OnIDLE_ST(){
-         if(MySkill!=null){
-          DoSkill();
-         }
          if(
           !IsTraversingPath()
          ){
