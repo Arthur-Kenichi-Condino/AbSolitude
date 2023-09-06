@@ -17,14 +17,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
         protected override void OnIDLE_ST(){
          //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);
          Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
-         SetMySkill();
          base.OnIDLE_ST();
-        }
-        protected override void DoSkill(){
-         if(MySkill is ChaoticBlessing chaoticBlessingSkill){
-          chaoticBlessingSkill.DoSkill(this,chaoticBlessingSkill.level);
-         }
-         base.DoSkill();
         }
     }
 }

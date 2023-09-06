@@ -40,7 +40,12 @@ namespace AKCondinoO.Sims.Actors.Skills{
             spawnData.masters[spawnData.at.Count-1]=actor.id.Value;
            }
           }
-          foreach(var slave in arthurCondino.slaves){
+          foreach(var slaveId in arthurCondino.slaves){
+           if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)){
+            if(slaveSimObject.masterId!=actor.id){
+             slaveSimObject.masterId=actor.id;
+            }
+           }
           }
          }
          actor.requiredSlaves.Clear();
