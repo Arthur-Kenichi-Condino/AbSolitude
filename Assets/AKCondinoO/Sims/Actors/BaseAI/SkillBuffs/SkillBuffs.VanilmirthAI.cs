@@ -8,8 +8,12 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI{
         protected override void DoSkill(){
-         if(ReflectionUtil.IsTypeDerivedFrom(MySkill.GetType(),typeof(ChaoticBlessing))&&MySkill is ChaoticBlessing chaoticBlessingSkill){
-          chaoticBlessingSkill.DoSkill(this,chaoticBlessingSkill.level);
+         if(ReflectionUtil.IsTypeDerivedFrom(MySkill.GetType(),typeof(ChaoticBlessing))){
+          //  TO DO: if its a special skill, then do special stuff too
+          ChaoticBlessing chaoticBlessingSkill=(ChaoticBlessing)MySkill;
+          SimObject target=this;//  TO DO: use best my skill target
+          chaoticBlessingSkill.DoSkill(target,chaoticBlessingSkill.level);
+          return;
          }
          base.DoSkill();
         }

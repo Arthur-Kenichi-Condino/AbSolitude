@@ -17,6 +17,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  oops, it's not the time to use the skill, and no more tests required
          return false;
         }
+     readonly SpawnData spawnData=new SpawnData();
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           //  do any other skill setting needed here
@@ -25,30 +26,6 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
          //  the skill cannot be used!
          return false;
-        }
-     readonly SpawnData spawnData=new SpawnData();
-        internal static void SetHomunToBeGenerated(SimActor actor,SpawnData spawnData){
-         spawnData.Clear();
-         //  add data to spawn
-         if(actor is ArthurCondinoAI arthurCondino){
-          foreach(var requiredSlavesList in arthurCondino.requiredSlaves){
-           Type requiredSlaveType=requiredSlavesList.Key;
-           List<SlaveData>requiredSlavesOfType=requiredSlavesList.Value;
-           foreach(SlaveData requiredSlaveOfType in requiredSlavesOfType){
-            spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,requiredSlaveType,null,new SimObject.PersistentData()));
-            //  TO DO: fill SimActorPersistentData
-            spawnData.masters[spawnData.at.Count-1]=actor.id.Value;
-           }
-          }
-          foreach(var slaveId in arthurCondino.slaves){
-           if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)){
-            if(slaveSimObject.masterId!=actor.id){
-             slaveSimObject.masterId=actor.id;
-            }
-           }
-          }
-         }
-         actor.requiredSlaves.Clear();
         }
         protected override void Invoke(){
          //  do more skill initialization here / or use this as main call of the skill
