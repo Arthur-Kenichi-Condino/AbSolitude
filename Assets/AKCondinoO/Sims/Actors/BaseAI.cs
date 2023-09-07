@@ -69,7 +69,8 @@ namespace AKCondinoO.Sims.Actors{
           }
           MyState=State.IDLE_ST;
          }
-         SetBestSkillToUse();
+         SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
+         if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
          if(MySkill!=null){
           DoSkill();
          }

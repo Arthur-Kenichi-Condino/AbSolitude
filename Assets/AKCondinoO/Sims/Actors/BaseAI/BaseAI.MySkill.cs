@@ -10,7 +10,7 @@ namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      protected Skill MySkill=null;internal Skill skillToUse{get{return MySkill;}}
       internal readonly HashSet<Skill>skillsToUse=new HashSet<Skill>();
-        protected virtual void SetBestSkillToUse(){
+        protected virtual void SetBestSkillToUse(Skill.SkillUseContext context){
          //  TO DO: skillsToUse.Clear() ao trocar de estado da AI ou em situações específicas, como depois de um delay
          if(MySkill==null){
           //  TO DO: get other skills
@@ -34,8 +34,10 @@ namespace AKCondinoO.Sims.Actors{
            break;
           }
           case Skill.SkillUseContext.OnCallSlaves:{
-           if(this.skills.TryGetValue(typeof(GenerateHomunculus),out Skill skill)){
-            skills.Add(skill);
+           if(requiredSlaves.Count>0){
+            if(this.skills.TryGetValue(typeof(GenerateHomunculus),out Skill skill)){
+             skills.Add(skill);
+            }
            }
            break;
           }

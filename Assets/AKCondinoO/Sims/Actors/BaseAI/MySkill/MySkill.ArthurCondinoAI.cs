@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
     internal partial class ArthurCondinoAI{
-        protected override void SetBestSkillToUse(){
+        protected override void SetBestSkillToUse(Skill.SkillUseContext context){
          if(MySkill==null&&skillsToUse.Count<=0){
-          GetBest(Skill.SkillUseContext.OnCallSlaves,skillsToUse);
+          GetBest(context,skillsToUse);
          }
          if(MySkill==null){
           if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
