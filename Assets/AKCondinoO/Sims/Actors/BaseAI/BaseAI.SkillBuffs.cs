@@ -8,9 +8,8 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         protected virtual void DoSkill(){
-         if(ReflectionUtil.IsTypeDerivedFrom(MySkill.GetType(),typeof(GenerateHomunculus))&&MySkill is GenerateHomunculus generateHomunculusSkill){
-          generateHomunculusSkill.DoSkill(this,generateHomunculusSkill.level);
-         }
+         SimObject target=this;//  TO DO: use best my skill target
+         MySkill.DoSkill(target,MySkill.level);
         }
         internal override void OnSkillUsed(Skill skill,bool done,bool revoked){
          base.OnSkillUsed(skill,done,revoked);

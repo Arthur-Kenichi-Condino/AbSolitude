@@ -7,39 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI{
-        protected override void SetBestSkillToUse(Skill.SkillUseContext context){
-         if(MySkill==null&&skillsToUse.Count<=0){
-          GetBest(context,skillsToUse);
-         }
-         if(MySkill==null){
-          if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
-           GenerateHomunculus generateHomunculusSkill=(GenerateHomunculus)skill;
-           if(generateHomunculusSkill.IsAvailable(this,generateHomunculusSkill.level)){
-            if(requiredSlaves.Count>0){
-             MySkill=generateHomunculusSkill;
-             Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use generateHomunculusSkill");
-            }
-           }
-           skillsToUse.Remove(skill);
-          }
-         }
-         if(MySkill==null){
-          if(skills.TryGetValue(typeof(ChaoticBlessing),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
-           ChaoticBlessing chaoticBlessingSkill=(ChaoticBlessing)skill;
-           if(chaoticBlessingSkill.IsAvailable(this,chaoticBlessingSkill.level)){
-            MySkill=chaoticBlessingSkill;
-            Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use chaoticBlessingSkill");
-           }
-           skillsToUse.Remove(skill);
-          }
-         }
-         if(MySkill!=null){
-          return;
-         }
-         if(MySkill==null){
-          skillsToUse.Clear();
-         }
-        }
         internal override void GetBest(Skill.SkillUseContext context,HashSet<Skill>skills){
          switch(context){
           case Skill.SkillUseContext.OnIdle:{
@@ -50,6 +17,26 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
           }
          }
          base.GetBest(context,skills);
+        }
+        protected override void SetBestSkillToUse(Skill.SkillUseContext context,bool fromDerived=false){
+         if(!fromDerived){
+          if(MySkill==null&&skillsToUse.Count<=0){
+           GetBest(context,skillsToUse);
+          }
+         }
+         if(MySkill==null){
+          if(skills.TryGetValue(typeof(ChaoticBlessing),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
+           //  TO DO: if its a special skill, then do special stuff too, also priority
+           ChaoticBlessing chaoticBlessingSkill=(ChaoticBlessing)skill;
+           SimObject target=this;//  TO DO: set best my skill target
+           if(chaoticBlessingSkill.IsAvailable(target,chaoticBlessingSkill.level)){
+            MySkill=chaoticBlessingSkill;
+            Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use:"+skill.GetType());
+           }
+           skillsToUse.Remove(skill);
+          }
+         }
+         base.SetBestSkillToUse(context,true);
         }
     }
 }
