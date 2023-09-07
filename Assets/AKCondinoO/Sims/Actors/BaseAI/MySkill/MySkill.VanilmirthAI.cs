@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI{
-        protected override void SetBestSkillToUse(){
+        protected override void SetBestSkillToUse(Skill.SkillUseContext context){
          if(MySkill==null&&skillsToUse.Count<=0){
-          GetBest(Skill.SkillUseContext.OnCallSlaves,skillsToUse);
+          GetBest(context,skillsToUse);
          }
          if(MySkill==null){
           if(skills.TryGetValue(typeof(GenerateHomunculus),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
@@ -23,29 +23,19 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
            skillsToUse.Remove(skill);
           }
          }
+         if(MySkill==null){
+          if(skills.TryGetValue(typeof(ChaoticBlessing),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
+           ChaoticBlessing chaoticBlessingSkill=(ChaoticBlessing)skill;
+           if(chaoticBlessingSkill.IsAvailable(this,chaoticBlessingSkill.level)){
+            MySkill=chaoticBlessingSkill;
+            Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use chaoticBlessingSkill");
+           }
+           skillsToUse.Remove(skill);
+          }
+         }
          if(MySkill!=null){
           return;
          }
-         #region IDLE_ST
-             if(MyState==State.IDLE_ST){
-              if(MySkill==null&&skillsToUse.Count<=0){
-               GetBest(Skill.SkillUseContext.OnIdle,skillsToUse);
-              }
-              if(MySkill==null){
-               if(skills.TryGetValue(typeof(ChaoticBlessing),out Skill skillToGet)&&skillsToUse.TryGetValue(skillToGet,out Skill skill)){
-                ChaoticBlessing chaoticBlessingSkill=(ChaoticBlessing)skill;
-                if(chaoticBlessingSkill.IsAvailable(this,chaoticBlessingSkill.level)){
-                 MySkill=chaoticBlessingSkill;
-                 Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use chaoticBlessingSkill");
-                }
-                skillsToUse.Remove(skill);
-               }
-              }
-              if(MySkill!=null){
-               return;
-              }
-             }
-         #endregion
          if(MySkill==null){
           skillsToUse.Clear();
          }
