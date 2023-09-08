@@ -91,6 +91,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          invoked=true;
         }
         protected virtual void OnInvokeSetCooldown(){
+         cooldown=GetOnInvokeCooldown();
         }
         internal virtual float GetOnInvokeCooldown(){
          return castDelay;

@@ -1,31 +1,33 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
-using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
-    internal class SpiritualHealing:HealingSkill{
+    internal class Teleport:PositionChangeSkill{
+        internal override bool IsAvailable(SimObject target,int useLevel){
+         if(base.IsAvailable(target,useLevel)){
+          //  do more tests here
+          return true;
+         }
+         //  oops, it's not the time to use the skill, and no more tests required
+         return false;
+        }
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
-          target.OnTargetedBySkill(this,actor);
+          //  do any other skill setting needed here
           return true;
          }
          //  the skill cannot be used!
          return false;
         }
         protected override void Invoke(){
-         SkillBuff buff=SkillBuff.Dequeue(typeof(SpiritualHealingSkillBuff));
-         if(buff!=null){
-          buff.duration=0f;
-          buff.delay=0f;
-          target.skillBuffs.Add(buff,this);
-         }
-         target.OnHitByTargetedSkill(this,actor);
-         (GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)skillVFX=SkillVisualEffectsManager.singleton.SpawnSkillVisualEffectGameObject(typeof(SpiritualHealingSkillVisualEffect),this);
-         skillVFX.skillVisualEffect.Activate(target,0f,1);
+         Log.DebugMessage(this+":Invoke()");
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){

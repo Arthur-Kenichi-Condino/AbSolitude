@@ -1,11 +1,25 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class CallHomunculus:CallSlaveSkill{
+     (GameObject skillGameObject,Teleport skill)?teleport;
+        internal override void OnSpawned(){
+         base.OnSpawned();
+         (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(typeof(Teleport),level,actor);
+         teleport=(spawnedSkill.skillGameObject,(Teleport)spawnedSkill.skill);
+        }
+        internal override void OnPool(){
+         if(teleport!=null){
+          SkillsManager.singleton.Pool(teleport.Value.skill.GetType(),teleport.Value.skill);
+          teleport=null;
+         }
+         base.OnPool();
+        }
         internal override bool IsAvailable(SimObject target,int useLevel){
          if(base.IsAvailable(target,useLevel)){
           //  do more tests here
@@ -29,6 +43,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
          spawnData.dequeued=false;
          SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(spawnData);
          base.Invoke();//  the invoked flag is set here
+        }
+        protected override void OnInvokeSetCooldown(){
+         //Log.DebugMessage("SpiritualHealing cooldown:"+cooldown);
+         base.OnInvokeSetCooldown();
         }
         protected override void Revoke(){
          //  do deinitialization here, and clear important variables
