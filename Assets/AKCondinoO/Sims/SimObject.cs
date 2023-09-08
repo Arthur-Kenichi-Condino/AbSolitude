@@ -532,6 +532,9 @@ namespace AKCondinoO.Sims{
          int result=0;
          return result;
         }
+        internal virtual bool OnTeleportTo(Vector3 position,Quaternion rotation){
+         return false;
+        }
         void TransformBoundsVertices(){
          worldBoundsVertices[0]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.min.z);
          worldBoundsVertices[1]=transform.TransformPoint(localBounds.max.x,localBounds.min.y,localBounds.min.z);

@@ -7,17 +7,16 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class CallHomunculus:CallSlaveSkill{
-     (GameObject skillGameObject,Teleport skill)?teleport;
+     readonly List<(GameObject skillGameObject,Teleport skill)>teleportSkills=new();
         internal override void OnSpawned(){
          base.OnSpawned();
-         (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(typeof(Teleport),level,actor);
-         teleport=(spawnedSkill.skillGameObject,(Teleport)spawnedSkill.skill);
         }
         internal override void OnPool(){
-         if(teleport!=null){
-          SkillsManager.singleton.Pool(teleport.Value.skill.GetType(),teleport.Value.skill);
-          teleport=null;
+         for(int i=0;i<teleportSkills.Count;++i){
+          Skill skill=teleportSkills[i].skill;
+          SkillsManager.singleton.Pool(skill.GetType(),skill);
          }
+         teleportSkills.Clear();
          base.OnPool();
         }
         internal override bool IsAvailable(SimObject target,int useLevel){
@@ -29,10 +28,18 @@ namespace AKCondinoO.Sims.Actors.Skills{
          return false;
         }
      readonly SpawnData spawnData=new SpawnData();
+     readonly List<SimObject>toTeleport=new List<SimObject>();
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           //  do any other skill setting needed here
-          SetHomunToBeGenerated(actor,spawnData);
+          toTeleport.Clear();
+          SetHomunToBeGenerated(actor,spawnData,toTeleport);
+          for(int i=0;i<toTeleport.Count;++i){
+           if(i>=teleportSkills.Count){
+            (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(typeof(Teleport),level,actor);
+            teleportSkills.Add((spawnedSkill.skillGameObject,(Teleport)spawnedSkill.skill));
+           }
+          }
           return true;
          }
          //  the skill cannot be used!
@@ -42,6 +49,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  do more skill initialization here / or use this as main call of the skill
          spawnData.dequeued=false;
          SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(spawnData);
+         for(int i=0;i<toTeleport.Count;++i){
+          SimObject simObject=toTeleport[i];
+          (GameObject skillGameObject,Teleport skill)teleport=teleportSkills[i];
+          teleport.skill.targetDest=actor.transform.position;
+          teleport.skill.cooldown=0f;
+          teleport.skill.DoSkill(simObject,useLevel);
+         }
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){

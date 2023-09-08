@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
-    internal class PositionChangeSkill:Skill{
-     internal Vector3 targetDest;
+    internal class OnHitSkill:Skill{
     }
 }
