@@ -9,7 +9,7 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class CallSlaveSkill:Skill{
-        internal static void SetHomunToBeGenerated(SimActor actor,SpawnData spawnData){
+        internal static void SetHomunToBeGenerated(SimActor actor,SpawnData spawnData,List<SimObject>toTeleport=null){
          spawnData.Clear();
          //  add data to spawn
          if(actor is BaseAI baseAI){
@@ -30,6 +30,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
              slaveSimObject.masterId=actor.id;
             }
             Log.DebugMessage("teleport to master:"+slaveSimObject);
+            toTeleport.Add(slaveSimObject);
             //  TO DO: teleport
            }else{
             spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,slaveId.simObjectType,slaveId.idNumber,new SimObject.PersistentData()));

@@ -528,6 +528,20 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnCharacterControllerUpdated(){
         }
+        internal override bool OnTeleportTo(Vector3 position,Quaternion rotation){
+         if(navMeshAgent!=null&&navMeshAgent.enabled){
+          if(NavMesh.SamplePosition(position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
+           transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
+           if(!navMeshAgent.isOnNavMesh){
+            DisableNavMeshAgent();
+           }
+           return true;
+          }
+          return false;
+         }
+         transform.position=position;
+         return true;
+        }
         internal Vector3 GetHeadPosition(bool fromAnimator){
          Vector3 headPos;
          if(fromAnimator&&simActorAnimatorController!=null&&simActorAnimatorController.animator!=null){

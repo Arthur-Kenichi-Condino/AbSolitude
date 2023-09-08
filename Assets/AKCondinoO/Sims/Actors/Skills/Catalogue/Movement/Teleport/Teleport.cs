@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
+using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
 using System;
 using System.Collections;
@@ -28,6 +29,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         protected override void Invoke(){
          Log.DebugMessage(this+":Invoke()");
+         SkillBuff buff=SkillBuff.Dequeue(typeof(TeleportSkillBuff));
+         if(buff!=null){
+          buff.duration=0f;
+          buff.delay=0f;
+          target.skillBuffs.Add(buff,this);
+          TeleportSkillBuff teleportBuff=(TeleportSkillBuff)buff;
+          teleportBuff.targetDest=targetDest;
+         }
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){
