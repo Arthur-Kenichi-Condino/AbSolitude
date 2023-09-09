@@ -25,8 +25,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
          bool containsBuff=false;
          if(target.skillBuffs.Contains(typeof(OnHitGracePeriodSkillBuff),out List<SkillBuff>activeOnHitGracePeriodSkillBuffs)){
           Log.DebugMessage("OnHitGracePeriod:containsBuff=true");
-          SkillBuff buff = activeOnHitGracePeriodSkillBuffs[0];
-          buff.duration=onHitSetMotionVulnerablePeriodDuration+onHitSetMotionGracePeriodDuration;
+          SkillBuff buff=activeOnHitGracePeriodSkillBuffs[0];
+          buff.duration=buff.elapsedTime+onHitSetMotionVulnerablePeriodDuration+onHitSetMotionGracePeriodDuration;
           containsBuff=true;
          }
          if(!containsBuff){
