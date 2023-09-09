@@ -3,6 +3,8 @@
 #endif
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,24 +72,62 @@ namespace AKCondinoO.Sims.Actors{
          //Log.DebugMessage("DoAttack()");
          onDoAttackSetMotion=true;
         }
+     protected readonly HashSet<Skill>onWillTakeDamageSkillsToUse=new HashSet<Skill>();
      protected bool onHitSetMotion=false;
       protected bool onHitResetMotion=false;
         internal override void OnHit(Hitboxes hitbox){
-         if(onHitSetMotionGracePeriod<=0f){
-          if(onHitSetMotion){
-           if(onHitResetMotionGracePeriod<=0f){
-            onHitResetMotion=true;
-            onHitResetMotionGracePeriod=onHitResetMotionGracePeriodDuration;
-            Log.DebugMessage("onHitResetMotion="+onHitResetMotion+";onHitResetMotionGracePeriod="+onHitResetMotionGracePeriod);
+         onWillTakeDamageSkillsToUse.Clear();
+         GetBest(Skill.SkillUseContext.OnWillTakeDamage,onWillTakeDamageSkillsToUse);
+         foreach(Skill skill in onWillTakeDamageSkillsToUse){
+          Type skillType=skill.GetType();
+          if(skills.TryGetValue(skillType,out Skill skillToGet)&&skillToGet==skill){
+           SimObject target=this;//  TO DO: set best my skill target
+           if(skill.IsAvailable(target,skill.level)){
+            skill.DoSkillImmediate(target,skill.level);
            }
           }
-          onHitSetMotion=true;
-          if(onHitSetMotionVulnerablePeriod<=0f){
-           Log.DebugMessage("onHitSetMotionVulnerablePeriod="+onHitSetMotionVulnerablePeriod);
-           onHitSetMotionVulnerablePeriod=onHitSetMotionVulnerablePeriodDuration;
-          }
-          Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
          }
+         bool canTakeDamage=true;
+         bool canSetMotion=true,canResetMotion=true;
+         OnHitGracePeriodSkillBuff onHitGracePeriodSkillBuff=null;
+         if(skillBuffs.Contains(typeof(OnHitGracePeriodSkillBuff),out List<SkillBuff>activeOnHitGracePeriodSkillBuffs)){
+          canSetMotion=false;canResetMotion=false;
+          onHitGracePeriodSkillBuff=(OnHitGracePeriodSkillBuff)activeOnHitGracePeriodSkillBuffs[0];
+          var effect=onHitGracePeriodSkillBuff.onHitGracePeriodEffect;
+          if(effect.onHitSetMotionGracePeriod<=0f){
+           if(onHitSetMotion){
+            if(effect.onHitResetMotionGracePeriod<=0f){
+             canResetMotion=true;
+             effect.onHitResetMotionGracePeriod=effect.onHitResetMotionGracePeriodDuration;
+             Log.DebugMessage("effect.onHitResetMotionGracePeriod="+effect.onHitResetMotionGracePeriod);
+            }
+           }
+           canSetMotion=true;
+           if(effect.onHitSetMotionVulnerablePeriod<=0f){
+            effect.onHitSetMotionVulnerablePeriod=effect.onHitSetMotionVulnerablePeriodDuration;
+            Log.DebugMessage("effect.onHitSetMotionVulnerablePeriod="+effect.onHitSetMotionVulnerablePeriod);
+           }
+          }
+         }
+         onHitResetMotion|=canResetMotion;
+         Log.DebugMessage("onHitResetMotion="+onHitResetMotion);
+         onHitSetMotion|=canSetMotion;
+         Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
+         //if(onHitSetMotionGracePeriod<=0f){
+         // if(onHitSetMotion){
+         //  if(onHitResetMotionGracePeriod<=0f){
+         //   onHitResetMotion=true;
+         //   onHitResetMotionGracePeriod=onHitResetMotionGracePeriodDuration;
+         //   Log.DebugMessage("onHitResetMotion="+onHitResetMotion+";onHitResetMotionGracePeriod="+onHitResetMotionGracePeriod);
+         //  }
+         // }
+         // onHitSetMotion=true;
+         // if(onHitSetMotionVulnerablePeriod<=0f){
+         //  Log.DebugMessage("onHitSetMotionVulnerablePeriod="+onHitSetMotionVulnerablePeriod);
+         //  onHitSetMotionVulnerablePeriod=onHitSetMotionVulnerablePeriodDuration;
+         // }
+         // Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
+         //}
         }
     }
 }

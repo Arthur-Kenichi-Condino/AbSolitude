@@ -209,6 +209,7 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
+         requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
          lastForward=transform.forward;
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
@@ -231,14 +232,14 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(requiredSkills.Count>0){
           Log.DebugMessage("required skills missing");
-         }
-         foreach(var requiredSkill in requiredSkills){
-          if(!ReflectionUtil.IsTypeDerivedFrom(requiredSkill.Key,typeof(Skill))){
-           Log.Warning("invalid skill type:"+requiredSkill.Key);
-           continue;
+          foreach(var requiredSkill in requiredSkills){
+           if(!ReflectionUtil.IsTypeDerivedFrom(requiredSkill.Key,typeof(Skill))){
+            Log.Warning("invalid skill type:"+requiredSkill.Key);
+            continue;
+           }
+           (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key,requiredSkill.Value.level,this);
+           skills.Add(requiredSkill.Key,spawnedSkill.skill);
           }
-          (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key,requiredSkill.Value.level,this);
-          skills.Add(requiredSkill.Key,spawnedSkill.skill);
          }
          requiredSkills.Clear();
          slaves.Clear();
