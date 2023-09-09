@@ -15,29 +15,29 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_HIT   =4,
          MOTION_HIT_RIFLE   =54,
         }
-     [SerializeField]internal float onHitSetMotionVulnerablePeriodDuration=2f;
-      [SerializeField]internal float onHitResetMotionGracePeriodDuration=.2f;
-       [SerializeField]internal float onHitSetMotionGracePeriodDuration=5f;
-     internal float onHitSetMotionVulnerablePeriod;
-      internal float onHitResetMotionGracePeriod;
-       internal float onHitSetMotionGracePeriod;
+     //[SerializeField]internal float onHitSetMotionVulnerablePeriodDuration=2f;
+     // [SerializeField]internal float onHitResetMotionGracePeriodDuration=.2f;
+     //  [SerializeField]internal float onHitSetMotionGracePeriodDuration=5f;
+     //internal float onHitSetMotionVulnerablePeriod;
+     // internal float onHitResetMotionGracePeriod;
+     //  internal float onHitSetMotionGracePeriod;
         internal virtual void UpdateMotion(bool fromAI){
-         if(onHitResetMotionGracePeriod>0f){
-          //Log.DebugMessage("onHitResetMotionGracePeriod=="+onHitResetMotionGracePeriod);
-          onHitResetMotionGracePeriod-=Time.deltaTime;
-         }
-         if(onHitSetMotionGracePeriod>0f){
-          //Log.DebugMessage("onHitSetMotionGracePeriod=="+onHitSetMotionGracePeriod);
-          onHitSetMotionGracePeriod-=Time.deltaTime;
-         }
-         if(onHitSetMotionVulnerablePeriod>0f){
-          //Log.DebugMessage("onHitSetMotionVulnerablePeriod=="+onHitSetMotionVulnerablePeriod);
-          onHitSetMotionVulnerablePeriod-=Time.deltaTime;
-          if(onHitSetMotionVulnerablePeriod<=0f){
-           onHitSetMotionGracePeriod=onHitSetMotionGracePeriodDuration;
-           Log.DebugMessage("onHitSetMotionGracePeriod="+onHitSetMotionGracePeriod);
-          }
-         }
+         //if(onHitResetMotionGracePeriod>0f){
+         // //Log.DebugMessage("onHitResetMotionGracePeriod=="+onHitResetMotionGracePeriod);
+         // onHitResetMotionGracePeriod-=Time.deltaTime;
+         //}
+         //if(onHitSetMotionGracePeriod>0f){
+         // //Log.DebugMessage("onHitSetMotionGracePeriod=="+onHitSetMotionGracePeriod);
+         // onHitSetMotionGracePeriod-=Time.deltaTime;
+         //}
+         //if(onHitSetMotionVulnerablePeriod>0f){
+         // //Log.DebugMessage("onHitSetMotionVulnerablePeriod=="+onHitSetMotionVulnerablePeriod);
+         // onHitSetMotionVulnerablePeriod-=Time.deltaTime;
+         // if(onHitSetMotionVulnerablePeriod<=0f){
+         //  onHitSetMotionGracePeriod=onHitSetMotionGracePeriodDuration;
+         //  Log.DebugMessage("onHitSetMotionGracePeriod="+onHitSetMotionGracePeriod);
+         // }
+         //}
          if(fromAI){
           if(onHitSetMotion){
               onDoAttackSetMotion=false;

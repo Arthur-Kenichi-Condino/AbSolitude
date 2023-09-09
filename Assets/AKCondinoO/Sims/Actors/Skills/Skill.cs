@@ -80,7 +80,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         internal virtual bool DoSkillImmediate(SimObject target,int useLevel){
          bool result=DoSkill(target,useLevel);
-         OnUpdate();
+         if(result){
+          OnUpdate();
+         }
          return result;
         }
         /// <summary>

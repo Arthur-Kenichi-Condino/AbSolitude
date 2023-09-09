@@ -21,6 +21,10 @@ namespace AKCondinoO.Sims.Actors{
            break;
           }
           case Skill.SkillUseContext.OnWillTakeDamage:{
+           if(this.skills.TryGetValue(typeof(OnHitGracePeriod),out Skill skill)){
+            Log.DebugMessage("GetBest:OnHitGracePeriod");
+            skills.Add(skill);
+           }
            break;
           }
           case Skill.SkillUseContext.OnCallSlaves:{

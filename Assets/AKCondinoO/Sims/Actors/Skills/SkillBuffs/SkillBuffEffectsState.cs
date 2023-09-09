@@ -54,5 +54,15 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          }
          buffsToPool.Clear();
         }
+        internal bool Contains(Type buffType,out List<SkillBuff>buffs){
+         if(activeBuffs.TryGetValue(buffType,out buffs)){
+          if(buffs.Count>0){
+           return true;
+          }
+          buffs=null;
+          return false;
+         }
+         return false;
+        }
     }
 }

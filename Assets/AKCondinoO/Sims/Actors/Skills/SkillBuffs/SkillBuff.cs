@@ -28,7 +28,9 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
      internal bool expired=false;
      internal bool applied=false;
      internal bool hasBeenUpdatedThisFrame=false;
+     internal float deltaTime;
         internal virtual void ManualUpdate(float deltaTime){
+         this.deltaTime=deltaTime;
          if(elapsedTime>=delay){
           if(!expired){
            OnApply();
