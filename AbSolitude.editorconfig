@@ -1,0 +1,9 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# New Rule Set
+# Description:  
+
+# Code files
+[*.{cs,vb}]
+
+dotnet_analyzer_diagnostic.severity=none
