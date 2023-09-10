@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid{
     internal partial class HumanoidAI{
-        internal partial class HumanoidAIStats:CharacterStats{
+        internal partial class HumanoidAIStats:SimActorStats{
         }
     }
 }
