@@ -35,7 +35,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
           buff.delay=0f;
           target.skillBuffs.Add(buff,this);
           TeleportSkillBuff teleportBuff=(TeleportSkillBuff)buff;
-          teleportBuff.targetDest=targetDest;
+          GetRandomPositionFor(target,actor.transform.position,8f,out Vector3 randomPos);
+          teleportBuff.targetDest=randomPos;
          }
          base.Invoke();//  the invoked flag is set here
         }
