@@ -114,7 +114,13 @@ namespace AKCondinoO.Sims.Actors{
          onHitSetMotion|=canSetMotion;
          Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
          if(canTakeDamage){
-          
+          OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
+         }
+        }
+        internal override void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
+         if(stats!=null){
+          float integrity=stats.IntegrityGet(this);
+          Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
          }
         }
     }

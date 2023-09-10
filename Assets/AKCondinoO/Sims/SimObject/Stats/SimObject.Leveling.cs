@@ -38,12 +38,12 @@ namespace AKCondinoO.Sims{
             SetPendingRefresh(statsSim,forceRefresh);
            }
             protected bool updatedIsTranscendent;
-         internal void OnRefresh_IsTranscendent(SimObject statsSim=null){
-          if(updatedIsTranscendent){
-           refreshedIsTranscendent=true;
-          }
-         }
-          protected bool refreshedIsTranscendent;
+             internal void OnRefresh_IsTranscendent(SimObject statsSim=null){
+              if(updatedIsTranscendent){
+               refreshedIsTranscendent=true;
+              }
+             }
+              protected bool refreshedIsTranscendent;
          #endregion
           #region SimLevel
           /// <summary>
@@ -62,67 +62,67 @@ namespace AKCondinoO.Sims{
              SetPendingRefresh(statsSim,forceRefresh);
             }
              protected bool updatedSimLevel;
-          internal void OnRefresh_SimLevel(SimObject statsSim=null){
-           if(updatedSimLevel||
-              refreshedIsTranscendent
-           ){
-            totalStatPoints_value=AddStatPointsFrom151To200(simLevel_value,isTranscendent_value);
-            Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
-            refreshedSimLevel=true;
-           }
-          }
-           protected bool refreshedSimLevel;
-          static readonly Dictionary<(int currentLevel,bool transcendent),int>totalStatPointsAtLevel=new Dictionary<(int,bool),int>();
-           internal static int AddStatPointsFrom1To99(int currentLevel,bool transcendent){
-            lock(totalStatPointsAtLevel){
-             if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
-              return cached;
-             }
-            }
-            int statPoints;
-            if(transcendent){
-             statPoints=100;
-            }else{
-             statPoints=48;
-            }
-            for(int level=2;level<=Math.Min(currentLevel,99);level++){
-             statPoints+=Mathf.FloorToInt((level-1)/5f)+3;
+              internal void OnRefresh_SimLevel(SimObject statsSim=null){
+               if(updatedSimLevel||
+                  refreshedIsTranscendent
+               ){
+                totalStatPoints_value=AddStatPointsFrom151To200(simLevel_value,isTranscendent_value);
+                Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
+                refreshedSimLevel=true;
+               }
+              }
+               protected bool refreshedSimLevel;
+         static readonly Dictionary<(int currentLevel,bool transcendent),int>totalStatPointsAtLevel=new Dictionary<(int,bool),int>();
+            internal static int AddStatPointsFrom1To99(int currentLevel,bool transcendent){
              lock(totalStatPointsAtLevel){
-              totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
+               return cached;
+              }
              }
-            }
-            return statPoints;
-           }
-           internal static int AddStatPointsFrom100To150(int currentLevel,bool transcendent){
-            lock(totalStatPointsAtLevel){
-             if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
-              return cached;
+             int statPoints;
+             if(transcendent){
+              statPoints=100;
+             }else{
+              statPoints=48;
              }
+             for(int level=2;level<=Math.Min(currentLevel,99);level++){
+              statPoints+=Mathf.FloorToInt((level-1)/5f)+3;
+              lock(totalStatPointsAtLevel){
+               totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              }
+             }
+             return statPoints;
             }
-            int statPoints=AddStatPointsFrom1To99(currentLevel,transcendent);
-            for(int level=100;level<=Math.Min(currentLevel,150);level++){
-             statPoints+=Mathf.FloorToInt((level-1)/10f)+13;
+            internal static int AddStatPointsFrom100To150(int currentLevel,bool transcendent){
              lock(totalStatPointsAtLevel){
-              totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
+               return cached;
+              }
              }
-            }
-            return statPoints;
-           }
-           internal static int AddStatPointsFrom151To200(int currentLevel,bool transcendent){
-            lock(totalStatPointsAtLevel){
-             if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
-              return cached;
+             int statPoints=AddStatPointsFrom1To99(currentLevel,transcendent);
+             for(int level=100;level<=Math.Min(currentLevel,150);level++){
+              statPoints+=Mathf.FloorToInt((level-1)/10f)+13;
+              lock(totalStatPointsAtLevel){
+               totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              }
              }
+             return statPoints;
             }
-            int statPoints=AddStatPointsFrom100To150(currentLevel,transcendent);
-            for(int level=151;level<=Math.Min(currentLevel,200);level++){
-             statPoints+=Mathf.FloorToInt(((level-1)-150)/7f)+28;
+            internal static int AddStatPointsFrom151To200(int currentLevel,bool transcendent){
              lock(totalStatPointsAtLevel){
-              totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
+               return cached;
+              }
              }
+             int statPoints=AddStatPointsFrom100To150(currentLevel,transcendent);
+             for(int level=151;level<=Math.Min(currentLevel,200);level++){
+              statPoints+=Mathf.FloorToInt(((level-1)-150)/7f)+28;
+              lock(totalStatPointsAtLevel){
+               totalStatPointsAtLevel[(level,transcendent)]=statPoints;
+              }
+             }
+             return statPoints;
             }
-            return statPoints;
-           }
           #endregion
            #region AgeLevel
            /// <summary>
@@ -139,13 +139,13 @@ namespace AKCondinoO.Sims{
              SetPendingRefresh(statsSim,forceRefresh);
             }
              protected bool updatedAgeLevel;
-          internal void OnRefresh_AgeLevel(SimObject statsSim=null){
-           if(updatedAgeLevel
-           ){
-            refreshedAgeLevel=true;
-           }
-          }
-           protected bool refreshedAgeLevel;
+              internal void OnRefresh_AgeLevel(SimObject statsSim=null){
+               if(updatedAgeLevel
+               ){
+                refreshedAgeLevel=true;
+               }
+              }
+               protected bool refreshedAgeLevel;
            #endregion
         }
     }

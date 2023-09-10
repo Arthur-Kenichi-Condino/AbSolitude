@@ -27,6 +27,7 @@ namespace AKCondinoO.Sims{
                   OnRefresh_Vitality    (statsSim);
                    OnRefresh_Luck_Late(statsSim);
                     OnRefresh_MaxIntegrity(statsSim);
+                     OnRefresh_Integrity(statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
                updatedSimLevel      =false;refreshedSimLevel      =false;
                updatedAgeLevel      =false;refreshedAgeLevel      =false;
@@ -44,6 +45,7 @@ namespace AKCondinoO.Sims{
                   updatedStrength    =false;refreshedStrength    =false;
                   updatedVitality    =false;refreshedVitality    =false;
                     updatedMaxIntegrity=false;refreshedMaxIntegrity=false;
+                     updatedIntegrity=false;refreshedIntegrity=false;
               pendingRefresh=false;
              }
             }

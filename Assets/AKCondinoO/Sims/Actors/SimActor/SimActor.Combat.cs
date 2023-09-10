@@ -15,5 +15,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnHit(Hitboxes hitbox){
         }
+        internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
+        }
     }
 }

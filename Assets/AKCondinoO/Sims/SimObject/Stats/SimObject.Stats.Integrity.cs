@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims{
         internal partial class Stats{
          //
          #region Integrity
+         protected float scaleIntegrity;
          /// <summary>
          ///  Integridade física atual para o objeto Sim: se este valor chegar a 0f, o Sim irá morrer ou ser destruído
          /// </summary>
@@ -24,6 +25,17 @@ namespace AKCondinoO.Sims{
             SetPendingRefresh(statsSim,forceRefresh);
            }
             protected bool updatedIntegrity;
+             internal void OnRefresh_Integrity(SimObject statsSim=null){
+               if(refreshedMaxIntegrity
+               ){
+                //Log.DebugMessage("OnRefresh_Integrity");
+                refreshedIntegrity=true;
+               }
+               if(updatedIntegrity){
+                refreshedIntegrity=true;
+               }
+             }
+              protected bool refreshedIntegrity;
           #region MaxIntegrity
           /// <summary>
           ///  Integridade física máxima do Sim: valor calculado com base em outros atributos
@@ -48,39 +60,38 @@ namespace AKCondinoO.Sims{
              SetPendingRefresh(statsSim,forceRefresh);
             }
              protected bool updatedMaxIntegrity;
-          internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
-           if(refreshedSimLevel||
-              refreshedAgeLevel||
-              updatedBodily_kinesthetic||
-              refreshedVitality
-           ){
-            float maxIntegrity=35f;
-            float maxIntegrityModifierB=5f;
-            maxIntegrityModifierB=Math.Max(maxIntegrityModifierB,bodily_kinesthetic_value*.035f);
-            maxIntegrity+=(simLevel_value*maxIntegrityModifierB);
-            float maxIntegrityModifierA=(bodily_kinesthetic_value/200f)+((simLevel_value/200f)*.1f);
-            for(int level=2;level<=Mathf.FloorToInt(simLevel_value);++level){
-             maxIntegrity+=(level*maxIntegrityModifierA);
-            }
-            maxIntegrity*=(1f+(vitality_value_stats+vitality_value_set)*.01f);
-            if(isTranscendent_value){
-             maxIntegrity*=1.25f;
-            }
-            //Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
-            float previousMaxIntegrity=maxIntegrity_value_stats;
-            float scaleIntegrity;
-            if(previousMaxIntegrity<=0f){
-             scaleIntegrity=0f;
-            }else{
-             scaleIntegrity=maxIntegrity/previousMaxIntegrity;
-            }
-            refreshedMaxIntegrity=true;
-           }
-           if(updatedMaxIntegrity){
-            refreshedMaxIntegrity=true;
-           }
-          }
-           protected bool refreshedMaxIntegrity;
+              internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
+               if(refreshedSimLevel||
+                  refreshedAgeLevel||
+                  updatedBodily_kinesthetic||
+                  refreshedVitality
+               ){
+                float maxIntegrity=35f;
+                float maxIntegrityModifierB=5f;
+                maxIntegrityModifierB=Math.Max(maxIntegrityModifierB,bodily_kinesthetic_value*.035f);
+                maxIntegrity+=(simLevel_value*maxIntegrityModifierB);
+                float maxIntegrityModifierA=(bodily_kinesthetic_value/200f)+((simLevel_value/200f)*.1f);
+                for(int level=2;level<=Mathf.FloorToInt(simLevel_value);++level){
+                 maxIntegrity+=(level*maxIntegrityModifierA);
+                }
+                maxIntegrity*=(1f+(vitality_value_stats+vitality_value_set)*.01f);
+                if(isTranscendent_value){
+                 maxIntegrity*=1.25f;
+                }
+                //Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
+                float previousMaxIntegrity=maxIntegrity_value_stats;
+                if(previousMaxIntegrity<=0f){
+                 scaleIntegrity=-1f;
+                }else{
+                 scaleIntegrity=maxIntegrity/previousMaxIntegrity;
+                }
+                refreshedMaxIntegrity=true;
+               }
+               if(updatedMaxIntegrity){
+                refreshedMaxIntegrity=true;
+               }
+              }
+               protected bool refreshedMaxIntegrity;
            #region Stamina
            /// <summary>
            ///  Energia física disponível para realizar ações
