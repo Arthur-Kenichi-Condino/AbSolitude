@@ -28,7 +28,13 @@ namespace AKCondinoO.Sims{
              internal void OnRefresh_Integrity(SimObject statsSim=null){
                if(refreshedMaxIntegrity
                ){
-                //Log.DebugMessage("OnRefresh_Integrity");
+                Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+";scaleIntegrity:"+scaleIntegrity);
+                if(scaleIntegrity<0f){
+                 integrity_value=maxIntegrity_value_stats+maxIntegrity_value_set;
+                }else{
+                 integrity_value*=scaleIntegrity;
+                }
+                Log.DebugMessage(statsSim+":integrity_value:"+integrity_value);
                 refreshedIntegrity=true;
                }
                if(updatedIntegrity){
@@ -78,8 +84,9 @@ namespace AKCondinoO.Sims{
                 if(isTranscendent_value){
                  maxIntegrity*=1.25f;
                 }
-                //Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
+                Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
                 float previousMaxIntegrity=maxIntegrity_value_stats;
+                maxIntegrity_value_stats=maxIntegrity;
                 if(previousMaxIntegrity<=0f){
                  scaleIntegrity=-1f;
                 }else{
