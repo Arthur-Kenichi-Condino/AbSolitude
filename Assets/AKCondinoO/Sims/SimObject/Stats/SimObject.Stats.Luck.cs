@@ -29,10 +29,10 @@ namespace AKCondinoO.Sims{
               if(luck_value>0f){
               }
              }
-             internal void OnRefresh_Luck_Late(SimObject statsSim=null){
-              if(luck_value>0f){
-              }
-             }
+               internal void OnRefresh_Luck_Late(SimObject statsSim=null){
+                if(luck_value>0f){
+                }
+               }
          #endregion
         }
     }
