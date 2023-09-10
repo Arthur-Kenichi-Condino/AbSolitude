@@ -22,22 +22,6 @@ namespace AKCondinoO.Sims.Actors{
      // internal float onHitResetMotionGracePeriod;
      //  internal float onHitSetMotionGracePeriod;
         internal virtual void UpdateMotion(bool fromAI){
-         //if(onHitResetMotionGracePeriod>0f){
-         // //Log.DebugMessage("onHitResetMotionGracePeriod=="+onHitResetMotionGracePeriod);
-         // onHitResetMotionGracePeriod-=Time.deltaTime;
-         //}
-         //if(onHitSetMotionGracePeriod>0f){
-         // //Log.DebugMessage("onHitSetMotionGracePeriod=="+onHitSetMotionGracePeriod);
-         // onHitSetMotionGracePeriod-=Time.deltaTime;
-         //}
-         //if(onHitSetMotionVulnerablePeriod>0f){
-         // //Log.DebugMessage("onHitSetMotionVulnerablePeriod=="+onHitSetMotionVulnerablePeriod);
-         // onHitSetMotionVulnerablePeriod-=Time.deltaTime;
-         // if(onHitSetMotionVulnerablePeriod<=0f){
-         //  onHitSetMotionGracePeriod=onHitSetMotionGracePeriodDuration;
-         //  Log.DebugMessage("onHitSetMotionGracePeriod="+onHitSetMotionGracePeriod);
-         // }
-         //}
          if(fromAI){
           if(onHitSetMotion){
               onDoAttackSetMotion=false;

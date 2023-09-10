@@ -113,21 +113,9 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("onHitResetMotion="+onHitResetMotion);
          onHitSetMotion|=canSetMotion;
          Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
-         //if(onHitSetMotionGracePeriod<=0f){
-         // if(onHitSetMotion){
-         //  if(onHitResetMotionGracePeriod<=0f){
-         //   onHitResetMotion=true;
-         //   onHitResetMotionGracePeriod=onHitResetMotionGracePeriodDuration;
-         //   Log.DebugMessage("onHitResetMotion="+onHitResetMotion+";onHitResetMotionGracePeriod="+onHitResetMotionGracePeriod);
-         //  }
-         // }
-         // onHitSetMotion=true;
-         // if(onHitSetMotionVulnerablePeriod<=0f){
-         //  Log.DebugMessage("onHitSetMotionVulnerablePeriod="+onHitSetMotionVulnerablePeriod);
-         //  onHitSetMotionVulnerablePeriod=onHitSetMotionVulnerablePeriodDuration;
-         // }
-         // Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
-         //}
+         if(canTakeDamage){
+          
+         }
         }
     }
 }
