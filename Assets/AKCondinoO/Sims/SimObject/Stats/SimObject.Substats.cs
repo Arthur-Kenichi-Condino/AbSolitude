@@ -48,10 +48,12 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float physicalDefenseFlatValue;
+                 protected float physicalDefenseFlatValue_value_stats;
+                 protected float physicalDefenseFlatValue_value_set;
+                 protected float physicalDefenseFlatValue_value_buffs;
                   internal float PhysicalDefenseFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
-                   return physicalDefenseFlatValue;
+                   return physicalDefenseFlatValue_value_stats+physicalDefenseFlatValue_value_set;
                   }
                  /// <summary>
                  ///  Substats
