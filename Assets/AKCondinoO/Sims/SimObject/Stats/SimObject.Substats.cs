@@ -11,11 +11,40 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float physicalPowerFlatValue;
+                 protected float physicalPowerFlatValue_value_stats;
+                 protected float physicalPowerFlatValue_value_set;
+                 protected float physicalPowerFlatValue_value_buffs;
                   internal float PhysicalPowerFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
-                   return physicalPowerFlatValue;
+                   return physicalPowerFlatValue_value_stats+physicalPowerFlatValue_value_set;
                   }
+                   internal void PhysicalPowerFlatValueSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                    OnRefresh(statsSim);
+                    physicalPowerFlatValue_value_set=value-physicalPowerFlatValue_value_stats;
+                    updatedPhysicalPowerFlatValue=true;
+                    SetPendingRefresh(statsSim,forceRefresh);
+                   }
+                    protected bool updatedPhysicalPowerFlatValue;
+                     internal void OnRefresh_PhysicalPowerFlatValue(SimObject statsSim=null){
+                      if(refreshedSimLevel||
+                         refreshedAgeLevel||
+                         refreshedDexterity||
+                         refreshedStrength||
+                         refreshedVitality
+                      ){
+                       physicalPowerFlatValue_value_stats=
+                        (simLevel_value/4f)+
+                         ((dexterity_value_stats+dexterity_value_set)/3f)+
+                          ((strength_value_stats+strength_value_set)/1f)+
+                           ((vitality_value_stats+vitality_value_set)/5f);
+                       //Log.DebugMessage("OnRefresh_PhysicalPowerFlatValue:physicalPowerFlatValue_value_stats:"+physicalPowerFlatValue_value_stats);
+                       refreshedPhysicalPowerFlatValue=true;
+                      }
+                      if(updatedPhysicalPowerFlatValue){
+                       refreshedPhysicalPowerFlatValue=true;
+                      }
+                     }
+                      protected bool refreshedPhysicalPowerFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>

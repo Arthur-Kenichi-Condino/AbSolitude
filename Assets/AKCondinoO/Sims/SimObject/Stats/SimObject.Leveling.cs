@@ -24,7 +24,7 @@ namespace AKCondinoO.Sims{
               }
               AgeLevelSet(math_random.Next(1,970),statsSim,false);
              }
-             Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value);
+             //Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value);
             }
          #region IsTranscendent
          protected bool isTranscendent_value;
@@ -67,7 +67,7 @@ namespace AKCondinoO.Sims{
                   refreshedIsTranscendent
                ){
                 totalStatPoints_value=AddStatPointsFrom151To200(simLevel_value,isTranscendent_value);
-                Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
+                //Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
                 refreshedSimLevel=true;
                }
               }

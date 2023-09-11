@@ -121,6 +121,11 @@ namespace AKCondinoO.Sims.Actors{
          if(stats!=null){
           float integrity=stats.IntegrityGet(this);
           Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+          float damageFromSimObject=1f;
+          if(simObject.stats!=null){
+           float fromSimObjectPhysicalPowerFlatValue=simObject.stats.PhysicalPowerFlatValueGet(simObject);
+           Log.DebugMessage("OnHitProcessStatDamageFrom:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
+          }
          }
         }
     }
