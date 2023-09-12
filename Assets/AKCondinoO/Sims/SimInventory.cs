@@ -141,10 +141,10 @@ namespace AKCondinoO.Sims.Inventory{
          simInventoryItemPool.Enqueue(simInventoryItem);
          if(updatePersistentData){persistentSimInventoryData.UpdateData(this);}
         }
-        internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,bool updatePersistentData=true){
+        internal virtual bool Add(SimObject simObject,out SimInventoryItemsInContainerSettings.InContainerSettings settings,bool updatePersistentData=true){
          int slots=0;
          if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(simObject.GetType(),out settings)){
-          if(!settings.inventorySpaces.TryGetValue(this.GetType(),out slots)){
+          if(!settings.spacesUsage.TryGetValue(this.GetType(),out slots)){
            Log.DebugMessage("SimObject doesn't have a valid SimInventoryItemsSettings.SimObjectSettings for this SimInventory:"+this.GetType());
            return(false);
           }

@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using static AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion.SimObjectAsInventoryItemTransformForSimType;
+using UnityEngine.Animations;
+using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
      internal SimInventoryItem asInventoryItem=null;
@@ -27,7 +28,7 @@ namespace AKCondinoO.Sims{
            foreach(var simInventory in simHandsInventories){
             if(simInventory.Value is SimHands simHandsInventory){
              Log.DebugMessage("simHandsInventory try Add");
-             if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.SimObjectSettings settings,!addingList)){
+             if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.InContainerSettings settings,!addingList)){
               Log.DebugMessage("added to simHandsInventory:mark simObject to be saved as an inventory item");
               //  TO DO: create local function to save simObjects as an inventory item
               OnAddedToInventory(simHandsInventory,settings);
@@ -38,12 +39,12 @@ namespace AKCondinoO.Sims{
           }
          }
          return false;
-         void OnAddedToInventory(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
+         void OnAddedToInventory(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings){
           simObject.ChangeInteractionsToActAsInventoryItem(simInventory,settings);
           OnInventoryItemAdded(simInventory,settings,simObject);
          }
         }
-        protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings,SimObject simObjectAdded){
+        protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings,SimObject simObjectAdded){
          if(simInventory is SimHands simHands){
           SetCurrentToolsOrWeapons(null,null);
          }
@@ -75,7 +76,7 @@ namespace AKCondinoO.Sims{
         protected virtual void SetCurrentToolsOrWeapons(SimObject forAction1,SimObject forAction2){
         }
      internal bool actingAsInventoryItem=false;
-        internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings){
+        internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings){
          Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
          //  TO DO: disable some types of collisions and enable triggers or special collisions
          actingAsInventoryItem=true;
@@ -105,7 +106,16 @@ namespace AKCondinoO.Sims{
            collider.enabled=true;
           }
          }
+         if(parentConstraint!=null){
+          parentConstraint.locked=false;
+          for(int i=0;i<parentConstraint.sourceCount;++i){
+           parentConstraint.RemoveSource(i);
+          }
+          parentConstraint.constraintActive=false;
+         }
+         inContainerTransformData=null;
         }
+     protected InContainerTransformData inContainerTransformData=null;
         internal void SetAsInventoryItemTransform(){
          //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
          if(asInventoryItem.container is SimHands simHands){
@@ -113,40 +123,64 @@ namespace AKCondinoO.Sims{
            Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
            Vector3 lineBetweenHandsDir=(simHands.leftHand.transform.position-simHands.rightHand.transform.position).normalized;
            Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up);
-           SimInventoryItemsInContainerSettings.SimObjectSettings settings=asInventoryItem.settings;
+           SimInventoryItemsInContainerSettings.InContainerSettings settings=asInventoryItem.settings;
            if(asInventoryItem.container.asSimObject is BaseAI containerAsBaseAI){
             if(containerAsBaseAI.simActorAnimatorController!=null){
              if(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex!=null){
-              if(containerAsBaseAI.simActorAnimatorController.layerIndexToName.TryGetValue(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value,out string layerName)){
-               if(settings.inventoryTransformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
-                if(transformSettingsForSimHands.TryGetValue(containerAsBaseAI.motion,out var transformSettingsForMotion)){
-                 if(transformSettingsForMotion.TryGetValue(containerAsBaseAI.GetType(),out var transformSettingsForSimType)){
-                  int transformIndex=0;
-                  int priority=int.MaxValue;
-                  Transform bodyPart=null;
-                  SimObjectAsInventoryItemTransformForParentBodyPartName transformSettings=null;
-                  foreach(var transformSettingsForParentBodyPartName in transformSettingsForSimType){
-                   string parentBodyPartName=transformSettingsForParentBodyPartName.Key;
-                   if(containerAsBaseAI.nameToBodyPart.TryGetValue(parentBodyPartName,out Transform parentBodyPart)){
-                    int index=Array.IndexOf(transformSettingsForParentBodyPartName.Value.layer,layerName);
-                    if(index>=0){
-                     int layerPriority=transformSettingsForParentBodyPartName.Value.layerPriority[index];
-                     if(layerPriority<=priority){
-                      priority=layerPriority;
-                      transformIndex=index;
-                      bodyPart=parentBodyPart;
-                      transformSettings=transformSettingsForParentBodyPartName.Value;
-                      Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
-                     }
-                    }
+              string layerName=null;
+              int layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponLayerIndex.Value;
+              GetLayerAtIndex(layerIndex,out layerName);
+              if(layerName==null){
+               layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value;
+               GetLayerAtIndex(layerIndex,out layerName);
+              }
+              void GetLayerAtIndex(int layerIndex,out string layerName){
+               if(containerAsBaseAI.simActorAnimatorController.layerIndexToName.TryGetValue(layerIndex,out layerName)){
+                if(containerAsBaseAI.simActorAnimatorController.layerTargetWeight[layerIndex]!=1f){
+                 layerName=null;
+                }
+               }
+              }
+              if(layerName!=null){
+               //Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
+               if(settings.transformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
+                (Type containerSimType,ActorMotion?containerSimMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,layerName);
+                if(transformSettingsForSimHands.TryGetValue(key,out var transformSettingsForParentBodyPartName)){
+                 int priority=int.MaxValue;
+                 Transform bodyPart=null;
+                 InContainerTransformData inContainerTransformData=null;
+                 foreach(var kvp in transformSettingsForParentBodyPartName){
+                  string parentBodyPartName=kvp.Key;
+                  if(containerAsBaseAI.nameToBodyPart.TryGetValue(parentBodyPartName,out Transform parentBodyPart)){
+                   int layerPriority=kvp.Value.layerPriority;
+                   if(layerPriority<=priority){
+                    priority=layerPriority;
+                    bodyPart=parentBodyPart;
+                    inContainerTransformData=kvp.Value;
+                    //Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
                    }
                   }
-                  if(bodyPart!=null){
-                   Vector3 grabPos=transformSettings.transform[transformIndex].localPosition;
-                   Quaternion grabRot=transformSettings.transform[transformIndex].localRotation;
-                   if(transformSettings.transformIsDeterminant[transformIndex]){
-                    transform.rotation=bodyPart.rotation*grabRot;
-                    transform.position=bodyPart.position+bodyPart.rotation*grabPos;
+                 }
+                 if(bodyPart!=null){
+                  if(inContainerTransformData!=this.inContainerTransformData){
+                   Log.DebugMessage("set ParentConstraint:"+layerName);
+                   this.inContainerTransformData=inContainerTransformData;
+                   if(parentConstraint!=null){
+                    parentConstraint.locked=false;
+                    for(int i=0;i<parentConstraint.sourceCount;++i){
+                     parentConstraint.RemoveSource(i);
+                    }
+                    ConstraintSource source=new ConstraintSource{
+                     sourceTransform=bodyPart,
+                     weight=1f,
+                    };
+                    parentConstraint.AddSource(source);
+                    Log.DebugMessage("set ParentConstraint:localRotation:"+inContainerTransformData.transform.localRotation.eulerAngles);
+                    parentConstraint.SetRotationOffset   (parentConstraint.sourceCount-1,inContainerTransformData.transform.localRotation.eulerAngles);
+                    Log.DebugMessage("set ParentConstraint:localPosition:"+inContainerTransformData.transform.localPosition);
+                    parentConstraint.SetTranslationOffset(parentConstraint.sourceCount-1,inContainerTransformData.transform.localPosition);
+                    parentConstraint.locked=true;
+                    parentConstraint.constraintActive=true;
                    }
                   }
                  }
