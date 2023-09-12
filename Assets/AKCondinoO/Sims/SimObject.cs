@@ -347,6 +347,7 @@ namespace AKCondinoO.Sims{
         }
      public bool interactionsEnabled{get;protected set;}
         protected virtual void EnableInteractions(){
+         OnActAsNonInventorySimObject();
          foreach(Collider collider in colliders){
           collider.enabled=true;
          }
@@ -368,6 +369,9 @@ namespace AKCondinoO.Sims{
           simCollisions.Activate();
          }
          EnableRenderers();
+         if(actingAsInventoryItem){
+          OnActAsInventoryItem();
+         }
         }
         protected virtual void DisableInteractions(){
          foreach(Collider collider in colliders){

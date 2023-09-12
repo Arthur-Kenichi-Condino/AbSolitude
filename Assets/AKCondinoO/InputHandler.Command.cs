@@ -22,7 +22,7 @@ namespace AKCondinoO{
          internal static CommandState RIGHT   =new CommandState{input=KeyCode.D,mode=Modes.ActiveHeld};
          internal static CommandState LEFT    =new CommandState{input=KeyCode.A,mode=Modes.ActiveHeld};
          internal static CommandState ACTION_1=new CommandState{input=(int)0,mode=Modes.ActiveHeld};
-         internal static CommandState ACTION_2=new CommandState{input=(int)1,mode=Modes.ActiveHeld};
+         internal static CommandState ACTION_2=new CommandState{input=(int)1,mode=Modes.AlternateDown};
          internal static CommandState WALK    =new CommandState{input=KeyCode.CapsLock,mode=Modes.AlternateDown};
         }
     }

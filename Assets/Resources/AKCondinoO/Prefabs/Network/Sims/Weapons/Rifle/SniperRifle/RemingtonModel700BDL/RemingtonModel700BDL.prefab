@@ -191,13 +191,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562222896545869462}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.60260373, y: -0.060572945, z: 0.061085902, w: 0.7933903}
-  m_LocalPosition: {x: 0.043, y: 0.213, z: 0.104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_LocalEulerAnglesHint: {x: 74.494, y: -4.827, z: 5.135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1664986227289551588
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,13 +305,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3878925924232417409}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6680677, y: -0.075629175, z: 0.019319933, w: 0.73999506}
-  m_LocalPosition: {x: 0.03953539, y: 0.19131555, z: 0.09338001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_LocalEulerAnglesHint: {x: 82.593, y: -41.914, z: -34.198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4067705305482202223
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,8 +907,9 @@ Transform:
   - {fileID: 5619068117634271608}
   - {fileID: 1498394650546069935}
   - {fileID: 7476013650176718565}
-  - {fileID: 5574443840501539311}
   - {fileID: 2050044667056734405}
+  - {fileID: 5574443840501539311}
+  - {fileID: 7301093732698183763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
 --- !u!114 &-8870923142324330951
@@ -966,25 +967,31 @@ MonoBehaviour:
     simInventorySpaceUse: 2
     transformSettingsForMotion:
     - motion: 50
-      parentBodyPartName: rightHand
-      transformIsDeterminant: 1
-      layer:
-      - Rifle
-      - Rifle_Aim
-      layerPriority: 0200000001000000
-      transform:
-      - {fileID: 7476013650176718565}
-      - {fileID: 2050044667056734405}
+      transformSettingsForSimType:
+      - simTypeName: ArthurCondinoAI
+        transformSettingsForParentBodyPartName:
+        - parentBodyPartName: rightHand
+          layer:
+          - Carrying Rifle
+          - Aiming with Rifle
+          layerPriority: 0100000000000000
+          transformIsDeterminant: 0101
+          transform:
+          - {fileID: 7476013650176718565}
+          - {fileID: 2050044667056734405}
     - motion: 51
-      parentBodyPartName: rightHand
-      transformIsDeterminant: 1
-      layer:
-      - Rifle
-      - Rifle_Aim
-      layerPriority: 0200000001000000
-      transform:
-      - {fileID: 5574443840501539311}
-      - {fileID: 2050044667056734405}
+      transformSettingsForSimType:
+      - simTypeName: ArthurCondinoAI
+        transformSettingsForParentBodyPartName:
+        - parentBodyPartName: rightHand
+          layer:
+          - Carrying Rifle
+          - Aiming with Rifle
+          layerPriority: 0100000000000000
+          transformIsDeterminant: 0101
+          transform:
+          - {fileID: 5574443840501539311}
+          - {fileID: 7301093732698183763}
 --- !u!1 &5619068119356455063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,6 +1159,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6375865945637120835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7301093732698183763}
+  m_Layer: 0
+  m_Name: rightHandGrabLocalTransformMOTION_MOVE_AIMING_RIFLE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7301093732698183763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6375865945637120835}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5619068118059489713}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8258515989489139868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,13 +1297,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695075485846467242}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.68324864, y: 0.12669457, z: 0.08614123, w: 0.71393245}
-  m_LocalPosition: {x: 0.0258, y: 0.1738, z: 0.0591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_LocalEulerAnglesHint: {x: 107.492004, y: -96.541016, z: -99.866}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8939747737377269075
 GameObject:
   m_ObjectHideFlags: 0
