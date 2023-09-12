@@ -10,8 +10,8 @@ namespace AKCondinoO.Sims.Inventory{
      internal SimInventory container;
      internal SimObject simObject;
      internal readonly HashSet<int>slotIdsUsed=new HashSet<int>();
-     internal SimInventoryItemsInContainerSettings.SimObjectSettings settings;
-        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,SimInventoryItemsInContainerSettings.SimObjectSettings settings,int spaces){
+     internal SimInventoryItemsInContainerSettings.InContainerSettings settings;
+        internal void SetAsInventoryItem(SimInventory inventory,SimObject simObject,SimInventoryItemsInContainerSettings.InContainerSettings settings,int spaces){
          Log.DebugMessage("SetAsInventoryItem:"+simObject);
          this.settings=settings;
          if(simObject.asInventoryItem!=null&&simObject.asInventoryItem.container!=null){

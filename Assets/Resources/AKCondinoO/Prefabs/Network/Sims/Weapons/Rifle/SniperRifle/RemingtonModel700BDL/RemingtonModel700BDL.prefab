@@ -176,8 +176,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2050044667056734405}
+  - component: {fileID: 422869261266657073}
   m_Layer: 0
-  m_Name: rightHandGrabLocalTransformMOTION_STAND_AIMING_RIFLE
+  m_Name: ArthurCondinoAIrightHandGrabLocalTransformMOTION_STAND_AIMING_RIFLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,6 +199,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &422869261266657073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562222896545869462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df82f049de2a92c40a4ea909610930e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simTypeName: ArthurCondinoAI
+  motion: 50
+  layer: Aiming with Rifle
+  parentBodyPartName: rightHand
+  layerPriority: 0
 --- !u!1 &1664986227289551588
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,8 +308,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5574443840501539311}
+  - component: {fileID: 4046836832325046960}
   m_Layer: 0
-  m_Name: rightHandGrabLocalTransformMOTION_MOVE_RIFLE
+  m_Name: ArthurCondinoAIrightHandGrabLocalTransformMOTION_MOVE_RIFLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,6 +331,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4046836832325046960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3878925924232417409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df82f049de2a92c40a4ea909610930e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simTypeName: ArthurCondinoAI
+  motion: 51
+  layer: Carrying Rifle
+  parentBodyPartName: rightHand
+  layerPriority: 1
 --- !u!1 &4067705305482202223
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +919,7 @@ GameObject:
   - component: {fileID: -8870923142324330951}
   - component: {fileID: -1854219316473170960}
   - component: {fileID: -6769974653762724209}
+  - component: {fileID: 1886113482308048330}
   m_Layer: 0
   m_Name: RemingtonModel700BDL
   m_TagString: Untagged
@@ -906,10 +943,10 @@ Transform:
   - {fileID: 2003169171473749588}
   - {fileID: 5619068117634271608}
   - {fileID: 1498394650546069935}
-  - {fileID: 7476013650176718565}
   - {fileID: 2050044667056734405}
-  - {fileID: 5574443840501539311}
+  - {fileID: 7476013650176718565}
   - {fileID: 7301093732698183763}
+  - {fileID: 5574443840501539311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
 --- !u!114 &-8870923142324330951
@@ -962,36 +999,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handsUsage: 2
   weaponType: 2
-  inventorySettings:
+  dataArrays:
   - simInventoryType: SimHands
-    simInventorySpaceUse: 2
-    transformSettingsForMotion:
-    - motion: 50
-      transformSettingsForSimType:
-      - simTypeName: ArthurCondinoAI
-        transformSettingsForParentBodyPartName:
-        - parentBodyPartName: rightHand
-          layer:
-          - Carrying Rifle
-          - Aiming with Rifle
-          layerPriority: 0100000000000000
-          transformIsDeterminant: 0101
-          transform:
-          - {fileID: 7476013650176718565}
-          - {fileID: 2050044667056734405}
-    - motion: 51
-      transformSettingsForSimType:
-      - simTypeName: ArthurCondinoAI
-        transformSettingsForParentBodyPartName:
-        - parentBodyPartName: rightHand
-          layer:
-          - Carrying Rifle
-          - Aiming with Rifle
-          layerPriority: 0100000000000000
-          transformIsDeterminant: 0101
-          transform:
-          - {fileID: 5574443840501539311}
-          - {fileID: 7301093732698183763}
+    simInventorySpacesUsage: 2
+    transformData:
+    - {fileID: 3863814787127284236}
+    - {fileID: 422869261266657073}
+    - {fileID: 4046836832325046960}
+    - {fileID: 6212574107777507712}
+--- !u!1773428102 &1886113482308048330
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5619068118059489712}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationAtRest: {x: -90, y: -90, z: 0}
+  m_TranslationOffsets: []
+  m_RotationOffsets: []
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 0
+  m_IsLocked: 0
+  m_Sources: []
 --- !u!1 &5619068119356455063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,8 +1206,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7301093732698183763}
+  - component: {fileID: 6212574107777507712}
   m_Layer: 0
-  m_Name: rightHandGrabLocalTransformMOTION_MOVE_AIMING_RIFLE
+  m_Name: ArthurCondinoAIrightHandGrabLocalTransformMOTION_MOVE_AIMING_RIFLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1190,6 +1229,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6212574107777507712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6375865945637120835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df82f049de2a92c40a4ea909610930e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simTypeName: ArthurCondinoAI
+  motion: 51
+  layer: Aiming with Rifle
+  parentBodyPartName: rightHand
+  layerPriority: 0
 --- !u!1 &8258515989489139868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,8 +1338,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7476013650176718565}
+  - component: {fileID: 3863814787127284236}
   m_Layer: 0
-  m_Name: rightHandGrabLocalTransformMOTION_STAND_RIFLE
+  m_Name: ArthurCondinoAIrightHandGrabLocalTransformMOTION_STAND_RIFLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1297,13 +1354,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695075485846467242}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.018729676, y: -0.07850729, z: 0.1399883, w: 0.98685825}
+  m_LocalPosition: {x: 0.015857909, y: 0.17020711, z: 0.06070278}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619068118059489713}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.859, y: -9.219, z: 16.217}
+--- !u!114 &3863814787127284236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8695075485846467242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df82f049de2a92c40a4ea909610930e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simTypeName: ArthurCondinoAI
+  motion: 50
+  layer: Carrying Rifle
+  parentBodyPartName: rightHand
+  layerPriority: 1
 --- !u!1 &8939747737377269075
 GameObject:
   m_ObjectHideFlags: 0

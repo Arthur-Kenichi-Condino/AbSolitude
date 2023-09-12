@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-        protected override void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.SimObjectSettings settings,SimObject simObjectAdded){
+        protected override void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings,SimObject simObjectAdded){
          MyWeaponType=settings.weaponType;
         }
         protected override void OnInventoryItemRemoved(SimInventory simInventory,SimObject simObjectAdded){

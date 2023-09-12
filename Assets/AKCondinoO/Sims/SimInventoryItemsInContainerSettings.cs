@@ -9,61 +9,16 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
-using static AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemSettings;
-using static AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData;
-using static AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion;
-using static AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemSettings.SimInventoryItemInContainerData.SimObjectAsInventoryItemTransformForMotion.SimObjectAsInventoryItemTransformForSimType;
 namespace AKCondinoO.Sims.Inventory{
-    internal class SimInventoryItemsInContainerSettings{
-        internal class SimObjectSettings{
-         public readonly ReadOnlyDictionary<Type,int>inventorySpaces;
-          public readonly ReadOnlyDictionary<Type,ReadOnlyDictionary<ActorMotion,ReadOnlyDictionary<Type,ReadOnlyDictionary<string,SimObjectAsInventoryItemTransformForParentBodyPartName>>>>inventoryTransformSettings;
-         public HandsUsage handsUsage;
-         public WeaponTypes weaponType;
-            internal SimObjectSettings(HandsUsage handsUsage,WeaponTypes weaponType,SimInventoryItemInContainerData[]inventorySettings){
-             Dictionary<Type,int>inventorySpaces=new Dictionary<Type,int>();
-             var inventoryTransformSettingsDictionary=new Dictionary<Type,ReadOnlyDictionary<ActorMotion,ReadOnlyDictionary<Type,ReadOnlyDictionary<string,SimObjectAsInventoryItemTransformForParentBodyPartName>>>>();
-             for(int i=0;i<inventorySettings.Length;++i){
-              SimInventoryItemInContainerData inContainerData=inventorySettings[i];
-              Type simInventoryType=ReflectionUtil.GetTypeByName(inContainerData.simInventoryType,typeof(SimInventory));
-              if(simInventoryType!=null){
-               Log.DebugMessage("simInventoryType:"+simInventoryType);
-               int spacesUsed=inContainerData.simInventorySpaceUse;
-               inventorySpaces.Add(simInventoryType,spacesUsed);
-               var transformSettingsForMotion=new Dictionary<ActorMotion,ReadOnlyDictionary<Type,ReadOnlyDictionary<string,SimObjectAsInventoryItemTransformForParentBodyPartName>>>();
-               foreach(var settings1 in inContainerData.transformSettingsForMotion){
-                ActorMotion motion=settings1.motion;
-                var transformSettingsForSimType=new Dictionary<Type,ReadOnlyDictionary<string,SimObjectAsInventoryItemTransformForParentBodyPartName>>();
-                foreach(var settings2 in settings1.transformSettingsForSimType){
-                 Type simType=ReflectionUtil.GetTypeByName(settings2.simTypeName);
-                 if(simType!=null){
-                  var transformSettingsForParentBodyPartName=new Dictionary<string,SimObjectAsInventoryItemTransformForParentBodyPartName>();
-                  foreach(var settings3 in settings2.transformSettingsForParentBodyPartName){
-                   string parentBodyPartName=settings3.parentBodyPartName;
-                   transformSettingsForParentBodyPartName[parentBodyPartName]=settings3;
-                  }
-                  transformSettingsForSimType[simType]=new(transformSettingsForParentBodyPartName);
-                 }
-                }
-                transformSettingsForMotion[motion]=new(transformSettingsForSimType);
-               }
-               inventoryTransformSettingsDictionary.Add(simInventoryType,new(transformSettingsForMotion));
-              }
-             }
-             this.inventorySpaces=new ReadOnlyDictionary<Type,int>(inventorySpaces);
-             this.inventoryTransformSettings=new(inventoryTransformSettingsDictionary);
-             this.handsUsage=handsUsage;
-             this.weaponType=weaponType;
-            }
-        }
-     internal readonly Dictionary<Type,SimObjectSettings>allSettings=new Dictionary<Type,SimObjectSettings>();
+    internal class SimInventoryItemsInContainerSettings{//  Global
+     internal readonly Dictionary<Type,InContainerSettings>allSettings=new Dictionary<Type,InContainerSettings>();
         internal SimInventoryItemsInContainerSettings(){
         }
         internal void Set(){
          Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
-          SimObjectAsInventoryItemSettings simObjectAsInventoryItemSettings=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemSettings>();
-          if(simObjectAsInventoryItemSettings!=null){
+          SimObjectAsInventoryItemInContainerData inContainerData=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemInContainerData>();
+          if(inContainerData!=null){
            SimObject simObject=simObjectPrefab.Value.GetComponent<SimObject>();
            Type simObjectType=simObjectPrefab.Key;
            if(typeDictionary.ContainsKey(simObjectType)){
@@ -75,13 +30,72 @@ namespace AKCondinoO.Sims.Inventory{
            }
            Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
            allSettings.Add(simObjectType,
-            new SimObjectSettings(
-             handsUsage:simObjectAsInventoryItemSettings.handsUsage,
-             weaponType:simObjectAsInventoryItemSettings.weaponType,
-             inventorySettings:simObjectAsInventoryItemSettings.inventorySettings)
+            new InContainerSettings(
+             inContainerData
+            )
            );
           }
          }
+        }
+        internal class InContainerSettings{
+         public HandsUsage handsUsage;
+         public WeaponTypes weaponType;
+         public readonly ReadOnlyDictionary<Type,int>spacesUsage;
+         public readonly ReadOnlyDictionary<Type,
+                          ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                           ReadOnlyDictionary<string,
+                            InContainerTransformData
+                           >
+                          >
+                         >transformSettings;
+            internal InContainerSettings(SimObjectAsInventoryItemInContainerData inContainerData){
+             this.handsUsage=inContainerData.handsUsage;
+             this.weaponType=inContainerData.weaponType;
+             Dictionary<Type,int>spacesUsage=new Dictionary<Type,int>();
+             var transformSettings=new Dictionary<Type,
+                                        ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                                         ReadOnlyDictionary<string,
+                                          InContainerTransformData
+                                         >
+                                        >
+                                       >();
+             for(int i=0;i<inContainerData.dataArrays.Length;++i){
+              SimObjectAsInventoryItemInContainerData.InContainerData data=inContainerData.dataArrays[i];
+              Type simInventoryType=ReflectionUtil.GetTypeByName(data.simInventoryType,typeof(SimInventory));
+              if(simInventoryType!=null){
+               Log.DebugMessage("simInventoryType:"+simInventoryType);
+               int spaces=data.simInventorySpacesUsage;
+               spacesUsage.Add(simInventoryType,spaces);
+               var transformSettingsDictionary=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                                                     Dictionary<string,
+                                                      InContainerTransformData
+                                                     >
+                                                    >();
+               foreach(var transformData in data.transformData){
+                Type simType=ReflectionUtil.GetTypeByName(transformData.simTypeName,typeof(SimObject));
+                if(simType!=null){
+                 var key=(simType,transformData.motion,transformData.layer);
+                 var value=transformData;
+                 if(!transformSettingsDictionary.TryGetValue(key,out var parentBodyPartNameDictionary)){
+                  transformSettingsDictionary.Add(key,parentBodyPartNameDictionary=new());
+                 }
+                 parentBodyPartNameDictionary.Add(transformData.parentBodyPartName,transformData);
+                }
+               }
+               var transformSettingsForReadOnly=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                                                     ReadOnlyDictionary<string,
+                                                      InContainerTransformData
+                                                     >
+                                                    >();
+               foreach(var parentBodyPartNameDictionary in transformSettingsDictionary){
+                transformSettingsForReadOnly.Add(parentBodyPartNameDictionary.Key,new(parentBodyPartNameDictionary.Value));
+               }
+               transformSettings.Add(simInventoryType,new(transformSettingsForReadOnly));
+              }
+             }
+             this.spacesUsage=new ReadOnlyDictionary<Type,int>(spacesUsage);
+             this.transformSettings=new(transformSettings);
+            }
         }
      internal static readonly Dictionary<Type,string>typeDictionary=new Dictionary<Type,string>{
       {typeof(RemingtonModel700BDL),"RemingtonModel700BDL"},

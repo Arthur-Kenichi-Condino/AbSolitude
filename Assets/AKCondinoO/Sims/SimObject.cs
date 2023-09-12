@@ -15,6 +15,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal partial class SimObject:NetworkBehaviour{
@@ -166,6 +167,7 @@ namespace AKCondinoO.Sims{
       internal bool navMeshObstacleCarving;
      internal Bounds localBounds;
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
+     internal ParentConstraint parentConstraint;
         protected virtual void Awake(){
          netObj=GetComponent<NetworkObject>();
          hasRigidbody=transform.root.GetComponent<Rigidbody>();
@@ -216,6 +218,7 @@ namespace AKCondinoO.Sims{
          skillBuffs=gameObject.AddComponent<SkillBuffEffectsState>();
          skillBuffs.targetSimObject=this;
          waitForFixedUpdate=new WaitForFixedUpdate();
+         parentConstraint=gameObject.GetComponent<ParentConstraint>();
         }
         public override void OnDestroy(){
          foreach(var kvp1 in derivedMaterials){
