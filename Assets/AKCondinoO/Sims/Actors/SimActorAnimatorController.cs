@@ -172,8 +172,11 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
-         if(actor.leftEye!=null){
-          Debug.DrawLine(actor.leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+         if(actor. leftEye!=null){
+          Debug.DrawLine(actor. leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+         }
+         if(actor.rightEye!=null){
+          Debug.DrawLine(actor.rightEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
          }
          Quaternion rotAdjustment=Quaternion.identity;
          if(actor is BaseAI baseAI&&motionTransformAdjustment.TryGetValue(baseAI.motion,out TransformAdjustment adjustment)){

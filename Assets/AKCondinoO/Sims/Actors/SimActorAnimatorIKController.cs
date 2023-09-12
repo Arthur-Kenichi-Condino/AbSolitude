@@ -9,6 +9,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorIKController:MonoBehaviour{
      internal SimActorAnimatorController simActorAnimatorController;
+     [SerializeField]internal Vector3 aimAtTorsoAdjust=new Vector3(25f,10f,0f);
      internal float headMaxVerticalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxVerticalRotationAngle;}}
       internal float headIKLimitedVerticalRotationAngleTolerance=7f;
       internal float headMaxHorizontalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxHorizontalRotationAngle;}}
@@ -46,7 +47,12 @@ namespace AKCondinoO.Sims.Actors{
           initialized=true;
          }
          if(simActorAnimatorController.actor.simActorCharacterController.isAiming){
-          headLookAtPositionLerp.tgtPos=simActorAnimatorController.actor.simActorCharacterController.aimingAt;
+          var characterController=simActorAnimatorController.actor.simActorCharacterController.characterController;
+          var headOffset=simActorAnimatorController.actor.simActorCharacterController.headOffset;
+          var viewRotation=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+          var aimAtMaxDistance=simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          headLookAtPositionLerp.tgtPos=aimAt;
           headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
           //  [https://discussions.unity.com/t/upper-torso-ik/133564/2]
           //m_Anim.SetLookAtWeight(m_LookWeight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight); 

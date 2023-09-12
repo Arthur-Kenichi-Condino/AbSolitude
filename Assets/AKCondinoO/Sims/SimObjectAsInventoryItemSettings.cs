@@ -20,11 +20,18 @@ namespace AKCondinoO.Sims.Inventory{
          [SerializeField]internal SimObjectAsInventoryItemTransformForMotion[]transformSettingsForMotion;
             [Serializable]internal class SimObjectAsInventoryItemTransformForMotion{
              [SerializeField]internal ActorMotion motion;
-             [SerializeField]internal string parentBodyPartName;
-             [SerializeField]internal bool transformIsDeterminant;
-             [SerializeField]internal string[]layer;
-             [SerializeField]internal int[]layerPriority;
-             [SerializeField]internal Transform[]transform;
+             [SerializeField]internal SimObjectAsInventoryItemTransformForSimType[]transformSettingsForSimType;
+                [Serializable]internal class SimObjectAsInventoryItemTransformForSimType{
+                 [SerializeField]internal string simTypeName;
+                 [SerializeField]internal SimObjectAsInventoryItemTransformForParentBodyPartName[]transformSettingsForParentBodyPartName;
+                 [Serializable]internal class SimObjectAsInventoryItemTransformForParentBodyPartName{
+                  [SerializeField]internal string parentBodyPartName;
+                  [SerializeField]internal string[]layer;
+                  [SerializeField]internal int[]layerPriority;
+                  [SerializeField]internal bool[]transformIsDeterminant;
+                  [SerializeField]internal Transform[]transform;
+                 }
+                }
             }
         }
     }
