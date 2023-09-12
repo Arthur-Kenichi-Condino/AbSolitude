@@ -75,7 +75,6 @@ namespace AKCondinoO.Sims.Inventory{
                 Type simType=ReflectionUtil.GetTypeByName(transformData.simTypeName,typeof(SimObject));
                 if(simType!=null){
                  var key=(simType,transformData.motion,transformData.layer);
-                 var value=transformData;
                  if(!transformSettingsDictionary.TryGetValue(key,out var parentBodyPartNameDictionary)){
                   transformSettingsDictionary.Add(key,parentBodyPartNameDictionary=new());
                  }
