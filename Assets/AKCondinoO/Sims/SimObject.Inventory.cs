@@ -128,10 +128,10 @@ namespace AKCondinoO.Sims{
             if(containerAsBaseAI.simActorAnimatorController!=null){
              if(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex!=null){
               string layerName=null;
-              int layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponLayerIndex.Value;
+              int layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value;
               GetLayerAtIndex(layerIndex,out layerName);
-              if(layerName==null){
-               layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value;
+              if(layerName==null){//  Aim Layer has higher priority
+               layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponLayerIndex.Value;
                GetLayerAtIndex(layerIndex,out layerName);
               }
               void GetLayerAtIndex(int layerIndex,out string layerName){
@@ -142,7 +142,7 @@ namespace AKCondinoO.Sims{
                }
               }
               if(layerName!=null){
-               //Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
+               Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
                if(settings.transformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
                 (Type containerSimType,ActorMotion?containerSimMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,layerName);
                 if(transformSettingsForSimHands.TryGetValue(key,out var transformSettingsForParentBodyPartName)){
