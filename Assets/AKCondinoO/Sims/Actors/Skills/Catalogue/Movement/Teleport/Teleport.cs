@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          return false;
         }
         protected override void Invoke(){
-         Log.DebugMessage(this+":Invoke()");
+         //Log.DebugMessage(this+":Invoke()");
          SkillBuff buff=SkillBuff.Dequeue(typeof(TeleportSkillBuff));
          if(buff!=null){
           buff.duration=0f;
@@ -37,6 +37,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
           TeleportSkillBuff teleportBuff=(TeleportSkillBuff)buff;
           GetRandomPositionFor(target,actor.transform.position,8f,out Vector3 randomPos);
           teleportBuff.targetDest=randomPos;
+          Log.DebugMessage("teleportBuff to:"+randomPos);
          }
          base.Invoke();//  the invoked flag is set here
         }

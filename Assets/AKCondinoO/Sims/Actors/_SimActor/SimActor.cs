@@ -532,14 +532,19 @@ namespace AKCondinoO.Sims.Actors{
         internal override bool OnTeleportTo(Vector3 position,Quaternion rotation){
          if(navMeshAgent!=null&&navMeshAgent.enabled){
           if(NavMesh.SamplePosition(position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
-           transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
+           if(navMeshAgent.Warp(hitResult.position+Vector3.up*navMeshAgent.height/2f)){
+            navMeshAgent.destination=navMeshAgent.transform.position;
+           }
            if(!navMeshAgent.isOnNavMesh){
             DisableNavMeshAgent();
            }
+           //Log.DebugMessage("OnTeleportTo, navMeshAgent, position:"+position+", hitResult.position:"+hitResult.position+", transform.position:"+transform.position);
            return true;
           }
+          //Log.DebugMessage("OnTeleportTo failed, navMeshAgent, position:"+position+", transform.position:"+transform.position);
           return false;
          }
+         //Log.DebugMessage("OnTeleportTo success, position:"+position+", transform.position:"+transform.position);
          transform.position=position;
          return true;
         }
