@@ -130,7 +130,7 @@ namespace AKCondinoO.Sims{
               string layerName=null;
               int layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value;
               GetLayerAtIndex(layerIndex,out layerName);
-              if(layerName==null){//  Aim Layer has higher priority
+              if(layerName==null){//  Aim layer has higher priority
                layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponLayerIndex.Value;
                GetLayerAtIndex(layerIndex,out layerName);
               }
