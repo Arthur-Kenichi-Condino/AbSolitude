@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims.Actors{
           }
           case Skill.SkillUseContext.OnWillTakeDamage:{
            if(this.skills.TryGetValue(typeof(OnHitGracePeriod),out Skill skill)){
-            Log.DebugMessage("GetBest:OnHitGracePeriod");
+            //Log.DebugMessage("GetBest:OnHitGracePeriod");
             skills.Add(skill);
            }
            break;
@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Actors{
             }
            }else{
             if(this.skills.TryGetValue(typeof(CallHomunculus),out Skill skill)){
-             Log.DebugMessage("GetBest:CallHomunculus");
+             //Log.DebugMessage("GetBest:CallHomunculus");
              skills.Add(skill);
             }
            }
