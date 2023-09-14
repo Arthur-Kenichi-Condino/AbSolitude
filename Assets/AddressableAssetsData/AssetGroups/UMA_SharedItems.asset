@@ -23,7 +23,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d01791214901d7341b52409cd66cc65e
     m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
@@ -31,7 +31,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 823abf9c6123e4d47985592ad67dde13
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c276deea2834bfd4c99611063846736e
     m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
@@ -47,7 +47,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
     m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
@@ -63,7 +63,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd56361a0055b3443a6a121d818041b0
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Face_Overlay
@@ -71,7 +71,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6049048ab587ace488163bbf473f247e
     m_Address: UMA/SlotDataAsset-G8mbasefacemapd01_1001
@@ -79,7 +79,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 744b567807b2d8b4ab23ece149d1e80c
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Eyes_Overlay
@@ -87,7 +87,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 006cf9231c755ae459be6fec82003f6e
     m_Address: UMA/SlotDataAsset-G8mbaseeyesmap02d_1007
@@ -95,7 +95,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63c53978740d78d4ca464b44d20a2d07
     m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Arms_Overlay
@@ -103,7 +103,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fca386a016aed0646a65c33ef2449ef1
     m_Address: UMA/SlotDataAsset-G8mbasearmsmapd_1004
@@ -111,7 +111,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - RaceHumanMaleMorphableUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c0d0b5e34a7f37c48aa80f619a2c909e
     m_Address: UMA/OverlayDataAsset-DisfiguringHomunculus_Body_Overlay
