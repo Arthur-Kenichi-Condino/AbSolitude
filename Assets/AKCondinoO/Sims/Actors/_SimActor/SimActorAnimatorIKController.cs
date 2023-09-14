@@ -31,6 +31,7 @@ namespace AKCondinoO.Sims.Actors{
      internal float rightFootIKRotationWeight;
       [SerializeField]internal FloatLerpHelper rightFootIKPositionWeightLerp=new FloatLerpHelper();
       [SerializeField]internal FloatLerpHelper rightFootIKRotationWeightLerp=new FloatLerpHelper();
+     bool wasAiming;
         //  [https://forum.unity.com/threads/setikrotation-for-feet-on-slope.510931/]
         void OnAnimatorIK(int layerIndex){
          //Log.DebugMessage("OnAnimatorIK:layerIndex:"+layerIndex);
@@ -53,7 +54,11 @@ namespace AKCondinoO.Sims.Actors{
           var aimAtMaxDistance=simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
           Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           headLookAtPositionLerp.tgtPos=aimAt;
-          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+          if(!wasAiming){
+           headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
+          }else{
+           headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+          }
           //  [https://discussions.unity.com/t/upper-torso-ik/133564/2]
           //m_Anim.SetLookAtWeight(m_LookWeight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight); 
           simActorAnimatorController.animator.SetLookAtWeight(1f,1f,1f,1f,0f);
@@ -196,6 +201,7 @@ namespace AKCondinoO.Sims.Actors{
               simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
           #endregion
          }
+         wasAiming=simActorAnimatorController.actor.simActorCharacterController.isAiming;
         }
     }
 }

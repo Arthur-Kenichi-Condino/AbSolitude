@@ -273,6 +273,7 @@ namespace AKCondinoO.Sims.Actors{
           }
           lastMotion=baseAI.motion;
         }
+     [SerializeField]float layerTransitionSpeed=64.0f;
      Coroutine layerTransitionCoroutine;
       internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
        internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
@@ -286,12 +287,12 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(weight!=targetWeight){
                if(weight>targetWeight){
-                weight-=16.0f*Core.magicDeltaTimeNumber;
+                weight-=layerTransitionSpeed*Core.magicDeltaTimeNumber;
                 if(weight<=targetWeight){
                  weight=targetWeight;
                 }
                }else if(weight<targetWeight){
-                weight+=16.0f*Core.magicDeltaTimeNumber;
+                weight+=layerTransitionSpeed*Core.magicDeltaTimeNumber;
                 if(weight>=targetWeight){
                  weight=targetWeight;
                 }
