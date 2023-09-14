@@ -9,7 +9,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorIKController:MonoBehaviour{
      internal SimActorAnimatorController simActorAnimatorController;
-     [SerializeField]internal Vector3 aimAtTorsoAdjust=new Vector3(25f,10f,0f);
+     [SerializeField]internal Vector3 aimAtTorsoAdjust=new Vector3(18.315f,7.08f,0f);
      internal float headMaxVerticalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxVerticalRotationAngle;}}
       internal float headIKLimitedVerticalRotationAngleTolerance=7f;
       internal float headMaxHorizontalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxHorizontalRotationAngle;}}

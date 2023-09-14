@@ -118,17 +118,8 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal override void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
-         if(stats!=null){
-          float integrity=stats.IntegrityGet(this);
-          Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
-          float damageFromSimObject=1f;
-          if(simObject.stats!=null){
-           float fromSimObjectPhysicalPowerFlatValue=simObject.stats.PhysicalPowerFlatValueGet(simObject);
-           Log.DebugMessage("OnHitProcessStatDamageFrom:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
-           float physicalDefenseFlatValue=stats.PhysicalDefenseFlatValueGet(this);
-           Log.DebugMessage("OnHitProcessStatDamageFrom:physicalDefenseFlatValue:"+physicalDefenseFlatValue);
-          }
-         }
+         float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,simObject);
+         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
         }
     }
 }
