@@ -55,6 +55,33 @@ namespace AKCondinoO.Sims{
                    OnRefresh(statsSim);
                    return physicalDefenseFlatValue_value_stats+physicalDefenseFlatValue_value_set;
                   }
+                   internal void PhysicalDefenseFlatValueSet(float value,SimObject statsSim=null,bool forceRefresh=false){
+                    OnRefresh(statsSim);
+                    physicalDefenseFlatValue_value_set=value-physicalDefenseFlatValue_value_stats;
+                    updatedPhysicalDefenseFlatValue=true;
+                    SetPendingRefresh(statsSim,forceRefresh);
+                   }
+                    protected bool updatedPhysicalDefenseFlatValue;
+                     internal void OnRefresh_PhysicalDefenseFlatValue(SimObject statsSim=null){
+                      if(refreshedSimLevel||
+                         refreshedAgeLevel||
+                         refreshedAgility||
+                         refreshedStrength||
+                         refreshedVitality
+                      ){
+                       physicalDefenseFlatValue_value_stats=
+                        (simLevel_value/2f)+
+                         ((agility_value_stats+agility_value_set)/5f)+
+                          ((strength_value_stats+strength_value_set)/3f)+
+                           ((vitality_value_stats+vitality_value_set)/1f);
+                       //Log.DebugMessage("OnRefresh_PhysicalDefenseFlatValue:physicalDefenseFlatValue_value_stats:"+physicalDefenseFlatValue_value_stats);
+                       refreshedPhysicalDefenseFlatValue=true;
+                      }
+                      if(updatedPhysicalDefenseFlatValue){
+                       refreshedPhysicalDefenseFlatValue=true;
+                      }
+                     }
+                      protected bool refreshedPhysicalDefenseFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>
