@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,6 +83,32 @@ namespace AKCondinoO.Sims{
                       }
                      }
                       protected bool refreshedPhysicalDefenseFlatValue;
+            internal static float ProcessStatPhysicalDamageOn(SimObject simObject,SimObject fromSimObject){
+             var stats=simObject.stats;
+             if(stats!=null){
+              float integrity=stats.IntegrityGet(simObject);
+              Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+              float damageFromSimObject=1f;
+              var fromSimObjectStats=fromSimObject.stats;
+              if(fromSimObjectStats!=null){
+               float fromSimObjectPhysicalPowerFlatValue=fromSimObjectStats.PhysicalPowerFlatValueGet(fromSimObject);
+               //Log.DebugMessage("OnHitProcessStatDamageFrom:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
+               float physicalDefenseFlatValue=stats.PhysicalDefenseFlatValueGet(simObject);
+               //Log.DebugMessage("OnHitProcessStatDamageFrom:physicalDefenseFlatValue:"+physicalDefenseFlatValue);
+               damageFromSimObject=fromSimObjectPhysicalPowerFlatValue*((4000f+physicalDefenseFlatValue)/(4000f+physicalDefenseFlatValue*10f));
+               //Log.DebugMessage("OnHitProcessStatDamageFrom:hard damageFromSimObject:"+damageFromSimObject);
+               if(simObject is BaseAI baseAI){
+                double randomMultiplier=baseAI.math_random.NextDouble(.5d,1.5d);
+                damageFromSimObject*=(float)randomMultiplier;
+                //Log.DebugMessage("OnHitProcessStatDamageFrom:random damageFromSimObject:"+damageFromSimObject);
+               }
+              }
+              integrity-=damageFromSimObject;
+              stats.IntegritySet(integrity,simObject);
+              return integrity;
+             }
+             return 0f;
+            }
                  /// <summary>
                  ///  Substats
                  /// </summary>
