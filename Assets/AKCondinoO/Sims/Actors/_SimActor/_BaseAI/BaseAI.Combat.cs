@@ -125,6 +125,8 @@ namespace AKCondinoO.Sims.Actors{
           if(simObject.stats!=null){
            float fromSimObjectPhysicalPowerFlatValue=simObject.stats.PhysicalPowerFlatValueGet(simObject);
            Log.DebugMessage("OnHitProcessStatDamageFrom:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
+           float physicalDefenseFlatValue=stats.PhysicalDefenseFlatValueGet(this);
+           Log.DebugMessage("OnHitProcessStatDamageFrom:physicalDefenseFlatValue:"+physicalDefenseFlatValue);
           }
          }
         }
