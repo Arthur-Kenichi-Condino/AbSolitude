@@ -114,8 +114,8 @@ MonoBehaviour:
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 2461128663094476801, guid: 49d00260215b5494381f6fb86baff6b6, type: 3}
-  navMeshAgentWalkSpeed: 2
-  navMeshAgentRunSpeed: 4
+  navMeshAgentWalkSpeed: 1
+  navMeshAgentRunSpeed: 1.5
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
@@ -132,10 +132,10 @@ MonoBehaviour:
     tgtValLerpMaxTime: 0
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 0}
+  MyAggressionMode: 2
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
-  MyAggressionMode: 2
   renewEnemyInterval: 3
   pathfindingTimeout: 3
   pathPendingTimeout: 6
@@ -163,9 +163,9 @@ MonoBehaviour:
     tgtPosLerpMaxTime: 0.0001
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
-  maxMoveSpeed: {x: 2, y: 2, z: 2}
-  walkSpeedAverage: 2
-  moveSpeedRunMultiplier: 2
+  maxMoveSpeed: {x: 1, y: 1, z: 1}
+  walkSpeedAverage: 1
+  moveSpeedRunMultiplier: 1.5
   isRunningMoveSpeedMultiplierLerp:
     tgtValLerpSpeed: 76
     tgtValLerpMaxTime: 0.0005
@@ -221,7 +221,7 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 1479372276
   m_Radius: 0.25
-  m_Speed: 2
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 240
