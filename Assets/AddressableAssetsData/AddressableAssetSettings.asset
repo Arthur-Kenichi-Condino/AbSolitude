@@ -97,6 +97,7 @@ MonoBehaviour:
     - RaceHumanMaleMorphableUMATextRecipe
     - VanilmirthUMATextRecipe
     - DisfiguringHomunculusUMATextRecipe
+    - MorphableHumanMaleUMATextRecipe
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 09a8ff04d6e1aa74b818603a09e665f0, type: 2}

@@ -97,7 +97,6 @@ namespace AKCondinoO.Sims.Actors.Skills{
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){
-         cooldown=GetOnInvokeCooldown();
          //Log.DebugMessage("ChaoticBlessing cooldown:"+cooldown);
          base.OnInvokeSetCooldown();
         }
@@ -111,6 +110,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         protected override void Update(){
          base.Update();
+        }
+        protected override void OnUpdate(){
+         base.OnUpdate();
          if(doing){
           if(revoked){//  something went wrong
            return;

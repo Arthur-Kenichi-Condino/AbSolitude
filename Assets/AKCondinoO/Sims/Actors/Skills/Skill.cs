@@ -8,6 +8,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal partial class Skill:MonoBehaviour{
+        public enum SkillUseContext{
+         OnCallSlaves,
+         OnWillTakeDamage,
+         OnTookDamage,
+         OnIdle,
+        }
      /// <summary>
      ///  After-cast Delay
      /// </summary>
@@ -20,35 +26,6 @@ namespace AKCondinoO.Sims.Actors.Skills{
       }
      }
      protected float castDelay_value=1.0f;
-        public enum SkillUseContext{
-         OnCallSlaves,
-         OnWillTakeDamage,
-         OnTookDamage,
-         OnIdle,
-        }
-        internal static void GetBest(BaseAI actor,SkillUseContext context,HashSet<Skill>skills){
-         if(actor is VanilmirthAI vanilmirth){
-          VanilmirthGetBest(vanilmirth,context,skills);
-          return;
-         }
-         switch(context){
-          case SkillUseContext.OnIdle:{
-           break;
-          }
-          case SkillUseContext.OnTookDamage:{
-           break;
-          }
-          case SkillUseContext.OnWillTakeDamage:{
-           break;
-          }
-          case SkillUseContext.OnCallSlaves:{
-           if(actor.skills.TryGetValue(typeof(GenerateHomunculus),out Skill skill)){
-            skills.Add(skill);
-           }
-           break;
-          }
-         }
-        }
      internal LinkedListNode<Skill>pooled=null;
      internal SimActor actor;
      internal int level=1;
@@ -101,6 +78,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
          doing=true;
          return true;
         }
+        internal virtual bool DoSkillImmediate(SimObject target,int useLevel){
+         bool result=DoSkill(target,useLevel);
+         if(result){
+          OnUpdate();
+         }
+         return result;
+        }
         /// <summary>
         ///  Can be the "initialization" or skill "main call"
         /// </summary>
@@ -109,6 +93,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          invoked=true;
         }
         protected virtual void OnInvokeSetCooldown(){
+         cooldown=GetOnInvokeCooldown();
         }
         internal virtual float GetOnInvokeCooldown(){
          return castDelay;
@@ -121,6 +106,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          doing=false;
         }
         protected virtual void Update(){
+         OnUpdate();
+        }
+        protected virtual void OnUpdate(){
          if(!doing){
           if(revoked||done){
            if(actor!=null){
