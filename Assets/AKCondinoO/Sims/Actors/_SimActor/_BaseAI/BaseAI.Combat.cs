@@ -121,7 +121,7 @@ namespace AKCondinoO.Sims.Actors{
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,simObject);
          Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
-          Log.DebugMessage("OnHitProcessStatDamageFrom:set dead motion");
+          Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
          }
         }
     }
