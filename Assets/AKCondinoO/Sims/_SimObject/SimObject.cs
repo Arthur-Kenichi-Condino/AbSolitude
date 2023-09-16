@@ -24,6 +24,7 @@ namespace AKCondinoO.Sims{
          public Quaternion rotation;
          public Vector3    position;
          public Vector3    localScale;
+         public(Type simObjectType,ulong idNumber)?masterId;
          public bool isInventoryItem;
          public(Type simInventoryType,ulong idNumber)?containerSimInventoryId;
          //  Não salvar lista de inventários aqui; ela é salva em uma pasta própria, por tipo e id de sim object
@@ -31,10 +32,11 @@ namespace AKCondinoO.Sims{
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;
              localScale=simObject.transform.localScale;
+             masterId=simObject.masterId;
              isInventoryItem=(simObject.asInventoryItem!=null);
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , isInventoryItem={3} , }}",position,rotation,localScale,isInventoryItem);
+             return string.Format(CultureInfoUtil.en_US,"persistentData={{ position={0} , rotation={1} , localScale={2} , masterId={3} , isInventoryItem={4} , containerSimInventoryId={5} , }}",position,rotation,localScale,masterId,isInventoryItem,containerSimInventoryId);
             }
             internal static PersistentData Parse(string s){
              PersistentData persistentData=new PersistentData();
@@ -76,6 +78,18 @@ namespace AKCondinoO.Sims{
                 persistentData.localScale.y<=0f||
                 persistentData.localScale.z<=0f){
               persistentData.localScale=Vector3.one;
+             }
+             int masterIdStringStart=s.IndexOf("masterId=(");
+             if(masterIdStringStart>=0){
+                masterIdStringStart+=10;
+              int masterIdStringEnd=s.IndexOf(") , ",masterIdStringStart);
+              string masterIdString=s.Substring(masterIdStringStart,masterIdStringEnd-masterIdStringStart);
+              string[]simObjectTypeIdNumberString=masterIdString.Split(',');
+              Type simObjectType=Type.GetType(simObjectTypeIdNumberString[0].Replace(" ",""));
+              //Log.DebugMessage("masterId:simObjectType:"+simObjectType);
+              ulong idNumber=ulong.Parse(simObjectTypeIdNumberString[1].Replace(" ",""),NumberStyles.Any,CultureInfoUtil.en_US);
+              (Type simObjectType,ulong idNumber)masterId=(simObjectType,idNumber);
+              persistentData.masterId=masterId;
              }
              int isInventoryItemStringStart=s.IndexOf("isInventoryItem=");
              if(isInventoryItemStringStart>=0){

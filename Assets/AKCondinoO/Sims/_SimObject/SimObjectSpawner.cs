@@ -230,6 +230,10 @@ namespace AKCondinoO.Sims{
                if(toSpawn.masters.TryGetValue(index,out var masterIdValue)){
                 masterId=masterIdValue;
                }
+               if(masterId==null&&at.persistentData.masterId!=null){
+                masterId=at.persistentData.masterId;
+                Log.DebugMessage("persistentData masterId:"+masterId);
+               }
                (Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null;
                if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwnerIdValue)){
                 asInventoryItemOwnerId=asInventoryItemOwnerIdValue;
