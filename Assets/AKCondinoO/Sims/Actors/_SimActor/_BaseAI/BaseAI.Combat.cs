@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Vector3 MyAttackRange=new Vector3(0f,.4375f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
+     protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
         internal enum AggressionMode:int{
          Defensive=0,
