@@ -57,28 +57,43 @@ namespace AKCondinoO.Sims.Actors{
          if(MyEnemy!=null){
           if(IsInAttackRange(MyEnemy)){
            MyState=State.ATTACK_ST;
+           goto _MyStateSet;
           }else{
            if(MyState!=State.CHASE_ST){
             OnCHASE_ST_START();
            }
            MyState=State.CHASE_ST;
+           goto _MyStateSet;
           }
          }else{
+          if(masterId!=null){
+           float disToMaster=GetDistance(this,masterSimObject);
+           if(disToMaster>=0f){
+            if(disToMaster>8f){
+             //Log.DebugMessage("I should follow my master:"+masterSimObject+";this:"+this);
+             MyState=State.FOLLOW_ST;
+             goto _MyStateSet;
+            }
+           }
+          }
           if(MyState!=State.IDLE_ST){
            OnIDLE_ST_START();
           }
           MyState=State.IDLE_ST;
+          goto _MyStateSet;
          }
+         _MyStateSet:{}
          SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
          if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
          if(MySkill!=null){
           DoSkill();
          }
-         if      (MyState==State.FOLLOW_ST){
+         if      (MyState==State.ATTACK_ST){
+          OnATTACK_ST();
          }else if(MyState==State. CHASE_ST){
            OnCHASE_ST();
-         }else if(MyState==State.ATTACK_ST){
-          OnATTACK_ST();
+         }else if(MyState==State.FOLLOW_ST){
+          OnFOLLOW_ST();
          }else{
             OnIDLE_ST();
          }
@@ -87,6 +102,58 @@ namespace AKCondinoO.Sims.Actors{
         protected override void OnCharacterControllerUpdated(){
          base.OnCharacterControllerUpdated();
          UpdateMotion(false);
+        }
+        protected virtual void OnIDLE_ST_START(){
+         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+        }
+     [SerializeField]protected bool doIdleMove=true;
+     [SerializeField]protected float useRunSpeedChance=0.5f;
+     [SerializeField]protected float delayToRandomMove=8.0f;
+     protected float timerToRandomMove=2.0f;
+        protected virtual void OnIDLE_ST(){
+         if(
+          !IsTraversingPath()
+         ){
+          if(timerToRandomMove>0.0f){
+             timerToRandomMove-=Time.deltaTime;
+          }else if(doIdleMove){
+             timerToRandomMove=delayToRandomMove;
+           //Log.DebugMessage("can do random movement");
+           if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
+            //Log.DebugMessage("got random position:"+result);
+            bool run=Mathf.Clamp01((float)math_random.NextDouble())<useRunSpeedChance;
+            if(navMeshAgentShouldUseRunSpeed||run){
+             navMeshAgent.speed=navMeshAgentRunSpeed;
+            }else{
+             navMeshAgent.speed=navMeshAgentWalkSpeed;
+            }
+            navMeshAgent.destination=result;
+           }
+          }
+         }
+        }
+        protected virtual void OnFOLLOW_ST(){
+         //Log.DebugMessage("OnFOLLOW_ST()");
+         if(
+          !IsTraversingPath()
+         ){
+          if(masterSimObject is BaseAI masterAI){
+           if(masterAI.isUsingAI){
+            if(masterAI.state==State.IDLE_ST){
+             MoveToMasterRandom(masterAI,4f);
+            }else{
+             MoveToMaster      (masterAI,0f);
+            }
+           }else{
+            if(!masterAI.IsMoving()){
+             MoveToMasterRandom(masterAI,4f);
+            }else{
+             MoveToMaster      (masterAI,0f);
+            }
+           }
+          }else{
+          }
+         }
         }
         protected virtual void OnCHASE_ST_START(){
          simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
@@ -292,47 +359,6 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
-        }
-        protected virtual void OnIDLE_ST_START(){
-         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
-        }
-     [SerializeField]protected bool doIdleMove=true;
-     [SerializeField]protected float useRunSpeedChance=0.5f;
-     [SerializeField]protected float delayToRandomMove=8.0f;
-     protected float timerToRandomMove=2.0f;
-        protected virtual void OnIDLE_ST(){
-         if(
-          !IsTraversingPath()
-         ){
-          if(timerToRandomMove>0.0f){
-             timerToRandomMove-=Time.deltaTime;
-          }else if(doIdleMove){
-             timerToRandomMove=delayToRandomMove;
-           //Log.DebugMessage("can do random movement");
-           if(GetRandomPosition(transform.position,8.0f,out Vector3 result)){
-            //Log.DebugMessage("got random position:"+result);
-            bool run=Mathf.Clamp01((float)math_random.NextDouble())<useRunSpeedChance;
-            if(navMeshAgentShouldUseRunSpeed||run){
-             navMeshAgent.speed=navMeshAgentRunSpeed;
-            }else{
-             navMeshAgent.speed=navMeshAgentWalkSpeed;
-            }
-            navMeshAgent.destination=result;
-           }
-          }
-         }
-        }
-        //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
-        protected bool GetRandomPosition(Vector3 center,float maxDis,out Vector3 result){
-         for(int i=0;i<3;++i){
-          Vector3 randomPoint=Util.GetRandomPosition(center,maxDis);
-          if(NavMesh.SamplePosition(randomPoint,out NavMeshHit hit,Height,navMeshQueryFilter)){
-           result=hit.position;
-           return true;
-          }
-         }
-         result=center;
-         return false;
         }
     }
 }

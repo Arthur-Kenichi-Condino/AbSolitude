@@ -523,17 +523,20 @@ namespace AKCondinoO.Sims.Actors{
             simActorAnimatorController.ManualUpdate();
          }
          lastForward=transform.forward;
+         teleportedMove=false;
          return result;
         }
         protected virtual void AI(){
         }
         protected virtual void OnCharacterControllerUpdated(){
         }
+     protected bool teleportedMove;
         internal override bool OnTeleportTo(Vector3 position,Quaternion rotation){
          if(navMeshAgent!=null&&navMeshAgent.enabled){
           if(NavMesh.SamplePosition(position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
            if(navMeshAgent.Warp(hitResult.position+Vector3.up*navMeshAgent.height/2f)){
             navMeshAgent.destination=navMeshAgent.transform.position;
+            teleportedMove=true;
            }
            if(!navMeshAgent.isOnNavMesh){
             DisableNavMeshAgent();
@@ -546,6 +549,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          //Log.DebugMessage("OnTeleportTo success, position:"+position+", transform.position:"+transform.position);
          transform.position=position;
+         teleportedMove=true;
          return true;
         }
         internal Vector3 GetHeadPosition(bool fromAnimator){
