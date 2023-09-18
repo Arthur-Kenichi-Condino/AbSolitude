@@ -164,8 +164,8 @@ MonoBehaviour:
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 1, y: 1, z: 1}
-  walkSpeedAverage: 1
-  moveSpeedRunMultiplier: 1.5
+  walkSpeedAverage: 1.5
+  moveSpeedRunMultiplier: 2
   isRunningMoveSpeedMultiplierLerp:
     tgtValLerpSpeed: 76
     tgtValLerpMaxTime: 0.0005
@@ -222,7 +222,7 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 1479372276
   m_Radius: 0.25
-  m_Speed: 1
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 240

@@ -166,7 +166,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected Coroutine onChaseGetDataCoroutine;
      protected WaitUntil onChaseGetDataThrottler;
-      protected float onChaseGetDataThrottlerInterval=1f;
+      protected float onChaseGetDataThrottlerInterval=.125f;
        protected float onChaseGetDataThrottlerTimer;
      protected RaycastHit[]onChaseInTheWayColliderHits=new RaycastHit[8];
       protected int onChaseInTheWayColliderHitsCount=0;
@@ -240,10 +240,10 @@ namespace AKCondinoO.Sims.Actors{
          return Vector3.Distance(transform.root.position,a.collider.transform.root.position).CompareTo(Vector3.Distance(transform.root.position,b.collider.transform.root.position));
         }
         internal enum OnChaseTimeoutReactionCodes:int{
-         Random=0,
-         GoLeft=22,
-         GoRight=30,
-         ResetCounter=38,
+         Random=8,
+         GoLeft=16,
+         GoRight=24,
+         ResetCounter=32,
         }
      protected int onChaseTimeoutFailCount=0;
       protected OnChaseTimeoutReactionCodes onChaseTimeoutReactionCode;
@@ -251,17 +251,17 @@ namespace AKCondinoO.Sims.Actors{
          if(++onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.ResetCounter){
           onChaseTimeoutFailCount=0;
          }
-         if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoLeft){
-          onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.GoLeft;
-         }else if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoRight){
+         if      (onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoRight){
           onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.GoRight;
-         }else{
+         }else if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.GoLeft){
+          onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.GoLeft;
+         }else if(onChaseTimeoutFailCount>=(int)OnChaseTimeoutReactionCodes.Random){
           onChaseTimeoutReactionCode=OnChaseTimeoutReactionCodes.Random;
          }
         }
      protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
-     protected float onChaseRenewDestinationTimeInterval=2f;
-      protected float onChaseRenewDestinationTimer=2f;
+     protected float onChaseRenewDestinationTimeInterval=4f;
+      protected float onChaseRenewDestinationTimer=4f;
      protected float onChaseMyEnemyMovedSoChangeDestinationTimeInterval=.2f;
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
@@ -316,15 +316,22 @@ namespace AKCondinoO.Sims.Actors{
               forward.Normalize();
               //Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
               int rightSign=1;
-              float rightDis=1.0f;
-              if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.Random){
+              float rightDis=3.0f;
+              float forwardDis=1.5f;
+              if      (onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.Random){
                rightSign=math_random.CoinFlip()?-1:1;
+               rightDis=(float)math_random.NextDouble(2.0d,6d);
+               forwardDis=(float)math_random.NextDouble(1.0d,6d);
               }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoLeft){
                rightSign=-1;
+               rightDis=(float)math_random.NextDouble(3.0d,6.0d);
+               forwardDis=(float)math_random.NextDouble(1.5d,3.0d);
               }else if(onChaseTimeoutReactionCode==OnChaseTimeoutReactionCodes.GoRight){
                rightSign=1;
+               rightDis=(float)math_random.NextDouble(3.0d,6.0d);
+               forwardDis=(float)math_random.NextDouble(1.5d,3.0d);
               }
-              MyDest=actorHit.transform.root.position+((right*rightSign)*3.0f-forward*1.5f)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
+              MyDest=actorHit.transform.root.position+((right*rightSign)*rightDis-forward*forwardDis)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
               break;
              }
             }
