@@ -8,6 +8,7 @@ namespace AKCondinoO.Sims.Actors {
       protected float pathfindingTimer;
       [SerializeField]protected float pathPendingTimeout=6f;
        protected float pathPendingTimer;
+      protected bool stopPathfindingOnTimeout=true;
         internal enum PathfindingResult:int{
          IDLE                   =0,
          REACHED                =1,
@@ -20,7 +21,10 @@ namespace AKCondinoO.Sims.Actors {
          if(pathPendingTimer>0f){
             pathPendingTimer-=Time.deltaTime;
           if(pathPendingTimer<=0f){
-           navMeshAgent.destination=navMeshAgent.transform.position;
+           if(stopPathfindingOnTimeout){
+            Log.DebugMessage("pathPendingTimer<=0f:PathfindingResult.TIMEOUT");
+            navMeshAgent.destination=navMeshAgent.transform.position;
+           }
            return PathfindingResult.TIMEOUT;
           }
          }
@@ -47,7 +51,10 @@ namespace AKCondinoO.Sims.Actors {
          if(pathfindingTimer>0f){
             pathfindingTimer-=Time.deltaTime;
           if(pathfindingTimer<=0f){
-           navMeshAgent.destination=navMeshAgent.transform.position;
+           if(stopPathfindingOnTimeout){
+            Log.DebugMessage("pathfindingTimer<=0f:PathfindingResult.TIMEOUT");
+            navMeshAgent.destination=navMeshAgent.transform.position;
+           }
            return PathfindingResult.TIMEOUT;
           }
          }
