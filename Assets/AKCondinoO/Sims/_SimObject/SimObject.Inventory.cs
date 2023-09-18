@@ -142,7 +142,7 @@ namespace AKCondinoO.Sims{
                }
               }
               if(layerName!=null){
-               Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
+               //Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
                if(settings.transformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
                 (Type containerSimType,ActorMotion?containerSimMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,layerName);
                 if(transformSettingsForSimHands.TryGetValue(key,out var transformSettingsForParentBodyPartName)){

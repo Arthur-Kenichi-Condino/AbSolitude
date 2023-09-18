@@ -53,6 +53,7 @@ namespace AKCondinoO.Sims.Actors{
          base.AI();
          RenewEnemiesAndAllies();
          MyPathfinding=GetPathfindingResult();
+         stopPathfindingOnTimeout=true;
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
          if(MyEnemy!=null){
           if(IsInAttackRange(MyEnemy)){
@@ -134,6 +135,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnFOLLOW_ST(){
          //Log.DebugMessage("OnFOLLOW_ST()");
+         stopPathfindingOnTimeout=false;//
          if(
           !IsTraversingPath()
          ){
@@ -264,6 +266,7 @@ namespace AKCondinoO.Sims.Actors{
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
         protected virtual void OnCHASE_ST(){
+         stopPathfindingOnTimeout=false;//
          if((onChaseMyEnemyPos_Last=onChaseMyEnemyPos)!=(onChaseMyEnemyPos=MyEnemy.transform.position)){
           onChaseMyEnemyMovedSoChangeDestination=true;
          }

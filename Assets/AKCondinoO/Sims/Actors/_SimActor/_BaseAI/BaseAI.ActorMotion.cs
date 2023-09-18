@@ -39,7 +39,11 @@ namespace AKCondinoO.Sims.Actors{
                    MyMotion=ActorMotion.MOTION_ATTACK;
                   }
               }else{
-                  if(MyPathfinding==PathfindingResult.TRAVELLING){
+                  if((moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
+                     MyPathfinding!=PathfindingResult.REACHED&&
+                     MyPathfinding!=PathfindingResult.IDLE&&
+                     MyPathfinding!=PathfindingResult.TRAVELLING_BUT_NO_SPEED
+                  ){
                       if(MyWeaponType==WeaponTypes.SniperRifle){
                        MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
                       }else{
