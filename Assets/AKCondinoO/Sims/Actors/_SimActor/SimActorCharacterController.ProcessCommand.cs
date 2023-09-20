@@ -8,9 +8,5 @@ using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorCharacterController{
-        internal void OnAction1(){
-         if(actor is BaseAI baseAI){
-         }
-        }
     }
 }
