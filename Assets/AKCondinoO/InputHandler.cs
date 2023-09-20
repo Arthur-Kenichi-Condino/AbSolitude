@@ -130,6 +130,18 @@ namespace AKCondinoO{
                   enabled.curState=!enabled.curState;
                   SetActivityDetectionFlag(enabled);
                  }
+             }else if(mode==Command.Modes.WhenUp){
+                 enabled.curState=false;
+                 if(InvokeDelegate(command,type,GetterReturnMode.Up)){
+                  enabled.curState=true;
+                  SetActivityDetectionFlag(enabled);
+                 }
+             }else if(mode==Command.Modes.WhenDown){
+                 enabled.curState=false;
+                 if(InvokeDelegate(command,type,GetterReturnMode.Down)){
+                  enabled.curState=true;
+                  SetActivityDetectionFlag(enabled);
+                 }
              }
          }
          Enabled.RELEASE_MOUSE.curState=Enabled.RELEASE_MOUSE.curState||escape||!focus;

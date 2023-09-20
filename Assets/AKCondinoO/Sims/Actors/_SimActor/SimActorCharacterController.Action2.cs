@@ -9,7 +9,7 @@ using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorCharacterController{
      internal bool isAiming;
-        internal void ProcessAction2(){
+        internal void OnAction2(){
          isAiming=false;
          if(actor is BaseAI baseAI){
           if(Enabled.ACTION_2.curState){
