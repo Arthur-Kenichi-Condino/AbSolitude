@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
         }
-        internal(GameObject skillGameObject,Skill skill)SpawnSkillGameObject(Type skillType,int level,SimActor actor){
+        internal(GameObject skillGameObject,Skill skill)SpawnSkillGameObject(Type skillType,int level,BaseAI actor){
          GameObject skillGameObject;
          var pool=this.pool[skillType];
          Skill skill;

@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
      }
      protected float castDelay_value=1.0f;
      internal LinkedListNode<Skill>pooled=null;
-     internal SimActor actor;
+     internal BaseAI actor;
      internal int level=1;
         protected virtual void Awake(){
         }

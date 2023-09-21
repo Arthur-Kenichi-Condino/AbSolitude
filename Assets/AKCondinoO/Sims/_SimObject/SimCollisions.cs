@@ -24,7 +24,7 @@ namespace AKCondinoO.Sims{
          kinematicRigidbody.isKinematic=true;
          foreach(var volumeCollider in simObject.volumeColliders){
           if(volumeCollider is CharacterController characterController){
-           SimActor simActor=simObject as SimActor;
+           BaseAI simActor=simObject as BaseAI;
            CapsuleCollider trigger=this.gameObject.AddComponent<CapsuleCollider>();
            var values=GetCapsuleValuesForCollisionTesting(characterController,transform.root);
            trigger.isTrigger=true;
