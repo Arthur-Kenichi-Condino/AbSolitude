@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal Vector3 targetDest;
         //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
         protected static bool GetRandomPositionFor(SimObject simObject,Vector3 center,float maxDis,out Vector3 result){
-         if(simObject is SimActor actor){
+         if(simObject is BaseAI actor){
           for(int i=0;i<3;++i){
            Vector3 randomPoint=Util.GetRandomPosition(center,maxDis);
            if(NavMesh.SamplePosition(randomPoint,out NavMeshHit hit,Height,actor.navMeshQueryFilter)){

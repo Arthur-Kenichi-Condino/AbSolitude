@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     /// </summary>
     internal class AISensor:MonoBehaviour{
-     internal SimActor actor;
+     internal BaseAI actor;
      [SerializeField]internal bool zIsUp=false;
      [SerializeField]internal float distance=96f;
      [SerializeField]internal float angleHorizontal=60f;

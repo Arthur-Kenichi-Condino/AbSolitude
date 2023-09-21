@@ -19,7 +19,7 @@ namespace AKCondinoO.Sims.Actors{
          AggressiveToAll=2,
         }
      [SerializeField]protected AggressionMode MyAggressionMode=AggressionMode.Defensive;internal AggressionMode aggression{get{return MyAggressionMode;}}
-        internal override void OnSimObjectIsInSight(SimObject simObject){
+        internal virtual void OnSimObjectIsInSight(SimObject simObject){
          ApplyAggressionModeForThenAddAsTarget(simObject);
         }
         internal virtual void ApplyAggressionModeForThenAddAsTarget(SimObject target){
@@ -41,7 +41,7 @@ namespace AKCondinoO.Sims.Actors{
          //Log.DebugMessage("target to add:"+target.id.Value);
          OnAddAsTarget(target,gotTargetMode,enemyPriority);
         }
-        internal override void OnSimObjectIsOutOfSight(SimObject simObject){
+        internal virtual void OnSimObjectIsOutOfSight(SimObject simObject){
          SetToBeRemovedFromAsTarget(simObject);
         }
         internal virtual void SetToBeRemovedFromAsTarget(SimObject target){
@@ -79,10 +79,10 @@ namespace AKCondinoO.Sims.Actors{
           return false;
          }
          if(isAiming){
-          if(simActorAnimatorController.animator!=null){
-           if(simActorAnimatorController.animationEventsHandler!=null){
+          if(animatorController.animator!=null){
+           if(animatorController.animationEventsHandler!=null){
             Log.DebugMessage("DoShooting()");
-            simActorAnimatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
+            animatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
             onDoShootingSetMotion=true;
             return true;
            }

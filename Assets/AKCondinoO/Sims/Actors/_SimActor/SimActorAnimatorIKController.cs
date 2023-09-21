@@ -10,9 +10,9 @@ namespace AKCondinoO.Sims.Actors{
     internal class SimActorAnimatorIKController:MonoBehaviour{
      internal SimActorAnimatorController simActorAnimatorController;
      [SerializeField]internal Vector3 aimAtTorsoAdjust=new Vector3(18.315f,7.08f,0f);
-     internal float headMaxVerticalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxVerticalRotationAngle;}}
+     internal float headMaxVerticalRotationAngle{get{return simActorAnimatorController.actor.characterController.headMaxVerticalRotationAngle;}}
       internal float headIKLimitedVerticalRotationAngleTolerance=7f;
-      internal float headMaxHorizontalRotationAngle{get{return simActorAnimatorController.actor.simActorCharacterController.headMaxHorizontalRotationAngle;}}
+      internal float headMaxHorizontalRotationAngle{get{return simActorAnimatorController.actor.characterController.headMaxHorizontalRotationAngle;}}
        internal float headIKLimitedHorizontalRotationAngleTolerance=7f;
      bool initialized=false;
      internal Transform      head{get{return simActorAnimatorController.actor.head;}}
@@ -47,11 +47,11 @@ namespace AKCondinoO.Sims.Actors{
           }
           initialized=true;
          }
-         if(simActorAnimatorController.actor.simActorCharacterController.isAiming){
-          var characterController=simActorAnimatorController.actor.simActorCharacterController.characterController;
-          var headOffset=simActorAnimatorController.actor.simActorCharacterController.headOffset;
-          var viewRotation=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
-          var aimAtMaxDistance=simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+         if(simActorAnimatorController.actor.characterController.isAiming){
+          var characterController=simActorAnimatorController.actor.characterController.character;
+          var headOffset=simActorAnimatorController.actor.characterController.headOffset;
+          var viewRotation=simActorAnimatorController.actor.characterController.viewRotation;
+          var aimAtMaxDistance=simActorAnimatorController.actor.characterController.aimAtMaxDistance;
           Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           headLookAtPositionLerp.tgtPos=aimAt;
           if(!wasAiming){
@@ -68,7 +68,7 @@ namespace AKCondinoO.Sims.Actors{
            if(!simActorAnimatorController.actor.navMeshAgent.enabled){
             Vector3 animHeadPos=simActorAnimatorController.actor.GetHeadPosition(fromAnimator:true);
             Quaternion animBodyRot=simActorAnimatorController.animator.transform.rotation;
-            Quaternion viewRot=simActorAnimatorController.actor.simActorCharacterController.viewRotation;
+            Quaternion viewRot=simActorAnimatorController.actor.characterController.viewRotation;
             float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
             //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
             float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
@@ -77,12 +77,12 @@ namespace AKCondinoO.Sims.Actors{
              Quaternion.AngleAxis(Math.Clamp(verticalRotSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle),animBodyRot*Vector3.left)*
              Quaternion.AngleAxis(Math.Clamp(horizontalRotSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle),animBodyRot*Vector3.up)*
              animBodyRot;
-            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+            Vector3 headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.characterController.aimAtMaxDistance;
             //  TO DO: rotating? Or moving? handle special conditions and rotations
             bool flag;
             if((flag=(simActorAnimatorController.rotLerp.tgtRotLerpTime!=0f&&simActorAnimatorController.actor.simUMA.transform.parent.rotation.eulerAngles!=simActorAnimatorController.rotLerp.tgtRotLerpB.eulerAngles))||headIKRotationStoppedTimer>0f){
              //Log.DebugMessage("rotating body, set target head IK to forward");
-             headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.simActorCharacterController.aimAtMaxDistance;
+             headLookAtPosition=animHeadPos+limitedHeadRotation*Vector3.forward*simActorAnimatorController.actor.characterController.aimAtMaxDistance;
              if(flag){
               headIKRotationStoppedTimer=headOnIKRotationStoppedCooldown;
              }else{
@@ -201,7 +201,7 @@ namespace AKCondinoO.Sims.Actors{
               simActorAnimatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
           #endregion
          }
-         wasAiming=simActorAnimatorController.actor.simActorCharacterController.isAiming;
+         wasAiming=simActorAnimatorController.actor.characterController.isAiming;
         }
     }
 }

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Inventory;
@@ -13,18 +14,39 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
-     internal static System.Random seedGenerator;
-     internal System.Random math_random;
         protected override void Awake(){
-         math_random=new System.Random(seedGenerator.Next());
-         InitEnemiesAndAllies();
+         InitTargets();
          base.Awake();
+         aiSensor=GetComponentInChildren<AISensor>();
+         if(aiSensor){
+          aiSensor.actor=this;
+          aiSensor.Deactivate();
+          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+         }
+         navMeshAgent=GetComponent<NavMeshAgent>();
+         navMeshQueryFilter=new NavMeshQueryFilter(){
+          agentTypeID=navMeshAgent.agentTypeID,
+             areaMask=navMeshAgent.areaMask,
+         };
+         characterController=GetComponent<SimActorCharacterController>();
+         if(characterController!=null){
+            characterController.actor=this;
+          height=characterController.character.height;
+         }
+         heightCrouching=navMeshAgent.height;
+         if(characterController==null){
+          height=heightCrouching;
+         }
+         Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
+         animatorController=GetComponent<SimActorAnimatorController>();
+         animatorController.actor=this;
         }
         internal override bool IsMonster(){
          return MyAggressionMode==AggressionMode.AggressiveToAll;
         }
         internal override void OnActivated(){
          base.OnActivated();
+         OnResetMotion();
          if(onChaseGetDataCoroutine!=null){
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }
@@ -37,20 +59,12 @@ namespace AKCondinoO.Sims.Actors{
          base.OnDeactivated();
          ReleaseEnemiesAndAllies();
         }
-        protected override void OnResetMotion(){
-         onHitSetMotion=false;
-          onHitResetMotion=false;
-         onDoAttackSetMotion=false;
-         MyMotion=ActorMotion.MOTION_STAND;
-         base.OnResetMotion();
-        }
      protected ActorMotion MyMotion=ActorMotion.MOTION_STAND;internal ActorMotion motion{get{return MyMotion;}}
      protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
      protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
      protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
-        protected override void AI(){
-         base.AI();
+        protected virtual void AI(){
          RenewEnemiesAndAllies();
          MyPathfinding=GetPathfindingResult();
          stopPathfindingOnTimeout=true;
@@ -100,12 +114,11 @@ namespace AKCondinoO.Sims.Actors{
          }
          UpdateMotion(true);
         }
-        protected override void OnCharacterControllerUpdated(){
-         base.OnCharacterControllerUpdated();
+        protected virtual void OnCharacterControllerUpdated(){
          UpdateMotion(false);
         }
         protected virtual void OnIDLE_ST_START(){
-         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+         characterController.character.transform.localRotation=Quaternion.identity;
         }
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
@@ -158,7 +171,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void OnCHASE_ST_START(){
-         simActorCharacterController.characterController.transform.localRotation=Quaternion.identity;
+         characterController.character.transform.localRotation=Quaternion.identity;
          onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
          onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
          onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
@@ -191,8 +204,8 @@ namespace AKCondinoO.Sims.Actors{
          Loop:{
           yield return onChaseGetDataThrottler;
           //Log.DebugMessage("OnChaseGetDataCoroutine");
-          if(simActorCharacterController!=null){
-           var values=simCollisions.GetCapsuleValuesForCollisionTesting(simActorCharacterController.characterController,transform.root);
+          if(characterController!=null){
+           var values=simCollisions.GetCapsuleValuesForCollisionTesting(characterController.character,transform.root);
            float maxDis=Vector3.Distance(MyEnemy.transform.position,transform.root.position);
            int inTheWayLength=0;
            _GetInTheWayColliderHits:{
@@ -303,10 +316,10 @@ namespace AKCondinoO.Sims.Actors{
          if(moveToDestination){
           MyDest=MyEnemy.transform.position;
           if(onChaseInTheWayColliderHitsCount>0){
-           if(simActorCharacterController!=null){
+           if(characterController!=null){
             for(int i=0;i<onChaseInTheWayColliderHitsCount;++i){
              RaycastHit hit=onChaseInTheWayColliderHits[i];
-             if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.simActorCharacterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
+             if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is SimActor actorHit&&actorHit.characterController!=null&&(actorHit.transform.root.position-transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-transform.root.position).sqrMagnitude){
               Vector3 cross=Vector3.Cross(transform.root.position,actorHit.transform.root.position);
               //Debug.DrawLine(actorHit.transform.root.position,transform.root.position,Color.blue,1f);
               //Debug.DrawRay(actorHit.transform.root.position,cross,Color.cyan,1f);
@@ -335,7 +348,7 @@ namespace AKCondinoO.Sims.Actors{
                rightDis=(float)math_random.NextDouble(3.0d,6.0d);
                forwardDis=(float)math_random.NextDouble(1.5d,3.0d);
               }
-              MyDest=actorHit.transform.root.position+((right*rightSign)*rightDis-forward*forwardDis)*(actorHit.simActorCharacterController.characterController.radius+simActorCharacterController.characterController.radius)+Vector3.down*(height/2f);
+              MyDest=actorHit.transform.root.position+((right*rightSign)*rightDis-forward*forwardDis)*(actorHit.characterController.character.radius+characterController.character.radius)+Vector3.down*(height/2f);
               break;
              }
             }
@@ -351,13 +364,13 @@ namespace AKCondinoO.Sims.Actors{
          ){
           navMeshAgent.destination=navMeshAgent.transform.position;
          }else{
-          if(simActorCharacterController!=null){
+          if(characterController!=null){
            Vector3 lookDir=MyEnemy.transform.position-transform.position;
            Vector3 planarLookDir=lookDir;
            planarLookDir.y=0f;
            onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
-           simActorCharacterController.characterController.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(simActorCharacterController.characterController.transform.rotation,Core.magicDeltaTimeNumber);
-           Debug.DrawRay(simActorCharacterController.characterController.transform.position,simActorCharacterController.characterController.transform.forward,Color.gray);
+           characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+           Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
            if(simUMA!=null){
             Vector3 animatorLookDir=-simUMA.transform.parent.forward;
             Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles;
@@ -366,13 +379,140 @@ namespace AKCondinoO.Sims.Actors{
             animatorPlanarLookEuler.x=0f;
             animatorPlanarLookEuler.z=0f;
             Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
-            Debug.DrawRay(simActorCharacterController.characterController.transform.position,animatorPlanarLookDir,Color.white);
-            if(Vector3.Angle(simActorCharacterController.characterController.transform.forward,animatorPlanarLookDir)<=5f){
+            Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
+            if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
              DoAttack();
             }
            }
           }
          }
         }
+        protected virtual void OnResetMotion(){
+         onHitSetMotion=false;
+          onHitResetMotion=false;
+         onDoAttackSetMotion=false;
+         MyMotion=ActorMotion.MOTION_STAND;
+         navMeshAgentShouldBeStopped=false;
+         if(characterController!=null){
+          characterController.isStopped=false;
+         }
+        }
+        protected virtual void OnMotionHitSet(){
+         navMeshAgentShouldBeStopped=true;
+         if(characterController!=null){
+          characterController.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitReset(){
+         navMeshAgentShouldBeStopped=true;
+         if(characterController!=null){
+          characterController.isStopped=true;
+         }
+        }
+        protected virtual void OnMotionHitAnimationEnd(){
+         navMeshAgentShouldBeStopped=false;
+         if(characterController!=null){
+          characterController.isStopped=false;
+         }
+        }
+        internal virtual void UpdateGetters(){
+         float velocityFlattened=0f;
+         if(isUsingAI){
+          float velocityMagnitude=moveVelocity.magnitude;
+          //Log.DebugMessage("navMeshAgent velocityMagnitude:"+velocityMagnitude);
+          velocityFlattened=velocityMagnitude/navMeshAgentRunSpeed;
+         }else if(characterController!=null){
+          velocityFlattened=moveVelocity.z;
+          //Log.DebugMessage("characterController velocityFlattened:"+velocityFlattened);
+         }
+         moveVelocityFlattenedLerp.tgtVal=Math.Clamp(velocityFlattened,-1f,1f);
+         moveVelocityFlattened_value=moveVelocityFlattenedLerp.UpdateFloat(moveVelocityFlattened_value,Core.magicDeltaTimeNumber);
+         float strafeVelocityFlattened=0f;
+         if(isUsingAI){
+         }else if(characterController!=null){
+          strafeVelocityFlattened=moveVelocity.x;
+          //Log.DebugMessage("characterController strafeVelocityFlattened:"+strafeVelocityFlattened);
+         }
+         moveStrafeVelocityFlattenedLerp.tgtVal=Math.Clamp(strafeVelocityFlattened,-1f,1f);
+         moveStrafeVelocityFlattened_value=moveStrafeVelocityFlattenedLerp.UpdateFloat(moveStrafeVelocityFlattened_value,Core.magicDeltaTimeNumber);
+         float angle=0f;
+         if(isUsingAI){
+          if(!Mathf.Approximately(moveVelocity.magnitude,0f)){
+           angle=Vector3.SignedAngle(transform.forward,moveVelocity.normalized,transform.up)/180f;
+           //Log.DebugMessage("angle:"+angle);
+          }
+         }else if(characterController!=null){
+          angle=Vector3.SignedAngle(characterController.lastBodyRotation*Vector3.forward,characterController.bodyRotation*Vector3.forward,transform.up);
+         }
+         turnAngleLerp.tgtVal=Math.Clamp(angle,-.5f,.5f);
+         turnAngle_value=turnAngleLerp.UpdateFloat(turnAngle_value,Core.magicDeltaTimeNumber);
+        }
+     internal virtual Vector3 moveVelocity{
+      get{
+       if(isUsingAI){
+        return navMeshAgent.velocity;
+       }else if(characterController!=null){
+        float divideBy=
+         (characterController.inputMoveVelocity.z!=0f?(Mathf.Abs(characterController.inputMoveVelocity.z)/(characterController.maxMoveSpeed.z*characterController.isRunningMoveSpeedMultiplier)):0f)+
+         (characterController.inputMoveVelocity.x!=0f?(Mathf.Abs(characterController.inputMoveVelocity.x)/(characterController.maxMoveSpeed.x*characterController.isRunningMoveSpeedMultiplier)):0f);
+        Vector3 velocity=
+         Vector3.Scale(
+          characterController.inputMoveVelocity,
+          new Vector3(
+           1f/((divideBy==0f?1f:divideBy)*characterController.walkSpeedAverage*2f),
+           0f,
+           1f/((divideBy==0f?1f:divideBy)*characterController.walkSpeedAverage*2f)
+          )
+         );
+        //Log.DebugMessage("characterController velocity:"+velocity);
+        return velocity;
+       }
+       return Vector3.zero;
+      }
+     }
+     internal virtual bool isMovingBackwards{
+      get{
+       return moveVelocityFlattened<0f;
+      }
+     }
+     [SerializeField]internal FloatLerpHelper moveVelocityFlattenedLerp=new FloatLerpHelper();
+      protected float moveVelocityFlattened_value;
+     internal virtual float moveVelocityFlattened{
+      get{
+       return moveVelocityFlattened_value;
+      }
+     }
+     [SerializeField]internal FloatLerpHelper moveStrafeVelocityFlattenedLerp=new FloatLerpHelper();
+      protected float moveStrafeVelocityFlattened_value;
+     internal virtual float moveStrafeVelocityFlattened{
+      get{
+       return moveStrafeVelocityFlattened_value;
+      }
+     }
+     [SerializeField]internal FloatLerpHelper turnAngleLerp=new FloatLerpHelper();
+      protected float turnAngle_value;
+     internal float turnAngle{
+      get{
+       return turnAngle_value;
+      }
+     }
+     internal bool isAiming{
+      get{
+       if(characterController!=null){
+        return characterController.isAiming;
+       }
+       return false;
+      }
+     }
+     internal bool isShooting{
+      get{
+       if(characterController!=null){
+        if(this is BaseAI baseAI){
+         return baseAI.onDoShootingSetMotion;
+        }
+       }
+       return false;
+      }
+     }
     }
 }

@@ -8,23 +8,23 @@ using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorCharacterController:MonoBehaviour{
-     internal SimActor actor;
-     internal CharacterController characterController;
+     internal BaseAI actor;
+     internal CharacterController character;
       internal Vector3 center;
      internal bool isStopped=false;
      [SerializeField]internal float headMaxVerticalRotationAngle=40f;
       [SerializeField]internal float headMaxHorizontalRotationAngle=60f;
         void Awake(){
-         characterController=GetComponentInChildren<CharacterController>();
-         center=characterController.center;
+         character=GetComponentInChildren<CharacterController>();
+         center=character.center;
          headOffset=new Vector3(
           0f,
-          characterController.height/2f-characterController.radius,
+          character.height/2f-character.radius,
           0f
          );
-         rotLerp.tgtRot=rotLerp.tgtRot_Last=characterController.transform.rotation;
-         posLerp.tgtPos=posLerp.tgtPos_Last=characterController.transform.position;
-         viewRotation=Quaternion.LookRotation(characterController.transform.forward,Vector3.up);
+         rotLerp.tgtRot=rotLerp.tgtRot_Last=character.transform.rotation;
+         posLerp.tgtPos=posLerp.tgtPos_Last=character.transform.position;
+         viewRotation=Quaternion.LookRotation(character.transform.forward,Vector3.up);
         }
      float delayToConsiderNotOnGround=.2f;
      internal bool isGrounded{
@@ -71,12 +71,12 @@ namespace AKCondinoO.Sims.Actors{
           isRunningMoveSpeedMultiplierLerp.tgtVal=moveSpeedRunMultiplier;
          }
          isRunningMoveSpeedMultiplier_value=isRunningMoveSpeedMultiplierLerp.UpdateFloat(isRunningMoveSpeedMultiplier_value,Core.magicDeltaTimeNumber);
-         if(characterController.isGrounded){
+         if(character.isGrounded){
           delayToConsiderNotOnGround=.2f;
          }else if(delayToConsiderNotOnGround>0f){
           delayToConsiderNotOnGround-=Time.deltaTime;
          }
-         beforeMovePos=characterController.transform.position;
+         beforeMovePos=character.transform.position;
          if(!Enabled.RELEASE_MOUSE.curState){
           inputViewRotationEuler.x+=-Enabled.MOUSE_ROTATION_DELTA_Y[0]*viewRotationSmoothValue;
           inputViewRotationEuler.y+= Enabled.MOUSE_ROTATION_DELTA_X[0]*viewRotationSmoothValue;
@@ -88,7 +88,7 @@ namespace AKCondinoO.Sims.Actors{
           inputViewRotationEuler=Vector3.zero;
          }
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
-         bodyRotation=lastBodyRotation=characterController.transform.rotation;
+         bodyRotation=lastBodyRotation=character.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
           if(
            Enabled.FORWARD .curState||
@@ -112,7 +112,7 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("rotate body in degrees:"+angleToRotateBody);
           bodyRotation*=Quaternion.AngleAxis(angleToRotateBody,bodyRotation*Vector3.up);
          }
-         characterController.transform.rotation=bodyRotation;
+         character.transform.rotation=bodyRotation;
          if(!Enabled.RELEASE_MOUSE.curState){
           if(Enabled.FORWARD .curState){if(inputMoveVelocity.z<0f){inputMoveVelocity.z+=moveDeceleration.z*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.z+=moveAcceleration.z*isRunningMoveSpeedMultiplier;}}
           if(Enabled.BACKWARD.curState){if(inputMoveVelocity.z>0f){inputMoveVelocity.z-=moveDeceleration.z*isRunningMoveSpeedMultiplier;}else{inputMoveVelocity.z-=moveAcceleration.z*isRunningMoveSpeedMultiplier;}}
@@ -166,11 +166,11 @@ namespace AKCondinoO.Sims.Actors{
          appliedControllerVelocity=Vector3.Scale(appliedControllerVelocity,Vector3.Scale(appliedControllerVelocity.normalized,new Vector3(Mathf.Sign(appliedControllerVelocity.x),Mathf.Sign(appliedControllerVelocity.y),Mathf.Sign(appliedControllerVelocity.z))));
          if(jumpingTimer>0f){
          }else{
-          characterController.SimpleMove(characterController.transform.rotation*appliedControllerVelocity);
+          character.SimpleMove(character.transform.rotation*appliedControllerVelocity);
          }
-         afterMovePos=characterController.transform.position;
+         afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
-         aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
          OnReload();
          OnAction2();
          OnAction1();
