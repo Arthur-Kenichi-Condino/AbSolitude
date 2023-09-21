@@ -172,8 +172,8 @@ namespace AKCondinoO.Sims.Actors{
          moveDelta=afterMovePos-beforeMovePos;
          aimingAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
          OnReload();
-         OnAction1();
          OnAction2();
+         OnAction1();
         }
     }
 }

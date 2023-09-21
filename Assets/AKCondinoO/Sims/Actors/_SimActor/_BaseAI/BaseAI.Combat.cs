@@ -4,6 +4,7 @@
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using AKCondinoO.Sims.Weapons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -71,6 +72,23 @@ namespace AKCondinoO.Sims.Actors{
         protected override void DoAttack(){
          //Log.DebugMessage("DoAttack()");
          onDoAttackSetMotion=true;
+        }
+     internal bool onDoShootingSetMotion=false;
+        internal override bool DoShooting(SimWeapon simWeapon){
+         if(onDoShootingSetMotion){
+          return false;
+         }
+         if(isAiming){
+          if(simActorAnimatorController.animator!=null){
+           if(simActorAnimatorController.animationEventsHandler!=null){
+            Log.DebugMessage("DoShooting()");
+            simActorAnimatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
+            onDoShootingSetMotion=true;
+            return true;
+           }
+          }
+         }
+         return false;
         }
      protected readonly HashSet<Skill>onWillTakeDamageSkillsToUse=new HashSet<Skill>();
      protected bool onHitSetMotion=false;

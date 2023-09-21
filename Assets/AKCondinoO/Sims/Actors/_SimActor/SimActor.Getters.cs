@@ -99,6 +99,9 @@ namespace AKCondinoO.Sims.Actors{
      internal bool isShooting{
       get{
        if(simActorCharacterController!=null){
+        if(this is BaseAI baseAI){
+         return baseAI.onDoShootingSetMotion;
+        }
        }
        return false;
       }

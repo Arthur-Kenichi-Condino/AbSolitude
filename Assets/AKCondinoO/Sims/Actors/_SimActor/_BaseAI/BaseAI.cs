@@ -214,10 +214,14 @@ namespace AKCondinoO.Sims.Actors{
            }
            onChaseInTheWayColliderHitsCount=inTheWayLength;
            if(onChaseInTheWayColliderHitsCount>0){
-            for(int i=onChaseInTheWayColliderHitsCount-1;i>=0;--i){
+            for(int i=onChaseInTheWayColliderHits.Length-1;i>=0;--i){
+             if(i>=onChaseInTheWayColliderHitsCount){
+              onChaseInTheWayColliderHits[i]=default(RaycastHit);
+              continue;
+             }
              RaycastHit hit=onChaseInTheWayColliderHits[i];
              if(hit.collider.transform.root==this.transform.root){
-              onChaseInTheWayColliderHits[i]=new RaycastHit();
+              onChaseInTheWayColliderHits[i]=default(RaycastHit);
               onChaseInTheWayColliderHitsCount--;
              }
             }
@@ -237,7 +241,7 @@ namespace AKCondinoO.Sims.Actors{
          if(a.collider!=null&&b.collider==null){
           return -1;
          }
-         return Vector3.Distance(transform.root.position,a.collider.transform.root.position).CompareTo(Vector3.Distance(transform.root.position,b.collider.transform.root.position));
+         return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
         internal enum OnChaseTimeoutReactionCodes:int{
          Random=8,
