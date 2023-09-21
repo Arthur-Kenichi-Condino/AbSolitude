@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     internal class Hitboxes:MonoBehaviour{
      internal Rigidbody kinematicRigidbody;
-     internal SimActor actor;
+     internal BaseAI actor;
      [SerializeField]float maxCanDamageTime=.5f;
      [SerializeField]internal float gracePeriod=.2f;
       float canDamage=-1f;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorAnimatorController{
+    internal partial class SimAnimatorController{
      internal AnimationEventsHandler animationEventsHandler;
         internal void AddAnimationEventsHandler(){
          animationEventsHandler=animator.AddComponent<AnimationEventsHandler>();

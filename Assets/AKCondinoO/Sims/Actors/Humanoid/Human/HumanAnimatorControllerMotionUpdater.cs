@@ -35,7 +35,7 @@ namespace AKCondinoO.Sims.Actors{
          if(controller.actor is BaseAI baseAI){
           if(baseAI is HumanAI humanAI){
               controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE",humanAI.isShooting);
-              if(baseAI.weaponType==SimActor.WeaponTypes.SniperRifle){
+              if(baseAI.weaponType==BaseAI.WeaponTypes.SniperRifle){
                controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
                controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );
                 controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY"       ,humanAI.      moveVelocityFlattened);

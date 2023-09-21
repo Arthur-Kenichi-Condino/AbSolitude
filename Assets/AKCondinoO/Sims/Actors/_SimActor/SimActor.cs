@@ -38,7 +38,12 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal readonly Dictionary<string,Transform>nameToBodyPart=new Dictionary<string,Transform>();
         protected virtual void OnUMACharacterUpdated(UMAData simUMAData){
-         OnCreateHitHurtBoxes(simUMA,simUMAData);
+        }
+        public override void OnDestroy(){
+         if(simUMA!=null){
+          DestroyImmediate(simUMA.gameObject);
+         }
+         base.OnDestroy();
         }
         protected void SetBodyPart(string name,string transformChildName,out Transform bodyPart){
          if(!nameToBodyPart.TryGetValue(name,out bodyPart)||bodyPart==null){
@@ -50,12 +55,6 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
-        }
-        public override void OnDestroy(){
-         if(simUMA!=null){
-          DestroyImmediate(simUMA.gameObject);
-         }
-         base.OnDestroy();
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();

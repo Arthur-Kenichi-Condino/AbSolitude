@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     internal class Hurtboxes:MonoBehaviour{
      internal Rigidbody kinematicRigidbody;
-     internal SimActor actor;
+     internal BaseAI actor;
         internal void OnTriggerStay(Collider other){
         }
         internal bool OnTakeDamage(Hitboxes fromHitbox){

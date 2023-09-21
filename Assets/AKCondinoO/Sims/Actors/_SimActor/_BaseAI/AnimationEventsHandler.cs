@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class AnimationEventsHandler:MonoBehaviour{
-     internal SimActor actor;
+     internal BaseAI actor;
         internal void OnShootEvent(){
          Log.DebugMessage("OnShootEvent");
          OnAnimatorShoot?.Invoke(actor);
