@@ -21,124 +21,15 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActor:SimObject{
+    internal abstract partial class SimActor:SimObject{
      [SerializeField]GameObject simUMAPrefab;
-     internal PersistentSimActorData persistentSimActorData;
-        //  [https://stackoverflow.com/questions/945664/can-structs-contain-fields-of-reference-types]
-        internal struct PersistentSimActorData{
-         public ListWrapper<SkillData>skills;
-            public struct SkillData{
-             public Type skill;public int level;
-            }
-         public ListWrapper<SlaveData>slaves;
-            public struct SlaveData{
-             public Type simObjectType;public ulong idNumber;
-            }
-         public float timerToRandomMove;
-            internal void UpdateData(SimActor simActor){
-             skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
-             slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simObjectType=v.simObjectType,idNumber=v.idNumber};}).ToList());
-            }
-         private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
-            public override string ToString(){
-             if(!stringBuilderPool.TryDequeue(out StringBuilder stringBuilder)){
-              stringBuilder=new StringBuilder();
-             }
-             stringBuilder.Clear();
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"skills={{ ");
-             skills.Reset();
-             while(skills.MoveNext()){
-              SkillData skill=skills.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",skill.skill,skill.level);
-             }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"slaves={{ ");
-             slaves.Reset();
-             while(slaves.MoveNext()){
-              SlaveData slave=slaves.Current;
-              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"[{0},{1}], ",slave.simObjectType,slave.idNumber);
-             }
-             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
-             string result=string.Format(CultureInfoUtil.en_US,"persistentSimActorData={{ {0}, }}",stringBuilder.ToString());
-             stringBuilderPool.Enqueue(stringBuilder);
-             return result;
-            }
-         private static readonly ConcurrentQueue<List<SkillData>>parsingSkillListPool=new ConcurrentQueue<List<SkillData>>();
-         private static readonly ConcurrentQueue<List<SlaveData>>parsingSlaveListPool=new ConcurrentQueue<List<SlaveData>>();
-            internal static PersistentSimActorData Parse(string s){
-             PersistentSimActorData persistentSimActorData=new PersistentSimActorData();
-             if(!parsingSkillListPool.TryDequeue(out List<SkillData>skillList)){
-              skillList=new List<SkillData>();
-             }
-             skillList.Clear();
-             if(!parsingSlaveListPool.TryDequeue(out List<SlaveData>slaveList)){
-              slaveList=new List<SlaveData>();
-             }
-             slaveList.Clear();
-             //Log.DebugMessage("s:"+s);
-             int skillsStringStart=s.IndexOf("skills={");
-             if(skillsStringStart>=0){
-                skillsStringStart+=8;
-              int skillsStringEnd=s.IndexOf("} , ",skillsStringStart);
-              string skillsString=s.Substring(skillsStringStart,skillsStringEnd-skillsStringStart);
-              int skillStringStart=0;
-              while((skillStringStart=skillsString.IndexOf("[",skillStringStart))>=0){
-               int skillAssetTypeStringStart=skillStringStart+1;
-               int skillAssetTypeStringEnd  =skillsString.IndexOf(",",skillAssetTypeStringStart);
-               Type skillAssetType=Type.GetType(skillsString.Substring(skillAssetTypeStringStart,skillAssetTypeStringEnd-skillAssetTypeStringStart));
-               int skillLevelStringStart=skillAssetTypeStringEnd+1;
-               int skillLevelStringEnd  =skillsString.IndexOf("],",skillLevelStringStart);
-               int skillLevel=int.Parse(skillsString.Substring(skillLevelStringStart,skillLevelStringEnd-skillLevelStringStart));
-               //Log.DebugMessage("skillType:"+skillType+";skillLevel:"+skillLevel);
-               SkillData skill=new SkillData(){
-                skill=skillAssetType,
-                level=skillLevel,
-               };
-               skillList.Add(skill);
-               skillStringStart=skillLevelStringEnd+2;
-              }
-             }
-             int slavesStringStart=s.IndexOf("slaves={");
-             if(slavesStringStart>=0){
-                slavesStringStart+=8;
-              int slavesStringEnd=s.IndexOf("} , ",slavesStringStart);
-              string slavesString=s.Substring(slavesStringStart,slavesStringEnd-slavesStringStart);
-              //Log.DebugMessage("slavesString:"+slavesString);
-              int slaveStringStart=0;
-              while((slaveStringStart=slavesString.IndexOf("[",slaveStringStart))>=0){
-               int slaveSimObjectTypeStringStart=slaveStringStart+1;
-               int slaveSimObjectTypeStringEnd  =slavesString.IndexOf(",",slaveSimObjectTypeStringStart);
-               Type slaveSimObjectType=Type.GetType(slavesString.Substring(slaveSimObjectTypeStringStart,slaveSimObjectTypeStringEnd-slaveSimObjectTypeStringStart));
-               int slaveIdNumberStringStart=slaveSimObjectTypeStringEnd+1;
-               int slaveIdNumberStringEnd  =slavesString.IndexOf("],",slaveIdNumberStringStart);
-               ulong slaveIdNumber=ulong.Parse(slavesString.Substring(slaveIdNumberStringStart,slaveIdNumberStringEnd-slaveIdNumberStringStart));
-               SlaveData slave=new SlaveData(){
-                simObjectType=slaveSimObjectType,
-                idNumber=slaveIdNumber,
-               };
-               slaveList.Add(slave);
-               slaveStringStart=slaveIdNumberStringEnd+2;
-              }
-             }
-             persistentSimActorData.skills=new ListWrapper<SkillData>(skillList);
-             persistentSimActorData.slaves=new ListWrapper<SlaveData>(slaveList);
-             parsingSkillListPool.Enqueue(skillList);
-             parsingSlaveListPool.Enqueue(slaveList);
-             return persistentSimActorData;
-            }
-        }
      internal DynamicCharacterAvatar simUMA;
+      [SerializeField]GameObject goToSimUMA;
       internal Vector3 simUMAPosOffset;
-     internal NavMeshAgent navMeshAgent;
-      internal bool navMeshAgentShouldBeStopped=false;
-      internal NavMeshQueryFilter navMeshQueryFilter;
-       [SerializeField]protected float navMeshAgentWalkSpeed=2f;
-        [SerializeField]protected float navMeshAgentRunSpeed=4f;
-         protected bool navMeshAgentShouldUseRunSpeed=false;
-     internal SimActorCharacterController simActorCharacterController;
+     internal SimActorCharacterController characterController;
       internal float height;
        internal float heightCrouching;
-     internal SimActorAnimatorController simActorAnimatorController;
+     internal SimActorAnimatorController animatorController;
      internal AISensor aiSensor;
         protected override void Awake(){
          if(simUMAPrefab!=null){
@@ -148,29 +39,6 @@ namespace AKCondinoO.Sims.Actors{
           simUMA.CharacterUpdated.AddAction(OnUMACharacterUpdated);
          }
          base.Awake();
-         aiSensor=GetComponentInChildren<AISensor>();
-         if(aiSensor){
-          aiSensor.actor=this;
-          aiSensor.Deactivate();
-          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
-         }
-         navMeshAgent=GetComponent<NavMeshAgent>();
-         navMeshQueryFilter=new NavMeshQueryFilter(){
-          agentTypeID=navMeshAgent.agentTypeID,
-             areaMask=navMeshAgent.areaMask,
-         };
-         simActorCharacterController=GetComponent<SimActorCharacterController>();
-         if(simActorCharacterController!=null){
-            simActorCharacterController.actor=this;
-          height=simActorCharacterController.characterController.height;
-         }
-         heightCrouching=navMeshAgent.height;
-         if(simActorCharacterController==null){
-          height=heightCrouching;
-         }
-         Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
-         simActorAnimatorController=GetComponent<SimActorAnimatorController>();
-         simActorAnimatorController.actor=this;
         }
      internal readonly Dictionary<string,Transform>nameToBodyPart=new Dictionary<string,Transform>();
      protected bool canSense;
@@ -256,7 +124,6 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          persistentSimActorData.UpdateData(this);
-         OnResetMotion();
         }
         internal override void OnDeactivated(){
          Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
@@ -280,54 +147,10 @@ namespace AKCondinoO.Sims.Actors{
         protected override void DisableInteractions(){
          interactionsEnabled=false;
         }
-     protected float onEnableNavMeshAgentProximityTimeout=10f;
-      protected float onEnableNavMeshAgentProximityTimer=10f;
-        void EnableNavMeshAgent(){
-         if(!navMeshAgent.enabled){
-          if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
-           if(onEnableNavMeshAgentProximityTimer>0f){
-            onEnableNavMeshAgentProximityTimer-=Time.deltaTime;
-           }
-           if(onEnableNavMeshAgentProximityTimer<=0f||(new Vector3(hitResult.position.x,0f,hitResult.position.z)-new Vector3(transform.position.x,0f,transform.position.z)).magnitude<=2f){
-            transform.position=hitResult.position+Vector3.up*navMeshAgent.height/2f;
-            navMeshAgent.enabled=true;
-            onEnableNavMeshAgentProximityTimer=onEnableNavMeshAgentProximityTimeout;
-            //Log.DebugMessage("navMeshAgent is enabled");
-           }
-          }
-         }
-        }
-        void DisableNavMeshAgent(){
-         navMeshAgent.enabled=false;
-        }
         internal void OnThirdPersonCamFollow(){
          Log.DebugMessage("OnThirdPersonCamFollow()");
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
-        }
-        protected virtual void OnResetMotion(){
-         navMeshAgentShouldBeStopped=false;
-         if(simActorCharacterController!=null){
-          simActorCharacterController.isStopped=false;
-         }
-        }
-        protected virtual void OnMotionHitSet(){
-         navMeshAgentShouldBeStopped=true;
-         if(simActorCharacterController!=null){
-          simActorCharacterController.isStopped=true;
-         }
-        }
-        protected virtual void OnMotionHitReset(){
-         navMeshAgentShouldBeStopped=true;
-         if(simActorCharacterController!=null){
-          simActorCharacterController.isStopped=true;
-         }
-        }
-        protected virtual void OnMotionHitAnimationEnd(){
-         navMeshAgentShouldBeStopped=false;
-         if(simActorCharacterController!=null){
-          simActorCharacterController.isStopped=false;
-         }
         }
      internal bool isUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
@@ -340,224 +163,21 @@ namespace AKCondinoO.Sims.Actors{
          if(height>heightCrouching){//  can crouch
           if(!crouching_v){
            crouching_v=true;
-           simActorCharacterController.characterController.height=heightCrouching;
-           simActorCharacterController.characterController.center=new Vector3(0,-((height/2f)-(heightCrouching/2f)),0);
+           characterController.character.height=heightCrouching;
+           characterController.character.center=new Vector3(0,-((height/2f)-(heightCrouching/2f)),0);
           }else{
            crouching_v=false;
-           simActorCharacterController.characterController.height=height;
-           simActorCharacterController.characterController.center=new Vector3(0,0,0);
+           characterController.character.height=height;
+           characterController.character.center=new Vector3(0,0,0);
           }
          }
-        }
-     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
-     [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
-     [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
-     [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
-     [SerializeField]float AFKTimeToUseAI=30f;
-      float AFKTimerToUseAI;
-     bool?wasCrouchingBeforeShouldCrouch;
-        internal override int ManualUpdate(bool doValidationChecks){
-         int result=0;
-         if((result=base.ManualUpdate(doValidationChecks))!=0){
-          DisableNavMeshAgent();
-          return result;
-         }
-         bool shouldCrouch=false;//  is crouching required?
-         if(Core.singleton.isServer){
-          if(IsOwner){
-           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
-              DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
-            OnThirdPersonCamFollow();
-           }
-           if(MainCamera.singleton.toFollowActor==this){
-            //Log.DebugMessage("following this:"+this);
-            if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){
-             isUsingAI=false;
-             AFKTimerToUseAI=AFKTimeToUseAI;
-             //Log.DebugMessage("start using manual control:"+this);
-            }
-           }else{
-            if(!isUsingAI){
-             isUsingAI=true;
-             AFKTimerToUseAI=0f;
-             Log.DebugMessage("camera stopped following, use AI:"+this);
-            }
-           }
-           if(!isUsingAI){
-            if(AFKTimerToUseAI>0f){
-             AFKTimerToUseAI-=Time.deltaTime;
-            }
-            if(AFKTimerToUseAI<=0f){
-             isUsingAI=true;
-             Log.DebugMessage("AFK for too long, use AI:"+this);
-            }
-           }
-           if(DEBUG_TOGGLE_HOLSTER_WEAPON){
-              DEBUG_TOGGLE_HOLSTER_WEAPON=false;
-            if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
-             if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsInContainerSettings.InContainerSettings simInventoryItemSettings)){
-              if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
-               inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
-               inventoryItemsSpawnData.asInventoryItemOwnerIds[inventoryItemsSpawnData.at.Count-1]=id.Value;
-               inventoryItemsSpawnData.dequeued=false;
-               SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(inventoryItemsSpawnData);
-              }
-             }
-            }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
-             //  TO DO: release items
-            }
-           }
-           if(aiSensor){
-            if(canSense){
-             if(!aiSensor.isActiveAndEnabled){
-              aiSensor.Activate();
-             }
-             if(aiSensor.isActiveAndEnabled){
-              if(rightEye){
-               if(leftEye){
-                aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
-                aiSensor.transform.rotation=leftEye.transform.rotation;
-               }else{
-                aiSensor.transform.position=rightEye.transform.position;
-                aiSensor.transform.rotation=rightEye.transform.rotation;
-               }
-              }else if(leftEye){
-               aiSensor.transform.position=leftEye.transform.position;
-               aiSensor.transform.rotation=leftEye.transform.rotation;
-              }else if(head){
-               if(aiSensor.zIsUp){
-                aiSensor.transform.position=head.transform.position;
-                aiSensor.transform.rotation=Quaternion.LookRotation(head.up,head.forward);
-               }else{
-                aiSensor.transform.position=head.transform.position;
-                aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
-               }
-              }
-             }
-            }
-           }
-           HitHurtBoxesUpdate();
-           if(isUsingAI){
-            EnableNavMeshAgent();
-            if(!navMeshAgent.isOnNavMesh){
-             DisableNavMeshAgent();
-            }
-            if(navMeshAgent.enabled){
-             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
-              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
-             }
-             AI();
-            }
-           }else{
-            DisableNavMeshAgent();
-            if(simActorCharacterController!=null){
-               simActorCharacterController.ManualUpdate();
-             transform.position+=simActorCharacterController.moveDelta;
-             simActorCharacterController.characterController.transform.position-=simActorCharacterController.moveDelta;
-             OnCharacterControllerUpdated();
-            }
-           }
-          }else{
-           DisableNavMeshAgent();
-          }
-         }
-         if(transform.hasChanged){
-          GetCollidersTouchingNonAlloc(instantCheck:true);
-         }
-         if(gotCollidersTouchingFromInstantCheck){
-          for(int i=0;i<collidersTouchingUpperCount;++i){
-           Collider colliderTouchingUpper=collidersTouchingUpper[i];
-           if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
-            shouldCrouch=true;
-           }
-          }
-          for(int i=0;i<collidersTouchingMiddleCount;++i){
-           Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
-           if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
-            shouldCrouch=true;
-           }
-          }
-         }else{
-          if(simCollisionsTouchingUpper !=null){
-           foreach(Collider colliderTouchingUpper  in simCollisionsTouchingUpper .simObjectColliders){
-            shouldCrouch=true;
-           }
-          }
-          if(simCollisionsTouchingMiddle!=null){
-           foreach(Collider colliderTouchingMiddle in simCollisionsTouchingMiddle.simObjectColliders){
-            shouldCrouch=true;
-           }
-          }
-         }
-         if(Core.singleton.isServer){
-          if(IsOwner){
-           if(shouldCrouch){
-            if(wasCrouchingBeforeShouldCrouch==null){
-               wasCrouchingBeforeShouldCrouch=crouching;
-            }
-            if(!crouching){
-             OnToggleCrouching();
-            }
-           }else{
-            if(wasCrouchingBeforeShouldCrouch!=null){
-             if(!wasCrouchingBeforeShouldCrouch.Value){
-              if(crouching){
-               OnToggleCrouching();
-              }
-             }else{
-              if(!crouching){
-               OnToggleCrouching();
-              }
-             }
-               wasCrouchingBeforeShouldCrouch=null;
-            }
-            if(DEBUG_TOGGLE_CROUCHING){
-               DEBUG_TOGGLE_CROUCHING=false;
-             OnToggleCrouching();
-            }
-           }
-          }
-         }
-         UpdateGetters();
-         if(simActorAnimatorController!=null){
-            simActorAnimatorController.ManualUpdate();
-         }
-         lastForward=transform.forward;
-         teleportedMove=false;
-         return result;
-        }
-        protected virtual void AI(){
-        }
-        protected virtual void OnCharacterControllerUpdated(){
-        }
-     protected bool teleportedMove;
-        internal override bool OnTeleportTo(Vector3 position,Quaternion rotation){
-         if(navMeshAgent!=null&&navMeshAgent.enabled){
-          if(NavMesh.SamplePosition(position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
-           if(navMeshAgent.Warp(hitResult.position+Vector3.up*navMeshAgent.height/2f)){
-            navMeshAgent.destination=navMeshAgent.transform.position;
-            teleportedMove=true;
-           }
-           if(!navMeshAgent.isOnNavMesh){
-            DisableNavMeshAgent();
-           }
-           //Log.DebugMessage("OnTeleportTo, navMeshAgent, position:"+position+", hitResult.position:"+hitResult.position+", transform.position:"+transform.position);
-           return true;
-          }
-          //Log.DebugMessage("OnTeleportTo failed, navMeshAgent, position:"+position+", transform.position:"+transform.position);
-          return false;
-         }
-         //Log.DebugMessage("OnTeleportTo success, position:"+position+", transform.position:"+transform.position);
-         transform.position=position;
-         teleportedMove=true;
-         return true;
         }
         internal Vector3 GetHeadPosition(bool fromAnimator){
          Vector3 headPos;
-         if(fromAnimator&&simActorAnimatorController!=null&&simActorAnimatorController.animator!=null){
-          headPos=simActorAnimatorController.animator.transform.position+simActorAnimatorController.animator.transform.rotation*(new Vector3(0f,simActorCharacterController.characterController.height/2f+simActorCharacterController.characterController.radius,0f)+simActorCharacterController.headOffset);
+         if(fromAnimator&&animatorController!=null&&animatorController.animator!=null){
+          headPos=animatorController.animator.transform.position+animatorController.animator.transform.rotation*(new Vector3(0f,characterController.character.height/2f+characterController.character.radius,0f)+characterController.headOffset);
          }else{
-          headPos=simActorCharacterController.characterController.transform.position+simActorCharacterController.characterController.transform.rotation*simActorCharacterController.headOffset;
+          headPos=characterController.character.transform.position+characterController.character.transform.rotation*characterController.headOffset;
          }
          return headPos;
         }
@@ -578,9 +198,9 @@ namespace AKCondinoO.Sims.Actors{
            return;
           }
          }
-         if(simActorCharacterController!=null){
+         if(characterController!=null){
           gotCollidersTouchingFromInstantCheck=true;
-          var upperMiddleLowerValues=simCollisions.GetCapsuleValuesForUpperMiddleLowerCollisionTesting(simActorCharacterController.characterController,transform.root,height,simActorCharacterController.center);
+          var upperMiddleLowerValues=simCollisions.GetCapsuleValuesForUpperMiddleLowerCollisionTesting(characterController.character,transform.root,height,characterController.center);
           if(upperMiddleLowerValues!=null){
            var point0=upperMiddleLowerValues.Value.upperValues.point0;
            var point1=upperMiddleLowerValues.Value.upperValues.point1;

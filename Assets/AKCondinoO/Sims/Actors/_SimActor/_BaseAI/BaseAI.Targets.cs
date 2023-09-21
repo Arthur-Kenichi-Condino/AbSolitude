@@ -115,7 +115,7 @@ namespace AKCondinoO.Sims.Actors{
          targetsToRemove.Clear();
          MyEnemy=null;
         }
-        internal virtual void InitEnemiesAndAllies(){
+        internal virtual void InitTargets(){
          foreach(int i in Enum.GetValues(typeof(GotTargetMode))){
           targetsGotten.Add((GotTargetMode)i,new SortedList<EnemyPriority,Dictionary<(Type simType,ulong number),SimObject>>());
           foreach(int j in Enum.GetValues(typeof(EnemyPriority))){

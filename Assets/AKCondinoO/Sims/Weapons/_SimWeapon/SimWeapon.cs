@@ -62,8 +62,8 @@ namespace AKCondinoO.Sims.Weapons{
         internal void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
          shootHitsLength=0;
          if(muzzle!=null){
-          if(holder is SimActor actor&&actor.simActorCharacterController!=null){
-           Vector3 shootDir=(actor.simActorCharacterController.aimingAt-muzzle.transform.position).normalized;
+          if(holder is SimActor actor&&actor.characterController!=null){
+           Vector3 shootDir=(actor.characterController.aimingAt-muzzle.transform.position).normalized;
            Ray shootRay=new Ray(muzzle.transform.position,shootDir);
            _GetShootHits:{
             shootHitsLength=Physics.RaycastNonAlloc(shootRay,shootHits,shootDis,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide);

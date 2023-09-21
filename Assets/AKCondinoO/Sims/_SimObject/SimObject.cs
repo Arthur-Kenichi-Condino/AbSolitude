@@ -19,6 +19,8 @@ using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal partial class SimObject:NetworkBehaviour{
+     internal static System.Random seedGenerator;
+     internal System.Random math_random;
      internal PersistentData persistentData;
         internal struct PersistentData{
          public Quaternion rotation;
@@ -183,6 +185,7 @@ namespace AKCondinoO.Sims{
      protected readonly Vector3[]worldBoundsVertices=new Vector3[8];
      internal ParentConstraint parentConstraint;
         protected virtual void Awake(){
+         math_random=new System.Random(seedGenerator.Next());
          netObj=GetComponent<NetworkObject>();
          hasRigidbody=transform.root.GetComponent<Rigidbody>();
          //Log.DebugMessage(id+" hasRigidbody:"+(hasRigidbody!=null));

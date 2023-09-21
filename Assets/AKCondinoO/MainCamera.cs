@@ -55,7 +55,7 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          Quaternion rot=toFollowActor.simActorCharacterController.rotLerp.tgtRot;
+          Quaternion rot=toFollowActor.characterController.rotLerp.tgtRot;
           rotLerp.tgtRot=rot;
           UpdateTransformRotation();
           posLerp.tgtPos=toFollowActor.transform.position+rotLerp.tgtRot*thirdPersonOffset;

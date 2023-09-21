@@ -162,18 +162,18 @@ namespace AKCondinoO.Sims{
            Quaternion lineBetweenHandsRot=Quaternion.LookRotation(lineBetweenHandsDir,asInventoryItem.container.asSimObject.transform.up);
            SimInventoryItemsInContainerSettings.InContainerSettings settings=asInventoryItem.settings;
            if(asInventoryItem.container.asSimObject is BaseAI containerAsBaseAI){
-            if(containerAsBaseAI.simActorAnimatorController!=null){
-             if(containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex!=null){
+            if(containerAsBaseAI.animatorController!=null){
+             if(containerAsBaseAI.animatorController.currentWeaponAimLayerIndex!=null){
               string layerName=null;
-              int layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponAimLayerIndex.Value;
+              int layerIndex=containerAsBaseAI.animatorController.currentWeaponAimLayerIndex.Value;
               GetLayerAtIndex(layerIndex,out layerName);
               if(layerName==null){//  Aim layer has higher priority
-               layerIndex=containerAsBaseAI.simActorAnimatorController.currentWeaponLayerIndex.Value;
+               layerIndex=containerAsBaseAI.animatorController.currentWeaponLayerIndex.Value;
                GetLayerAtIndex(layerIndex,out layerName);
               }
               void GetLayerAtIndex(int layerIndex,out string layerName){
-               if(containerAsBaseAI.simActorAnimatorController.layerIndexToName.TryGetValue(layerIndex,out layerName)){
-                if(containerAsBaseAI.simActorAnimatorController.layerTargetWeight[layerIndex]!=1f){
+               if(containerAsBaseAI.animatorController.layerIndexToName.TryGetValue(layerIndex,out layerName)){
+                if(containerAsBaseAI.animatorController.layerTargetWeight[layerIndex]!=1f){
                  layerName=null;
                 }
                }

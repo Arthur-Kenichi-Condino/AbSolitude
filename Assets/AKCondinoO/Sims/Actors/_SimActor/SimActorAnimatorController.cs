@@ -13,7 +13,7 @@ using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimActorAnimatorController:MonoBehaviour{
-     internal SimActor actor;
+     internal BaseAI actor;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;
@@ -173,37 +173,37 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
          if(actor. leftEye!=null){
-          Debug.DrawLine(actor. leftEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+          Debug.DrawLine(actor. leftEye.transform.position,actor.characterController.aimingAt,Color.red);
          }
          if(actor.rightEye!=null){
-          Debug.DrawLine(actor.rightEye.transform.position,actor.simActorCharacterController.aimingAt,Color.red);
+          Debug.DrawLine(actor.rightEye.transform.position,actor.characterController.aimingAt,Color.red);
          }
          Quaternion rotAdjustment=Quaternion.identity;
          if(actor is BaseAI baseAI&&motionTransformAdjustment.TryGetValue(baseAI.motion,out TransformAdjustment adjustment)){
           rotAdjustment=adjustment.adjustment.localRotation;
          }
-         rotLerp.tgtRot=Quaternion.Euler(actor.simActorCharacterController.characterController.transform.eulerAngles+new Vector3(0f,180f,0f))*rotAdjustment;
-         posLerp.tgtPos=actor.simActorCharacterController.characterController.transform.position+actor.simUMAPosOffset;
+         rotLerp.tgtRot=Quaternion.Euler(actor.characterController.character.transform.eulerAngles+new Vector3(0f,180f,0f))*rotAdjustment;
+         posLerp.tgtPos=actor.characterController.character.transform.position+actor.simUMAPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
          actorLeft=-actor.transform.right;
          actorRight=actor.transform.right;
-         Vector3 boundsMaxRight=actor.simActorCharacterController.characterController.bounds.max;
-                 boundsMaxRight.y=actor.simActorCharacterController.characterController.transform.position.y;
-                 boundsMaxRight.z=actor.simActorCharacterController.characterController.transform.position.z;
-         float maxRightDis=Vector3.Distance(actor.simActorCharacterController.characterController.transform.position,boundsMaxRight);
-         Vector3 maxRight=actor.simActorCharacterController.characterController.transform.position+actor.simActorCharacterController.characterController.transform.rotation*(Vector3.right*maxRightDis);
-         Vector3 boundsMinLeft=actor.simActorCharacterController.characterController.bounds.min;
-                 boundsMinLeft.y=actor.simActorCharacterController.characterController.transform.position.y;
-                 boundsMinLeft.z=actor.simActorCharacterController.characterController.transform.position.z;
-         float minLeftDis=Vector3.Distance(actor.simActorCharacterController.characterController.transform.position,boundsMinLeft);
-         Vector3 minLeft=actor.simActorCharacterController.characterController.transform.position+actor.simActorCharacterController.characterController.transform.rotation*(Vector3.left*minLeftDis);
-         if(actor.navMeshAgent.enabled||actor.simActorCharacterController.isGrounded){
+         Vector3 boundsMaxRight=actor.characterController.character.bounds.max;
+                 boundsMaxRight.y=actor.characterController.character.transform.position.y;
+                 boundsMaxRight.z=actor.characterController.character.transform.position.z;
+         float maxRightDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMaxRight);
+         Vector3 maxRight=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.right*maxRightDis);
+         Vector3 boundsMinLeft=actor.characterController.character.bounds.min;
+                 boundsMinLeft.y=actor.characterController.character.transform.position.y;
+                 boundsMinLeft.z=actor.characterController.character.transform.position.z;
+         float minLeftDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMinLeft);
+         Vector3 minLeft=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.left*minLeftDis);
+         if(actor.navMeshAgent.enabled||actor.characterController.isGrounded){
           Debug.DrawRay(maxRight,Vector3.down,Color.blue);
           if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f,PhysUtil.considerGroundLayer)){
            Debug.DrawRay(rightFloorHit.point,rightFloorHit.normal);
-           Vector3 bottom=actor.simActorCharacterController.characterController.bounds.center;
-                   bottom.y=actor.simActorCharacterController.characterController.bounds.min.y;
+           Vector3 bottom=actor.characterController.character.bounds.center;
+                   bottom.y=actor.characterController.character.bounds.min.y;
            Plane floorPlane=new Plane(rightFloorHit.normal,bottom);
            Ray leftRay=new Ray(minLeft,Vector3.down);
            Debug.DrawRay(leftRay.origin,leftRay.direction,Color.blue);

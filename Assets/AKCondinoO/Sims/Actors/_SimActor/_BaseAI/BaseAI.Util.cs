@@ -54,7 +54,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected void MoveToMaster      (BaseAI masterAI,float dis){
          Vector3 dir=(this.transform.position-masterAI.transform.position).normalized;
-         Vector3 dest=masterAI.transform.position+dir*(this.simActorCharacterController.characterController.radius/2f+masterAI.simActorCharacterController.characterController.radius/2f);
+         Vector3 dest=masterAI.transform.position+dir*(this.characterController.character.radius/2f+masterAI.characterController.character.radius/2f);
          navMeshAgent.destination=dest;
         }
     }
