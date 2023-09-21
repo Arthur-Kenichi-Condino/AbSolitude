@@ -12,7 +12,7 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorAnimatorController:MonoBehaviour{
+    internal partial class SimAnimatorController:MonoBehaviour{
      internal BaseAI actor;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
@@ -33,32 +33,38 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-     internal readonly Dictionary<(int layer,string clipName),string>layerClipToFullPath=new Dictionary<(int,string),string>();
-        internal string GetFullPath(int layerIndex,string currentClipName){
-         (int layer,string clipName)layerClip=(layerIndex,currentClipName);
-         if(layerClipToFullPath.TryGetValue(layerClip,out string fullPath)){
-          return fullPath;
+        void LateUpdate(){
+        }
+     bool synced=true;
+     BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
+     internal int layerCount{get;private set;}
+     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
+     internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
+      internal WeaponTypes lastWeaponType=WeaponTypes.None;
+       internal int?currentWeaponLayerIndex=null;
+        internal int?currentWeaponAimLayerIndex=null;
+      internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
+     internal Dictionary<int,float>animationTime{get;private set;}
+      internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
+     Dictionary<int,float>normalizedTime;
+      Dictionary<int,float>normalizedTimeInCurrentLoop;
+     Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
+      Dictionary<int,int>lastLoopCount;
+       Dictionary<int,bool>looped;
+     Dictionary<int,List<AnimatorClipInfo>>animatorClip;
+     Dictionary<int,int>currentClipInstanceID;
+      Dictionary<int,string>currentClipName;
+        internal virtual void ManualUpdate(){
+         GetAnimator();
+         if(animator!=null&&actor is BaseAI baseAI){
+          GetTransformTgtValuesFromCharacterController();
+          SetTransformTgtValuesUsingActorAndPhysicData();
+          if(actor.simUMA!=null){
+           SetSimUMADataTransform();
+          }
+          GetAnimatorStateInfo();
+          UpdateMotion(baseAI);
          }
-         string layerName=animator.GetLayerName(layerIndex);
-         fullPath=layerName+"."+currentClipName;
-         layerClipToFullPath.Add(layerClip,fullPath);
-         return fullPath;
-        }
-     [SerializeField]internal WeaponLayer[]weaponLayerNames=new WeaponLayer[]{
-      new WeaponLayer{weaponType=WeaponTypes.None,layerName="Base Layer"},
-      new WeaponLayer{weaponType=WeaponTypes.SniperRifle,layerName="Carrying Rifle"},
-     };
-        [Serializable]internal class WeaponLayer{
-         [SerializeField]internal WeaponTypes weaponType;
-         [SerializeField]internal string layerName;
-        }
-     [SerializeField]internal WeaponAimLayer[]weaponAimLayerNames=new WeaponAimLayer[]{
-      new WeaponAimLayer{weaponType=WeaponTypes.None,layerName="Base Layer"},
-      new WeaponAimLayer{weaponType=WeaponTypes.SniperRifle,layerName="Aiming with Rifle"},
-     };
-        [Serializable]internal class WeaponAimLayer{
-         [SerializeField]internal WeaponTypes weaponType;
-         [SerializeField]internal string layerName;
         }
         protected virtual void GetAnimator(){
          if(animator==null){
@@ -125,51 +131,36 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-     bool synced=true;
-     BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
-     internal int layerCount{get;private set;}
-     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
-     internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
-      internal WeaponTypes lastWeaponType=WeaponTypes.None;
-       internal int?currentWeaponLayerIndex=null;
-        internal int?currentWeaponAimLayerIndex=null;
-      internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
-     internal Dictionary<int,float>animationTime{get;private set;}
-      internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
-     Dictionary<int,float>normalizedTime;
-      Dictionary<int,float>normalizedTimeInCurrentLoop;
-     Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
-      Dictionary<int,int>lastLoopCount;
-       Dictionary<int,bool>looped;
-     Dictionary<int,List<AnimatorClipInfo>>animatorClip;
-     Dictionary<int,int>currentClipInstanceID;
-      Dictionary<int,string>currentClipName;
-        internal virtual void ManualUpdate(){
-         GetAnimator();
-         if(animator!=null&&actor is BaseAI baseAI){
-          GetTransformTgtValuesFromCharacterController();
-          SetTransformTgtValuesUsingActorAndPhysicData();
-          if(actor.simUMA!=null){
-           SetSimUMADataTransform();
-          }
-          GetAnimatorStateInfo();
-          UpdateMotion(baseAI);
-         }
-        }
-        protected void OnAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
-         }
-        }
-        protected void OnAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
-         }
-        }
-        protected void OnAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
-         }
+     [SerializeField]float layerTransitionSpeed=64.0f;
+     Coroutine layerTransitionCoroutine;
+      internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
+       internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
+        IEnumerator LayerTransition(){
+            Loop:{
+             foreach(var layer in layerTargetWeight){
+              int layerIndex=layer.Key;
+              float targetWeight=layer.Value;
+              if(!layerWeight.TryGetValue(layerIndex,out float weight)){
+               weight=layerWeight[layerIndex]=animator.GetLayerWeight(layerIndex);
+              }
+              if(weight!=targetWeight){
+               if(weight>targetWeight){
+                weight-=layerTransitionSpeed*Core.magicDeltaTimeNumber;
+                if(weight<=targetWeight){
+                 weight=targetWeight;
+                }
+               }else if(weight<targetWeight){
+                weight+=layerTransitionSpeed*Core.magicDeltaTimeNumber;
+                if(weight>=targetWeight){
+                 weight=targetWeight;
+                }
+               }
+               animator.SetLayerWeight(layerIndex,layerWeight[layerIndex]=weight);
+              }
+             }
+             yield return null;
+            }
+            goto Loop;
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
          if(actor. leftEye!=null){
@@ -220,90 +211,6 @@ namespace AKCondinoO.Sims.Actors{
          actor.simUMA.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMA.transform.parent.rotation,Core.magicDeltaTimeNumber);
          actor.simUMA.transform.parent.position=posLerp.UpdatePosition(actor.simUMA.transform.parent.position,Core.magicDeltaTimeNumber);
         }
-        protected virtual void GetAnimatorStateInfo(){
-         //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
-         foreach(var layer in animatorClip){
-          int layerIndex=layer.Key;
-          List<AnimatorClipInfo>clipList=layer.Value;
-          clipList.Clear();
-          AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(layerIndex);
-                                          animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
-          if(clipList.Count>0){
-           if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
-            //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
-            OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
-            currentClipName[layerIndex]=clipList[0].clip.name;
-            looped[layerIndex]=false;
-           }
-           lastLoopCount[layerIndex]=loopCount[layerIndex];
-           if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
-            //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
-            looped[layerIndex]=true;
-            OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
-           }
-           normalizedTime[layerIndex]=animatorState.normalizedTime;
-            normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
-           //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);
-           animationTime[layerIndex]=clipList[0].clip.length*normalizedTime[layerIndex];
-            animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
-           //Log.DebugMessage("current animationTime:"+animationTime[layerIndex]);
-           OnAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
-          }
-         }
-        }
-     internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
-        protected virtual void UpdateMotion(BaseAI baseAI){
-          if(lastMotion!=baseAI.motion){
-           //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
-          }
-          if(motionUpdater==null){
-           if(actor.simUMA!=null){
-            motionUpdater=actor.simUMA.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
-           }
-           if(motionUpdater!=null){
-            motionUpdater.controller=this;
-           }
-          }
-          if(motionUpdater!=null){
-             motionUpdater.UpdateAnimatorWeaponLayer();
-             motionUpdater.UpdateAnimatorMotionValue();
-          }
-          if(lastMotion!=baseAI.motion){
-           //Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
-          }
-          lastMotion=baseAI.motion;
-        }
-     [SerializeField]float layerTransitionSpeed=64.0f;
-     Coroutine layerTransitionCoroutine;
-      internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
-       internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
-        IEnumerator LayerTransition(){
-            Loop:{
-             foreach(var layer in layerTargetWeight){
-              int layerIndex=layer.Key;
-              float targetWeight=layer.Value;
-              if(!layerWeight.TryGetValue(layerIndex,out float weight)){
-               weight=layerWeight[layerIndex]=animator.GetLayerWeight(layerIndex);
-              }
-              if(weight!=targetWeight){
-               if(weight>targetWeight){
-                weight-=layerTransitionSpeed*Core.magicDeltaTimeNumber;
-                if(weight<=targetWeight){
-                 weight=targetWeight;
-                }
-               }else if(weight<targetWeight){
-                weight+=layerTransitionSpeed*Core.magicDeltaTimeNumber;
-                if(weight>=targetWeight){
-                 weight=targetWeight;
-                }
-               }
-               animator.SetLayerWeight(layerIndex,layerWeight[layerIndex]=weight);
-              }
-             }
-             yield return null;
-            }
-            goto Loop;
-        }
         /// <summary>
         ///  Check if animation locks another motion beforehand
         /// </summary>
@@ -318,8 +225,6 @@ namespace AKCondinoO.Sims.Actors{
         /// <returns></returns>
         internal bool Sync(){
          return synced;
-        }
-        void LateUpdate(){
         }
     }
 }

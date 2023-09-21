@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims{
          if(simInventory is SimHands simHands){
           Log.DebugMessage(this+":OnInventoryItemAdded,simObjectAdded:"+simObjectAdded);
           if(simObjectAdded is SimWeapon simWeapon){
-           if(settings.handsUsage==SimActor.HandsUsage.TwoHanded){
+           if(settings.handsUsage==BaseAI.HandsUsage.TwoHanded){
             SetCurrentToolsOrWeapons(simWeapon,simWeapon);
            }else{
             SetCurrentToolsOrWeapons(simWeapon,null);

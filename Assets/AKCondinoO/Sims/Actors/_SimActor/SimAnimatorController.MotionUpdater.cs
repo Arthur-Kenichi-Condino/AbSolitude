@@ -1,0 +1,33 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+namespace AKCondinoO.Sims.Actors{
+    internal partial class SimAnimatorController{
+     internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
+        protected virtual void UpdateMotion(BaseAI baseAI){
+          if(lastMotion!=baseAI.motion){
+           //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);
+          }
+          if(motionUpdater==null){
+           if(actor.simUMA!=null){
+            motionUpdater=actor.simUMA.transform.root.GetComponentInChildren<BaseAnimatorControllerMotionUpdater>();
+           }
+           if(motionUpdater!=null){
+            motionUpdater.controller=this;
+           }
+          }
+          if(motionUpdater!=null){
+             motionUpdater.UpdateAnimatorWeaponLayer();
+             motionUpdater.UpdateAnimatorMotionValue();
+          }
+          if(lastMotion!=baseAI.motion){
+           //Log.DebugMessage("actor changed motion from:"+lastMotion+" to:"+baseAI.motion);
+          }
+          lastMotion=baseAI.motion;
+        }
+    }
+}

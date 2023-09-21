@@ -69,12 +69,12 @@ namespace AKCondinoO.Sims.Actors{
          return false;
         }
      protected bool onDoAttackSetMotion=false;
-        protected override void DoAttack(){
+        protected virtual void DoAttack(){
          //Log.DebugMessage("DoAttack()");
          onDoAttackSetMotion=true;
         }
      internal bool onDoShootingSetMotion=false;
-        internal override bool DoShooting(SimWeapon simWeapon){
+        internal virtual bool DoShooting(SimWeapon simWeapon){
          if(onDoShootingSetMotion){
           return false;
          }
@@ -93,7 +93,7 @@ namespace AKCondinoO.Sims.Actors{
      protected readonly HashSet<Skill>onWillTakeDamageSkillsToUse=new HashSet<Skill>();
      protected bool onHitSetMotion=false;
       protected bool onHitResetMotion=false;
-        internal override void OnHit(Hitboxes hitbox){
+        internal virtual void OnHit(Hitboxes hitbox){
          onWillTakeDamageSkillsToUse.Clear();
          GetBest(Skill.SkillUseContext.OnWillTakeDamage,onWillTakeDamageSkillsToUse);
          foreach(Skill skill in onWillTakeDamageSkillsToUse){
@@ -135,7 +135,7 @@ namespace AKCondinoO.Sims.Actors{
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
          }
         }
-        internal override void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
+        internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,simObject);
          Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){

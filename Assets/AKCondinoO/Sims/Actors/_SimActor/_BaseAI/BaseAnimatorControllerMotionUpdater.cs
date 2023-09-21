@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class BaseAnimatorControllerMotionUpdater:MonoBehaviour{
-     internal SimActorAnimatorController controller;
+     internal SimAnimatorController controller;
         internal virtual void UpdateAnimatorWeaponLayer(){
         }
         internal virtual void UpdateAnimatorMotionValue(){
