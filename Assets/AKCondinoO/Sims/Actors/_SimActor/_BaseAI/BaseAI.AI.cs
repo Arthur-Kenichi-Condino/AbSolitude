@@ -15,9 +15,6 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
-     protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
-     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
-     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
      protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
         protected virtual void AI(){
          RenewTargets();

@@ -33,46 +33,29 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-        void LateUpdate(){
-        }
-     bool synced=true;
-     BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
-     internal int layerCount{get;private set;}
-     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
-     internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
-      internal WeaponTypes lastWeaponType=WeaponTypes.None;
-       internal int?currentWeaponLayerIndex=null;
-        internal int?currentWeaponAimLayerIndex=null;
-      internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
-     internal Dictionary<int,float>animationTime{get;private set;}
-      internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
-     Dictionary<int,float>normalizedTime;
-      Dictionary<int,float>normalizedTimeInCurrentLoop;
-     Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
-      Dictionary<int,int>lastLoopCount;
-       Dictionary<int,bool>looped;
-     Dictionary<int,List<AnimatorClipInfo>>animatorClip;
-     Dictionary<int,int>currentClipInstanceID;
-      Dictionary<int,string>currentClipName;
         internal virtual void ManualUpdate(){
          GetAnimator();
-         if(animator!=null&&actor is BaseAI baseAI){
+         if(animator!=null){
           GetTransformTgtValuesFromCharacterController();
           SetTransformTgtValuesUsingActorAndPhysicData();
           if(actor.simUMA!=null){
            SetSimUMADataTransform();
           }
           GetAnimatorStateInfo();
-          UpdateMotion(baseAI);
+          UpdateMotion(actor);
          }
         }
+     internal int layerCount{get;private set;}
+     internal readonly Dictionary<int,string>layerIndexToName=new Dictionary<int,string>();
+     internal Dictionary<WeaponTypes,int>weaponLayer{get;private set;}
+      internal Dictionary<WeaponTypes,int>weaponAimLayer{get;private set;}
         protected virtual void GetAnimator(){
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
            Log.DebugMessage("add SimActorAnimatorIKController");
            animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
-           animatorIKController.simActorAnimatorController=this;
+           animatorIKController.animatorController=this;
            animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=Mathf.Max(
             rotLerp.tgtRotLerpSpeed+1f,
             posLerp.xLerp.tgtValLerpSpeed+1f,
@@ -170,7 +153,7 @@ namespace AKCondinoO.Sims.Actors{
           Debug.DrawLine(actor.rightEye.transform.position,actor.characterController.aimingAt,Color.red);
          }
          Quaternion rotAdjustment=Quaternion.identity;
-         if(actor is BaseAI baseAI&&motionTransformAdjustment.TryGetValue(baseAI.motion,out TransformAdjustment adjustment)){
+         if(motionTransformAdjustment.TryGetValue(actor.motion,out TransformAdjustment adjustment)){
           rotAdjustment=adjustment.adjustment.localRotation;
          }
          rotLerp.tgtRot=Quaternion.Euler(actor.characterController.character.transform.eulerAngles+new Vector3(0f,180f,0f))*rotAdjustment;
@@ -211,20 +194,7 @@ namespace AKCondinoO.Sims.Actors{
          actor.simUMA.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMA.transform.parent.rotation,Core.magicDeltaTimeNumber);
          actor.simUMA.transform.parent.position=posLerp.UpdatePosition(actor.simUMA.transform.parent.position,Core.magicDeltaTimeNumber);
         }
-        /// <summary>
-        ///  Check if animation locks another motion beforehand
-        /// </summary>
-        /// <param name="motion"></param>
-        /// <returns></returns>
-        internal bool CurrentAnimationAllowsMotionChangeTo(BaseAI.ActorMotion motion){
-         return true;
-        }
-        /// <summary>
-        ///  Wait for the end of the currently running animation
-        /// </summary>
-        /// <returns></returns>
-        internal bool Sync(){
-         return synced;
+        void LateUpdate(){
         }
     }
 }

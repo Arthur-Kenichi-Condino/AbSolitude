@@ -7,6 +7,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController{
+     internal Dictionary<int,float>animationTime{get;private set;}
+      internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
+     Dictionary<int,float>normalizedTime;
+      Dictionary<int,float>normalizedTimeInCurrentLoop;
+     Dictionary<int,int>loopCount;//  use integer part of normalizedTime [https://answers.unity.com/questions/1317841/how-to-find-the-normalised-time-of-a-looping-anima.html]
+      Dictionary<int,int>lastLoopCount;
+       Dictionary<int,bool>looped;
+     Dictionary<int,List<AnimatorClipInfo>>animatorClip;
+     Dictionary<int,int>currentClipInstanceID;
+      Dictionary<int,string>currentClipName;
         protected virtual void GetAnimatorStateInfo(){
          //  [https://answers.unity.com/questions/1035587/how-to-get-current-time-of-an-animator.html]
          foreach(var layer in animatorClip){
@@ -39,19 +49,29 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected void OnAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
-         }
+         actor.OnShouldSetNextMotionAnimatorAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
         }
         protected void OnAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
-         }
+         actor.OnShouldSetNextMotionAnimatorAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:lastClipName,currentClipName:currentClipName);
         }
         protected void OnAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         if(actor is BaseAI baseAI){
-          baseAI.OnShouldSetNextMotionAnimatorAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
-         }
+         actor.OnShouldSetNextMotionAnimatorAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName);
+        }
+        /// <summary>
+        ///  Check if animation locks another motion beforehand
+        /// </summary>
+        /// <param name="motion"></param>
+        /// <returns></returns>
+        internal bool CurrentAnimationAllowsMotionChangeTo(BaseAI.ActorMotion motion){
+         return true;
+        }
+     bool synced=true;
+        /// <summary>
+        ///  Wait for the end of the currently running animation
+        /// </summary>
+        /// <returns></returns>
+        internal bool Sync(){
+         return synced;
         }
     }
 }
