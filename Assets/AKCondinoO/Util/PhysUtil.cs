@@ -15,19 +15,23 @@ namespace AKCondinoO{
        "VoxelTerrain",
        "Construction",
       };
+     internal static int shootingHitsLayer;
+      internal static readonly string[]shootingHitsLayerNames=new string[]{
+       "Default",
+       "VoxelTerrain",
+       "Construction",
+      };
         internal static void SetUtil(){
-         for(int i=0;i<considerGroundLayerNames.Length;++i){
+         SetLayer(ref considerGroundLayer,considerGroundLayerNames);
+         SetLayer(ref physObstaclesLayer,physObstaclesLayerNames);
+         SetLayer(ref shootingHitsLayer,shootingHitsLayerNames);
+        }
+        static void SetLayer(ref int layer,string[]layerNames){
+         for(int i=0;i<layerNames.Length;++i){
           if(i==0){
-           considerGroundLayer=1<<LayerMask.NameToLayer(considerGroundLayerNames[i]);
+           layer=1<<LayerMask.NameToLayer(layerNames[i]);
           }else{
-           considerGroundLayer=considerGroundLayer|(1<<LayerMask.NameToLayer(considerGroundLayerNames[i]));
-          }
-         }
-         for(int i=0;i<physObstaclesLayerNames.Length;++i){
-          if(i==0){
-           physObstaclesLayer=1<<LayerMask.NameToLayer(physObstaclesLayerNames[i]);
-          }else{
-           physObstaclesLayer=physObstaclesLayer|(1<<LayerMask.NameToLayer(physObstaclesLayerNames[i]));
+           layer=layer|(1<<LayerMask.NameToLayer(layerNames[i]));
           }
          }
         }

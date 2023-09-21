@@ -12,8 +12,8 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly HashSet<SimWeapon>weaponsReload=new HashSet<SimWeapon>();
         internal void OnReload(){
          weaponsReload.Clear();
-         if(actor is BaseAI baseAI){
-          if(Enabled.RELOAD.curState){
+         if(Enabled.RELOAD.curState){
+          if(actor is BaseAI baseAI){
            if(actor.inventory.TryGetValue(typeof(SimHands),out Dictionary<ulong,SimInventory>simHandsInventories)){
             foreach(var simInventory in simHandsInventories){
              if(simInventory.Value is SimHands simHandsInventory){

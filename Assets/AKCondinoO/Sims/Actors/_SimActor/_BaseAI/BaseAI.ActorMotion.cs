@@ -15,12 +15,6 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_HIT   =4,
          MOTION_HIT_RIFLE   =54,
         }
-     //[SerializeField]internal float onHitSetMotionVulnerablePeriodDuration=2f;
-     // [SerializeField]internal float onHitResetMotionGracePeriodDuration=.2f;
-     //  [SerializeField]internal float onHitSetMotionGracePeriodDuration=5f;
-     //internal float onHitSetMotionVulnerablePeriod;
-     // internal float onHitResetMotionGracePeriod;
-     //  internal float onHitSetMotionGracePeriod;
         internal virtual void UpdateMotion(bool fromAI){
          if(fromAI){
           if(onHitSetMotion){

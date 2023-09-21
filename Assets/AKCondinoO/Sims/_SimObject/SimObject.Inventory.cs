@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Inventory;
+using AKCondinoO.Sims.Weapons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,8 +46,16 @@ namespace AKCondinoO.Sims{
          }
         }
         protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings,SimObject simObjectAdded){
+         Log.DebugMessage(this+":OnInventoryItemAdded,simInventory:"+simInventory);
          if(simInventory is SimHands simHands){
-          SetCurrentToolsOrWeapons(null,null);
+          Log.DebugMessage(this+":OnInventoryItemAdded,simObjectAdded:"+simObjectAdded);
+          if(simObjectAdded is SimWeapon simWeapon){
+           if(settings.handsUsage==SimActor.HandsUsage.TwoHanded){
+            SetCurrentToolsOrWeapons(simWeapon,simWeapon);
+           }else{
+            SetCurrentToolsOrWeapons(simWeapon,null);
+           }
+          }
          }
         }
         internal void RemoveFromInventory(SimObject simObject,SimInventory simInventory,bool delete=true,bool removingList=false){
@@ -57,6 +66,7 @@ namespace AKCondinoO.Sims{
          OnInventoryItemRemoved(simInventory,simObject);
         }
         protected virtual void OnInventoryItemRemoved(SimInventory simInventory,SimObject simObjectRemoved){
+         RemoveFromCurrentToolsOrWeapons(simObjectRemoved);
         }
         internal bool InventoryContains(SimObject simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData){
          containerData=null;
@@ -73,7 +83,34 @@ namespace AKCondinoO.Sims{
          }
          return false;
         }
+     internal readonly HashSet<(SimObject forAction1,SimObject forAction2)>itemsInToolbar=new HashSet<(SimObject,SimObject)>();
+      internal readonly Dictionary<int,(SimObject forAction1,SimObject forAction2)>itemsByToolbarSlot=new Dictionary<int,(SimObject,SimObject)>();
+       internal(SimObject forAction1,SimObject forAction2)?itemsEquipped=null;
         protected virtual void SetCurrentToolsOrWeapons(SimObject forAction1,SimObject forAction2){
+         //  TO DO: put in toolbar slots only if available and only equip one item pair selected by its toolbar slot
+         itemsInToolbar.Add((forAction1,forAction2));
+         itemsEquipped=(forAction1,forAction2);
+         Log.DebugMessage(this+":itemsEquipped:"+itemsEquipped);
+        }
+        protected virtual void RemoveFromCurrentToolsOrWeapons(SimObject simObject){
+         itemsInToolbar.RemoveWhere(
+          (itemPair)=>{
+           return(
+            (itemPair.forAction1==null&&itemPair.forAction2==null)||
+            (itemPair.forAction1!=null&&itemPair.forAction1==simObject)||
+            (itemPair.forAction2!=null&&itemPair.forAction2==simObject)
+           );
+          }
+         );
+         if(itemsEquipped!=null){
+          if(
+           (itemsEquipped.Value.forAction1==null&&itemsEquipped.Value.forAction2==null)||
+           (itemsEquipped.Value.forAction1!=null&&itemsEquipped.Value.forAction1==simObject)||
+           (itemsEquipped.Value.forAction2!=null&&itemsEquipped.Value.forAction2==simObject)
+          ){
+           itemsEquipped=null;
+          }
+         }
         }
      internal bool actingAsInventoryItem=false;
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings){

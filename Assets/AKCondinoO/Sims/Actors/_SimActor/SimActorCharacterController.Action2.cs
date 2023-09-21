@@ -11,8 +11,8 @@ namespace AKCondinoO.Sims.Actors{
      internal bool isAiming;
         internal void OnAction2(){
          isAiming=false;
-         if(actor is BaseAI baseAI){
-          if(Enabled.ACTION_2.curState){
+         if(Enabled.ACTION_2.curState){
+          if(actor is BaseAI baseAI){
            if(MainCamera.singleton.toFollowActor==actor){
             //Log.DebugMessage("Enabled.ACTION_2.curState:mouse aim");
             isAiming=true;
