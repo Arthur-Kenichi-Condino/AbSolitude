@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;
-     internal SimActorAnimatorIKController animatorIKController;
+     internal SimAnimatorIKController animatorIKController;
      [SerializeField]TransformAdjustment[]transformAdjustments;
       internal readonly Dictionary<ActorMotion,TransformAdjustment>motionTransformAdjustment=new Dictionary<ActorMotion,TransformAdjustment>();
         [Serializable]internal class TransformAdjustment{
@@ -71,7 +71,7 @@ namespace AKCondinoO.Sims.Actors{
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
            Log.DebugMessage("add SimActorAnimatorIKController");
-           animatorIKController=animator.gameObject.AddComponent<SimActorAnimatorIKController>();
+           animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
            animatorIKController.simActorAnimatorController=this;
            animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=Mathf.Max(
             rotLerp.tgtRotLerpSpeed+1f,
