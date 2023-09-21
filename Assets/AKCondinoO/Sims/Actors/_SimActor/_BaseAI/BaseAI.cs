@@ -14,6 +14,7 @@ using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.GameMode;
+using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
@@ -215,6 +216,183 @@ namespace AKCondinoO.Sims.Actors{
          base.SetSlave(slave);
          persistentSimActorData.UpdateData(this);
         }
+     [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
+     [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
+     [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+     [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
+     [SerializeField]float AFKTimeToUseAI=30f;
+      float AFKTimerToUseAI;
+     bool?wasCrouchingBeforeShouldCrouch;
+        internal override int ManualUpdate(bool doValidationChecks){
+         int result=0;
+         if((result=base.ManualUpdate(doValidationChecks))!=0){
+          DisableNavMeshAgent();
+          return result;
+         }
+         bool shouldCrouch=false;//  is crouching required?
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
+              DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
+            OnThirdPersonCamFollow();
+           }
+           if(MainCamera.singleton.toFollowActor==this){
+            //Log.DebugMessage("following this:"+this);
+            if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){
+             isUsingAI=false;
+             AFKTimerToUseAI=AFKTimeToUseAI;
+             //Log.DebugMessage("start using manual control:"+this);
+            }
+           }else{
+            if(!isUsingAI){
+             isUsingAI=true;
+             AFKTimerToUseAI=0f;
+             Log.DebugMessage("camera stopped following, use AI:"+this);
+            }
+           }
+           if(!isUsingAI){
+            if(AFKTimerToUseAI>0f){
+             AFKTimerToUseAI-=Time.deltaTime;
+            }
+            if(AFKTimerToUseAI<=0f){
+             isUsingAI=true;
+             Log.DebugMessage("AFK for too long, use AI:"+this);
+            }
+           }
+           if(DEBUG_TOGGLE_HOLSTER_WEAPON){
+              DEBUG_TOGGLE_HOLSTER_WEAPON=false;
+            if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.SniperRifle){
+             if(SimObjectSpawner.singleton.simInventoryItemsInContainerSettings.allSettings.TryGetValue(typeof(RemingtonModel700BDL),out SimInventoryItemsInContainerSettings.InContainerSettings simInventoryItemSettings)){
+              if(inventoryItemsSpawnData!=null&&inventoryItemsSpawnData.dequeued){
+               inventoryItemsSpawnData.at.Add((Vector3.zero,Vector3.zero,Vector3.one,typeof(RemingtonModel700BDL),null,new PersistentData()));
+               inventoryItemsSpawnData.asInventoryItemOwnerIds[inventoryItemsSpawnData.at.Count-1]=id.Value;
+               inventoryItemsSpawnData.dequeued=false;
+               SimObjectSpawner.singleton.OnSpecificSpawnRequestAt(inventoryItemsSpawnData);
+              }
+             }
+            }else if(DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE==WeaponTypes.None){
+             //  TO DO: release items
+            }
+           }
+           if(aiSensor){
+            if(canSense){
+             if(!aiSensor.isActiveAndEnabled){
+              aiSensor.Activate();
+             }
+             if(aiSensor.isActiveAndEnabled){
+              if(rightEye){
+               if(leftEye){
+                aiSensor.transform.position=(leftEye.transform.position+rightEye.transform.position)/2f;
+                aiSensor.transform.rotation=leftEye.transform.rotation;
+               }else{
+                aiSensor.transform.position=rightEye.transform.position;
+                aiSensor.transform.rotation=rightEye.transform.rotation;
+               }
+              }else if(leftEye){
+               aiSensor.transform.position=leftEye.transform.position;
+               aiSensor.transform.rotation=leftEye.transform.rotation;
+              }else if(head){
+               if(aiSensor.zIsUp){
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.LookRotation(head.up,head.forward);
+               }else{
+                aiSensor.transform.position=head.transform.position;
+                aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
+               }
+              }
+             }
+            }
+           }
+           HitHurtBoxesUpdate();
+           if(isUsingAI){
+            EnableNavMeshAgent();
+            if(!navMeshAgent.isOnNavMesh){
+             DisableNavMeshAgent();
+            }
+            if(navMeshAgent.enabled){
+             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
+              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
+             }
+             AI();
+            }
+           }else{
+            DisableNavMeshAgent();
+            if(characterController!=null){
+               characterController.ManualUpdate();
+             transform.position+=characterController.moveDelta;
+             characterController.character.transform.position-=characterController.moveDelta;
+             OnCharacterControllerUpdated();
+            }
+           }
+          }else{
+           DisableNavMeshAgent();
+          }
+         }
+         if(transform.hasChanged){
+          GetCollidersTouchingNonAlloc(instantCheck:true);
+         }
+         if(gotCollidersTouchingFromInstantCheck){
+          for(int i=0;i<collidersTouchingUpperCount;++i){
+           Collider colliderTouchingUpper=collidersTouchingUpper[i];
+           if(colliderTouchingUpper.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
+          }
+          for(int i=0;i<collidersTouchingMiddleCount;++i){
+           Collider colliderTouchingMiddle=collidersTouchingMiddle[i];
+           if(colliderTouchingMiddle.transform.root!=transform.root){//  it's not myself
+            shouldCrouch=true;
+           }
+          }
+         }else{
+          if(simCollisionsTouchingUpper !=null){
+           foreach(Collider colliderTouchingUpper  in simCollisionsTouchingUpper .simObjectColliders){
+            shouldCrouch=true;
+           }
+          }
+          if(simCollisionsTouchingMiddle!=null){
+           foreach(Collider colliderTouchingMiddle in simCollisionsTouchingMiddle.simObjectColliders){
+            shouldCrouch=true;
+           }
+          }
+         }
+         if(Core.singleton.isServer){
+          if(IsOwner){
+           if(shouldCrouch){
+            if(wasCrouchingBeforeShouldCrouch==null){
+               wasCrouchingBeforeShouldCrouch=crouching;
+            }
+            if(!crouching){
+             OnToggleCrouching();
+            }
+           }else{
+            if(wasCrouchingBeforeShouldCrouch!=null){
+             if(!wasCrouchingBeforeShouldCrouch.Value){
+              if(crouching){
+               OnToggleCrouching();
+              }
+             }else{
+              if(!crouching){
+               OnToggleCrouching();
+              }
+             }
+               wasCrouchingBeforeShouldCrouch=null;
+            }
+            if(DEBUG_TOGGLE_CROUCHING){
+               DEBUG_TOGGLE_CROUCHING=false;
+             OnToggleCrouching();
+            }
+           }
+          }
+         }
+         UpdateGetters();
+         if(animatorController!=null){
+            animatorController.ManualUpdate();
+         }
+         lastForward=transform.forward;
+         teleportedMove=false;
+         return result;
+        }
         internal void OnThirdPersonCamFollow(){
          Log.DebugMessage("OnThirdPersonCamFollow()");
          MainCamera.singleton.toFollowActor=this;
@@ -305,60 +483,6 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
-        }
-     protected State MyState=State.IDLE_ST;internal State state{get{return MyState;}}
-     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
-     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
-     protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
-        protected virtual void AI(){
-         RenewTargets();
-         MyPathfinding=GetPathfindingResult();
-         stopPathfindingOnTimeout=true;
-         //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
-         if(MyEnemy!=null){
-          if(IsInAttackRange(MyEnemy)){
-           MyState=State.ATTACK_ST;
-           goto _MyStateSet;
-          }else{
-           if(MyState!=State.CHASE_ST){
-            OnCHASE_ST_START();
-           }
-           MyState=State.CHASE_ST;
-           goto _MyStateSet;
-          }
-         }else{
-          if(masterId!=null){
-           float disToMaster=GetDistance(this,masterSimObject);
-           if(disToMaster>=0f){
-            if(disToMaster>8f){
-             //Log.DebugMessage("I should follow my master:"+masterSimObject+";this:"+this);
-             MyState=State.FOLLOW_ST;
-             goto _MyStateSet;
-            }
-           }
-          }
-          if(MyState!=State.IDLE_ST){
-           OnIDLE_ST_START();
-          }
-          MyState=State.IDLE_ST;
-          goto _MyStateSet;
-         }
-         _MyStateSet:{}
-         SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
-         if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
-         if(MySkill!=null){
-          DoSkill();
-         }
-         if      (MyState==State.ATTACK_ST){
-          OnATTACK_ST();
-         }else if(MyState==State. CHASE_ST){
-           OnCHASE_ST();
-         }else if(MyState==State.FOLLOW_ST){
-          OnFOLLOW_ST();
-         }else{
-            OnIDLE_ST();
-         }
-         UpdateMotion(true);
         }
         protected virtual void OnCharacterControllerUpdated(){
          UpdateMotion(false);
