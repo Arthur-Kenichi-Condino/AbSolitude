@@ -9,7 +9,7 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class CallSlaveSkill:Skill{
-        internal static void SetHomunToBeGenerated(SimActor actor,SpawnData spawnData,List<SimObject>toTeleport=null){
+        internal static void SetHomunToBeGenerated(BaseAI actor,SpawnData spawnData,List<SimObject>toTeleport=null){
          spawnData.Clear();
          //  add data to spawn
          if(actor is BaseAI baseAI){

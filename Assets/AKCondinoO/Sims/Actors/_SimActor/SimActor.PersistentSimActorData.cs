@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Actors{
              public Type simObjectType;public ulong idNumber;
             }
          public float timerToRandomMove;
-            internal void UpdateData(SimActor simActor){
+            internal void UpdateData(BaseAI simActor){
              skills=new ListWrapper<SkillData>(simActor.skills.Select(kvp=>{return new SkillData{skill=kvp.Key,level=kvp.Value.level};}).ToList());
              slaves=new ListWrapper<SlaveData>(simActor.slaves.Select(v  =>{return new SlaveData{simObjectType=v.simObjectType,idNumber=v.idNumber};}).ToList());
             }

@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]protected float renewEnemyInterval=3f;
       protected float renewEnemyTimer=3f;
-        internal virtual void RenewEnemiesAndAllies(){
+        internal virtual void RenewTargets(){
          if(MyEnemy!=null){
           if(MyEnemy.id==null||(targetTimeouts.TryGetValue(MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)){
            MyEnemy=null;
@@ -99,7 +99,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          targetsToRemove.Clear();
         }
-        internal virtual void ReleaseEnemiesAndAllies(){
+        internal virtual void ReleaseTargets(){
          foreach(var kvp1 in targetsGotten){
           foreach(var kvp2 in kvp1.Value){
            foreach(var kvp3 in kvp2.Value){

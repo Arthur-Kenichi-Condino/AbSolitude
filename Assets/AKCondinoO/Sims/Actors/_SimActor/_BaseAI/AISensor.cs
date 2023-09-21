@@ -122,7 +122,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
          simObjectCollidersInSight.Clear();
          foreach(var kvp in gotInSightOf){
           SimObject simObjectGotInSightOf=kvp.Key;
-          if(simObjectGotInSightOf is SimActor simActor&&simActor.aiSensor!=null){
+          if(simObjectGotInSightOf is BaseAI simActor&&simActor.aiSensor!=null){
            simActor.aiSensor.simObjectCollidersInSight.RemoveWhere(collider=>{return collider.transform.root==this.transform.root;});
           }
          }
@@ -138,7 +138,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
           return;
          }
          //Log.DebugMessage("AISensor:OnTriggerEnter:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
-         if(IsValidForSensing(other,out SimObject otherSimObject,out SimActor otherSimActor)){
+         if(IsValidForSensing(other,out SimObject otherSimObject,out BaseAI otherSimActor)){
           //Log.DebugMessage("AISensor:OnTriggerEnter:SimObjectVolume:"+this.transform.root.gameObject.name+"-> senses <-"+other.transform.root.gameObject.name);
           simObjectCollidersInSight.Add(other);
           if(!otherSimActor.aiSensor.gotInSightOf.ContainsKey(actor)){
@@ -155,7 +155,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
          }
          //Log.DebugMessage("AISensor:OnTriggerExit:"+other.transform.root.gameObject.name);
          simObjectCollidersInSight.Remove(other);
-         if(IsValidForSensing(other,out SimObject otherSimObject,out SimActor otherSimActor)){
+         if(IsValidForSensing(other,out SimObject otherSimObject,out BaseAI otherSimActor)){
           actor.OnSimObjectIsOutOfSight(otherSimObject);
           if(otherSimActor.aiSensor.gotInSightOf.ContainsKey(actor)){
            otherSimActor.aiSensor.gotInSightOf[actor]--;
@@ -165,9 +165,9 @@ namespace AKCondinoO.Sims.Actors.Combat{
           }
          }
         }
-        internal bool IsValidForSensing(Collider other,out SimObject otherSimObject,out SimActor otherSimActor){
+        internal bool IsValidForSensing(Collider other,out SimObject otherSimObject,out BaseAI otherSimActor){
          otherSimActor=null;
-         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger&&(otherSimObject=other.GetComponentInParent<SimObject>())!=null&&otherSimObject is SimActor otherIsSimActor&&otherIsSimActor.aiSensor!=null){
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger&&(otherSimObject=other.GetComponentInParent<SimObject>())!=null&&otherSimObject is BaseAI otherIsSimActor&&otherIsSimActor.aiSensor!=null){
           otherSimActor=otherIsSimActor;
           return true;
          }
