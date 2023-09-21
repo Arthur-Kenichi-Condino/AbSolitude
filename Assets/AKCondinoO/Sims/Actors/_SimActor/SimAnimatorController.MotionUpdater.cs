@@ -5,9 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController{
      internal BaseAnimatorControllerMotionUpdater motionUpdater=null;
+      internal WeaponTypes lastWeaponType=WeaponTypes.None;
+       internal int?currentWeaponLayerIndex=null;
+        internal int?currentWeaponAimLayerIndex=null;
+     BaseAI.ActorMotion lastMotion=BaseAI.ActorMotion.MOTION_STAND;
         protected virtual void UpdateMotion(BaseAI baseAI){
           if(lastMotion!=baseAI.motion){
            //Log.DebugMessage("actor motion will be set from:"+lastMotion+" to:"+baseAI.motion);

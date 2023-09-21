@@ -69,7 +69,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped");
+         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
          if(onHitSetMotion){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
@@ -95,8 +95,10 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
+         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
+         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationIsPlaying:"+currentClipName);
          if(onHitSetMotion){
           //Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
           if(onHitResetMotion){

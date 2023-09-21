@@ -4,11 +4,8 @@
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors {
     internal partial class BaseAI{
-     [SerializeField]protected float pathfindingTimeout=3f;
-      protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=6f;
-       protected float pathPendingTimer;
-      protected bool stopPathfindingOnTimeout=true;
+     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
+     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
         internal enum PathfindingResult:int{
          IDLE                   =0,
          REACHED                =1,
@@ -17,6 +14,11 @@ namespace AKCondinoO.Sims.Actors {
          TRAVELLING_BUT_NO_SPEED=4,
          TIMEOUT                =5,
         }
+     [SerializeField]protected float pathfindingTimeout=3f;
+      protected float pathfindingTimer;
+      [SerializeField]protected float pathPendingTimeout=6f;
+       protected float pathPendingTimer;
+      protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
          if(pathPendingTimer>0f){
             pathPendingTimer-=Time.deltaTime;
