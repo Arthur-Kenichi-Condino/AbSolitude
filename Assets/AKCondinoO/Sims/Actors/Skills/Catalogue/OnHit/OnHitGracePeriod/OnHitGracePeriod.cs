@@ -10,9 +10,9 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class OnHitGracePeriod:OnHitSkill{
-     [SerializeField]internal float onHitSetMotionVulnerablePeriodDuration=2f;
-      [SerializeField]internal float onHitResetMotionGracePeriodDuration=.2f;
-       [SerializeField]internal float onHitSetMotionGracePeriodDuration=5f;
+     [SerializeField]internal float hitCanTriggerAnimationIsVulnerablePeriodDuration=2f;
+      [SerializeField]internal float hitCantTriggerAnimationResetIsOnGracePeriodDuration=.2f;
+       [SerializeField]internal float hitCantTriggerAnimationIsOnGracePeriodDuration=5f;
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           return true;
@@ -26,17 +26,17 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(target.skillBuffs.Contains(typeof(OnHitGracePeriodSkillBuff),out List<SkillBuff>activeOnHitGracePeriodSkillBuffs)){
           Log.DebugMessage("OnHitGracePeriod:containsBuff=true");
           SkillBuff buff=activeOnHitGracePeriodSkillBuffs[0];
-          buff.duration=buff.elapsedTime+onHitSetMotionVulnerablePeriodDuration+onHitSetMotionGracePeriodDuration;
+          buff.duration=buff.elapsedTime+hitCanTriggerAnimationIsVulnerablePeriodDuration+hitCantTriggerAnimationIsOnGracePeriodDuration;
           containsBuff=true;
          }
          if(!containsBuff){
           SkillBuff buff=SkillBuff.Dequeue(typeof(OnHitGracePeriodSkillBuff));
           if(buff!=null){
            OnHitGracePeriodSkillBuff onHitGracePeriodSkillBuff=(OnHitGracePeriodSkillBuff)buff;
-           onHitGracePeriodSkillBuff.onHitSetMotionVulnerablePeriodDuration=onHitSetMotionVulnerablePeriodDuration;
-            onHitGracePeriodSkillBuff.onHitResetMotionGracePeriodDuration=onHitResetMotionGracePeriodDuration;
-             onHitGracePeriodSkillBuff.onHitSetMotionGracePeriodDuration=onHitSetMotionGracePeriodDuration;
-           buff.duration=onHitSetMotionVulnerablePeriodDuration+onHitSetMotionGracePeriodDuration;
+           onHitGracePeriodSkillBuff.hitCanTriggerAnimationIsVulnerablePeriodDuration=hitCanTriggerAnimationIsVulnerablePeriodDuration;
+            onHitGracePeriodSkillBuff.hitCantTriggerAnimationResetIsOnGracePeriodDuration=hitCantTriggerAnimationResetIsOnGracePeriodDuration;
+             onHitGracePeriodSkillBuff.hitCantTriggerAnimationIsOnGracePeriodDuration=hitCantTriggerAnimationIsOnGracePeriodDuration;
+           buff.duration=hitCanTriggerAnimationIsVulnerablePeriodDuration+hitCantTriggerAnimationIsOnGracePeriodDuration;
            buff.delay=0f;
            target.skillBuffs.Add(buff,this);
            Log.DebugMessage("OnHitGracePeriod:added buff");
