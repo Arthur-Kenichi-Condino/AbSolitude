@@ -7,10 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-        protected virtual void DoSkill(){
-         SimObject target=this;//  TO DO: use best my skill target
-         MySkill.DoSkill(target,MySkill.level);
-        }
         internal override void OnSkillUsed(Skill skill,bool done,bool revoked){
          base.OnSkillUsed(skill,done,revoked);
          Log.DebugMessage("OnSkillUsed:"+skill);

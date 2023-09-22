@@ -9,9 +9,6 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-        protected bool IsMoving(){
-         return moveVelocityFlattened!=0f||teleportedMove;
-        }
         protected float GetDistance((Type simObjectType,ulong idNumber)?idA,(Type simObjectType,ulong idNumber)?idB){
          if(idA!=null&&
             idB!=null
