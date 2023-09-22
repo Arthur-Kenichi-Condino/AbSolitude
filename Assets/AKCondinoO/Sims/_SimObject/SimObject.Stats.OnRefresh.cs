@@ -28,7 +28,8 @@ namespace AKCondinoO.Sims{
                    OnRefresh_Luck_Late(statsSim);
                     OnRefresh_MaxIntegrity(statsSim);
                      OnRefresh_Integrity(statsSim);
-                     OnRefresh_PhysicalPowerFlatValue(statsSim);
+                     OnRefresh_PhysicalPowerFlatValue  (statsSim);
+                     OnRefresh_PhysicalDefenseFlatValue(statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
                updatedSimLevel      =false;refreshedSimLevel      =false;
                updatedAgeLevel      =false;refreshedAgeLevel      =false;
@@ -47,7 +48,8 @@ namespace AKCondinoO.Sims{
                   updatedVitality    =false;refreshedVitality    =false;
                     updatedMaxIntegrity=false;refreshedMaxIntegrity=false;
                      updatedIntegrity=false;refreshedIntegrity=false;
-                     updatedPhysicalPowerFlatValue=false;refreshedPhysicalPowerFlatValue=false;
+                     updatedPhysicalPowerFlatValue  =false;refreshedPhysicalPowerFlatValue  =false;
+                     updatedPhysicalDefenseFlatValue=false;refreshedPhysicalDefenseFlatValue=false;
               pendingRefresh=false;
              }
             }

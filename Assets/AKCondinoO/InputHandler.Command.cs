@@ -10,6 +10,7 @@ namespace AKCondinoO{
              ActiveHeld,
              AlternateDown,
              WhenUp,
+             WhenDown,
             }
             internal class CommandState{
              internal object input;internal Modes mode;internal float holdDelay;internal bool inRange;
@@ -24,6 +25,7 @@ namespace AKCondinoO{
          internal static CommandState ACTION_1=new CommandState{input=(int)0,mode=Modes.ActiveHeld};
          internal static CommandState ACTION_2=new CommandState{input=(int)1,mode=Modes.AlternateDown};
          internal static CommandState WALK    =new CommandState{input=KeyCode.CapsLock,mode=Modes.AlternateDown};
+         internal static CommandState RELOAD  =new CommandState{input=KeyCode.R,mode=Modes.WhenDown};
         }
     }
 }

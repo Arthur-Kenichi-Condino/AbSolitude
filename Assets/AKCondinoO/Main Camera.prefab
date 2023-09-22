@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6595663811422386841}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1410879282809439804
 MonoBehaviour:
@@ -50,11 +50,11 @@ MonoBehaviour:
   DEBUG_STOP_FOLLOWING: 0
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 80
+    tgtRotLerpSpeed: 1000
     tgtRotLerpMaxTime: 0
   viewRotationSmoothValue: 0.025
   posLerp:
-    tgtPosLerpSpeed: 80
+    tgtPosLerpSpeed: 1000
     tgtPosLerpMaxTime: 0
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
   maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}

@@ -33,7 +33,7 @@ namespace AKCondinoO{
      Vector3 endOfFrameRotation;
      Vector3 endOfFramePosition;
       internal bool hasTransformChanges{get;private set;}
-     internal SimActor toFollowActor;
+     internal BaseAI toFollowActor;
       bool isFollowing;
        internal Vector3 thirdPersonOffset=new Vector3(
         .375f,//  radius+radius/2f
@@ -55,7 +55,7 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          Quaternion rot=toFollowActor.simActorCharacterController.rotLerp.tgtRot;
+          Quaternion rot=toFollowActor.characterController.rotLerp.tgtRot;
           rotLerp.tgtRot=rot;
           UpdateTransformRotation();
           posLerp.tgtPos=toFollowActor.transform.position+rotLerp.tgtRot*thirdPersonOffset;
