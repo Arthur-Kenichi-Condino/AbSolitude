@@ -38,22 +38,22 @@ namespace AKCondinoO.Sims.Actors{
          }
          return false;
         }
-     protected bool onDoAttackSetMotion=false;
-        protected virtual void DoAttackContinuously(){
-         //Log.DebugMessage("DoAttackContinuously()");
-         onDoAttackSetMotion=true;
+     protected bool motionFlagForAttackAnimation=false;
+        protected virtual void DoAttackOnAnimationEvent(){
+         //Log.DebugMessage("DoAttackOnAnimationEvent()");
+         motionFlagForAttackAnimation=true;
         }
-     protected bool onDoShootingSetMotion=false;
-        internal virtual bool DoShootingOnce(SimWeapon simWeapon){
-         if(onDoShootingSetMotion){
+     protected bool motionFlagForShootingAnimation=false;
+        internal virtual bool DoShootingOnAnimationEventUsingWeapon(SimWeapon simWeapon){
+         if(motionFlagForShootingAnimation){
           return false;
          }
          if(isAiming){
           if(animatorController.animator!=null){
            if(animatorController.animationEventsHandler!=null){
-            Log.DebugMessage("DoShootingOnce()");
+            Log.DebugMessage("DoShootingOnAnimationEventUsingWeapon()");
             animatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
-            onDoShootingSetMotion=true;
+            motionFlagForShootingAnimation=true;
             return true;
            }
           }
@@ -62,16 +62,16 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal bool isShooting{
       get{
-       return onDoShootingSetMotion;
+       return motionFlagForShootingAnimation;
       }
      }
-     protected readonly HashSet<Skill>onWillTakeDamageSkillsToUse=new HashSet<Skill>();
-     protected bool onHitSetMotion=false;
-      protected bool onHitResetMotion=false;
+     protected readonly HashSet<Skill>skillsToUseOnWillTakeDamage=new HashSet<Skill>();
+     protected bool motionFlagForHitAnimation=false;
+      protected bool motionFlagForHitResetAnimation=false;
         internal virtual void OnHit(Hitboxes hitbox){
-         onWillTakeDamageSkillsToUse.Clear();
-         GetBest(Skill.SkillUseContext.OnWillTakeDamage,onWillTakeDamageSkillsToUse);
-         foreach(Skill skill in onWillTakeDamageSkillsToUse){
+         skillsToUseOnWillTakeDamage.Clear();
+         GetBest(Skill.SkillUseContext.OnWillTakeDamage,skillsToUseOnWillTakeDamage);
+         foreach(Skill skill in skillsToUseOnWillTakeDamage){
           Type skillType=skill.GetType();
           if(skills.TryGetValue(skillType,out Skill skillToGet)&&skillToGet==skill){
            SimObject target=this;//  TO DO: set best my skill target
@@ -81,31 +81,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          bool canTakeDamage=true;
-         bool canSetMotion=true,canResetMotion=true;
+         bool canSetMotionFlag=true,canSetMotionResetFlag=true;
          OnHitGracePeriodSkillBuff onHitGracePeriodSkillBuff=null;
          if(skillBuffs.Contains(typeof(OnHitGracePeriodSkillBuff),out List<SkillBuff>activeOnHitGracePeriodSkillBuffs)){
-          canSetMotion=false;canResetMotion=false;
+          canSetMotionFlag=false;canSetMotionResetFlag=false;
           onHitGracePeriodSkillBuff=(OnHitGracePeriodSkillBuff)activeOnHitGracePeriodSkillBuffs[0];
           var effect=onHitGracePeriodSkillBuff.onHitGracePeriodEffect;
-          if(effect.onHitSetMotionGracePeriod<=0f){
-           if(onHitSetMotion){
-            if(effect.onHitResetMotionGracePeriod<=0f){
-             canResetMotion=true;
-             effect.onHitResetMotionGracePeriod=effect.onHitResetMotionGracePeriodDuration;
-             Log.DebugMessage("effect.onHitResetMotionGracePeriod="+effect.onHitResetMotionGracePeriod);
+          if(effect.hitCantTriggerAnimationIsOnGracePeriod<=0f){
+           if(motionFlagForHitAnimation){
+            if(effect.hitCantTriggerResetAnimationIsOnGracePeriod<=0f){
+             canSetMotionResetFlag=true;
+             effect.hitCantTriggerResetAnimationIsOnGracePeriod=effect.hitCantTriggerAnimationResetIsOnGracePeriodDuration;
+             Log.DebugMessage("effect.hitCantTriggerResetAnimationIsOnGracePeriod="+effect.hitCantTriggerResetAnimationIsOnGracePeriod);
             }
            }
-           canSetMotion=true;
-           if(effect.onHitSetMotionVulnerablePeriod<=0f){
-            effect.onHitSetMotionVulnerablePeriod=effect.onHitSetMotionVulnerablePeriodDuration;
-            Log.DebugMessage("effect.onHitSetMotionVulnerablePeriod="+effect.onHitSetMotionVulnerablePeriod);
+           canSetMotionFlag=true;
+           if(effect.hitCanTriggerAnimationIsVulnerablePeriod<=0f){
+            effect.hitCanTriggerAnimationIsVulnerablePeriod=effect.hitCanTriggerAnimationIsVulnerablePeriodDuration;
+            Log.DebugMessage("effect.hitCanTriggerAnimationIsVulnerablePeriod="+effect.hitCanTriggerAnimationIsVulnerablePeriod);
            }
           }
          }
-         onHitResetMotion|=canResetMotion;
-         Log.DebugMessage("onHitResetMotion="+onHitResetMotion);
-         onHitSetMotion|=canSetMotion;
-         Log.DebugMessage("onHitSetMotion="+onHitSetMotion);
+         motionFlagForHitResetAnimation|=canSetMotionResetFlag;
+         Log.DebugMessage("motionFlagForHitAnimationReset="+motionFlagForHitResetAnimation);
+         motionFlagForHitAnimation|=canSetMotionFlag;
+         Log.DebugMessage("motionFlagForHitAnimation="+motionFlagForHitAnimation);
          if(canTakeDamage){
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
          }

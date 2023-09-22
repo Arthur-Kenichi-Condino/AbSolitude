@@ -39,7 +39,7 @@ namespace AKCondinoO.Sims.Actors{
             Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
             Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
             if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
-             DoAttackContinuously();
+             DoAttackOnAnimationEvent();
             }
            }
           }
