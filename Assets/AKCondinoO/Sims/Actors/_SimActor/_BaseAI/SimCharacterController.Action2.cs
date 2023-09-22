@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorCharacterController{
+    internal partial class SimCharacterController{
      internal bool isAiming;
         internal void OnAction2(){
          isAiming=false;

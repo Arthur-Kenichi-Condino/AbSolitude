@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorCharacterController{
+    internal partial class SimCharacterController{
      internal readonly HashSet<SimWeapon>weaponsReload=new HashSet<SimWeapon>();
         internal void OnReload(){
          weaponsReload.Clear();

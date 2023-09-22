@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorCharacterController:MonoBehaviour{
+    internal partial class SimCharacterController:MonoBehaviour{
      internal BaseAI actor;
      internal CharacterController character;
       internal Vector3 center;

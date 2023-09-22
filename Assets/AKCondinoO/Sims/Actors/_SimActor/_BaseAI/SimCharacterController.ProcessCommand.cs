@@ -7,6 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class SimActorCharacterController{
+    internal partial class SimCharacterController{
     }
 }
