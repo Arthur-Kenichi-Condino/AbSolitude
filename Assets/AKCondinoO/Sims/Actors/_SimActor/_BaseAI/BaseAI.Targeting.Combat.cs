@@ -14,6 +14,14 @@ namespace AKCondinoO.Sims.Actors{
         internal override bool IsMonster(){
          return MyAggressionMode==AggressionMode.AggressiveToAll;
         }
+     internal bool isAiming{
+      get{
+       if(characterController!=null){
+        return characterController.isAiming;
+       }
+       return false;
+      }
+     }
      protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
         internal virtual bool IsInAttackRange(SimObject simObject){
          Vector3 delta=new Vector3(
@@ -31,19 +39,19 @@ namespace AKCondinoO.Sims.Actors{
          return false;
         }
      protected bool onDoAttackSetMotion=false;
-        protected virtual void DoAttack(){
-         //Log.DebugMessage("DoAttack()");
+        protected virtual void DoAttackContinuously(){
+         //Log.DebugMessage("DoAttackContinuously()");
          onDoAttackSetMotion=true;
         }
-     internal bool onDoShootingSetMotion=false;
-        internal virtual bool DoShooting(SimWeapon simWeapon){
+     protected bool onDoShootingSetMotion=false;
+        internal virtual bool DoShootingOnce(SimWeapon simWeapon){
          if(onDoShootingSetMotion){
           return false;
          }
          if(isAiming){
           if(animatorController.animator!=null){
            if(animatorController.animationEventsHandler!=null){
-            Log.DebugMessage("DoShooting()");
+            Log.DebugMessage("DoShootingOnce()");
             animatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
             onDoShootingSetMotion=true;
             return true;
@@ -52,6 +60,11 @@ namespace AKCondinoO.Sims.Actors{
          }
          return false;
         }
+     internal bool isShooting{
+      get{
+       return onDoShootingSetMotion;
+      }
+     }
      protected readonly HashSet<Skill>onWillTakeDamageSkillsToUse=new HashSet<Skill>();
      protected bool onHitSetMotion=false;
       protected bool onHitResetMotion=false;

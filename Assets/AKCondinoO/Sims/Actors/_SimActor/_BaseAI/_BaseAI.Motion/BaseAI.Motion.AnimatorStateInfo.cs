@@ -6,7 +6,12 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
+         //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
+         if(onDoShootingSetMotion){
+          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_STAND_FIRING_RIFLE){
+           onDoShootingSetMotion=false;
+          }
+         }
          if(onHitSetMotion){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
@@ -32,10 +37,10 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
-         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
+         //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
-         Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationIsPlaying:"+currentClipName);
+         //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationIsPlaying:"+currentClipName);
          if(onHitSetMotion){
           //Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
           if(onHitResetMotion){
@@ -76,6 +81,11 @@ namespace AKCondinoO.Sims.Actors{
          if(clipName.Contains("MOTION_ATTACK")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
           //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
+          return true;
+         }
+         if(clipName.Contains("MOTION_STAND_FIRING_RIFLE")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_STAND_FIRING_RIFLE;
+          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
           return true;
          }
          return false;

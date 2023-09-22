@@ -34,7 +34,6 @@ namespace AKCondinoO.Sims.Actors{
         internal override void UpdateAnimatorMotionValue(){
          if(controller.actor is BaseAI baseAI){
           if(baseAI is HumanAI humanAI){
-              controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE",humanAI.isShooting);
               if(baseAI.weaponType==BaseAI.WeaponTypes.SniperRifle){
                controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
                controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );
@@ -50,13 +49,16 @@ namespace AKCondinoO.Sims.Actors{
                  controller.animator.SetFloat("MOTION_MOVE_TURN",humanAI.turnAngle);
                controller.animator.SetBool("MOTION_HIT"  ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT  );
               }
+              bool canDoShootingAnimation=false;
               if(controller.currentWeaponAimLayerIndex!=null){
                if(controller.actor.isAiming){
                 controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=1.0f;
+                canDoShootingAnimation=true;
                }else{
                 controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=0.0f;
                }
               }
+              controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE",canDoShootingAnimation&&humanAI.isShooting);
           }
          }
         }
