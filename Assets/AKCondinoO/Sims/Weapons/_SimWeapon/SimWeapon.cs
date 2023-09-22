@@ -42,7 +42,7 @@ namespace AKCondinoO.Sims.Weapons{
      [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
         internal bool TryStartShootingAction(SimObject simAiming){
          if(simAiming is BaseAI baseAI){
-          if(baseAI.DoShooting(this)){
+          if(baseAI.DoShootingOnce(this)){
            return true;
           }
          }
@@ -57,6 +57,8 @@ namespace AKCondinoO.Sims.Weapons{
             Log.DebugMessage("shootHit:"+shootHit.collider.name+",of:"+shootHit.collider.transform.root.name);
            }
           }
+         }else{
+          Log.DebugMessage("on shoot:no ammo");
          }
         }
         internal void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
