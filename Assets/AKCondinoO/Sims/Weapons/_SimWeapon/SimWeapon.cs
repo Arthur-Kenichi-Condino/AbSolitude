@@ -42,7 +42,7 @@ namespace AKCondinoO.Sims.Weapons{
      [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
         internal bool TryStartShootingAction(SimObject simAiming){
          if(simAiming is BaseAI baseAI){
-          if(baseAI.DoShootingOnce(this)){
+          if(baseAI.DoShootingOnAnimationEventUsingWeapon(this)){
            return true;
           }
          }

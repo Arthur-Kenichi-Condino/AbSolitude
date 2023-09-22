@@ -14045,7 +14045,7 @@ AnimationClip:
   m_Events:
   - time: 0.1
     functionName: OnShootEvent
-    data: 
+    data: MOTION_STAND_FIRING_RIFLE
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
