@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+#if UNITY_EDITOR//||DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
 #endif
 using System.Collections.Generic;
@@ -10,7 +10,9 @@ namespace AKCondinoO.Sims.Actors{
          if(onDoShootingSetMotion){
           if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_STAND_FIRING_RIFLE){
            onDoShootingSetMotion=false;
+           Log.DebugMessage("onDoShootingSetMotion=false");
           }
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:"+motion);
          }
          if(onHitSetMotion){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
@@ -62,30 +64,31 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal static readonly Dictionary<string,ActorMotion>animatorClipNameToActorMotion=new Dictionary<string,ActorMotion>();
         internal bool MapAnimatorClipNameToActorMotion(string clipName,out ActorMotion?motion){
+         //Log.DebugMessage("MapAnimatorClipNameToActorMotion:clipName:"+clipName);
          motion=null;
          if(animatorClipNameToActorMotion.TryGetValue(clipName,out ActorMotion clipToMotion)){
           motion=clipToMotion;
-          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
           return true;
          }
          if(clipName.Contains("MOTION_HIT_RIFLE")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT_RIFLE;
-          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT_RIFLE");
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT_RIFLE");
           return true;
          }
          if(clipName.Contains("MOTION_HIT")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT;
-          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
           return true;
          }
          if(clipName.Contains("MOTION_ATTACK")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
-          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
           return true;
          }
          if(clipName.Contains("MOTION_STAND_FIRING_RIFLE")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_STAND_FIRING_RIFLE;
-          //Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
           return true;
          }
          return false;
