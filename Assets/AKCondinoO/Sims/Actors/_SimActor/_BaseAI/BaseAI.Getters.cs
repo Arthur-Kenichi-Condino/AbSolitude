@@ -110,10 +110,7 @@ namespace AKCondinoO.Sims.Actors{
      }
      internal bool isShooting{
       get{
-       if(characterController!=null){
-        return onDoShootingSetMotion;
-       }
-       return false;
+       return onDoShootingSetMotion;
       }
      }
     }

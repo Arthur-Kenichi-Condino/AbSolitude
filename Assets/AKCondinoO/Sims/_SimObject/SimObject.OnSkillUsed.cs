@@ -8,14 +8,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-        internal virtual void OnSkillUsed(Skill skill,bool done,bool revoked){
-        }
      internal SkillBuffEffectsState skillBuffs;
-        internal virtual bool OnTargetedBySkill(Skill skill,SimObject caster){
-         return false;
-        }
-        internal virtual bool OnHitByTargetedSkill(Skill skill,SimObject caster){
-         return false;
+        internal virtual void OnSkillUsed(Skill skill,bool done,bool revoked){
         }
     }
 }

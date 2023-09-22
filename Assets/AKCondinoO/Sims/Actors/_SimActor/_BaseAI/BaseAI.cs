@@ -21,7 +21,7 @@ using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI:SimActor{
-     internal SimActorCharacterController characterController;
+     internal SimCharacterController characterController;
       internal float height;
        internal float heightCrouching;
      internal SimAnimatorController animatorController;
@@ -40,7 +40,7 @@ namespace AKCondinoO.Sims.Actors{
           agentTypeID=navMeshAgent.agentTypeID,
              areaMask=navMeshAgent.areaMask,
          };
-         characterController=GetComponent<SimActorCharacterController>();
+         characterController=GetComponent<SimCharacterController>();
          if(characterController!=null){
             characterController.actor=this;
           height=characterController.character.height;
