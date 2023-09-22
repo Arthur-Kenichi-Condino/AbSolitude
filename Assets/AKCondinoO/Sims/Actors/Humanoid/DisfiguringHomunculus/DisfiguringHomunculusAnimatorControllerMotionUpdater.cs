@@ -13,12 +13,12 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void UpdateAnimatorMotionValue(){
          if(controller.actor is DisfiguringHomunculusAI disfiguringHomunculusAI){
-               controller.animator.SetBool("MOTION_STAND" ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_STAND );
-               controller.animator.SetBool("MOTION_MOVE"  ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_MOVE  );
-                controller.animator.SetFloat("MOTION_MOVE_VELOCITY"       ,disfiguringHomunculusAI.      moveVelocityFlattened);
-                controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",disfiguringHomunculusAI.moveStrafeVelocityFlattened);
-                 controller.animator.SetFloat("MOTION_MOVE_TURN",disfiguringHomunculusAI.turnAngle);
-               controller.animator.SetBool("MOTION_ATTACK",disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_ATTACK);
+             controller.animator.SetBool("MOTION_STAND" ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_STAND );
+             controller.animator.SetBool("MOTION_MOVE"  ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_MOVE  );
+              controller.animator.SetFloat("MOTION_MOVE_VELOCITY"       ,disfiguringHomunculusAI.      moveVelocityFlattened);
+              controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",disfiguringHomunculusAI.moveStrafeVelocityFlattened);
+               controller.animator.SetFloat("MOTION_MOVE_TURN",disfiguringHomunculusAI.turnAngle);
+             controller.animator.SetBool("MOTION_ATTACK",disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_ATTACK);
          }
         }
     }
