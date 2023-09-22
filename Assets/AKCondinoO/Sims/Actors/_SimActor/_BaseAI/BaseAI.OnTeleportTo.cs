@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class BaseAI:SimActor{
+    internal partial class BaseAI{
      protected bool teleportedMove;
         internal override bool OnTeleportTo(Vector3 position,Quaternion rotation){
          if(navMeshAgent!=null&&navMeshAgent.enabled){

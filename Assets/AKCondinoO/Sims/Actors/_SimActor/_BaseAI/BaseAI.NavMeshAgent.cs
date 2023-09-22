@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class BaseAI:SimActor{
+    internal partial class BaseAI{
      internal NavMeshAgent navMeshAgent;
       internal bool navMeshAgentShouldBeStopped=false;
       internal NavMeshQueryFilter navMeshQueryFilter;

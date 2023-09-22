@@ -14,8 +14,7 @@ using UnityEngine.AI;
 using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
-    internal partial class BaseAI:SimActor{
-     protected WeaponTypes MyWeaponType=WeaponTypes.None;internal WeaponTypes weaponType{get{return MyWeaponType;}}
+    internal partial class BaseAI{
         protected virtual void AI(){
          RenewTargets();
          MyPathfinding=GetPathfindingResult();
@@ -27,7 +26,7 @@ namespace AKCondinoO.Sims.Actors{
            goto _MyStateSet;
           }else{
            if(MyState!=State.CHASE_ST){
-            OnCHASE_ST_START();
+            OnCHASE_ST_Start();
            }
            MyState=State.CHASE_ST;
            goto _MyStateSet;
@@ -44,7 +43,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
           if(MyState!=State.IDLE_ST){
-           OnIDLE_ST_START();
+           OnIDLE_ST_Start();
           }
           MyState=State.IDLE_ST;
           goto _MyStateSet;
