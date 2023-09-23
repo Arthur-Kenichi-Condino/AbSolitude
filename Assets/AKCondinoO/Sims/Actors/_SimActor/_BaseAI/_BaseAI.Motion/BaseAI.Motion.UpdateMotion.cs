@@ -81,11 +81,11 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
          if(motionFlagForShootingAnimation){
-          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_STAND_FIRING_RIFLE){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE){
            motionFlagForShootingAnimation=false;
            Log.DebugMessage("onDoShootingSetMotion=false");
           }
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:"+motion);
+          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
          }
          if(motionFlagForHitAnimation){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
@@ -177,9 +177,14 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
           return true;
          }
+         return false;
+        }
+     internal static readonly Dictionary<string,ActorWeaponLayerMotion>animatorClipNameToActorWeaponLayerMotion=new Dictionary<string,ActorWeaponLayerMotion>();
+        internal bool MapAnimatorClipNameToActorWeaponLayerMotion(string clipName,out ActorWeaponLayerMotion?motion){
+         motion=null;
          if(clipName.Contains("MOTION_STAND_FIRING_RIFLE")){
-          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_STAND_FIRING_RIFLE;
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
+          motion=animatorClipNameToActorWeaponLayerMotion[clipName]=ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE;
+          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
           return true;
          }
          return false;

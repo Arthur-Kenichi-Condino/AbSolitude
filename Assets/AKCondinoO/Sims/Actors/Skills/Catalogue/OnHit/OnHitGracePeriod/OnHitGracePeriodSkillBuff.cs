@@ -18,53 +18,53 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
        effect=value;
       }
      }
-     internal float hitCanTriggerAnimationIsVulnerablePeriodDuration;
-      internal float hitCantTriggerAnimationResetIsOnGracePeriodDuration;
-       internal float hitCantTriggerAnimationIsOnGracePeriodDuration;
+     internal float vulnerabilityDuration;
+      internal float gracePeriodForResetAnimation;
+       internal float gracePeriod;
         internal class OnHitGracePeriodEffect:Effect{
-         internal float hitCanTriggerAnimationIsVulnerablePeriodDuration;
-          internal float hitCantTriggerAnimationResetIsOnGracePeriodDuration;
-           internal float hitCantTriggerAnimationIsOnGracePeriodDuration;
+         internal float hitCanTriggerAnimationDuration;
+         internal float hitCanTriggerAnimation;
+          internal float hitCantTriggerResetAnimationDuration;
+          internal float hitCantTriggerResetAnimation;
+           internal float hitCantTriggerAnimationDuration;
+           internal float hitCantTriggerAnimation;
          internal float deltaTime;
-         internal float hitCanTriggerAnimationIsVulnerablePeriod;
-          internal float hitCantTriggerResetAnimationIsOnGracePeriod;
-           internal float hitCantTriggerAnimationIsOnGracePeriod;
             internal override void Apply(SimObject.Stats stats){
              Log.DebugMessage("OnHitGracePeriodEffect:Apply");
             }
             internal override bool ApplyRepeating(SimObject.Stats stats){
              //Log.DebugMessage("OnHitGracePeriodEffect:ApplyRepeating");
-             if(hitCantTriggerResetAnimationIsOnGracePeriod>0f){
-              //Log.DebugMessage("hitCantTriggerAnimationResetIsOnGracePeriod=="+hitCantTriggerAnimationResetIsOnGracePeriod);
-              hitCantTriggerResetAnimationIsOnGracePeriod-=deltaTime;
+             if(hitCantTriggerResetAnimation>0f){
+              //Log.DebugMessage("hitCantTriggerResetAnimation=="+hitCantTriggerResetAnimation);
+              hitCantTriggerResetAnimation-=deltaTime;
              }
-             if(hitCantTriggerAnimationIsOnGracePeriod>0f){
-              //Log.DebugMessage("hitCantTriggerAnimationIsOnGracePeriod=="+hitCantTriggerAnimationIsOnGracePeriod);
-              hitCantTriggerAnimationIsOnGracePeriod-=deltaTime;
+             if(hitCantTriggerAnimation>0f){
+              //Log.DebugMessage("hitCantTriggerAnimation=="+hitCantTriggerAnimation);
+              hitCantTriggerAnimation-=deltaTime;
              }
-             if(hitCanTriggerAnimationIsVulnerablePeriod>0f){
-              //Log.DebugMessage("hitCanTriggerAnimationVulnerablePeriod=="+hitCanTriggerAnimationVulnerablePeriod);
-              hitCanTriggerAnimationIsVulnerablePeriod-=deltaTime;
-              if(hitCanTriggerAnimationIsVulnerablePeriod<=0f){
-               hitCantTriggerAnimationIsOnGracePeriod=hitCantTriggerAnimationIsOnGracePeriodDuration;
-               Log.DebugMessage("hitCantTriggerAnimationIsOnGracePeriod="+hitCantTriggerAnimationIsOnGracePeriod);
+             if(hitCanTriggerAnimation>0f){
+              //Log.DebugMessage("hitCanTriggerAnimation=="+hitCanTriggerAnimation);
+              hitCanTriggerAnimation-=deltaTime;
+              if(hitCanTriggerAnimation<=0f){
+               hitCantTriggerAnimation=hitCantTriggerAnimationDuration;
+               Log.DebugMessage("hitCantTriggerAnimation="+hitCantTriggerAnimation);
               }
              }
              return false;
             }
             internal override void Unapply(SimObject.Stats stats){
-             hitCanTriggerAnimationIsVulnerablePeriod=0f;
-              hitCantTriggerResetAnimationIsOnGracePeriod=0f;
-               hitCantTriggerAnimationIsOnGracePeriod=0f;
+             hitCanTriggerAnimation=0f;
+              hitCantTriggerResetAnimation=0f;
+               hitCantTriggerAnimation=0f;
             }
         }
         internal override void OnApply(bool gameExiting=false){
          onHitGracePeriodEffect.deltaTime=this.deltaTime;
          if(!applied){
           //  apply buff effects here
-          onHitGracePeriodEffect.hitCanTriggerAnimationIsVulnerablePeriodDuration=hitCanTriggerAnimationIsVulnerablePeriodDuration;
-           onHitGracePeriodEffect.hitCantTriggerAnimationResetIsOnGracePeriodDuration=hitCantTriggerAnimationResetIsOnGracePeriodDuration;
-            onHitGracePeriodEffect.hitCantTriggerAnimationIsOnGracePeriodDuration=hitCantTriggerAnimationIsOnGracePeriodDuration;
+          onHitGracePeriodEffect.hitCanTriggerAnimationDuration=vulnerabilityDuration;
+           onHitGracePeriodEffect.hitCantTriggerResetAnimationDuration=gracePeriodForResetAnimation;
+            onHitGracePeriodEffect.hitCantTriggerAnimationDuration=gracePeriod;
          }
          base.OnApply(gameExiting);
         }

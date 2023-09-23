@@ -15,6 +15,8 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_MOVE_RIFLE  =51,
          MOTION_ATTACK_RIFLE=52,
          MOTION_HIT_RIFLE   =54,
+        }
+        internal enum ActorWeaponLayerMotion:int{
          MOTION_STAND_FIRING_RIFLE=501,
         }
     }

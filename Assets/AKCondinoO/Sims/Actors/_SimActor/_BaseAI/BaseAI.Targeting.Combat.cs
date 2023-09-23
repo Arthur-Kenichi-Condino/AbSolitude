@@ -87,23 +87,23 @@ namespace AKCondinoO.Sims.Actors{
           canSetMotionFlag=false;canSetMotionResetFlag=false;
           onHitGracePeriodSkillBuff=(OnHitGracePeriodSkillBuff)activeOnHitGracePeriodSkillBuffs[0];
           var effect=onHitGracePeriodSkillBuff.onHitGracePeriodEffect;
-          if(effect.hitCantTriggerAnimationIsOnGracePeriod<=0f){
+          if(effect.hitCantTriggerAnimation<=0f){
            if(motionFlagForHitAnimation){
-            if(effect.hitCantTriggerResetAnimationIsOnGracePeriod<=0f){
+            if(effect.hitCantTriggerResetAnimation<=0f){
              canSetMotionResetFlag=true;
-             effect.hitCantTriggerResetAnimationIsOnGracePeriod=effect.hitCantTriggerAnimationResetIsOnGracePeriodDuration;
-             Log.DebugMessage("effect.hitCantTriggerResetAnimationIsOnGracePeriod="+effect.hitCantTriggerResetAnimationIsOnGracePeriod);
+             effect.hitCantTriggerResetAnimation=effect.hitCantTriggerResetAnimationDuration;
+             Log.DebugMessage("effect.hitCantTriggerResetAnimation="+effect.hitCantTriggerResetAnimation);
             }
            }
            canSetMotionFlag=true;
-           if(effect.hitCanTriggerAnimationIsVulnerablePeriod<=0f){
-            effect.hitCanTriggerAnimationIsVulnerablePeriod=effect.hitCanTriggerAnimationIsVulnerablePeriodDuration;
-            Log.DebugMessage("effect.hitCanTriggerAnimationIsVulnerablePeriod="+effect.hitCanTriggerAnimationIsVulnerablePeriod);
+           if(effect.hitCanTriggerAnimation<=0f){
+            effect.hitCanTriggerAnimation=effect.hitCanTriggerAnimationDuration;
+            Log.DebugMessage("effect.hitCanTriggerAnimation="+effect.hitCanTriggerAnimation);
            }
           }
          }
          motionFlagForHitResetAnimation|=canSetMotionResetFlag;
-         Log.DebugMessage("motionFlagForHitAnimationReset="+motionFlagForHitResetAnimation);
+         Log.DebugMessage("motionFlagForHitResetAnimation="+motionFlagForHitResetAnimation);
          motionFlagForHitAnimation|=canSetMotionFlag;
          Log.DebugMessage("motionFlagForHitAnimation="+motionFlagForHitAnimation);
          if(canTakeDamage){
