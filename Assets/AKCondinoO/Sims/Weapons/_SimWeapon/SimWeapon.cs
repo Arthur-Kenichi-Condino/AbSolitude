@@ -8,8 +8,17 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Weapons{
     internal class SimWeapon:SimObject{
+     [SerializeField]internal float shootDis=900f;
+     [SerializeField]internal Transform[]magazines;
+     [SerializeField]internal Transform[]cartridges;
+     [SerializeField]internal Transform[]bullets;
+     [SerializeField]internal Transform muzzle;
+      internal SimWeaponOnShootVisualEffect simWeaponVisualEffect;
         protected override void Awake(){
          base.Awake();
+         if(muzzle!=null){
+          simWeaponVisualEffect=muzzle.GetComponent<SimWeaponOnShootVisualEffect>();
+         }
         }
         internal override void OnActivated(){
          base.OnActivated();
@@ -34,11 +43,6 @@ namespace AKCondinoO.Sims.Weapons{
          }
          return false;
         }
-     [SerializeField]internal float shootDis=900f;
-     [SerializeField]internal Transform[]magazines;
-     [SerializeField]internal Transform[]cartridges;
-     [SerializeField]internal Transform[]bullets;
-     [SerializeField]internal Transform muzzle;
      [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
         internal bool TryStartShootingAction(SimObject simAiming){
          if(simAiming is BaseAI baseAI){
@@ -56,6 +60,9 @@ namespace AKCondinoO.Sims.Weapons{
             RaycastHit shootHit=shootHits[i];
             Log.DebugMessage("shootHit:"+shootHit.collider.name+",of:"+shootHit.collider.transform.root.name);
            }
+          }
+          if(simWeaponVisualEffect!=null){
+           simWeaponVisualEffect.OnShot();
           }
          }else{
           Log.DebugMessage("on shoot:no ammo");

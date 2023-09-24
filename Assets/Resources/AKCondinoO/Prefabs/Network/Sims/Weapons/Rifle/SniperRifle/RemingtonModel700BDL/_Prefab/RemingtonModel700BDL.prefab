@@ -966,13 +966,13 @@ MonoBehaviour:
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
-  startingAmmo: Infinity
-  ammoPerMagazine: 4
   shootDis: 900
   magazines: []
   cartridges: []
   bullets: []
   muzzle: {fileID: 7362929647853177301}
+  startingAmmo: Infinity
+  ammoPerMagazine: 4
 --- !u!114 &-1854219316473170960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1480,6 +1480,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8919403261941323335, guid: ba37a471ca2e0b14888463802ae97cd2, type: 3}
       propertyPath: OnShootSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 1b067fe833a32e647a89df8d49231980, type: 3}
+    - target: {fileID: -8919403261941323335, guid: ba37a471ca2e0b14888463802ae97cd2, type: 3}
+      propertyPath: onShootSFX
       value: 
       objectReference: {fileID: 8300000, guid: 1b067fe833a32e647a89df8d49231980, type: 3}
     - target: {fileID: 1689901661184854453, guid: ba37a471ca2e0b14888463802ae97cd2, type: 3}
