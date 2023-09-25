@@ -49,3 +49,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1b067fe833a32e647a89df8d49231980, type: 3}
   onShootVFX:
   - {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+  onShootDrySFX:
+  - {fileID: 8300000, guid: 0463a3e091a752f438c4e737bd43ceb8, type: 3}
+  onShootDryVFX: []
