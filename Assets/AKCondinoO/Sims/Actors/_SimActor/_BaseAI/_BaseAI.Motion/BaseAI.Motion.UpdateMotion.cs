@@ -83,7 +83,12 @@ namespace AKCondinoO.Sims.Actors{
          if(motionFlagForShootingAnimation){
           if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE){
            motionFlagForShootingAnimation=false;
-           Log.DebugMessage("onDoShootingSetMotion=false");
+           if(animatorController.animator!=null){
+            if(animatorController.animationEventsHandler!=null){
+             animatorController.animationEventsHandler.CancelShootEvent();
+            }
+           }
+           Log.DebugMessage("motionFlagForShootingAnimation=false");
           }
           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
          }
@@ -113,6 +118,18 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
+         if(motionFlagForShootingAnimation){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE){
+           motionFlagForShootingAnimation=false;
+           if(animatorController.animator!=null){
+            if(animatorController.animationEventsHandler!=null){
+             animatorController.animationEventsHandler.CancelShootEvent();
+            }
+           }
+           Log.DebugMessage("motionFlagForShootingAnimation=false");
+          }
+          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+         }
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationIsPlaying:"+currentClipName);

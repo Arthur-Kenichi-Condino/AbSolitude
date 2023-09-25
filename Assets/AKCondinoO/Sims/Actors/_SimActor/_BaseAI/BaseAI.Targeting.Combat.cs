@@ -45,14 +45,15 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected bool motionFlagForShootingAnimation=false;
         internal virtual bool DoShootingOnAnimationEventUsingWeapon(SimWeapon simWeapon){
-         if(motionFlagForShootingAnimation){
+         if(animatorController.animationEventsHandler.onAnimatorShoot!=null){
+          Log.DebugMessage("onAnimatorShoot!=null");
           return false;
          }
          if(isAiming){
           if(animatorController.animator!=null){
            if(animatorController.animationEventsHandler!=null){
             Log.DebugMessage("DoShootingOnAnimationEventUsingWeapon()");
-            animatorController.animationEventsHandler.OnAnimatorShoot+=simWeapon.OnShoot;
+            animatorController.animationEventsHandler.onAnimatorShoot+=simWeapon.OnShoot;
             motionFlagForShootingAnimation=true;
             return true;
            }

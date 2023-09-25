@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.AnimationEventsHandler;
 namespace AKCondinoO.Sims.Weapons{
     internal class SimWeapon:SimObject{
      [SerializeField]internal float shootDis=900f;
@@ -43,7 +44,6 @@ namespace AKCondinoO.Sims.Weapons{
          }
          return false;
         }
-     [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
         internal bool TryStartShootingAction(SimObject simAiming){
          if(simAiming is BaseAI baseAI){
           if(baseAI.DoShootingOnAnimationEventUsingWeapon(this)){
@@ -52,6 +52,7 @@ namespace AKCondinoO.Sims.Weapons{
          }
          return false;
         }
+     [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
         internal void OnShoot(SimObject simAiming){
          if(ammoLoaded>0f){
           OnShootGetHits(simAiming,ref shootHits,out int shootHitsLength);
@@ -66,6 +67,9 @@ namespace AKCondinoO.Sims.Weapons{
           }
          }else{
           Log.DebugMessage("on shoot:no ammo");
+          if(simWeaponVisualEffect!=null){
+           simWeaponVisualEffect.OnShotDry();
+          }
          }
         }
         internal void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){

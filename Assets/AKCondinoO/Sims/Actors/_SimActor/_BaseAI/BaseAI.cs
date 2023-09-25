@@ -123,6 +123,11 @@ namespace AKCondinoO.Sims.Actors{
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }
          onChaseGetDataCoroutine=StartCoroutine(OnChaseGetDataCoroutine());
+         if(animatorController!=null){
+          if(animatorController.animationEventsHandler!=null){
+           animatorController.animationEventsHandler.CancelAllEvents();
+          }
+         }
         }
         internal override void OnDeactivated(){
          if(onChaseGetDataCoroutine!=null){
