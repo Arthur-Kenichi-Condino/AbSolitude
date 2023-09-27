@@ -114,8 +114,7 @@ MonoBehaviour:
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 2461128663094476801, guid: 49d00260215b5494381f6fb86baff6b6, type: 3}
-  navMeshAgentWalkSpeed: 1
-  navMeshAgentRunSpeed: 1.5
+  goToSimUMA: {fileID: 0}
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
@@ -130,15 +129,17 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  navMeshAgentWalkSpeed: 1
+  navMeshAgentRunSpeed: 1.5
+  pathfindingTimeout: 3
+  pathPendingTimeout: 6
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 0}
+  renewEnemyInterval: 3
   MyAggressionMode: 2
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
-  renewEnemyInterval: 3
-  pathfindingTimeout: 3
-  pathPendingTimeout: 6
 --- !u!114 &-5906123023762645204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,18 +190,19 @@ MonoBehaviour:
     adjustment: {fileID: 2850720430510664476}
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 76
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpSpeed: 9
+    tgtRotLerpMaxTime: 0.25
   posLerp:
     xLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
+      tgtValLerpSpeed: 38
+      tgtValLerpMaxTime: 0.25
     yLerp:
       tgtValLerpSpeed: 19
-      tgtValLerpMaxTime: 0.0005
+      tgtValLerpMaxTime: 0.25
     zLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
+      tgtValLerpSpeed: 38
+      tgtValLerpMaxTime: 0.25
+  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -211,7 +213,6 @@ MonoBehaviour:
     layerName: Base Layer
   - weaponType: 2
     layerName: Aiming with Rifle
-  layerTransitionSpeed: 64
 --- !u!195 &-897908923207528447
 NavMeshAgent:
   m_ObjectHideFlags: 0

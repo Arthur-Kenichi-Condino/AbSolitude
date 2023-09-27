@@ -46,16 +46,19 @@ namespace AKCondinoO.Sims.Actors{
                 controller.animator.SetFloat("MOTION_MOVE_TURN",humanAI.turnAngle);
               controller.animator.SetBool("MOTION_HIT"  ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT  );
              }
-             bool canDoShootingAnimation=false;
              if(controller.currentWeaponAimLayerIndex!=null){
-              if(controller.actor.isAiming){
+              if(controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_AIMING_RIFLE||
+                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RELOADING_RIFLE||
+                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE
+              ){
                controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=1.0f;
-               canDoShootingAnimation=true;
               }else{
                controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=0.0f;
               }
              }
-             controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE",canDoShootingAnimation&&humanAI.isShooting);
+             controller.animator.SetBool("MOTION_STAND_AIMING_RIFLE"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_AIMING_RIFLE   );
+             controller.animator.SetBool("MOTION_STAND_RELOADING_RIFLE",controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RELOADING_RIFLE);
+             controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE   );
          }
         }
     }
