@@ -106,7 +106,7 @@ namespace AKCondinoO.Sims{
             {
              typeof(DisfiguringHomunculusAI),
               new SimsMachineSpawnSettings.SimObjectSettings{
-               count=5,
+               count=1,
                chance=1.0f,
               }
             },

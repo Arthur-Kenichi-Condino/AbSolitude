@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Combat;
+using AKCondinoO.Sims.Weapons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +10,19 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal class AnimationEventsHandler:MonoBehaviour{
      internal BaseAI actor;
+        internal void CancelAllEvents(){
+         CancelShootEvent();
+        }
         internal void OnShootEvent(string weaponMotionName){
          Log.DebugMessage("OnShootEvent:"+weaponMotionName);
-         OnAnimatorShoot?.Invoke(actor);
-         OnAnimatorShoot=null;
+         onAnimatorShoot?.Invoke(actor);
         }
         internal delegate void OnAnimatorShootEvent(SimObject simAiming);
-        internal OnAnimatorShootEvent OnAnimatorShoot;
+        internal OnAnimatorShootEvent onAnimatorShoot;
+        internal void CancelShootEvent(){
+         Log.DebugMessage("CancelShootEvent:");
+         onAnimatorShoot=null;
+        }
         internal void OnCanDamageAnimationEvent(string bodyPartName){
          //Log.DebugMessage("OnCanDamageAnimationEvent:"+bodyPartName);
          if(actor.nameToHitboxes.TryGetValue(bodyPartName,out Hitboxes bodyPartHitbox)){
