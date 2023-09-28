@@ -14,6 +14,7 @@ using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController:MonoBehaviour{
      internal BaseAI actor;
+     [SerializeField]Transform transformAdjustmentsForUMA;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;
@@ -190,9 +191,43 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+        bool transformAdjustmentsForUMAScaleApplied;
+        bool transformAdjustmentsForUMARotationApplied;
+        bool transformAdjustmentsForUMAPositionApplied;
         protected virtual void SetSimUMADataTransform(){
+         if(transformAdjustmentsForUMA!=null){
+          if(transformAdjustmentsForUMAScaleApplied){
+           actor.simUMA.transform.root.localScale=Vector3.Scale(
+            actor.simUMA.transform.root.localScale,
+            new Vector3(
+             1f/transformAdjustmentsForUMA.localScale.x,
+             1f/transformAdjustmentsForUMA.localScale.y,
+             1f/transformAdjustmentsForUMA.localScale.z
+            )
+           );
+           transformAdjustmentsForUMAScaleApplied=false;
+          }
+          if(transformAdjustmentsForUMARotationApplied){
+           actor.simUMA.transform.root.rotation*=Quaternion.Inverse(transformAdjustmentsForUMA.localRotation);
+           transformAdjustmentsForUMARotationApplied=false;
+          }
+         }
          actor.simUMA.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMA.transform.parent.rotation,Core.magicDeltaTimeNumber);
          actor.simUMA.transform.parent.position=posLerp.UpdatePosition(actor.simUMA.transform.parent.position,Core.magicDeltaTimeNumber);
+         if(transformAdjustmentsForUMA!=null){
+          if(!transformAdjustmentsForUMAScaleApplied){
+           actor.simUMA.transform.root.localScale=Vector3.Scale(
+            actor.simUMA.transform.root.localScale,
+            transformAdjustmentsForUMA.localScale
+           );
+           transformAdjustmentsForUMAScaleApplied=true;
+           Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
+          }
+          if(!transformAdjustmentsForUMARotationApplied){
+           actor.simUMA.transform.root.rotation*=transformAdjustmentsForUMA.localRotation;
+           transformAdjustmentsForUMARotationApplied=true;
+          }
+         }
         }
         void LateUpdate(){
         }
