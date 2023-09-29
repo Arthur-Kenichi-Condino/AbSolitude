@@ -1,0 +1,6 @@
+Blender:
+-Y Forward
+Z Up
+
+Z Primary Bone Axis
+-X Secondary Bone Axis

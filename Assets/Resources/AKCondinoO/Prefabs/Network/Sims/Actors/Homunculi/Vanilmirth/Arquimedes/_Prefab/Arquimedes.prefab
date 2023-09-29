@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6683752426998207080}
+  - {fileID: 5699977945363918326}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-4455510629419889334
@@ -54,8 +55,7 @@ MonoBehaviour:
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 3290482251516891750, guid: 6f5fd54ff986cf149baab03c924a292a, type: 3}
-  navMeshAgentWalkSpeed: 2
-  navMeshAgentRunSpeed: 4
+  goToSimUMA: {fileID: 0}
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
@@ -70,15 +70,17 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  navMeshAgentWalkSpeed: 2
+  navMeshAgentRunSpeed: 4
+  pathfindingTimeout: 3
+  pathPendingTimeout: 6
   hitboxesPrefabs: {fileID: 0}
   hurtboxesPrefabs: {fileID: 0}
+  renewEnemyInterval: 3
+  MyAggressionMode: 0
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
-  MyAggressionMode: 0
-  renewEnemyInterval: 3
-  pathfindingTimeout: 3
-  pathPendingTimeout: 6
 --- !u!114 &2273105198794575747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustmentsForUMA: {fileID: 5699977945363918326}
   transformAdjustments: []
   rotLerp:
     dealWithGimbalLock: 1
@@ -139,6 +142,7 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
+  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -249,3 +253,34 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5599078125331894685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5699977945363918326}
+  m_Layer: 0
+  m_Name: TransformAdjustmentsForUMA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5699977945363918326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599078125331894685}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: -0.7071068, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 907142613423581965}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: -90}
