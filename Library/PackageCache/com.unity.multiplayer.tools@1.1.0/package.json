@@ -1,0 +1,39 @@
+{
+  "name": "com.unity.multiplayer.tools",
+  "displayName": "Multiplayer Tools",
+  "version": "1.1.0",
+  "unity": "2020.3",
+  "description": "Adds a suite of tools that improve workflows for multiplayer development",
+  "dependencies": {
+    "com.unity.profiling.core": "1.0.0-pre.1",
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.nuget.mono-cecil": "1.10.1",
+    "com.unity.collections": "1.1.0",
+    "com.unity.modules.uielements": "1.0.0"
+  },
+  "keywords": [
+    "Multiplayer",
+    "Netcode",
+    "GameObjects",
+    "Tools"
+  ],
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Network Scenario Samples",
+      "description": "Samples showcasing the different ways of building custom network simulator scenarios.",
+      "path": "Samples~/NetworkSimulator"
+    }
+  ],
+  "relatedPackages": {
+    "com.unity.multiplayer.tools.tests": "1.1.0"
+  },
+  "upmCi": {
+    "footprint": "e658d3ad3487f792d253b3a7f97bb456a482766c"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git",
+    "type": "git",
+    "revision": "3ac1c04a8a9f6bd7a75572380019c0661b7d0f2c"
+  }
+}

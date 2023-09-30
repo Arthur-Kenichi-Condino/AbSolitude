@@ -1,0 +1,3070 @@
+ScriptsOnlyBuild:
+  usedScripts:
+    Assembly-CSharp:
+    - AKCondinoO.Ambience.Clouds.CloudParticle
+    - AKCondinoO.Sims.Actors.ArquimedesAnimatorControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.ArthurCondinoControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.Combat.AISensor
+    - AKCondinoO.Sims.Actors.Combat.Hitboxes
+    - AKCondinoO.Sims.Actors.Combat.HitboxesPrefabsList
+    - AKCondinoO.Sims.Actors.Combat.Hurtboxes
+    - AKCondinoO.Sims.Actors.Combat.HurtboxesPrefabsList
+    - AKCondinoO.Sims.Actors.DisfiguringHomunculusAnimatorControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.Homunculi.Vanilmirth.ArquimedesAI
+    - AKCondinoO.Sims.Actors.Humanoid.DisfiguringHomunculusAI
+    - AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino.ArthurCondinoAI
+    - AKCondinoO.Sims.Actors.SimAnimatorController
+    - AKCondinoO.Sims.Actors.SimCharacterController
+    - AKCondinoO.Sims.Actors.Skills.CallHomunculus
+    - AKCondinoO.Sims.Actors.Skills.ChaoticBlessing
+    - AKCondinoO.Sims.Actors.Skills.GenerateHomunculus
+    - AKCondinoO.Sims.Actors.Skills.OnHitGracePeriod
+    - AKCondinoO.Sims.Actors.Skills.SkillVisualEffects.SpiritualHealingSkillVisualEffect
+    - AKCondinoO.Sims.Actors.Skills.SpiritualHealing
+    - AKCondinoO.Sims.Actors.Skills.Teleport
+    - AKCondinoO.Sims.Floor10x10x10
+    - AKCondinoO.Sims.Inventory.InContainerTransformData
+    - AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemInContainerData
+    - AKCondinoO.Sims.SimCollisions
+    - AKCondinoO.Sims.SimCollisionsChildTrigger
+    - AKCondinoO.Sims.Trees.Betula_occidentalis_1
+    - AKCondinoO.Sims.Trees.Pinus_elliottii_1
+    - AKCondinoO.Sims.Weapons.Rifle.SniperRifle.RemingtonModel700BDL
+    Assembly-CSharp.dll:
+    - AKCondinoO.Ambience.Clouds.CloudParticle
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem
+    - AKCondinoO.Ambience.Clouds.CloudsCamera
+    - AKCondinoO.Core
+    - AKCondinoO.CoreDataSync
+    - AKCondinoO.GameEntry
+    - AKCondinoO.GameMode
+    - AKCondinoO.Gameplayer
+    - AKCondinoO.Gameplaying.GameplayerManagement
+    - AKCondinoO.InputHandler
+    - AKCondinoO.MainCamera
+    - AKCondinoO.Music.BGM
+    - AKCondinoO.Networking.NetworkCommandLine
+    - AKCondinoO.ScreenInput
+    - AKCondinoO.SimObjectToSpriteTool.ScreenshotBackground
+    - AKCondinoO.SimObjectToSpriteTool.SimObjectScreenshotHelper
+    - AKCondinoO.SimTime
+    - AKCondinoO.Sims.Actors.ArquimedesAnimatorControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.ArthurCondinoControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.Combat.AISensor
+    - AKCondinoO.Sims.Actors.Combat.Hitboxes
+    - AKCondinoO.Sims.Actors.Combat.HitboxesPrefabsList
+    - AKCondinoO.Sims.Actors.Combat.Hurtboxes
+    - AKCondinoO.Sims.Actors.Combat.HurtboxesPrefabsList
+    - AKCondinoO.Sims.Actors.DisfiguringHomunculusAnimatorControllerMotionUpdater
+    - AKCondinoO.Sims.Actors.Homunculi.Vanilmirth.ArquimedesAI
+    - AKCondinoO.Sims.Actors.Humanoid.DisfiguringHomunculusAI
+    - AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino.ArthurCondinoAI
+    - AKCondinoO.Sims.Actors.SimAnimatorController
+    - AKCondinoO.Sims.Actors.SimCharacterController
+    - AKCondinoO.Sims.Actors.Skills.SkillVisualEffects.SkillVisualEffectsManager
+    - AKCondinoO.Sims.Actors.Skills.SkillsManager
+    - AKCondinoO.Sims.AutonomyCore
+    - AKCondinoO.Sims.Floor10x10x10
+    - AKCondinoO.Sims.Inventory.InContainerTransformData
+    - AKCondinoO.Sims.Inventory.SimInventoryManager
+    - AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemInContainerData
+    - AKCondinoO.Sims.SimCollisions
+    - AKCondinoO.Sims.SimCollisionsChildTrigger
+    - AKCondinoO.Sims.SimObjectManager
+    - AKCondinoO.Sims.SimObjectSpawner
+    - AKCondinoO.Sims.SimsMachine
+    - AKCondinoO.Sims.Trees.Betula_occidentalis_1
+    - AKCondinoO.Sims.Trees.Pinus_elliottii_1
+    - AKCondinoO.Sims.Weapons.Rifle.SniperRifle.RemingtonModel700BDL
+    - AKCondinoO.SunLight
+    - AKCondinoO.SunTransform
+    - AKCondinoO.UI.Context.ContextMenuUI
+    - AKCondinoO.UI.Fixed.ConsoleInputField
+    - AKCondinoO.UI.Fixed.FixedUI
+    - AKCondinoO.UI.MainMenu
+    - AKCondinoO.UI.Placeholder
+    - AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditing
+    - AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkUnnamedMessageHandler
+    - AKCondinoO.Voxels.Terrain.VoxelTerrainChunk
+    - AKCondinoO.Voxels.VoxelSystem
+    - AKCondinoO.Voxels.Water.Editing.VoxelWaterEditing
+    - AKCondinoO.Voxels.Water.VoxelWaterChunk
+    - SteamManager
+    SteamNetworkingSockets Transport for Netcode for GameObjects.dll:
+    - Netcode.Transports.SteamNetworkingSocketsTransport
+    UMA_Core:
+    - UMA.CharacterSystem.DynamicCharacterAvatar
+    - UMA.CharacterSystem.UMAWardrobeRecipe
+    - UMA.DynamicDNAConverterController
+    - UMA.DynamicUMADnaAsset
+    - UMA.OverlayDataAsset
+    - UMA.RaceData
+    - UMA.SlotDataAsset
+    - UMA.TutorialDNAConverterBehaviour
+    - UMA.UMAAssetIndexer
+    - UMA.UMAData
+    - UMA.UMAMaterial
+    - UMA.UMATextRecipe
+    - UMA.UmaTPose
+    UMA_Core.dll:
+    - UMA.CharacterSystem.DynamicCharacterAvatar
+    - UMA.DynamicDNAConverterController
+    - UMA.DynamicUMADnaAsset
+    - UMA.OverlayDataAsset
+    - UMA.RaceData
+    - UMA.SlotDataAsset
+    - UMA.TextureMerge
+    - UMA.UMAAssetIndexer
+    - UMA.UMAData
+    - UMA.UMADefaultMeshCombiner
+    - UMA.UMAGenerator
+    - UMA.UMAGlobalContext
+    - UMA.UMAMaterial
+    - UMA.UMAPostProcess
+    - UMA.UMATextRecipe
+    - UMA.UmaTPose
+    Unity.Addressables.Editor.dll:
+    - UnityEditor.AddressableAssets.AddressableAssetSettingsDefaultObject
+    - UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptFastMode
+    - UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptPackedMode
+    - UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptPackedPlayMode
+    - UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptVirtualMode
+    - UnityEditor.AddressableAssets.BuildReportVisualizer.BuildReportWindow
+    - UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+    - UnityEditor.AddressableAssets.Settings.AddressableAssetGroupTemplate
+    - UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
+    - UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema
+    - UnityEditor.AddressableAssets.Settings.GroupSchemas.ContentUpdateGroupSchema
+    - UnityEditor.AddressableAssets.Settings.GroupSchemas.PlayerDataGroupSchema
+    Unity.Netcode.Editor.dll:
+    - Unity.Netcode.Editor.Configuration.NetcodeForGameObjectsProjectSettings
+    Unity.Netcode.Runtime:
+    - Unity.Netcode.NetworkObject
+    Unity.Netcode.Runtime.dll:
+    - Unity.Netcode.NetworkManager
+    - Unity.Netcode.NetworkObject
+    - Unity.Netcode.Transports.UTP.UnityTransport
+    Unity.Postprocessing.Runtime.dll:
+    - UnityEngine.Rendering.PostProcessing.AmbientOcclusion
+    - UnityEngine.Rendering.PostProcessing.AutoExposure
+    - UnityEngine.Rendering.PostProcessing.Bloom
+    - UnityEngine.Rendering.PostProcessing.ChromaticAberration
+    - UnityEngine.Rendering.PostProcessing.ColorGrading
+    - UnityEngine.Rendering.PostProcessing.DepthOfField
+    - UnityEngine.Rendering.PostProcessing.Grain
+    - UnityEngine.Rendering.PostProcessing.LensDistortion
+    - UnityEngine.Rendering.PostProcessing.MotionBlur
+    - UnityEngine.Rendering.PostProcessing.PostProcessLayer
+    - UnityEngine.Rendering.PostProcessing.PostProcessProfile
+    - UnityEngine.Rendering.PostProcessing.PostProcessResources
+    - UnityEngine.Rendering.PostProcessing.PostProcessVolume
+    - UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections
+    - UnityEngine.Rendering.PostProcessing.Vignette
+    Unity.ResourceManager.dll:
+    - MonoBehaviourCallbackHooks
+    Unity.Rider.Editor.dll:
+    - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.TextMeshPro:
+    - TMPro.TMP_FontAsset
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
+    Unity.TextMeshPro.dll:
+    - TMPro.TMP_FontAsset
+    - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshProUGUI
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
+    UnityEditor.TestRunner.dll:
+    - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
+    - UnityEditor.TestTools.TestRunner.TestListCacheData
+    - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.UI:
+    - UnityEngine.EventSystems.EventTrigger
+    UnityEngine.UI.dll:
+    - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.EventTrigger
+    - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
+    - UnityEngine.UI.LayoutElement
+    - UnityEngine.UI.Mask
+    - UnityEngine.UI.RectMask2D
+    - UnityEngine.UI.ScrollRect
+    - UnityEngine.UI.Scrollbar
+  serializedClasses:
+    Assembly-CSharp:
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem/CloudParticleAlphaSettings
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem/CloudParticleAngleSettings
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem/CloudParticleDistanceSettings
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem/CloudParticleOrbitSettings
+    - AKCondinoO.Ambience.Clouds.CloudParticleSystem/CloudParticleScaleSettings
+    - AKCondinoO.FloatLerpHelper
+    - AKCondinoO.QuaternionRotLerpHelper
+    - AKCondinoO.Sims.Actors.SimAnimatorController/TransformAdjustment
+    - AKCondinoO.Sims.Actors.SimAnimatorController/WeaponAimLayer
+    - AKCondinoO.Sims.Actors.SimAnimatorController/WeaponLayer
+    - AKCondinoO.Sims.Inventory.SimObjectAsInventoryItemInContainerData/InContainerData
+    - AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildBuyEditModeUIContent
+    - AKCondinoO.Vector3PosComponentwiseLerpHelper
+    - AKCondinoO.Vector3PosLerpHelper
+    UMA_Core:
+    - UMA.AssetItem
+    - UMA.BaseCharacterModifier
+    - UMA.CharacterSystem.DynamicCharacterAvatar/ColorValue
+    - UMA.CharacterSystem.DynamicCharacterAvatar/ColorValueList
+    - UMA.CharacterSystem.DynamicCharacterAvatar/RaceAnimator
+    - UMA.CharacterSystem.DynamicCharacterAvatar/RaceAnimatorList
+    - UMA.CharacterSystem.DynamicCharacterAvatar/RaceSetter
+    - UMA.CharacterSystem.DynamicCharacterAvatar/WardrobeRecipeList
+    - UMA.DNAConverterField
+    - UMA.DNAConverterList
+    - UMA.DnaValue
+    - UMA.RaceData/CrossCompatibilitySettingsList
+    - UMA.RaceData/RaceThumbnails
+    - UMA.RaceData/RaceThumbnails/WardrobeSlotThumb
+    - UMA.SubMeshTriangles
+    - UMA.UMABoneWeight
+    - UMA.UMAData/UMARecipe
+    - UMA.UMADataEvent
+    - UMA.UMADataSlotMaterialRectEvent
+    - UMA.UMADataWardrobeEvent
+    - UMA.UMAMaterial/MaterialChannel
+    - UMA.UMAMaterialPropertyBlock
+    - UMA.UMAMeshData
+    - UMA.UMAPredefinedDNA
+    - UMA.UMASkeleton
+    - UMA.UMATransform
+    Unity.Netcode.Runtime:
+    - Unity.Netcode.NetworkConfig
+    - Unity.Netcode.NetworkPrefabs
+    - Unity.Netcode.Transports.UTP.UnityTransport/ConnectionAddressData
+    - Unity.Netcode.Transports.UTP.UnityTransport/SimulatorParameters
+    Unity.Postprocessing.Runtime:
+    - UnityEngine.Rendering.PostProcessing.AmbientOcclusionModeParameter
+    - UnityEngine.Rendering.PostProcessing.AmbientOcclusionQualityParameter
+    - UnityEngine.Rendering.PostProcessing.BoolParameter
+    - UnityEngine.Rendering.PostProcessing.ColorParameter
+    - UnityEngine.Rendering.PostProcessing.FastApproximateAntialiasing
+    - UnityEngine.Rendering.PostProcessing.FloatParameter
+    - UnityEngine.Rendering.PostProcessing.Fog
+    - UnityEngine.Rendering.PostProcessing.HistogramMonitor
+    - UnityEngine.Rendering.PostProcessing.LightMeterMonitor
+    - UnityEngine.Rendering.PostProcessing.PostProcessDebugLayer
+    - UnityEngine.Rendering.PostProcessing.PostProcessDebugLayer/OverlaySettings
+    - UnityEngine.Rendering.PostProcessing.PostProcessResources/ComputeShaders
+    - UnityEngine.Rendering.PostProcessing.PostProcessResources/SMAALuts
+    - UnityEngine.Rendering.PostProcessing.PostProcessResources/Shaders
+    - UnityEngine.Rendering.PostProcessing.SubpixelMorphologicalAntialiasing
+    - UnityEngine.Rendering.PostProcessing.TemporalAntialiasing
+    - UnityEngine.Rendering.PostProcessing.TextureParameter
+    - UnityEngine.Rendering.PostProcessing.VectorscopeMonitor
+    - UnityEngine.Rendering.PostProcessing.WaveformMonitor
+    Unity.TextMeshPro:
+    - TMPro.FaceInfo_Legacy
+    - TMPro.FontAssetCreationSettings
+    - TMPro.KerningTable
+    - TMPro.TMP_Character
+    - TMPro.TMP_FontFeatureTable
+    - TMPro.TMP_FontWeightPair
+    - TMPro.TMP_GlyphAdjustmentRecord
+    - TMPro.TMP_GlyphPairAdjustmentRecord
+    - TMPro.TMP_GlyphValueRecord
+    - TMPro.TMP_InputField/OnChangeEvent
+    - TMPro.TMP_InputField/SelectionEvent
+    - TMPro.TMP_InputField/SubmitEvent
+    - TMPro.TMP_InputField/TextSelectionEvent
+    - TMPro.TMP_InputField/TouchScreenKeyboardEvent
+    - TMPro.TMP_Sprite
+    - TMPro.TMP_SpriteCharacter
+    - TMPro.TMP_SpriteGlyph
+    - TMPro.TMP_Style
+    - TMPro.VertexGradient
+    UnityEngine.CoreModule:
+    - UnityEngine.BoneWeight1
+    - UnityEngine.Events.ArgumentCache
+    - UnityEngine.Events.PersistentCallGroup
+    - UnityEngine.Events.PersistentListenerMode
+    UnityEngine.TextCoreFontEngineModule:
+    - UnityEngine.TextCore.FaceInfo
+    - UnityEngine.TextCore.Glyph
+    - UnityEngine.TextCore.GlyphMetrics
+    - UnityEngine.TextCore.GlyphRect
+    UnityEngine.UI:
+    - UnityEngine.EventSystems.EventTrigger/Entry
+    - UnityEngine.EventSystems.EventTrigger/TriggerEvent
+    - UnityEngine.UI.AnimationTriggers
+    - UnityEngine.UI.Button/ButtonClickedEvent
+    - UnityEngine.UI.ColorBlock
+    - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+    - UnityEngine.UI.Navigation
+    - UnityEngine.UI.ScrollRect/ScrollRectEvent
+    - UnityEngine.UI.Scrollbar/ScrollEvent
+    - UnityEngine.UI.SpriteState
+    UnityEngine.UIElementsModule:
+    - UnityEngine.UIElements.DynamicAtlasSettings
+    - UnityEngine.UIElements.StyleComplexSelector
+    - UnityEngine.UIElements.StyleProperty
+    - UnityEngine.UIElements.StyleRule
+    - UnityEngine.UIElements.StyleSelector
+    - UnityEngine.UIElements.StyleSelectorPart
+    - UnityEngine.UIElements.StyleSheet/ImportStruct
+    - UnityEngine.UIElements.StyleSheets.Dimension
+    - UnityEngine.UIElements.StyleSheets.ScalableImage
+    - UnityEngine.UIElements.StyleValueHandle
+  methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: AKCondinoO.UI.Fixed.ConsoleInputField
+    methodName: OnEndEdit
+  - assembly: Assembly-CSharp
+    fullTypeName: AKCondinoO.UI.Fixed.FixedUI
+    methodName: OnInteractModeButtonPress
+  - assembly: Assembly-CSharp
+    fullTypeName: AKCondinoO.UI.Fixed.FixedUI
+    methodName: OnBuildBuyEditModeButtonPress
+  sceneClasses:
+    Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 3876}
+    - Class: 114
+      Script: {instanceID: 12876}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    Assets/Scenes/EntryScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 72
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 700}
+    - Class: 114
+      Script: {instanceID: 702}
+    - Class: 114
+      Script: {instanceID: 724}
+    - Class: 114
+      Script: {instanceID: 1674}
+    - Class: 114
+      Script: {instanceID: 1822}
+    - Class: 114
+      Script: {instanceID: 1882}
+    - Class: 114
+      Script: {instanceID: 1978}
+    - Class: 114
+      Script: {instanceID: 1998}
+    - Class: 114
+      Script: {instanceID: 2276}
+    - Class: 114
+      Script: {instanceID: 2732}
+    - Class: 114
+      Script: {instanceID: 2862}
+    - Class: 114
+      Script: {instanceID: 2932}
+    - Class: 114
+      Script: {instanceID: 3400}
+    - Class: 114
+      Script: {instanceID: 3884}
+    - Class: 114
+      Script: {instanceID: 3936}
+    - Class: 114
+      Script: {instanceID: 3946}
+    - Class: 114
+      Script: {instanceID: 4102}
+    - Class: 114
+      Script: {instanceID: 4606}
+    - Class: 114
+      Script: {instanceID: 4786}
+    - Class: 114
+      Script: {instanceID: 4994}
+    - Class: 114
+      Script: {instanceID: 5648}
+    - Class: 114
+      Script: {instanceID: 5732}
+    - Class: 114
+      Script: {instanceID: 5734}
+    - Class: 114
+      Script: {instanceID: 5888}
+    - Class: 114
+      Script: {instanceID: 5906}
+    - Class: 114
+      Script: {instanceID: 6098}
+    - Class: 114
+      Script: {instanceID: 6490}
+    - Class: 114
+      Script: {instanceID: 6856}
+    - Class: 114
+      Script: {instanceID: 6910}
+    - Class: 114
+      Script: {instanceID: 7052}
+    - Class: 114
+      Script: {instanceID: 7264}
+    - Class: 114
+      Script: {instanceID: 7340}
+    - Class: 114
+      Script: {instanceID: 7400}
+    - Class: 114
+      Script: {instanceID: 7592}
+    - Class: 114
+      Script: {instanceID: 7658}
+    - Class: 114
+      Script: {instanceID: 7770}
+    - Class: 114
+      Script: {instanceID: 8034}
+    - Class: 114
+      Script: {instanceID: 8074}
+    - Class: 114
+      Script: {instanceID: 8128}
+    - Class: 114
+      Script: {instanceID: 8560}
+    - Class: 114
+      Script: {instanceID: 8752}
+    - Class: 114
+      Script: {instanceID: 9810}
+    - Class: 114
+      Script: {instanceID: 10062}
+    - Class: 114
+      Script: {instanceID: 10092}
+    - Class: 114
+      Script: {instanceID: 10626}
+    - Class: 114
+      Script: {instanceID: 10702}
+    - Class: 114
+      Script: {instanceID: 10736}
+    - Class: 114
+      Script: {instanceID: 10834}
+    - Class: 114
+      Script: {instanceID: 11134}
+    - Class: 114
+      Script: {instanceID: 11370}
+    - Class: 114
+      Script: {instanceID: 11452}
+    - Class: 114
+      Script: {instanceID: 12286}
+    - Class: 114
+      Script: {instanceID: 12330}
+    - Class: 114
+      Script: {instanceID: 12520}
+    - Class: 114
+      Script: {instanceID: 12846}
+    - Class: 114
+      Script: {instanceID: 13132}
+    - Class: 114
+      Script: {instanceID: 13310}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 136
+      Script: {instanceID: 0}
+    - Class: 143
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 193
+      Script: {instanceID: 0}
+    - Class: 195
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 208
+      Script: {instanceID: 0}
+    - Class: 1773428102
+      Script: {instanceID: 0}
+    Assets/Scenes/MainMenuScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1862}
+    - Class: 114
+      Script: {instanceID: 3536}
+    - Class: 114
+      Script: {instanceID: 5410}
+    - Class: 114
+      Script: {instanceID: 8612}
+    - Class: 114
+      Script: {instanceID: 10062}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    Assets/Scenes/MainScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 72
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1652}
+    - Class: 114
+      Script: {instanceID: 1654}
+    - Class: 114
+      Script: {instanceID: 1656}
+    - Class: 114
+      Script: {instanceID: 1694}
+    - Class: 114
+      Script: {instanceID: 1716}
+    - Class: 114
+      Script: {instanceID: 1820}
+    - Class: 114
+      Script: {instanceID: 1862}
+    - Class: 114
+      Script: {instanceID: 2732}
+    - Class: 114
+      Script: {instanceID: 3034}
+    - Class: 114
+      Script: {instanceID: 3130}
+    - Class: 114
+      Script: {instanceID: 3352}
+    - Class: 114
+      Script: {instanceID: 3556}
+    - Class: 114
+      Script: {instanceID: 3846}
+    - Class: 114
+      Script: {instanceID: 4096}
+    - Class: 114
+      Script: {instanceID: 4450}
+    - Class: 114
+      Script: {instanceID: 4596}
+    - Class: 114
+      Script: {instanceID: 4762}
+    - Class: 114
+      Script: {instanceID: 5410}
+    - Class: 114
+      Script: {instanceID: 5498}
+    - Class: 114
+      Script: {instanceID: 5508}
+    - Class: 114
+      Script: {instanceID: 5888}
+    - Class: 114
+      Script: {instanceID: 5994}
+    - Class: 114
+      Script: {instanceID: 6082}
+    - Class: 114
+      Script: {instanceID: 6274}
+    - Class: 114
+      Script: {instanceID: 6364}
+    - Class: 114
+      Script: {instanceID: 6648}
+    - Class: 114
+      Script: {instanceID: 7228}
+    - Class: 114
+      Script: {instanceID: 7636}
+    - Class: 114
+      Script: {instanceID: 7714}
+    - Class: 114
+      Script: {instanceID: 7770}
+    - Class: 114
+      Script: {instanceID: 8268}
+    - Class: 114
+      Script: {instanceID: 8326}
+    - Class: 114
+      Script: {instanceID: 8452}
+    - Class: 114
+      Script: {instanceID: 8626}
+    - Class: 114
+      Script: {instanceID: 8644}
+    - Class: 114
+      Script: {instanceID: 9346}
+    - Class: 114
+      Script: {instanceID: 9368}
+    - Class: 114
+      Script: {instanceID: 9578}
+    - Class: 114
+      Script: {instanceID: 9646}
+    - Class: 114
+      Script: {instanceID: 9780}
+    - Class: 114
+      Script: {instanceID: 9842}
+    - Class: 114
+      Script: {instanceID: 9880}
+    - Class: 114
+      Script: {instanceID: 10062}
+    - Class: 114
+      Script: {instanceID: 10282}
+    - Class: 114
+      Script: {instanceID: 10454}
+    - Class: 114
+      Script: {instanceID: 10474}
+    - Class: 114
+      Script: {instanceID: 10544}
+    - Class: 114
+      Script: {instanceID: 10736}
+    - Class: 114
+      Script: {instanceID: 10822}
+    - Class: 114
+      Script: {instanceID: 11128}
+    - Class: 114
+      Script: {instanceID: 11244}
+    - Class: 114
+      Script: {instanceID: 11462}
+    - Class: 114
+      Script: {instanceID: 11542}
+    - Class: 114
+      Script: {instanceID: 11594}
+    - Class: 114
+      Script: {instanceID: 11622}
+    - Class: 114
+      Script: {instanceID: 11632}
+    - Class: 114
+      Script: {instanceID: 12066}
+    - Class: 114
+      Script: {instanceID: 12578}
+    - Class: 114
+      Script: {instanceID: 12604}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 182
+      Script: {instanceID: 0}
+    - Class: 187
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 258
+      Script: {instanceID: 0}
+    - Class: 850595691
+      Script: {instanceID: 0}
+  scriptHashData:
+  - hash:
+      serializedVersion: 2
+      Hash: 6a356b04c25c0bb008c1b24bf8b0f996
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: CanvasScaler
+  - hash:
+      serializedVersion: 2
+      Hash: 0b7995e6c59201aa9b4ad6a0aecb4621
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Button
+  - hash:
+      serializedVersion: 2
+      Hash: 1acffdc47de1ca014dae3d384c3d1086
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: ScrollRect
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UIElements
+    className: PanelRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: DisfiguringHomunculusAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: 16c8cbd24a32f9d6625615e0e9098073
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Image
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Inventory
+    className: SimInventoryManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables
+    className: BuildCategorySimObjectsTable
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnScrollbarValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 94f8303fca6ba25383fc62595e324b7b
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: LayoutElement
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimCollisionsChildTrigger
+  - hash:
+      serializedVersion: 2
+      Hash: 1ed2c6278a809fcb97c4b0e845bbecc5
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Selectable
+  - hash:
+      serializedVersion: 2
+      Hash: ca58944a0aa93b025fcf96876cd4d16d
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: Gameplayer
+  - hash:
+      serializedVersion: 2
+      Hash: 6558c53948dbdfacfdf4eb246227ed7f
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: TutorialDNAConverterBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Humanoid.Human
+    className: HumanAI
+  - hash:
+      serializedVersion: 2
+      Hash: bc173c2c2562fdeb937e6b39560e02f7
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UmaTPose
+  - hash:
+      serializedVersion: 2
+      Hash: 8d5d0b90d9fd191136ed7adebabf1691
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaColorTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: ArthurCondinoControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnDropMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 8358d10619b0a8514d17ad3d8ff3068b
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: ExpressionPlayer
+  - hash:
+      serializedVersion: 2
+      Hash: d4e54905572b5248a464d5a5dc4227e3
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: DeferredFogEffect
+  - hash:
+      serializedVersion: 2
+      Hash: ce71df3ffef13cac3e51363248a09903
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: DynamicUMADnaAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: EmissiveOscillator
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnBecameVisibleMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 03a9285838fdfc938d3e284a7f45f9c8
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: OverallScaleDNAConverterPlugin
+  - hash:
+      serializedVersion: 2
+      Hash: bf8e7513a6a15e836c34b697fcf2ccd7
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: TimelineAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: a8eef8ba110432c3a7f5b72acd04d4cb
+    assemblyName: Unity.Multiplayer.Tools.NetStatsMonitor.Configuration
+    namespaceName: Unity.Multiplayer.Tools.NetStatsMonitor
+    className: NetStatsMonitorConfiguration
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Ambience.Clouds
+    className: CloudParticle
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: CoroutineRunner
+  - hash:
+      serializedVersion: 2
+      Hash: aa5adfbcb3c4ed0948c412372aab3263
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: ChromaticAberration
+  - hash:
+      serializedVersion: 2
+      Hash: 5066c8d8a9eaf6c90eb31f4abfee9292
+    assemblyName: UMA_Core
+    namespaceName: UMA.AssetBundles
+    className: AssetBundleLoadingIndicator
+  - hash:
+      serializedVersion: 2
+      Hash: be8b55fc8a992741c6269f20cbc719b1
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: InputField
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnButtonClickMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: a306b4581adca3253f63acc061a6fbf8
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Inventory
+    className: InContainerTransformData
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Humanoid
+    className: DisfiguringHomunculusAI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnDropdownValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: f27f3056094f52385706af96ac5a0cbf
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMAExpressionSet
+  - hash:
+      serializedVersion: 2
+      Hash: 1f778e3c8d27c05cffad8f4dff20f6a6
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: GeometrySelector
+  - hash:
+      serializedVersion: 2
+      Hash: d2312d38be77aab23895892f6bd7d847
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAGenerator
+  - hash:
+      serializedVersion: 2
+      Hash: 866d4680b98e49a822c0ab17aa72657e
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Trees
+    className: SimTree
+  - hash:
+      serializedVersion: 2
+      Hash: 7544030b550fb15ca66632b721e54b7c
+    assemblyName: UMA_Core
+    namespaceName: UMA.Dynamics
+    className: UMAPhysicsAvatar
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnInputFieldValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseDownMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAGlobalContext
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseDragMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 4c7b3268166d88cbe2edaec43310dc64
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: OverlayViewer
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Flow
+    namespaceName: Unity.VisualScripting
+    className: ScriptMachine
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnSelectMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 034f9e7aa55857216a927654f5bef819
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels.Terrain.Editing
+    className: VoxelTerrainEditing
+  - hash:
+      serializedVersion: 2
+      Hash: 9ee6cf24adde56d13761a90d80667e94
+    assemblyName: UMA_Core
+    namespaceName: 
+    className: UMASettingsProvider
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: GenerateHomunculus
+  - hash:
+      serializedVersion: 2
+      Hash: 747284d692f6c45bae4955ed655ed04c
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TextMeshPro
+  - hash:
+      serializedVersion: 2
+      Hash: c343da5828fddd0a899e69eb0f447fd5
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: AnimationTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionExit2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: b6285bbebfd146ef3afe007ed7e0756a
+    assemblyName: UMA_Core
+    namespaceName: UMA.Dynamics
+    className: UMAPhysicsElement
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: CoreDataSync
+  - hash:
+      serializedVersion: 2
+      Hash: 9c9caa424d45bd967c70cc5f044ffdb3
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels.Water.Editing
+    className: VoxelWaterEditing
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Flow
+    namespaceName: Unity.VisualScripting
+    className: ScriptGraphAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 0286ed84936a6e3c4dba049ae21a7b1c
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: ActivationTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnPointerExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 8f834e9cda1d95edcfe6dc40c42d5e86
+    assemblyName: UMA_Core
+    namespaceName: 
+    className: UMARenderTextureMover
+  - hash:
+      serializedVersion: 2
+      Hash: fadea829800797b437e8d1fed052e0fa
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: SkeletonDNAConverterPlugin
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMARenderTextureManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: GameMode
+  - hash:
+      serializedVersion: 2
+      Hash: 13c320424e15e88a0527d7477a4188bb
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: SignalReceiver
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.SimObjectToSpriteTool
+    className: SimObjectScreenshotHelper
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: SpiritualHealing
+  - hash:
+      serializedVersion: 2
+      Hash: d4309e41df824c206fbe9f4900221fab
+    assemblyName: Unity.Multiplayer.Tools.NetStatsMonitor.Component
+    namespaceName: Unity.Multiplayer.Tools.NetStatsMonitor
+    className: CustomTestDataGenerator
+  - hash:
+      serializedVersion: 2
+      Hash: dd7365d011fb5975838f523fc9b1668a
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_Settings
+  - hash:
+      serializedVersion: 2
+      Hash: fd3b229c6fefe660cc56661413795fea
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAAssetIndexer
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnJointBreak2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 115f7ae5ac85c8853becdfabc4fdf917
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimConstruction
+  - hash:
+      serializedVersion: 2
+      Hash: 1f916fc64c6188d57734e028545e3769
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaWardrobeClip
+  - hash:
+      serializedVersion: 2
+      Hash: 350287793c1a6b35313df9baa18155f5
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: SunLight
+  - hash:
+      serializedVersion: 2
+      Hash: 7e3dea2417f90828726d332b44fbd216
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Weapons.Rifle.SniperRifle
+    className: RemingtonModel700BDL
+  - hash:
+      serializedVersion: 2
+      Hash: 8fc624ac811721273127d46f1437677d
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: DNARangeAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 408293f89d4950546351fcf0e974583f
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: MotionBlur
+  - hash:
+      serializedVersion: 2
+      Hash: fad26101945943c1d2f770988cf92666
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicOverlayLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 2d75826e20b3bcaf5d1c4959d271fa74
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: 
+    className: ExampleNetworkDiscovery
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCancelMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnPointerClickMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: a774afc2d683a1fb0fa29ecc0d5a6fb5
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessVolume
+  - hash:
+      serializedVersion: 2
+      Hash: ae1dccb43fdcd72731878b37880196f2
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMAExpressionPlayer
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: MacroScriptableObject
+  - hash:
+      serializedVersion: 2
+      Hash: 142264d9d6b0842e37d4aad2e8ff56d0
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: GridLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: e44c1964aad6fb40563573cf6608be1c
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessResources
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills.SkillVisualEffects
+    className: SpiritualHealingSkillVisualEffect
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTransformChildrenChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnBeginDragMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 562a132bd9387b2df9162ffa80ec2f4b
+    assemblyName: UMA_Core
+    namespaceName: UMA.Examples
+    className: UMASimpleLOD
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Homunculi
+    className: HomunculusAI
+  - hash:
+      serializedVersion: 2
+      Hash: fa7c62595553866a25a1f687b1914fd2
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Toggle
+  - hash:
+      serializedVersion: 2
+      Hash: 2ebf18dc503dbe680beb56f1ba4c4c21
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: SimTime
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Humanoid
+    className: HumanoidAI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SteamManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: Skill
+  - hash:
+      serializedVersion: 2
+      Hash: 504ce94d407db6cc04deba6c49062bc8
+    assemblyName: Unity.Netcode.Components
+    namespaceName: Unity.Netcode.Components
+    className: NetworkAnimator
+  - hash:
+      serializedVersion: 2
+      Hash: 41ac98c9880a6f3758ca69dbaa1e7777
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: HorizontalLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionEnter2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 15146d050d6483434f5274d48058398e
+    assemblyName: Unity.AI.Navigation
+    namespaceName: Unity.AI.Navigation
+    className: NavMeshModifierVolume
+  - hash:
+      serializedVersion: 2
+      Hash: 2c11e3687875dd78c091544cf3bccfa3
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: DepthOfField
+  - hash:
+      serializedVersion: 2
+      Hash: 99714fb338be16318d228efa4e9829ee
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: BloomEffect
+  - hash:
+      serializedVersion: 2
+      Hash: 53a661f7e22d8243d3a0704ade75de8c
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DCARendererManager
+  - hash:
+      serializedVersion: 2
+      Hash: 115f7ae5ac85c8853becdfabc4fdf917
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: Floor10x10x10
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UIElements
+    className: PanelEventHandler
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: GroupTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnDeselectMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: d96e4ae3c01c9d42e47e4d6642fb3169
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicAssetLoader
+  - hash:
+      serializedVersion: 2
+      Hash: 2d8b84c370b0a7eacc303607cc9c3a1c
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAGeneratorStub
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.ResourceManager
+    namespaceName: 
+    className: MonoBehaviourCallbackHooks
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables
+    className: TableFloors
+  - hash:
+      serializedVersion: 2
+      Hash: 4126b0751311119d71423265392e674f
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: SlotLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: a048d987ffe7628df96de12582b6b8f7
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAContext
+  - hash:
+      serializedVersion: 2
+      Hash: 4a0613e4991e661e7b4f52c740c0b3cb
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels.Terrain.Networking
+    className: VoxelTerrainChunkUnnamedMessageHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: AnimatorMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAFastMeshCombiner
+  - hash:
+      serializedVersion: 2
+      Hash: 0c9304605500dbd9ebcff68fd7f9345b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels.Water
+    className: VoxelWaterChunk
+  - hash:
+      serializedVersion: 2
+      Hash: 46ffbaea01259c5c7ee677afefd93ea8
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TextMeshProUGUI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: AnimationEventsHandler
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino
+    className: ArthurCondinoAI
+  - hash:
+      serializedVersion: 2
+      Hash: e951a509986cba0510354f1c7aadcdba
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: DynamicDNAConverterController
+  - hash:
+      serializedVersion: 2
+      Hash: 2a8fe28fab666b52134475f04127e8f2
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimCollisions
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerStay2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 7e3dea2417f90828726d332b44fbd216
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Weapons.Rifle.SniperRifle
+    className: SimSniperRifle
+  - hash:
+      serializedVersion: 2
+      Hash: df70afff09fcc26f54fe08084e6042ec
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_SubMesh
+  - hash:
+      serializedVersion: 2
+      Hash: de5f6a51506a5bdb94f2ea1c93170469
+    assemblyName: Unity.Netcode.Components
+    namespaceName: Unity.Netcode.Components
+    className: NetworkTransform
+  - hash:
+      serializedVersion: 2
+      Hash: 62893d5386388c58f52447ba7d000e77
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: OverlayDataAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: GameEntry
+  - hash:
+      serializedVersion: 2
+      Hash: d4cdda32396467393589518c23ec263d
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMADynamicExpressionBonePose
+  - hash:
+      serializedVersion: 2
+      Hash: a03cf6f60c605d858f83449f4b4fc400
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools
+    className: BeforeAfterTestCommandState
+  - hash:
+      serializedVersion: 2
+      Hash: 21118b0810c9b4690a357f6d9e791d8e
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: 
+    className: NetworkManagerHud
+  - hash:
+      serializedVersion: 2
+      Hash: 0a2b9e03c317debf94d9c1bdb32e85fc
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMARandomizer
+  - hash:
+      serializedVersion: 2
+      Hash: 804136b77d71cf14df61284c06f25772
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimObjectSpawner
+  - hash:
+      serializedVersion: 2
+      Hash: 1a4f853293374b45dd53395d73c1dc46
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: TwistBones
+  - hash:
+      serializedVersion: 2
+      Hash: 27b6bb8390255ceb457a2f7c1863bea8
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Fixed
+    className: FixedUI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: CallHomunculus
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnDragMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: ea1569413d805748b7cef2dcb4622c85
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Outline
+  - hash:
+      serializedVersion: 2
+      Hash: 25ff0a62cb51cd66d21e28116d85b3af
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicCharacterSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 41ac98c9880a6f3758ca69dbaa1e7777
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: VerticalLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: AutonomyCore
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerEnter2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: fbf53acf713ce68dd7710f7771a6093f
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Fixed
+    className: Stretcher
+  - hash:
+      serializedVersion: 2
+      Hash: 6169f397c33ac528450ace33e33ea4b3
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Music
+    className: BGM
+  - hash:
+      serializedVersion: 2
+      Hash: 34096a327d779b7c96a3e390f3559143
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: Physics2DRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: PositionChangeSkill
+  - hash:
+      serializedVersion: 2
+      Hash: 788f68f9b7ec40b66df87342b32a0ef9
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicDNAConverterBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: PositionAsUV1
+  - hash:
+      serializedVersion: 2
+      Hash: 2d8b84c370b0a7eacc303607cc9c3a1c
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAGeneratorGLIB
+  - hash:
+      serializedVersion: 2
+      Hash: 6a8f33c6f65e56dee5afb5653d6b5183
+    assemblyName: Unity.Netcode.Runtime
+    namespaceName: Unity.Netcode
+    className: NetworkManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnSubmitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 21458b64fdf3b1c35574c2a0e82b859d
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Dropdown
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: SignalTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 48c9635ae92d289d270530cd33c9e518
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels.Terrain
+    className: VoxelTerrainChunk
+  - hash:
+      serializedVersion: 2
+      Hash: f4d350b7f47f48ff9fe749c9f2fb29a7
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: FXAAEffect
+  - hash:
+      serializedVersion: 2
+      Hash: 6c9b94768b76672bb0b11ff91dd93b6a
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMADynamicExpressionPlayer
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: ControlTrack
+  - hash:
+      serializedVersion: 2
+      Hash: f88e41f9c5ab47071dd0fbe4c275e066
+    assemblyName: UMA_Core
+    namespaceName: UMA.Integrations.PowerTools
+    className: UMALODConversionSet
+  - hash:
+      serializedVersion: 2
+      Hash: 1ba94d754762a37eb8d04c3dfd6b0a67
+    assemblyName: SteamNetworkingSockets Transport for Netcode for GameObjects
+    namespaceName: Netcode.Transports
+    className: SteamNetworkingSocketsTransport
+  - hash:
+      serializedVersion: 2
+      Hash: 7927cb241a3451a30d716c57fd32045c
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: RaceData
+  - hash:
+      serializedVersion: 2
+      Hash: 6558c53948dbdfacfdf4eb246227ed7f
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: HumanoidDNAConverterBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 07fd14c6c802738105d41763273ef4ca
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: ColorDNAConverterPlugin
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnParticleCollisionMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseOverMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: Teleport
+  - hash:
+      serializedVersion: 2
+      Hash: a0c3d8ac0230199d5e0acf6626e72964
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: ColorGrading
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: Variables
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.State
+    namespaceName: Unity.VisualScripting
+    className: StateMachine
+  - hash:
+      serializedVersion: 2
+      Hash: e0959e6b1ac2cd5e8efb65362252ce93
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: LensDistortion
+  - hash:
+      serializedVersion: 2
+      Hash: 128906859f52ec37da2fb732756a9fc4
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: SeamRemoval
+  - hash:
+      serializedVersion: 2
+      Hash: 81f24fb2f51bf001c533802a77c4aeae
+    assemblyName: Unity.Multiplayer.Tools.NetworkSimulator.Runtime
+    namespaceName: Unity.Multiplayer.Tools.NetworkSimulator.Runtime
+    className: NetworkSimulator
+  - hash:
+      serializedVersion: 2
+      Hash: 42f548e7c4b38e7bdd235cc9649d6131
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: BonePoseDNAConverterPlugin
+  - hash:
+      serializedVersion: 2
+      Hash: ee193aa3205130430edac51e725fcec3
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: OverlayLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 28873fe9170abb2910f2c4b88a93bb0f
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_ScrollbarEventHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: BinaryAssetWrapper
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: InputHandler
+  - hash:
+      serializedVersion: 2
+      Hash: bb89d86fab65b2e3510cf64bb0cd70a6
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Combat
+    className: Hitboxes
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills.SkillVisualEffects
+    className: SkillVisualEffect
+  - hash:
+      serializedVersion: 2
+      Hash: daba00a72b0c07617983f2631c7fc178
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: UMAWardrobeRecipe
+  - hash:
+      serializedVersion: 2
+      Hash: afe1800287c9574079eab3fea2622416
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: SignalEmitter
+  - hash:
+      serializedVersion: 2
+      Hash: 38028cdb31eb2e05085d581602b2aca9
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: OnHitGracePeriod
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnToggleValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseEnterMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 0e28d8006f33a4c6bf3ef39e20820f9c
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: TouchInputModule
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.ResourceManager
+    namespaceName: UnityEngine.ResourceManagement.Diagnostics
+    className: DiagnosticEventCollector
+  - hash:
+      serializedVersion: 2
+      Hash: 2d1e471209da5a5b47f8e7e50c8c5dff
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: BlendshapeDNAConverterPlugin
+  - hash:
+      serializedVersion: 2
+      Hash: 8244584c258c6fc24b5789bd07f31d48
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicSlotLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Combat
+    className: Hurtboxes
+  - hash:
+      serializedVersion: 2
+      Hash: 6938a1f995c15952cc0bc9b4267bca0a
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Gameplaying
+    className: GameplayerManagement
+  - hash:
+      serializedVersion: 2
+      Hash: 97d1aeae4676e948e43c08877e1608b6
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaRaceClip
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Networking
+    className: NetworkCommandLine
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: SignalAsset
+  - hash:
+      serializedVersion: 2
+      Hash: df4f4f182005df0a58099506d634cbdb
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: Grain
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimsMachine
+  - hash:
+      serializedVersion: 2
+      Hash: 425d3ffa19cad8dda8a95b50af0641a1
+    assemblyName: Unity.Netcode.Runtime
+    namespaceName: Unity.Netcode.Transports.UTP
+    className: SecretsLoaderHelper
+  - hash:
+      serializedVersion: 2
+      Hash: ea1569413d805748b7cef2dcb4622c85
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Shadow
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionStayMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 9ccc7f8412d856d7f305fe20d42bb8c6
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAMaterial
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicCharacterSystemBase
+  - hash:
+      serializedVersion: 2
+      Hash: 9b4b09b2924330945408353636beec94
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GPUInstancingTest
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Netcode.Components
+    namespaceName: Unity.Netcode.Components
+    className: NetworkRigidbody2D
+  - hash:
+      serializedVersion: 2
+      Hash: cdce0fd4c09c80faab9b8a4aebe060b3
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: 
+    className: ExampleNetworkDiscoveryHud
+  - hash:
+      serializedVersion: 2
+      Hash: 05ca56950301db3a96888b11acde8b92
+    assemblyName: Unity.Multiplayer.Tools.NetworkSimulator.Runtime
+    namespaceName: Unity.Multiplayer.Tools.NetworkSimulator.Runtime
+    className: NetworkSimulatorPresetAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: ChaoticBlessing
+  - hash:
+      serializedVersion: 2
+      Hash: f1445f3ff32ccc4abfea45fc9d49d307
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: Netcode.Extensions
+    className: ClientNetworkAnimator
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerEnterMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 63815508dfd6cf329d5c593ac8e76888
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_StyleSheet
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnPointerUpMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: a443c74709b759f40470fc7a3a2164f5
+    assemblyName: Unity.Netcode.Runtime
+    namespaceName: Unity.Netcode.Transports.UTP
+    className: UnityTransport
+  - hash:
+      serializedVersion: 2
+      Hash: 49031f0904f24a521ccdec39bbd92cba
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools.TestRunner
+    className: PlaymodeTestsController
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnJointBreakMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 6f67dd406ddfc18c9b3f8a90725c6266
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: RawImage
+  - hash:
+      serializedVersion: 2
+      Hash: f34f6a4a902b5770e5191b5985cd9106
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: StandAloneDNA
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.ResourceManager
+    namespaceName: UnityEngine.ResourceManagement.Util
+    className: DelayedActionManager
+  - hash:
+      serializedVersion: 2
+      Hash: 7e666833ed6f7b7023727d2f1ed650e8
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: UMADynamicCharacterAvatarRecipe
+  - hash:
+      serializedVersion: 2
+      Hash: fc4b10d676d5a5aae087dfc9c7748857
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessLayer
+  - hash:
+      serializedVersion: 2
+      Hash: e57f15d7c331b25a9dfbb56e44d98187
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: SimAnimatorIKController
+  - hash:
+      serializedVersion: 2
+      Hash: e2b882bfa40dee0b02e259e2a3226ebe
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: MorphSetDnaConverterBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 05a6b486252d5cb166c6295e24bf8a70
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAPostProcess
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: HumanAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: 2fb7c9d45a068cc73521a5c014dcd30b
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: Netcode.Extensions
+    className: NetworkObjectPool
+  - hash:
+      serializedVersion: 2
+      Hash: bcdedb1b3a567eb05111be4716618ce1
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: EventSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 848c5c3c98557fc2f2199206a7eaa69a
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_Dropdown
+  - hash:
+      serializedVersion: 2
+      Hash: 684b06ef3de8cea5fbf767704db4f3e4
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: AudioTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionEnterMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: e6a753b0965f830e79fc1140e90b6b92
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicCharacterAvatar
+  - hash:
+      serializedVersion: 2
+      Hash: 1d44cf46bbdbccc0e50c72e5da25f40c
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI
+    className: MainMenu
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Fixed
+    className: ConsoleInputField
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestRunner.Utils
+    className: TestRunCallbackListener
+  - hash:
+      serializedVersion: 2
+      Hash: 6498fc76484598db46c5c1a11bab42fa
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: GraphicRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 34fa63a30926bcf55d7323dae76be890
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_SelectionCaret
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_SpriteAnimator
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnInputFieldEndEditMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
+    className: TestResultRendererCallback
+  - hash:
+      serializedVersion: 2
+      Hash: 6ae5ec4b3686ae4cbe0b3d2fc81223da
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: SlotDataAsset
+  - hash:
+      serializedVersion: 2
+      Hash: f744056c839b4b52a23525fca07ed238
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: DNAEvaluationGraphPresetLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 54a1a6d6fc3bf662ed9aa505d2ca74f2
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaColorClip
+  - hash:
+      serializedVersion: 2
+      Hash: 14be8b8fb2e2cae82d9b9f469cf347eb
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMARandomAvatar
+  - hash:
+      serializedVersion: 2
+      Hash: a4d905db69ca7f45f45458ae380fb66f
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: ToggleGroup
+  - hash:
+      serializedVersion: 2
+      Hash: bb9ac4945d91f5020a1c2031eee32ccc
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAClothProperties
+  - hash:
+      serializedVersion: 2
+      Hash: 7d11b087a658f33e5880589c7177b314
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: DepthOfFieldEffect
+  - hash:
+      serializedVersion: 2
+      Hash: f3a365a4967b4703938fd6d90be70162
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: MeshHideAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills.SkillBuffs
+    className: SkillBuffEffectsState
+  - hash:
+      serializedVersion: 2
+      Hash: 843836ad56ce5ef50c83c4db3bf552d1
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: AutoExposure
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnScrollMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTransformParentChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 0249933f35dcc970b31eaae0159aebf9
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: ContentSizeFitter
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: VariablesAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 5ae87f54827b2cb17f1447c22564562d
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMABonePose
+  - hash:
+      serializedVersion: 2
+      Hash: 866d4680b98e49a822c0ab17aa72657e
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimObject
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
+    className: PlayerQuitHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: BaseInput
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: BaseAI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnControllerColliderHitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: a174367387140fb8f1dee256ed2bc1a2
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: TextureMerge
+  - hash:
+      serializedVersion: 2
+      Hash: da4d32f9cd3b02cc835567ea8973a171
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: Bloom
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaWardrobeTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 36e83104f8fdeb0937f4ac2be776118b
+    assemblyName: UMA_Core
+    namespaceName: UMA.AssetBundles
+    className: AssetBundleIndex
+  - hash:
+      serializedVersion: 2
+      Hash: a313e018decf2b7088da6fc4ed2258ff
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMARendererAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 0b38a0e76fbc4ec81572599103ce302f
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Voxels
+    className: VoxelSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 26c4d3ec85d81cf5e8b0cca0369a4b67
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaDnaClip
+  - hash:
+      serializedVersion: 2
+      Hash: b18151310f999106767addd7177d1a99
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Mask
+  - hash:
+      serializedVersion: 2
+      Hash: 028131bd57ac77bffd4327ae20c7ca30
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessEffectSettings
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaDnaTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionStay2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: b7c2c0e7ea5866fa575533cec11ef74d
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI.Context
+    className: ContextMenuUI
+  - hash:
+      serializedVersion: 2
+      Hash: f60085eba621f0023ea84554fae25344
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_ColorGradient
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Homunculi.Vanilmirth
+    className: ArquimedesAI
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: VariablesSaver
+  - hash:
+      serializedVersion: 2
+      Hash: 34096a327d779b7c96a3e390f3559143
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: PhysicsRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMADefaultMeshCombiner
+  - hash:
+      serializedVersion: 2
+      Hash: 98db835dd0659d490ded675102354289
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: ControlPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 2b006c27b595e55e112de0e713333574
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: RectMask2D
+  - hash:
+      serializedVersion: 2
+      Hash: bf5ca355e11b8eb204b6325406ee4a5c
+    assemblyName: UMA_Core
+    namespaceName: UMA.AssetBundles
+    className: UMAEncryptedBundle
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: DictionaryAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 6298a10412e94e11ad85ac6148c9dda1
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_SubMeshUI
+  - hash:
+      serializedVersion: 2
+      Hash: 144e882647a10a121a157ed067576ee4
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: TangentSpaceVisualizer
+  - hash:
+      serializedVersion: 2
+      Hash: 2942527feeafe81f148603e8bc34d5ef
+    assemblyName: Unity.Netcode.Runtime
+    namespaceName: Unity.Netcode
+    className: NetworkObject
+  - hash:
+      serializedVersion: 2
+      Hash: fcc569162a8d9bd9df34e8c9dee84212
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_SpriteAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: OnHitSkill
+  - hash:
+      serializedVersion: 2
+      Hash: 91fba0a2850ee2dd5a8a1e782bba2e26
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: ScreenSpaceReflections
+  - hash:
+      serializedVersion: 2
+      Hash: 97fffbec02b2c98692b2a818172b0b1d
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: HomunculusAnimatorController
+  - hash:
+      serializedVersion: 2
+      Hash: c0412e43908db043c68a7eafc58921c8
+    assemblyName: Unity.Netcode.Runtime
+    namespaceName: Unity.Netcode
+    className: NetworkPrefabsList
+  - hash:
+      serializedVersion: 2
+      Hash: 5a02e6aa82eac4a4094212f5e6b4432a
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: AssetBundleLoader
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills.SkillVisualEffects
+    className: SkillVisualEffectsManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: ActivationPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: SceneVariables
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA.AssetBundles
+    className: AssetBundleManager
+  - hash:
+      serializedVersion: 2
+      Hash: d1eb37d506f4604c2e20e2d1ab77db64
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Homunculi.Vanilmirth
+    className: VanilmirthAI
+  - hash:
+      serializedVersion: 2
+      Hash: 3a09ae0a4d0e75b36abda223b76ab1ea
+    assemblyName: Unity.AI.Navigation
+    namespaceName: Unity.AI.Navigation
+    className: NavMeshLink
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnEndDragMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 30b47ad88e97c139354d848e6ca2aba6
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 39973d1dfdd0728499a75c7ddb47b3ba
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: SunTransform
+  - hash:
+      serializedVersion: 2
+      Hash: 0cadf67970140b3a7997770202c43c70
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: AnimationPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: Netcode.Extensions.LagCompensation
+    className: TrackedObject
+  - hash:
+      serializedVersion: 2
+      Hash: 6237f92becd6162fa105361ab9ce2a00
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_InputField
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerStayMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: UMA_Core
+    namespaceName: UMA.Timeline
+    className: UmaRaceTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 7e666833ed6f7b7023727d2f1ed650e8
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMATextRecipe
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: GlobalMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 892b5093967522535ba980d28ce42084
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Slider
+  - hash:
+      serializedVersion: 2
+      Hash: 16e37bcabfe01719f731c560b146021f
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Combat
+    className: HurtboxesPrefabsList
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 1b4a83f2a2f1a4def12cdc9223cce72c
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TMP_FontAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 4862508a82e551bebf075a72a1084e27
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: Vignette
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: VanilmirthAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: d4504be021150a73d8ded6a9dc334107
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: RaceLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: ScreenInput
+  - hash:
+      serializedVersion: 2
+      Hash: 866d4680b98e49a822c0ab17aa72657e
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Trees
+    className: Betula_occidentalis_1
+  - hash:
+      serializedVersion: 2
+      Hash: df3841bdc79e467b7c95f61e2c5503ff
+    assemblyName: Unity.Multiplayer.Tools.NetStatsMonitor.Component
+    namespaceName: Unity.Multiplayer.Tools.NetStatsMonitor
+    className: RuntimeNetStatsMonitor
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnBecameInvisibleMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: f701137b5fe9552c6bf7c218e1d6c0d5
+    assemblyName: Unity.AI.Navigation
+    namespaceName: Unity.AI.Navigation
+    className: NavMeshSurface
+  - hash:
+      serializedVersion: 2
+      Hash: 115f7ae5ac85c8853becdfabc4fdf917
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimFloor
+  - hash:
+      serializedVersion: 2
+      Hash: 8e9c41254e5d537c5ad5a64dfc6709fb
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAAssetCollection
+  - hash:
+      serializedVersion: 2
+      Hash: 1ed846c1ed9d69c8c2fcff9a6896b04f
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Text
+  - hash:
+      serializedVersion: 2
+      Hash: f6831ac80ec81c5d5b370c0ed0fee997
+    assemblyName: Unity.VisualScripting.State
+    namespaceName: Unity.VisualScripting
+    className: StateGraphAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: SkillsManager
+  - hash:
+      serializedVersion: 2
+      Hash: 115b4be866689bf0d13809342edc71af
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAData
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Netcode.Components
+    namespaceName: Unity.Netcode.Components
+    className: NetworkRigidbody
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.UI
+    className: Placeholder
+  - hash:
+      serializedVersion: 2
+      Hash: 9edfd5836abca020b315ec22f415b23c
+    assemblyName: UMA_Core
+    namespaceName: 
+    className: UMAMountedItem
+  - hash:
+      serializedVersion: 2
+      Hash: eb89cc9c55c1361dc02d4fea220cc023
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: AspectRatioFitter
+  - hash:
+      serializedVersion: 2
+      Hash: ad3f6a308192b254ad4a8765534d8d57
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: UMAColorFader
+  - hash:
+      serializedVersion: 2
+      Hash: d70ed3bc057e50cb6109418b1810c239
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Combat
+    className: HitboxesPrefabsList
+  - hash:
+      serializedVersion: 2
+      Hash: 97fffbec02b2c98692b2a818172b0b1d
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: SimAnimatorController
+  - hash:
+      serializedVersion: 2
+      Hash: 75ee8d9edfd00f8a4a1dc48c823867ac
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims
+    className: SimObjectManager
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseUpAsButtonMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 23bac4337d5cedf6440e29a39a003e1c
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Ambience.Clouds
+    className: CloudParticleSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: HealingSkill
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: Core
+  - hash:
+      serializedVersion: 2
+      Hash: 5f6081561006955632ae889045b70bce
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: UMAExtendedAvatar
+  - hash:
+      serializedVersion: 2
+      Hash: 751d867553f413cde86fe5db0b02780d
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: StandaloneInputModule
+  - hash:
+      serializedVersion: 2
+      Hash: e021fae07b7c73933e18725f76623e21
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Scrollbar
+  - hash:
+      serializedVersion: 2
+      Hash: 3be189c3217dc5499497d288c56144e8
+    assemblyName: Netcode for GameObjects Community Extensions
+    namespaceName: Netcode.Extensions.LagCompensation
+    className: LagCompensationManager
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: MarkerTrack
+  - hash:
+      serializedVersion: 2
+      Hash: aa3abe62679eed605debfa89a32fd294
+    assemblyName: Unity.AI.Navigation
+    namespaceName: Unity.AI.Navigation
+    className: NavMeshModifier
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: HumanoidAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: f4f39b64f410b0cd98b49df4bad0eb7e
+    assemblyName: Unity.TextMeshPro
+    namespaceName: TMPro
+    className: TextContainer
+  - hash:
+      serializedVersion: 2
+      Hash: 7e3dea2417f90828726d332b44fbd216
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Weapons.Rifle
+    className: SimRifle
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Multiplayer.Tools.NetStatsReporting
+    namespaceName: Unity.Multiplayer.Tools.NetStatsReporting
+    className: TestDataGeneratorComponent
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnPointerEnterMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: be140ea01a11255b651c097661ac55b1
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 26d227ec3b40c386978afac588a70e49
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: SharedColorTable
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Ambience.Clouds
+    className: CloudsCamera
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnCollisionExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: BasicPlayableBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
+    className: PlayModeRunnerCallback
+  - hash:
+      serializedVersion: 2
+      Hash: bbd18fc68ceeefb10270c51811911485
+    assemblyName: Unity.Timeline
+    namespaceName: UnityEngine.Timeline
+    className: AudioPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnPointerDownMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnScrollRectValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: ce670371265af50e12cc59c9b9e94af9
+    assemblyName: UMA_Core
+    namespaceName: UMA.AssetBundles
+    className: UMAAssetBundleManagerSettings
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UnityEngine.TestRunner
+    namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
+    className: RemoteTestResultSender
+  - hash:
+      serializedVersion: 2
+      Hash: c92e03126f82226c2e517b0c562a3094
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.EventSystems
+    className: EventTrigger
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: ArquimedesAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: 5f6081561006955632ae889045b70bce
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMADynamicAvatar
+  - hash:
+      serializedVersion: 2
+      Hash: a6f9fe87f80e0d41a87e450fc0088542
+    assemblyName: UMA_Core
+    namespaceName: UMA.PoseTools
+    className: UMADynamicExpressionSet
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Skills
+    className: CallSlaveSkill
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMoveMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 866d4680b98e49a822c0ab17aa72657e
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Trees
+    className: Pinus_elliottii_1
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicDNAConverterCustomizer
+  - hash:
+      serializedVersion: 2
+      Hash: 8a19dad21d969aca0399d1618eb1c727
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessProfile
+  - hash:
+      serializedVersion: 2
+      Hash: 80789df0e1940f5416d1f2e5d39bb34b
+    assemblyName: Unity.Postprocessing.Runtime
+    namespaceName: UnityEngine.Rendering.PostProcessing
+    className: PostProcessDebug
+  - hash:
+      serializedVersion: 2
+      Hash: 047ccbd37d208a437099a26ed5c2a81b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO
+    className: MainCamera
+  - hash:
+      serializedVersion: 2
+      Hash: 56e44fa084eed055d2a9c07601825bd0
+    assemblyName: Unity.ScriptableBuildPipeline
+    namespaceName: UnityEngine.Build.Pipeline
+    className: CompatibilityAssetBundleManifest
+  - hash:
+      serializedVersion: 2
+      Hash: 3ea91634c03b5afb4d54caa65f4ae095
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: UMAWardrobeCollection
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: HomunculiAnimatorControllerMotionUpdater
+  - hash:
+      serializedVersion: 2
+      Hash: 7e3dea2417f90828726d332b44fbd216
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Weapons
+    className: SimWeapon
+  - hash:
+      serializedVersion: 2
+      Hash: 79461085796a306f5d125a3d9556485f
+    assemblyName: UMA_Core
+    namespaceName: UMA.CharacterSystem
+    className: DynamicRaceLibrary
+  - hash:
+      serializedVersion: 2
+      Hash: 943482c4cb426976a22bd1ce9fe65972
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: SimCharacterController
+  - hash:
+      serializedVersion: 2
+      Hash: f345ba640008cef500ad7615269f07bf
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.SimObjectToSpriteTool
+    className: ScreenshotBackground
+  - hash:
+      serializedVersion: 2
+      Hash: 0d08e2ff6580c83475c440e0f848d635
+    assemblyName: Unity.Multiplayer.Tools.MetricTestData
+    namespaceName: Unity.Multiplayer.Tools.MetricTestData
+    className: TestDataGeneratorComponent
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnMouseUpMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 21f4a121481db2f9027ef3878e7c0f3f
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: UMAPhysicsSlotDefinition
+  - hash:
+      serializedVersion: 2
+      Hash: e6f6a6cbe6b08b8c136ca21b2b49c498
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: MorphSetDnaAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 6541716fc0a530cf6788a45b3e85a417
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Inventory
+    className: SimObjectAsInventoryItemInContainerData
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnTriggerExit2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 6558c53948dbdfacfdf4eb246227ed7f
+    assemblyName: UMA_Core
+    namespaceName: UMA
+    className: DnaConverterBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Unity.VisualScripting.Core
+    namespaceName: Unity.VisualScripting
+    className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 43ac40ca17d21b36e8953dd108b5fcf6
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors.Combat
+    className: AISensor
+  - hash:
+      serializedVersion: 2
+      Hash: 751e5bae2a317288c2ab58d66687092b
+    assemblyName: Assembly-CSharp
+    namespaceName: AKCondinoO.Sims.Actors
+    className: BaseAnimatorControllerMotionUpdater
+  platform: 19
+  scenePathNames:
+  - Assets/Scenes/EntryScene.unity
+  - Assets/Scenes/MainMenuScene.unity
+  - Assets/Scenes/MainScene.unity
+  - Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity
+  playerPath: C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude.exe
