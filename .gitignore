@@ -1,4 +1,5 @@
 /[Mm]emoryCaptures/
-DiscordBots/*/.env
-Temp/UnityLockfile
-Temp/FSTimeGet-*
+/[Dd]iscordBots/*/.env
+/[Tt]emp/UnityLockfile
+/[Tt]emp/FSTimeGet-*
+/[Ll]ibrary/ArtifactDB*
