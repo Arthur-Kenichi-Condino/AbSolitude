@@ -20,6 +20,9 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
+    ///  [https://www.youtube.com/watch?v=t9e2XBQY4Og]
+    ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
+    ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     internal partial class BaseAI:SimActor{
      internal SimCharacterController characterController;
       internal float height;
@@ -223,9 +226,15 @@ namespace AKCondinoO.Sims.Actors{
                 aiSensor.transform.position=rightEye.transform.position;
                 aiSensor.transform.rotation=rightEye.transform.rotation;
                }
+               if(aiSensor.zIsUp){
+                aiSensor.transform.rotation*=(Quaternion.Euler(90f,0f,0f)*Quaternion.Euler(0f,180f,0f));
+               }
               }else if(leftEye){
                aiSensor.transform.position=leftEye.transform.position;
                aiSensor.transform.rotation=leftEye.transform.rotation;
+               if(aiSensor.zIsUp){
+                aiSensor.transform.rotation*=(Quaternion.Euler(90f,0f,0f)*Quaternion.Euler(0f,180f,0f));
+               }
               }else if(head){
                if(aiSensor.zIsUp){
                 aiSensor.transform.position=head.transform.position;

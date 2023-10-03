@@ -4,10 +4,18 @@
 using AKCondinoO.Sims.Actors.Skills;
 using System.Collections;
 using System.Collections.Generic;
+using UMA;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI:HomunculusAI{   
+        protected override void OnUMACharacterUpdated(UMAData simUMAData){
+         Log.DebugMessage("OnUMACharacterUpdated");
+         SetBodyPart( "leftEye","leye",out  leftEye);
+         SetBodyPart("rightEye","reye",out rightEye);
+         SetBodyPart("body","bodyBase",out _);
+         base.OnUMACharacterUpdated(simUMAData);
+        }
         internal override void OnActivated(){
          Log.DebugMessage("VanilmirthAI:OnActivated():masterId:"+masterId);
          requiredSkills.Clear();

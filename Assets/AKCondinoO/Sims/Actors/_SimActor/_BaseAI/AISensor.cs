@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     /// <summary>
+    ///  [https://www.youtube.com/watch?v=t9e2XBQY4Og]
+    ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     /// </summary>
     internal class AISensor:MonoBehaviour{

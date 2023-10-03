@@ -22,6 +22,15 @@ namespace AKCondinoO.Sims.Actors{
        return false;
       }
      }
+     protected bool motionFlagForReloadingAnimation=false;
+        internal virtual bool DoReloadingOnAnimationEventUsingWeapon(SimWeapon simWeapon){
+         return false;
+        }
+     internal bool isReloading{
+      get{
+       return motionFlagForReloadingAnimation;
+      }
+     }
      protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
         internal virtual bool IsInAttackRange(SimObject simObject){
          Vector3 delta=new Vector3(
