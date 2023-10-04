@@ -29,8 +29,12 @@ namespace AKCondinoO.Sims.Actors.Skills{
             if(slaveSimObject.masterId!=actor.id){
              slaveSimObject.masterId=actor.id;
             }
-            Log.DebugMessage("teleport to master:"+slaveSimObject);
-            toTeleport.Add(slaveSimObject);
+            if(slaveSimObject is BaseAI slaveAI){
+             if(slaveAI.state==BaseAI.State.IDLE_ST){
+              Log.DebugMessage("teleport to master:"+slaveSimObject);
+              toTeleport.Add(slaveSimObject);
+             }
+            }
             //  TO DO: teleport
            }else{
             spawnData.at.Add((actor.transform.position,actor.transform.rotation.eulerAngles,Vector3.one,slaveId.simObjectType,slaveId.idNumber,new SimObject.PersistentData()));
