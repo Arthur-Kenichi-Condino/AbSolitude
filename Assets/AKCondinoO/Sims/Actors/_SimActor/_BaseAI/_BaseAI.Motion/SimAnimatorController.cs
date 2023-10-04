@@ -14,7 +14,7 @@ using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController:MonoBehaviour{
      internal BaseAI actor;
-     [SerializeField]Transform transformAdjustmentsForUMA;
+     [SerializeField]internal Transform transformAdjustmentsForUMA;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;

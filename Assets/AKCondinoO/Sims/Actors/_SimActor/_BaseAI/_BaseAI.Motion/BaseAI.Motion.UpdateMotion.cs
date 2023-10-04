@@ -64,6 +64,8 @@ namespace AKCondinoO.Sims.Actors{
          motionFlagForHitAnimation=false;
           motionFlagForHitResetAnimation=false;
          motionFlagForAttackAnimation=false;
+          motionFlagForReloadingAnimation=false;
+           motionFlagForShootingAnimation=false;
          MyMotion=ActorMotion.MOTION_STAND;
          navMeshAgentShouldBeStopped=false;
          if(characterController!=null){

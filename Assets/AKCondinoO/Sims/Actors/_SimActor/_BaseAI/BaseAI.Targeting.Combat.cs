@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
+     [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
         internal virtual bool IsInAttackRange(SimObject simObject){
          Vector3 delta=new Vector3(
           Mathf.Abs(simObject.transform.position.x-transform.position.x),
@@ -49,7 +49,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected bool motionFlagForAttackAnimation=false;
         protected virtual void DoAttackOnAnimationEvent(){
-         //Log.DebugMessage("DoAttackOnAnimationEvent()");
+         Log.DebugMessage("DoAttackOnAnimationEvent()");
          motionFlagForAttackAnimation=true;
         }
      protected bool motionFlagForShootingAnimation=false;
@@ -118,6 +118,14 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("motionFlagForHitAnimation="+motionFlagForHitAnimation);
          if(canTakeDamage){
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
+         }
+         ApplyAggressionModeForThenAddTarget(hitbox.actor);
+         SetTargetToBeRemoved(hitbox.actor,15f);
+         foreach(var slaveId in slaves){
+          if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)&&slaveSimObject is BaseAI slaveAI){
+           slaveAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
+           slaveAI.SetTargetToBeRemoved(hitbox.actor,15f);
+          }
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){

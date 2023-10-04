@@ -529,6 +529,9 @@ namespace AKCondinoO.Sims{
            }
           }
           foreach(var despawnAndReleaseId in SimObjectManager.singleton.despawningAndReleasingId){
+           if(despawnAndReleaseId.Value is SimActor simActor){
+            SimsMachine.singleton.OnActorDespawn(simActor);
+           }
            SimObjectManager.singleton.spawned.Remove(despawnAndReleaseId.Key);
            SimObjectManager.singleton.releasedIds[despawnAndReleaseId.Key.simObjectType].Add(despawnAndReleaseId.Key.idNumber);
            despawnAndReleaseId.Value.OnDespawned();

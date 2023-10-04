@@ -31,6 +31,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override void UpdateAnimatorMotionValue(){
          if(controller.actor is HumanAI humanAI){
+          //Log.DebugMessage("humanAI.motion:"+humanAI.motion);
              if(controller.actor.weaponType==BaseAI.WeaponTypes.SniperRifle){
               controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
               controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );

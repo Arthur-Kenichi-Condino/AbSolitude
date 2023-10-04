@@ -17,16 +17,22 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnSimObjectIsInSight(SimObject simObject){
          ApplyAggressionModeForThenAddTarget(simObject);
         }
-        internal virtual void ApplyAggressionModeForThenAddTarget(SimObject target){
+        internal virtual void ApplyAggressionModeForThenAddTarget(SimObject target,SimObject targetOfTarget=null){
          if(target.id==null){
           return;
          }
          if(MyAggressionMode==AggressionMode.AggressiveToAll){
           if(target is SimActor targetSimActor&&!target.IsMonster()){
            ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.Aggressively);
+           return;
           }
-         }else{
+         }else if(targetOfTarget!=null){
+          if(masterId==targetOfTarget.id){
+           ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.FromMaster);
+           return;
+          }
          }
+         ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.Defensively);
         }
         internal virtual void ApplyEnemyPriorityForThenAddTarget(SimObject target,GotTargetMode gotTargetMode){
          if(target.id==null){
@@ -39,13 +45,13 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnSimObjectIsOutOfSight(SimObject simObject){
          SetTargetToBeRemoved(simObject);
         }
-        internal virtual void SetTargetToBeRemoved(SimObject target){
+        internal virtual void SetTargetToBeRemoved(SimObject target,float afterSeconds=30f){
          if(target.id==null){
           return;
          }
          if(targetsByPriority.TryGetValue(target.id.Value,out _)){
           //Log.DebugMessage("target set to be removed:"+target.id.Value);
-          targetTimeouts[target.id.Value]=30f;
+          targetTimeouts[target.id.Value]=afterSeconds;
          }
         }
     }

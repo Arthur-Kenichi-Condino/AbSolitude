@@ -10,8 +10,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3071695530705957541, guid: 55dff1332b9882e4fba0cda67e1a8458, type: 3}
       propertyPath: prefabs.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -3071695530705957541, guid: 55dff1332b9882e4fba0cda67e1a8458, type: 3}
+      propertyPath: prefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: -5941629597017304619, guid: 7a560ffd024fcb94989d362be5037aff, type: 3}
     - target: {fileID: 3557642046335758276, guid: 55dff1332b9882e4fba0cda67e1a8458, type: 3}
       propertyPath: m_Name
       value: VanilmirthHitboxesPrefabsList

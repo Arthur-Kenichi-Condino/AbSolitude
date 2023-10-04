@@ -133,10 +133,15 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 1.5
   pathfindingTimeout: 3
   pathPendingTimeout: 6
+  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 0}
   renewEnemyInterval: 3
   MyAggressionMode: 2
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
@@ -185,12 +190,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments:
   - motion: 2
     adjustment: {fileID: 2850720430510664476}
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 9
+    tgtRotLerpSpeed: 18
     tgtRotLerpMaxTime: 0.25
   posLerp:
     xLerp:
