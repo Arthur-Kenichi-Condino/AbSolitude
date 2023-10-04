@@ -21,6 +21,19 @@ namespace AKCondinoO.Sims.Actors{
          if(target.id==null){
           return;
          }
+         if(target.id==id){
+          return;
+         }
+         if(target.id==masterId){
+          if(masterSimObject is BaseAI masterAI&&masterAI.enemy!=this){
+           return;
+          }
+         }
+         if(slaves.Contains(target.id.Value)){
+          if(target is BaseAI targetAI&&targetAI.enemy!=this){
+           return;
+          }
+         }
          if(MyAggressionMode==AggressionMode.AggressiveToAll){
           if(target is SimActor targetSimActor&&!target.IsMonster()){
            ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.Aggressively);

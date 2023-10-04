@@ -122,6 +122,10 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
          lastForward=transform.forward;
          OnResetMotion();
+         if(onAttackGetDataCoroutine!=null){
+          StopCoroutine(onAttackGetDataCoroutine);onAttackGetDataCoroutine=null;
+         }
+         onAttackGetDataCoroutine=StartCoroutine(OnAttackGetDataCoroutine());
          if(onChaseGetDataCoroutine!=null){
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }
