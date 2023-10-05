@@ -95,7 +95,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 70a8ed2a51e8616498ab1ba2650cacfa, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0.5}
-    m_TimeScale: 2
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: MOTION_MOVE_VELOCITY
     m_Mirror: 0
@@ -249,8 +249,8 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HumanoidMonsterMOTION_ATTACK_PUNCHING
-  m_Speed: 1
+  m_Name: HumanoidMonsterMOTION_ATTACK
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7466859921801862553}
@@ -264,7 +264,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 5221fc19bfd10894d94fd29b5720cd81, type: 2}
+  m_Motion: {fileID: 7400000, guid: e5cf86c30e315be4794dd909144fdf43, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

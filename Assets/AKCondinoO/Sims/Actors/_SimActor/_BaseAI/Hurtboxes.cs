@@ -11,11 +11,15 @@ namespace AKCondinoO.Sims.Actors.Combat{
         internal void OnTriggerStay(Collider other){
         }
         internal bool OnTakeDamage(Hitboxes fromHitbox){
+         if(fromHitbox.actor==actor){
+          //Log.DebugMessage("ignore damage from my own hitbox");
+          return false;
+         }
          if(actor.hitGracePeriod.ContainsKey(fromHitbox)){
           return false;
          }
          actor.hitGracePeriod.Add(fromHitbox,fromHitbox.gracePeriod);
-         Log.DebugMessage("OnTakeDamage:fromHitbox:"+fromHitbox);
+         Log.DebugMessage("OnTakeDamage:fromHitbox:"+fromHitbox+";Hurtbox:"+this);
          actor.OnHit(fromHitbox);
          return true;
         }
