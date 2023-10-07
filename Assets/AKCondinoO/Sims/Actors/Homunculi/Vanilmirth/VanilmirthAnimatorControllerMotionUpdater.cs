@@ -18,6 +18,8 @@ namespace AKCondinoO.Sims.Actors{
               controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",vanilmirthAI.moveStrafeVelocityFlattened);
                controller.animator.SetFloat("MOTION_MOVE_TURN",vanilmirthAI.turnAngle);
              controller.animator.SetBool("MOTION_ATTACK",vanilmirthAI.motion==BaseAI.ActorMotion.MOTION_ATTACK);
+             controller.animator.SetBool("MOTION_DEAD"  ,vanilmirthAI.motion==BaseAI.ActorMotion.MOTION_DEAD  );
+             controller.animator.SetBool("MOTION_HIT"   ,vanilmirthAI.motion==BaseAI.ActorMotion.MOTION_HIT   );
          }
         }
     }

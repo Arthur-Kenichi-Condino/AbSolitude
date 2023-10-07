@@ -41,7 +41,7 @@ namespace AKCondinoO.Sims.Actors{
          );
          Loop:{
           yield return onAttackGetDataThrottler;
-          //  TO DO: don't attack allies, handle MOTION_RIFLE_ATTACK (or motions that are not processed or implemented),
+          //  TO DO: don't attack allies, handle MOTION_ATTACK_RIFLE (or motions that are not processed or implemented),
          }
          goto Loop;
         }

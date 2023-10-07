@@ -8,6 +8,9 @@ namespace AKCondinoO.Sims.Actors.Humanoid{
          Log.DebugMessage("OnUMACharacterUpdated");
          SetBodyPart("rightHand","hand.R",out _);
          SetBodyPart("abdomen","spine.001",out _);
+         SetBodyPart("pelvis","spine",out _);
+         SetBodyPart("chest","spine.003",out _);
+         SetBodyPart("neck","spine.004",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
     }

@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_STAND =0,
          MOTION_MOVE  =1,
          MOTION_ATTACK=2,
+         MOTION_DEAD  =3,
          MOTION_HIT   =4,
          MOTION_STAND_RIFLE =50,
          MOTION_MOVE_RIFLE  =51,
