@@ -259,6 +259,7 @@ namespace AKCondinoO.Sims.Actors{
             }
             if(navMeshAgent.enabled){
              if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
+              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
               navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
              }
              AI();

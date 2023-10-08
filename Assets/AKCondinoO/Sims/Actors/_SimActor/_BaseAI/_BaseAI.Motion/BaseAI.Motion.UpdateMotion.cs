@@ -133,13 +133,15 @@ namespace AKCondinoO.Sims.Actors{
            if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
             string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
             Log.DebugMessage("fullPath:"+fullPath);
-            animatorController.animator.Play(fullPath,layerIndex,0f);
+            //animatorController.animator.Play(fullPath,layerIndex,0f);
+            animatorController.animator.SetTrigger("MOTION_HIT_RESET");
             motionFlagForHitResetAnimation=false;
             OnMotionHitReset();
            }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
             string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
             Log.DebugMessage("fullPath:"+fullPath);
-            animatorController.animator.Play(fullPath,layerIndex,0f);
+            //animatorController.animator.Play(fullPath,layerIndex,0f);
+            animatorController.animator.SetTrigger("MOTION_HIT_RIFLE_RESET");
             motionFlagForHitResetAnimation=false;
             OnMotionHitReset();
            }

@@ -221,7 +221,7 @@ namespace AKCondinoO.Sims.Actors{
             transformAdjustmentsForUMA.localScale
            );
            transformAdjustmentsForUMAScaleApplied=true;
-           Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
+           //Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
           }
           if(!transformAdjustmentsForUMARotationApplied){
            actor.simUMA.transform.root.rotation*=transformAdjustmentsForUMA.localRotation;

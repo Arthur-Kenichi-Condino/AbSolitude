@@ -44,3 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c345210699c412499657bb9a91c383c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vulnerabilityDuration: 4
+  gracePeriodForResetAnimation: 0.5
+  gracePeriod: 2

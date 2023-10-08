@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MorphableHumanMaleDynamicUMADnaAsset
   m_EditorClassIdentifier: 
   dnaTypeHash: 1677886961
-  lastKnownAssetPath: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/_UMA/MorphableHumanMale/RaceHumanMaleMorphableDynamicUMADnaAsset.asset
-  lastKnownDuplicateAssetPath: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/_UMA/MorphableHumanMale/RaceHumanMaleMorphableDynamicUMADnaAsset
+  lastKnownAssetPath: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/_UMA/MorphableHumanMale/MorphableHumanMaleDynamicUMADnaAsset.asset
+  lastKnownDuplicateAssetPath: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/_UMA/MorphableHumanMale/MorphableHumanMaleDynamicUMADnaAsset
     1.asset
-  lastKnownInstanceID: 28702
+  lastKnownInstanceID: 48510
   Names: []

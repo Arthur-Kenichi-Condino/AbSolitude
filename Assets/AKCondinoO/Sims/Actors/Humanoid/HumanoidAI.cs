@@ -11,6 +11,12 @@ namespace AKCondinoO.Sims.Actors.Humanoid{
          SetBodyPart("pelvis","spine",out _);
          SetBodyPart("chest","spine.003",out _);
          SetBodyPart("neck","spine.004",out _);
+         SetBodyPart( "leftThigh","thigh.L",out _);
+         SetBodyPart("rightThigh","thigh.R",out _);
+         SetBodyPart( "leftKnee","shin.L",out _);
+         SetBodyPart("rightKnee","shin.R",out _);
+         SetBodyPart( "leftShin","shin.L",out _);
+         SetBodyPart("rightShin","shin.R",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
     }

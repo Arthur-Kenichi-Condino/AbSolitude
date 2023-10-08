@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.size
-      value: 2
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.data[0]
@@ -19,7 +19,35 @@ PrefabInstance:
     - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: prefabs.Array.data[1]
       value: 
+      objectReference: {fileID: 5416838451382315734, guid: 7a98c3ab6aafa524182464ed7f1fc31a, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[2]
+      value: 
       objectReference: {fileID: 5416838451382315734, guid: 3bfa0d5f92e5aa94d904264189ecf2dc, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 83215f44d3007254aa58c55ac41b78aa, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 1fe40abaab502fb4a95a6907dec7740b, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: ede8c53dc0b47b54a8d53a9b245fd0ca, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: ea21f950f1529f440aecade4b445561e, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 2929d7b5b02e72949a1698838fc237a9, type: 3}
+    - target: {fileID: 1201003495446915704, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
+      propertyPath: prefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 8343810164730002960, guid: 90278a1dd3ea385458354b744dcfcf10, type: 3}
     - target: {fileID: 6394357566084382521, guid: 282d3a8eabd7d8b4badba5490fcf1626, type: 3}
       propertyPath: m_Name
       value: DisfiguringHomunculusHurtboxesPrefabsList

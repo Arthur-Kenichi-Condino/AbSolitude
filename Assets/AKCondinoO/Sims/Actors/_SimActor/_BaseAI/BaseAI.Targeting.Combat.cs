@@ -49,7 +49,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      protected bool motionFlagForAttackAnimation=false;
         protected virtual void DoAttackOnAnimationEvent(){
-         Log.DebugMessage("DoAttackOnAnimationEvent()");
+         //Log.DebugMessage("DoAttackOnAnimationEvent()");
          motionFlagForAttackAnimation=true;
         }
      protected bool motionFlagForShootingAnimation=false;
@@ -104,6 +104,9 @@ namespace AKCondinoO.Sims.Actors{
              effect.hitCantTriggerResetAnimation=effect.hitCantTriggerResetAnimationDuration;
              Log.DebugMessage("effect.hitCantTriggerResetAnimation="+effect.hitCantTriggerResetAnimation);
             }
+           }else{
+            effect.hitCantTriggerResetAnimation=effect.hitCantTriggerResetAnimationDuration;
+            Log.DebugMessage("effect.hitCantTriggerResetAnimation="+effect.hitCantTriggerResetAnimation);
            }
            canSetMotionFlag=true;
            if(effect.hitCanTriggerAnimation<=0f){
