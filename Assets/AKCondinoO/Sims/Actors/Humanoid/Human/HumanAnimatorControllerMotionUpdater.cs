@@ -48,18 +48,18 @@ namespace AKCondinoO.Sims.Actors{
               controller.animator.SetBool("MOTION_HIT"  ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT  );
              }
              if(controller.currentWeaponAimLayerIndex!=null){
-              if(controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_AIMING_RIFLE||
-                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RELOADING_RIFLE||
-                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE
+              if(controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING||
+                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING||
+                 controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING
               ){
                controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=1.0f;
               }else{
                controller.layerTargetWeight[controller.currentWeaponAimLayerIndex.Value]=0.0f;
               }
              }
-             controller.animator.SetBool("MOTION_STAND_AIMING_RIFLE"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_AIMING_RIFLE   );
-             controller.animator.SetBool("MOTION_STAND_RELOADING_RIFLE",controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RELOADING_RIFLE);
-             controller.animator.SetBool("MOTION_STAND_FIRING_RIFLE"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE   );
+             controller.animator.SetBool("MOTION_STAND_RIFLE_AIMING"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING   );
+             controller.animator.SetBool("MOTION_STAND_RIFLE_RELOADING",controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING);
+             controller.animator.SetBool("MOTION_STAND_RIFLE_FIRING"   ,controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING   );
          }
         }
     }

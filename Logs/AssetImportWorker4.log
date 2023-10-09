@@ -2722,3 +2722,229 @@ Received Import Request.
 Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller using Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2a56a575d5cef622f074d4e056fc36b8') in 0.617915 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 68
+========================================================================
+Received Import Request.
+  Time since last request: 43559.279386 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/_3D/Animations/VanilmirthAnimatorController.controller
+  artifactKey: Guid(495551cc268b8d246abf46f63067cf9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/_3D/Animations/VanilmirthAnimatorController.controller using Guid(495551cc268b8d246abf46f63067cf9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '400a7d10a1296c86e88bcc72ae1b52ea') in 0.050994 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 371.551971 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/_3D/Animations/DisfiguringHomunculusAnimatorController.controller
+  artifactKey: Guid(e56a7384982b59e4893dbf838f3b1c01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/_3D/Animations/DisfiguringHomunculusAnimatorController.controller using Guid(e56a7384982b59e4893dbf838f3b1c01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '99c465955951010d4ffb41bcff9c0401') in 0.085417 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 24
+========================================================================
+Received Import Request.
+  Time since last request: 126.663570 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller
+  artifactKey: Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller using Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7485f54267cf89fdebe447d8d3d892c7') in 0.753474 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 68
+========================================================================
+Received Import Request.
+  Time since last request: 589.990297 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_AIMING_RIFLE.anim
+  artifactKey: Guid(b67a3a67dd42ed648ac2df2488997f27) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_AIMING_RIFLE.anim using Guid(b67a3a67dd42ed648ac2df2488997f27) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3efbe7283ebb87e7f49a1f7d4a53f75d') in 0.007242 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 7.938759 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_AIMING.anim
+  artifactKey: Guid(b67a3a67dd42ed648ac2df2488997f27) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_AIMING.anim using Guid(b67a3a67dd42ed648ac2df2488997f27) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cd7bb59c4ca6bc7edb0209eec28d0852') in 0.006253 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 6.128586 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RELOADING_RIFLE.anim
+  artifactKey: Guid(2d1228185ec5bc0428bbccb465e21ce6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RELOADING_RIFLE.anim using Guid(2d1228185ec5bc0428bbccb465e21ce6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0687df38c425f7746af516ec7191e0fb') in 0.030026 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 5.699410 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_RELOADING.anim
+  artifactKey: Guid(2d1228185ec5bc0428bbccb465e21ce6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_RELOADING.anim using Guid(2d1228185ec5bc0428bbccb465e21ce6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '672344b672a4064cbb711afc6e3a8099') in 0.028483 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 15.355736 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_FIRING_RIFLE.anim
+  artifactKey: Guid(30b6ec807e3cbc243b18f980f17f94f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_FIRING_RIFLE.anim using Guid(30b6ec807e3cbc243b18f980f17f94f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '490baf194f3e3995c7aaa4832f5cdb71') in 0.004911 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 4.480576 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_FIRING.anim
+  artifactKey: Guid(30b6ec807e3cbc243b18f980f17f94f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_STAND_RIFLE_FIRING.anim using Guid(30b6ec807e3cbc243b18f980f17f94f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ae7d267647000de02aa34c789a4ba49') in 0.004488 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  2.492 seconds
+Refreshing native plugins compatible for Editor in 6.90 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in 10.153 seconds
+Domain Reload Profiling: 12640ms
+	BeginReloadAssembly (242ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (9ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (108ms)
+	RebuildCommonClasses (109ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (34ms)
+	LoadAllAssembliesAndSetupDomain (2091ms)
+		LoadAssemblies (2134ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (39ms)
+			TypeCache.Refresh (15ms)
+				TypeCache.ScanAssembly (3ms)
+			ScanForSourceGeneratedMonoScriptInfo (15ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (10154ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (391ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (82ms)
+			ProcessInitializeOnLoadAttributes (241ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (7ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 8.60 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5808 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 54 unused Assets / (1.3 MB). Loaded Objects now: 6631.
+Memory consumption went from 195.5 MB to 194.2 MB.
+Total: 4.775100 ms (FindLiveObjects: 0.484200 ms CreateObjectMapping: 0.507800 ms MarkObjects: 3.539400 ms  DeleteObjects: 0.242500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 413.893755 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_MOVE_RIFLE.anim
+  artifactKey: Guid(22c0e7cd4f6fce84fb7084989ff42c92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleMOTION_MOVE_RIFLE.anim using Guid(22c0e7cd4f6fce84fb7084989ff42c92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '989a2e9ec95b3f58a8c49907243154e5') in 0.043530 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 241.227116 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller
+  artifactKey: Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller using Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ca38b6d3e3db61e18d7c3c9c47ca9d6f') in 0.630718 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 68
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.536 seconds
+Refreshing native plugins compatible for Editor in 6.37 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.009 seconds
+Domain Reload Profiling: 1540ms
+	BeginReloadAssembly (145ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (5ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (36ms)
+	RebuildCommonClasses (29ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (315ms)
+		LoadAssemblies (348ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (38ms)
+			TypeCache.Refresh (15ms)
+				TypeCache.ScanAssembly (3ms)
+			ScanForSourceGeneratedMonoScriptInfo (13ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (1010ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (403ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (82ms)
+			ProcessInitializeOnLoadAttributes (253ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (7ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+Refreshing native plugins compatible for Editor in 9.23 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5808 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 54 unused Assets / (1.3 MB). Loaded Objects now: 6638.
+Memory consumption went from 195.4 MB to 194.1 MB.
+Total: 6.858800 ms (FindLiveObjects: 0.813200 ms CreateObjectMapping: 0.847400 ms MarkObjects: 4.718400 ms  DeleteObjects: 0.478500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 

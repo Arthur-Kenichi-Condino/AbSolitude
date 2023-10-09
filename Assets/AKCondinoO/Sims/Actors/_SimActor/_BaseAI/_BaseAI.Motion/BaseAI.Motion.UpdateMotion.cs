@@ -8,14 +8,14 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void UpdateMotion(bool fromAI){
          bool canDoShootingAnimation=false;
          if(isAiming){
-          MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_AIMING_RIFLE;
+          MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
           canDoShootingAnimation=true;
          }else{
           MyWeaponLayerMotion=ActorWeaponLayerMotion.NONE;
          }
          if(canDoShootingAnimation){
           if(isShooting){
-           MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE;
+           MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
           }
          }
          //Log.DebugMessage("MyWeaponLayerMotion:"+MyWeaponLayerMotion);
@@ -75,7 +75,7 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
          if(motionFlagForShootingAnimation){
-          if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
            motionFlagForShootingAnimation=false;
            if(animatorController.animator!=null){
             if(animatorController.animationEventsHandler!=null){
@@ -113,7 +113,7 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
          if(motionFlagForShootingAnimation){
-          if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
            motionFlagForShootingAnimation=false;
            if(animatorController.animator!=null){
             if(animatorController.animationEventsHandler!=null){
@@ -195,9 +195,9 @@ namespace AKCondinoO.Sims.Actors{
      internal static readonly Dictionary<string,ActorWeaponLayerMotion>animatorClipNameToActorWeaponLayerMotion=new Dictionary<string,ActorWeaponLayerMotion>();
         internal bool MapAnimatorClipNameToActorWeaponLayerMotion(string clipName,out ActorWeaponLayerMotion?motion){
          motion=null;
-         if(clipName.Contains("MOTION_STAND_FIRING_RIFLE")){
-          motion=animatorClipNameToActorWeaponLayerMotion[clipName]=ActorWeaponLayerMotion.MOTION_STAND_FIRING_RIFLE;
-          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:mapped "+clipName+" to MOTION_STAND_FIRING_RIFLE");
+         if(clipName.Contains("MOTION_STAND_RIFLE_FIRING")){
+          motion=animatorClipNameToActorWeaponLayerMotion[clipName]=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
+          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:mapped "+clipName+" to MOTION_STAND_RIFLE_FIRING");
           return true;
          }
          return false;

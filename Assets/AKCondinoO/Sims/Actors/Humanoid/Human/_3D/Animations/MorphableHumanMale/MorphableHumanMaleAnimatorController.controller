@@ -179,7 +179,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MorphableHumanMaleMOTION_STAND_RELOADING_RIFLE
+  m_Name: MorphableHumanMaleMOTION_STAND_RIFLE_RELOADING
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -348,7 +348,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MorphableHumanMaleMOTION_STAND_FIRING_RIFLE
+  m_Name: MorphableHumanMaleMOTION_STAND_RIFLE_FIRING
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -471,7 +471,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MorphableHumanMaleMOTION_STAND_AIMING_RIFLE
+  m_Name: MorphableHumanMaleMOTION_STAND_RIFLE_AIMING
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -522,7 +522,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: MOTION_STAND_FIRING_RIFLE
+    m_ConditionEvent: MOTION_STAND_RIFLE_FIRING
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2692169494193496635}
@@ -641,19 +641,19 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: MOTION_STAND_AIMING_RIFLE
+  - m_Name: MOTION_STAND_RIFLE_AIMING
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: MOTION_STAND_RELOADING_RIFLE
+  - m_Name: MOTION_STAND_RIFLE_RELOADING
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: MOTION_STAND_FIRING_RIFLE
+  - m_Name: MOTION_STAND_RIFLE_FIRING
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -720,6 +720,18 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: MOTION_ATTACK_RIFLE
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_DEAD
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: MOTION_DEAD_RIFLE
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -852,7 +864,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MOTION_RIFLE_MOVE Blend Tree
+  m_Name: MOTION_MOVE_RIFLE Blend Tree
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 22c0e7cd4f6fce84fb7084989ff42c92, type: 2}
@@ -974,7 +986,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: MOTION_STAND_FIRING_RIFLE
+    m_ConditionEvent: MOTION_STAND_RIFLE_FIRING
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1620486914439508065}
@@ -1107,7 +1119,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MOTION_RIFLE_MOVE Blend Tree
+  m_Name: MOTION_MOVE_RIFLE Blend Tree
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -1367,7 +1379,7 @@ AnimatorStateMachine:
     m_Position: {x: 230, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6476535918894183204}
-    m_Position: {x: 410, y: 110, z: 0}
+    m_Position: {x: 460, y: 180, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

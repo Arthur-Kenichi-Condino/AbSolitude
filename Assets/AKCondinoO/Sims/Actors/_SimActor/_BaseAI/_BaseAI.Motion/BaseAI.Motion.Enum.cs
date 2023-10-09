@@ -20,9 +20,9 @@ namespace AKCondinoO.Sims.Actors{
      protected ActorWeaponLayerMotion MyWeaponLayerMotion=ActorWeaponLayerMotion.NONE;internal ActorWeaponLayerMotion weaponLayerMotion{get{return MyWeaponLayerMotion;}}
         internal enum ActorWeaponLayerMotion:int{
          NONE=0,
-         MOTION_STAND_AIMING_RIFLE   =501,
-         MOTION_STAND_RELOADING_RIFLE=502,
-         MOTION_STAND_FIRING_RIFLE   =503,
+         MOTION_STAND_RIFLE_AIMING   =501,
+         MOTION_STAND_RIFLE_RELOADING=502,
+         MOTION_STAND_RIFLE_FIRING   =503,
         }
     }
 }
