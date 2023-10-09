@@ -34,6 +34,7 @@ namespace AKCondinoO.Sims.Actors{
                  }else{
                   MyMotion=ActorMotion.MOTION_ATTACK;
                  }
+                 OnMotionAttackSet();
              }else{
                  if(
                   (moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
@@ -61,16 +62,13 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void OnResetMotion(){
-         motionFlagForHitAnimation=false;
-          motionFlagForHitResetAnimation=false;
          motionFlagForAttackAnimation=false;
           motionFlagForReloadingAnimation=false;
            motionFlagForShootingAnimation=false;
+         motionFlagForHitAnimation=false;
+          motionFlagForHitResetAnimation=false;
          MyMotion=ActorMotion.MOTION_STAND;
-         navMeshAgentShouldBeStopped=false;
-         if(characterController!=null){
-          characterController.isStopped=false;
-         }
+         OnMotionShouldStopMovement(false);
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
@@ -88,12 +86,12 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(motionFlagForHitAnimation){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
-          if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
+          if      (               MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion) &&motion.Value==ActorMotion.MOTION_HIT){
            motionFlagForHitAnimation=false;
             motionFlagForHitResetAnimation=false;
            MyMotion=ActorMotion.MOTION_STAND;
            OnMotionHitAnimationEnd();
-          }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
+          }else if((motion!=null||MapAnimatorClipNameToActorMotion(currentClipName,out             motion))&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
            motionFlagForHitAnimation=false;
             motionFlagForHitResetAnimation=false;
            MyMotion=ActorMotion.MOTION_STAND_RIFLE;
@@ -102,10 +100,16 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           if(motionFlagForAttackAnimation){
            //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onDoAttackSetMotion:currentClipName:"+currentClipName);
-           if(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_ATTACK){
+           if      (               MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion) &&motion.Value==ActorMotion.MOTION_ATTACK){
             //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
             motionFlagForAttackAnimation=false;
             MyMotion=ActorMotion.MOTION_STAND;
+            OnMotionAttackAnimationEnd();
+           }else if((motion!=null||MapAnimatorClipNameToActorMotion(currentClipName,out             motion))&&motion.Value==ActorMotion.MOTION_ATTACK_RIFLE){
+            //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:motion.Value:"+motion.Value);
+            motionFlagForAttackAnimation=false;
+            MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+            OnMotionAttackAnimationEnd();
            }
           }
          }
@@ -148,22 +152,25 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+        protected virtual void OnMotionAttackSet(){
+         OnMotionShouldStopMovement(true);
+        }
+        protected virtual void OnMotionAttackAnimationEnd(){
+         OnMotionShouldStopMovement(false);
+        }
         protected virtual void OnMotionHitSet(){
-         navMeshAgentShouldBeStopped=true;
-         if(characterController!=null){
-          characterController.isStopped=true;
-         }
+         OnMotionShouldStopMovement(true);
         }
         protected virtual void OnMotionHitReset(){
-         navMeshAgentShouldBeStopped=true;
-         if(characterController!=null){
-          characterController.isStopped=true;
-         }
+         OnMotionShouldStopMovement(true);
         }
         protected virtual void OnMotionHitAnimationEnd(){
-         navMeshAgentShouldBeStopped=false;
+         OnMotionShouldStopMovement(false);
+        }
+        protected virtual void OnMotionShouldStopMovement(bool stop){
+         navMeshAgentShouldBeStopped=stop;
          if(characterController!=null){
-          characterController.isStopped=false;
+          characterController.isStopped=stop;
          }
         }
      internal static readonly Dictionary<string,ActorMotion>animatorClipNameToActorMotion=new Dictionary<string,ActorMotion>();
@@ -183,6 +190,11 @@ namespace AKCondinoO.Sims.Actors{
          if(clipName.Contains("MOTION_HIT")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT;
           Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
+          return true;
+         }
+         if(clipName.Contains("MOTION_ATTACK_RIFLE")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK_RIFLE;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK_RIFLE");
           return true;
          }
          if(clipName.Contains("MOTION_ATTACK")){

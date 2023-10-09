@@ -105,6 +105,8 @@ namespace AKCondinoO.Sims.Actors{
             }
             animatorController.animator.SetLookAtWeight(1f);
             animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
+           }else{
+            animatorController.animator.SetLookAtWeight(0f);
            }
           }
          }

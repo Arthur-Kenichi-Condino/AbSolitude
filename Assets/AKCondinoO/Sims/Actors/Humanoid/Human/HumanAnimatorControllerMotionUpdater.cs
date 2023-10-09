@@ -33,19 +33,21 @@ namespace AKCondinoO.Sims.Actors{
          if(controller.actor is HumanAI humanAI){
           //Log.DebugMessage("humanAI.motion:"+humanAI.motion);
              if(controller.actor.weaponType==BaseAI.WeaponTypes.SniperRifle){
-              controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE);
-              controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE );
+              controller.animator.SetBool("MOTION_STAND_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE  );
+              controller.animator.SetBool("MOTION_MOVE_RIFLE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE_RIFLE   );
                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY"       ,humanAI.      moveVelocityFlattened);
                controller.animator.SetFloat("MOTION_MOVE_RIFLE_VELOCITY_STRAFE",humanAI.moveStrafeVelocityFlattened);
                 controller.animator.SetFloat("MOTION_MOVE_RIFLE_TURN",humanAI.turnAngle);
-              controller.animator.SetBool("MOTION_HIT_RIFLE"  ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE  );
+              controller.animator.SetBool("MOTION_ATTACK_RIFLE",humanAI.motion==BaseAI.ActorMotion.MOTION_ATTACK_RIFLE);
+              controller.animator.SetBool("MOTION_HIT_RIFLE"   ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE   );
              }else{
-              controller.animator.SetBool("MOTION_STAND",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND);
-              controller.animator.SetBool("MOTION_MOVE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE );
+              controller.animator.SetBool("MOTION_STAND",humanAI.motion==BaseAI.ActorMotion.MOTION_STAND  );
+              controller.animator.SetBool("MOTION_MOVE" ,humanAI.motion==BaseAI.ActorMotion.MOTION_MOVE   );
                controller.animator.SetFloat("MOTION_MOVE_VELOCITY"       ,humanAI.      moveVelocityFlattened);
                controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",humanAI.moveStrafeVelocityFlattened);
                 controller.animator.SetFloat("MOTION_MOVE_TURN",humanAI.turnAngle);
-              controller.animator.SetBool("MOTION_HIT"  ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT  );
+              controller.animator.SetBool("MOTION_ATTACK",humanAI.motion==BaseAI.ActorMotion.MOTION_ATTACK);
+              controller.animator.SetBool("MOTION_HIT"   ,humanAI.motion==BaseAI.ActorMotion.MOTION_HIT   );
              }
              if(controller.currentWeaponAimLayerIndex!=null){
               if(controller.actor.weaponLayerMotion==BaseAI.ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING||

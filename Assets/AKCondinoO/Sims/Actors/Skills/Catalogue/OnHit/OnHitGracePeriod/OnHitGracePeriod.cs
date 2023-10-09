@@ -12,7 +12,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
     internal class OnHitGracePeriod:OnHitSkill{
      [SerializeField]internal float vulnerabilityDuration=2f;
       [SerializeField]internal float gracePeriodForResetAnimation=.2f;
-       [SerializeField]internal float gracePeriod=5f;
+       [SerializeField]internal float gracePeriod=6f;
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           return true;
