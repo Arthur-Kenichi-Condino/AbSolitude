@@ -2541,3 +2541,184 @@ Received Import Request.
 Start importing Assets/AKCondinoO/Sims/_SimObject/SimObject.Stats.cs using Guid(4a31fb5700c01054f8844404c6e80f1e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f1ff5315a2cf0df5ca7d5bfd8079f3b2') in 0.000565 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.502 seconds
+Refreshing native plugins compatible for Editor in 6.65 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.565 seconds
+Domain Reload Profiling: 2061ms
+	BeginReloadAssembly (151ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (5ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (40ms)
+	RebuildCommonClasses (30ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (275ms)
+		LoadAssemblies (332ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (16ms)
+			TypeCache.Refresh (7ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (1565ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (411ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (89ms)
+			ProcessInitializeOnLoadAttributes (257ms)
+			ProcessInitializeOnLoadMethodAttributes (50ms)
+			AfterProcessingInitializeOnLoad (6ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 7.52 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5808 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 54 unused Assets / (1.3 MB). Loaded Objects now: 6581.
+Memory consumption went from 193.3 MB to 192.0 MB.
+Total: 5.509500 ms (FindLiveObjects: 0.725700 ms CreateObjectMapping: 0.750000 ms MarkObjects: 3.694800 ms  DeleteObjects: 0.337500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 64893.909559 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/X Bot@Smash.fbx
+  artifactKey: Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/X Bot@Smash.fbx using Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0bfb6b23ebd3dabdc262029d5a13d85b') in 0.197044 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 2.519427 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MOTION_ATTACK.fbx
+  artifactKey: Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MOTION_ATTACK.fbx using Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5278f021db3eb098c73c85ce6232249') in 0.034953 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 3.221445 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanTRANS_CROUCH_STAND.fbx
+  artifactKey: Guid(5bd056d6fac04ad4eb9ad55d6139b56c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanTRANS_CROUCH_STAND.fbx using Guid(5bd056d6fac04ad4eb9ad55d6139b56c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9196534ea46a06c39c1bc2fe2438e630') in 0.004721 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 135
+========================================================================
+Received Import Request.
+  Time since last request: 10.505161 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK.fbx
+  artifactKey: Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK.fbx using Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75aeb6a6d4508d1f8d09985f6b631a47') in 0.033022 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 3.099646 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_MOVE_RIFLE.fbx
+  artifactKey: Guid(24b85e61b151f1947b56ba17fe3a95c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_MOVE_RIFLE.fbx using Guid(24b85e61b151f1947b56ba17fe3a95c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '03bfbd89321f660c672080350d2d6d6f') in 0.004564 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 135
+========================================================================
+Received Import Request.
+  Time since last request: 7.784617 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK_RIFLE.fbx
+  artifactKey: Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK_RIFLE.fbx using Guid(0403bf69c9dcfb5488c98a4f0676c9b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '523c437c1bf3d107c7aa5941a96652f1') in 0.036344 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 0.001906 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/falling to roll.fbx
+  artifactKey: Guid(48f9afbc09838334ab8551109f85757d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/falling to roll.fbx using Guid(48f9afbc09838334ab8551109f85757d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a9b98d6e72c56bb245a61f28f1a75e22') in 0.004539 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 135
+========================================================================
+Received Import Request.
+  Time since last request: 118.953640 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_MOVE_BACKWARDS_RIFLE.fbx
+  artifactKey: Guid(52ed9e1580d451047a0e8495182fd877) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_MOVE_BACKWARDS_RIFLE.fbx using Guid(52ed9e1580d451047a0e8495182fd877) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3186378596ecefe77b90ce5828d4f820') in 0.004465 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 135
+========================================================================
+Received Import Request.
+  Time since last request: 7.979278 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/X Bot@Punching.fbx
+  artifactKey: Guid(9c3f6639e2ad88245b4d4445f0f99a85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/X Bot@Punching.fbx using Guid(9c3f6639e2ad88245b4d4445f0f99a85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39c4174f2eb8d7d9058b4fc23778f138') in 0.035585 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 3.662885 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK.fbx
+  artifactKey: Guid(9c3f6639e2ad88245b4d4445f0f99a85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/HumanMOTION_ATTACK.fbx using Guid(9c3f6639e2ad88245b4d4445f0f99a85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a4a10eb07898874cb6959c6b41411fa3') in 0.032214 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 145
+========================================================================
+Received Import Request.
+  Time since last request: 10.240341 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/_3D/Animations/VanilmirthAnimatorController.controller
+  artifactKey: Guid(495551cc268b8d246abf46f63067cf9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/_3D/Animations/VanilmirthAnimatorController.controller using Guid(495551cc268b8d246abf46f63067cf9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bd84a7bcf1f2b1b293aceef3a8f74dae') in 0.084680 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 62.266039 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/_3D/Animations/DisfiguringHomunculusAnimatorController.controller
+  artifactKey: Guid(e56a7384982b59e4893dbf838f3b1c01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/_3D/Animations/DisfiguringHomunculusAnimatorController.controller using Guid(e56a7384982b59e4893dbf838f3b1c01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'abe6e4505c322e41ea6b040754605a65') in 0.088217 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 24
+========================================================================
+Received Import Request.
+  Time since last request: 62.124029 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller
+  artifactKey: Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller using Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '47a8f31de631c265bd84fff073a1df29') in 0.785169 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 68
+========================================================================
+Received Import Request.
+  Time since last request: 1336.697415 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller
+  artifactKey: Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/Humanoid/Human/_3D/Animations/MorphableHumanMale/MorphableHumanMaleAnimatorController.controller using Guid(c662bb389be2cfe45932e8766dad8593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2a56a575d5cef622f074d4e056fc36b8') in 0.617915 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 68
