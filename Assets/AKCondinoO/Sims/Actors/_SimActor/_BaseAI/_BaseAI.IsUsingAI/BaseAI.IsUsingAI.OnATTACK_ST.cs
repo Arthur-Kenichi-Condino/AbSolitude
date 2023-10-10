@@ -41,7 +41,34 @@ namespace AKCondinoO.Sims.Actors{
          );
          Loop:{
           yield return onAttackGetDataThrottler;
+          //Log.DebugMessage("OnAttackGetDataCoroutine:Loop");
           //  TO DO: don't attack allies, handle MOTION_ATTACK_RIFLE (or motions that are not processed or implemented),
+          if(characterController!=null){
+           var values=simCollisions.GetCapsuleValuesForCollisionTesting(characterController.character,transform.root);
+           Vector3 attackDistance=AttackDistance();
+           float maxDis=attackDistance.z;
+           int inTheWayLength=0;
+           _GetInTheWayColliderHits:{
+            inTheWayLength=Physics.CapsuleCastNonAlloc(
+             values.point0,
+             values.point1,
+             values.radius,
+             (MyEnemy.transform.position-transform.root.position).normalized,
+             onAttackInTheWayColliderHits,
+             maxDis,
+             PhysUtil.physObstaclesLayer
+            );
+           }
+           if(inTheWayLength>0){
+            if(inTheWayLength>=onAttackInTheWayColliderHits.Length){
+             Array.Resize(ref onAttackInTheWayColliderHits,inTheWayLength*2);
+             goto _GetInTheWayColliderHits;
+            }
+           }
+           onAttackInTheWayColliderHitsCount=inTheWayLength;
+           if(onAttackInTheWayColliderHitsCount>0){
+           }
+          }
          }
          goto Loop;
         }

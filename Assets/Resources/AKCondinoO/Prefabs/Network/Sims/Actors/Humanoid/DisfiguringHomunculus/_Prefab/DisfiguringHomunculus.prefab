@@ -196,7 +196,7 @@ MonoBehaviour:
     adjustment: {fileID: 2850720430510664476}
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 18
+    tgtRotLerpSpeed: 76
     tgtRotLerpMaxTime: 0.25
   posLerp:
     xLerp:

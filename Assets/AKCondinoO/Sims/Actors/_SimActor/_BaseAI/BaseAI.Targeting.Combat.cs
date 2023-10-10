@@ -32,6 +32,14 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
      [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
+        internal Vector3 AttackDistance(){
+         float radius=Mathf.Max(localBounds.extents.x,localBounds.extents.z);
+         return new Vector3(
+          radius,
+          localBounds.extents.y+MyAttackRange.y,
+          radius+MyAttackRange.z
+         );
+        }
         internal virtual bool IsInAttackRange(SimObject simObject){
          Vector3 delta=new Vector3(
           Mathf.Abs(simObject.transform.position.x-transform.position.x),
@@ -39,9 +47,9 @@ namespace AKCondinoO.Sims.Actors{
           Mathf.Abs(simObject.transform.position.z-transform.position.z)
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
-         float radius=Mathf.Max(localBounds.extents.x,localBounds.extents.z);
+         Vector3 attackDistance=AttackDistance();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
-         if(disXZPlane<=radius+simObjectRadius+MyAttackRange.z&&delta.y<=localBounds.extents.y+MyAttackRange.y){
+         if(disXZPlane<=attackDistance.z+simObjectRadius&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
           return true;
          }
