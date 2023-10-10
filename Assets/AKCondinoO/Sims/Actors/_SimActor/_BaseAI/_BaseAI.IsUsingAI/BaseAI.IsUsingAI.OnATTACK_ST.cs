@@ -67,10 +67,35 @@ namespace AKCondinoO.Sims.Actors{
            }
            onAttackInTheWayColliderHitsCount=inTheWayLength;
            if(onAttackInTheWayColliderHitsCount>0){
+            for(int i=onAttackInTheWayColliderHits.Length-1;i>=0;--i){
+             if(i>=onAttackInTheWayColliderHitsCount){
+              onAttackInTheWayColliderHits[i]=default(RaycastHit);
+              continue;
+             }
+             RaycastHit hit=onAttackInTheWayColliderHits[i];
+             if(hit.collider.transform.root==this.transform.root){
+              onAttackInTheWayColliderHits[i]=default(RaycastHit);
+              onAttackInTheWayColliderHitsCount--;
+             }
+            }
+            Array.Sort(onAttackInTheWayColliderHits,OnAttackInTheWayColliderHitsArraySortComparer);
            }
           }
          }
          goto Loop;
+        }
+        //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
+        private int OnAttackInTheWayColliderHitsArraySortComparer(RaycastHit a,RaycastHit b){
+         if(a.collider==null&&b.collider==null){
+          return 0;
+         }
+         if(a.collider==null&&b.collider!=null){
+          return 1;
+         }
+         if(a.collider!=null&&b.collider==null){
+          return -1;
+         }
+         return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
      [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
         protected virtual void OnATTACK_ST(){

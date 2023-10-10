@@ -82,6 +82,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          goto Loop;
         }
+        //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
         private int OnChaseInTheWayColliderHitsArraySortComparer(RaycastHit a,RaycastHit b){
          if(a.collider==null&&b.collider==null){
           return 0;

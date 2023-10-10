@@ -102,7 +102,7 @@ namespace AKCondinoO.Sims.Weapons{
           }
          }
         }
-        private int ShootGetHitsArraySortComparer(RaycastHit a,RaycastHit b){//  ordena 'a' relativo a 'b'
+        private int ShootGetHitsArraySortComparer(RaycastHit a,RaycastHit b){//  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
          if(a.collider==null&&b.collider==null){
           return 0;
          }
