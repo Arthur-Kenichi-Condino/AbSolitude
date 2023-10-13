@@ -893,6 +893,42 @@
       "DebugActionIndex": 29
     },
     {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_a3ce94232e804a88ceb921a41774dd1c.bundle",
+      "DisplayName": "Copying overlaydataasset-body_overlay_a3ce94232e804a88ceb921a41774dd1c.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_a3ce94232e804a88ceb921a41774dd1c.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_a3ce94232e804a88ceb921a41774dd1c.bundle"
+      ],
+      "DebugActionIndex": 30
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_fde41658689a2ad4ce8de42b8aa09da2.bundle",
+      "DisplayName": "Copying overlaydataasset-brain_overlay_fde41658689a2ad4ce8de42b8aa09da2.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_fde41658689a2ad4ce8de42b8aa09da2.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_fde41658689a2ad4ce8de42b8aa09da2.bundle"
+      ],
+      "DebugActionIndex": 31
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_00b03941d575aa99b9804d170dddaf2d.bundle",
+      "DisplayName": "Copying overlaydataasset-cards_overlay_00b03941d575aa99b9804d170dddaf2d.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_00b03941d575aa99b9804d170dddaf2d.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_00b03941d575aa99b9804d170dddaf2d.bundle"
+      ],
+      "DebugActionIndex": 32
+    },
+    {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-disfiguringhomunculus_body_overlay_0b8f6ee652c31d67220c3a995a1dcb6c.bundle",
       "DisplayName": "Copying overlaydataasset-disfiguringhomunculus_body_overlay_0b8f6ee652c31d67220c3a995a1dcb6c.bundle",
       "ActionType": "CopyFiles",
@@ -902,7 +938,19 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-disfiguringhomunculus_body_overlay_0b8f6ee652c31d67220c3a995a1dcb6c.bundle"
       ],
-      "DebugActionIndex": 30
+      "DebugActionIndex": 33
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_bc1fe49c3b56d6bf9305d91370dccc24.bundle",
+      "DisplayName": "Copying overlaydataasset-eyes_overlay_bc1fe49c3b56d6bf9305d91370dccc24.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_bc1fe49c3b56d6bf9305d91370dccc24.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_bc1fe49c3b56d6bf9305d91370dccc24.bundle"
+      ],
+      "DebugActionIndex": 34
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_arms_overlay_a683626ebefebde960a5fa26c0307013.bundle",
@@ -914,7 +962,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_arms_overlay_a683626ebefebde960a5fa26c0307013.bundle"
       ],
-      "DebugActionIndex": 31
+      "DebugActionIndex": 35
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_eyes_overlay_eaff723bb97276928cf1e0db8197a269.bundle",
@@ -926,7 +974,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_eyes_overlay_eaff723bb97276928cf1e0db8197a269.bundle"
       ],
-      "DebugActionIndex": 32
+      "DebugActionIndex": 36
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_face_overlay_aaa4bdec054de81b8fc5d2be9325bb7c.bundle",
@@ -938,7 +986,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_face_overlay_aaa4bdec054de81b8fc5d2be9325bb7c.bundle"
       ],
-      "DebugActionIndex": 33
+      "DebugActionIndex": 37
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_legs_overlay_95f06288a3d16f8986b8aa628b7f0525.bundle",
@@ -950,7 +998,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_legs_overlay_95f06288a3d16f8986b8aa628b7f0525.bundle"
       ],
-      "DebugActionIndex": 34
+      "DebugActionIndex": 38
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_mouth_overlay_406692288f87dda06ddc92494e2dc653.bundle",
@@ -962,7 +1010,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_mouth_overlay_406692288f87dda06ddc92494e2dc653.bundle"
       ],
-      "DebugActionIndex": 35
+      "DebugActionIndex": 39
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_torso_overlay_5046dc4c3872acddfeafeecde581fe71.bundle",
@@ -974,55 +1022,43 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-racehumanmalemorphable_torso_overlay_5046dc4c3872acddfeafeecde581fe71.bundle"
       ],
-      "DebugActionIndex": 36
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_body_overlay_165affe2e597bc12b62ba23071b0614c.bundle",
-      "DisplayName": "Copying overlaydataasset-vanilmirth_body_overlay_165affe2e597bc12b62ba23071b0614c.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_body_overlay_165affe2e597bc12b62ba23071b0614c.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_body_overlay_165affe2e597bc12b62ba23071b0614c.bundle"
-      ],
-      "DebugActionIndex": 37
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_brain_overlay_2a4bc0f39d3a45034ffdc8b7ce1f5801.bundle",
-      "DisplayName": "Copying overlaydataasset-vanilmirth_brain_overlay_2a4bc0f39d3a45034ffdc8b7ce1f5801.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_brain_overlay_2a4bc0f39d3a45034ffdc8b7ce1f5801.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_brain_overlay_2a4bc0f39d3a45034ffdc8b7ce1f5801.bundle"
-      ],
-      "DebugActionIndex": 38
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_cards_overlay_dc3f9941cdda1e79853c8098078223aa.bundle",
-      "DisplayName": "Copying overlaydataasset-vanilmirth_cards_overlay_dc3f9941cdda1e79853c8098078223aa.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_cards_overlay_dc3f9941cdda1e79853c8098078223aa.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_cards_overlay_dc3f9941cdda1e79853c8098078223aa.bundle"
-      ],
-      "DebugActionIndex": 39
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_eyes_overlay_5eab3aa922906e3b3e29dca16e7c9acb.bundle",
-      "DisplayName": "Copying overlaydataasset-vanilmirth_eyes_overlay_5eab3aa922906e3b3e29dca16e7c9acb.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_eyes_overlay_5eab3aa922906e3b3e29dca16e7c9acb.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-vanilmirth_eyes_overlay_5eab3aa922906e3b3e29dca16e7c9acb.bundle"
-      ],
       "DebugActionIndex": 40
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-body_211fdb1185de9ff462b8c0941938cd76.bundle",
+      "DisplayName": "Copying slotdataasset-body_211fdb1185de9ff462b8c0941938cd76.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-body_211fdb1185de9ff462b8c0941938cd76.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-body_211fdb1185de9ff462b8c0941938cd76.bundle"
+      ],
+      "DebugActionIndex": 41
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-brain_22435513c12589cc0445d7bcb1ce33fb.bundle",
+      "DisplayName": "Copying slotdataasset-brain_22435513c12589cc0445d7bcb1ce33fb.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-brain_22435513c12589cc0445d7bcb1ce33fb.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-brain_22435513c12589cc0445d7bcb1ce33fb.bundle"
+      ],
+      "DebugActionIndex": 42
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-cards_73bde37e2a2920216f73c4b0b68eaf65.bundle",
+      "DisplayName": "Copying slotdataasset-cards_73bde37e2a2920216f73c4b0b68eaf65.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-cards_73bde37e2a2920216f73c4b0b68eaf65.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-cards_73bde37e2a2920216f73c4b0b68eaf65.bundle"
+      ],
+      "DebugActionIndex": 43
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-disfiguringhomunculus_body_f4f8ef565f6e4bf4b5368f2a23eb96bf.bundle",
@@ -1034,7 +1070,19 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-disfiguringhomunculus_body_f4f8ef565f6e4bf4b5368f2a23eb96bf.bundle"
       ],
-      "DebugActionIndex": 41
+      "DebugActionIndex": 44
+    },
+    {
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-eyes_8512e75c506f095f386ecd36f76a8359.bundle",
+      "DisplayName": "Copying slotdataasset-eyes_8512e75c506f095f386ecd36f76a8359.bundle",
+      "ActionType": "CopyFiles",
+      "Inputs": [
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-eyes_8512e75c506f095f386ecd36f76a8359.bundle"
+      ],
+      "Outputs": [
+        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-eyes_8512e75c506f095f386ecd36f76a8359.bundle"
+      ],
+      "DebugActionIndex": 45
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasearmsmapd_1004_ff4ef15ad0a31e0cea2293d6130c8de3.bundle",
@@ -1046,7 +1094,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasearmsmapd_1004_ff4ef15ad0a31e0cea2293d6130c8de3.bundle"
       ],
-      "DebugActionIndex": 42
+      "DebugActionIndex": 46
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbaseeyesmap02d_1007_8494dd19a799017aa9f6025b4c0b2d1d.bundle",
@@ -1058,7 +1106,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbaseeyesmap02d_1007_8494dd19a799017aa9f6025b4c0b2d1d.bundle"
       ],
-      "DebugActionIndex": 43
+      "DebugActionIndex": 47
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasefacemapd01_1001_60bf03d4162e9f96105f46e1e5adea89.bundle",
@@ -1070,7 +1118,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasefacemapd01_1001_60bf03d4162e9f96105f46e1e5adea89.bundle"
       ],
-      "DebugActionIndex": 44
+      "DebugActionIndex": 48
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbaselegsmapd_1003_55b2d2628aa94758c9b96c3661390268.bundle",
@@ -1082,7 +1130,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbaselegsmapd_1003_55b2d2628aa94758c9b96c3661390268.bundle"
       ],
-      "DebugActionIndex": 45
+      "DebugActionIndex": 49
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasemouthmapd_1005_bc8e1fd508781c7b4e1b8095870fdfc0.bundle",
@@ -1094,7 +1142,7 @@
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasemouthmapd_1005_bc8e1fd508781c7b4e1b8095870fdfc0.bundle"
       ],
-      "DebugActionIndex": 46
+      "DebugActionIndex": 50
     },
     {
       "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasetorsomapd_1002_11b54095c207e36e5729a3410d33770a.bundle",
@@ -1105,54 +1153,6 @@
       ],
       "Outputs": [
         "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-g8mbasetorsomapd_1002_11b54095c207e36e5729a3410d33770a.bundle"
-      ],
-      "DebugActionIndex": 47
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_body_2dc4214689171e92edd44343cceeb233.bundle",
-      "DisplayName": "Copying slotdataasset-vanilmirth_body_2dc4214689171e92edd44343cceeb233.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_body_2dc4214689171e92edd44343cceeb233.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_body_2dc4214689171e92edd44343cceeb233.bundle"
-      ],
-      "DebugActionIndex": 48
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_brain_fddc21d84fc85d516d1703e1d358492e.bundle",
-      "DisplayName": "Copying slotdataasset-vanilmirth_brain_fddc21d84fc85d516d1703e1d358492e.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_brain_fddc21d84fc85d516d1703e1d358492e.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_brain_fddc21d84fc85d516d1703e1d358492e.bundle"
-      ],
-      "DebugActionIndex": 49
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_cards_a8eda1da9862b4cf42d6527fb71f846d.bundle",
-      "DisplayName": "Copying slotdataasset-vanilmirth_cards_a8eda1da9862b4cf42d6527fb71f846d.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_cards_a8eda1da9862b4cf42d6527fb71f846d.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_cards_a8eda1da9862b4cf42d6527fb71f846d.bundle"
-      ],
-      "DebugActionIndex": 50
-    },
-    {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_eyes_8281c421bf6bd67843da1377ffb73f15.bundle",
-      "DisplayName": "Copying slotdataasset-vanilmirth_eyes_8281c421bf6bd67843da1377ffb73f15.bundle",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_eyes_8281c421bf6bd67843da1377ffb73f15.bundle"
-      ],
-      "Outputs": [
-        "C:/Users/arthu/Documentos/build/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/slotdataasset-vanilmirth_eyes_8281c421bf6bd67843da1377ffb73f15.bundle"
       ],
       "DebugActionIndex": 51
     },

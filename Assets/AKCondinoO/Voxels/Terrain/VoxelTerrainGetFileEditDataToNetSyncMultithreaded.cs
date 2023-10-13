@@ -48,7 +48,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           Log.DebugMessage("container.segmentSize<=0");
           return;
          }
-         VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
+         VoxelSystem.Concurrent.terrainFiles_rwl.EnterReadLock();
          try{
           Vector2Int cnkRgn1=container.cnkRgn;
           Vector2Int cCoord1=container.cCoord;
@@ -163,7 +163,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
+          VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
          }
         }
     }

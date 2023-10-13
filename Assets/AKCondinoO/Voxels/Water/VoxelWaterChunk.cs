@@ -67,16 +67,16 @@ namespace AKCondinoO.Voxels.Water{
         void DrawVoxelsDensity(){
          if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null){
           VoxelWater?[]voxels=null;
-          if(VoxelSystem.Concurrent.water_rwl.TryEnterReadLock(0)){
+          if(VoxelSystem.Concurrent.waterCache_rwl.TryEnterReadLock(0)){
            try{
-            if(!VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out voxels)){
+            //if(!VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out voxels)){
              return;
-            }
+            //}
            }catch{
             voxels=null;
             throw;
            }finally{
-            VoxelSystem.Concurrent.water_rwl.ExitReadLock();
+            VoxelSystem.Concurrent.waterCache_rwl.ExitReadLock();
            }
           }
           if(voxels==null){

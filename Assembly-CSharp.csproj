@@ -241,6 +241,7 @@
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionRotLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
+    <Compile Include="Assets\AKCondinoO\Util\FileUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\rlabrecque\SteamManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />

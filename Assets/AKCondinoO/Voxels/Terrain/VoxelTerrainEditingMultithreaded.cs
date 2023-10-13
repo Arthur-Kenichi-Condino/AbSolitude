@@ -250,7 +250,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           }}
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,TerrainEditOutputData>editData){
-          VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
+          VoxelSystem.Concurrent.terrainFiles_rwl.EnterReadLock();
           try{
            string fileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord.x,cCoord.y);
            if(File.Exists(fileName)){
@@ -291,10 +291,10 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           }catch{
            throw;
           }finally{
-           VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
+           VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
           }
          }
-         VoxelSystem.Concurrent.terrainFileData_rwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrainFiles_rwl.EnterWriteLock();
          foreach(object syn in container.terrainSynchronization){
           Monitor.Enter(syn);
          }
@@ -357,7 +357,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
           foreach(object syn in container.terrainSynchronization){
            Monitor.Exit(syn);
           }
-          VoxelSystem.Concurrent.terrainFileData_rwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainFiles_rwl.ExitWriteLock();
          }
         }
     }

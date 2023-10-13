@@ -16,10 +16,12 @@ using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     internal class MarchingCubesBackgroundContainer:BackgroundContainer{
-     internal readonly Voxel[]voxelsOutput=new Voxel[VoxelsPerChunk];
+     internal FileStream   voxelsCacheStream;
+     internal StreamWriter voxelsCacheStreamWriter;
+     internal StreamReader voxelsCacheStreamReader;
      internal readonly object synchronizer=new object();
-     internal readonly Dictionary<int,string>editsFileName=new Dictionary<int,string>();
-     internal readonly Dictionary<int,FileStream>editsFileStream=new Dictionary<int,FileStream>();
+     internal readonly Dictionary<int,string      >editsFileName        =new Dictionary<int,string      >();
+     internal readonly Dictionary<int,FileStream  >editsFileStream      =new Dictionary<int,FileStream  >();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal NativeList<Vertex>TempVer;[StructLayout(LayoutKind.Sequential)]internal struct Vertex{
           internal Vector4 pos;
@@ -63,6 +65,13 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
           foreach(var sR in editsFileStreamReader){if(sR.Value!=null){sR.Value.Dispose();}}
           editsFileStream      .Clear();
           editsFileStreamReader.Clear();
+          if(voxelsCacheStream!=null){
+           voxelsCacheStreamWriter.Dispose();
+           voxelsCacheStreamReader.Dispose();
+           voxelsCacheStream=null;
+           voxelsCacheStreamWriter=null;
+           voxelsCacheStreamReader=null;
+          }
          }
          //  free unmanaged resources here
          base.Dispose(disposing);
@@ -162,7 +171,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          //Log.DebugMessage("do MarchingCubes for cnkIdx:"+container.cnkIdx);
          container.TempVer.Clear();
          container.TempTri.Clear();
-         VoxelSystem.Concurrent.terrainFileData_rwl.EnterReadLock();
+         VoxelSystem.Concurrent.terrainFiles_rwl.EnterReadLock();
          try{
           lock(container.synchronizer){
            for(int x=-1;x<=1;x++){
@@ -221,30 +230,48 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrainFileData_rwl.ExitReadLock();
+          VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
          }
-         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
+         bool shouldDispose=false;
+         if(container.voxelsCacheStream!=null){
+          //  TO DO: only if id changes:
+          shouldDispose=true;
+         }
+         VoxelSystem.Concurrent.terrainCache_rwl.EnterWriteLock();
          try{
-          if(VoxelSystem.Concurrent.terrainVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
-           if(VoxelSystem.Concurrent.terrainVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out Voxel[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
-            VoxelSystem.Concurrent.terrainVoxelsOutput.Remove(voxelsOutputOldId.cnkIdx);
-            //Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
+          if(shouldDispose){
+           bool shouldDelete=false;
+           if(VoxelSystem.Concurrent.terrainCacheIds.TryGetValue(container.voxelsCacheStream,out var voxelsCacheOldId)){
+            if(VoxelSystem.Concurrent.terrainCache.TryGetValue(voxelsCacheOldId.cnkIdx,out var oldIdVoxelsCache)&&object.ReferenceEquals(oldIdVoxelsCache.stream,container.voxelsCacheStream)){
+             VoxelSystem.Concurrent.terrainCache.Remove(voxelsCacheOldId.cnkIdx);
+             shouldDelete=true;
+             Log.DebugMessage("removed old value for voxelsCacheOldId.cnkIdx:"+voxelsCacheOldId.cnkIdx);
+            }
+           }
+           string path=container.voxelsCacheStream.Name;
+           container.voxelsCacheStreamWriter.Dispose();
+           container.voxelsCacheStreamReader.Dispose();
+           container.voxelsCacheStream=null;
+           container.voxelsCacheStreamWriter=null;
+           container.voxelsCacheStreamReader=null;
+           if(shouldDelete){
+            File.Delete(path);
            }
           }
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainCache_rwl.ExitWriteLock();
          }
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
-         lock(container.voxelsOutput){
+         //lock(container.voxelsOutput){
           for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
           for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
           for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
            int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
            int corner=0;Vector3Int vCoord2=vCoord1;                                       if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][0];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][0];else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][0];else SetpolygonCellVoxel();
-           container.voxelsOutput[vxlIdx1]=polygonCell[corner];
+           //container.voxelsOutput[vxlIdx1]=polygonCell[corner];
                corner++;           vCoord2=vCoord1;vCoord2.x+=1;                          if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][1];                                                                      else if(vCoord1.y>0)polygonCell[corner]=voxelsCache1[2][vCoord1.z+vCoord1.x*Depth][1];else SetpolygonCellVoxel();
                corner++;           vCoord2=vCoord1;vCoord2.x+=1;vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][2];                                                                                                                                                            else SetpolygonCellVoxel();
                corner++;           vCoord2=vCoord1;             vCoord2.y+=1;             if(vCoord1.z>0)polygonCell[corner]=voxelsCache1[0][0][3];else if(vCoord1.x>0)polygonCell[corner]=voxelsCache1[1][vCoord1.z][1];                                                                                      else SetpolygonCellVoxel();
@@ -386,22 +413,30 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                           vertexUV
            );
           }}}
-         }
+         //}
          //  TO DO: luz e oclusão de ambiente neste "for":
          //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
          //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
          //for(vCoord1.y=Height-1      ;vCoord1.y>=0    ;vCoord1.y--){
          //}
          //}}
-         VoxelSystem.Concurrent.terrain_rwl.EnterWriteLock();
+         VoxelSystem.Concurrent.terrainCache_rwl.EnterWriteLock();
          try{
-          VoxelSystem.Concurrent.terrainVoxelsOutput[container.cnkIdx]=container.voxelsOutput;
-          VoxelSystem.Concurrent.terrainVoxelsId[container.voxelsOutput]=(container.cCoord,container.cnkRgn,container.cnkIdx);
-          //Log.DebugMessage("added voxelsOutput for container.cnkIdx:"+container.cnkIdx);
+          if(container.voxelsCacheStream==null){
+           string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.terrainCacheFileFormat,VoxelSystem.Concurrent.terrainCachePath,container.cCoord.x,container.cCoord.y);
+           //Log.DebugMessage("cacheFileName:"+cacheFileName);
+           container.voxelsCacheStream=new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           container.voxelsCacheStreamWriter=new StreamWriter(container.voxelsCacheStream);
+           container.voxelsCacheStreamReader=new StreamReader(container.voxelsCacheStream);
+           //Log.DebugMessage("container.voxelsCacheStream.Name:"+(container.voxelsCacheStream.Name.Replace("\\","/")));
+          }
+          VoxelSystem.Concurrent.terrainCache[container.cnkIdx]=(container.voxelsCacheStream,container.voxelsCacheStreamWriter,container.voxelsCacheStreamReader);
+          VoxelSystem.Concurrent.terrainCacheIds[container.voxelsCacheStream]=(container.cCoord,container.cnkRgn,container.cnkIdx);
+          //Log.DebugMessage("added voxelsCacheStream for container.cnkIdx:"+container.cnkIdx);
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrain_rwl.ExitWriteLock();
+          VoxelSystem.Concurrent.terrainCache_rwl.ExitWriteLock();
          }
          Vector2Int posOffset=Vector2Int.zero;
          Vector2Int crdOffset=Vector2Int.zero;

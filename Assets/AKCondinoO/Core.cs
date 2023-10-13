@@ -69,7 +69,7 @@ namespace AKCondinoO{
          #if !UNITY_EDITOR
           GarbageCollector.GCMode=GarbageCollector.Mode.Manual;
          #endif
-         GCSettings.LatencyMode=GCLatencyMode.Batch;
+         GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
                 PhysUtil.SetUtil();
