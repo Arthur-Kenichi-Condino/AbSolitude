@@ -8,9 +8,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEngine;
 using Unity.Collections;
+using Unity.VisualScripting;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
@@ -78,6 +81,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
         }
     }
     internal class MarchingCubesMultithreaded:BaseMultithreaded<MarchingCubesBackgroundContainer>{
+     readonly StringBuilder voxelsOutputCacheStringBuilder=new StringBuilder();
      readonly Dictionary<int,Voxel>[]voxels=new Dictionary<int,Voxel>[9];
      readonly Dictionary<int,bool>[]isSolid=new Dictionary<int,bool>[9];
      readonly Voxel[][][]voxelsCache1=new Voxel[3][][]{
@@ -140,6 +144,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          #endregion
         }
         protected override void Cleanup(){
+         voxelsOutputCacheStringBuilder.Clear();
          for(int i=0;i<voxels.Length;++i){
                        voxels[i].Clear();
          }
@@ -167,7 +172,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
              vertexUV.Clear();
          #endregion
         }
+     readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
+         sw.Restart();
          //Log.DebugMessage("do MarchingCubes for cnkIdx:"+container.cnkIdx);
          container.TempVer.Clear();
          container.TempTri.Clear();
@@ -413,6 +420,10 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                           vertexUV
            );
           }}}
+          Vector2Int cCoord2=container.cCoord;
+          int oftIdx2=GetoftIdx(cCoord2-container.cCoord);
+          foreach(var kvp in voxels[oftIdx2].OrderBy(kvp=>kvp.Key)){
+          }
          //}
          //  TO DO: luz e oclusão de ambiente neste "for":
          //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
@@ -762,6 +773,8 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            }
           }
          }
+         sw.Stop();
+         Log.DebugMessage("MarchingCubesMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
         }
     }
 }
