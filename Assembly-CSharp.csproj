@@ -237,6 +237,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.PooledPrefabInstanceHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
