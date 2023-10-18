@@ -615,6 +615,7 @@
 "Assets/AKCondinoO/Voxels/Biomes/BaseBiomeSimObjectsSpawnSettings.cs"
 "Assets/AKCondinoO/Voxels/Biomes/BiomesEnum.cs"
 "Assets/AKCondinoO/Voxels/paulbourke/MarchingCubes/Tables.cs"
+"Assets/AKCondinoO/Voxels/Terrain/GetVoxelMultithreaded.cs"
 "Assets/AKCondinoO/Voxels/Terrain/MarchingCubesMultithreaded.cs"
 "Assets/AKCondinoO/Voxels/Terrain/MarchingCubesTerrain.cs"
 "Assets/AKCondinoO/Voxels/Terrain/VoxelTerrainChunk.cs"

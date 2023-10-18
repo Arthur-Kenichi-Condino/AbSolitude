@@ -122,8 +122,9 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystem.Concurrent.terrainCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);VoxelSystem.Concurrent.terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.waterCache_rwl  =new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);VoxelSystem.Concurrent.waterFiles_rwl  =new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.  waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.  waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
@@ -152,8 +153,8 @@ namespace AKCondinoO.Voxels{
          int poolSize=chunkPoolMultiplier*(expropriationDistance.x*2+1)*
                                           (expropriationDistance.y*2+1);
          if(Core.singleton.isServer){
-          VoxelSystem.Concurrent.terrainCachePath=string.Format("{0}{1}",Core.savePath,"ChunkCache/");
-          Directory.CreateDirectory(VoxelSystem.Concurrent.terrainCachePath);
+          VoxelSystem.Concurrent.waterCachePath=string.Format("{0}{1}",Core.savePath,"WaterChunkCache/");
+          Directory.CreateDirectory(VoxelSystem.Concurrent.waterCachePath);
           chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
           Directory.CreateDirectory(chunkStatePath);
           chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
@@ -251,14 +252,11 @@ namespace AKCondinoO.Voxels{
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
-         VoxelSystem.Concurrent.terrainCache_rwl.Dispose();
          VoxelSystem.Concurrent.terrainFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.waterCache_rwl  .Dispose();
-         VoxelSystem.Concurrent.waterFiles_rwl  .Dispose();
-         VoxelSystem.Concurrent.terrainCache   .Clear();
-         VoxelSystem.Concurrent.terrainCacheIds.Clear();
-         //VoxelSystem.Concurrent.waterVoxelsOutput  .Clear();
-         //VoxelSystem.Concurrent.waterVoxelsId      .Clear();
+         VoxelSystem.Concurrent.  waterFiles_rwl.Dispose();
+         VoxelSystem.Concurrent.  waterCache_rwl.Dispose();
+         VoxelSystem.Concurrent.  waterCache   .Clear();
+         VoxelSystem.Concurrent.  waterCacheIds.Clear();
         }
         void OnDestroy(){
         }

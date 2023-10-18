@@ -117,6 +117,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Rendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\GetVoxelMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\UnnamedMessageTypes.cs" />

@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
@@ -63,24 +64,28 @@ namespace AKCondinoO.Voxels.Water{
           DrawVoxelsDensity();
          #endif
         }
+        VoxelWater?[]DEBUG_DRAW_WATER_DENSITY_VOXELS=null;
         #if UNITY_EDITOR
         void DrawVoxelsDensity(){
          if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null){
-          VoxelWater?[]voxels=null;
           if(VoxelSystem.Concurrent.waterCache_rwl.TryEnterReadLock(0)){
            try{
-            //if(!VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(tCnk.id.Value.cnkIdx,out voxels)){
+            if(!VoxelSystem.Concurrent.waterCache.TryGetValue(tCnk.id.Value.cnkIdx,out var cache)){
              return;
-            //}
+            }
+            if(DEBUG_DRAW_WATER_DENSITY_VOXELS==null){
+             DEBUG_DRAW_WATER_DENSITY_VOXELS=new VoxelWater?[VoxelsPerChunk];
+            }
+            cache.stream.Position=0L;
+            while(cache.reader.BaseStream.Position!=cache.reader.BaseStream.Length){
+             var v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
+             DEBUG_DRAW_WATER_DENSITY_VOXELS[v.vxlIdx]=v.voxel;
+            }
            }catch{
-            voxels=null;
             throw;
            }finally{
             VoxelSystem.Concurrent.waterCache_rwl.ExitReadLock();
            }
-          }
-          if(voxels==null){
-           return;
           }
           Vector3Int vCoord1;
           for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
@@ -88,9 +93,9 @@ namespace AKCondinoO.Voxels.Water{
           for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
            int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
            VoxelWater voxel;
-           lock(voxels){
-            if(voxels[vxlIdx1]!=null){
-             voxel=voxels[vxlIdx1].Value;
+           lock(DEBUG_DRAW_WATER_DENSITY_VOXELS){
+            if(DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx1]!=null){
+             voxel=DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx1].Value;
             }else{
              continue;
             }

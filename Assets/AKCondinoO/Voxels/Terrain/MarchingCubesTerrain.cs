@@ -44,9 +44,6 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
             }
          internal static Voxel air    {get;}=new Voxel(  0.0,Vector3.zero,MaterialId.Air    );
          internal static Voxel bedrock{get;}=new Voxel(101.0,Vector3.zero,MaterialId.Bedrock);
-            public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"voxel={{ density={0} , normal={1} , material={2} , isCreated={3} , }}",density,normal,material,isCreated);
-            }
         }
      internal static Vector3 trianglePosAdj{get;}=new Vector3(
       (Width /2.0f)-0.5f,
