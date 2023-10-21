@@ -75,6 +75,7 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnActivated(){
          base.OnActivated();
          requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
+         requiredSkills.Add(typeof(Teleport        ),new SkillData(){skill=typeof(Teleport        ),level=1 ,});
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){

@@ -101,6 +101,7 @@ namespace AKCondinoO.Sims.Actors{
          onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
          onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
          onChaseMyEnemyMovedSoChangeDestination=true;
+         onChaseFailedTimer=0f;
         }
      protected OnChaseTimeoutReactionCodes onChaseTimeoutReactionCode;
         internal enum OnChaseTimeoutReactionCodes:int{
@@ -128,8 +129,14 @@ namespace AKCondinoO.Sims.Actors{
      protected float onChaseMyEnemyMovedSoChangeDestinationTimeInterval=.2f;
       protected float onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
        protected bool onChaseMyEnemyMovedSoChangeDestination=true;
+     protected float onChaseFailedAfter=1f;//7f;
+      protected float onChaseFailedTimer=0f;
+     protected int onChaseFailCount=0;
+      protected int onChaseFailThresholdForTeleport=3;
+      protected int onChaseFailCountResetAt=3;
         protected virtual void OnCHASE_ST(){
          stopPathfindingOnTimeout=false;//
+         bool onChaseFail=false;
          if((onChaseMyEnemyPos_Last=onChaseMyEnemyPos)!=(onChaseMyEnemyPos=MyEnemy.transform.position)){
           onChaseMyEnemyMovedSoChangeDestination=true;
          }
@@ -146,6 +153,7 @@ namespace AKCondinoO.Sims.Actors{
          ){
           if(MyPathfinding==PathfindingResult.TIMEOUT){
            OnChaseTimeoutFail();
+           onChaseFail=true;
           }
           moveToDestination|=true;
          }
@@ -157,6 +165,35 @@ namespace AKCondinoO.Sims.Actors{
            onChaseMyEnemyMovedSoChangeDestinationTimer=onChaseMyEnemyMovedSoChangeDestinationTimeInterval;
            onChaseMyEnemyMovedSoChangeDestination=false;
            moveToDestination|=true;
+          }
+         }
+         onChaseFailedTimer+=Time.deltaTime;
+         if(onChaseFailedTimer>=onChaseFailedAfter){
+          onChaseFailedTimer=0f;
+          onChaseFail=true;
+         }
+         if(onChaseFail){
+          onChaseFailCount++;
+          if(onChaseFailCount>=onChaseFailThresholdForTeleport){
+           Log.DebugMessage("onChaseFailThresholdForTeleport");
+           //  if my enemy is attacking my master
+           if(MyEnemy is BaseAI enemyAI&&enemyAI.enemy!=null&&enemyAI.enemy.id==masterId){
+            Log.DebugMessage("onChase teleport:enemyAI.enemy.id==masterId");
+            if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
+             teleport.targetDest=MyEnemy.transform.position;
+             teleport.cooldown=0f;
+             teleport.DoSkill(this,1);
+            }
+           }
+           //  if pathfinding results in unreachable
+           //  after a pathfinding timeout fails count
+           //  if I'm targeted by any enemy but can't target back (MyEnemy==null)
+           //  if enemy is attacking but I'm not
+           //  after a longer total chase time and couldn't get in range
+          }
+          if(onChaseFailCount>=onChaseFailCountResetAt){
+           Log.DebugMessage("onChaseFailCountResetAt");
+           onChaseFailCount=0;
           }
          }
          if(moveToDestination){
