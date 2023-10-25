@@ -75,6 +75,7 @@ namespace AKCondinoO.Sims.Actors{
              if(hit.collider.transform.root==this.transform.root){
               onChaseInTheWayColliderHits[i]=default(RaycastHit);
               onChaseInTheWayColliderHitsCount--;
+              continue;
              }
             }
             Array.Sort(onChaseInTheWayColliderHits,OnChaseInTheWayColliderHitsArraySortComparer);
@@ -104,7 +105,9 @@ namespace AKCondinoO.Sims.Actors{
          onChaseMyEnemyMovedSoChangeDestination=true;
          onChaseTookTooLongTimer=0f;
          onChaseTookTooLongCount=0;
-        onChasePathfinderTimeoutCount=0;
+         onChasePathfinderTimeoutCount=0;
+         onChasePathfinderUnreachableCount=0;
+         onChaseNoSpeedCount=0;
         }
      protected OnChaseTimeoutReactionCodes onChaseTimeoutReactionCode;
         internal enum OnChaseTimeoutReactionCodes:int{

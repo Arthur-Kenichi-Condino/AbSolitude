@@ -21,6 +21,7 @@ namespace AKCondinoO.Sims.Actors{
        protected float onAttackGetDataThrottlerTimer;
      protected RaycastHit[]onAttackInTheWayColliderHits=new RaycastHit[8];
       protected int onAttackInTheWayColliderHitsCount=0;
+     readonly List<(SimObject sim,RaycastHit hit)>onAttackHasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
         protected virtual IEnumerator OnAttackGetDataCoroutine(){
          onAttackGetDataThrottler=new WaitUntil(
           ()=>{
@@ -66,6 +67,7 @@ namespace AKCondinoO.Sims.Actors{
             }
            }
            onAttackInTheWayColliderHitsCount=inTheWayLength;
+           onAttackHasFriendlyTargetsToAvoid.Clear();
            if(onAttackInTheWayColliderHitsCount>0){
             for(int i=onAttackInTheWayColliderHits.Length-1;i>=0;--i){
              if(i>=onAttackInTheWayColliderHitsCount){
@@ -76,6 +78,14 @@ namespace AKCondinoO.Sims.Actors{
              if(hit.collider.transform.root==this.transform.root){
               onAttackInTheWayColliderHits[i]=default(RaycastHit);
               onAttackInTheWayColliderHitsCount--;
+              continue;
+             }
+             if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit){
+              bool isFriendly=actorHit.IsFriendlyTo(this);
+              if(isFriendly){
+               Log.DebugMessage("I need to avoid hitting a friendly target:"+actorHit.name);
+               onAttackHasFriendlyTargetsToAvoid.Add((actorHit,hit));
+              }
              }
             }
             Array.Sort(onAttackInTheWayColliderHits,OnAttackInTheWayColliderHitsArraySortComparer);
@@ -100,33 +110,40 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
         protected virtual void OnATTACK_ST(){
          //Log.DebugMessage("OnATTACK_ST(),this:"+this);
-         if(
-          IsTraversingPath()
-         ){
-          navMeshAgent.destination=navMeshAgent.transform.position;
-         }
-         if(characterController!=null){
-          Vector3 lookDir=MyEnemy.transform.position-transform.position;
-          Vector3 planarLookDir=lookDir;
-          planarLookDir.y=0f;
-          onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
-          characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
-          Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
-          if(simUMA!=null){
-           Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
-           if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
-            animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
-           }
-           Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
-           Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
-           animatorLookEuler.y+=180f;
-           Vector3 animatorPlanarLookEuler=animatorLookEuler;
-           animatorPlanarLookEuler.x=0f;
-           animatorPlanarLookEuler.z=0f;
-           Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
-           Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-           if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
-            DoAttackOnAnimationEvent();
+         if(onAttackHasFriendlyTargetsToAvoid.Count>0){
+          Log.DebugMessage("onAttackHasFriendlyTargetsToAvoid.Count>0");
+          for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
+           Log.DebugMessage("OnATTACK_ST(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
+          }
+         }else{
+          if(
+           IsTraversingPath()
+          ){
+           navMeshAgent.destination=navMeshAgent.transform.position;
+          }
+          if(characterController!=null){
+           Vector3 lookDir=MyEnemy.transform.position-transform.position;
+           Vector3 planarLookDir=lookDir;
+           planarLookDir.y=0f;
+           onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
+           characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+           Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
+           if(simUMA!=null){
+            Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
+            if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
+             animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
+            }
+            Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
+            Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
+            animatorLookEuler.y+=180f;
+            Vector3 animatorPlanarLookEuler=animatorLookEuler;
+            animatorPlanarLookEuler.x=0f;
+            animatorPlanarLookEuler.z=0f;
+            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
+            Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
+            if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
+             DoAttackOnAnimationEvent();
+            }
            }
           }
          }

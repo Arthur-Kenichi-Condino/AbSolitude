@@ -14,6 +14,12 @@ namespace AKCondinoO.Sims.Actors{
         internal override bool IsMonster(){
          return MyAggressionMode==AggressionMode.AggressiveToAll;
         }
+        internal override bool IsFriendlyTo(SimObject sim){
+         if(id==sim.masterId){
+          return true;
+         }
+         return base.IsFriendlyTo(sim);
+        }
      internal bool isAiming{
       get{
        if(characterController!=null){

@@ -20,5 +20,8 @@ namespace AKCondinoO.Sims{
         internal virtual bool IsMonster(){
          return false;
         }
+        internal virtual bool IsFriendlyTo(SimObject sim){
+         return false;
+        }
     }
 }
