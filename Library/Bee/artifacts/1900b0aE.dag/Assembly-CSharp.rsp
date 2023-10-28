@@ -574,6 +574,7 @@
 "Assets/AKCondinoO/Sims/_SimObject/SimObject.Stats.Secondary.cs"
 "Assets/AKCondinoO/Sims/_SimObject/SimObject.Stats.Substats.cs"
 "Assets/AKCondinoO/Sims/_SimObject/SimObject.Targeting.Combat.cs"
+"Assets/AKCondinoO/Sims/_SimObject/SimObject.Util.cs"
 "Assets/AKCondinoO/Sims/_SimObject/SimObjectAsInventoryItemInContainerData.cs"
 "Assets/AKCondinoO/Sims/_SimObject/SimObjectManager.cs"
 "Assets/AKCondinoO/Sims/_SimObject/SimObjectSpawner.cs"

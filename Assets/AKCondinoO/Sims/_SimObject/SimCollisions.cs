@@ -120,15 +120,21 @@ namespace AKCondinoO.Sims{
               Vector3 localPoint1,
               Vector3 point0,
               Vector3 point1
-             )GetCapsuleValuesForCollisionTesting(CharacterController capsule,Transform transform){
+             )GetCapsuleValuesForCollisionTesting(CharacterController capsule,Transform transform,Vector3 applyScale=default(Vector3),Vector3 applyOffset=default(Vector3)){
               var direction=Vector3.up;
               //Log.DebugMessage("capsule direction:"+direction);
               var offset=capsule.height/2f-capsule.radius;
+              if(applyScale.y>0f){
+               offset*=applyScale.y;
+              }
               var localPoint0=capsule.center-direction*offset;
               var localPoint1=capsule.center+direction*offset;
-              var point0=transform.TransformPoint(localPoint0);
-              var point1=transform.TransformPoint(localPoint1);
+              var point0=transform.TransformPoint(localPoint0);point0+=applyOffset;
+              var point1=transform.TransformPoint(localPoint1);point1+=applyOffset;
               float radius=capsule.radius;
+              if(applyScale.x>0f||applyScale.z>0f){
+               radius*=Mathf.Max(applyScale.x,applyScale.z);
+              }
               return(
                direction,
                1,

@@ -87,7 +87,7 @@ namespace AKCondinoO.Sims{
              var stats=simObject.stats;
              if(stats!=null){
               float integrity=stats.IntegrityGet(simObject);
-              Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+              //Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
               float damageFromSimObject=1f;
               var fromSimObjectStats=fromSimObject.stats;
               if(fromSimObjectStats!=null){

@@ -264,6 +264,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\_SimFloor\SimFloor.cs" />
     <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />

@@ -253,12 +253,12 @@ namespace AKCondinoO.Sims.Actors{
               //Debug.DrawLine(actorHit.transform.root.position,transform.root.position,Color.blue,1f);
               //Debug.DrawRay(actorHit.transform.root.position,cross,Color.cyan,1f);
               Vector3 right=cross;
-              right.y=actorHit.transform.root.position.y;
+              right.y=0f;
               right.Normalize();
               //Debug.DrawRay(actorHit.transform.root.position,right,Color.cyan,1f);
               Vector3 cross2=Vector3.Cross(actorHit.transform.root.position+right,actorHit.transform.root.position+Vector3.up);
               Vector3 forward=cross2;
-              forward.y=actorHit.transform.root.position.y;
+              forward.y=0f;
               forward.Normalize();
               //Debug.DrawRay(actorHit.transform.root.position,forward,Color.cyan,1f);
               int rightSign=1;

@@ -39,10 +39,10 @@ namespace AKCondinoO.Sims.Actors{
      }
      [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
         internal Vector3 AttackDistance(){
-         float radius=Mathf.Max(localBounds.extents.x,localBounds.extents.z);
+         float radius=GetRadius();
          return new Vector3(
-          radius,
-          localBounds.extents.y+MyAttackRange.y,
+          radius+MyAttackRange.x,
+          GetHeight()+MyAttackRange.y,
           radius+MyAttackRange.z
          );
         }
@@ -147,7 +147,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,simObject);
-         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         //Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
          }

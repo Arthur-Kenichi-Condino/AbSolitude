@@ -45,9 +45,19 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("OnAttackGetDataCoroutine:Loop");
           //  TO DO: don't attack allies, handle MOTION_ATTACK_RIFLE (or motions that are not processed or implemented),
           if(characterController!=null){
-           var values=simCollisions.GetCapsuleValuesForCollisionTesting(characterController.character,transform.root);
+           Quaternion rotation=GetRotation();
+           float height=GetHeight();
+           float radius=GetRadius();
            Vector3 attackDistance=AttackDistance();
-           float maxDis=attackDistance.z;
+           Vector3 forward=(MyEnemy.transform.root.position-transform.root.position).normalized;
+           forward.y=0f;
+           Vector3 scale=new Vector3(attackDistance.x/radius,attackDistance.y/height,1f);
+           Vector3 offset=-forward*radius*2f*scale.x;
+           var values=simCollisions.GetCapsuleValuesForCollisionTesting(characterController.character,transform.root,scale,offset);
+           Debug.DrawLine(values.point0,values.point1,Color.red,onAttackGetDataThrottlerInterval);
+           Debug.DrawRay(values.point0,rotation*Vector3.right*radius*scale.x,Color.red,onAttackGetDataThrottlerInterval);
+           float maxDis=attackDistance.z+radius*2f*scale.x;
+           //Debug.DrawLine(this.transform.position+offset,this.transform.position+forward*maxDis,Color.red,onAttackGetDataThrottlerInterval);
            int inTheWayLength=0;
            _GetInTheWayColliderHits:{
             inTheWayLength=Physics.CapsuleCastNonAlloc(
@@ -81,10 +91,15 @@ namespace AKCondinoO.Sims.Actors{
               continue;
              }
              if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit){
-              bool isFriendly=actorHit.IsFriendlyTo(this);
-              if(isFriendly){
-               Log.DebugMessage("I need to avoid hitting a friendly target:"+actorHit.name);
-               onAttackHasFriendlyTargetsToAvoid.Add((actorHit,hit));
+              float actorHitRadius=actorHit.GetRadius();
+              if(Math.Abs(transform.root.position.x-(hit.collider.transform.root.position.x-actorHitRadius))<=attackDistance.x||
+                 Math.Abs(transform.root.position.z-(hit.collider.transform.root.position.z-actorHitRadius))<=attackDistance.z
+              ){
+               bool isFriendly=actorHit.IsFriendlyTo(this);
+               if(isFriendly){
+                Log.DebugMessage("I need to avoid hitting a friendly target:"+actorHit.name);
+                onAttackHasFriendlyTargetsToAvoid.Add((actorHit,hit));
+               }
               }
              }
             }
@@ -110,10 +125,39 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
         protected virtual void OnATTACK_ST(){
          //Log.DebugMessage("OnATTACK_ST(),this:"+this);
+         bool canAttack=true;
+         Quaternion rotation=GetRotation();
+         Vector3 attackDistance=AttackDistance();
+         Debug.DrawRay(transform.root.position,rotation*(Vector3.forward*attackDistance.z),Color.magenta);
          if(onAttackHasFriendlyTargetsToAvoid.Count>0){
-          Log.DebugMessage("onAttackHasFriendlyTargetsToAvoid.Count>0");
-          for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
-           Log.DebugMessage("OnATTACK_ST(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
+          canAttack=false;
+          //Log.DebugMessage("onAttackHasFriendlyTargetsToAvoid.Count>0");
+          if(
+           !IsTraversingPath()
+          ){
+           Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
+           float destAngle=0f;
+           for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
+            //Log.DebugMessage("OnATTACK_ST(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
+            RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
+            SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
+            Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
+            dirFromAllyToEnemy.y=0f;
+            Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
+            Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
+            dirFromEnemyToMe.y=0f;
+            Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
+            float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
+            destAngle+=angle;
+           }
+           if(destAngle!=0f){
+            destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+            Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.blue,1f);
+           }
+           Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z);
+           Debug.DrawLine(transform.root.position,dest,Color.blue,1f);
+           MyDest=dest-(Vector3.up*(GetHeight()/2f));
+           navMeshAgent.destination=MyDest;
           }
          }else{
           if(
@@ -121,27 +165,29 @@ namespace AKCondinoO.Sims.Actors{
           ){
            navMeshAgent.destination=navMeshAgent.transform.position;
           }
-          if(characterController!=null){
-           Vector3 lookDir=MyEnemy.transform.position-transform.position;
-           Vector3 planarLookDir=lookDir;
-           planarLookDir.y=0f;
-           onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
-           characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
-           Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
-           if(simUMA!=null){
-            Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
-            if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
-             animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
-            }
-            Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
-            Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
-            animatorLookEuler.y+=180f;
-            Vector3 animatorPlanarLookEuler=animatorLookEuler;
-            animatorPlanarLookEuler.x=0f;
-            animatorPlanarLookEuler.z=0f;
-            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
-            Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-            if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
+         }
+         if(characterController!=null){
+          Vector3 lookDir=MyEnemy.transform.position-transform.position;
+          Vector3 planarLookDir=lookDir;
+          planarLookDir.y=0f;
+          onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
+          characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+          //Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
+          if(simUMA!=null){
+           Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
+           if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
+            animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
+           }
+           Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
+           Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
+           animatorLookEuler.y+=180f;
+           Vector3 animatorPlanarLookEuler=animatorLookEuler;
+           animatorPlanarLookEuler.x=0f;
+           animatorPlanarLookEuler.z=0f;
+           Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
+           //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
+           if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=5f){
+            if(canAttack){
              DoAttackOnAnimationEvent();
             }
            }
