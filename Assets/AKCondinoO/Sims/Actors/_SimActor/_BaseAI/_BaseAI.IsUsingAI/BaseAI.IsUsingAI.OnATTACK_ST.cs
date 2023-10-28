@@ -108,6 +108,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         onAttackGotData=true;
          goto Loop;
         }
         //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
@@ -124,8 +125,16 @@ namespace AKCondinoO.Sims.Actors{
          return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
      [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
+      bool onAttackWaitForNextTargetsToAvoidData;
         protected virtual void OnATTACK_ST(){
          //Log.DebugMessage("OnATTACK_ST(),this:"+this);
+         if(onAttackGotData){
+          if(
+           !IsTraversingPath()
+          ){
+           onAttackWaitForNextTargetsToAvoidData=false;
+          }
+         }
          bool canAttack=true;
          Quaternion rotation=GetRotation();
          Vector3 attackDistance=AttackDistance();
@@ -136,29 +145,36 @@ namespace AKCondinoO.Sims.Actors{
           if(
            !IsTraversingPath()
           ){
-           Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
-           float destAngle=0f;
-           for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
-            //Log.DebugMessage("OnATTACK_ST(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
-            RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
-            SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
-            Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
-            dirFromAllyToEnemy.y=0f;
-            Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
-            Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
-            dirFromEnemyToMe.y=0f;
-            Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
-            float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
-            destAngle+=angle;
+           bool moveToDestination=false;
+           if(!onAttackWaitForNextTargetsToAvoidData){
+            moveToDestination|=true;
            }
-           if(destAngle!=0f){
-            destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-            Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.blue,1f);
+           if(moveToDestination){
+            Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
+            float destAngle=0f;
+            for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
+             //Log.DebugMessage("OnATTACK_ST(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
+             RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
+             SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
+             Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
+             dirFromAllyToEnemy.y=0f;
+             Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
+             Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
+             dirFromEnemyToMe.y=0f;
+             Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
+             float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
+             destAngle+=angle;
+            }
+            if(destAngle!=0f){
+             destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+             Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.blue,1f);
+            }
+            Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z);
+            Debug.DrawLine(transform.root.position,dest,Color.blue,1f);
+            MyDest=dest-(Vector3.up*(GetHeight()/2f));
+            navMeshAgent.destination=MyDest;
+            onAttackWaitForNextTargetsToAvoidData=true;
            }
-           Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z);
-           Debug.DrawLine(transform.root.position,dest,Color.blue,1f);
-           MyDest=dest-(Vector3.up*(GetHeight()/2f));
-           navMeshAgent.destination=MyDest;
           }
          }else{
           if(
@@ -194,6 +210,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         onAttackGotData=false;
         }
     }
 }
