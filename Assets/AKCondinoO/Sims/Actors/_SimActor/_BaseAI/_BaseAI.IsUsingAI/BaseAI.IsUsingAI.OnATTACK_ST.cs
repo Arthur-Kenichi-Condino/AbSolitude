@@ -22,6 +22,7 @@ namespace AKCondinoO.Sims.Actors{
      protected RaycastHit[]onAttackInTheWayColliderHits=new RaycastHit[8];
       protected int onAttackInTheWayColliderHitsCount=0;
      readonly List<(SimObject sim,RaycastHit hit)>onAttackHasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
+     bool onAttackGotData;
         protected virtual IEnumerator OnAttackGetDataCoroutine(){
          onAttackGetDataThrottler=new WaitUntil(
           ()=>{
