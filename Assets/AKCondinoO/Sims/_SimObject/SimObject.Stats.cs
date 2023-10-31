@@ -98,7 +98,7 @@ namespace AKCondinoO.Sims{
              Debug.Assert(GetStatPointsSpentFor(130)==statPoints,"static Stats():GetStatPointsSpentFor(130):wrong cached value");
              for(int statLevel=1;statLevel<130;++statLevel){
               statPoints=GetStatPointsRequired(statLevel,statLevel+1);
-              Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
+              //Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
               Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):wrong cached value");
              }
              int totalStatPoints=AddStatPointsFrom1To99(99,false);

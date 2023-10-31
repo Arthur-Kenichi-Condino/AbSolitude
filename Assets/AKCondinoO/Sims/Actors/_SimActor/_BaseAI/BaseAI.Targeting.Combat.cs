@@ -55,7 +55,7 @@ namespace AKCondinoO.Sims.Actors{
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
          Vector3 attackDistance=AttackDistance();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
-         if(disXZPlane<=attackDistance.z+simObjectRadius&&delta.y<=attackDistance.y){
+         if((disXZPlane<=attackDistance.z+simObjectRadius||disXZPlane<=attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
           return true;
          }
@@ -144,10 +144,14 @@ namespace AKCondinoO.Sims.Actors{
            slaveAI.SetTargetToBeRemoved(hitbox.actor,15f);
           }
          }
+         if(masterSimObject is BaseAI masterAI){
+          masterAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
+          masterAI.SetTargetToBeRemoved(hitbox.actor,15f);
+         }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,simObject);
-         //Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
          }

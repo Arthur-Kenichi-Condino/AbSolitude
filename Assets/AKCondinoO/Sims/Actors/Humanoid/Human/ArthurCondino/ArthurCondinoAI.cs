@@ -26,8 +26,8 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          );
          base.OnActivated();
         }
-        protected override void OnIDLE_ST(){
-         base.OnIDLE_ST();
+        protected override void OnIDLE_ST_Routine(){
+         base.OnIDLE_ST_Routine();
         }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){

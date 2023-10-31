@@ -449,6 +449,7 @@
 "Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/VanilmirthAI.OnSkillUsed.cs"
 "Assets/AKCondinoO/Sims/Actors/Homunculi/Vanilmirth/VanilmirthAnimatorControllerMotionUpdater.cs"
 "Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/DisfiguringHomunculusAI.cs"
+"Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/DisfiguringHomunculusAI.Stats.cs"
 "Assets/AKCondinoO/Sims/Actors/Humanoid/DisfiguringHomunculus/DisfiguringHomunculusAnimatorControllerMotionUpdater.cs"
 "Assets/AKCondinoO/Sims/Actors/Humanoid/Human/ArthurCondino/ArthurCondinoAI.cs"
 "Assets/AKCondinoO/Sims/Actors/Humanoid/Human/ArthurCondino/ArthurCondinoAI.MySkill.cs"

@@ -16,13 +16,12 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         protected virtual void OnIDLE_ST_Start(){
-         characterController.character.transform.localRotation=Quaternion.identity;
         }
      [SerializeField]protected bool doIdleMove=true;
      [SerializeField]protected float useRunSpeedChance=0.5f;
      [SerializeField]protected float delayToRandomMove=8.0f;
      protected float timerToRandomMove=2.0f;
-        protected virtual void OnIDLE_ST(){
+        protected virtual void OnIDLE_ST_Routine(){
          if(
           !IsTraversingPath()
          ){

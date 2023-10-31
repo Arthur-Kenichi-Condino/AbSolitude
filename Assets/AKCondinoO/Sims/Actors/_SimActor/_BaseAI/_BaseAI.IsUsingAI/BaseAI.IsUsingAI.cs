@@ -20,17 +20,17 @@ namespace AKCondinoO.Sims.Actors{
          MyPathfinding=GetPathfindingResult();
          stopPathfindingOnTimeout=true;
          //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
+         State lastState=MyState;
          if(MyEnemy!=null){
           if(IsInAttackRange(MyEnemy)){
            MyState=State.ATTACK_ST;
            goto _MyStateSet;
-          }else{
-           if(MyState!=State.CHASE_ST){
-            OnCHASE_ST_Start();
-           }
-           MyState=State.CHASE_ST;
-           goto _MyStateSet;
           }
+          if(MyState!=State.CHASE_ST){
+           OnCHASE_ST_Start();
+          }
+          MyState=State.CHASE_ST;
+          goto _MyStateSet;
          }else{
           if(masterId!=null){
            float disToMaster=GetDistance(this,masterSimObject);
@@ -49,19 +49,25 @@ namespace AKCondinoO.Sims.Actors{
           goto _MyStateSet;
          }
          _MyStateSet:{}
+         if(lastState!=MyState){
+          if(lastState==State.ATTACK_ST){
+           onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.identity;
+           characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.EndRotation();
+          }
+         }
          SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
          if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
          if(MySkill!=null){
           DoSkill();
          }
          if      (MyState==State.ATTACK_ST){
-          OnATTACK_ST();
+          OnATTACK_ST_Routine();
          }else if(MyState==State. CHASE_ST){
-           OnCHASE_ST();
+           OnCHASE_ST_Routine();
          }else if(MyState==State.FOLLOW_ST){
-          OnFOLLOW_ST();
+          OnFOLLOW_ST_Routine();
          }else{
-            OnIDLE_ST();
+            OnIDLE_ST_Routine();
          }
          UpdateMotion(true);
         }

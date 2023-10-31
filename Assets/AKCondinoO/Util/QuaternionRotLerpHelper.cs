@@ -68,5 +68,10 @@ namespace AKCondinoO{
              }
          return result;
         }
+        internal Quaternion EndRotation(){
+         tgtRotLerpVal=1;
+         tgtRotLerpTime=0;
+         return tgtRot_Last=tgtRot;
+        }
     }
 }

@@ -40,14 +40,14 @@ namespace AKCondinoO.Sims{
                             musical_value=0f;
                        naturalistic_value=0f;
                             spatial_value=0f;
-                Bodily_kinestheticSet((float)math_random.Next(1,131));
-                     InterpersonalSet((float)math_random.Next(1,131));
-                     IntrapersonalSet((float)math_random.Next(1,131));
-                        LinguisticSet((float)math_random.Next(1,131));
-              Logical_mathematicalSet((float)math_random.Next(1,131));
-                           MusicalSet((float)math_random.Next(1,131));
-                      NaturalisticSet((float)math_random.Next(1,131));
-                           SpatialSet((float)math_random.Next(1,131));
+                Bodily_kinestheticSet((float)math_random.Next(1,131),statsSim,false);
+                     InterpersonalSet((float)math_random.Next(1,131),statsSim,false);
+                     IntrapersonalSet((float)math_random.Next(1,131),statsSim,false);
+                        LinguisticSet((float)math_random.Next(1,131),statsSim,false);
+              Logical_mathematicalSet((float)math_random.Next(1,131),statsSim,false);
+                           MusicalSet((float)math_random.Next(1,131),statsSim,false);
+                      NaturalisticSet((float)math_random.Next(1,131),statsSim,false);
+                           SpatialSet((float)math_random.Next(1,131),statsSim,false);
              }
             }
             protected static void TryRaiseStatLevelTo(ref float stat,int toLevel,ref int statPointsSpent,int totalStatPoints){

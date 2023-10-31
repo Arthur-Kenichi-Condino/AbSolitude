@@ -19,7 +19,7 @@ namespace AKCondinoO.Sims.Actors {
         }
      [SerializeField]protected float pathfindingTimeout=3f;
       protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=6f;
+      [SerializeField]protected float pathPendingTimeout=4f;
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){

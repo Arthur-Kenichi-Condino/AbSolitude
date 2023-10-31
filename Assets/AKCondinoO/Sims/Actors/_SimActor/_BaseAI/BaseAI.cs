@@ -163,7 +163,7 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
      [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
      [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
-     [SerializeField]float AFKTimeToUseAI=30f;
+     [SerializeField]float AFKTimeToUseAI=5f;
       float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){

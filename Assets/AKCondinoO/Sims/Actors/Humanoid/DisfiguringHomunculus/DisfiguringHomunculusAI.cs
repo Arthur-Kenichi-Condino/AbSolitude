@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UMA;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid{
-    internal class DisfiguringHomunculusAI:HumanoidAI{
+    internal partial class DisfiguringHomunculusAI:HumanoidAI{
         protected override void OnUMACharacterUpdated(UMAData simUMAData){
          Log.DebugMessage("OnUMACharacterUpdated");
          SetBodyPart("head","face",out head);

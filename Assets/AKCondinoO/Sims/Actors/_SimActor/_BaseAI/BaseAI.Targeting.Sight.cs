@@ -40,8 +40,15 @@ namespace AKCondinoO.Sims.Actors{
            return;
           }
          }else if(targetOfTarget!=null){
+          if(targetOfTarget.id==null){
+           return;
+          }
           if(masterId==targetOfTarget.id){
            ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.FromMaster);
+           return;
+          }
+          if(slaves.Contains(targetOfTarget.id.Value)){
+           ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.FromSlave);
            return;
           }
          }

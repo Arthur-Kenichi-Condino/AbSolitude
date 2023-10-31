@@ -55,13 +55,12 @@ MonoBehaviour:
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
-  navMeshAgentWalkSpeed: 2
-  navMeshAgentRunSpeed: 4
+  goToSimUMA: {fileID: 0}
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 30
+  AFKTimeToUseAI: 5
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
@@ -71,18 +70,22 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  navMeshAgentWalkSpeed: 2
+  navMeshAgentRunSpeed: 4
+  pathfindingTimeout: 3
+  pathPendingTimeout: 6
+  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
+  renewEnemyInterval: 3
+  MyAggressionMode: 0
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
-  onHitSetMotionVulnerablePeriodDuration: 2
-  onHitResetMotionGracePeriodDuration: 0.2
-  onHitSetMotionGracePeriodDuration: 5
-  MyAggressionMode: 0
-  renewEnemyInterval: 3
-  pathfindingTimeout: 3
-  pathPendingTimeout: 6
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments: []
   rotLerp:
     dealWithGimbalLock: 1
@@ -143,6 +147,7 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
+  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer

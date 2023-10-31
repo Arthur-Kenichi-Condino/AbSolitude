@@ -11,9 +11,10 @@ namespace AKCondinoO.Sims.Actors{
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
         internal enum GotTargetMode:int{
          FromMaster=0,
-         FromFriends=1,
-         Defensively=2,
-         Aggressively=3,
+         FromSlave=1,
+         FromFriends=2,
+         Defensively=3,
+         Aggressively=4,
         }
         internal enum EnemyPriority:int{
          High=0,
