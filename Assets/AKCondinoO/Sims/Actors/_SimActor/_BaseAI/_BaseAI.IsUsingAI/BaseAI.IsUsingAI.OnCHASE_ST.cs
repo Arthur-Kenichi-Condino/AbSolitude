@@ -296,10 +296,6 @@ namespace AKCondinoO.Sims.Actors{
           teleport.DoSkill(this,1);
          }
         }
-        protected virtual void OnCHASE_ST_Move(bool useModifiers=true){
-         OnCHASE_ST_GetDest(useModifiers);
-         navMeshAgent.destination=MyDest;
-        }
         protected virtual void OnCHASE_ST_DestModifiersNext(){
          if(onChaseGetDestGoLeft){
           onChaseGetDestGoLeft=false;
@@ -356,6 +352,10 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+        }
+        protected virtual void OnCHASE_ST_Move(bool useModifiers=true){
+         OnCHASE_ST_GetDest(useModifiers);
+         navMeshAgent.destination=MyDest;
         }
     }
 }
