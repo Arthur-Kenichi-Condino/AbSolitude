@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO{
-    internal class ScreenInput:MonoBehaviour,ISingletonInitialization{
+    internal partial class ScreenInput:MonoBehaviour,ISingletonInitialization{
      internal static ScreenInput singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
@@ -25,7 +25,9 @@ namespace AKCondinoO{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("ScreenInput:OnDestroyingCoreEvent");
         }
+     internal Vector3 mouse{get;private set;}
         void Update(){
+         mouse=Input.mousePosition;
          pointerEventData.position=Input.mousePosition;
          isPointerOverUIElement=false;
          eventSystemRaycastResults.Clear();

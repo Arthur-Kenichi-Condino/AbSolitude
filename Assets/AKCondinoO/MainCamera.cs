@@ -78,7 +78,7 @@ namespace AKCondinoO{
           hasTransformChanges=true;
          }
         }
-     [SerializeField]bool DEBUG_STOP_FOLLOWING=false;
+     [SerializeField]internal bool DEBUG_STOP_FOLLOWING=false;
      [SerializeField]QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;

@@ -436,6 +436,8 @@
 "Assets/AKCondinoO/Networking/rlabrecque/SteamManager.cs"
 "Assets/AKCondinoO/Networking/UnnamedMessageTypes.cs"
 "Assets/AKCondinoO/ScreenInput.cs"
+"Assets/AKCondinoO/ScreenInput.Util.cs"
+"Assets/AKCondinoO/ScreenInputUtil.cs"
 "Assets/AKCondinoO/SimObjectToSpriteTool/ScreenshotBackground.cs"
 "Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectScreenshotHelper.cs"
 "Assets/AKCondinoO/Sims/Actors/Homunculi/HomunculiAnimatorControllerMotionUpdater.cs"
