@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims;
 using AKCondinoO.UI.Fixed;
 using System;
 using System.Collections;
@@ -34,7 +35,27 @@ namespace AKCondinoO.UI.Context{
            Close();
           }else{
            if(Enabled.ACTION_2.curState!=Enabled.ACTION_2.lastState){
-            Open();
+            SimObject openFor=null;
+            bool open=false;
+            if(ScreenInput.singleton.screenPointRaycastResultsCount>0){
+             for(int i=0;i<ScreenInput.singleton.screenPointRaycastResultsCount;++i){
+              RaycastHit hit=ScreenInput.singleton.screenPointRaycastResults[i];
+              if(hit.collider==null||!hit.collider.CompareTag("SimObjectVolume")){
+               continue;
+              }
+              SimObject sim=hit.collider.transform.root.GetComponentInChildren<SimObject>();
+              if(sim!=null){
+               openFor=sim;
+               open=true;
+               break;
+              }
+             }
+            }
+            if(open){
+             Open(openFor);
+            }else{
+             Close();
+            }
            }else{
             if(Enabled.ACTION_1.curState!=Enabled.ACTION_1.lastState){
              if(!ScreenInput.singleton.isPointerOverUIElement&&(ScreenInput.singleton.currentSelectedGameObject==null||ScreenInput.singleton.currentSelectedGameObject.transform.root!=this.transform.root)){
@@ -50,7 +71,8 @@ namespace AKCondinoO.UI.Context{
           panel.gameObject.SetActive(false);
          }
         }
-        void Open(){
+        void Open(SimObject openFor){
+         Log.DebugMessage("open panel for sim:"+openFor);
          Vector3 pos=ScreenInput.singleton.mouse;
          //Vector3[]v=null;
          //Vector2 size=panel.ActualSize2(ref v);

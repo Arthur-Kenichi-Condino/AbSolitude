@@ -1,0 +1,54 @@
+AbSolitude Project Dev Log:
+
+2023-11-04 13:31 h
+
+Hello! Good morning/afternoon/evening!
+
+My name is Arthur Kenichi Condino Odaguiri, I'm from Brazil, and I'm developing an Unity 3D game based on Ragnarök Online, mainly focused in its Homunculi System. I used to make the AI for all the homunculi in Ragnarök; my AI was called AI Gibraltar and my nickname was Arthur Gibraltar. The AI was published in Brazil's Level Up! Games' magazine in the Homunculus S edition (number 34, 2012 August).
+
+I've been working in this project non stop for about 10 years (from approximately 2014, counting the time I had to study game dev by myself, both using XNA and then later Unity [and I had no full development project, but only tiny test projects or projects that failed because of some hard to fix bug]); and currently I do have:
+
+- a customizable (during gameplay) voxel terrain, and some parts of the voxel water system (the water system is scattered in other project versions in GitHub); 
+- AI controlled characters which start combat against each other when they are enemies; 
+- some implementation of the stats/attributes system for the RPG part of the game;
+- implementation of a skill system and buffs and debuffs;
+- some implementation of the saving and loading system so data is saved to files when the game closes (I did the serialization): some data/parts aren't being saved yet;
+- some implementation of the Unity Networking system so it sychronizes data from server to client (still very little: position and rotation only, plus sending terrain edits data, which still must be changed to not use reliable channel but instead the unreliable [plus doing some sort of data verification in the end]);
+- implementation of the Unity UMA system for adding new characters;
+- Vanilmirth based homunculus modeled, animated and added;
+- Lif and Eleanor homunculi, only 3D modeled;
+- BGM system;
+- day and night cycle;
+- a special shader for the terrain so it merges material textures;
+- the beginning of the UI system;
+
+What will make this game "fun": 
+
+- for each homunculus type, appearance or skill you want, you need to find items to complete a recipe and make an homunculus alchemical transmutation, making it stronger, adding the new skill, changing its appearance, etc., sou you have the strongest homunculus you aim for with the specializations you seek;
+- cada homunculus e cada skill requer sua própria combinação de itens e uma transmutação alquímica;
+- viajar para lugares e locais longínquos e montar seu acampamento aconchegante com amigos e npcs para passar a noite, e no dia seguinte caçar monstros ou outras espécies e coletar em plantas ou minerais os ingredientes para fazer os experimentos em homunculus;
+- cada local diferente possui um bioma e determinadas espécies de plantas e criaturas;
+- montar o seu esquadrão perfeito de homunculi especializados que possam interagir entre si para realizar a melhor estratégia durante os combates;
+- com sua esquadrão cada vez mais forte, conseguir derrotar monstros mais difíceis e finalmente os chefes de cada região, ou bioma, que são os monstros mais aterrorizantes e intensos de se derrotar, e que possuem os itens mais raros para fazer as melhores habilidades em cada homunculus;
+- você só vai conseguir derrotar os grandes chefes se tiver ajuda de seus amigos e npcs e ter um esquadrão de homunculi bem organizado e eficiente para uma boa estratégia de combate;
+- cada homunculus que você criar: você escolhe como ele age em combate, como usa as habilidades automaticamente, se ataca à distância ou não, etc.;
+
+I'm developing with 3 friends in the moment (they only participate in their free time, as hobbyists).
+
+My project is currently in a "prototype-published-for-testing" state in itch.io. I'm sure I won't stop developing it, ever: but I don't know how long will it take for it to become a full playable game. Or if I'll die before finishing it, who knows.
+
+Things I'm currently looking for to be added in the project with a higher priority are:
+
+- adding the commands which are done in Unity Inspector for the game interaction in the actual gameplay UI;
+- animating Eleanor and Lif models (painting the humanoid skeleton weights);
+- finding any bugs in the code or any parts that need or must be optimized or changed for a better performance for when the game gets to grow larger;
+- finish the game documentation in a web page html/javascript/node.js format (like in a wiki manner, but simpler and developed by me [or my team] so we can add more stuff in the future)
+- testing and developing more biomes using the biome system of the voxel terrain (adding more terrain materials, and objects, and testing it so we can bugfix any problem: the biome uses libnoise for Unity)
+- creating more homunculi;
+- creating more skills;
+- I am developing the Castling, Tarot Card of Destiny and AbSolitude skills now;
+- designing more RPG elements (currently I'm doing one based on Ragnarök Online's system)
+
+This game is also a "Releitura" ("Reinterpretation") of Ragnarök Online's Homunculus System; it's honoring this piece of art game and also giving it another meaning based in my interpretation and the culture I live in.
+
+YouTube: https://www.youtube.com/watch?v=d4HLbjGo9M8

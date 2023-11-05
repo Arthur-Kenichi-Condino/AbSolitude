@@ -19,6 +19,8 @@ namespace AKCondinoO{
      internal PointerEventData pointerEventData;
       internal readonly List<RaycastResult>eventSystemRaycastResults=new List<RaycastResult>();
      internal Ray?screenPointRay;
+     internal RaycastHit[]screenPointRaycastResults=new RaycastHit[1];
+     internal int screenPointRaycastResultsCount=0;
         public void Init(){
          pointerEventData=new PointerEventData(EventSystem.current);
         }
@@ -58,7 +60,29 @@ namespace AKCondinoO{
          }
          if(Camera.main!=null){
           screenPointRay=Camera.main.ScreenPointToRay(Input.mousePosition);
+          if(ScreenInput.singleton.screenPointRay!=null){
+           _DoRaycast:{}
+           screenPointRaycastResultsCount=Physics.RaycastNonAlloc(ScreenInput.singleton.screenPointRay.Value,screenPointRaycastResults);
+           if(screenPointRaycastResultsCount>0&&screenPointRaycastResultsCount>=screenPointRaycastResults.Length){
+            Array.Resize(ref screenPointRaycastResults,screenPointRaycastResultsCount*2);
+            goto _DoRaycast;
+           }
+           Array.Sort(screenPointRaycastResults,HitsArraySortComparer);
+          }
          }
+        }
+        //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
+        private int HitsArraySortComparer(RaycastHit a,RaycastHit b){
+         if(a.collider==null&&b.collider==null){
+          return 0;
+         }
+         if(a.collider==null&&b.collider!=null){
+          return 1;
+         }
+         if(a.collider!=null&&b.collider==null){
+          return -1;
+         }
+         return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
     }
 }
