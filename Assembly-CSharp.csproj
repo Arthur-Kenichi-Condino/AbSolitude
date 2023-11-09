@@ -142,6 +142,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\NavMeshHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterChunk.cs" />
+    <Compile Include="Assets\AKCondinoO\Ambience\WindZone.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
@@ -345,6 +346,7 @@
     <None Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\_3D\_UMA\HairFadeCutout2.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\AKCondinoO\Particles\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>

@@ -189,6 +189,63 @@ Light:
   m_CorrespondingSourceObject: {fileID: 705507994, guid: b94606b97c5a86c46b64bab270e85a60, type: 3}
   m_PrefabInstance: {fileID: 2927522432442171595}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1100231856
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3616349737859918861, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_Name
+      value: WindTrails
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120450419848331842, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8b9f637968477d84d9fa67d228f37f8e, type: 3}
 --- !u!1001 &1741499374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1542,6 +1599,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 68723255049791197, guid: 83f9f07a5fdaab24b8f3f557a98b6ffc, type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 68723255049791197, guid: 83f9f07a5fdaab24b8f3f557a98b6ffc, type: 3}
+      propertyPath: ExternalForcesModule.influenceFilter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 68723255049791197, guid: 83f9f07a5fdaab24b8f3f557a98b6ffc, type: 3}
+      propertyPath: ExternalForcesModule.influenceList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2158388413294349547, guid: 83f9f07a5fdaab24b8f3f557a98b6ffc, type: 3}
       propertyPath: m_Name
       value: WindZone
@@ -1725,8 +1794,9 @@ SceneRoots:
   - {fileID: 6595663812078327784}
   - {fileID: 6013401304489151639}
   - {fileID: 2927522432442171595}
-  - {fileID: 6312158182046691267}
   - {fileID: 7838806499601472705}
+  - {fileID: 1100231856}
+  - {fileID: 6312158182046691267}
   - {fileID: 3668055589917077604}
   - {fileID: 6931113277628498649}
   - {fileID: 6057447582156994583}

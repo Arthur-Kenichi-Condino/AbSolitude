@@ -8408,3 +8408,959 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 13624.147843 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Skills/SkillVisualEffects/Healing/SpiritualHealing/SpiritualHealingVisualEffect.prefab
+  artifactKey: Guid(86b04f5bcfb461f448f88ac834f23c73) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Skills/SkillVisualEffects/Healing/SpiritualHealing/SpiritualHealingVisualEffect.prefab using Guid(86b04f5bcfb461f448f88ac834f23c73) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '60da495f9dd448930c66b42e4db999e9') in 1.018778 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 14
+========================================================================
+Received Import Request.
+  Time since last request: 1030.037391 seconds.
+  path: Assets/AKCondinoO/Particles
+  artifactKey: Guid(0af5824c16bd7d04ebf5e882f02937ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles using Guid(0af5824c16bd7d04ebf5e882f02937ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4b01b2343220e36ad411266475def51') in 0.001708 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 10.380067 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection
+  artifactKey: Guid(bb23f03a30ab36a4d8d18c0834483143) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection using Guid(bb23f03a30ab36a4d8d18c0834483143) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9ca3dc4d754b2f1ace5766ff4807359b') in 0.000604 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 46.411554 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BasicSpark 4 (Shower).prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BasicSpark 4 (Shower).prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a80505cff38bec3be6328efb7745878a') in 0.126049 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 23.454690 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BasicSpark_Shower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BasicSpark_Shower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3f2301c3dafd0d6363084694d68acdb3') in 0.020150 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 5.434020 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/SparksShower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/SparksShower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '759449e85b386f47bb6bc0d4be80233e') in 0.015137 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 45.998163 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdayConfetti + Streamers.prefab
+  artifactKey: Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdayConfetti + Streamers.prefab using Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '62ee5f3edabaab7aabedca1d5caa7d26') in 4.583342 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 12.191319 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdayConfetti_Streamers.prefab
+  artifactKey: Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdayConfetti_Streamers.prefab using Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7e475e2ed8510bf24c2cbc0d6c686681') in 0.019512 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 6.852747 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdaySpark.prefab
+  artifactKey: Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdaySpark.prefab using Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86c82f0f92ceb5e98228cbe943e90ba0') in 0.030270 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 3.747143 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdaySparks.prefab
+  artifactKey: Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/BirthdaySparks.prefab using Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2ff347988f5ad926995c2244027eb86') in 0.015735 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 2230.466686 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Ambience/Clouds/_Prefab/CloudParticle.prefab
+  artifactKey: Guid(055ba01762f51294e92a986d0ccbae70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Ambience/Clouds/_Prefab/CloudParticle.prefab using Guid(055ba01762f51294e92a986d0ccbae70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1d33503acf86344f23111cc81e37a364') in 0.069296 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 834.903207 seconds.
+  path: Assets/AKCondinoO/Particles/Materials/Triangle.fbx
+  artifactKey: Guid(ecab19b8d4e8b1641a4bf38a91e9325a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Materials/Triangle.fbx using Guid(ecab19b8d4e8b1641a4bf38a91e9325a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a638b0ce4ec37a75df9161ef20244979') in 0.262170 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 40.381413 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Textures/WhiteToNothing.png
+  artifactKey: Guid(5a46793f22d5f5b43810d1cd13f51e13) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Textures/WhiteToNothing.png using Guid(5a46793f22d5f5b43810d1cd13f51e13) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86f70bdf969b7246656e4e823c1bdf9e') in 0.176652 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.591909 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Textures/White Circle Mask.png
+  artifactKey: Guid(fdb692cd7a6d70845a3501f947955dc0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Textures/White Circle Mask.png using Guid(fdb692cd7a6d70845a3501f947955dc0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '591155485dda3080a14ad2940abce8eb') in 0.018687 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 18.438915 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/Wind.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/Wind.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f6d993b0bb13a915fb930bd4b07b8bc5') in 0.035677 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 0.038663 seconds.
+  path: Assets/AKCondinoO/Particles/Materials/VertexUnlitDiffuseCircle.mat
+  artifactKey: Guid(da51c40235f7fcc47812a1e6f2c6df0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Materials/VertexUnlitDiffuseCircle.mat using Guid(da51c40235f7fcc47812a1e6f2c6df0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c65a2b29a9f61362f703581ac371f1af') in 0.088241 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 305.298422 seconds.
+  path: Assets/AKCondinoO/Particles/SparksShower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SparksShower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fbacfcb59635763db02bef4015345d34') in 0.022649 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 0.901794 seconds.
+  path: Assets/AKCondinoO/Particles/SparksShower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SparksShower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a8858d2f1e833d640b499d67b5889be1') in 0.012510 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 2.875131 seconds.
+  path: Assets/AKCondinoO/Particles/BirthdaySparks.prefab
+  artifactKey: Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/BirthdaySparks.prefab using Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aef0fbf61ee5e2cbd3b46bbf85fbc9ba') in 0.022412 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 0.878614 seconds.
+  path: Assets/AKCondinoO/Particles/BirthdaySparks.prefab
+  artifactKey: Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/BirthdaySparks.prefab using Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c17ccd529124f3259dac09457391b77d') in 0.013636 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 3.056630 seconds.
+  path: Assets/AKCondinoO/Particles/BirthdayConfetti_Streamers.prefab
+  artifactKey: Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/BirthdayConfetti_Streamers.prefab using Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '753494ab48f5eb95b46ed68cc35d175a') in 0.021845 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 5.639031 seconds.
+  path: Assets/AKCondinoO/Particles/Wind.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Wind.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f87e52a349d12f58e3dd3c5dc983478f') in 0.017524 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 459.698473 seconds.
+  path: Assets/AKCondinoO/Particles/Wind.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Wind.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0751a81ea82fdb963aadd77722a1089') in 0.020129 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 4.846416 seconds.
+  path: Assets/AKCondinoO/Particles/WindParticles.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/WindParticles.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fae5a372db1be87154e1a2d74518c847') in 0.011181 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 64.475594 seconds.
+  path: Assets/AKCondinoO/Particles/WindTrails.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/WindTrails.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0da4bc9540d2d5219c9142b4ff302967') in 0.012111 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 31.885673 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.prefab
+  artifactKey: Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.prefab using Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75ef85298f98e7183dc0b2085f1fb3f6') in 0.008793 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 5
+========================================================================
+Received Import Request.
+  Time since last request: 11.580429 seconds.
+  path: Assets/AKCondinoO/Ambience/WindTrails Variant.prefab
+  artifactKey: Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindTrails Variant.prefab using Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '82b9ced74ed67bec34767bd449add3ed') in 0.034545 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 16
+========================================================================
+Received Import Request.
+  Time since last request: 5.039960 seconds.
+  path: Assets/AKCondinoO/Ambience/WindTrails.prefab
+  artifactKey: Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindTrails.prefab using Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '17a3f63f8f7f02f025ec9cdf875fb4c6') in 0.012170 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 16
+========================================================================
+Received Import Request.
+  Time since last request: 84.683862 seconds.
+  path: Assets/AKCondinoO/Ambience/WindTrails 1.prefab
+  artifactKey: Guid(b47e2a9fc2885ab4797f09c79349c703) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindTrails 1.prefab using Guid(b47e2a9fc2885ab4797f09c79349c703) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d8af8ddf4cd6103c569edaa4961845b') in 0.019380 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 16
+========================================================================
+Received Import Request.
+  Time since last request: 18.093694 seconds.
+  path: Assets/AKCondinoO/Ambience/WindTrails.prefab
+  artifactKey: Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindTrails.prefab using Guid(8b9f637968477d84d9fa67d228f37f8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ba52535d1897e61b3b202b2e8bfa9fe') in 0.012969 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 44.313735 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.prefab
+  artifactKey: Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.prefab using Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '43e4e89459b07ad6076943a1eed7378f') in 0.018222 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 48.580513 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/SmokeyExplosion 2.prefab
+  artifactKey: Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/SmokeyExplosion 2.prefab using Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b7b15e9a6dfd8495c06a89d3566dee2') in 0.054013 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 59
+========================================================================
+Received Import Request.
+  Time since last request: 0.869195 seconds.
+  path: Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/ChargingPop.prefab
+  artifactKey: Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Sherbbs Particle Collection/Scenes/ChargingPop.prefab using Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3fe7303797a7fc65b782299c444553e7') in 0.020241 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 40
+========================================================================
+Received Import Request.
+  Time since last request: 54.987416 seconds.
+  path: Assets/AKCondinoO/Particles/Materials/VertexUnlitSlightGlowFadedMaskAdditive.mat
+  artifactKey: Guid(a23bc5be0d07f7142b7e13aeb95dc248) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Materials/VertexUnlitSlightGlowFadedMaskAdditive.mat using Guid(a23bc5be0d07f7142b7e13aeb95dc248) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '58b52323832a75c77ec6c61b28d0bbdf') in 0.052248 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 55.187604 seconds.
+  path: Assets/AKCondinoO/Particles/ChargingPop.prefab
+  artifactKey: Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/ChargingPop.prefab using Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c4f1e2e67297047d6d9404b077268bb3') in 0.122969 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 40
+========================================================================
+Received Import Request.
+  Time since last request: 20.398071 seconds.
+  path: Assets/AKCondinoO/Particles/ChargeAndPop.prefab
+  artifactKey: Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/ChargeAndPop.prefab using Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ade0f776038c2902bdd7b1dd3962ba61') in 0.022292 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 40
+========================================================================
+Received Import Request.
+  Time since last request: 1.248847 seconds.
+  path: Assets/AKCondinoO/Particles/Confetti Rain.prefab
+  artifactKey: Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Confetti Rain.prefab using Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1cab998e53582ccd147865b00e345f60') in 0.014220 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 5.342883 seconds.
+  path: Assets/AKCondinoO/Particles/ConfettiRain.prefab
+  artifactKey: Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/ConfettiRain.prefab using Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dc4a02d1875a3a4aa660bd6ddc2ec7c9') in 0.010382 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.945843 seconds.
+  path: Assets/AKCondinoO/Particles/CosmicReversal.prefab
+  artifactKey: Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/CosmicReversal.prefab using Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c30827c146588f75e6bff7c3111d0e0a') in 0.063855 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 69
+========================================================================
+Received Import Request.
+  Time since last request: 30.776627 seconds.
+  path: Assets/AKCondinoO/Particles/Materials/VertexUnlitGlowCircle.mat
+  artifactKey: Guid(63c277894672e024897840a609c424ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Materials/VertexUnlitGlowCircle.mat using Guid(63c277894672e024897840a609c424ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1a90cb1610b4443e1170e992eac6d2e') in 0.022176 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 136.527015 seconds.
+  path: Assets/AKCondinoO/Particles/Etherial Lines.prefab
+  artifactKey: Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Etherial Lines.prefab using Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ccfd65e176f369099b4ded349ae00e3') in 0.023033 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 8.319470 seconds.
+  path: Assets/AKCondinoO/Particles/EtherialLines.prefab
+  artifactKey: Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/EtherialLines.prefab using Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96a1c9365ddc602c8a020762337f75b3') in 0.012558 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 5.598536 seconds.
+  path: Assets/AKCondinoO/Particles/FireFlies.prefab
+  artifactKey: Guid(1c29348c7b62a294395aa11db64a4990) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/FireFlies.prefab using Guid(1c29348c7b62a294395aa11db64a4990) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1997e4104a1b6994297fd34d9cc75ac6') in 0.021746 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 5.414569 seconds.
+  path: Assets/AKCondinoO/Particles/Ground Embers.prefab
+  artifactKey: Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Ground Embers.prefab using Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9384d90f5fd02a03b38f542bd4d2261c') in 0.050567 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 4.023592 seconds.
+  path: Assets/AKCondinoO/Particles/GroundEmbers.prefab
+  artifactKey: Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/GroundEmbers.prefab using Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3c0382d5172a2b56b5cdb6d87a917259') in 0.010759 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 18.237112 seconds.
+  path: Assets/AKCondinoO/Particles/Instability (loop).prefab
+  artifactKey: Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Instability (loop).prefab using Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a0ed69823892c3f37817fd105dc98c09') in 0.014854 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 13
+========================================================================
+Received Import Request.
+  Time since last request: 9.879232 seconds.
+  path: Assets/AKCondinoO/Particles/Instability_Loop.prefab
+  artifactKey: Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Instability_Loop.prefab using Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3bfb3885b384bbfb98205c6365405b1') in 0.131936 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 13
+========================================================================
+Received Import Request.
+  Time since last request: 0.797152 seconds.
+  path: Assets/AKCondinoO/Particles/Rain (Collision).prefab
+  artifactKey: Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Rain (Collision).prefab using Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '01fbd0b670769be68a72a33c524a2c72') in 0.026761 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 12
+========================================================================
+Received Import Request.
+  Time since last request: 0.032832 seconds.
+  path: Assets/AKCondinoO/Particles/Materials/VertexLitDiffuseCircle.mat
+  artifactKey: Guid(40c64702d468d1546bc0def47a66d50b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Materials/VertexLitDiffuseCircle.mat using Guid(40c64702d468d1546bc0def47a66d50b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '35f4fbbf82ad56e1fd74ffa481ad42fd') in 0.015657 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.497445 seconds.
+  path: Assets/AKCondinoO/Particles/MuzzleFlash TRIS.prefab
+  artifactKey: Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/MuzzleFlash TRIS.prefab using Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8547c91de7201a5c6491e21473e9b79') in 0.020480 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 7.030045 seconds.
+  path: Assets/AKCondinoO/Particles/MuzzleFlash_Tris.prefab
+  artifactKey: Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/MuzzleFlash_Tris.prefab using Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8bcd3c1b4af649e1aadcdebc8b819bda') in 0.132831 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 29.390350 seconds.
+  path: Assets/AKCondinoO/Particles/Rain_WithCollision.prefab
+  artifactKey: Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Rain_WithCollision.prefab using Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b6a8ebfad90766f28c80de7b1913453') in 0.011905 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 12
+========================================================================
+Received Import Request.
+  Time since last request: 178.403761 seconds.
+  path: Assets/AKCondinoO/Particles/Rain_WithCollision.prefab
+  artifactKey: Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Rain_WithCollision.prefab using Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '994526b816816196e6d663d550b1f048') in 0.043428 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 12
+========================================================================
+Received Import Request.
+  Time since last request: 1.364821 seconds.
+  path: Assets/AKCondinoO/Particles/SmokeyExplosion.prefab
+  artifactKey: Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SmokeyExplosion.prefab using Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4da467516340be9d51189e9993030960') in 0.026612 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 50
+========================================================================
+Received Import Request.
+  Time since last request: 27.729785 seconds.
+  path: Assets/AKCondinoO/Particles/SmokeyExplosion.prefab
+  artifactKey: Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SmokeyExplosion.prefab using Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '84165c093b4bed15926118bda181befe') in 0.184052 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 50
+========================================================================
+Received Import Request.
+  Time since last request: 9.855055 seconds.
+  path: Assets/AKCondinoO/Particles/SmokeyExplosion_01.prefab
+  artifactKey: Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SmokeyExplosion_01.prefab using Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '11ae96b3da6bc3851d5565cd3e647273') in 0.435302 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 59
+========================================================================
+Received Import Request.
+  Time since last request: 49.127705 seconds.
+  path: Assets/AKCondinoO/Particles/SparkShower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SparkShower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '95781e648601d423dfeefcf3c5267e6d') in 0.011645 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 473.282682 seconds.
+  path: Assets/AKCondinoO/Particles/Readme.txt
+  artifactKey: Guid(3f8b15ee90de39943870be0031de5281) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/Readme.txt using Guid(3f8b15ee90de39943870be0031de5281) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fac4bd9131be3ddd35297f0b8d9ae007') in 0.003031 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 734.015495 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsBirthdayConfetti_Streamers.prefab
+  artifactKey: Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsBirthdayConfetti_Streamers.prefab using Guid(3220149f60852a3418c36b470b1d98ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '504b7f8c3ae63acfcfdc47a483439a87') in 0.019671 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 18
+========================================================================
+Received Import Request.
+  Time since last request: 4.235720 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsBirthdaySparks.prefab
+  artifactKey: Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsBirthdaySparks.prefab using Guid(284ebd12c6914eb4ab7636891ff9d1ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c252d7ad1b6d6e56c44136b6b13f948') in 0.020474 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 3.657105 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsChargingPop.prefab
+  artifactKey: Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsChargingPop.prefab using Guid(60fc2aef990875f40b82ddec635d4d61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00fbf02919ebac68a3255d0fcd63d675') in 0.028867 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 40
+========================================================================
+Received Import Request.
+  Time since last request: 3.391612 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsConfettiRain.prefab
+  artifactKey: Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsConfettiRain.prefab using Guid(000c8d31ff7662840ac9fcedbf5d89ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24b8c03a6f838c5df96612dec4017153') in 0.009887 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.535384 seconds.
+  path: Assets/AKCondinoO/Particles/CosmicReversal.prefab
+  artifactKey: Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/CosmicReversal.prefab using Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ed266a99eb57e20e55b4234950a17e57') in 0.032012 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 69
+========================================================================
+Received Import Request.
+  Time since last request: 2.395017 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsCosmicReversal.prefab
+  artifactKey: Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsCosmicReversal.prefab using Guid(a4f1255d3622d6b4293669e12da7e42a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '626b395d0723e851c7c34643bc6dca0c') in 0.019473 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 69
+========================================================================
+Received Import Request.
+  Time since last request: 3.611974 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsEtherialLines.prefab
+  artifactKey: Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsEtherialLines.prefab using Guid(f19ea6c431e1d20448d525ba86acd739) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e9476502bdbc411908e8ce49149aafd1') in 0.009807 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 3.053985 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsFireFlies.prefab
+  artifactKey: Guid(1c29348c7b62a294395aa11db64a4990) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsFireFlies.prefab using Guid(1c29348c7b62a294395aa11db64a4990) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '427d875a05303da73986b0c3491e0a29') in 0.010737 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 2.937244 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsGroundEmbers.prefab
+  artifactKey: Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsGroundEmbers.prefab using Guid(552daf9e1ac1f2449bb89e2029f2d146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '635492251fd013bfef14a42f39615f76') in 0.015598 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 6.953594 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsInstability_Loop.prefab
+  artifactKey: Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsInstability_Loop.prefab using Guid(e405594c42ec8894f968c4ddce1a835f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3d9f5ef43e2bff07046b2a251f933e20') in 0.009855 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 13
+========================================================================
+Received Import Request.
+  Time since last request: 0.802104 seconds.
+  path: Assets/AKCondinoO/Particles/MuzzleFlash_Tris.prefab
+  artifactKey: Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/MuzzleFlash_Tris.prefab using Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2e85fa31301c84f7c23294480c9f8e71') in 0.018881 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 3.346310 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsMuzzleFlash_Tris.prefab
+  artifactKey: Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsMuzzleFlash_Tris.prefab using Guid(fce94e801bb5df94187f9e978d7e8001) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dc7fff4fbd32584704a244935d2b23b9') in 0.016639 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 25
+========================================================================
+Received Import Request.
+  Time since last request: 3.851857 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsRain_WithCollision.prefab
+  artifactKey: Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsRain_WithCollision.prefab using Guid(f4bfab570af2b8d4c95893e0734d802b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f162e1bdb54e09c4f03849caade94bc1') in 0.012748 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 12
+========================================================================
+Received Import Request.
+  Time since last request: 7.013510 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsSmokeyExplosion.prefab
+  artifactKey: Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsSmokeyExplosion.prefab using Guid(86655921c38d17144a879f80e5a9080f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bf3cfc12cc22b6ba50939ee5643e1e12') in 0.018759 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 50
+========================================================================
+Received Import Request.
+  Time since last request: 0.627008 seconds.
+  path: Assets/AKCondinoO/Particles/SmokeyExplosion_01.prefab
+  artifactKey: Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SmokeyExplosion_01.prefab using Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e175b2d37b9b2331491b28f076ca57d3') in 0.032054 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 59
+========================================================================
+Received Import Request.
+  Time since last request: 3.226849 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsSmokeyExplosion_01.prefab
+  artifactKey: Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsSmokeyExplosion_01.prefab using Guid(f5ca3d1fdf7922f4083c02e5f480ae7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1959b9e3cc375cf00cc502d955f6289c') in 0.019998 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 59
+========================================================================
+Received Import Request.
+  Time since last request: 3.398610 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsSparkShower.prefab
+  artifactKey: Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsSparkShower.prefab using Guid(94f0ec9ca1e613141b754f6f79808b84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b58b269195a77e7da0f155144360779b') in 0.011022 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 21
+========================================================================
+Received Import Request.
+  Time since last request: 3.505964 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsWind.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsWind.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '90f5a6987938ef74f28e00a4d2a67e45') in 0.017975 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 50796.021729 seconds.
+  path: Assets/AKCondinoO/Particles/SherbbsWind.prefab
+  artifactKey: Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Particles/SherbbsWind.prefab using Guid(cec48707ae6fa104abf0bc1ba4810678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eb592e26515bc07012237c5867e14420') in 0.141079 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 80.460536 seconds.
+  path: Assets/AKCondinoO/Ambience
+  artifactKey: Guid(30ee8d4b23bf78947a7354437d0a8ad2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience using Guid(30ee8d4b23bf78947a7354437d0a8ad2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b562f3792757d681eddd924316c5066b') in 0.004644 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 4.699953 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.cs
+  artifactKey: Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.cs using Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5dddc126a921d6f6f1c03c3b988fc5b3') in 0.001762 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 5.312386 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.prefab
+  artifactKey: Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.prefab using Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '46e32c24f59b25a95ac6ce100e93affb') in 0.012210 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 5
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  3.554 seconds
+Refreshing native plugins compatible for Editor in 8.82 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in 15.318 seconds
+Domain Reload Profiling: 18866ms
+	BeginReloadAssembly (578ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (30ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (252ms)
+	RebuildCommonClasses (155ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (53ms)
+	LoadAllAssembliesAndSetupDomain (2749ms)
+		LoadAssemblies (2892ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (69ms)
+			TypeCache.Refresh (26ms)
+				TypeCache.ScanAssembly (5ms)
+			ScanForSourceGeneratedMonoScriptInfo (29ms)
+			ResolveRequiredComponents (12ms)
+	FinalizeReload (15318ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (635ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (9ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (120ms)
+			ProcessInitializeOnLoadAttributes (401ms)
+			ProcessInitializeOnLoadMethodAttributes (90ms)
+			AfterProcessingInitializeOnLoad (9ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (15ms)
+Refreshing native plugins compatible for Editor in 13.21 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5821 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 56 unused Assets / (1.3 MB). Loaded Objects now: 7217.
+Memory consumption went from 268.8 MB to 267.5 MB.
+Total: 8.535700 ms (FindLiveObjects: 0.924300 ms CreateObjectMapping: 0.688400 ms MarkObjects: 6.557200 ms  DeleteObjects: 0.364100 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 74.745325 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.prefab
+  artifactKey: Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.prefab using Guid(83f9f07a5fdaab24b8f3f557a98b6ffc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '389611682b3115a21d7e3f9af24c366c') in 0.106392 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
+========================================================================
+Received Import Request.
+  Time since last request: 30.471833 seconds.
+  path: Assets/AKCondinoO/Ambience/SimTime.cs
+  artifactKey: Guid(6f9fbf9f2b0e11b44820a5f3ac3bf3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/SimTime.cs using Guid(6f9fbf9f2b0e11b44820a5f3ac3bf3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '28dc34c8941bc4d9218ab1436b65e18a') in 0.000807 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.724 seconds
+Refreshing native plugins compatible for Editor in 9.21 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.437 seconds
+Domain Reload Profiling: 2155ms
+	BeginReloadAssembly (202ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (8ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (48ms)
+	RebuildCommonClasses (45ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (41ms)
+	LoadAllAssembliesAndSetupDomain (414ms)
+		LoadAssemblies (464ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (51ms)
+			TypeCache.Refresh (20ms)
+				TypeCache.ScanAssembly (5ms)
+			ScanForSourceGeneratedMonoScriptInfo (19ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1438ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (581ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (118ms)
+			ProcessInitializeOnLoadAttributes (369ms)
+			ProcessInitializeOnLoadMethodAttributes (72ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (14ms)
+Refreshing native plugins compatible for Editor in 11.40 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5821 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 53 unused Assets / (1.3 MB). Loaded Objects now: 7224.
+Memory consumption went from 268.9 MB to 267.6 MB.
+Total: 6.161400 ms (FindLiveObjects: 0.781300 ms CreateObjectMapping: 0.692000 ms MarkObjects: 4.369800 ms  DeleteObjects: 0.316600 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 143.139619 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.cs
+  artifactKey: Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.cs using Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96e49e88c7a699553691f274c4098f89') in 0.002569 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 227.068587 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.cs
+  artifactKey: Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.cs using Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '316d9a7de987cd1f520520d42f5f3a8e') in 0.001272 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.674 seconds
+Refreshing native plugins compatible for Editor in 8.70 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.494 seconds
+Domain Reload Profiling: 2161ms
+	BeginReloadAssembly (219ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (51ms)
+	RebuildCommonClasses (39ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (46ms)
+	LoadAllAssembliesAndSetupDomain (348ms)
+		LoadAssemblies (429ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (25ms)
+			TypeCache.Refresh (8ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (1494ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (604ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (6ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (135ms)
+			ProcessInitializeOnLoadAttributes (371ms)
+			ProcessInitializeOnLoadMethodAttributes (74ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (13ms)
+Refreshing native plugins compatible for Editor in 9.21 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5821 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 53 unused Assets / (1.3 MB). Loaded Objects now: 7231.
+Memory consumption went from 268.9 MB to 267.6 MB.
+Total: 5.892300 ms (FindLiveObjects: 0.670900 ms CreateObjectMapping: 0.649000 ms MarkObjects: 4.285800 ms  DeleteObjects: 0.285400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 32.779569 seconds.
+  path: Assets/AKCondinoO/Ambience/WindZone.cs
+  artifactKey: Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Ambience/WindZone.cs using Guid(8976d678d162aaf43b62f581e3b909b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dd71762c3cb8f55352b6919fdb3e4814') in 0.008356 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.632 seconds
+Refreshing native plugins compatible for Editor in 9.10 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.398 seconds
+Domain Reload Profiling: 2023ms
+	BeginReloadAssembly (184ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (42ms)
+	RebuildCommonClasses (46ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (43ms)
+	LoadAllAssembliesAndSetupDomain (337ms)
+		LoadAssemblies (407ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (21ms)
+			TypeCache.Refresh (8ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (1398ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (567ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (117ms)
+			ProcessInitializeOnLoadAttributes (355ms)
+			ProcessInitializeOnLoadMethodAttributes (74ms)
+			AfterProcessingInitializeOnLoad (9ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (13ms)
+Refreshing native plugins compatible for Editor in 8.39 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 5821 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 53 unused Assets / (1.3 MB). Loaded Objects now: 7238.
+Memory consumption went from 268.9 MB to 267.6 MB.
+Total: 5.471700 ms (FindLiveObjects: 0.643900 ms CreateObjectMapping: 0.619300 ms MarkObjects: 3.934500 ms  DeleteObjects: 0.272900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 756ad292c208cfabdd7b50bc23989ffe -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
