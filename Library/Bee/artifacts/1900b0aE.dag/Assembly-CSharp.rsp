@@ -416,7 +416,7 @@
 "Assets/AKCondinoO/Ambience/SimTime.cs"
 "Assets/AKCondinoO/Ambience/SunLight.cs"
 "Assets/AKCondinoO/Ambience/SunTransform.cs"
-"Assets/AKCondinoO/Ambience/WindZone.cs"
+"Assets/AKCondinoO/Ambience/WindZoneControl.cs"
 "Assets/AKCondinoO/BaseMultithreaded.cs"
 "Assets/AKCondinoO/Core.cs"
 "Assets/AKCondinoO/CoreDataSync.cs"

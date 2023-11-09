@@ -81,6 +81,7 @@
     <Compile Include="Assets\AKCondinoO\Util\DictionaryWrapper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />
+    <Compile Include="Assets\AKCondinoO\Ambience\WindZoneControl.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
@@ -142,7 +143,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\NavMeshHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterChunk.cs" />
-    <Compile Include="Assets\AKCondinoO\Ambience\WindZone.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
