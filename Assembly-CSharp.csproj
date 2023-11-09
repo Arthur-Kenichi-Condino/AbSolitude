@@ -126,6 +126,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Messages.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Concurrent.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataLoadingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\Teleport\TeleportSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildBuyEditModeUIContent.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Client.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Context\ContextMenuUI.cs" />
@@ -197,11 +199,13 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Buff\BuffSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculiAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\PassiveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionRotLerpHelper.cs" />

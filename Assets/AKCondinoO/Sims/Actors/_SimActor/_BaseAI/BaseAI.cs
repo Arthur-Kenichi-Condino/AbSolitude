@@ -70,6 +70,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
+       internal readonly HashSet<Skill>passiveSkills=new HashSet<Skill>();
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
@@ -86,6 +87,9 @@ namespace AKCondinoO.Sims.Actors{
           }
           (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(skillData.skill,skillData.level,this);
           skills.Add(skillData.skill,spawnedSkill.skill);
+          if(spawnedSkill.skill is PassiveSkill passiveSkill){
+           passiveSkills.Add(passiveSkill);
+          }
          }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
@@ -104,6 +108,9 @@ namespace AKCondinoO.Sims.Actors{
            }
            (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key,requiredSkill.Value.level,this);
            skills.Add(requiredSkill.Key,spawnedSkill.skill);
+           if(spawnedSkill.skill is PassiveSkill passiveSkill){
+            passiveSkills.Add(passiveSkill);
+           }
           }
          }
          requiredSkills.Clear();
@@ -149,6 +156,7 @@ namespace AKCondinoO.Sims.Actors{
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
          skills.Clear();//  to do: pool skills before clearing the list
+         passiveSkills.Clear();
          base.OnDeactivated();
          ReleaseTargets();
         }

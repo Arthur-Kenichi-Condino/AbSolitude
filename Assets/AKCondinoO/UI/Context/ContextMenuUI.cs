@@ -14,6 +14,7 @@ namespace AKCondinoO.UI.Context{
     internal class ContextMenuUI:MonoBehaviour,ISingletonInitialization{
      internal static ContextMenuUI singleton{get;set;}
      [SerializeField]internal RectTransform panel;
+     [SerializeField]internal RectTransform selectSimObjectButton;
      internal Canvas canvas{get;private set;}
      internal CanvasScaler canvasScaler{get;private set;}
         void Awake(){
