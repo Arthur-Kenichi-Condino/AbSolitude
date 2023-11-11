@@ -9,36 +9,38 @@ namespace AKCondinoO{
     internal class WindZoneControl:MonoBehaviour,ISingletonInitialization{
      internal static WindZoneControl singleton{get;set;}
      internal WindZone wind;
-     [SerializeField]internal float windChangesTimeInterval=5f;
-     [SerializeField]internal float directionChangeSpeed=10f;
+     [SerializeField]internal float windDirectionChangesTimeInterval=5f;
+      [SerializeField]internal float directionChangeSpeed=10f;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          wind=gameObject.GetComponent<WindZone>();
         }
         public void Init(){
-         changesRoutine=StartCoroutine(ChangesRoutine());
-         startChangesRoutine=StartCoroutine(StartChangesRoutine());
+         directionChangesRoutine=StartCoroutine(DirectionChangesRoutine());
+         startDirectionChangesRoutine=StartCoroutine(StartDirectionChangesRoutine());
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("WindZoneControl:OnDestroyingCoreEvent");
-         if(startChangesRoutine!=null){
-          StopCoroutine(startChangesRoutine);
-          startChangesRoutine=null;
-         }
-         if(changesRoutine!=null){
-          StopCoroutine(changesRoutine);
-          changesRoutine=null;
+         if(this!=null){
+          if(startDirectionChangesRoutine!=null){
+           StopCoroutine(startDirectionChangesRoutine);
+           startDirectionChangesRoutine=null;
+          }
+          if(directionChangesRoutine!=null){
+           StopCoroutine(directionChangesRoutine);
+           directionChangesRoutine=null;
+          }
          }
         }
-     Coroutine startChangesRoutine;
-     Quaternion initRotation;
-     Quaternion goalRotation;
-        IEnumerator StartChangesRoutine(){
+     Coroutine startDirectionChangesRoutine;
+      Quaternion initRotation;
+      Quaternion goalRotation;
+        IEnumerator StartDirectionChangesRoutine(){
          float windChangesTimer=0f;
          WaitUntil waitForTimeInterval=new WaitUntil(
           ()=>{
            windChangesTimer+=Time.deltaTime;
-           if(windChangesTimer>=windChangesTimeInterval){
+           if(windChangesTimer>=windDirectionChangesTimeInterval){
             windChangesTimer=0f;
             return true;
            }
@@ -47,23 +49,23 @@ namespace AKCondinoO{
          );
          Loop:{
           yield return waitForTimeInterval;
-          Log.DebugMessage("StartChangesRoutine Loop");
+          Log.DebugMessage("StartDirectionChangesRoutine Loop");
           initRotation=transform.rotation;
           Vector3 goalDirection=UnityEngine.Random.insideUnitSphere;
           goalDirection.y=0f;
           goalDirection.Normalize();
           goalRotation=Quaternion.LookRotation(goalDirection);
-          startChangesFlag=true;
+          startDirectionChangesFlag=true;
          }
          goto Loop;
         }
-     Coroutine changesRoutine;
-      bool startChangesFlag;
-        IEnumerator ChangesRoutine(){
+     Coroutine directionChangesRoutine;
+      bool startDirectionChangesFlag;
+        IEnumerator DirectionChangesRoutine(){
          WaitUntil waitForStartChangesFlag=new WaitUntil(
           ()=>{
-           if(startChangesFlag){
-            startChangesFlag=false;
+           if(startDirectionChangesFlag){
+            startDirectionChangesFlag=false;
             return true;
            }
            return false;
@@ -71,7 +73,7 @@ namespace AKCondinoO{
          );
          Loop:{
           yield return waitForStartChangesFlag;
-          Log.DebugMessage("ChangesRoutine Loop");
+          Log.DebugMessage("DirectionChangesRoutine Loop");
           while(transform.rotation!=goalRotation){
            transform.rotation=Quaternion.RotateTowards(transform.rotation,goalRotation,directionChangeSpeed*Time.deltaTime);
            yield return null;
