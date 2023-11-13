@@ -169,6 +169,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorIKController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.OnSkillUsed.cs" />
+    <Compile Include="Assets\AKCondinoO\Ambience\WindTrails.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\Teleport\Teleport.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\InContainerTransformData.cs" />
