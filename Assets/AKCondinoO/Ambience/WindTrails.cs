@@ -16,15 +16,21 @@ namespace AKCondinoO{
          lastEmitTime=Time.time;
         }
      float lastEmitTime;
+     float curvesTime;
         void Update(){
          var main=ps.main;
          float emissionRate=ps.emission.rateOverTimeMultiplier;
          int maxParticles=main.maxParticles;
          if(ps.particleCount<maxParticles){
           if(Time.time-lastEmitTime>emissionRate){
+           curvesTime+=Time.deltaTime;
+           if(curvesTime>1f){
+            curvesTime=(curvesTime%1f);
+           }
            lastEmitTime=Time.time;
-           emitParams.velocity=WindZoneControl.singleton.transform.forward*main.startSpeed.constant;
-           emitParams.position=MainCamera.singleton.transform.position-(WindZoneControl.singleton.transform.forward*((main.startSpeed.constant*main.startLifetime.constant)/4f));
+           float startSpeed=main.startSpeed.Evaluate(curvesTime);
+           emitParams.velocity=WindZoneControl.singleton.transform.forward*startSpeed;
+           emitParams.position=MainCamera.singleton.transform.position-(WindZoneControl.singleton.transform.forward*((startSpeed*main.startLifetime.Evaluate(curvesTime))/4f));
            emitParams.applyShapeToPosition=true;
            ps.Emit(emitParams,1);
           }
