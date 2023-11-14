@@ -9,16 +9,25 @@ using UnityEngine;
 using UnityEngine.ParticleSystemJobs;
 namespace AKCondinoO{
     internal class WindTrails:MonoBehaviour{
-     [SerializeField]int maxParticles=10;
      private ParticleSystem ps;
      ParticleSystem.EmitParams emitParams=new ParticleSystem.EmitParams();
         void Awake(){
          ps=GetComponent<ParticleSystem>();
+         lastEmitTime=Time.time;
         }
+     float lastEmitTime;
         void Update(){
-         if(ps.particleCount<=0){
-          emitParams.velocity=WindZoneControl.singleton.transform.forward*ps.main.startSpeed.constant;
-          ps.Emit(emitParams,1);
+         var main=ps.main;
+         float emissionRate=ps.emission.rateOverTimeMultiplier;
+         int maxParticles=main.maxParticles;
+         if(ps.particleCount<maxParticles){
+          if(Time.time-lastEmitTime>emissionRate){
+           lastEmitTime=Time.time;
+           emitParams.velocity=WindZoneControl.singleton.transform.forward*main.startSpeed.constant;
+           emitParams.position=MainCamera.singleton.transform.position-(WindZoneControl.singleton.transform.forward*((main.startSpeed.constant*main.startLifetime.constant)/4f));
+           emitParams.applyShapeToPosition=true;
+           ps.Emit(emitParams,1);
+          }
          }
          job.windDirection=WindZoneControl.singleton.transform.forward;
          Log.DebugMessage("ps.particleCount:"+ps.particleCount);
