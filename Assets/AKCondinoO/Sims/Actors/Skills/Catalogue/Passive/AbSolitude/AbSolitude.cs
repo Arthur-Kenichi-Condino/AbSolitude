@@ -14,5 +14,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          buffsToApply.Add(typeof(AbSolitudeSkillBuff));
          base.Awake();
         }
+        protected override void Invoke(){
+         Log.DebugMessage("AbSolitude:Invoke()");
+         base.Invoke();
+        }
     }
 }

@@ -71,6 +71,7 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
        internal readonly HashSet<Skill>passiveSkills=new HashSet<Skill>();
+        protected bool isAllPassiveSkillsInEffectFlag;
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
@@ -143,6 +144,7 @@ namespace AKCondinoO.Sims.Actors{
            animatorController.animationEventsHandler.CancelAllEvents();
           }
          }
+         isAllPassiveSkillsInEffectFlag=false;
         }
         internal override void OnDeactivated(){
          if(onChaseGetDataCoroutine!=null){
@@ -257,6 +259,14 @@ namespace AKCondinoO.Sims.Actors{
                 aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
                }
               }
+             }
+            }
+           }
+           if(!isAllPassiveSkillsInEffectFlag){
+            isAllPassiveSkillsInEffectFlag=true;
+            foreach(PassiveSkill passiveSkill in passiveSkills){
+             if(!passiveSkill.DoSkillImmediate(this,passiveSkill.level)&&!passiveSkill.doing){
+              isAllPassiveSkillsInEffectFlag=false;
              }
             }
            }
