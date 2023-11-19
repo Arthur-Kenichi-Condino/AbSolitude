@@ -2,14 +2,16 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
+using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class PassiveSkill:Skill{
-     internal const float passiveAddBuffCooldown=1.0f;
+     internal const float passiveAddBuffCooldown=10.0f;
      protected readonly List<Type>buffsToApply=new List<Type>();
         protected override void Awake(){
         }
@@ -45,6 +47,29 @@ namespace AKCondinoO.Sims.Actors.Skills{
          return result;
         }
         protected override void Invoke(){
+         foreach(Type buffType in buffsToApply){
+          if(!target.skillBuffs.Contains(buffType,out List<SkillBuff>buffs)||
+           !buffs.Any(
+            (buff)=>{
+             return buff.skill==this;
+            }
+           )
+          ){
+           SkillBuff buff=SkillBuff.Dequeue(buffType);
+           if(buff!=null){
+            Log.DebugMessage("skill "+this+":add buff of type:"+buffType);
+            buff.duration=passiveAddBuffCooldown*2f;
+            buff.delay=0f;
+            target.skillBuffs.Add(buff,this);
+           }
+          }else{
+           foreach(SkillBuff buff in buffs){
+            if(buff.skill==this){
+             buff.duration=buff.elapsedTime+passiveAddBuffCooldown*2f;
+            }
+           }
+          }
+         }
          OnInvokeSetCooldown();
          invoked=true;
         }
