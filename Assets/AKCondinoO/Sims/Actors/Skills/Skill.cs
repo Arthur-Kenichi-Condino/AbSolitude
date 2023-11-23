@@ -37,7 +37,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          cooldown=0f;
         }
      internal bool doing;
-      internal int useLevel;
+      internal int useLevel=1;
       internal SimObject target;
       internal bool invoked;
       internal bool revoked;

@@ -8,7 +8,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal class OnHitGracePeriodSkillBuff:SkillBuff{
         internal OnHitGracePeriodSkillBuff():base(){
          Log.DebugMessage("OnHitGracePeriodEffect ctor");
-         onHitGracePeriodEffect=new OnHitGracePeriodEffect();
+         onHitGracePeriodEffect=new OnHitGracePeriodEffect(this);
         }
      internal OnHitGracePeriodEffect onHitGracePeriodEffect{
       get{
@@ -22,13 +22,15 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
       internal float gracePeriodForResetAnimation;
        internal float gracePeriod;
         internal class OnHitGracePeriodEffect:Effect{
+         internal float deltaTime;
+            internal OnHitGracePeriodEffect(SkillBuff buff):base(buff){
+            }
          internal float hitCanTriggerAnimationDuration;
          internal float hitCanTriggerAnimation;
           internal float hitCantTriggerResetAnimationDuration;
           internal float hitCantTriggerResetAnimation;
            internal float hitCantTriggerAnimationDuration;
            internal float hitCantTriggerAnimation;
-         internal float deltaTime;
             internal override void Apply(SimObject.Stats stats){
              Log.DebugMessage("OnHitGracePeriodEffect:Apply");
             }

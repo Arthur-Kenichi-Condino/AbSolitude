@@ -10,6 +10,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal partial class SkillBuff{
      internal Skill skill;
      internal SkillBuffEffectsState applyingEffectsOn;
+     internal int level=1;
         internal SkillBuff(){
         }
         internal virtual void OnReset(){

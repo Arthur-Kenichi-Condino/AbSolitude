@@ -60,11 +60,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
             Log.DebugMessage("skill "+this+":add buff of type:"+buffType);
             buff.duration=passiveAddBuffCooldown*2f;
             buff.delay=0f;
+            OnBuffDequeued(buff);
             target.skillBuffs.Add(buff,this);
            }
           }else{
            foreach(SkillBuff buff in buffs){
             if(buff.skill==this){
+             Log.DebugMessage("skill "+this+":renew buff of type:"+buffType);
              buff.duration=buff.elapsedTime+passiveAddBuffCooldown*2f;
             }
            }
@@ -72,6 +74,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
          OnInvokeSetCooldown();
          invoked=true;
+        }
+        protected virtual void OnBuffDequeued(SkillBuff buff){
         }
         protected override void OnInvokeSetCooldown(){
          cooldown=GetOnInvokeCooldown();

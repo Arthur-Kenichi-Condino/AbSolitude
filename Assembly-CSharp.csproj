@@ -261,6 +261,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.OnRefresh.cs" />

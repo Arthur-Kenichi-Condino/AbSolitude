@@ -10,6 +10,7 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class AbSolitude:PassiveSkill{
+     [SerializeField]internal float applyNewSkillCooldown=8f;
         protected override void Awake(){
          buffsToApply.Add(typeof(AbSolitudeSkillBuff));
          base.Awake();
@@ -17,6 +18,11 @@ namespace AKCondinoO.Sims.Actors.Skills{
         protected override void Invoke(){
          Log.DebugMessage("AbSolitude:Invoke()");
          base.Invoke();
+        }
+        protected override void OnBuffDequeued(SkillBuff buff){
+         if(buff is AbSolitudeSkillBuff abSolitudeSkillBuff){
+          abSolitudeSkillBuff.applyNewSkillCooldown=applyNewSkillCooldown;
+         }
         }
     }
 }
