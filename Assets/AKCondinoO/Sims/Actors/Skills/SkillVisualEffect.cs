@@ -29,6 +29,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         }
         internal virtual void OnPool(){
          this.target=null;
+         this.targetPos=null;
         }
      internal SimObject target;
      internal float delay;
@@ -47,6 +48,11 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          this.active=true;
          enabled=true;
         }
+     internal Vector3?targetPos;
+        internal virtual void ActivateAt(Vector3 targetPos,SimObject target,float delay,int loops,float duration=0f){
+         this.targetPos=targetPos;
+         Activate(target,delay,loops,duration);
+        }
         internal virtual void OnDeactivate(){
          particleSystemParent.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
          stopSFX=true;
@@ -60,7 +66,11 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           return;
          }
          if(timer>=delay){
-          transform.position=target.transform.position;
+          if(targetPos!=null){
+           transform.position=targetPos.Value;
+          }else{
+           transform.position=target.transform.position;
+          }
           if(duration>0f){
            if(timer>=duration){
             OnDeactivate();
