@@ -12,13 +12,23 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      internal new ParticleSystem[]particleSystem;
      internal AudioSource[]audioSources;
      internal readonly Dictionary<ParticleSystem,float>totalDuration=new Dictionary<ParticleSystem,float>();
+     protected float maxDuration;
+     protected float minDuration;
         void Awake(){
          Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
          particleSystemParent=GetComponent<ParticleSystem>();
          particleSystem=GetComponentsInChildren<ParticleSystem>();
          foreach(ParticleSystem particleSys in particleSystem){
           Log.DebugMessage("particleSys:"+particleSys.name);
-          totalDuration.Add(particleSys,particleSys.main.duration);
+          var main=particleSys.main;
+          totalDuration.Add(particleSys,main.duration);
+          main.loop=false;
+          maxDuration=Mathf.Max(maxDuration,main.duration+main.startLifetime.constantMax);
+          if(minDuration<=0f){
+           minDuration=main.duration+main.startLifetime.constantMax;
+          }else{
+           minDuration=Mathf.Min(minDuration,main.duration+main.startLifetime.constantMax);
+          }
          }
          audioSources=GetComponentsInChildren<AudioSource>();
          waitForParticleSystemParentPlay=new WaitUntil(()=>{return playSFX;});
@@ -44,6 +54,15 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          timer=0f;
          this.loops=loops;
          loopCount=-1;
+         float durationProportion=duration/maxDuration;
+         foreach(ParticleSystem particleSys in particleSystem){
+          var main=particleSys.main;
+          if(duration!=0f){
+           main.duration=(totalDuration[particleSys]+main.startLifetime.constantMax)*durationProportion;
+          }else{
+           main.duration=totalDuration[particleSys];
+          }
+         }
          this.duration=delay+duration;
          this.active=true;
          enabled=true;

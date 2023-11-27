@@ -26,6 +26,15 @@ namespace AKCondinoO.Sims.Actors.Skills{
         castDelay_value=value;
        }
       }
+     protected float range_value=50.0f;
+      internal float range{
+       get{
+        return range_value;
+       }
+       set{
+        range_value=value;
+       }
+      }
      internal LinkedListNode<Skill>pooled=null;
      internal BaseAI actor;
      internal int level=1;

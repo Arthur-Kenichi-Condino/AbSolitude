@@ -470,6 +470,8 @@
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/AreaSkill.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/Quagmire/Quagmire.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/Quagmire/QuagmireSkillVisualEffect.cs"
+"Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/SkillAoE.cs"
+"Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/SkillAoEManager.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Buff/BuffSkill.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Healing/HealingSkill.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Healing/SpiritualHealing/SpiritualHealing.cs"

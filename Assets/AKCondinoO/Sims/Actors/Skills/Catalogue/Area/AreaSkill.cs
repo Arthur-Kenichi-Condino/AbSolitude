@@ -17,15 +17,6 @@ namespace AKCondinoO.Sims.Actors.Skills{
         internal override void OnPool(){
          cooldown=0f;
         }
-     protected float range_value=50.0f;
-      internal float range{
-       get{
-        return range_value;
-       }
-       set{
-        range_value=value;
-       }
-      }
         internal override bool IsAvailable(SimObject target,int useLevel){
          if(base.IsAvailable(target,useLevel)){
           //  do more tests here

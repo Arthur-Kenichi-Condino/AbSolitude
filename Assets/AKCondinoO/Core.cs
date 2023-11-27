@@ -128,6 +128,7 @@ namespace AKCondinoO{
           {o++,SimObjectManager         .singleton},
           {o++,SimObjectSpawner         .singleton},
           {o++,SkillVisualEffectsManager.singleton},
+          {o++,SkillAoEManager          .singleton},
           {o++,SkillsManager            .singleton},
           {o++,SimsMachine              .singleton},
           {o++,AutonomyCore             .singleton},

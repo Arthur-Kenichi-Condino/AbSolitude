@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\AIUtil.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoE.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.Transform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\PositionChangeSkill.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoEManager.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunTransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnFOLLOW_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
