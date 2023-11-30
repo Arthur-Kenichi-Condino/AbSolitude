@@ -92,8 +92,10 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           }
           if(duration>0f){
            if(timer>=duration){
-            OnDeactivate();
-            return;
+            if(!audioSources.Any(audioSource=>audioSource.isPlaying)){
+             OnDeactivate();
+             return;
+            }
            }else{
             if(!particleSystem.Any(particleSys=>particleSys.isPlaying)){
              particleSystemParent.Play(true);

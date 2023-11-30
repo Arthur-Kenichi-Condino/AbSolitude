@@ -9,12 +9,17 @@ using UnityEngine;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class AreaSkill:Skill{
+     internal readonly List<SkillAoE>activeAoE=new List<SkillAoE>();
      internal Vector3?targetPos;
         protected override void Awake(){
         }
         internal override void OnSpawned(){
         }
         internal override void OnPool(){
+         foreach(SkillAoE aoe in activeAoE){
+          aoe.skill=null;
+         }
+         activeAoE.Clear();
          cooldown=0f;
         }
         internal override bool IsAvailable(SimObject target,int useLevel){

@@ -133,6 +133,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
      internal readonly Dictionary<SimObject,int>gotInSightOf=new Dictionary<SimObject,int>();
      internal readonly HashSet<Collider>simObjectCollidersInSight=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
+         //Log.DebugMessage("OnTriggerEnter:other:"+other,other);
          if(!Core.singleton.isServer){
           return;
          }

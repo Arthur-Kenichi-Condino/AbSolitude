@@ -240,6 +240,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\AtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventory.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillAoE.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SpawnData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.cs" />
