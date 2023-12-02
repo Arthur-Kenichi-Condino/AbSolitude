@@ -14,6 +14,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      internal readonly Dictionary<ParticleSystem,float>totalDuration=new Dictionary<ParticleSystem,float>();
      protected float maxDuration;
      protected float minDuration;
+     internal SkillAoE aoe;
         void Awake(){
          Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
          particleSystemParent=GetComponent<ParticleSystem>();
@@ -38,6 +39,12 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         internal virtual void OnSpawned(){
         }
         internal virtual void OnPool(){
+         if(aoe!=null){
+          if(aoe.skillVFXs.TryGetValue(this.GetType(),out List<SkillVisualEffect>skillVFXsOfThisType)){
+           skillVFXsOfThisType.Remove(this);
+          }
+          aoe=null;
+         }
          this.target=null;
          this.targetPos=null;
         }

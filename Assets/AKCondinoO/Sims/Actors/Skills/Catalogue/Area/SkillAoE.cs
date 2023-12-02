@@ -6,16 +6,23 @@ using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal partial class SkillAoE:MonoBehaviour{
      internal LinkedListNode<SkillAoE>pooled=null;
      internal Skill skill;
      [SerializeField]internal int skillVFXsToSpawn=1;
-     internal readonly List<SkillVisualEffect>skillVFXs=new List<SkillVisualEffect>();
+     internal readonly Dictionary<Type,List<SkillVisualEffect>>skillVFXs=new Dictionary<Type,List<SkillVisualEffect>>();
         internal virtual void OnSpawned(){
         }
         internal virtual void OnPool(){
+         foreach(var skillVFXList in skillVFXs){
+          foreach(var skillVFX in skillVFXList.Value){
+           skillVFX.aoe=null;
+          }
+          skillVFXList.Value.Clear();
+         }
          if(skill!=null){
           if(skill is AreaSkill areaSkill){
            areaSkill.activeAoE.Remove(this);
@@ -67,13 +74,13 @@ namespace AKCondinoO.Sims.Actors.Skills{
             OnDeactivate();
             return;
            }else{
-            if(skillVFXs.Count<skillVFXsToSpawn){
+            if(skillVFXs.All(kvp=>{return kvp.Value.Count<skillVFXsToSpawn;})){
              //
              SpawnSkillVFXs();
             }
            }
           }else{
-           if(skillVFXs.Count<=0){
+           if(skillVFXs.All(kvp=>{return kvp.Value.Count<=0;})){
             loopCount++;
             if(loopCount>=loops){
              OnDeactivate();
@@ -88,8 +95,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
          timer+=Time.deltaTime;
         }
         protected virtual void SpawnSkillVFXs(){
-         //(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)skillVFX=SkillVisualEffectsManager.singleton.SpawnSkillVisualEffectGameObject(typeof(QuagmireSkillVisualEffect),this);
-         //skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,null,0f,1);
+        }
+     internal Vector3 size;
+        protected virtual void OnTriggerEnter(Collider other){
+         Log.DebugMessage("SkillAoE:OnTriggerEnter:other:"+other);
         }
     }
 }
