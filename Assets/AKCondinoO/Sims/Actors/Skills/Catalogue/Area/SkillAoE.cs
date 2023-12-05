@@ -48,7 +48,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          timer=0f;
          this.loops=loops;
          loopCount=-1;
-         this.duration=delay+duration;
+         if(duration>0f){
+          this.duration=delay+duration;
+         }
          this.active=true;
          enabled=true;
         }
@@ -66,7 +68,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(timer>=delay){
           if(targetPos!=null){
            transform.position=targetPos.Value;
-          }else{
+          }else if(target!=null){
            transform.position=target.transform.position;
           }
           if(duration>0f){

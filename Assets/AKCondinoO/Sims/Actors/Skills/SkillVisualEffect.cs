@@ -11,24 +11,21 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      internal ParticleSystem particleSystemParent;
      internal new ParticleSystem[]particleSystem;
      internal AudioSource[]audioSources;
-     internal readonly Dictionary<ParticleSystem,float>totalDuration=new Dictionary<ParticleSystem,float>();
-     protected float maxDuration;
-     protected float minDuration;
+     internal readonly Dictionary<ParticleSystem,(float duration,float startLifetimeConstantMin,float startLifetimeConstant,float startLifetimeConstantMax)>totalDuration=new Dictionary<ParticleSystem,(float,float,float,float)>();
+     ParticleSystem highestDurationParticleSystem;
      internal SkillAoE aoe;
         void Awake(){
          Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
          particleSystemParent=GetComponent<ParticleSystem>();
          particleSystem=GetComponentsInChildren<ParticleSystem>();
+         float maxDuration=0f;
          foreach(ParticleSystem particleSys in particleSystem){
           Log.DebugMessage("particleSys:"+particleSys.name);
           var main=particleSys.main;
-          totalDuration.Add(particleSys,main.duration);
+          totalDuration.Add(particleSys,(main.duration,main.startLifetime.constantMin,main.startLifetime.constant,main.startLifetime.constantMax));
           main.loop=false;
-          maxDuration=Mathf.Max(maxDuration,main.duration+main.startLifetime.constantMax);
-          if(minDuration<=0f){
-           minDuration=main.duration+main.startLifetime.constantMax;
-          }else{
-           minDuration=Mathf.Min(minDuration,main.duration+main.startLifetime.constantMax);
+          if(maxDuration<=(maxDuration=Mathf.Max(maxDuration,main.duration+main.startLifetime.constantMax))){
+           highestDurationParticleSystem=particleSys;
           }
          }
          audioSources=GetComponentsInChildren<AudioSource>();
@@ -61,16 +58,60 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          timer=0f;
          this.loops=loops;
          loopCount=-1;
+         float maxDuration=totalDuration[highestDurationParticleSystem].duration;
          float durationProportion=duration/maxDuration;
          foreach(ParticleSystem particleSys in particleSystem){
           var main=particleSys.main;
-          if(duration!=0f){
-           main.duration=(totalDuration[particleSys]+main.startLifetime.constantMax)*durationProportion;
+          if(duration>0f){
+           float particleSysDuration=totalDuration[particleSys].duration;
+           float particleSysStartLifetimeConstantMax=totalDuration[particleSys].startLifetimeConstantMax;
+           if(particleSysDuration+particleSysStartLifetimeConstantMax>duration){
+            SetDuration(duration/(particleSysDuration+particleSysStartLifetimeConstantMax));
+           }else{
+            SetDuration(durationProportion);
+           }
           }else{
-           main.duration=totalDuration[particleSys];
+           SetDuration(1f);
+          }
+          void SetDuration(float proportion){
+           if(proportion<1f){
+            if(totalDuration[particleSys].duration*proportion-totalDuration[particleSys].startLifetimeConstantMax<=0f){
+             main.duration=totalDuration[particleSys].duration*proportion;
+             var startLifetime=main.startLifetime;
+             startLifetime.constantMin=totalDuration[particleSys].startLifetimeConstantMin*proportion;
+             startLifetime.constant   =totalDuration[particleSys].startLifetimeConstant   *proportion;
+             startLifetime.constantMax=totalDuration[particleSys].startLifetimeConstantMax*proportion;
+             main.startLifetime=startLifetime;
+            }else{
+             main.duration=totalDuration[particleSys].duration*proportion-totalDuration[particleSys].startLifetimeConstantMax;
+             var startLifetime=main.startLifetime;
+             startLifetime.constantMin=totalDuration[particleSys].startLifetimeConstantMin;
+             startLifetime.constant   =totalDuration[particleSys].startLifetimeConstant   ;
+             startLifetime.constantMax=totalDuration[particleSys].startLifetimeConstantMax;
+             main.startLifetime=startLifetime;
+            }
+           }else{
+            if(totalDuration[particleSys].startLifetimeConstantMax>=totalDuration[particleSys].duration*proportion){
+             main.duration=totalDuration[particleSys].duration*proportion;
+             var startLifetime=main.startLifetime;
+             startLifetime.constantMin=totalDuration[particleSys].startLifetimeConstantMin*proportion;
+             startLifetime.constant   =totalDuration[particleSys].startLifetimeConstant   *proportion;
+             startLifetime.constantMax=totalDuration[particleSys].startLifetimeConstantMax*proportion;
+             main.startLifetime=startLifetime;
+            }else{
+             main.duration=totalDuration[particleSys].duration*proportion-totalDuration[particleSys].startLifetimeConstantMax;
+             var startLifetime=main.startLifetime;
+             startLifetime.constantMin=totalDuration[particleSys].startLifetimeConstantMin;
+             startLifetime.constant   =totalDuration[particleSys].startLifetimeConstant   ;
+             startLifetime.constantMax=totalDuration[particleSys].startLifetimeConstantMax;
+             main.startLifetime=startLifetime;
+            }
+           }
           }
          }
-         this.duration=delay+duration;
+         if(duration>0f){
+          this.duration=delay+duration;
+         }
          this.active=true;
          enabled=true;
         }
@@ -94,7 +135,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          if(timer>=delay){
           if(targetPos!=null){
            transform.position=targetPos.Value;
-          }else{
+          }else if(target!=null){
            transform.position=target.transform.position;
           }
           if(duration>0f){

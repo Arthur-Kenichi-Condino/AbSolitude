@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          Log.DebugMessage("skillVFXs.Count:"+skillVFXs.Count);
          skillVFXsOfType.Add(skillVFX.skillVisualEffect);
          Log.DebugMessage("skillVFXsOfType.Count:"+skillVFXsOfType.Count);
-         skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,null,0f,1);
+         skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,target,delay,loops,duration);
         }
     }
 }

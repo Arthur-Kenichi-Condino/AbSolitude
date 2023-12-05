@@ -11,6 +11,16 @@ namespace AKCondinoO.Sims.Actors.Skills{
     internal class AreaSkill:Skill{
      internal readonly List<SkillAoE>activeAoE=new List<SkillAoE>();
      internal Vector3?targetPos;
+     internal readonly Dictionary<SkillAoE,float>aoeActiveCooldowns=new Dictionary<SkillAoE,float>();
+     protected int maxAoECount_value=1;
+      internal int maxAoECount{
+       get{
+        return maxAoECount_value;
+       }
+       set{
+        maxAoECount_value=value;
+       }
+      }
         protected override void Awake(){
         }
         internal override void OnSpawned(){
@@ -20,6 +30,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
           aoe.skill=null;
          }
          activeAoE.Clear();
+         aoeActiveCooldowns.Clear();
          cooldown=0f;
         }
         internal override bool IsAvailable(SimObject target,int useLevel){
@@ -34,6 +45,15 @@ namespace AKCondinoO.Sims.Actors.Skills{
           }
           if(Vector3.Distance(actor.transform.position,targetPos.Value)>range){
            return false;
+          }
+          if(!doing||!invoked){
+           //  if the skill has not been cast yet then some other tests can still be done here, like focus points required to use the skill
+           if(activeAoE.Count>=maxAoECount){
+            return false;
+           }
+           if(aoeActiveCooldowns.Count>=maxAoECount){
+            return false;
+           }
           }
           return true;
          }
@@ -60,7 +80,19 @@ namespace AKCondinoO.Sims.Actors.Skills{
          targetPos=null;
          base.Revoke();//  the revoked flag is set here
         }
+        readonly List<SkillAoE>aoeActiveCooldownsToUpdate=new List<SkillAoE>();
         protected override void Update(){
+         aoeActiveCooldownsToUpdate.AddRange(aoeActiveCooldowns.Keys);
+         foreach(var aoe in aoeActiveCooldownsToUpdate){
+          float cooldown=aoeActiveCooldowns[aoe];
+          cooldown-=Time.deltaTime;
+          if(cooldown>0f){
+           aoeActiveCooldowns[aoe]=cooldown;
+          }else{
+           aoeActiveCooldowns.Remove(aoe);
+          }
+         }
+         aoeActiveCooldownsToUpdate.Clear();
          base.Update();
         }
         protected override void OnUpdate(){
