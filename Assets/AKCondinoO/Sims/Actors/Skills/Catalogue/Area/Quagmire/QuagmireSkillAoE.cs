@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal partial class QuagmireSkillAoE:SkillAoE{
-        protected override void SpawnSkillVFXs(){
+        protected override void SpawnSkillVFXs(float skillVFXsDuration){
          (GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)skillVFX=SkillVisualEffectsManager.singleton.SpawnSkillVisualEffectGameObject(typeof(QuagmireSkillVisualEffect),skill,this);
          if(!skillVFXs.TryGetValue(skillVFX.skillVisualEffect.GetType(),out List<SkillVisualEffect>skillVFXsOfType)){
           skillVFXs.Add(skillVFX.skillVisualEffect.GetType(),skillVFXsOfType=new List<SkillVisualEffect>());
@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          Log.DebugMessage("skillVFXs.Count:"+skillVFXs.Count);
          skillVFXsOfType.Add(skillVFX.skillVisualEffect);
          Log.DebugMessage("skillVFXsOfType.Count:"+skillVFXsOfType.Count);
-         skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,target,delay,loops,duration);
+         skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,target,delay,loops,skillVFXsDuration);
         }
     }
 }

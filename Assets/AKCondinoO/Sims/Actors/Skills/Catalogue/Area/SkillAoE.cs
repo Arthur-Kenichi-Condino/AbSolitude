@@ -78,7 +78,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
            }else{
             if(skillVFXs.All(kvp=>{return kvp.Value.Count<skillVFXsToSpawn;})){
              //
-             SpawnSkillVFXs();
+             SpawnSkillVFXs(ValidateSkillVFXsDuration(duration-timer));
             }
            }
           }else{
@@ -89,14 +89,21 @@ namespace AKCondinoO.Sims.Actors.Skills{
              return;
             }else{
              //
-             SpawnSkillVFXs();
+             SpawnSkillVFXs(ValidateSkillVFXsDuration(-1f));
             }
            }
           }
          }
          timer+=Time.deltaTime;
         }
-        protected virtual void SpawnSkillVFXs(){
+        protected virtual void SpawnSkillVFXs(float skillVFXsDuration){
+        }
+        protected virtual float ValidateSkillVFXsDuration(float skillVFXsDuration){
+         float duration=skillVFXsDuration;
+         if(duration<0f){
+          duration=0f;
+         }
+         return duration;
         }
      internal Vector3 size;
         protected virtual void OnTriggerEnter(Collider other){
