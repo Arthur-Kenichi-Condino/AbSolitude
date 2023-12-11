@@ -20,7 +20,7 @@ namespace AKCondinoO.Sims.Actors{
               foreach(SimInventoryItem item in simHandsInventory.items){
                if(item.simObject!=null){
                 if(item.simObject is SimWeapon weapon){
-                 if(weapon.Reload()){
+                 if(weapon.TryStartReloadingAction(simAiming:actor)){
                   weaponsReload.Add(weapon);
                  }
                 }

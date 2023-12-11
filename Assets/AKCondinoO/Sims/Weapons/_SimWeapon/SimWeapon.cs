@@ -25,22 +25,39 @@ namespace AKCondinoO.Sims.Weapons{
          base.OnActivated();
          ammo=startingAmmo;
         }
+        internal bool TryStartReloadingAction(SimObject simAiming){
+         if(simAiming is BaseAI baseAI){
+          if(OnWillReloadChecks(out _)){
+           if(baseAI.DoReloadingOnAnimationEventUsingWeapon(this)){
+            return true;
+           }
+          }
+         }
+         return false;
+        }
      [SerializeField]internal float startingAmmo=0f;
      internal float ammo=0f;
       [SerializeField]internal float ammoPerMagazine=0f;
        internal float ammoLoaded=0f;
-        internal bool Reload(){
-         float ammoToLoad=ammoPerMagazine-ammoLoaded;
+        internal bool OnWillReloadChecks(out float ammoToLoad){
+         ammoToLoad=ammoPerMagazine-ammoLoaded;
          if(ammoToLoad>0f){
-          Log.DebugMessage("ammoToLoad:"+ammoToLoad);
           ammoToLoad=Math.Min(ammoToLoad,ammo);
           if(ammoToLoad>0f){
-           Log.DebugMessage("reloading ammo:"+ammoToLoad);
-           ammoLoaded=ammoToLoad;
-           ammo-=ammoToLoad;
-           Log.DebugMessage("remaining ammo:"+ammo);
+           Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
            return true;
           }
+         }
+         ammoToLoad=0f;
+         return false;
+        }
+        internal bool OnReload(){
+         if(OnWillReloadChecks(out float ammoToLoad)){
+          Log.DebugMessage("reloading ammo:"+ammoToLoad);
+          ammoLoaded=ammoToLoad;
+          ammo-=ammoToLoad;
+          Log.DebugMessage("remaining ammo:"+ammo);
+          return true;
          }
          return false;
         }

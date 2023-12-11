@@ -11,14 +11,25 @@ namespace AKCondinoO.Sims.Actors{
     internal class AnimationEventsHandler:MonoBehaviour{
      internal BaseAI actor;
         internal void CancelAllEvents(){
-         CancelShootEvent();
+         CancelReloadEvent();
+          CancelShootEvent();
         }
+        internal delegate void OnAnimatorReloadEvent(SimObject simAiming);
+        internal OnAnimatorReloadEvent onAnimatorReload;
+        internal void OnReloadEvent(string weaponMotionName){
+         Log.DebugMessage("OnReloadEvent:"+weaponMotionName);
+         onAnimatorReload?.Invoke(actor);
+        }
+        internal void CancelReloadEvent(){
+         Log.DebugMessage("CancelReloadEvent:");
+         onAnimatorReload=null;
+        }
+        internal delegate void OnAnimatorShootEvent(SimObject simAiming);
+        internal OnAnimatorShootEvent onAnimatorShoot;
         internal void OnShootEvent(string weaponMotionName){
          Log.DebugMessage("OnShootEvent:"+weaponMotionName);
          onAnimatorShoot?.Invoke(actor);
         }
-        internal delegate void OnAnimatorShootEvent(SimObject simAiming);
-        internal OnAnimatorShootEvent onAnimatorShoot;
         internal void CancelShootEvent(){
          Log.DebugMessage("CancelShootEvent:");
          onAnimatorShoot=null;
