@@ -29,12 +29,12 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
         internal virtual bool HasListenersForAnimationEventUsingWeapon(){
-         if(animatorController.animationEventsHandler.onAnimatorShoot!=null){
-          Log.DebugMessage("onAnimatorShoot!=null");
-          return true;
-         }
          if(animatorController.animationEventsHandler.onAnimatorReload!=null){
           Log.DebugMessage("onAnimatorReload!=null");
+          return true;
+         }
+         if(animatorController.animationEventsHandler.onAnimatorShoot!=null){
+          Log.DebugMessage("onAnimatorShoot!=null");
           return true;
          }
          return false;
@@ -44,7 +44,16 @@ namespace AKCondinoO.Sims.Actors{
          if(HasListenersForAnimationEventUsingWeapon()){
           return false;
          }
-         Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon:simWeapon:"+simWeapon,simWeapon);
+         if(isAiming){
+          if(animatorController.animator!=null){
+           if(animatorController.animationEventsHandler!=null){
+            Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon():simWeapon:"+simWeapon,simWeapon);
+            animatorController.animationEventsHandler.onAnimatorReload+=simWeapon.OnReload;
+            motionFlagForReloadingAnimation=true;
+            return true;
+           }
+          }
+         }
          return false;
         }
      internal bool isReloading{

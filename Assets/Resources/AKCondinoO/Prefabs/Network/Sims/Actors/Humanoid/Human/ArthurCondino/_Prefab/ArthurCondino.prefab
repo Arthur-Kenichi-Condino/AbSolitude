@@ -56,11 +56,11 @@ MonoBehaviour:
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
   goToSimUMA: {fileID: 0}
-  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
+  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 5
+  AFKTimeToUseAI: 30
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0

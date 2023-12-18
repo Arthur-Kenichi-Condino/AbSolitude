@@ -42,6 +42,13 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal void OnCantDamageAnimationEvent(string bodyPartName){
          //Log.DebugMessage("OnCantDamageAnimationEvent:"+bodyPartName);
+         if(String.IsNullOrEmpty(bodyPartName)){
+          foreach(var bodyPart in actor.nameToHitboxes){
+           Hitboxes hitbox=bodyPart.Value;
+           hitbox.OnCantDamage();
+          }
+          return;
+         }
          if(actor.nameToHitboxes.TryGetValue(bodyPartName,out Hitboxes bodyPartHitbox)){
           bodyPartHitbox.OnCantDamage();
          }

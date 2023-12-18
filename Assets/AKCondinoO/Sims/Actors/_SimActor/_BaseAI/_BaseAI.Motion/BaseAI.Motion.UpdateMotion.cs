@@ -6,35 +6,79 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal virtual void UpdateMotion(bool fromAI){
-         bool canDoShootingAnimation=false;
-         if(isAiming){
-          MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
-          canDoShootingAnimation=true;
+         if(motionFlagForReloadingAnimation){
+             if(MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING||
+                MyWeaponLayerMotion==ActorWeaponLayerMotion.NONE
+             ){
+              MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING;
+             }
+             if(MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING
+             ){
+              if(motionFlagForShootingAnimation){
+               motionFlagForShootingAnimation=false;
+               if(animatorController.animator!=null){
+                if(animatorController.animationEventsHandler!=null){
+                 animatorController.animationEventsHandler.CancelShootEvent();
+                }
+               }
+              }
+             }
          }else{
-          MyWeaponLayerMotion=ActorWeaponLayerMotion.NONE;
-         }
-         if(canDoShootingAnimation){
-          if(isShooting){
-           MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
-          }
+             if(motionFlagForShootingAnimation){
+                 if(MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING||
+                    MyWeaponLayerMotion==ActorWeaponLayerMotion.NONE
+                 ){
+                  MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
+                 }
+             }else{
+                 if(isAiming){
+                  MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
+                 }else{
+                  MyWeaponLayerMotion=ActorWeaponLayerMotion.NONE;
+                 }
+             }
          }
          //Log.DebugMessage("MyWeaponLayerMotion:"+MyWeaponLayerMotion);
          if(motionFlagForHitAnimation){
-             motionFlagForAttackAnimation=false;
-             if(MyWeaponType==WeaponTypes.SniperRifle){
-              MyMotion=ActorMotion.MOTION_HIT_RIFLE;
-             }else{
-              MyMotion=ActorMotion.MOTION_HIT;
+             ActorMotion lastMotion=MyMotion;
+             if(MyMotion!=ActorMotion.MOTION_HIT&&
+                MyMotion!=ActorMotion.MOTION_HIT_RIFLE
+             ){
+              if(MyWeaponType==WeaponTypes.SniperRifle){
+               MyMotion=ActorMotion.MOTION_HIT_RIFLE;
+              }else{
+               MyMotion=ActorMotion.MOTION_HIT;
+              }
              }
-             OnMotionHitSet();
+             if(MyMotion==ActorMotion.MOTION_HIT||
+                MyMotion==ActorMotion.MOTION_HIT_RIFLE
+             ){
+              if(motionFlagForAttackAnimation){
+               motionFlagForAttackAnimation=false;
+              }
+              if(lastMotion==ActorMotion.MOTION_ATTACK||
+                 lastMotion==ActorMotion.MOTION_ATTACK_RIFLE
+              ){
+               OnMotionAttackInterrupt();
+              }
+              OnMotionHitSet();
+             }
          }else{
              if(motionFlagForAttackAnimation){
-                 if(MyWeaponType==WeaponTypes.SniperRifle){
-                  MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
-                 }else{
-                  MyMotion=ActorMotion.MOTION_ATTACK;
+                 if(MyMotion!=ActorMotion.MOTION_ATTACK&&
+                    MyMotion!=ActorMotion.MOTION_ATTACK_RIFLE
+                 ){
+                  if(MyWeaponType==WeaponTypes.SniperRifle){
+                   MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
+                  }else{
+                   MyMotion=ActorMotion.MOTION_ATTACK;
+                  }
                  }
-                 OnMotionAttackSet();
+                 if(MyMotion==ActorMotion.MOTION_ATTACK||
+                    MyMotion==ActorMotion.MOTION_ATTACK_RIFLE
+                 ){
+                  OnMotionAttackSet();
+                 }
              }else{
                  if(
                   (moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
@@ -65,6 +109,7 @@ namespace AKCondinoO.Sims.Actors{
          motionFlagForAttackAnimation=false;
           motionFlagForReloadingAnimation=false;
            motionFlagForShootingAnimation=false;
+         MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
          motionFlagForHitAnimation=false;
           motionFlagForHitResetAnimation=false;
          MyMotion=ActorMotion.MOTION_STAND;
@@ -72,17 +117,32 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:"+currentClipName);
-         if(motionFlagForShootingAnimation){
-          if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
-           motionFlagForShootingAnimation=false;
+         if(motionFlagForReloadingAnimation){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING){
+           motionFlagForReloadingAnimation=false;
+           MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
            if(animatorController.animator!=null){
             if(animatorController.animationEventsHandler!=null){
-             animatorController.animationEventsHandler.CancelShootEvent();
+             animatorController.animationEventsHandler.CancelReloadEvent();
             }
            }
-           Log.DebugMessage("motionFlagForShootingAnimation=false");
+           Log.DebugMessage("motionFlagForReloadingAnimation=false");
           }
           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+         }else{
+          if(motionFlagForShootingAnimation){
+           if      (MapAnimatorClipNameToActorWeaponLayerMotion(currentClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
+            motionFlagForShootingAnimation=false;
+            MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
+            if(animatorController.animator!=null){
+             if(animatorController.animationEventsHandler!=null){
+              animatorController.animationEventsHandler.CancelShootEvent();
+             }
+            }
+            Log.DebugMessage("motionFlagForShootingAnimation=false");
+           }
+           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+          }
          }
          if(motionFlagForHitAnimation){
           //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationLooped:onHitSetMotion:currentClipName:"+currentClipName);
@@ -116,17 +176,32 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
-         if(motionFlagForShootingAnimation){
-          if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
-           motionFlagForShootingAnimation=false;
+         if(motionFlagForReloadingAnimation){
+          if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING){
+           motionFlagForReloadingAnimation=false;
+           MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
            if(animatorController.animator!=null){
             if(animatorController.animationEventsHandler!=null){
-             animatorController.animationEventsHandler.CancelShootEvent();
+             animatorController.animationEventsHandler.CancelReloadEvent();
             }
            }
-           Log.DebugMessage("motionFlagForShootingAnimation=false");
+           Log.DebugMessage("motionFlagForReloadingAnimation=false");
           }
           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+         }else{
+          if(motionFlagForShootingAnimation){
+           if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){
+            motionFlagForShootingAnimation=false;
+            MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
+            if(animatorController.animator!=null){
+             if(animatorController.animationEventsHandler!=null){
+              animatorController.animationEventsHandler.CancelShootEvent();
+             }
+            }
+            Log.DebugMessage("motionFlagForShootingAnimation=false");
+           }
+           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+          }
          }
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationIsPlaying(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){
@@ -157,6 +232,12 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnMotionAttackAnimationEnd(){
          OnMotionShouldStopMovement(false);
+        }
+        protected virtual void OnMotionAttackInterrupt(){
+         OnMotionShouldStopMovement(false);
+         if(animatorController.animationEventsHandler!=null){
+          animatorController.animationEventsHandler.OnCantDamageAnimationEvent("");
+         }
         }
         protected virtual void OnMotionHitSet(){
          OnMotionShouldStopMovement(true);
@@ -207,6 +288,11 @@ namespace AKCondinoO.Sims.Actors{
      internal static readonly Dictionary<string,ActorWeaponLayerMotion>animatorClipNameToActorWeaponLayerMotion=new Dictionary<string,ActorWeaponLayerMotion>();
         internal bool MapAnimatorClipNameToActorWeaponLayerMotion(string clipName,out ActorWeaponLayerMotion?motion){
          motion=null;
+         if(clipName.Contains("MOTION_STAND_RIFLE_RELOADING")){
+          motion=animatorClipNameToActorWeaponLayerMotion[clipName]=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING;
+          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:mapped "+clipName+" to MOTION_STAND_RIFLE_RELOADING");
+          return true;
+         }
          if(clipName.Contains("MOTION_STAND_RIFLE_FIRING")){
           motion=animatorClipNameToActorWeaponLayerMotion[clipName]=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
           Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:mapped "+clipName+" to MOTION_STAND_RIFLE_FIRING");

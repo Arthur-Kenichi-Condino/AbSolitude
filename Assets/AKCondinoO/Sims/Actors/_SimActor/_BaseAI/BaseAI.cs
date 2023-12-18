@@ -147,6 +147,9 @@ namespace AKCondinoO.Sims.Actors{
          isAllPassiveSkillsInEffectFlag=false;
         }
         internal override void OnDeactivated(){
+         if(characterController!=null){
+          characterController.weaponsReloading.Clear();
+         }
          if(onChaseGetDataCoroutine!=null){
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }

@@ -51,7 +51,12 @@ namespace AKCondinoO.Sims.Weapons{
          ammoToLoad=0f;
          return false;
         }
-        internal bool OnReload(){
+        internal void OnReload(SimObject simAiming){
+         if(simAiming is BaseAI baseAI&&baseAI.characterController!=null){
+          baseAI.characterController.OnReloadEvent();
+         }
+        }
+        internal bool Reload(SimObject simAiming){
          if(OnWillReloadChecks(out float ammoToLoad)){
           Log.DebugMessage("reloading ammo:"+ammoToLoad);
           ammoLoaded=ammoToLoad;
