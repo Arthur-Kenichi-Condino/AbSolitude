@@ -179,5 +179,11 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
          }
         }
+        internal override bool OnShotByWeapon(SimWeapon simWeapon,Hurtboxes hurtbox=null){
+         if(hurtbox!=null){
+          return hurtbox.OnTakeDamage(fromWeapon:simWeapon);
+         }
+         return false;
+        }
     }
 }

@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Actors.Combat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,6 +83,20 @@ namespace AKCondinoO.Sims.Weapons{
            for(int i=0;i<shootHitsLength;++i){
             RaycastHit shootHit=shootHits[i];
             Log.DebugMessage("shootHit:"+shootHit.collider.name+",of:"+shootHit.collider.transform.root.name);
+            GameObject colliderGameObject=shootHit.collider.gameObject;
+            SimObject simObjectHit=null;
+            BaseAI actorHit=null;
+            Hurtboxes hurtbox=null;
+            if(LayerMask.LayerToName(colliderGameObject.layer)=="Hurtbox"){
+             Log.DebugMessage("shootHit:layer:Hurtbox");
+             hurtbox=colliderGameObject.GetComponent<Hurtboxes>();
+             if(hurtbox!=null){
+              simObjectHit=actorHit=hurtbox.actor;
+             }
+            }
+            if(actorHit!=null){
+             actorHit.OnShotByWeapon(this,hurtbox);
+            }
            }
           }
           if(simWeaponVisualEffect!=null){
@@ -94,7 +109,7 @@ namespace AKCondinoO.Sims.Weapons{
           }
          }
         }
-        internal void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
+        internal virtual void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
          shootHitsLength=0;
          if(muzzle!=null){
           if(holder is BaseAI actor&&actor.characterController!=null){
