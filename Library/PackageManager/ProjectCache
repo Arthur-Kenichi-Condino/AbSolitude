@@ -5,22 +5,22 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638295022457789128
-    m_Hash: 3827117678
+      ticks: 638391681588666967
+    m_Hash: 3876475528
   m_LockFileStatus:
     m_FilePath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638295022457839128
-    m_Hash: 1048083671
+      ticks: 638391682099431948
+    m_Hash: 1242924712
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
 m_ProjectPath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages
-m_EditorVersion: 2022.3.7f1 (b16b3b16c7a0)
+m_EditorVersion: 2022.3.16f1 (d2c21f0ef2f1)
 m_ResolvedPackages:
 - packageId: com.community.netcode.transport.steamnetworkingsockets@https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworkingsockets
   testable: 0
@@ -129,12 +129,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.addressables@1.21.15
+- packageId: com.unity.addressables@1.21.19
   testable: 0
   isDirectDependency: 1
-  version: 1.21.15
+  version: 1.21.19
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.addressables@1.21.15
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.addressables@1.21.19
   assetPath: Packages/com.unity.addressables
   name: com.unity.addressables
   displayName: Addressables
@@ -273,17 +273,12 @@ m_ResolvedPackages:
     - 2.0.4
     - 2.0.6
     compatible:
-    - 1.21.12
-    - 1.21.14
-    - 1.21.15
-    - 1.21.17
-    - 1.21.18
     - 1.21.19
     recommended: 1.21.19
     deprecated: []
   dependencies:
   - name: com.unity.scriptablebuildpipeline
-    version: 1.21.8
+    version: 1.21.21
   - name: com.unity.modules.assetbundle
     version: 1.0.0
   - name: com.unity.modules.imageconversion
@@ -296,7 +291,7 @@ m_ResolvedPackages:
     version: 1.0.0
   resolvedDependencies:
   - name: com.unity.scriptablebuildpipeline
-    version: 1.21.8
+    version: 1.21.21
   - name: com.unity.modules.assetbundle
     version: 1.0.0
   - name: com.unity.modules.imageconversion
@@ -323,28 +318,28 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638271645590000000
+  datePublishedTicks: 638342531680000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/Addressables.git
-    revision: b6e4f321768265894baab72ca85cb8b8877ffbd4
+    revision: f50f07ff121c5aa50ac3d852373c2c50ecbd73cf
     path: 
   unityLifecycle:
-    version: 1.21.12
+    version: 1.21.19
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.ai.navigation@1.1.4
+- packageId: com.unity.ai.navigation@1.1.5
   testable: 0
   isDirectDependency: 1
-  version: 1.1.4
+  version: 1.1.5
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ai.navigation@1.1.4
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ai.navigation@1.1.5
   assetPath: Packages/com.unity.ai.navigation
   name: com.unity.ai.navigation
   displayName: AI Navigation
@@ -374,7 +369,6 @@ m_ResolvedPackages:
     - 2.0.0-pre.4
     - 2.0.0
     compatible:
-    - 1.1.4
     - 1.1.5
     recommended: 1.1.5
     deprecated: []
@@ -395,28 +389,28 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638224218100000000
+  datePublishedTicks: 638319373850000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.ai.navigation@1.1/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.ai.navigation.git
-    revision: 3e8d494400ccac6cbd90ee1b474470f4b1299bfa
+    revision: a905e1ab41c8afae1a75688ceb3b4dfa1686ea75
     path: 
   unityLifecycle:
-    version: 1.1.4
+    version: 1.1.5
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.collab-proxy@2.0.7
+- packageId: com.unity.collab-proxy@2.2.0
   testable: 0
   isDirectDependency: 1
-  version: 2.0.7
+  version: 2.2.0
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collab-proxy@2.0.7
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collab-proxy@2.2.0
   assetPath: Packages/com.unity.collab-proxy
   name: com.unity.collab-proxy
   displayName: Version Control
@@ -428,7 +422,7 @@ m_ResolvedPackages:
   type: assets
   description: The package gives you the ability to use Unity Version Control in
     the Unity editor. To use Unity Version Control, a subscription is required. Learn
-    more about how you can get started for free by visiting plasticscm.com.
+    more about how you can get started for free by visiting https://unity.com/solutions/version-control
   status: 0
   errors: []
   versions:
@@ -504,14 +498,8 @@ m_ResolvedPackages:
     - 2.1.0
     - 2.2.0
     compatible:
-    - 2.0.5
-    - 2.0.7
-    - 2.1.0-preview.3
-    - 2.1.0-preview.5
-    - 2.1.0-preview.6
-    - 2.1.0
     - 2.2.0
-    recommended: 2.0.7
+    recommended: 2.2.0
     deprecated: []
   dependencies: []
   resolvedDependencies: []
@@ -540,16 +528,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638264754080000000
-  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.0/manual/index.html
+  datePublishedTicks: 638326189440000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.2/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.cloud.collaborate.git
-    revision: 13a0e74f47307a1b20a57747cea59891ce36a647
+    revision: 33c8fba1793946be3c73f738edf70db0b5546afd
     path: 
   unityLifecycle:
-    version: 2.0.5
+    version: 2.2.0
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -638,6 +626,7 @@ m_ResolvedPackages:
     - 2.3.0-exp.1
     - 2.3.0-pre.3
     - 2.4.0-exp.2
+    - 2.4.0-pre.2
     compatible:
     - 1.2.4
     - 1.3.1
@@ -654,6 +643,8 @@ m_ResolvedPackages:
     - 2.2.1
     - 2.3.0-exp.1
     - 2.3.0-pre.3
+    - 2.4.0-exp.2
+    - 2.4.0-pre.2
     recommended: 1.2.4
     deprecated: []
   dependencies:
@@ -665,7 +656,7 @@ m_ResolvedPackages:
     version: 1.11.4
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.7
+    version: 1.8.11
   - name: com.unity.mathematics
     version: 1.2.6
   - name: com.unity.modules.unityanalytics
@@ -706,12 +697,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.ide.rider@3.0.24
+- packageId: com.unity.ide.rider@3.0.27
   testable: 0
   isDirectDependency: 1
-  version: 3.0.24
+  version: 3.0.27
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.rider@3.0.24
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.rider@3.0.27
   assetPath: Packages/com.unity.ide.rider
   name: com.unity.ide.rider
   displayName: JetBrains Rider Editor
@@ -768,11 +759,10 @@ m_ResolvedPackages:
     - 3.0.24
     - 3.0.25
     - 3.0.26
+    - 3.0.27
     compatible:
-    - 3.0.24
-    - 3.0.25
-    - 3.0.26
-    recommended: 3.0.26
+    - 3.0.27
+    recommended: 3.0.27
     deprecated: []
   dependencies:
   - name: com.unity.ext.nunit
@@ -791,28 +781,28 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638221653400000000
+  datePublishedTicks: 638373878680000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.ide.rider@3.0/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.rider.git
-    revision: f5decc642e3618ce1c6827d47318260e61d64714
+    revision: 1d471c19a7f21834ae5b8d0358fd6f9b242c1ee8
     path: 
   unityLifecycle:
-    version: 3.0.24
+    version: 3.0.27
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.ide.visualstudio@2.0.20
+- packageId: com.unity.ide.visualstudio@2.0.22
   testable: 0
   isDirectDependency: 1
-  version: 2.0.20
+  version: 2.0.22
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.visualstudio@2.0.20
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.visualstudio@2.0.22
   assetPath: Packages/com.unity.ide.visualstudio
   name: com.unity.ide.visualstudio
   displayName: Visual Studio Editor
@@ -854,9 +844,6 @@ m_ResolvedPackages:
     - 2.0.21
     - 2.0.22
     compatible:
-    - 2.0.18
-    - 2.0.20
-    - 2.0.21
     - 2.0.22
     recommended: 2.0.22
     deprecated: []
@@ -883,16 +870,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638265007710000000
+  datePublishedTicks: 638326061910000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.ide.visualstudio@2.0/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.visualstudio.git
-    revision: b7bf23d23806ac75645bfa12acadcfc11468a383
+    revision: 700b44077345e97d37d464ff25507638983aed64
     path: 
   unityLifecycle:
-    version: 2.0.18
+    version: 2.0.22
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -967,12 +954,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.memoryprofiler@1.0.0
+- packageId: com.unity.memoryprofiler@1.1.0
   testable: 0
   isDirectDependency: 1
-  version: 1.0.0
+  version: 1.1.0
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.memoryprofiler@1.0.0
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.memoryprofiler@1.1.0
   assetPath: Packages/com.unity.memoryprofiler
   name: com.unity.memoryprofiler
   displayName: Memory Profiler
@@ -981,7 +968,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: asset
+  type: assets
   description: The Memory Profiler offers a unified solution allowing you to profile
     both small projects on mobile devices and big AAA projects on high end machines.
     It provides actionable information about allocations in the engine to allow developers
@@ -1036,13 +1023,8 @@ m_ResolvedPackages:
     - 1.1.0-pre.3
     - 1.1.0
     compatible:
-    - 1.0.0
-    - 1.1.0-exp.1
-    - 1.1.0-exp.2
-    - 1.1.0-pre.1
-    - 1.1.0-pre.3
     - 1.1.0
-    recommended: 1.0.0
+    recommended: 1.1.0
     deprecated: []
   dependencies:
   - name: com.unity.editorcoroutines
@@ -1067,16 +1049,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 637977144360000000
-  documentationUrl: 
+  datePublishedTicks: 638334775400000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.memoryprofiler@1.1/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.memoryprofiler.git
-    revision: abbd964f85ded6b5cd5296c4a2d4d3f393950ac1
+    revision: 2297acd0384cc2f42d24e670a5990104bedc19c5
     path: 
   unityLifecycle:
-    version: 1.0.0
+    version: 1.1.0
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1113,6 +1095,7 @@ m_ResolvedPackages:
     - 2.0.0-pre.2
     - 2.0.0-pre.3
     - 2.0.0-pre.5
+    - 2.1.0
     compatible:
     - 1.0.0
     - 1.1.0
@@ -1143,7 +1126,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.1.4
   - name: com.unity.burst
-    version: 1.8.7
+    version: 1.8.11
   - name: com.unity.mathematics
     version: 1.2.6
   - name: com.unity.modules.unityanalytics
@@ -1189,12 +1172,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.netcode.gameobjects@1.5.2
+- packageId: com.unity.netcode.gameobjects@1.7.1
   testable: 0
   isDirectDependency: 1
-  version: 1.5.2
+  version: 1.7.1
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.netcode.gameobjects@1.5.2
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.netcode.gameobjects@1.7.1
   assetPath: Packages/com.unity.netcode.gameobjects
   name: com.unity.netcode.gameobjects
   displayName: Netcode for GameObjects
@@ -1231,17 +1214,16 @@ m_ResolvedPackages:
     - 1.5.2
     - 1.6.0
     - 1.7.0
+    - 1.7.1
     compatible:
-    - 1.5.2
-    - 1.6.0
-    - 1.7.0
-    recommended: 1.5.2
+    - 1.7.1
+    recommended: 1.7.1
     deprecated: []
   dependencies:
   - name: com.unity.nuget.mono-cecil
     version: 1.10.1
   - name: com.unity.transport
-    version: 1.3.4
+    version: 1.4.0
   resolvedDependencies:
   - name: com.unity.nuget.mono-cecil
     version: 1.11.4
@@ -1250,7 +1232,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.1.4
   - name: com.unity.burst
-    version: 1.8.7
+    version: 1.8.11
   - name: com.unity.mathematics
     version: 1.2.6
   - name: com.unity.modules.unityanalytics
@@ -1270,16 +1252,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638260447580000000
-  documentationUrl: https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@1.5/manual/index.html
+  datePublishedTicks: 638364170340000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@1.7/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.com/Unity-Technologies/com.unity.netcode.gameobjects.git
-    revision: 36368846c5bfe6cfb93adc36282507614955955c
+    revision: 5df824c7588b43c29238a927d14642d5f94129ff
     path: 
   unityLifecycle:
-    version: 1.5.2
+    version: 1.7.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1345,9 +1327,11 @@ m_ResolvedPackages:
     - 3.2.1
     - 3.2.2
     - 3.3.0
+    - 3.4.0
     compatible:
     - 3.2.2
     - 3.3.0
+    - 3.4.0
     recommended: 3.2.2
     deprecated: []
   dependencies:
@@ -1447,6 +1431,8 @@ m_ResolvedPackages:
     - 1.3.8
     - 1.3.9
     - 1.4.0
+    - 1.4.1
+    - 1.4.2
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12
@@ -1463,6 +1449,8 @@ m_ResolvedPackages:
     - 1.3.8
     - 1.3.9
     - 1.4.0
+    - 1.4.1
+    - 1.4.2
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12
@@ -1637,6 +1625,7 @@ m_ResolvedPackages:
     - 3.2.0-pre.4
     - 3.2.0-pre.5
     - 3.2.0-pre.6
+    - 3.2.0-pre.7
     - 4.0.0-pre.1
     - 4.0.0-pre.2
     compatible:
@@ -1647,6 +1636,7 @@ m_ResolvedPackages:
     - 3.2.0-pre.4
     - 3.2.0-pre.5
     - 3.2.0-pre.6
+    - 3.2.0-pre.7
     - 4.0.0-pre.1
     - 4.0.0-pre.2
     recommended: 3.0.6
@@ -1693,12 +1683,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.timeline@1.7.5
+- packageId: com.unity.timeline@1.7.6
   testable: 0
   isDirectDependency: 1
-  version: 1.7.5
+  version: 1.7.6
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.timeline@1.7.5
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.timeline@1.7.6
   assetPath: Packages/com.unity.timeline
   name: com.unity.timeline
   displayName: Timeline
@@ -1800,7 +1790,6 @@ m_ResolvedPackages:
     - 1.8.5
     - 1.8.6
     compatible:
-    - 1.7.5
     - 1.7.6
     - 1.8.0
     - 1.8.1
@@ -1845,16 +1834,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638229649600000000
+  datePublishedTicks: 638326112840000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.timeline@1.7/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.timeline.git
-    revision: fdb1ca9a2c2a131e0ff9cb257b2eae3b53337b3a
+    revision: 02f49ada64a9f88044207cf42ba407dc634ef8e6
     path: 
   unityLifecycle:
-    version: 1.7.5
+    version: 1.7.6
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1917,6 +1906,7 @@ m_ResolvedPackages:
     - 1.3.3
     - 1.3.4
     - 1.4.0
+    - 1.4.1
     - 2.0.0-exp.6
     - 2.0.0-exp.7
     - 2.0.0-exp.8
@@ -1929,9 +1919,9 @@ m_ResolvedPackages:
     - 2.0.1
     - 2.0.2
     - 2.1.0
+    - 2.2.1
     compatible:
-    - 1.3.4
-    - 1.4.0
+    - 1.4.1
     - 2.0.0-exp.6
     - 2.0.0-exp.7
     - 2.0.0-exp.8
@@ -1944,7 +1934,8 @@ m_ResolvedPackages:
     - 2.0.1
     - 2.0.2
     - 2.1.0
-    recommended: 1.3.4
+    - 2.2.1
+    recommended: 1.4.1
     deprecated: []
   dependencies:
   - name: com.unity.collections
@@ -1957,7 +1948,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.1.4
   - name: com.unity.burst
-    version: 1.8.7
+    version: 1.8.11
   - name: com.unity.mathematics
     version: 1.2.6
   - name: com.unity.modules.unityanalytics
@@ -1988,7 +1979,7 @@ m_ResolvedPackages:
     revision: f7c618013b165797b9f23a38cd9dd1c219422030
     path: 
   unityLifecycle:
-    version: 1.3.4
+    version: 1.4.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -2066,12 +2057,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.visualscripting@1.8.0
+- packageId: com.unity.visualscripting@1.9.1
   testable: 0
   isDirectDependency: 1
-  version: 1.8.0
+  version: 1.9.1
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.8.0
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.visualscripting@1.9.1
   assetPath: Packages/com.unity.visualscripting
   name: com.unity.visualscripting
   displayName: Visual Scripting
@@ -2117,10 +2108,8 @@ m_ResolvedPackages:
     - 1.9.0
     - 1.9.1
     compatible:
-    - 1.8.0
-    - 1.9.0
     - 1.9.1
-    recommended: 1.8.0
+    recommended: 1.9.1
     deprecated:
     - 1.8.0-pre.1
   dependencies:
@@ -2148,16 +2137,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638060044680000000
+  datePublishedTicks: 638284821510000000
   documentationUrl: 
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.visualscripting.git
-    revision: 0de66378b19e990494d98f39ecc2b6aa5ac65351
+    revision: 5e78e9c354ed1567dbcea08e2bd9992e4a473cfb
     path: 
   unityLifecycle:
-    version: 1.8.0
+    version: 1.9.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -4065,12 +4054,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.burst@1.8.7
+- packageId: com.unity.burst@1.8.11
   testable: 0
   isDirectDependency: 0
-  version: 1.8.7
+  version: 1.8.11
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.burst@1.8.7
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.burst@1.8.11
   assetPath: Packages/com.unity.burst
   name: com.unity.burst
   displayName: Burst
@@ -4213,10 +4202,6 @@ m_ResolvedPackages:
     - 1.8.10
     - 1.8.11
     compatible:
-    - 1.8.7
-    - 1.8.8
-    - 1.8.9
-    - 1.8.10
     - 1.8.11
     recommended: 1.8.11
     deprecated: []
@@ -4237,16 +4222,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638221796120000000
+  datePublishedTicks: 638360965820000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: git@github.cds.internal.unity3d.com:unity/burst
-    revision: 47aa5e222ec0a9e94b78af0bb63021cf722ad06b
+    revision: 1d80ef69a5caadb47bb90e69e6fc822e3a334bd3
     path: 
   unityLifecycle:
-    version: 1.8.7
+    version: 1.8.11
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -4672,12 +4657,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.scriptablebuildpipeline@1.21.8
+- packageId: com.unity.scriptablebuildpipeline@1.21.21
   testable: 0
   isDirectDependency: 0
-  version: 1.21.8
+  version: 1.21.21
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.scriptablebuildpipeline@1.21.8
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.scriptablebuildpipeline@1.21.21
   assetPath: Packages/com.unity.scriptablebuildpipeline
   name: com.unity.scriptablebuildpipeline
   displayName: Scriptable Build Pipeline
@@ -4760,11 +4745,6 @@ m_ResolvedPackages:
     - 2.0.2
     - 2.1.0
     compatible:
-    - 1.21.5
-    - 1.21.7
-    - 1.21.8
-    - 1.21.9
-    - 1.21.20
     - 1.21.21
     - 2.0.1
     - 2.0.2
@@ -4790,16 +4770,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638271645570000000
+  datePublishedTicks: 638342531640000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.scriptablebuildpipeline@1.21/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/Addressables.git
-    revision: b6e4f321768265894baab72ca85cb8b8877ffbd4
+    revision: a981d4bc6c5de7a6a62ec3f63f3bdfc87ece371a
     path: 
   unityLifecycle:
-    version: 1.21.5
+    version: 1.21.21
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0

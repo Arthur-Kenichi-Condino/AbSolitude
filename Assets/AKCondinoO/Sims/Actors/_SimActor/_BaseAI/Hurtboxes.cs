@@ -28,6 +28,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
         }
         internal bool OnTakeDamage(SimWeapon fromWeapon){
          Log.DebugMessage("OnTakeDamage:fromWeapon:"+fromWeapon+";Hurtbox:"+this,actor);
+         //actor.OnHit(fromHitbox);
          return false;
         }
     }
