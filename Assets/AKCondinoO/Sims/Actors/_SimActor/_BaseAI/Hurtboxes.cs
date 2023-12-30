@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Inventory;
 using AKCondinoO.Sims.Weapons;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,20 @@ namespace AKCondinoO.Sims.Actors.Combat{
          return true;
         }
         internal bool OnTakeDamage(SimWeapon fromWeapon){
+         SimInventoryItem asInventoryItem=fromWeapon.asInventoryItem;
+         if(asInventoryItem!=null){
+          SimInventory container=asInventoryItem.container;
+          if(container!=null){
+           SimObject asSimObject=container.asSimObject;
+           if(asSimObject!=null){
+            Log.DebugMessage("weapon owner:"+asSimObject.name);
+            if(asSimObject==actor){
+             Log.DebugMessage("ignore damage from my own weapon");
+             return false;
+            }
+           }
+          }
+         }
          Log.DebugMessage("OnTakeDamage:fromWeapon:"+fromWeapon+";Hurtbox:"+this,actor);
          //actor.OnHit(fromHitbox);
          return false;

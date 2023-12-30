@@ -11,6 +11,7 @@ using static AKCondinoO.Sims.Actors.AnimationEventsHandler;
 namespace AKCondinoO.Sims.Weapons{
     internal class SimWeapon:SimObject{
      [SerializeField]internal float shootDis=900f;
+     [SerializeField]internal float gracePeriod=.01f;
      [SerializeField]internal Transform[]magazines;
      [SerializeField]internal Transform[]cartridges;
      [SerializeField]internal Transform[]bullets;
