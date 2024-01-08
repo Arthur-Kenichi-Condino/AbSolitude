@@ -28,6 +28,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
          return true;
         }
         internal bool OnTakeDamage(SimWeapon fromWeapon){
+         SimObject weaponActor=null;
          SimInventoryItem asInventoryItem=fromWeapon.asInventoryItem;
          if(asInventoryItem!=null){
           SimInventory container=asInventoryItem.container;
@@ -39,11 +40,16 @@ namespace AKCondinoO.Sims.Actors.Combat{
              Log.DebugMessage("ignore damage from my own weapon");
              return false;
             }
+            weaponActor=asSimObject;
            }
           }
          }
+         if(actor.weaponGracePeriod.ContainsKey(fromWeapon)){
+          return false;
+         }
+         actor.weaponGracePeriod.Add(fromWeapon,fromWeapon.gracePeriod);
          Log.DebugMessage("OnTakeDamage:fromWeapon:"+fromWeapon+";Hurtbox:"+this,actor);
-         //actor.OnHit(fromHitbox);
+         actor.OnHit(fromWeapon,this,weaponActor);
          return false;
         }
     }

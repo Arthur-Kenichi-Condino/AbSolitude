@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Weapons;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -104,6 +105,17 @@ namespace AKCondinoO.Sims{
                }
               }
               integrity-=damageFromSimObject;
+              stats.IntegritySet(integrity,simObject);
+              return integrity;
+             }
+             return 0f;
+            }
+            internal static float ProcessStatPhysicalDamageOn(SimObject simObject,SimWeapon fromSimWeapon){
+             var stats=simObject.stats;
+             if(stats!=null){
+              float integrity=stats.IntegrityGet(simObject);
+              //Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+              float damageFromSimWeapon=1f;
               stats.IntegritySet(integrity,simObject);
               return integrity;
              }

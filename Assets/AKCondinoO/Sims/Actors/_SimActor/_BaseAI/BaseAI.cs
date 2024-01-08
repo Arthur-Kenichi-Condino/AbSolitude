@@ -274,6 +274,7 @@ namespace AKCondinoO.Sims.Actors{
             }
            }
            UpdateHitboxesGracePeriod();
+           UpdateWeaponsGracePeriod();
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
