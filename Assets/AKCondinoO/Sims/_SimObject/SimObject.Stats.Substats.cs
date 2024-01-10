@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Weapons;
 using System.Collections;
 using System.Collections.Generic;
@@ -110,12 +111,14 @@ namespace AKCondinoO.Sims{
              }
              return 0f;
             }
-            internal static float ProcessStatPhysicalDamageOn(SimObject simObject,SimWeapon fromSimWeapon){
+            internal static float ProcessStatPhysicalDamageOn(SimObject simObject,Hurtboxes hurtbox,SimWeapon fromSimWeapon){
              var stats=simObject.stats;
              if(stats!=null){
               float integrity=stats.IntegrityGet(simObject);
               //Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
-              float damageFromSimWeapon=1f;
+              float maxIntegrity=stats.MaxIntegrityGet(simObject);
+              float damageFromSimWeapon=Mathf.Max(1f,hurtbox.bodyPartDamageMultiplierForFirearm*maxIntegrity);
+              integrity-=damageFromSimWeapon;
               stats.IntegritySet(integrity,simObject);
               return integrity;
              }

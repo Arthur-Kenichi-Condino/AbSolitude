@@ -196,11 +196,11 @@ namespace AKCondinoO.Sims.Actors{
          motionFlagForHitAnimation|=canSetMotionFlag;
          Log.DebugMessage("motionFlagForHitAnimation="+motionFlagForHitAnimation);
          if(canTakeDamage){
-          OnHitProcessStatDamageFrom(simWeapon,weaponActor);
+          OnHitProcessStatDamageFrom(simWeapon,hurtbox,weaponActor);
          }
         }
-        internal virtual void OnHitProcessStatDamageFrom(SimWeapon simWeapon,SimObject simObject=null){
-         float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,fromSimWeapon:simWeapon);
+        internal virtual void OnHitProcessStatDamageFrom(SimWeapon simWeapon,Hurtboxes hurtbox,SimObject simObject=null){
+         float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,hurtbox,fromSimWeapon:simWeapon);
          Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
