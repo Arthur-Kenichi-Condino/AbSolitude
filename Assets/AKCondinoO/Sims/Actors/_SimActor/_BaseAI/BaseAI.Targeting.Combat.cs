@@ -153,6 +153,7 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
+          OnDeath();
          }
         }
         internal override bool OnShotByWeapon(SimWeapon simWeapon,Hurtboxes hurtbox=null){
@@ -204,6 +205,7 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
+          OnDeath();
          }
         }
         protected virtual void ProcessOnHitGracePeriodSkillBuff(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag){
@@ -232,6 +234,11 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+        }
+     protected bool motionFlagForDeathAnimation=false;
+        protected override void OnDeath(){
+         Log.DebugMessage("OnDeath()");
+         motionFlagForDeathAnimation=true;
         }
     }
 }

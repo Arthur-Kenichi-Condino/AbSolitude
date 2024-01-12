@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_STAND_RIFLE =50,
          MOTION_MOVE_RIFLE  =51,
          MOTION_ATTACK_RIFLE=52,
+         MOTION_DEAD_RIFLE  =53,
          MOTION_HIT_RIFLE   =54,
         }
      protected ActorWeaponLayerMotion MyWeaponLayerMotion=ActorWeaponLayerMotion.NONE;internal ActorWeaponLayerMotion weaponLayerMotion{get{return MyWeaponLayerMotion;}}

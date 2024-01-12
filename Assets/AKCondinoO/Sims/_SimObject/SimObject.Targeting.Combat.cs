@@ -28,5 +28,7 @@ namespace AKCondinoO.Sims{
         internal virtual bool OnShotByWeapon(SimWeapon simWeapon,Hurtboxes hurtbox=null){
          return false;
         }
+        protected virtual void OnDeath(){
+        }
     }
 }

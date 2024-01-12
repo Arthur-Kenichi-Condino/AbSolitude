@@ -39,20 +39,29 @@ namespace AKCondinoO.Sims.Actors{
              }
          }
          //Log.DebugMessage("MyWeaponLayerMotion:"+MyWeaponLayerMotion);
-         if(motionFlagForHitAnimation){
+         if(motionFlagForDeathAnimation){
              ActorMotion lastMotion=MyMotion;
-             if(MyMotion!=ActorMotion.MOTION_HIT&&
-                MyMotion!=ActorMotion.MOTION_HIT_RIFLE
+             if(MyMotion!=ActorMotion.MOTION_DEAD&&
+                MyMotion!=ActorMotion.MOTION_DEAD_RIFLE
              ){
               if(MyWeaponType==WeaponTypes.SniperRifle){
-               MyMotion=ActorMotion.MOTION_HIT_RIFLE;
+               MyMotion=ActorMotion.MOTION_DEAD_RIFLE;
               }else{
-               MyMotion=ActorMotion.MOTION_HIT;
+               MyMotion=ActorMotion.MOTION_DEAD;
               }
              }
-             if(MyMotion==ActorMotion.MOTION_HIT||
-                MyMotion==ActorMotion.MOTION_HIT_RIFLE
+             if(MyMotion==ActorMotion.MOTION_DEAD||
+                MyMotion==ActorMotion.MOTION_DEAD_RIFLE
              ){
+              if(motionFlagForHitAnimation){
+               motionFlagForHitAnimation=false;
+                motionFlagForHitResetAnimation=false;
+              }
+              if(lastMotion==ActorMotion.MOTION_HIT||
+                 lastMotion==ActorMotion.MOTION_HIT_RIFLE
+              ){
+               OnMotionHitInterrupt();
+              }
               if(motionFlagForAttackAnimation){
                motionFlagForAttackAnimation=false;
               }
@@ -61,45 +70,71 @@ namespace AKCondinoO.Sims.Actors{
               ){
                OnMotionAttackInterrupt();
               }
-              OnMotionHitSet();
+              OnMotionDeadSet();
              }
          }else{
-             if(motionFlagForAttackAnimation){
-                 if(MyMotion!=ActorMotion.MOTION_ATTACK&&
-                    MyMotion!=ActorMotion.MOTION_ATTACK_RIFLE
+             if(motionFlagForHitAnimation){
+                 ActorMotion lastMotion=MyMotion;
+                 if(MyMotion!=ActorMotion.MOTION_HIT&&
+                    MyMotion!=ActorMotion.MOTION_HIT_RIFLE
                  ){
                   if(MyWeaponType==WeaponTypes.SniperRifle){
-                   MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
+                   MyMotion=ActorMotion.MOTION_HIT_RIFLE;
                   }else{
-                   MyMotion=ActorMotion.MOTION_ATTACK;
+                   MyMotion=ActorMotion.MOTION_HIT;
                   }
                  }
-                 if(MyMotion==ActorMotion.MOTION_ATTACK||
-                    MyMotion==ActorMotion.MOTION_ATTACK_RIFLE
+                 if(MyMotion==ActorMotion.MOTION_HIT||
+                    MyMotion==ActorMotion.MOTION_HIT_RIFLE
                  ){
-                  OnMotionAttackSet();
+                  if(motionFlagForAttackAnimation){
+                   motionFlagForAttackAnimation=false;
+                  }
+                  if(lastMotion==ActorMotion.MOTION_ATTACK||
+                     lastMotion==ActorMotion.MOTION_ATTACK_RIFLE
+                  ){
+                   OnMotionAttackInterrupt();
+                  }
+                  OnMotionHitSet();
                  }
              }else{
-                 if(
-                  (moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
-                  (
-                   (!fromAI)||
-                   (MyPathfinding!=PathfindingResult.REACHED&&
-                    MyPathfinding!=PathfindingResult.IDLE&&
-                    MyPathfinding!=PathfindingResult.TRAVELLING_BUT_NO_SPEED
-                   )
-                  )
-                 ){
-                     if(MyWeaponType==WeaponTypes.SniperRifle){
-                      MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
-                     }else{
-                      MyMotion=ActorMotion.MOTION_MOVE;
+                 if(motionFlagForAttackAnimation){
+                     if(MyMotion!=ActorMotion.MOTION_ATTACK&&
+                        MyMotion!=ActorMotion.MOTION_ATTACK_RIFLE
+                     ){
+                      if(MyWeaponType==WeaponTypes.SniperRifle){
+                       MyMotion=ActorMotion.MOTION_ATTACK_RIFLE;
+                      }else{
+                       MyMotion=ActorMotion.MOTION_ATTACK;
+                      }
+                     }
+                     if(MyMotion==ActorMotion.MOTION_ATTACK||
+                        MyMotion==ActorMotion.MOTION_ATTACK_RIFLE
+                     ){
+                      OnMotionAttackSet();
                      }
                  }else{
-                     if(MyWeaponType==WeaponTypes.SniperRifle){
-                      MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                     if(
+                      (moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
+                      (
+                       (!fromAI)||
+                       (MyPathfinding!=PathfindingResult.REACHED&&
+                        MyPathfinding!=PathfindingResult.IDLE&&
+                        MyPathfinding!=PathfindingResult.TRAVELLING_BUT_NO_SPEED
+                       )
+                      )
+                     ){
+                         if(MyWeaponType==WeaponTypes.SniperRifle){
+                          MyMotion=ActorMotion.MOTION_MOVE_RIFLE;
+                         }else{
+                          MyMotion=ActorMotion.MOTION_MOVE;
+                         }
                      }else{
-                      MyMotion=ActorMotion.MOTION_STAND;
+                         if(MyWeaponType==WeaponTypes.SniperRifle){
+                          MyMotion=ActorMotion.MOTION_STAND_RIFLE;
+                         }else{
+                          MyMotion=ActorMotion.MOTION_STAND;
+                         }
                      }
                  }
              }
@@ -247,6 +282,12 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnMotionHitAnimationEnd(){
          OnMotionShouldStopMovement(false);
+        }
+        protected virtual void OnMotionHitInterrupt(){
+         OnMotionShouldStopMovement(false);
+        }
+        protected virtual void OnMotionDeadSet(){
+         OnMotionShouldStopMovement(true);
         }
         protected virtual void OnMotionShouldStopMovement(bool stop){
          navMeshAgentShouldBeStopped=stop;
