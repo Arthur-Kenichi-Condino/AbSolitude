@@ -201,6 +201,7 @@ namespace AKCondinoO.Sims.Actors{
             }
            }else{
             if(!isUsingAI){
+             OnStartUsingAI();
              isUsingAI=true;
              AFKTimerToUseAI=0f;
              Log.DebugMessage("camera stopped following, use AI:"+this);
@@ -211,6 +212,7 @@ namespace AKCondinoO.Sims.Actors{
              AFKTimerToUseAI-=Time.deltaTime;
             }
             if(AFKTimerToUseAI<=0f){
+             OnStartUsingAI();
              isUsingAI=true;
              Log.DebugMessage("AFK for too long, use AI:"+this);
             }

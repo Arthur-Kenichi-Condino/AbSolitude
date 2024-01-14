@@ -30,5 +30,8 @@ namespace AKCondinoO.Sims{
         }
         protected virtual void OnDeath(){
         }
+        internal virtual bool IsDead(){
+         return false;
+        }
     }
 }

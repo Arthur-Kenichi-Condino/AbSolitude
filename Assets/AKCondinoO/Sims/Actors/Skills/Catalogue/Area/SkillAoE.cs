@@ -55,7 +55,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          enabled=true;
         }
         internal virtual void OnDeactivate(){
-         Log.DebugMessage("SkillAoE:OnDeactivate",this);
+         Log.DebugMessage("SkillAoE:OnDeactivate:timer:"+timer+";duration:"+duration,this);
          this.active=false;
          enabled=false;
          SkillAoEManager.singleton.Pool(this.GetType(),this);

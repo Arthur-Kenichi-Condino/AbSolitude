@@ -34,6 +34,9 @@ namespace AKCondinoO.Sims.Actors{
            return;
           }
          }
+         if(target.IsDead()){
+          return;
+         }
          if(MyAggressionMode==AggressionMode.AggressiveToAll){
           if(target is SimActor targetSimActor&&!target.IsMonster()){
            ApplyEnemyPriorityForThenAddTarget(target,GotTargetMode.Aggressively);

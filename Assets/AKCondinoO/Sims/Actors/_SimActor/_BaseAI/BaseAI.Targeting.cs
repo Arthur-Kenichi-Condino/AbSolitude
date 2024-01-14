@@ -78,6 +78,10 @@ namespace AKCondinoO.Sims.Actors{
              targetsToRemove.Add(id);
              continue;
             }
+            if(idTargetPair.Value.IsDead()){
+             targetsToRemove.Add(id);
+             continue;
+            }
             if(targetTimeouts[id]>=0f){
              targetTimeouts[id]-=Time.deltaTime;
              if(targetTimeouts[id]<=0f){

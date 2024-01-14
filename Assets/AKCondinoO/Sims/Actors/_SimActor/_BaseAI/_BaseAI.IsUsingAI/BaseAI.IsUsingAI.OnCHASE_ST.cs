@@ -97,6 +97,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
+     [SerializeField]internal QuaternionRotLerpHelper onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
      protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
      protected float onChaseRenewDestinationTimeInterval=4f;
      protected float onChaseRenewDestinationTimer=4f;
@@ -106,7 +107,7 @@ namespace AKCondinoO.Sims.Actors{
      protected bool onChaseGetDestGoLeft;
      protected bool onChaseGetDestGoRight;
      protected bool onChaseGetDestGoRandom;
-     protected int onChaseMaxCount=8;
+     protected int onChaseMaxCount=128;
      protected int onChaseCount;
      protected float onChaseTravelMaxTime=8f;
      protected float onChaseTravelTime;
@@ -217,6 +218,13 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }else{
+          if(characterController!=null){
+           Vector3 lookDir=MyEnemy.transform.position-transform.position;
+           Vector3 planarLookDir=lookDir;
+           planarLookDir.y=0f;
+           onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
+           characterController.character.transform.rotation=onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+          }
           onChaseTravelTime+=Time.deltaTime;
           if(onChaseTravelTime>=onChaseTravelMaxTime){
            onChaseTravelTime=0f;

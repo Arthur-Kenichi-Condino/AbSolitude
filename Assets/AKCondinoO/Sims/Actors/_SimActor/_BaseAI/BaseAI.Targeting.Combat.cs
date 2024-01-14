@@ -240,5 +240,13 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("OnDeath()");
          motionFlagForDeathAnimation=true;
         }
+        internal override bool IsDead(){
+         if(MyMotion==ActorMotion.MOTION_DEAD||
+            MyMotion==ActorMotion.MOTION_DEAD_RIFLE
+         ){
+          return true;
+         }
+         return false;
+        }
     }
 }
