@@ -37,13 +37,17 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(base.IsAvailable(target,useLevel)){
           //  do more tests here
           if(targetPos==null){
-           if(target!=null){
-            targetPos=target.transform.position;
-           }else{
+           if(target==null){
             return false;
            }
           }
-          if(Vector3.Distance(actor.transform.position,targetPos.Value)>range){
+          Vector3 testDisPos;
+          if(targetPos==null){
+           testDisPos=target.transform.position;
+          }else{
+           testDisPos=targetPos.Value;
+          }
+          if(Vector3.Distance(actor.transform.position,testDisPos)>range){
            return false;
           }
           if(!doing||!invoked){
@@ -62,6 +66,11 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
+          if(targetPos==null){
+           if(target!=null){
+            targetPos=target.transform.position;
+           }
+          }
           return true;
          }
          //  the skill cannot be used!
