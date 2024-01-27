@@ -39,6 +39,8 @@ namespace AKCondinoO.Sims.Actors{
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
+      internal Quaternion viewRotationRaw;
+      internal Quaternion viewRotationForAiming;
        internal Quaternion bodyRotation,lastBodyRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
@@ -63,6 +65,7 @@ namespace AKCondinoO.Sims.Actors{
           internal Vector3 moveDelta;
      internal Vector3 headOffset;
      internal Vector3 aimingAt;
+     internal Vector3 aimingAtRaw;
       [SerializeField]internal float aimAtMaxDistance=1000f;
         internal void ManualUpdate(){
          if(Enabled.WALK.curState){
@@ -87,6 +90,7 @@ namespace AKCondinoO.Sims.Actors{
           rotLerp.tgtRot=Quaternion.Euler(rotLerp.tgtRot.eulerAngles+inputViewRotationEuler);
           inputViewRotationEuler=Vector3.zero;
          }
+         viewRotationRaw=rotLerp.tgtRot;
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
          bodyRotation=lastBodyRotation=character.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
@@ -170,6 +174,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationRaw*Vector3.forward)*aimAtMaxDistance;
          aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
          OnReloadInput();
          OnAction2();

@@ -35,12 +35,12 @@ namespace AKCondinoO{
       internal bool hasTransformChanges{get;private set;}
      internal BaseAI toFollowActor;
       bool isFollowing;
-       internal Vector3 thirdPersonOffset=new Vector3(
-        .375f,//  radius+radius/2f
-        .75f,//  height/2f-radius/2f
-        -2.0f//  -radius*8f
+       [SerializeField]internal Vector3 thirdPersonOffset=new Vector3(
+        .82f,//  radius(?)+radius(?)/2f
+        .69f,//  height(?)/2f-radius(?)/2f
+        -1.47f//  -radius(?)*8f
        );
-       internal Vector3 overTheShoulderOffset=new Vector3(
+       [SerializeField]internal Vector3 overTheShoulderOffset=new Vector3(
         .375f,//  radius+radius/2f
         .75f,//  height/2f-radius/2f
         -.75f//  -radius*3f
@@ -55,13 +55,21 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
-          Quaternion rot=toFollowActor.characterController.rotLerp.tgtRot;
-          rotLerp.tgtRot=rot;
-          UpdateTransformRotation();
-          posLerp.tgtPos=toFollowActor.transform.position+rotLerp.tgtRot*thirdPersonOffset;
-          Vector3 onlyHeightOffsetTgtPos=toFollowActor.transform.position+rotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
-          //Debug.DrawLine(posLerp.tgtPos,onlyHeightOffsetTgtPos,Color.blue);
+          posRotLerp.tgtRot=toFollowActor.characterController.viewRotationRaw;
+          posRot=posRotLerp.UpdateRotation(posRot,Core.magicDeltaTimeNumber);
+          Vector3 v=toFollowActor.transform.position+posRot*thirdPersonOffset;
+          Vector3 onlyHeightOffsetTgtPos=toFollowActor.transform.position+posRot*new Vector3(0f,thirdPersonOffset.y,0f);
+          posLerp.tgtPos=v;
           UpdateTransformPosition();
+          Quaternion q=Quaternion.LookRotation((toFollowActor.characterController.aimingAtRaw-posLerp.tgtPos).normalized,posRotLerp.tgtRot*Vector3.up);
+          //Debug.DrawRay(posLerp.tgtPos,q*Vector3.forward*toFollowActor.characterController.aimAtMaxDistance,Color.red);
+          rotLerp.tgtRot=q;
+          UpdateTransformRotation();
+          //Log.DebugMessage("q forward:"+q*Vector3.forward+";rotLerp.tgtRot forward:"+rotLerp.tgtRot*Vector3.forward+";transform.forward:"+transform.forward);
+          //Log.DebugMessage("toFollowActor.characterController.aimingAt:"+toFollowActor.characterController.aimingAt);
+          //Debug.DrawLine(posLerp.tgtPos,onlyHeightOffsetTgtPos,Color.blue);
+          Debug.DrawLine(posLerp.tgtPos,posLerp.tgtPos+rotLerp.tgtRot*Vector3.forward*toFollowActor.characterController.aimAtMaxDistance,Color.red);
+          //Debug.DrawLine(toFollowActor.characterController.aimingAt,posLerp.tgtPos,Color.green);
           float disToActor=Vector3.Distance(transform.position,onlyHeightOffsetTgtPos);
           if(disToActor<=1f){
            Log.DebugMessage("camera is following too close to its target");
@@ -83,6 +91,8 @@ namespace AKCondinoO{
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
      [SerializeField]Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
+      [SerializeField]QuaternionRotLerpHelper posRotLerp=new QuaternionRotLerpHelper();
+       Quaternion posRot=Quaternion.identity;
       Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(.1f,.1f,.1f);
         [SerializeField]Vector3 maxMoveSpeed=new Vector3(1.0f,1.0f,1.0f);

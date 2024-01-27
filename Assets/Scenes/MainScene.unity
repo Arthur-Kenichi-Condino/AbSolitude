@@ -1600,10 +1600,6 @@ PrefabInstance:
       value: FixedUI
       objectReference: {fileID: 0}
     - target: {fileID: 8897539765222915657, guid: 1aecec1f497126e40ae9a46c4a478374, type: 3}
-      propertyPath: m_RootOrder
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 8897539765222915657, guid: 1aecec1f497126e40ae9a46c4a478374, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
