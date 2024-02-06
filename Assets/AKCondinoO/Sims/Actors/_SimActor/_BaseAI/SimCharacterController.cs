@@ -175,6 +175,22 @@ namespace AKCondinoO.Sims.Actors{
          afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
          aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationRaw*Vector3.forward)*aimAtMaxDistance;
+         Quaternion?isFollowingViewRotation=null;
+         if(MainCamera.singleton.isFollowing){
+          MainCamera.singleton.PredictCameraPosFollowing(character.transform,viewRotationRaw,out Vector3 predictCameraPos,out Quaternion predictCameraRot);
+          Vector3 cameraAimDir=(aimingAtRaw-predictCameraPos).normalized;
+          Ray cameraRay=new Ray(predictCameraPos,cameraAimDir);
+          if(Physics.Raycast(cameraRay,out RaycastHit cameraHitInfo,aimAtMaxDistance,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide)){
+           Vector3 predictCameraTarget=cameraHitInfo.point;
+           isFollowingViewRotation=Quaternion.LookRotation((predictCameraTarget-(character.transform.position+(character.transform.rotation*headOffset))).normalized,viewRotationRaw*Vector3.up);
+          }
+         }
+         if(isFollowingViewRotation!=null){
+          viewRotationForAiming=isFollowingViewRotation.Value;
+          Debug.DrawLine(character.transform.position+(character.transform.rotation*headOffset),character.transform.position+(character.transform.rotation*headOffset)+viewRotationForAiming*Vector3.forward*aimAtMaxDistance);
+         }else{
+          viewRotationForAiming=viewRotation;
+         }
          aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
          OnReloadInput();
          OnAction2();

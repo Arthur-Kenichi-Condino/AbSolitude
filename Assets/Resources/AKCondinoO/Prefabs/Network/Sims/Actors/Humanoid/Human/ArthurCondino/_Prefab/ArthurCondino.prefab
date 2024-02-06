@@ -107,7 +107,7 @@ MonoBehaviour:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 38
     tgtRotLerpMaxTime: 0.0005
-  doIdleMove: 1
+  doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
 --- !u!114 &-3747231846007095047

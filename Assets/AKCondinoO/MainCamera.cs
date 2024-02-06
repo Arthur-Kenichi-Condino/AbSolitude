@@ -34,7 +34,7 @@ namespace AKCondinoO{
      Vector3 endOfFramePosition;
       internal bool hasTransformChanges{get;private set;}
      internal BaseAI toFollowActor;
-      bool isFollowing;
+      internal bool isFollowing;
        [SerializeField]internal Vector3 thirdPersonOffset=new Vector3(
         .82f,//  radius(?)+radius(?)/2f
         .69f,//  height(?)/2f-radius(?)/2f
@@ -197,6 +197,15 @@ namespace AKCondinoO{
         }
         void UpdateTransformPosition(){
          transform.position=posLerp.UpdatePosition(transform.position,Core.magicDeltaTimeNumber);
+        }
+     QuaternionRotLerpHelper predictCameraPosFollowing_posRotLerp=new QuaternionRotLerpHelper();
+        internal void PredictCameraPosFollowing(Transform transform,Quaternion tgtRot,out Vector3 predictCameraPos,out Quaternion predictCameraRot){
+         predictCameraPosFollowing_posRotLerp.tgtRot=tgtRot;
+         Vector3 onlyHeightOffsetTgtPos=transform.position+predictCameraPosFollowing_posRotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
+         predictCameraPos=transform.position+(predictCameraPosFollowing_posRotLerp.tgtRot*thirdPersonOffset);
+         predictCameraRot=predictCameraPosFollowing_posRotLerp.tgtRot;
+        }
+        internal void PredictCameraTarget(){
         }
     }
 }
