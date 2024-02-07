@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors{
          if(animatorController.actor.characterController.isAiming){
           var characterController=animatorController.actor.characterController.character;
           var headOffset=animatorController.actor.characterController.headOffset;
-          var viewRotation=animatorController.actor.characterController.viewRotation;
+          var viewRotation=animatorController.actor.characterController.viewRotationForAiming;
           var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
           Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           headLookAtPositionLerp.tgtPos=aimAt;
@@ -68,7 +68,7 @@ namespace AKCondinoO.Sims.Actors{
            if(!animatorController.actor.navMeshAgent.enabled){
             Vector3 animHeadPos=animatorController.actor.GetHeadPosition(fromAnimator:true);
             Quaternion animBodyRot=animatorController.animator.transform.rotation;
-            Quaternion viewRot=animatorController.actor.characterController.viewRotation;
+            Quaternion viewRot=animatorController.actor.characterController.viewRotationForAiming;
             float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
             //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
             float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view

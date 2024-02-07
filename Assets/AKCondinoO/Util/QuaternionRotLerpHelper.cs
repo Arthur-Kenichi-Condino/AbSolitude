@@ -20,14 +20,22 @@ namespace AKCondinoO{
       }
       set{
        if(dealWithGimbalLock){
-         float horizontalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
          float   verticalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
-         //Log.DebugMessage("horizontalTgtRotationSignedAngle:"+horizontalTgtRotationSignedAngle+";verticalTgtRotationSignedAngle:"+verticalTgtRotationSignedAngle);
-         value=Quaternion.Euler(
+         Quaternion vRot=Quaternion.Euler(
           Math.Clamp(   verticalTgtRotationSignedAngle, -90f, 90f),
-          Math.Clamp(-horizontalTgtRotationSignedAngle,-180f,180f),
+          0f,
           0f
          );
+         float horizontalTgtRotationSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(value,Quaternion.LookRotation(Vector3.forward));
+         value=Quaternion.Euler(
+          0f,
+          Math.Clamp(-horizontalTgtRotationSignedAngle,-180f,180f),
+          0f
+         )*vRot;
+         //Log.DebugMessage("horizontalTgtRotationSignedAngle:"+horizontalTgtRotationSignedAngle+";verticalTgtRotationSignedAngle:"+verticalTgtRotationSignedAngle);
+       }
+       if(Mathf.Approximately(value.x+value.y+value.z+value.w,0f)){
+        value=Quaternion.identity;
        }
        tgtRot_value=value;
       }

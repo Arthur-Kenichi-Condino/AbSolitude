@@ -55,14 +55,21 @@ namespace AKCondinoO{
           }
          }
          if(isFollowing){
+          posRotLerp.dealWithGimbalLock=false;
           posRotLerp.tgtRot=toFollowActor.characterController.viewRotationRaw;
           posRot=posRotLerp.UpdateRotation(posRot,Core.magicDeltaTimeNumber);
           Vector3 v=toFollowActor.transform.position+posRot*thirdPersonOffset;
           Vector3 onlyHeightOffsetTgtPos=toFollowActor.transform.position+posRot*new Vector3(0f,thirdPersonOffset.y,0f);
           posLerp.tgtPos=v;
           UpdateTransformPosition();
+          float disToActor=Vector3.Distance(transform.position,onlyHeightOffsetTgtPos);
+          if(disToActor<=1f){
+           Log.DebugMessage("camera is following too close to its target");
+           transform.position=posLerp.EndPosition();
+          }
           Quaternion q=Quaternion.LookRotation((toFollowActor.characterController.aimingAtRaw-posLerp.tgtPos).normalized,posRotLerp.tgtRot*Vector3.up);
           //Debug.DrawRay(posLerp.tgtPos,q*Vector3.forward*toFollowActor.characterController.aimAtMaxDistance,Color.red);
+          rotLerp.dealWithGimbalLock=false;
           rotLerp.tgtRot=q;
           UpdateTransformRotation();
           //Log.DebugMessage("q forward:"+q*Vector3.forward+";rotLerp.tgtRot forward:"+rotLerp.tgtRot*Vector3.forward+";transform.forward:"+transform.forward);
@@ -70,11 +77,6 @@ namespace AKCondinoO{
           //Debug.DrawLine(posLerp.tgtPos,onlyHeightOffsetTgtPos,Color.blue);
           Debug.DrawLine(posLerp.tgtPos,posLerp.tgtPos+rotLerp.tgtRot*Vector3.forward*toFollowActor.characterController.aimAtMaxDistance,Color.red);
           //Debug.DrawLine(toFollowActor.characterController.aimingAt,posLerp.tgtPos,Color.green);
-          float disToActor=Vector3.Distance(transform.position,onlyHeightOffsetTgtPos);
-          if(disToActor<=1f){
-           Log.DebugMessage("camera is following too close to its target");
-           transform.position=posLerp.EndPosition();
-          }
           //  TO DO: stop following movement if paused
          }
          BGM.singleton.transform.position=this.transform.position;
@@ -178,6 +180,7 @@ namespace AKCondinoO{
                  }
              }
              if(inputViewRotationEuler!=Vector3.zero){
+              rotLerp.dealWithGimbalLock=true;
               rotLerp.tgtRot=Quaternion.Euler(rotLerp.tgtRot.eulerAngles+inputViewRotationEuler);
                 inputViewRotationEuler=Vector3.zero;
              }
