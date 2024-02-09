@@ -97,6 +97,7 @@ namespace AKCondinoO.Sims.Weapons{
             }
             if(actorHit!=null){
              actorHit.OnShotByWeapon(this,hurtbox);
+             break;
             }
            }
           }

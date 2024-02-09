@@ -53,6 +53,21 @@ namespace AKCondinoO.Sims.Actors{
           var viewRotation=animatorController.actor.characterController.viewRotationForAiming;
           var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
           Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          float disToTarget=aimAtMaxDistance;
+          if(animatorController.actor.characterController.predictCameraTarget!=null){
+           disToTarget=Vector3.Distance(characterController.transform.position+(characterController.transform.rotation*headOffset),animatorController.actor.characterController.predictCameraTarget.Value);
+          }
+          Vector3 from=animatorController.actor.characterController.character.transform.rotation*Vector3.forward;
+          Vector3 to=aimAt.normalized;
+          Quaternion viewRotationClamped=RotationHelper.Clamp(
+           viewRotation,
+           animatorController.actor.characterController.character.transform.rotation,
+           new Vector3(60f,60f,360f),
+           new Vector3(60f,60f,360f)
+          );
+          aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          from=animatorController.actor.characterController.character.transform.rotation*Vector3.forward;
+          to=aimAt.normalized;
           headLookAtPositionLerp.tgtPos=aimAt;
           if(!wasAiming){
            headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
@@ -129,8 +144,9 @@ namespace AKCondinoO.Sims.Actors{
            Quaternion leftFootIKRotationClamped;
            leftFootIKRotationClamped=RotationHelper.Clamp(
             leftFootIKRotation,
-            Quaternion.Euler(-5f,-180f,-5f),
-            Quaternion.Euler( 5f, 180f, 5f)
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
            );
            leftFootIKRotation=leftFootIKRotationClamped;
            Debug.DrawRay(leftFootIKPosition,leftFootIKRotation*-Vector3.right,Color.green);
@@ -152,8 +168,9 @@ namespace AKCondinoO.Sims.Actors{
            Quaternion rightFootIKRotationClamped;
            rightFootIKRotationClamped=RotationHelper.Clamp(
             rightFootIKRotation,
-            Quaternion.Euler(-15f,-180f,-15f),
-            Quaternion.Euler( 15f, 180f, 15f)
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
            );
            rightFootIKRotation=rightFootIKRotationClamped;
            Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);

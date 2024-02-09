@@ -25,6 +25,11 @@ namespace AKCondinoO.Sims.Actors{
          rotLerp.tgtRot=rotLerp.tgtRot_Last=character.transform.rotation;
          posLerp.tgtPos=posLerp.tgtPos_Last=character.transform.position;
          viewRotation=Quaternion.LookRotation(character.transform.forward,Vector3.up);
+         bodyRotation.eulerAngles=lastBodyRotation.eulerAngles=new Vector3(
+          0f,
+          viewRotation.eulerAngles.y,
+          0f
+         );
         }
      float delayToConsiderNotOnGround=.2f;
      internal bool isGrounded{
@@ -67,7 +72,9 @@ namespace AKCondinoO.Sims.Actors{
      internal Vector3 aimingAt;
      internal Vector3 aimingAtRaw;
       [SerializeField]internal float aimAtMaxDistance=1000f;
+     internal Vector3?predictCameraTarget=null;
         internal void ManualUpdate(){
+         predictCameraTarget=null;
          if(Enabled.WALK.curState){
           isRunningMoveSpeedMultiplierLerp.tgtVal=1f;
          }else{
@@ -94,14 +101,17 @@ namespace AKCondinoO.Sims.Actors{
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
          bodyRotation=lastBodyRotation=character.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
+          Vector3 viewEuler=viewRotation.eulerAngles;
+          Vector3 bodyEuler=bodyRotation.eulerAngles;
           if(
            Enabled.FORWARD .curState||
            Enabled.BACKWARD.curState||
            Enabled.RIGHT   .curState||
            Enabled.LEFT    .curState
           ){
-           Vector3 viewEuler=viewRotation.eulerAngles;
-           Vector3 bodyEuler=bodyRotation.eulerAngles;
+           RotateBodyToView();
+          }
+          void RotateBodyToView(){
            bodyRotation=Quaternion.Euler(bodyEuler.x,viewEuler.y,bodyEuler.z);
           }
          }
@@ -181,8 +191,8 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 cameraAimDir=(aimingAtRaw-predictCameraPos).normalized;
           Ray cameraRay=new Ray(predictCameraPos,cameraAimDir);
           if(Physics.Raycast(cameraRay,out RaycastHit cameraHitInfo,aimAtMaxDistance,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide)){
-           Vector3 predictCameraTarget=cameraHitInfo.point;
-           isFollowingViewRotation=Quaternion.LookRotation((predictCameraTarget-(character.transform.position+(character.transform.rotation*headOffset))).normalized,viewRotationRaw*Vector3.up);
+           predictCameraTarget=cameraHitInfo.point;
+           isFollowingViewRotation=Quaternion.LookRotation((predictCameraTarget.Value-(character.transform.position+(character.transform.rotation*headOffset))).normalized,viewRotationRaw*Vector3.up);
           }
          }
          if(isFollowingViewRotation!=null){
@@ -191,7 +201,7 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           viewRotationForAiming=viewRotation;
          }
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationForAiming*Vector3.forward)*aimAtMaxDistance;
          OnReloadInput();
          OnAction2();
          OnAction1();
