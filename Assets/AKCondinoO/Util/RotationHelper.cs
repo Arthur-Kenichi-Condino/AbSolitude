@@ -72,7 +72,7 @@ namespace AKCondinoO{
         }
         internal static Quaternion Clamp(Quaternion q,Quaternion relativeTo,Vector3 minAngleToQ,Vector3 maxAngleToQ){
          Log.DebugMessage("relativeToRot:"+relativeTo);
-         float signedAngleAroundXAxisToForwardQForward=SignedAngleFromRotationXComponentFromAToB(q,relativeTo);
+         float signedAngleAroundXAxisToForwardQForward=SignedAngleFromRotationXComponentFromAToB(relativeTo,q);
          Log.DebugMessage("signedAngleAroundXAxisToForwardQForwardRot:"+signedAngleAroundXAxisToForwardQForward);
          float angleAroundXAxisToForwardQForward=signedAngleAroundXAxisToForwardQForward;
          if(angleAroundXAxisToForwardQForward<-minAngleToQ.x){angleAroundXAxisToForwardQForward=-minAngleToQ.x;}
@@ -84,7 +84,7 @@ namespace AKCondinoO{
          if(angleAroundYAxisToForwardQForward<-minAngleToQ.y){angleAroundYAxisToForwardQForward=-minAngleToQ.y;}
          if(angleAroundYAxisToForwardQForward> maxAngleToQ.y){angleAroundYAxisToForwardQForward= maxAngleToQ.y;}
          Log.DebugMessage("angleAroundYAxisToForwardQForwardRot:"+angleAroundYAxisToForwardQForward);
-         Quaternion resultRot=relativeTo*Quaternion.Euler(angleAroundXAxisToForwardQForward,angleAroundYAxisToForwardQForward,0f);
+         Quaternion resultRot=relativeTo*Quaternion.Euler(-angleAroundXAxisToForwardQForward,angleAroundYAxisToForwardQForward,0f);
          Log.DebugMessage("resultRot:"+resultRot);
          return resultRot;
         }

@@ -52,22 +52,17 @@ namespace AKCondinoO.Sims.Actors{
           var headOffset=animatorController.actor.characterController.headOffset;
           var viewRotation=animatorController.actor.characterController.viewRotationForAiming;
           var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
-          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          Quaternion viewRotationClamped=RotationHelper.Clamp(
+           animatorController.actor.characterController.viewRotationForAiming,
+           animatorController.actor.characterController.viewRotation,
+           new Vector3(0f,45f,360f),
+           new Vector3(0f,45f,360f)
+          );
+          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           float disToTarget=aimAtMaxDistance;
           if(animatorController.actor.characterController.predictCameraTarget!=null){
            disToTarget=Vector3.Distance(characterController.transform.position+(characterController.transform.rotation*headOffset),animatorController.actor.characterController.predictCameraTarget.Value);
           }
-          Vector3 from=animatorController.actor.characterController.character.transform.rotation*Vector3.forward;
-          Vector3 to=aimAt.normalized;
-          Quaternion viewRotationClamped=RotationHelper.Clamp(
-           viewRotation,
-           animatorController.actor.characterController.character.transform.rotation,
-           new Vector3(60f,60f,360f),
-           new Vector3(60f,60f,360f)
-          );
-          aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
-          from=animatorController.actor.characterController.character.transform.rotation*Vector3.forward;
-          to=aimAt.normalized;
           headLookAtPositionLerp.tgtPos=aimAt;
           if(!wasAiming){
            headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
