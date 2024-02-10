@@ -71,21 +71,21 @@ namespace AKCondinoO{
          x,y,z
         }
         internal static Quaternion Clamp(Quaternion q,Quaternion relativeTo,Vector3 minAngleToQ,Vector3 maxAngleToQ){
-         Log.DebugMessage("relativeToRot:"+relativeTo);
+         //Log.DebugMessage("relativeToRot:"+relativeTo);
          float signedAngleAroundXAxisToForwardQForward=SignedAngleFromRotationXComponentFromAToB(relativeTo,q);
-         Log.DebugMessage("signedAngleAroundXAxisToForwardQForwardRot:"+signedAngleAroundXAxisToForwardQForward);
+         //Log.DebugMessage("signedAngleAroundXAxisToForwardQForwardRot:"+signedAngleAroundXAxisToForwardQForward);
          float angleAroundXAxisToForwardQForward=signedAngleAroundXAxisToForwardQForward;
          if(angleAroundXAxisToForwardQForward<-minAngleToQ.x){angleAroundXAxisToForwardQForward=-minAngleToQ.x;}
          if(angleAroundXAxisToForwardQForward> maxAngleToQ.x){angleAroundXAxisToForwardQForward= maxAngleToQ.x;}
-         Log.DebugMessage("angleAroundXAxisToForwardQForwardRot:"+angleAroundXAxisToForwardQForward);
+         //Log.DebugMessage("angleAroundXAxisToForwardQForwardRot:"+angleAroundXAxisToForwardQForward);
          float signedAngleAroundYAxisToForwardQForward=SignedAngleFromRotationYComponentFromAToB(relativeTo,q);
-         Log.DebugMessage("signedAngleAroundYAxisToForwardQForwardRot:"+signedAngleAroundYAxisToForwardQForward);
+         //Log.DebugMessage("signedAngleAroundYAxisToForwardQForwardRot:"+signedAngleAroundYAxisToForwardQForward);
          float angleAroundYAxisToForwardQForward=signedAngleAroundYAxisToForwardQForward;
          if(angleAroundYAxisToForwardQForward<-minAngleToQ.y){angleAroundYAxisToForwardQForward=-minAngleToQ.y;}
          if(angleAroundYAxisToForwardQForward> maxAngleToQ.y){angleAroundYAxisToForwardQForward= maxAngleToQ.y;}
-         Log.DebugMessage("angleAroundYAxisToForwardQForwardRot:"+angleAroundYAxisToForwardQForward);
+         //Log.DebugMessage("angleAroundYAxisToForwardQForwardRot:"+angleAroundYAxisToForwardQForward);
          Quaternion resultRot=relativeTo*Quaternion.Euler(-angleAroundXAxisToForwardQForward,angleAroundYAxisToForwardQForward,0f);
-         Log.DebugMessage("resultRot:"+resultRot);
+         //Log.DebugMessage("resultRot:"+resultRot);
          return resultRot;
         }
     }

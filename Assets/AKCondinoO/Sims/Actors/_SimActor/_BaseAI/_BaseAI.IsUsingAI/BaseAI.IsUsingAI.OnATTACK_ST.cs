@@ -167,54 +167,58 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(!IsTraversingPath()){
           if(onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid){
-           onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=false;
            OnATTACK_ST_Attack(true);
+           if(motionFlagForAttackAnimation){
+            onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=false;
+           }
           }else{
-           if(onAttackTargetsToAvoidWaitingRefreshFlag){
-            if(onAttackTargetsToAvoidRefreshFlag){
-             onAttackTargetsToAvoidWaitingRefreshFlag=false;
-             onAttackHasFriendlyTargetsToAvoidSubroutineMoves++;
-             if(onAttackHasFriendlyTargetsToAvoidSubroutineMoves%onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves==0){
-              OnATTACK_ST_DestModifiersNext();
+           if(!motionFlagForAttackAnimation){
+            if(onAttackTargetsToAvoidWaitingRefreshFlag){
+             if(onAttackTargetsToAvoidRefreshFlag){
+              onAttackTargetsToAvoidWaitingRefreshFlag=false;
+              onAttackHasFriendlyTargetsToAvoidSubroutineMoves++;
+              if(onAttackHasFriendlyTargetsToAvoidSubroutineMoves%onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves==0){
+               OnATTACK_ST_DestModifiersNext();
+              }
+              Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
+              float destAngle=0f;
+              for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
+               //Log.DebugMessage("OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
+               RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
+               SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
+               Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
+               dirFromAllyToEnemy.y=0f;
+               //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
+               Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
+               dirFromEnemyToMe.y=0f;
+               //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
+               float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
+               destAngle+=angle;
+              }
+              if(onAttackGetDestGoRandom){
+               destAngle*=math_random.CoinFlip()?-1f:1f;
+               destAngle+=(float)math_random.NextDouble(-90f,90f);
+              }else if(onAttackGetDestGoLeft){
+               destAngle=-Mathf.Abs(destAngle);
+               destAngle-=(float)math_random.NextDouble(0f,90f);
+              }else if(onAttackGetDestGoRight){
+               destAngle=Mathf.Abs(destAngle);
+               destAngle+=(float)math_random.NextDouble(0f,90f);
+              }
+              if(destAngle!=0f){
+               destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+               Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
+              }
+              Vector3 attackDistance=AttackDistance();
+              Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z*1.1f);
+              //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
+              MyDest=dest;
+              navMeshAgent.destination=MyDest;
+              onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
              }
-             Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
-             float destAngle=0f;
-             for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
-              //Log.DebugMessage("OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
-              RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
-              SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
-              Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
-              dirFromAllyToEnemy.y=0f;
-              //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
-              Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
-              dirFromEnemyToMe.y=0f;
-              //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
-              float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
-              destAngle+=angle;
-             }
-             if(onAttackGetDestGoRandom){
-              destAngle*=math_random.CoinFlip()?-1f:1f;
-              destAngle+=(float)math_random.NextDouble(-90f,90f);
-             }else if(onAttackGetDestGoLeft){
-              destAngle=-Mathf.Abs(destAngle);
-              destAngle-=(float)math_random.NextDouble(0f,90f);
-             }else if(onAttackGetDestGoRight){
-              destAngle=Mathf.Abs(destAngle);
-              destAngle+=(float)math_random.NextDouble(0f,90f);
-             }
-             if(destAngle!=0f){
-              destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-              Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
-             }
-             Vector3 attackDistance=AttackDistance();
-             Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z*1.1f);
-             //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
-             MyDest=dest;
-             navMeshAgent.destination=MyDest;
-             onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
+            }else{
+             onAttackTargetsToAvoidWaitingRefreshFlag=true;
             }
-           }else{
-            onAttackTargetsToAvoidWaitingRefreshFlag=true;
            }
           }
          }
@@ -263,7 +267,7 @@ namespace AKCondinoO.Sims.Actors{
            animatorPlanarLookEuler.z=0f;
            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
            //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-           if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=7f){
+           if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=1f){
             if(canAttack){
              DoAttackOnAnimationEvent();
             }
