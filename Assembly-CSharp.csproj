@@ -200,6 +200,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\TangentSpaceVisualizer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.GetV.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />

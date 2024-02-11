@@ -168,11 +168,11 @@ namespace AKCondinoO.Sims.Actors{
          if(!IsTraversingPath()){
           if(onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid){
            OnATTACK_ST_Attack(true);
-           if(motionFlagForAttackAnimation){
+           if(IsAttacking()){
             onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=false;
            }
           }else{
-           if(!motionFlagForAttackAnimation){
+           if(!IsAttacking()){
             if(onAttackTargetsToAvoidWaitingRefreshFlag){
              if(onAttackTargetsToAvoidRefreshFlag){
               onAttackTargetsToAvoidWaitingRefreshFlag=false;

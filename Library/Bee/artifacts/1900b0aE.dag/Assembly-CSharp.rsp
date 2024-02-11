@@ -505,6 +505,7 @@
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/AISensor.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/AutonomyCore.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.cs"
+"Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.GetV.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Inventory.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Inventory.HandsUsage.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Inventory.WeaponTypes.cs"
