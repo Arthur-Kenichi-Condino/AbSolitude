@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace AKCondinoO{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
+     internal BaseAI currentActiveSim=null;
      internal GameObject currentSelectedGameObject;
      internal bool isInputFieldSelected;
      internal bool isPointerOverUIElement;

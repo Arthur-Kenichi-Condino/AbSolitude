@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors;
 using AKCondinoO.UI.Fixed;
 using System;
 using System.Collections;
@@ -26,7 +27,12 @@ namespace AKCondinoO.UI.Context{
          panel.gameObject.SetActive(false);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("ContextMenu:OnDestroyingCoreEvent");
+         Log.DebugMessage("ContextMenuUI:OnDestroyingCoreEvent");
+        }
+     internal SimObject selectedSimObject=null;
+        public void OnSelectButtonPress(){
+         Log.DebugMessage("ContextMenuUI:OnSelectButtonPress");
+         selectedSimObject=contextSimObject;
         }
         void Update(){
          if(Cursor.lockState==CursorLockMode.Locked){
@@ -72,8 +78,10 @@ namespace AKCondinoO.UI.Context{
           panel.gameObject.SetActive(false);
          }
         }
+     internal SimObject contextSimObject=null;
         void Open(SimObject openFor){
          Log.DebugMessage("open panel for sim:"+openFor);
+         contextSimObject=openFor;
          Vector3 pos=ScreenInput.singleton.mouse;
          //Vector3[]v=null;
          //Vector2 size=panel.ActualSize2(ref v);

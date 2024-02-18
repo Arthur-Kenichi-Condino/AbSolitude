@@ -103,6 +103,13 @@ namespace AKCondinoO{
             DEBUG_STOP_FOLLOWING=false;
           OnStopFollowing();
          }
+         if(Enabled.TOGGLE_CAMERA_MODE.curState&&(Enabled.TOGGLE_CAMERA_MODE.curState!=Enabled.TOGGLE_CAMERA_MODE.lastState)){
+          Log.DebugMessage("TOGGLE_CAMERA_MODE");
+          if(toFollowActor!=null){
+           OnStopFollowing();
+          }else{
+          }
+         }
          if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
           if(toFollowActor==null){
            OnStopFollowing();
