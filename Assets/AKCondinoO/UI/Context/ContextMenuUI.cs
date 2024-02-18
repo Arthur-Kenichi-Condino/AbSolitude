@@ -30,9 +30,11 @@ namespace AKCondinoO.UI.Context{
          Log.DebugMessage("ContextMenuUI:OnDestroyingCoreEvent");
         }
      internal SimObject selectedSimObject=null;
+     bool selectButtonPressed;
         public void OnSelectButtonPress(){
          Log.DebugMessage("ContextMenuUI:OnSelectButtonPress");
          selectedSimObject=contextSimObject;
+         selectButtonPressed=true;
         }
         void Update(){
          if(Cursor.lockState==CursorLockMode.Locked){
@@ -67,11 +69,14 @@ namespace AKCondinoO.UI.Context{
             if(Enabled.ACTION_1.curState!=Enabled.ACTION_1.lastState){
              if(!ScreenInput.singleton.isPointerOverUIElement&&(ScreenInput.singleton.currentSelectedGameObject==null||ScreenInput.singleton.currentSelectedGameObject.transform.root!=this.transform.root)){
               Close();
+             }else if(selectButtonPressed){
+              Close();
              }
             }
            }
           }
          }
+         selectButtonPressed=false;
         }
         void Close(){
          if(panel.gameObject.activeSelf){
