@@ -20,6 +20,15 @@ namespace AKCondinoO.UI.Fixed{
         }
         public void OnEndEdit(){
          Log.DebugMessage("console:"+textInput.text);
+         if(textInput.text.StartsWith("DEBUG_STOP_FOLLOWING")){
+          var gO=GameObject.Find("Main Camera");
+          if(gO!=null){
+           var mainCamera=gO.GetComponentInChildren<MainCamera>();
+           if(mainCamera!=null){
+            mainCamera.DEBUG_STOP_FOLLOWING=true;
+           }
+          }
+         }
          inputField.text="";
         }
     }

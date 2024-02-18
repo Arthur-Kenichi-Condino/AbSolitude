@@ -127,7 +127,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
           //  TO DO: add neighbours that are dirty too
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData){
-          VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
+          VoxelSystem.Concurrent.waterFiles_rwl.EnterReadLock();
           try{
            string fileName=string.Format(CultureInfoUtil.en_US,VoxelWaterEditing.waterEditingFileFormat,VoxelWaterEditing.waterEditingPath,cCoord.x,cCoord.y);
            if(File.Exists(fileName)){
@@ -166,10 +166,10 @@ namespace AKCondinoO.Voxels.Water.Editing{
           }catch{
            throw;
           }finally{
-           VoxelSystem.Concurrent.waterFileData_rwl.ExitReadLock();
+           VoxelSystem.Concurrent.waterFiles_rwl.ExitReadLock();
           }
          }
-         VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
+         VoxelSystem.Concurrent.waterFiles_rwl.EnterWriteLock();
          try{
           //  salvar dados em arquivos
           foreach(var cCoordDataForSavingPair in dataForSavingToFile){
@@ -226,7 +226,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.waterFileData_rwl.ExitWriteLock();
+          VoxelSystem.Concurrent.waterFiles_rwl.ExitWriteLock();
          }
         }
     }

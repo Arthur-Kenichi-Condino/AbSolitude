@@ -19,6 +19,8 @@ namespace AKCondinoO.Sims.Actors{
               controller.animator.SetFloat("MOTION_MOVE_VELOCITY_STRAFE",disfiguringHomunculusAI.moveStrafeVelocityFlattened);
                controller.animator.SetFloat("MOTION_MOVE_TURN",disfiguringHomunculusAI.turnAngle);
              controller.animator.SetBool("MOTION_ATTACK",disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_ATTACK);
+             controller.animator.SetBool("MOTION_DEAD"  ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_DEAD  );
+             controller.animator.SetBool("MOTION_HIT"   ,disfiguringHomunculusAI.motion==BaseAI.ActorMotion.MOTION_HIT   );
          }
         }
     }

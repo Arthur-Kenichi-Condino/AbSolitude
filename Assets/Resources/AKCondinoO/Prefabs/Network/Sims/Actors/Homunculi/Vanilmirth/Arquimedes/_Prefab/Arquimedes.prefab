@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 907142613423581965}
+  - component: {fileID: -4738149446419429831}
   - component: {fileID: -4455510629419889334}
   - component: {fileID: 2273105198794575747}
   - component: {fileID: -2704640476733430876}
   - component: {fileID: 115391049882503325}
-  - component: {fileID: -4738149446419429831}
   m_Layer: 0
   m_Name: Arquimedes
   m_TagString: Untagged
@@ -35,9 +35,30 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6683752426998207080}
+  - {fileID: 2494143622066616246}
   - {fileID: 5699977945363918326}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4738149446419429831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065888385727663275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4134878887
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 1
+  AutoObjectParentSync: 0
 --- !u!114 &-4455510629419889334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,7 +81,7 @@ MonoBehaviour:
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 30
+  AFKTimeToUseAI: 5
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
@@ -74,11 +95,20 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 4
   pathfindingTimeout: 3
   pathPendingTimeout: 6
-  hitboxesPrefabs: {fileID: 0}
-  hurtboxesPrefabs: {fileID: 0}
+  MyAttackRange: {x: 0.45, y: 0.45, z: 1.25}
+  hitboxesPrefabs: {fileID: 4173842238774049089, guid: 16800c44b6c3fc44880fdc75a70aa0f5, type: 3}
+  hurtboxesPrefabs: {fileID: 4038989006948901071, guid: 9dc5281f352071a43a66aa62b7241d77, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 0
-  doIdleMove: 0
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
+  onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
+  doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
 --- !u!114 &2273105198794575747
@@ -175,26 +205,6 @@ NavMeshAgent:
   m_BaseOffset: 0.3775
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!114 &-4738149446419429831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065888385727663275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 1
-  AutoObjectParentSync: 0
 --- !u!1 &2270665923506917325
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,3 +294,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 907142613423581965}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: -90}
+--- !u!1001 &5867495714714653729
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 907142613423581965}
+    m_Modifications:
+    - target: {fileID: -4988789917063189567, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: zIsUp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 341367394087278572, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_Name
+      value: AISensor
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+--- !u!4 &2494143622066616246 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8354584312769127319, guid: 06c4ff6742db12a439405dd80b5a666d, type: 3}
+  m_PrefabInstance: {fileID: 5867495714714653729}
+  m_PrefabAsset: {fileID: 0}

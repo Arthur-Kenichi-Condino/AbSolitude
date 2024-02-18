@@ -232,7 +232,7 @@ namespace AKCondinoO.Sims{
                }
                if(masterId==null&&at.persistentData.masterId!=null){
                 masterId=at.persistentData.masterId;
-                Log.DebugMessage("persistentData masterId:"+masterId);
+                //Log.DebugMessage("persistentData masterId:"+masterId);
                }
                (Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null;
                if(toSpawn.asInventoryItemOwnerIds.TryGetValue(index,out var asInventoryItemOwnerIdValue)){
@@ -529,6 +529,9 @@ namespace AKCondinoO.Sims{
            }
           }
           foreach(var despawnAndReleaseId in SimObjectManager.singleton.despawningAndReleasingId){
+           if(despawnAndReleaseId.Value is SimActor simActor){
+            SimsMachine.singleton.OnActorDespawn(simActor);
+           }
            SimObjectManager.singleton.spawned.Remove(despawnAndReleaseId.Key);
            SimObjectManager.singleton.releasedIds[despawnAndReleaseId.Key.simObjectType].Add(despawnAndReleaseId.Key.idNumber);
            despawnAndReleaseId.Value.OnDespawned();

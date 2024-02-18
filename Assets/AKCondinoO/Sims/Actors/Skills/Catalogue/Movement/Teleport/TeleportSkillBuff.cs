@@ -8,7 +8,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal class TeleportSkillBuff:SkillBuff{
         internal TeleportSkillBuff():base(){
          Log.DebugMessage("TeleportEffect ctor");
-         teleportEffect=new TeleportEffect();
+         teleportEffect=new TeleportEffect(this);
         }
      internal TeleportEffect teleportEffect{
       get{
@@ -20,6 +20,8 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
      }
      internal Vector3 targetDest;
         internal class TeleportEffect:Effect{
+            internal TeleportEffect(SkillBuff buff):base(buff){
+            }
          internal SimObject target;
          internal Vector3 targetDest;
             internal override void Apply(SimObject.Stats stats){

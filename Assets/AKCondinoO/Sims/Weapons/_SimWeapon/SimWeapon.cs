@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors;
+using AKCondinoO.Sims.Actors.Combat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using static AKCondinoO.Sims.Actors.AnimationEventsHandler;
 namespace AKCondinoO.Sims.Weapons{
     internal class SimWeapon:SimObject{
      [SerializeField]internal float shootDis=900f;
+     [SerializeField]internal float gracePeriod=.01f;
      [SerializeField]internal Transform[]magazines;
      [SerializeField]internal Transform[]cartridges;
      [SerializeField]internal Transform[]bullets;
@@ -25,22 +27,44 @@ namespace AKCondinoO.Sims.Weapons{
          base.OnActivated();
          ammo=startingAmmo;
         }
+        internal bool TryStartReloadingAction(SimObject simAiming){
+         if(simAiming is BaseAI baseAI){
+          if(OnWillReloadChecks(out _)){
+           if(baseAI.DoReloadingOnAnimationEventUsingWeapon(this)){
+            return true;
+           }
+          }
+         }
+         return false;
+        }
      [SerializeField]internal float startingAmmo=0f;
      internal float ammo=0f;
       [SerializeField]internal float ammoPerMagazine=0f;
        internal float ammoLoaded=0f;
-        internal bool Reload(){
-         float ammoToLoad=ammoPerMagazine-ammoLoaded;
+        internal bool OnWillReloadChecks(out float ammoToLoad){
+         ammoToLoad=ammoPerMagazine-ammoLoaded;
          if(ammoToLoad>0f){
-          Log.DebugMessage("ammoToLoad:"+ammoToLoad);
           ammoToLoad=Math.Min(ammoToLoad,ammo);
           if(ammoToLoad>0f){
-           Log.DebugMessage("reloading ammo:"+ammoToLoad);
-           ammoLoaded=ammoToLoad;
-           ammo-=ammoToLoad;
-           Log.DebugMessage("remaining ammo:"+ammo);
+           Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
            return true;
           }
+         }
+         ammoToLoad=0f;
+         return false;
+        }
+        internal void OnReload(SimObject simAiming){
+         if(simAiming is BaseAI baseAI&&baseAI.characterController!=null){
+          baseAI.characterController.OnReloadEvent();
+         }
+        }
+        internal bool Reload(SimObject simAiming){
+         if(OnWillReloadChecks(out float ammoToLoad)){
+          Log.DebugMessage("reloading ammo:"+ammoToLoad);
+          ammoLoaded=ammoToLoad;
+          ammo-=ammoToLoad;
+          Log.DebugMessage("remaining ammo:"+ammo);
+          return true;
          }
          return false;
         }
@@ -60,6 +84,21 @@ namespace AKCondinoO.Sims.Weapons{
            for(int i=0;i<shootHitsLength;++i){
             RaycastHit shootHit=shootHits[i];
             Log.DebugMessage("shootHit:"+shootHit.collider.name+",of:"+shootHit.collider.transform.root.name);
+            GameObject colliderGameObject=shootHit.collider.gameObject;
+            SimObject simObjectHit=null;
+            BaseAI actorHit=null;
+            Hurtboxes hurtbox=null;
+            if(LayerMask.LayerToName(colliderGameObject.layer)=="Hurtbox"){
+             Log.DebugMessage("shootHit:layer:Hurtbox");
+             hurtbox=colliderGameObject.GetComponent<Hurtboxes>();
+             if(hurtbox!=null){
+              simObjectHit=actorHit=hurtbox.actor;
+             }
+            }
+            if(actorHit!=null){
+             actorHit.OnShotByWeapon(this,hurtbox);
+             break;
+            }
            }
           }
           if(simWeaponVisualEffect!=null){
@@ -72,7 +111,7 @@ namespace AKCondinoO.Sims.Weapons{
           }
          }
         }
-        internal void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
+        internal virtual void OnShootGetHits(SimObject holder,ref RaycastHit[]shootHits,out int shootHitsLength){
          shootHitsLength=0;
          if(muzzle!=null){
           if(holder is BaseAI actor&&actor.characterController!=null){
@@ -102,7 +141,7 @@ namespace AKCondinoO.Sims.Weapons{
           }
          }
         }
-        private int ShootGetHitsArraySortComparer(RaycastHit a,RaycastHit b){//  ordena 'a' relativo a 'b'
+        private int ShootGetHitsArraySortComparer(RaycastHit a,RaycastHit b){//  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
          if(a.collider==null&&b.collider==null){
           return 0;
          }

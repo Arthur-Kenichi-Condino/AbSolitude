@@ -9,9 +9,8 @@ using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimCharacterController{
-     internal readonly HashSet<SimWeapon>weaponsReload=new HashSet<SimWeapon>();
-        internal void OnReload(){
-         weaponsReload.Clear();
+     internal readonly HashSet<SimWeapon>weaponsReloading=new HashSet<SimWeapon>();
+        internal void OnReloadInput(){
          if(Enabled.RELOAD.curState){
           if(actor is BaseAI baseAI){
            if(actor.inventory.TryGetValue(typeof(SimHands),out Dictionary<ulong,SimInventory>simHandsInventories)){
@@ -20,8 +19,8 @@ namespace AKCondinoO.Sims.Actors{
               foreach(SimInventoryItem item in simHandsInventory.items){
                if(item.simObject!=null){
                 if(item.simObject is SimWeapon weapon){
-                 if(weapon.Reload()){
-                  weaponsReload.Add(weapon);
+                 if(weapon.TryStartReloadingAction(simAiming:actor)){
+                  weaponsReloading.Add(weapon);
                  }
                 }
                }
@@ -31,6 +30,12 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+        }
+        internal void OnReloadEvent(){
+         foreach(var weapon in weaponsReloading){
+          weapon.Reload(simAiming:actor);
+         }
+         weaponsReloading.Clear();
         }
     }
 }

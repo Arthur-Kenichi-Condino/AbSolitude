@@ -11,9 +11,10 @@ namespace AKCondinoO.Sims.Actors{
      protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
         internal enum GotTargetMode:int{
          FromMaster=0,
-         FromFriends=1,
-         Defensively=2,
-         Aggressively=3,
+         FromSlave=1,
+         FromFriends=2,
+         Defensively=3,
+         Aggressively=4,
         }
         internal enum EnemyPriority:int{
          High=0,
@@ -74,6 +75,10 @@ namespace AKCondinoO.Sims.Actors{
            foreach(var idTargetPair in targetsByPriority.Value){
             (Type simType,ulong number)id=idTargetPair.Key;
             if(idTargetPair.Value==null||idTargetPair.Value.id==null||idTargetPair.Value.id.Value!=id){
+             targetsToRemove.Add(id);
+             continue;
+            }
+            if(idTargetPair.Value.IsDead()){
              targetsToRemove.Add(id);
              continue;
             }

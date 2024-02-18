@@ -15,6 +15,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          if(!activeBuffs.TryGetValue(buffType,out List<SkillBuff>skillBuffsList)){
           activeBuffs.Add(buffType,skillBuffsList=new List<SkillBuff>());
          }
+         skillBuff.level=fromSkill.useLevel;
          skillBuff.skill=fromSkill;
          skillBuff.applyingEffectsOn=this;
          skillBuffsList.Add(skillBuff);

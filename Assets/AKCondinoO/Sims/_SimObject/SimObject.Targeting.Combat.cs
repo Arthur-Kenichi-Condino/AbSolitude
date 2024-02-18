@@ -1,8 +1,10 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
+using AKCondinoO.Sims.Weapons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +20,17 @@ namespace AKCondinoO.Sims{
          return false;
         }
         internal virtual bool IsMonster(){
+         return false;
+        }
+        internal virtual bool IsFriendlyTo(SimObject sim){
+         return false;
+        }
+        internal virtual bool OnShotByWeapon(SimWeapon simWeapon,Hurtboxes hurtbox=null){
+         return false;
+        }
+        protected virtual void OnDeath(){
+        }
+        internal virtual bool IsDead(){
          return false;
         }
     }

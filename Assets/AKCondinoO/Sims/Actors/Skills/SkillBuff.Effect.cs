@@ -8,6 +8,11 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal partial class SkillBuff{
      protected Effect effect;
         internal abstract class Effect{
+         internal SkillBuff buff;
+            internal Effect(SkillBuff buff){
+             this.buff=buff;
+            }
+         internal SimObject target;
             internal abstract void Apply(SimObject.Stats stats);
             internal abstract bool ApplyRepeating(SimObject.Stats stats);
             internal abstract void Unapply(SimObject.Stats stats);

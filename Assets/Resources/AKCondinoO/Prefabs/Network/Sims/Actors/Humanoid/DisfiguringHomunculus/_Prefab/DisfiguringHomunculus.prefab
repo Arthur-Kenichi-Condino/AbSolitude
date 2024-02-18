@@ -119,7 +119,7 @@ MonoBehaviour:
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 30
+  AFKTimeToUseAI: 5
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
@@ -133,10 +133,15 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 1.5
   pathfindingTimeout: 3
   pathPendingTimeout: 6
+  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
-  hurtboxesPrefabs: {fileID: 0}
+  hurtboxesPrefabs: {fileID: 5174956497298777513, guid: a78bf211ae2cf5c4688024ffd00ea111, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 2
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
@@ -185,12 +190,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments:
   - motion: 2
     adjustment: {fileID: 2850720430510664476}
   rotLerp:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 9
+    tgtRotLerpSpeed: 76
     tgtRotLerpMaxTime: 0.25
   posLerp:
     xLerp:
@@ -279,13 +285,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9030681807711954987}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.35110638, z: 0, w: 0.93633556}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2391910679848875198}
-  m_LocalEulerAnglesHint: {x: 0, y: -41.11, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &979205220679500051
 PrefabInstance:
   m_ObjectHideFlags: 0

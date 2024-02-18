@@ -12,6 +12,8 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class PositionChangeSkill:Skill{
      internal Vector3 targetDest;
+     internal bool useRandom=true;
+     internal float randomMaxDis=8f;
         //  [https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html]
         protected static bool GetRandomPositionFor(SimObject simObject,Vector3 center,float maxDis,out Vector3 result){
          if(simObject is BaseAI actor){

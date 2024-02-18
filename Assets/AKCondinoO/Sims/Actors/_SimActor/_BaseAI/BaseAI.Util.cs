@@ -9,6 +9,15 @@ using UnityEngine.AI;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        internal override Quaternion GetRotation(){
+         if(simUMA!=null){
+          return simUMA.transform.rotation;
+         }
+         if(animatorController!=null&&animatorController.animator!=null){
+          return animatorController.animator.transform.rotation;
+         }
+         return base.GetRotation();
+        }
         protected float GetDistance((Type simObjectType,ulong idNumber)?idA,(Type simObjectType,ulong idNumber)?idB){
          if(idA!=null&&
             idB!=null

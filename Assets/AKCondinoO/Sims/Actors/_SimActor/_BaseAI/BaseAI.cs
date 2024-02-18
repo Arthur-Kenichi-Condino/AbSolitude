@@ -20,6 +20,9 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
+    ///  [https://www.youtube.com/watch?v=t9e2XBQY4Og]
+    ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
+    ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     internal partial class BaseAI:SimActor{
      internal SimCharacterController characterController;
       internal float height;
@@ -67,11 +70,14 @@ namespace AKCondinoO.Sims.Actors{
         }
      internal readonly Dictionary<Type,SkillData>requiredSkills=new Dictionary<Type,SkillData>();
       internal readonly Dictionary<Type,Skill>skills=new Dictionary<Type,Skill>();
+       internal readonly HashSet<Skill>passiveSkills=new HashSet<Skill>();
+        protected bool isAllPassiveSkillsInEffectFlag;
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
          requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
+         requiredSkills.Add(typeof(Teleport        ),new SkillData(){skill=typeof(Teleport        ),level=1 ,});
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
@@ -82,6 +88,9 @@ namespace AKCondinoO.Sims.Actors{
           }
           (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(skillData.skill,skillData.level,this);
           skills.Add(skillData.skill,spawnedSkill.skill);
+          if(spawnedSkill.skill is PassiveSkill passiveSkill){
+           passiveSkills.Add(passiveSkill);
+          }
          }
          foreach(var skill in skills){
           if(requiredSkills.TryGetValue(skill.Key,out SkillData requiredSkill)){
@@ -100,6 +109,9 @@ namespace AKCondinoO.Sims.Actors{
            }
            (GameObject skillGameObject,Skill skill)spawnedSkill=SkillsManager.singleton.SpawnSkillGameObject(requiredSkill.Key,requiredSkill.Value.level,this);
            skills.Add(requiredSkill.Key,spawnedSkill.skill);
+           if(spawnedSkill.skill is PassiveSkill passiveSkill){
+            passiveSkills.Add(passiveSkill);
+           }
           }
          }
          requiredSkills.Clear();
@@ -119,6 +131,10 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
          lastForward=transform.forward;
          OnResetMotion();
+         if(onAttackGetDataCoroutine!=null){
+          StopCoroutine(onAttackGetDataCoroutine);onAttackGetDataCoroutine=null;
+         }
+         onAttackGetDataCoroutine=StartCoroutine(OnAttackGetDataCoroutine());
          if(onChaseGetDataCoroutine!=null){
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }
@@ -128,8 +144,12 @@ namespace AKCondinoO.Sims.Actors{
            animatorController.animationEventsHandler.CancelAllEvents();
           }
          }
+         isAllPassiveSkillsInEffectFlag=false;
         }
         internal override void OnDeactivated(){
+         if(characterController!=null){
+          characterController.weaponsReloading.Clear();
+         }
          if(onChaseGetDataCoroutine!=null){
           StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
          }
@@ -141,6 +161,7 @@ namespace AKCondinoO.Sims.Actors{
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
          skills.Clear();//  to do: pool skills before clearing the list
+         passiveSkills.Clear();
          base.OnDeactivated();
          ReleaseTargets();
         }
@@ -155,7 +176,7 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
      [SerializeField]bool        DEBUG_TOGGLE_HOLSTER_WEAPON=false;
      [SerializeField]WeaponTypes DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE=WeaponTypes.SniperRifle;
-     [SerializeField]float AFKTimeToUseAI=30f;
+     [SerializeField]float AFKTimeToUseAI=5f;
       float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
         internal override int ManualUpdate(bool doValidationChecks){
@@ -180,6 +201,7 @@ namespace AKCondinoO.Sims.Actors{
             }
            }else{
             if(!isUsingAI){
+             OnStartUsingAI();
              isUsingAI=true;
              AFKTimerToUseAI=0f;
              Log.DebugMessage("camera stopped following, use AI:"+this);
@@ -190,6 +212,7 @@ namespace AKCondinoO.Sims.Actors{
              AFKTimerToUseAI-=Time.deltaTime;
             }
             if(AFKTimerToUseAI<=0f){
+             OnStartUsingAI();
              isUsingAI=true;
              Log.DebugMessage("AFK for too long, use AI:"+this);
             }
@@ -223,9 +246,15 @@ namespace AKCondinoO.Sims.Actors{
                 aiSensor.transform.position=rightEye.transform.position;
                 aiSensor.transform.rotation=rightEye.transform.rotation;
                }
+               if(aiSensor.zIsUp){
+                aiSensor.transform.rotation*=(Quaternion.Euler(90f,0f,0f)*Quaternion.Euler(0f,180f,0f));
+               }
               }else if(leftEye){
                aiSensor.transform.position=leftEye.transform.position;
                aiSensor.transform.rotation=leftEye.transform.rotation;
+               if(aiSensor.zIsUp){
+                aiSensor.transform.rotation*=(Quaternion.Euler(90f,0f,0f)*Quaternion.Euler(0f,180f,0f));
+               }
               }else if(head){
                if(aiSensor.zIsUp){
                 aiSensor.transform.position=head.transform.position;
@@ -238,7 +267,16 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
            }
+           if(!isAllPassiveSkillsInEffectFlag){
+            isAllPassiveSkillsInEffectFlag=true;
+            foreach(PassiveSkill passiveSkill in passiveSkills){
+             if(!passiveSkill.DoSkillImmediate(this,passiveSkill.level)&&!passiveSkill.doing){
+              isAllPassiveSkillsInEffectFlag=false;
+             }
+            }
+           }
            UpdateHitboxesGracePeriod();
+           UpdateWeaponsGracePeriod();
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
@@ -246,6 +284,7 @@ namespace AKCondinoO.Sims.Actors{
             }
             if(navMeshAgent.enabled){
              if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
+              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
               navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
              }
              AI();

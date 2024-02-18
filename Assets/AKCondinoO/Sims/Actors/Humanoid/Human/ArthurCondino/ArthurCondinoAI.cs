@@ -18,6 +18,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          requiredSkills.Clear();
          requiredSkills.Add(typeof(GenerateHomunculus),new SkillData(){skill=typeof(GenerateHomunculus),level=10,});
          requiredSkills.Add(typeof(CallHomunculus    ),new SkillData(){skill=typeof(CallHomunculus    ),level=10,});
+         requiredSkills.Add(typeof(AbSolitude        ),new SkillData(){skill=typeof(AbSolitude        ),level=10,});
          requiredSlaves.Clear();
          requiredSlaves.Add(typeof(ArquimedesAI),
           new List<SlaveData>(){
@@ -26,8 +27,8 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
          );
          base.OnActivated();
         }
-        protected override void OnIDLE_ST(){
-         base.OnIDLE_ST();
+        protected override void OnIDLE_ST_Routine(){
+         base.OnIDLE_ST_Routine();
         }
         #if UNITY_EDITOR
             protected override void OnDrawGizmos(){

@@ -4,3 +4,5 @@ Z Up
 
 Z Primary Bone Axis
 -X Secondary Bone Axis
+
+.1 Scale

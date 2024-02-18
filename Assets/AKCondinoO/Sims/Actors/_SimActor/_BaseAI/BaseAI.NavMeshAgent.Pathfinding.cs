@@ -2,21 +2,24 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO.Sims.Actors {
     internal partial class BaseAI{
      protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
         internal enum PathfindingResult:int{
-         IDLE                   =0,
-         REACHED                =1,
-         PENDING                =2,
-         TRAVELLING             =3,
-         TRAVELLING_BUT_NO_SPEED=4,
-         TIMEOUT                =5,
+         IDLE                      =0,
+         REACHED                   =1,
+         PENDING                   =2,
+         TRAVELLING                =3,
+         TRAVELLING_BUT_NO_SPEED   =4,
+         TRAVELLING_BUT_UNREACHABLE=5,
+         TIMEOUT                   =6,
+         UNREACHABLE               =7,
         }
      [SerializeField]protected float pathfindingTimeout=3f;
       protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=6f;
+      [SerializeField]protected float pathPendingTimeout=4f;
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
@@ -60,12 +63,20 @@ namespace AKCondinoO.Sims.Actors {
            return PathfindingResult.TIMEOUT;
           }
          }
+         if(navMeshAgent.hasPath){
+          if(navMeshAgent.pathStatus==NavMeshPathStatus.PathInvalid){
+           return PathfindingResult.UNREACHABLE;
+          }
+         }
          if(navMeshAgent.remainingDistance>navMeshAgent.stoppingDistance){
           if(pathfindingTimer<=0f){
              pathfindingTimer=pathfindingTimeout;
           }
           if(Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
            return PathfindingResult.TRAVELLING_BUT_NO_SPEED;
+          }
+          if(navMeshAgent.pathStatus==NavMeshPathStatus.PathPartial){
+           return PathfindingResult.TRAVELLING_BUT_UNREACHABLE;
           }
           return PathfindingResult.TRAVELLING;
          }
@@ -76,7 +87,8 @@ namespace AKCondinoO.Sims.Actors {
          return!(
           MyPathfinding==PathfindingResult.IDLE||
           MyPathfinding==PathfindingResult.REACHED||
-          MyPathfinding==PathfindingResult.TIMEOUT
+          MyPathfinding==PathfindingResult.TIMEOUT||
+          MyPathfinding==PathfindingResult.UNREACHABLE
          );
         }
     }

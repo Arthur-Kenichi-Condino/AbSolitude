@@ -14,18 +14,27 @@ namespace AKCondinoO.Sims.Actors.Skills{
          OnTookDamage,
          OnIdle,
         }
+     protected float castDelay_value=1.0f;
      /// <summary>
      ///  After-cast Delay
      /// </summary>
-     internal float castDelay{
-      get{
-       return castDelay_value;
+      internal float castDelay{
+       get{
+        return castDelay_value;
+       }
+       set{
+        castDelay_value=value;
+       }
       }
-      set{
-       castDelay_value=value;
+     protected float range_value=50.0f;
+      internal float range{
+       get{
+        return range_value;
+       }
+       set{
+        range_value=value;
+       }
       }
-     }
-     protected float castDelay_value=1.0f;
      internal LinkedListNode<Skill>pooled=null;
      internal BaseAI actor;
      internal int level=1;
@@ -37,7 +46,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          cooldown=0f;
         }
      internal bool doing;
-      internal int useLevel;
+      internal int useLevel=1;
       internal SimObject target;
       internal bool invoked;
       internal bool revoked;

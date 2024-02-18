@@ -12,7 +12,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
     internal class OnHitGracePeriod:OnHitSkill{
      [SerializeField]internal float vulnerabilityDuration=2f;
       [SerializeField]internal float gracePeriodForResetAnimation=.2f;
-       [SerializeField]internal float gracePeriod=5f;
+       [SerializeField]internal float gracePeriod=6f;
         internal override bool DoSkill(SimObject target,int useLevel){
          if(base.DoSkill(target,useLevel)){
           return true;
@@ -26,7 +26,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(target.skillBuffs.Contains(typeof(OnHitGracePeriodSkillBuff),out List<SkillBuff>activeOnHitGracePeriodSkillBuffs)){
           Log.DebugMessage("OnHitGracePeriod:containsBuff=true");
           SkillBuff buff=activeOnHitGracePeriodSkillBuffs[0];
-          buff.duration=buff.elapsedTime+vulnerabilityDuration+gracePeriod;
+          buff.duration=buff.elapsedTime+(vulnerabilityDuration+gracePeriod)*2f;
           containsBuff=true;
          }
          if(!containsBuff){
@@ -36,7 +36,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
            onHitGracePeriodSkillBuff.vulnerabilityDuration=vulnerabilityDuration;
             onHitGracePeriodSkillBuff.gracePeriodForResetAnimation=gracePeriodForResetAnimation;
              onHitGracePeriodSkillBuff.gracePeriod=gracePeriod;
-           buff.duration=vulnerabilityDuration+gracePeriod;
+           buff.duration=(vulnerabilityDuration+gracePeriod)*2f;
            buff.delay=0f;
            target.skillBuffs.Add(buff,this);
            Log.DebugMessage("OnHitGracePeriod:added buff");

@@ -30,7 +30,6 @@ namespace AKCondinoO.UI{
           }
           if(!netManagerInitialized){
            Log.DebugMessage("initialize netManager");
-           toRemove.Clear();
            toRemove.AddRange(netManager.NetworkConfig.Prefabs.Prefabs);
            foreach(NetworkPrefab networkPrefab in toRemove){
             netManager.NetworkConfig.Prefabs.Remove(networkPrefab);

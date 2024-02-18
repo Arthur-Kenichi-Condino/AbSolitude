@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Combat{
     /// <summary>
+    ///  [https://www.youtube.com/watch?v=t9e2XBQY4Og]
+    ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     /// </summary>
     internal class AISensor:MonoBehaviour{
@@ -131,6 +133,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
      internal readonly Dictionary<SimObject,int>gotInSightOf=new Dictionary<SimObject,int>();
      internal readonly HashSet<Collider>simObjectCollidersInSight=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
+         //Log.DebugMessage("OnTriggerEnter:other:"+other,other);
          if(!Core.singleton.isServer){
           return;
          }

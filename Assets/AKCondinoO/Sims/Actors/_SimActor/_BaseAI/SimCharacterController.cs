@@ -25,6 +25,11 @@ namespace AKCondinoO.Sims.Actors{
          rotLerp.tgtRot=rotLerp.tgtRot_Last=character.transform.rotation;
          posLerp.tgtPos=posLerp.tgtPos_Last=character.transform.position;
          viewRotation=Quaternion.LookRotation(character.transform.forward,Vector3.up);
+         bodyRotation.eulerAngles=lastBodyRotation.eulerAngles=new Vector3(
+          0f,
+          viewRotation.eulerAngles.y,
+          0f
+         );
         }
      float delayToConsiderNotOnGround=.2f;
      internal bool isGrounded{
@@ -39,6 +44,8 @@ namespace AKCondinoO.Sims.Actors{
       Vector3 inputViewRotationEuler;
        [SerializeField]float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
+      internal Quaternion viewRotationRaw;
+      internal Quaternion viewRotationForAiming;
        internal Quaternion bodyRotation,lastBodyRotation;
      [SerializeField]internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
@@ -63,8 +70,11 @@ namespace AKCondinoO.Sims.Actors{
           internal Vector3 moveDelta;
      internal Vector3 headOffset;
      internal Vector3 aimingAt;
+     internal Vector3 aimingAtRaw;
       [SerializeField]internal float aimAtMaxDistance=1000f;
+     internal Vector3?predictCameraTarget=null;
         internal void ManualUpdate(){
+         predictCameraTarget=null;
          if(Enabled.WALK.curState){
           isRunningMoveSpeedMultiplierLerp.tgtVal=1f;
          }else{
@@ -87,17 +97,21 @@ namespace AKCondinoO.Sims.Actors{
           rotLerp.tgtRot=Quaternion.Euler(rotLerp.tgtRot.eulerAngles+inputViewRotationEuler);
           inputViewRotationEuler=Vector3.zero;
          }
+         viewRotationRaw=rotLerp.tgtRot;
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
          bodyRotation=lastBodyRotation=character.transform.rotation;
          if(!Enabled.RELEASE_MOUSE.curState){
+          Vector3 viewEuler=viewRotation.eulerAngles;
+          Vector3 bodyEuler=bodyRotation.eulerAngles;
           if(
            Enabled.FORWARD .curState||
            Enabled.BACKWARD.curState||
            Enabled.RIGHT   .curState||
            Enabled.LEFT    .curState
           ){
-           Vector3 viewEuler=viewRotation.eulerAngles;
-           Vector3 bodyEuler=bodyRotation.eulerAngles;
+           RotateBodyToView();
+          }
+          void RotateBodyToView(){
            bodyRotation=Quaternion.Euler(bodyEuler.x,viewEuler.y,bodyEuler.z);
           }
          }
@@ -170,8 +184,25 @@ namespace AKCondinoO.Sims.Actors{
          }
          afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotation*Vector3.forward)*aimAtMaxDistance;
-         OnReload();
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationRaw*Vector3.forward)*aimAtMaxDistance;
+         Quaternion?isFollowingViewRotation=null;
+         if(MainCamera.singleton.isFollowing){
+          MainCamera.singleton.PredictCameraPosFollowing(character.transform,viewRotationRaw,out Vector3 predictCameraPos,out Quaternion predictCameraRot);
+          Vector3 cameraAimDir=(aimingAtRaw-predictCameraPos).normalized;
+          Ray cameraRay=new Ray(predictCameraPos,cameraAimDir);
+          if(Physics.Raycast(cameraRay,out RaycastHit cameraHitInfo,aimAtMaxDistance,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide)){
+           predictCameraTarget=cameraHitInfo.point;
+           isFollowingViewRotation=Quaternion.LookRotation((predictCameraTarget.Value-(character.transform.position+(character.transform.rotation*headOffset))).normalized,viewRotationRaw*Vector3.up);
+          }
+         }
+         if(isFollowingViewRotation!=null){
+          viewRotationForAiming=isFollowingViewRotation.Value;
+          Debug.DrawLine(character.transform.position+(character.transform.rotation*headOffset),character.transform.position+(character.transform.rotation*headOffset)+viewRotationForAiming*Vector3.forward*aimAtMaxDistance);
+         }else{
+          viewRotationForAiming=viewRotation;
+         }
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationForAiming*Vector3.forward)*aimAtMaxDistance;
+         OnReloadInput();
          OnAction2();
          OnAction1();
         }

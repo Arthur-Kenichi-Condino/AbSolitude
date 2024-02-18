@@ -20,6 +20,7 @@ namespace AKCondinoO{
        "Default",
        "VoxelTerrain",
        "Construction",
+       "Hurtbox",
       };
         internal static void SetUtil(){
          SetLayer(ref considerGroundLayer,considerGroundLayerNames);

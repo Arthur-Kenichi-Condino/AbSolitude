@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4631629839819614593}
+  - component: {fileID: 8095807949435611358}
   - component: {fileID: 7758010734198664649}
   - component: {fileID: -3747231846007095047}
   - component: {fileID: 4284808389878888570}
   - component: {fileID: 4585911009965713821}
-  - component: {fileID: 8095807949435611358}
   m_Layer: 0
   m_Name: ArthurCondino
   m_TagString: Untagged
@@ -38,6 +38,26 @@ Transform:
   - {fileID: 632318490875797378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8095807949435611358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249316322628893736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1369732706
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 1
+  AutoObjectParentSync: 0
 --- !u!114 &7758010734198664649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,8 +75,7 @@ MonoBehaviour:
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
-  navMeshAgentWalkSpeed: 2
-  navMeshAgentRunSpeed: 4
+  goToSimUMA: {fileID: 0}
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
@@ -71,18 +90,26 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  navMeshAgentWalkSpeed: 2
+  navMeshAgentRunSpeed: 4
+  pathfindingTimeout: 3
+  pathPendingTimeout: 6
+  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
+  renewEnemyInterval: 3
+  MyAggressionMode: 0
+  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
+  onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
-  onHitSetMotionVulnerablePeriodDuration: 2
-  onHitResetMotionGracePeriodDuration: 0.2
-  onHitSetMotionGracePeriodDuration: 5
-  MyAggressionMode: 0
-  renewEnemyInterval: 3
-  pathfindingTimeout: 3
-  pathPendingTimeout: 6
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments: []
   rotLerp:
     dealWithGimbalLock: 1
@@ -143,6 +171,7 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
+  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -175,26 +204,6 @@ NavMeshAgent:
   m_BaseOffset: 0.875
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!114 &8095807949435611358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 249316322628893736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 1
-  AutoObjectParentSync: 0
 --- !u!1 &4899036718858050690
 GameObject:
   m_ObjectHideFlags: 0

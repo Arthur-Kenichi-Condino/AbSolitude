@@ -14,7 +14,7 @@ using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController:MonoBehaviour{
      internal BaseAI actor;
-     [SerializeField]Transform transformAdjustmentsForUMA;
+     [SerializeField]internal Transform transformAdjustmentsForUMA;
       internal Vector3 actorLeft;
       internal Vector3 actorRight;
      internal Animator animator;
@@ -221,7 +221,7 @@ namespace AKCondinoO.Sims.Actors{
             transformAdjustmentsForUMA.localScale
            );
            transformAdjustmentsForUMAScaleApplied=true;
-           Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
+           //Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
           }
           if(!transformAdjustmentsForUMARotationApplied){
            actor.simUMA.transform.root.rotation*=transformAdjustmentsForUMA.localRotation;

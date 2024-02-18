@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
         }
-        internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,Skill skill){
+        internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,Skill skill,SkillAoE skillAoE=null){
          GameObject skillVisualEffectGameObject;
          var pool=this.pool[skillVisualEffectType];
          SkillVisualEffect skillVisualEffect;
@@ -41,6 +41,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           skillVisualEffectGameObject=Instantiate(skillVisualEffectPrefabs[skillVisualEffectType]);
           skillVisualEffect=skillVisualEffectGameObject.GetComponent<SkillVisualEffect>();
          }
+         skillVisualEffect.aoe=skillAoE;
          skillVisualEffect.OnSpawned();
          return(skillVisualEffectGameObject,skillVisualEffect);
         }

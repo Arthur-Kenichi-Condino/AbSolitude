@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims{
           spawned.Add(simActor.id.Value);
           Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
          }
-         actors.Add(simActor.id.Value,simActor);
+         actors.Add(simActor.id.Value,simActor);//  remember to remove in both types of despawn
         }
         internal void OnActorDespawn(SimActor simActor){
          Type simType=simActor.id.Value.simObjectType;

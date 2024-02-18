@@ -50,9 +50,19 @@ namespace AKCondinoO.Sims.Actors{
          if(animatorController.actor.characterController.isAiming){
           var characterController=animatorController.actor.characterController.character;
           var headOffset=animatorController.actor.characterController.headOffset;
-          var viewRotation=animatorController.actor.characterController.viewRotation;
+          var viewRotation=animatorController.actor.characterController.viewRotationForAiming;
           var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
-          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotation*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          Quaternion viewRotationClamped=RotationHelper.Clamp(
+           animatorController.actor.characterController.viewRotationForAiming,
+           animatorController.actor.characterController.viewRotation,
+           new Vector3(0f,45f,360f),
+           new Vector3(0f,45f,360f)
+          );
+          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          float disToTarget=aimAtMaxDistance;
+          if(animatorController.actor.characterController.predictCameraTarget!=null){
+           disToTarget=Vector3.Distance(characterController.transform.position+(characterController.transform.rotation*headOffset),animatorController.actor.characterController.predictCameraTarget.Value);
+          }
           headLookAtPositionLerp.tgtPos=aimAt;
           if(!wasAiming){
            headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
@@ -68,7 +78,7 @@ namespace AKCondinoO.Sims.Actors{
            if(!animatorController.actor.navMeshAgent.enabled){
             Vector3 animHeadPos=animatorController.actor.GetHeadPosition(fromAnimator:true);
             Quaternion animBodyRot=animatorController.animator.transform.rotation;
-            Quaternion viewRot=animatorController.actor.characterController.viewRotation;
+            Quaternion viewRot=animatorController.actor.characterController.viewRotationForAiming;
             float horizontalRotSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(animBodyRot,viewRot);//  horizontal rotation from body to view
             //Log.DebugMessage("horizontalRotSignedAngle:"+horizontalRotSignedAngle);
             float   verticalRotSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(animBodyRot,viewRot);//    vertical rotation from body to view
@@ -105,6 +115,8 @@ namespace AKCondinoO.Sims.Actors{
             }
             animatorController.animator.SetLookAtWeight(1f);
             animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
+           }else{
+            animatorController.animator.SetLookAtWeight(0f);
            }
           }
          }
@@ -127,8 +139,9 @@ namespace AKCondinoO.Sims.Actors{
            Quaternion leftFootIKRotationClamped;
            leftFootIKRotationClamped=RotationHelper.Clamp(
             leftFootIKRotation,
-            Quaternion.Euler(-5f,-180f,-5f),
-            Quaternion.Euler( 5f, 180f, 5f)
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
            );
            leftFootIKRotation=leftFootIKRotationClamped;
            Debug.DrawRay(leftFootIKPosition,leftFootIKRotation*-Vector3.right,Color.green);
@@ -150,8 +163,9 @@ namespace AKCondinoO.Sims.Actors{
            Quaternion rightFootIKRotationClamped;
            rightFootIKRotationClamped=RotationHelper.Clamp(
             rightFootIKRotation,
-            Quaternion.Euler(-15f,-180f,-15f),
-            Quaternion.Euler( 15f, 180f, 15f)
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
            );
            rightFootIKRotation=rightFootIKRotationClamped;
            Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);

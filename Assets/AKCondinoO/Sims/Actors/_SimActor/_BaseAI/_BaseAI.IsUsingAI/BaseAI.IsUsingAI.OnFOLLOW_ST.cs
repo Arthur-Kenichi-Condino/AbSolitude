@@ -15,8 +15,8 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-        protected virtual void OnFOLLOW_ST(){
-         //Log.DebugMessage("OnFOLLOW_ST()");
+        protected virtual void OnFOLLOW_ST_Routine(){
+         //Log.DebugMessage("OnFOLLOW_ST_Routine()");
          stopPathfindingOnTimeout=false;//
          if(
           !IsTraversingPath()

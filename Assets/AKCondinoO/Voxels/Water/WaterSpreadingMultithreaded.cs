@@ -20,7 +20,6 @@ namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingContainer:BackgroundContainer{
-     internal readonly VoxelWater?[]voxelsOutput=new VoxelWater?[VoxelsPerChunk];
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
@@ -29,6 +28,9 @@ namespace AKCondinoO.Voxels.Water{
      internal readonly Dictionary<int,StreamWriter>editsFileStreamWriter=new Dictionary<int,StreamWriter>();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal float deltaTime;
+     internal FileStream cacheStream;
+     internal BinaryWriter cacheBinaryWriter;
+     internal BinaryReader cacheBinaryReader;
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here
@@ -37,6 +39,13 @@ namespace AKCondinoO.Voxels.Water{
           editsFileStream      .Clear();
           editsFileStreamWriter.Clear();
           editsFileStreamReader.Clear();
+          if(cacheStream!=null){
+           cacheBinaryWriter.Dispose();
+           cacheBinaryReader.Dispose();
+           cacheStream=null;
+           cacheBinaryWriter=null;
+           cacheBinaryReader=null;
+          }
          }
          //  free unmanaged resources here
          base.Dispose(disposing);
@@ -44,8 +53,7 @@ namespace AKCondinoO.Voxels.Water{
     }
     internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
      internal const double stopSpreadingDensity=30.0d;
-     readonly VoxelWater?[][]voxels=new VoxelWater?[9][];
-      readonly Voxel[][]terrainVoxels=new Voxel[9][];
+     readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>>absorbing=new();
      readonly Dictionary<int,Dictionary<Vector3Int,(double spread,VoxelWater voxel)>>spreading=new();
      internal readonly Queue<Dictionary<Vector3Int,WaterEditOutputData>>waterEditOutputDataPool=new Queue<Dictionary<Vector3Int,WaterEditOutputData>>();
@@ -53,11 +61,15 @@ namespace AKCondinoO.Voxels.Water{
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataForSavingToFile=new();
         internal WaterSpreadingMultithreaded(){
          for(int i=0;i<voxels.Length;++i){
+                       voxels[i]=new Dictionary<int,VoxelWater>();
                        absorbing[i]=new Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>();
                        spreading[i]=new Dictionary<Vector3Int,(double spread,VoxelWater voxel)>();
          }
         }
         protected override void Cleanup(){
+         for(int i=0;i<voxels.Length;++i){
+                       voxels[i].Clear();
+         }
          foreach(var cnkIdxAbsorbingPair in absorbing){cnkIdxAbsorbingPair.Value.Clear();}
          foreach(var cnkIdxSpreadingPair in spreading){cnkIdxSpreadingPair.Value.Clear();}
          foreach(var editData in dataFromFileToMerge){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
@@ -65,14 +77,30 @@ namespace AKCondinoO.Voxels.Water{
          foreach(var editData in dataForSavingToFile){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
          dataForSavingToFile.Clear();
         }
+        internal static(int vxlIdx,VoxelWater voxel)BinaryReadVoxelWater(BinaryReader cacheBinaryReader){
+         int vxlIdx            =cacheBinaryReader.ReadInt32();
+         double density        =cacheBinaryReader.ReadDouble();
+         double previousDensity=cacheBinaryReader.ReadDouble();
+         bool sleeping         =cacheBinaryReader.ReadBoolean();
+         float evaporateAfter  =cacheBinaryReader.ReadSingle();
+         return(vxlIdx,new VoxelWater(density,previousDensity,sleeping,evaporateAfter));
+        }
+        internal static void BinaryWriteVoxelWater(KeyValuePair<int,VoxelWater>kvp,BinaryWriter cacheBinaryWriter){
+         cacheBinaryWriter.Write(kvp.Key);
+         cacheBinaryWriter.Write(kvp.Value.density);
+         cacheBinaryWriter.Write(kvp.Value.previousDensity);
+         cacheBinaryWriter.Write(kvp.Value.sleeping);
+         cacheBinaryWriter.Write(kvp.Value.evaporateAfter);
+        }
+     readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
+         sw.Restart();
          if(container.cnkIdx==null){
           return;
          }
          //Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          Vector2Int cCoord1=container.cCoord.Value;
          int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
-         voxels[oftIdx1]=container.voxelsOutput;
          if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData1)){
           editData1=new Dictionary<Vector3Int,WaterEditOutputData>();
          }
@@ -81,43 +109,48 @@ namespace AKCondinoO.Voxels.Water{
          bool hasChangedIndex=false;
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           hasChangedIndex=true;
-          VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
-          try{
-           if(VoxelSystem.Concurrent.waterVoxelsId.TryGetValue(container.voxelsOutput,out var voxelsOutputOldId)){
-            if(VoxelSystem.Concurrent.waterVoxelsOutput.TryGetValue(voxelsOutputOldId.cnkIdx,out VoxelWater?[]oldIdVoxelsOutput)&&object.ReferenceEquals(oldIdVoxelsOutput,container.voxelsOutput)){
-             VoxelSystem.Concurrent.waterVoxelsOutput.Remove(voxelsOutputOldId.cnkIdx);
-             Log.DebugMessage("removed old value for voxelsOutputOldId.cnkIdx:"+voxelsOutputOldId.cnkIdx);
-            }
-           }
-          }catch{
-           throw;
-          }finally{
-           VoxelSystem.Concurrent.water_rwl.ExitWriteLock();
-          }
-          Array.Clear(voxels[oftIdx1],0,voxels[oftIdx1].Length);
-          LoadDataFromFile(cCoord1,editData1,voxels[oftIdx1]);
-         }else{
-          //VoxelSystem.Concurrent.water_rwl.EnterReadLock();
-          //try{
-          // //lock(container.voxelsOutput){
-          // // for(int i=0;i<container.voxelsOutput.Length;++i){
-          // //  voxels[oftIdx1][i]=container.voxelsOutput[i];
-          // // }
-          // //}
-          //}catch{
-          // throw;
-          //}finally{
-          // VoxelSystem.Concurrent.water_rwl.ExitReadLock();
-          //}
-          LoadDataFromFile(cCoord1,editData1,null);
          }
-         VoxelSystem.Concurrent.terrain_rwl.EnterReadLock();
+         VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
+          if(hasChangedIndex){
+           if(container.cacheStream!=null){
+            if(VoxelSystem.Concurrent.waterCacheIds.TryGetValue(container.cacheStream,out var cacheOldId)){
+             if(VoxelSystem.Concurrent.waterCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCache)&&object.ReferenceEquals(oldIdCache.stream,container.cacheStream)){
+              VoxelSystem.Concurrent.waterCache.Remove(cacheOldId.cnkIdx);
+              Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
+             }
+            }
+            container.cacheBinaryWriter.Dispose();
+            container.cacheBinaryReader.Dispose();
+            container.cacheStream=null;
+            container.cacheBinaryWriter=null;
+            container.cacheBinaryReader=null;
+           }
+          }
+          if(container.cacheStream==null){
+           string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterCacheFileFormat,VoxelSystem.Concurrent.waterCachePath,container.cCoord.Value.x,container.cCoord.Value.y);
+           container.cacheStream=new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           container.cacheBinaryWriter=new BinaryWriter(container.cacheStream);
+           container.cacheBinaryReader=new BinaryReader(container.cacheStream);
+          }
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.terrain_rwl.ExitReadLock();
+          VoxelSystem.Concurrent.waterCache_rwl.ExitWriteLock();
          }
+         VoxelSystem.Concurrent.waterCache_rwl.EnterReadLock();
+         try{
+          container.cacheStream.Position=0L;
+          while(container.cacheBinaryReader.BaseStream.Position!=container.cacheBinaryReader.BaseStream.Length){
+           var v=BinaryReadVoxelWater(container.cacheBinaryReader);
+           voxels[oftIdx1][v.vxlIdx]=v.voxel;
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.waterCache_rwl.ExitReadLock();
+         }
+         LoadDataFromFile(cCoord1,editData1,voxels[oftIdx1]);
          Vector3Int vCoord1;
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
          for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
@@ -126,8 +159,8 @@ namespace AKCondinoO.Voxels.Water{
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           VoxelWater voxel;
           lock(voxels[oftIdx1]){
-           if(voxels[oftIdx1][vxlIdx1]!=null){
-            voxel=voxels[oftIdx1][vxlIdx1].Value;
+           if(voxels[oftIdx1].TryGetValue(vxlIdx1,out VoxelWater v1)){
+            voxel=v1;
            }else{
             //  TO DO: valor do bioma
             voxel=new VoxelWater(0.0d,0.0d,true,-1f);
@@ -169,7 +202,7 @@ namespace AKCondinoO.Voxels.Water{
            }
           }else{
            lock(voxels[oftIdx1]){
-            voxels[oftIdx1][vxlIdx1]=null;
+            voxels[oftIdx1].Remove(vxlIdx1);
            }
           }
           //if(!voxel.sleeping){
@@ -196,8 +229,8 @@ namespace AKCondinoO.Voxels.Water{
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
              lock(voxels[oftIdx1]){
-              if(voxels[oftIdx1][vxlIdx3]!=null){
-               oldVoxel=voxels[oftIdx1][vxlIdx3].Value;
+              if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+               oldVoxel=v3;
               }else{
                //  TO DO: valor do bioma
                oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
@@ -240,8 +273,8 @@ namespace AKCondinoO.Voxels.Water{
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
              lock(voxels[oftIdx1]){
-              if(voxels[oftIdx1][vxlIdx3]!=null){
-               oldVoxel=voxels[oftIdx1][vxlIdx3].Value;
+              if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+               oldVoxel=v3;
               }else{
                //  TO DO: valor do bioma
                oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
@@ -269,52 +302,35 @@ namespace AKCondinoO.Voxels.Water{
          bool HasBlockageAt(Vector3Int vCoord){//  testar com array de voxels do terreno ou array de bool para objetos de estruturas
           return false;
          }
-         //// e também modificar vizinhos aqui, salvando em arquivo
-         //for(int x=-1;x<=1;x++){
-         //for(int y=-1;y<=1;y++){
-         //}}
-         VoxelSystem.Concurrent.waterFileData_rwl.EnterWriteLock();
+         VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
-         // //  salvar
-         // for(int x=-1;x<=1;x++){
-         // for(int y=-1;y<=1;y++){
-         // }}
+          container.cacheStream.SetLength(0L);
+          Vector2Int cCoord2=container.cCoord.Value;
+          int oftIdx2=GetoftIdx(cCoord2-container.cCoord.Value);
+          foreach(var kvp in voxels[oftIdx2]){
+           BinaryWriteVoxelWater(kvp,container.cacheBinaryWriter);
+          }
+          container.cacheBinaryWriter.Flush();
+          if(hasChangedIndex){
+           VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(container.cacheStream,container.cacheBinaryWriter,container.cacheBinaryReader);
+           VoxelSystem.Concurrent.waterCacheIds[container.cacheStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
+          }
          }catch{
           throw;
          }finally{
-          VoxelSystem.Concurrent.waterFileData_rwl.ExitWriteLock();
+          VoxelSystem.Concurrent.waterCache_rwl.ExitWriteLock();
          }
-         //VoxelSystem.Concurrent.water_rwl.EnterReadLock();
-         //try{
-         // //lock(container.voxelsOutput){
-         // // for(int i=0;i<container.voxelsOutput.Length;++i){
-         // //  if(!voxels[oftIdx1].TryGetValue(i,out VoxelWater voxel)){
-         // //   continue;
-         // //  }
-         // //  container.voxelsOutput[i]=voxel;
-         // // }
-         // //}
-         //}catch{
-         // throw;
-         //}finally{
-         // VoxelSystem.Concurrent.water_rwl.ExitReadLock();
-         //}
+         // //  salvar neighbourhood changes
+         // for(int x=-1;x<=1;x++){
+         // for(int y=-1;y<=1;y++){
+         // }}
          if(hasChangedIndex){
-          VoxelSystem.Concurrent.water_rwl.EnterWriteLock();
-          try{
-           VoxelSystem.Concurrent.waterVoxelsOutput[container.cnkIdx.Value]=container.voxelsOutput;
-           VoxelSystem.Concurrent.waterVoxelsId[container.voxelsOutput]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
-          }catch{
-           throw;
-          }finally{
-           VoxelSystem.Concurrent.water_rwl.ExitWriteLock();
-          }
           container.lastcCoord=container.cCoord;
           container.lastcnkRgn=container.cnkRgn;
           container.lastcnkIdx=container.cnkIdx;
          }
-         void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData,VoxelWater?[]voxels){
-          VoxelSystem.Concurrent.waterFileData_rwl.EnterReadLock();
+         void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData,Dictionary<int,VoxelWater>voxels){
+          VoxelSystem.Concurrent.waterFiles_rwl.EnterReadLock();
           try{
            int oftIdx=GetoftIdx(cCoord-container.cCoord.Value);
            string editsFileName=string.Format(CultureInfoUtil.en_US,VoxelWaterEditing.waterEditingFileFormat,VoxelWaterEditing.waterEditingPath,cCoord.x,cCoord.y);
@@ -371,9 +387,11 @@ namespace AKCondinoO.Voxels.Water{
           }catch{
            throw;
           }finally{
-           VoxelSystem.Concurrent.waterFileData_rwl.ExitReadLock();
+           VoxelSystem.Concurrent.waterFiles_rwl.ExitReadLock();
           }
          }
+         sw.Stop();
+         //Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
         }
     }
 }

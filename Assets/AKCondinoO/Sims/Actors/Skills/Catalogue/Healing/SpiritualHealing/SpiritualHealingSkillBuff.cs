@@ -8,7 +8,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal class SpiritualHealingSkillBuff:SkillBuff{
         internal SpiritualHealingSkillBuff():base(){
          Log.DebugMessage("SpiritualHealingEffect ctor");
-         spiritualHealingEffect=new SpiritualHealingEffect();
+         spiritualHealingEffect=new SpiritualHealingEffect(this);
         }
      internal SpiritualHealingEffect spiritualHealingEffect{
       get{
@@ -19,6 +19,8 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
       }
      }
         internal class SpiritualHealingEffect:Effect{
+            internal SpiritualHealingEffect(SkillBuff buff):base(buff){
+            }
          internal float socialMotiveRecoveryPercent;
          internal float sanityStatRecoveryFlatValue;
          internal float  focusStatRecoveryFlatValue;

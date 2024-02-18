@@ -69,7 +69,7 @@ namespace AKCondinoO{
          #if !UNITY_EDITOR
           GarbageCollector.GCMode=GarbageCollector.Mode.Manual;
          #endif
-         GCSettings.LatencyMode=GCLatencyMode.Batch;
+         GCSettings.LatencyMode=GCLatencyMode.SustainedLowLatency;
                     Util.SetUtil();
          CultureInfoUtil.SetUtil();
                 PhysUtil.SetUtil();
@@ -110,28 +110,31 @@ namespace AKCondinoO{
          if(!isServer&&!isClient){
           //Log.Error("harmless error:!isServer&&!isClient:engine will reload the game entry scene now");
          }
+         int o=0;
          singletonInitOrder=new SortedDictionary<int,ISingletonInitialization>{
-          { 0,GameplayerManagement     .singleton},
-          { 1,InputHandler             .singleton},
-          { 2,ScreenInput              .singleton},
-          { 3,BGM                      .singleton},
-          { 4,MainCamera               .singleton},
-          { 5,SimTime                  .singleton},
-          { 6,CloudParticleSystem      .singleton},
-          { 7,GameMode                 .singleton},
-          { 8,VoxelSystem              .singleton},
-          { 9,VoxelTerrainEditing      .singleton},
-          {10,VoxelWaterEditing        .singleton},
-          {11,SimInventoryManager      .singleton},
-          {12,SimObjectManager         .singleton},
-          {13,SimObjectSpawner         .singleton},
-          {14,SkillVisualEffectsManager.singleton},
-          {15,SkillsManager            .singleton},
-          {16,SimsMachine              .singleton},
-          {17,AutonomyCore             .singleton},
-          {18,Placeholder              .singleton},
-          {19,FixedUI                  .singleton},
-          {20,ContextMenuUI            .singleton},
+          {o++,GameplayerManagement     .singleton},
+          {o++,InputHandler             .singleton},
+          {o++,ScreenInput              .singleton},
+          {o++,BGM                      .singleton},
+          {o++,MainCamera               .singleton},
+          {o++,SimTime                  .singleton},
+          {o++,WindZoneControl          .singleton},
+          {o++,CloudParticleSystem      .singleton},
+          {o++,GameMode                 .singleton},
+          {o++,VoxelSystem              .singleton},
+          {o++,VoxelTerrainEditing      .singleton},
+          {o++,VoxelWaterEditing        .singleton},
+          {o++,SimInventoryManager      .singleton},
+          {o++,SimObjectManager         .singleton},
+          {o++,SimObjectSpawner         .singleton},
+          {o++,SkillVisualEffectsManager.singleton},
+          {o++,SkillAoEManager          .singleton},
+          {o++,SkillsManager            .singleton},
+          {o++,SimsMachine              .singleton},
+          {o++,AutonomyCore             .singleton},
+          {o++,Placeholder              .singleton},
+          {o++,FixedUI                  .singleton},
+          {o++,ContextMenuUI            .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
