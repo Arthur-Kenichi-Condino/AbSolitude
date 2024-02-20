@@ -194,7 +194,7 @@ namespace AKCondinoO.Voxels{
          if(this!=null&&proceduralGenerationCoroutine!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }
-         OnDestroyingCoreNetDestroy();
+         OnDestroyingCoreNetworkDestroy();
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].OnDestroyingCore();
@@ -207,7 +207,7 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i].Wait();
          }
-         OnDestroyingCoreNetDispose();
+         OnDestroyingCoreNetworkDispose();
          if(WaterSpreadingMultithreaded.Clear()!=0){
           Log.Error("WaterSpreadingMultithreaded will stop with pending work");
          }

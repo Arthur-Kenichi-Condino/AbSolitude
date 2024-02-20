@@ -15,8 +15,13 @@ namespace AKCondinoO.Gameplaying{
      [SerializeField]Gameplayer _GameplayerPrefab;
      internal ulong?hostId;
      internal readonly Dictionary<ulong,Gameplayer>all=new();
+     internal GameplayPersistentDataSavingBackgroundContainer persistentDataSavingBG;
+     internal GameplayPersistentDataSavingMultithreaded       persistentDataSavingBGThread;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         GameplayPersistentDataSavingMultithreaded.Stop=false;
+         persistentDataSavingBG=new GameplayPersistentDataSavingBackgroundContainer();
+         persistentDataSavingBGThread=new GameplayPersistentDataSavingMultithreaded();
         }
         public void Init(){
          if(Core.singleton.isServer){
@@ -33,6 +38,13 @@ namespace AKCondinoO.Gameplaying{
           Core.singleton.netManager.OnClientConnectedCallback -=OnServerSideClientConnected;
           Core.singleton.netManager.OnClientDisconnectCallback-=OnServerSideClientDisconnect;
          }
+         persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+         if(GameplayPersistentDataSavingMultithreaded.Clear()!=0){
+          Log.Error("GameplayPersistentDataSavingMultithreaded will stop with pending work");
+         }
+         GameplayPersistentDataSavingMultithreaded.Stop=true;
+         persistentDataSavingBGThread.Wait();
+         persistentDataSavingBG.Dispose();
         }
         void OnServerSideClientConnected(ulong clientId){
          Log.DebugMessage("OnServerSideClientConnected:clientId:"+clientId);

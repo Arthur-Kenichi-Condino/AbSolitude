@@ -469,8 +469,13 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     [SerializeField]internal bool canBeThirdPersonCamFollowed=false;
         internal void OnThirdPersonCamFollow(){
-         Log.DebugMessage("OnThirdPersonCamFollow()");
+         Log.DebugMessage("OnThirdPersonCamFollow()",this);
+         if(!canBeThirdPersonCamFollowed){
+          Log.DebugMessage("!canBeThirdPersonCamFollowed",this);
+          return;
+         }
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }

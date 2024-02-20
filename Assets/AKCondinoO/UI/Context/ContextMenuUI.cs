@@ -34,6 +34,10 @@ namespace AKCondinoO.UI.Context{
         public void OnSelectButtonPress(){
          Log.DebugMessage("ContextMenuUI:OnSelectButtonPress");
          selectedSimObject=contextSimObject;
+         ScreenInput.singleton.currentActiveSim=null;
+         if(selectedSimObject is BaseAI baseAI){
+          ScreenInput.singleton.currentActiveSim=baseAI;
+         }
          selectButtonPressed=true;
         }
         void Update(){

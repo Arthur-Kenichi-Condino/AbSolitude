@@ -26,7 +26,7 @@ namespace AKCondinoO.Voxels{
          Log.DebugMessage("NetClientSideInit");
          Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;
         }
-        internal void OnDestroyingCoreNetDestroy(){
+        internal void OnDestroyingCoreNetworkDestroy(){
          Log.DebugMessage("OnDestroyingCoreNetDestroy");
          if(this!=null&&serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine!=null){
           StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
@@ -45,7 +45,7 @@ namespace AKCondinoO.Voxels{
           }
          }
         }
-        internal void OnDestroyingCoreNetDispose(){
+        internal void OnDestroyingCoreNetworkDispose(){
          if(Core.singleton.isServer){
           for(int i=0;i<terrainMessageHandlers.Count;++i){
            terrainMessageHandlers[i].terrainGetFileEditDataToNetSyncBG.Dispose();

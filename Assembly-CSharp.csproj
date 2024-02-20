@@ -67,6 +67,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hurtboxes.cs" />
+    <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.Wasteland.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\GenerateHomunculus\GenerateHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FixedUI.InteractMode.cs" />
+    <Compile Include="Assets\AKCondinoO\GameplayPersistentDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DictionaryWrapper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />

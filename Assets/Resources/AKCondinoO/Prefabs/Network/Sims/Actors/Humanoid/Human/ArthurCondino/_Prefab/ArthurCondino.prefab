@@ -90,6 +90,7 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  canBeThirdPersonCamFollowed: 1
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
   pathfindingTimeout: 3
