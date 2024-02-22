@@ -59,6 +59,7 @@ namespace AKCondinoO.UI.Fixed{
           Placeholder.singleton.GetPlaceholderFor(DEBUG_SET_PLACEHOLDER.GetType());
             DEBUG_SET_PLACEHOLDER=null;
          }
+         UpdateUIForCameraMode();
         }
     }
 }
