@@ -300,6 +300,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeaponOnShootVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Gameplayer.cs" />

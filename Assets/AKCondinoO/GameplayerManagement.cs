@@ -39,6 +39,8 @@ namespace AKCondinoO.Gameplaying{
           Core.singleton.netManager.OnClientDisconnectCallback-=OnServerSideClientDisconnect;
          }
          persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+         GameplayPersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
+         persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
          if(GameplayPersistentDataSavingMultithreaded.Clear()!=0){
           Log.Error("GameplayPersistentDataSavingMultithreaded will stop with pending work");
          }

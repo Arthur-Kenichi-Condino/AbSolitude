@@ -124,7 +124,7 @@ namespace AKCondinoO.Sims{
                 SimInventoryManager.singleton.persistentSimInventoryDataSavingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.IsRunning,-1);
             #endregion
            SimObjectSpawner.singleton.CollectSavingData(exitSave:true);
-           
+           //
            foreach(var kvp in SkillBuff.allActiveBuffs){
             foreach(SkillBuff skillBuff in kvp.Value){
              buffsToPool.Add((kvp.Key,skillBuff));

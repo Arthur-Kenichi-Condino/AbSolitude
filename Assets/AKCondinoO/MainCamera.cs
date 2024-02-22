@@ -27,7 +27,17 @@ namespace AKCondinoO{
           mainCameraSavePath=string.Format("{0}{1}",Core.savePath,"MainCameraState/");
           Directory.CreateDirectory(mainCameraSavePath);
           mainCameraSaveFile=string.Format("{0}{1}",mainCameraSavePath,"mainCameraState.txt");
-          GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStream=new FileStream(mainCameraSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          FileStream mainCameraFileStream=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStream=new FileStream(mainCameraSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          StreamWriter mainCameraFileStreamWriter=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStreamWriter=new StreamWriter(mainCameraFileStream);
+          StreamReader mainCameraFileStreamReader=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStreamReader=new StreamReader(mainCameraFileStream);
+          mainCameraFileStream.Position=0L;
+          mainCameraFileStreamReader.DiscardBufferedData();
+          string line=mainCameraFileStreamReader.ReadLine();
+          if(line!=null){
+           if(!string.IsNullOrEmpty(line)){
+            persistentData=PersistentData.Parse(line);
+           }
+          }
           transform.rotation=persistentData.rotation;
           transform.position=persistentData.position;
          }
@@ -36,6 +46,8 @@ namespace AKCondinoO{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
+         GameplayerManagement.singleton.persistentDataSavingBG.IsCompleted(GameplayerManagement.singleton.persistentDataSavingBGThread.IsRunning,-1);
+         GameplayerManagement.singleton.persistentDataSavingBG.mainCameraPersistentData=persistentData;
         }
         internal void OnStopFollowing(){
          Log.DebugMessage("MainCamera:OnStopFollowing");
