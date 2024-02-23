@@ -125,7 +125,7 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.  waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.  waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
+         voxelTerrainLayer=LayerMask.GetMask("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Stop=false;
          for(int i=0;i<marchingCubesBGThreads.Length;++i){

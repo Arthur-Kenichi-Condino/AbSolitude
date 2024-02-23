@@ -4,6 +4,8 @@
 using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.UI.Fixed;
+using AKCondinoO.Voxels;
+using AKCondinoO.Voxels.Terrain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,13 +17,15 @@ namespace AKCondinoO.UI.Context{
     internal class ContextMenuUI:MonoBehaviour,ISingletonInitialization{
      internal static ContextMenuUI singleton{get;set;}
      [SerializeField]internal RectTransform panel;
-     [SerializeField]internal RectTransform selectSimObjectButton;
+     [SerializeField]internal RectTransform selectSimObjectButtonRect;
+     internal Button selectSimObjectButton;
      internal Canvas canvas{get;private set;}
      internal CanvasScaler canvasScaler{get;private set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          canvas      =transform.root.GetComponentInChildren<Canvas      >();
          canvasScaler=transform.root.GetComponentInChildren<CanvasScaler>();
+         selectSimObjectButton=selectSimObjectButtonRect.GetComponent<Button>();
         }
         public void Init(){
          panel.gameObject.SetActive(false);
@@ -49,23 +53,41 @@ namespace AKCondinoO.UI.Context{
           }else{
            if(Enabled.ACTION_2.curState!=Enabled.ACTION_2.lastState){
             SimObject openFor=null;
+            VoxelTerrainChunk openForTerrain=null;
             bool open=false;
             if(ScreenInput.singleton.screenPointRaycastResultsCount>0){
              for(int i=0;i<ScreenInput.singleton.screenPointRaycastResultsCount;++i){
               RaycastHit hit=ScreenInput.singleton.screenPointRaycastResults[i];
-              if(hit.collider==null||!hit.collider.CompareTag("SimObjectVolume")){
+              if(hit.collider==null){
                continue;
               }
-              SimObject sim=hit.collider.transform.root.GetComponentInChildren<SimObject>();
-              if(sim!=null){
-               openFor=sim;
-               open=true;
-               break;
+              Log.DebugMessage("hit.collider.name:"+hit.collider.name+";hit.collider.gameObject.layer:"+LayerMask.LayerToName(hit.collider.gameObject.layer)+"(VoxelSystem.voxelTerrainLayer mask:"+VoxelSystem.voxelTerrainLayer+")");
+              if(hit.collider.CompareTag("SimObjectVolume")){
+               SimObject sim=hit.collider.transform.root.GetComponentInChildren<SimObject>();
+               if(sim!=null){
+                openFor=sim;
+                open=true;
+                break;
+               }
+              }
+              if((VoxelSystem.voxelTerrainLayer&(1<<hit.collider.gameObject.layer))!=0){
+               VoxelTerrainChunk voxelTerrain=hit.collider.transform.root.GetComponentInChildren<VoxelTerrainChunk>();
+               if(voxelTerrain!=null){
+                openForTerrain=voxelTerrain;
+                open=true;
+                break;
+               }
               }
              }
             }
             if(open){
-             Open(openFor);
+             if(openFor!=null){
+              Open(openFor);
+             }else if(openForTerrain!=null){
+              Open(openForTerrain);
+             }else{
+              Close();
+             }
             }else{
              Close();
             }
@@ -89,12 +111,26 @@ namespace AKCondinoO.UI.Context{
         }
      internal SimObject contextSimObject=null;
         void Open(SimObject openFor){
-         Log.DebugMessage("open panel for sim:"+openFor);
+         OnOpen();
+         Log.DebugMessage("open panel for sim:"+openFor,openFor);
          contextSimObject=openFor;
+         DoOpen();
+        }
+        void Open(VoxelTerrainChunk openForTerrain){
+         OnOpen();
+         Log.DebugMessage("open panel for terrain:"+openForTerrain,openForTerrain);
+         DoOpen();
+        }
+        void OnOpen(){
+         contextSimObject=null;
+        }
+        void DoOpen(){
+         if(contextSimObject!=null){
+          selectSimObjectButton.interactable=true;
+         }else{
+          selectSimObjectButton.interactable=false;
+         }
          Vector3 pos=ScreenInput.singleton.mouse;
-         //Vector3[]v=null;
-         //Vector2 size=panel.ActualSize2(ref v);
-         //Log.DebugMessage("canvasScaler:"+canvasScaler);
          Vector2 size=panel.ActualSize(canvas);
          Log.DebugMessage("panel size:"+size);
          pos.x+=size.x/2f;

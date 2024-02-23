@@ -84,7 +84,7 @@ namespace AKCondinoO{
          if(a.collider!=null&&b.collider==null){
           return -1;
          }
-         return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
+         return Vector3.Distance(Camera.main.transform.root.position,a.point).CompareTo(Vector3.Distance(Camera.main.transform.root.position,b.point));
         }
     }
 }

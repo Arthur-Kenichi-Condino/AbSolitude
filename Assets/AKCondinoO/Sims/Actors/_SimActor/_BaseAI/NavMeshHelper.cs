@@ -17,9 +17,9 @@ namespace AKCondinoO.Sims{
         internal static void SetNavMeshBuildSettings(){
          for(int i=0;i<navMeshLayerNames.Length;++i){
           if(i==0){
-           navMeshLayer=1<<LayerMask.NameToLayer(navMeshLayerNames[i]);
+           navMeshLayer=LayerMask.GetMask(navMeshLayerNames[i]);
           }else{
-           navMeshLayer=navMeshLayer|(1<<LayerMask.NameToLayer(navMeshLayerNames[i]));
+           navMeshLayer|=LayerMask.GetMask(navMeshLayerNames[i]);
           }
          }
          navMeshBuildSettings=new NavMeshBuildSettings[]{
