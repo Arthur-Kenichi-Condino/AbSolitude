@@ -60,7 +60,8 @@ namespace AKCondinoO{
            Cursor.lockState=CursorLockMode.None;
           }
          }
-         if(Camera.main!=null){
+         if(Camera.main!=null&&Camera.main==MainCamera.singleton.camera&&!float.IsInfinity(Input.mousePosition.x)&&!float.IsInfinity(Input.mousePosition.y)&&!float.IsInfinity(Input.mousePosition.z)){
+          //Log.DebugMessage("Input.mousePosition:"+Input.mousePosition);
           screenPointRay=Camera.main.ScreenPointToRay(Input.mousePosition);
           if(ScreenInput.singleton.screenPointRay!=null){
            _DoRaycast:{}

@@ -18,7 +18,7 @@ using UnityEngine.AI;
 using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal partial class SimObject:NetworkBehaviour{
+    internal partial class SimObject:NetworkBehaviour,Interactable{
      internal static System.Random seedGenerator;
      internal System.Random math_random;
      internal Queue<NetworkObject>clientSidePooling=null;
@@ -98,6 +98,7 @@ namespace AKCondinoO.Sims{
          skillBuffs.targetSimObject=this;
          waitForFixedUpdate=new WaitForFixedUpdate();
          parentConstraint=gameObject.GetComponent<ParentConstraint>();
+         SetInteractionsList();
         }
         public override void OnDestroy(){
          foreach(var kvp1 in derivedMaterials){

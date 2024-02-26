@@ -17,8 +17,10 @@ namespace AKCondinoO{
      internal static MainCamera singleton{get;set;}
      internal static string mainCameraSavePath;
      internal static string mainCameraSaveFile;
+     internal new Camera camera;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         camera=GetComponent<Camera>();
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;

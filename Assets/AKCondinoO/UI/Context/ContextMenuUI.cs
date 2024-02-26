@@ -9,6 +9,7 @@ using AKCondinoO.Voxels.Terrain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static AKCondinoO.GameMode;
@@ -17,6 +18,9 @@ namespace AKCondinoO.UI.Context{
     internal class ContextMenuUI:MonoBehaviour,ISingletonInitialization{
      internal static ContextMenuUI singleton{get;set;}
      [SerializeField]internal RectTransform panel;
+     [SerializeField]internal RectTransform content;
+     [SerializeField]internal RectTransform simObjectNamePanelRect;
+     [SerializeField]internal TMP_Text simObjectNamePanelText;
      [SerializeField]internal RectTransform selectSimObjectButtonRect;
      internal Button selectSimObjectButton;
      internal Canvas canvas{get;private set;}
@@ -26,6 +30,7 @@ namespace AKCondinoO.UI.Context{
          canvas      =transform.root.GetComponentInChildren<Canvas      >();
          canvasScaler=transform.root.GetComponentInChildren<CanvasScaler>();
          selectSimObjectButton=selectSimObjectButtonRect.GetComponent<Button>();
+         interactionButtonPrefab=interactionButtonPrefabRect.GetComponent<Button>();
         }
         public void Init(){
          panel.gameObject.SetActive(false);
@@ -116,19 +121,31 @@ namespace AKCondinoO.UI.Context{
          contextSimObject=openFor;
          DoOpen();
         }
+     internal VoxelTerrainChunk contextTerrainChunk=null;
         void Open(VoxelTerrainChunk openForTerrain){
          OnOpen();
          Log.DebugMessage("open panel for terrain:"+openForTerrain,openForTerrain);
+         contextTerrainChunk=openForTerrain;
          DoOpen();
         }
         void OnOpen(){
+         //  limpeza...
          contextSimObject=null;
+         contextTerrainChunk=null;
         }
         void DoOpen(){
+         SetInteractionsScrollViewContent();
          if(contextSimObject!=null){
           selectSimObjectButton.interactable=true;
          }else{
           selectSimObjectButton.interactable=false;
+         }
+         if(contextSimObject!=null){
+          simObjectNamePanelText.text=contextSimObject.ContextName();
+         }else if(contextTerrainChunk!=null){
+          simObjectNamePanelText.text=contextTerrainChunk.ContextName();
+         }else{
+          simObjectNamePanelText.text="...";
          }
          Vector3 pos=ScreenInput.singleton.mouse;
          Vector2 size=panel.ActualSize(canvas);
@@ -138,6 +155,48 @@ namespace AKCondinoO.UI.Context{
          panel.position=new Vector2(pos.x,pos.y);
          if(!panel.gameObject.activeSelf){
           panel.gameObject.SetActive(true);
+         }
+        }
+     [SerializeField]internal RectTransform interactionButtonPrefabRect;
+     internal Button interactionButtonPrefab;
+     internal readonly List<Button>interactionButtons=new List<Button>();
+        void SetInteractionsScrollViewContent(){
+         List<Interaction>interactions=null;
+         if(contextSimObject!=null){
+          contextSimObject.GetInteractions(out interactions);
+         }else if(contextTerrainChunk!=null){
+          contextTerrainChunk.GetInteractions(out interactions);
+         }
+         int interactionsCount=0;
+         if(interactions!=null){
+          interactionsCount=interactions.Count;
+         }
+         int count=Mathf.Max(interactionsCount,interactionButtons.Count);
+         for(int i=0;i<count;i++){
+          Interaction interaction=null;
+          if(i<interactionsCount){
+           interaction=interactions[i];
+          }
+          if(interaction!=null){
+           Button button;
+           if(i<interactionButtons.Count){
+            button=interactionButtons[i];
+           }else{
+            button=Instantiate(interactionButtonPrefab,content);
+            RectTransform rectTransform=button.GetComponent<RectTransform>();
+            Log.DebugMessage("rectTransform.anchoredPosition:"+rectTransform.anchoredPosition);
+            float posY=rectTransform.anchoredPosition.y;
+            posY-=i*rectTransform.rect.height;
+            rectTransform.anchoredPosition=new Vector2(rectTransform.anchoredPosition.x,posY);
+            interactionButtons.Add(button);
+           }
+           var text=button.GetComponentInChildren<TMP_Text>();
+           text.text=interaction.ToString();
+           button.gameObject.SetActive(true);
+          }else if(i<interactionButtons.Count){
+           Button button=interactionButtons[i];
+           button.gameObject.SetActive(false);
+          }
          }
         }
     }

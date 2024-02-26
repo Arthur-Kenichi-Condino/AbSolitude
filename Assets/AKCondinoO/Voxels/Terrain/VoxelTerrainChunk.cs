@@ -20,7 +20,7 @@ using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundCont
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
-    internal class VoxelTerrainChunk:MonoBehaviour{
+    internal partial class VoxelTerrainChunk:MonoBehaviour,Interactable{
      [SerializeField]VoxelWaterChunk _VoxelWaterChunkPrefab;
      internal VoxelWaterChunk wCnk;
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
@@ -68,6 +68,7 @@ namespace AKCondinoO.Voxels.Terrain{
          wCnk=Instantiate(_VoxelWaterChunkPrefab);
          wCnk.tCnk=this;
          wCnk.OnInstantiated();
+         SetInteractionsList();
         }
         internal void OnDestroyingCore(){
          wCnk.OnDestroyingCore();

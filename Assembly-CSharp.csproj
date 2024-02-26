@@ -70,6 +70,7 @@
     <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.Wasteland.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnATTACK_ST.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindZoneControl.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Interactions\Interaction.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Assets\AKCondinoO\ScreenInput.cs" />
     <Compile Include="Assets\AKCondinoO\Util\CultureInfoUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\_SimSniperRifle\SimSniperRifle.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachineSpawnSettings.cs" />
@@ -246,6 +249,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillAoE.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Interactions\GoHere.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SpawnData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action1.cs" />
@@ -281,6 +285,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuffEffectsState.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItem.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />
