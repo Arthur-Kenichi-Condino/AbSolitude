@@ -539,6 +539,7 @@
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.IsUsingAI/BaseAI.IsUsingAI.OnCHASE_ST.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.IsUsingAI/BaseAI.IsUsingAI.OnFOLLOW_ST.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.IsUsingAI/BaseAI.IsUsingAI.OnIDLE_ST.cs"
+"Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.IsUsingAI/BaseAI.IsUsingAI.SNIPE_ST.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.IsUsingAI/BaseAI.State.Enum.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.Motion/AnimationEventsHandler.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.Motion/BaseAI.Motion.Enum.cs"

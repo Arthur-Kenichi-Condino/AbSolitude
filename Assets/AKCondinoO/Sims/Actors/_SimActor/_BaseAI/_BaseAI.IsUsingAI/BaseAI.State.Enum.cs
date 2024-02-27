@@ -21,6 +21,7 @@ namespace AKCondinoO.Sims.Actors{
          FOLLOW_ST= 1,
           CHASE_ST= 2,
          ATTACK_ST= 3,
+          SNIPE_ST=14,
            DEAD_ST=16,
         }
     }

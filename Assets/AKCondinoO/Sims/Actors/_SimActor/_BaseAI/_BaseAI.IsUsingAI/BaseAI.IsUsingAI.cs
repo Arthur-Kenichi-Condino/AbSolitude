@@ -32,7 +32,22 @@ namespace AKCondinoO.Sims.Actors{
           goto _MyStateSet;
          }else{
           if(MyEnemy!=null){
-           if(IsInAttackRange(MyEnemy)){
+           bool isInAttackRange=IsInAttackRange(MyEnemy);
+           bool isInAttackRangeWithWeapon=IsInAttackRange(MyEnemy,true);
+           if(isInAttackRangeWithWeapon){
+            Vector3 attackDistance=AttackDistance();
+            Vector3 attackDistanceWithWeapon=AttackDistance(true);
+            if(!isInAttackRange||(IsFasterThan(MyEnemy)&&(
+              attackDistance.z<attackDistanceWithWeapon.z||
+              attackDistance.x<attackDistanceWithWeapon.x||
+              attackDistance.y<attackDistanceWithWeapon.y
+             ))
+            ){
+             MyState=State.SNIPE_ST;
+             goto _MyStateSet;
+            }
+           }
+           if(isInAttackRange){
             MyState=State.ATTACK_ST;
             goto _MyStateSet;
            }
@@ -102,7 +117,9 @@ namespace AKCondinoO.Sims.Actors{
           DoSkill();
          }
          if      (MyState==State.  DEAD_ST){
-          
+          //
+         }else if(MyState==State. SNIPE_ST){
+           OnSNIPE_ST_Routine();
          }else if(MyState==State.ATTACK_ST){
           OnATTACK_ST_Routine();
          }else if(MyState==State. CHASE_ST){

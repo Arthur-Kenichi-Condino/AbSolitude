@@ -10,5 +10,15 @@ namespace AKCondinoO.Sims.Actors{
       bool result=motionFlagForAttackAnimation||(shooting&&motionFlagForShootingAnimation);
       return result;
      }
+     internal bool IsFasterThan(SimObject simObject){
+      if(simObject is BaseAI baseAI&&(
+       moveMaxVelocity.z>baseAI.moveMaxVelocity.z||
+       moveMaxVelocity.y>baseAI.moveMaxVelocity.y||
+       moveMaxVelocity.x>baseAI.moveMaxVelocity.x)
+      ){
+       return true;
+      }
+      return false;
+     }
     }
 }

@@ -145,6 +145,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DebugGizmos.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Secondary.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.SNIPE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />

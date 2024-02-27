@@ -422,6 +422,16 @@ namespace AKCondinoO.Sims.Actors{
        return Vector3.zero;
       }
      }
+     internal virtual Vector3 moveMaxVelocity{
+      get{//  TO DO: add flying or swimming speed
+       if(isUsingAI){
+        return new Vector3(navMeshAgent.speed,navMeshAgent.speed,navMeshAgent.speed);
+       }else if(characterController!=null){
+        return characterController.maxMoveSpeed;
+       }
+       return Vector3.zero;
+      }
+     }
      internal virtual bool isMovingBackwards{
       get{
        return moveVelocityFlattened<0f;
