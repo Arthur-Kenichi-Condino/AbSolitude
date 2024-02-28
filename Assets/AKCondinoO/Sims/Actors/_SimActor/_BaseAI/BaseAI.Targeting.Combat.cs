@@ -62,12 +62,20 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
      [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
+     readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
         internal Vector3 AttackDistance(bool checkWeapon=false){
          float radius=GetRadius();
+         float weaponRange=0f;
+         if(checkWeapon){
+          CurrentWeapons(attackDistanceSimWeapons);
+          foreach(SimWeapon weapon in attackDistanceSimWeapons){
+           weaponRange=Mathf.Max(weaponRange,weapon.shootDis);
+          }
+         }
          return new Vector3(
           radius+MyAttackRange.x,
           GetHeight()+MyAttackRange.y,
-          radius+MyAttackRange.z
+          radius+Mathf.Max(MyAttackRange.z,weaponRange)
          );
         }
         internal virtual bool IsInAttackRange(SimObject simObject,bool checkWeapon=false){

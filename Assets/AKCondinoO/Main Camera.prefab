@@ -63,7 +63,7 @@ MonoBehaviour:
     tgtRotLerpSpeed: 1000
     tgtRotLerpMaxTime: 0.025
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
-  maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
+  maxMoveSpeed: {x: 0.4, y: 0.4, z: 0.4}
 --- !u!20 &6595663811422386843
 Camera:
   m_ObjectHideFlags: 0
