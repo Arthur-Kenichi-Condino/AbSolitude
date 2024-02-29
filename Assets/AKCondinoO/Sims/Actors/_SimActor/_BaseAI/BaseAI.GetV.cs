@@ -25,7 +25,15 @@ namespace AKCondinoO.Sims.Actors{
       }
      }
      internal bool IsAttacking(bool shooting=true){
-      bool result=motionFlagForAttackAnimation||(shooting&&motionFlagForShootingAnimation);
+      bool result=motionFlagForAttackAnimation||MyMotion==ActorMotion.MOTION_ATTACK||(shooting&&(motionFlagForShootingAnimation||MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING));
+      return result;
+     }
+     internal bool IsReloading(){
+      bool result=motionFlagForReloadingAnimation||MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING;
+      return result;
+     }
+     internal bool IsShooting(){
+      bool result=motionFlagForShootingAnimation||MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING;
       return result;
      }
      internal bool IsFasterThan(SimObject simObject){

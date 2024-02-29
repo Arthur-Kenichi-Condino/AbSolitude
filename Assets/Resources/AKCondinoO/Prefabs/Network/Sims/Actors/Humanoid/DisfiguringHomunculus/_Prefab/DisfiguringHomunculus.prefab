@@ -67,11 +67,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2391910679848875198}
+  - component: {fileID: 5196235895436561482}
   - component: {fileID: -4222640111688762353}
   - component: {fileID: -5906123023762645204}
   - component: {fileID: -334818003799563713}
   - component: {fileID: -897908923207528447}
-  - component: {fileID: 5196235895436561482}
   m_Layer: 0
   m_Name: DisfiguringHomunculus
   m_TagString: Untagged
@@ -97,6 +97,26 @@ Transform:
   - {fileID: 2850720430510664476}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5196235895436561482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492074268408741665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3740330996
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 1
+  AutoObjectParentSync: 0
 --- !u!114 &-4222640111688762353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +149,7 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  canBeThirdPersonCamFollowed: 0
   navMeshAgentWalkSpeed: 1
   navMeshAgentRunSpeed: 1.5
   pathfindingTimeout: 3
@@ -142,9 +163,17 @@ MonoBehaviour:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 38
     tgtRotLerpMaxTime: 0.0005
+  onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
+  onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
 --- !u!114 &-5906123023762645204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,26 +270,6 @@ NavMeshAgent:
   m_BaseOffset: 0.875
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!114 &5196235895436561482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7492074268408741665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 1
-  AutoObjectParentSync: 0
 --- !u!1 &9030681807711954987
 GameObject:
   m_ObjectHideFlags: 0

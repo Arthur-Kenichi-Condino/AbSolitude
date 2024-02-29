@@ -1,17 +1,35 @@
 #if UNITY_EDITOR
-    #define ENABLE_LOG_DEBUG
+#define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Weapons;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        protected virtual void OnSNIPE_ST_Reset(){
+         if(characterController!=null){
+            characterController.isAiming=false;
+         }
+         ResetRotation(onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
+        }
      internal float onSnipeRetreatTime=3f;
      internal float onSnipeRetreatDis;
      protected bool onSnipeAlternateRetreatShoot=false;
-        protected virtual void OnSNIPE_ST_Routine(){
+        protected virtual void OnSNIPE_ST_Start(){
+         onSnipeAlternateRetreatShoot=false;
+         if(
+          IsTraversingPath()
+         ){
+          navMeshAgent.destination=navMeshAgent.transform.position;
+         }
+        }
+     [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
+     bool onSnipeMoving;
+     bool onSnipeReloading;
+     bool onSnipeShooting;
+        protected virtual void OnSNIPE_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
          Log.DebugMessage("OnSNIPE_ST_Routine()");
-         Vector3 attackDistanceWithWeapon=AttackDistance(true);
          float myMoveSpeed=Mathf.Max(moveMaxVelocity.x,moveMaxVelocity.y,moveMaxVelocity.z);
          float myEnemyMoveSpeed=0f;
          if(MyEnemy is BaseAI myEnemyAI){
@@ -33,9 +51,30 @@ namespace AKCondinoO.Sims.Actors{
          if(
           !IsTraversingPath()
          ){
-          if(Vector3.Distance(transform.position,MyEnemy.transform.position)<=onSnipeRetreatDis){
+          if(onSnipeReloading){
+           if(!IsReloading()){
+            OnSNIPE_ST_Reset();
+            alternateRoutineAction=true;
+            onSnipeReloading=false;
+           }
+          }else if(onSnipeShooting){
+           if(!IsShooting()){
+            OnSNIPE_ST_Reset();
+            alternateRoutineAction=true;
+            onSnipeShooting=false;
+           }
+          }else if(onSnipeMoving){
+           alternateRoutineAction=true;
+           onSnipeMoving=false;
+          }else if(Vector3.Distance(transform.position,MyEnemy.transform.position)<=onSnipeRetreatDis){
            moveToDestination|=true;
+          }else{
+           alternateRoutineAction=true;
           }
+         }
+         if(alternateRoutineAction){
+          onSnipeAlternateRetreatShoot=!onSnipeAlternateRetreatShoot;
+          alternateRoutineAction=false;
          }
          if(!onSnipeAlternateRetreatShoot){
           Log.DebugMessage("OnSNIPE_ST_Routine():move");
@@ -43,24 +82,47 @@ namespace AKCondinoO.Sims.Actors{
            Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
            MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis;
            navMeshAgent.destination=MyDest;
-          }
-          if(
-           !IsTraversingPath()
-          ){
-           alternateRoutineAction=true;
+           Debug.DrawRay(MyEnemy.transform.position,dir*onSnipeRetreatDis,Color.yellow,5f);
+           onSnipeMoving=true;
           }
          }
          if(onSnipeAlternateRetreatShoot){
           Log.DebugMessage("OnSNIPE_ST_Routine():shoot");
-          if(OnSNIPE_ST_Shoot()){
-           alternateRoutineAction=true;
+          if(
+           !IsTraversingPath()
+          ){
+           if(!onSnipeReloading&&
+              !onSnipeShooting
+           ){
+            if(OnSNIPE_ST_Shoot()){
+            }
+           }
           }
-         }
-         if(alternateRoutineAction){
-          onSnipeAlternateRetreatShoot=!onSnipeAlternateRetreatShoot;
          }
         }
         protected virtual bool OnSNIPE_ST_Shoot(){
+         if(LookToMyEnemy()){
+          //
+          characterController.isAiming=true;
+          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerp.tgtPos,animatorController.animatorIKController.headLookAtPositionLerped)<=1f){
+           if(itemsEquipped!=null){
+            if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
+             if(simWeapon.ammoLoaded<=0){
+              if(simWeapon.TryStartReloadingAction(simAiming:this)){
+               characterController.weaponsReloading.Add(simWeapon);
+               onSnipeReloading=true;
+               return true;
+              }
+             }else{
+              if(simWeapon.TryStartShootingAction(simAiming:this)){
+               onSnipeShooting=true;
+               return true;
+              }
+             }
+            }
+           }
+          }
+         }
          return false;
         }
     }

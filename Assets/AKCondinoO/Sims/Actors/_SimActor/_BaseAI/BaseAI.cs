@@ -287,6 +287,9 @@ namespace AKCondinoO.Sims.Actors{
               //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
               navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
              }
+             if(characterController!=null){
+                characterController.ManualUpdateUsingAI();
+             }
              AI();
             }
            }else{

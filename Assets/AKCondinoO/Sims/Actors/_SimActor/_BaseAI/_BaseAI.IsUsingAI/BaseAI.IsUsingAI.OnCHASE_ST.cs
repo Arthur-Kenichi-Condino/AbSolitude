@@ -16,6 +16,9 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        protected void OnCHASE_ST_Reset(){
+         ResetRotation(onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
+        }
      protected Coroutine onChaseGetDataCoroutine;
      protected WaitUntil onChaseGetDataThrottler;
       protected float onChaseGetDataThrottlerInterval=.125f;
@@ -145,7 +148,7 @@ namespace AKCondinoO.Sims.Actors{
          onChase_UNREACHABLE_Count=0;
          onChaseIsUnreachable=false;
         }
-        protected virtual void OnCHASE_ST_Routine(){
+        protected virtual void OnCHASE_ST_Routine(Vector3 attackDistance){
          stopPathfindingOnTimeout=false;//
          //if(MyEnemy is BaseAI enemyAI&&enemyAI.enemy!=null&&enemyAI.enemy.id==masterId){
          //}
@@ -177,7 +180,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(onChaseTraveledForTooLong){
           moveToDestination|=!IsTraversingPath();
-          OnCHASE_ST_SubroutineTraveledForTooLong(moveToDestination);
+          OnCHASE_ST_SubroutineTraveledForTooLong(moveToDestination,attackDistance);
           return;
          }
          if(!onChaseTimedOut){
@@ -186,7 +189,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(onChaseTimedOut){
           moveToDestination|=!IsTraversingPath();
-          OnCHASE_ST_SubroutineTimedOut(moveToDestination);
+          OnCHASE_ST_SubroutineTimedOut(moveToDestination,attackDistance);
           return;
          }
          if(!onChaseIsUnreachable){
@@ -195,7 +198,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(onChaseIsUnreachable){
           moveToDestination|=!IsTraversingPath();
-          OnCHASE_ST_SubroutineIsUnreachable(moveToDestination);
+          OnCHASE_ST_SubroutineIsUnreachable(moveToDestination,attackDistance);
           return;
          }
          if(
@@ -240,17 +243,17 @@ namespace AKCondinoO.Sims.Actors{
           onChaseCount++;
           if(onChaseCount>=onChaseMaxCount){
            onChaseCount=0;
-           OnCHASE_ST_Teleport();
+           OnCHASE_ST_Teleport(attackDistance);
            return;
           }
           OnCHASE_ST_Move(false);
           return;
          }
         }
-        protected virtual void OnCHASE_ST_SubroutineTraveledForTooLong(bool moveToDestination){
+        protected virtual void OnCHASE_ST_SubroutineTraveledForTooLong(bool moveToDestination,Vector3 attackDistance){
          onChaseTraveledForTooLongSubroutineTime+=Time.deltaTime;
          if(onChaseTraveledForTooLongSubroutineTime>=onChaseTraveledForTooLongSubroutineMaxTime){
-          OnCHASE_ST_Teleport();
+          OnCHASE_ST_Teleport(attackDistance);
           onChaseTraveledForTooLong=false;
           return;
          }
@@ -263,10 +266,10 @@ namespace AKCondinoO.Sims.Actors{
           return;
          }
         }
-        protected virtual void OnCHASE_ST_SubroutineTimedOut(bool moveToDestination){
+        protected virtual void OnCHASE_ST_SubroutineTimedOut(bool moveToDestination,Vector3 attackDistance){
          onChaseTimedOutSubroutineTime+=Time.deltaTime;
          if(onChaseTimedOutSubroutineTime>=onChaseTimedOutSubroutineMaxTime){
-          OnCHASE_ST_Teleport();
+          OnCHASE_ST_Teleport(attackDistance);
           onChaseTimedOut=false;
           return;
          }
@@ -279,10 +282,10 @@ namespace AKCondinoO.Sims.Actors{
           return;
          }
         }
-        protected virtual void OnCHASE_ST_SubroutineIsUnreachable(bool moveToDestination){
+        protected virtual void OnCHASE_ST_SubroutineIsUnreachable(bool moveToDestination,Vector3 attackDistance){
          onChaseIsUnreachableSubroutineTime+=Time.deltaTime;
          if(onChaseIsUnreachableSubroutineTime>=onChaseIsUnreachableSubroutineMaxTime){
-          OnCHASE_ST_Teleport();
+          OnCHASE_ST_Teleport(attackDistance);
           onChaseIsUnreachable=false;
           return;
          }
@@ -295,12 +298,12 @@ namespace AKCondinoO.Sims.Actors{
           return;
          }
         }
-        protected virtual void OnCHASE_ST_Teleport(){
+        protected virtual void OnCHASE_ST_Teleport(Vector3 attackDistance){
          if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
           teleport.targetDest=MyEnemy.transform.position;
           teleport.cooldown=0f;
           teleport.useRandom=true;
-          teleport.randomMaxDis=AttackDistance().z*1.1f;
+          teleport.randomMaxDis=attackDistance.z*1.1f;
           teleport.DoSkill(this,1);
          }
         }

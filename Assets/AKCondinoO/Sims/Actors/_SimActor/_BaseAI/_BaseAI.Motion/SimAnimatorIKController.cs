@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors{
      bool initialized=false;
      internal Transform      head{get{return animatorController.actor.head;}}
      [SerializeField]internal Vector3PosLerpHelper headLookAtPositionLerp=new Vector3PosLerpHelper();
-      Vector3 headLookAtPositionLerped;
+      internal Vector3 headLookAtPositionLerped;
      internal Transform  leftFoot{get{return animatorController.actor. leftFoot;}}
      internal Transform rightFoot{get{return animatorController.actor.rightFoot;}}
       internal float footHeight=.075f;
@@ -58,7 +58,12 @@ namespace AKCondinoO.Sims.Actors{
            new Vector3(0f,45f,360f),
            new Vector3(0f,45f,360f)
           );
-          Vector3 aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          Vector3 aimAt;
+          if(animatorController.actor.isUsingAI&&animatorController.actor.enemy!=null){
+           aimAt=animatorController.actor.enemy.transform.position;
+          }else{
+           aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          }
           float disToTarget=aimAtMaxDistance;
           if(animatorController.actor.characterController.predictCameraTarget!=null){
            disToTarget=Vector3.Distance(characterController.transform.position+(characterController.transform.rotation*headOffset),animatorController.actor.characterController.predictCameraTarget.Value);

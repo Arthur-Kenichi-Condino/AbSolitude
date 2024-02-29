@@ -15,6 +15,9 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        protected void OnATTACK_ST_Reset(){
+         ResetRotation(onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
+        }
      protected Coroutine onAttackGetDataCoroutine;
      protected WaitUntil onAttackGetDataThrottler;
       protected float onAttackGetDataThrottlerInterval=.125f;
@@ -92,7 +95,7 @@ namespace AKCondinoO.Sims.Actors{
              }
              if(hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit){
               float actorHitRadius=actorHit.GetRadius();
-              if(IsInAttackRange(actorHit)){
+              if(IsInAttackRange(actorHit,out _)){
                bool isFriendly=actorHit.IsFriendlyTo(this);
                if(isFriendly){
                 //Log.DebugMessage("I need to avoid hitting a friendly target:"+actorHit.name);
@@ -131,7 +134,7 @@ namespace AKCondinoO.Sims.Actors{
      protected float onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer;
      protected int onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves=2;
      protected int onAttackHasFriendlyTargetsToAvoidSubroutineMoves;
-        protected virtual void OnATTACK_ST_Routine(){
+        protected virtual void OnATTACK_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
          //Log.DebugMessage("OnATTACK_ST_Routine(),this:"+this);
          bool canAttack=true;
          bool shouldAvoid=(onAttackHasFriendlyTargetsToAvoid.Count>0);
@@ -145,7 +148,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(shouldAvoid){
           canAttack=false;
-          OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(canAttack);
+          OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(canAttack,attackDistance);
           return;
          }
          if(
@@ -158,10 +161,10 @@ namespace AKCondinoO.Sims.Actors{
      protected bool onAttackTargetsToAvoidWaitingRefreshFlag;
      protected bool onAttackTargetsToAvoidRefreshFlag;
      protected bool onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
-        protected virtual void OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(bool canAttack){
+        protected virtual void OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(bool canAttack,Vector3 attackDistance){
          onAttackHasFriendlyTargetsToAvoidSubroutineTime+=Time.deltaTime;
          if(onAttackHasFriendlyTargetsToAvoidSubroutineTime>=onAttackHasFriendlyTargetsToAvoidSubroutineMaxTime){
-          OnATTACK_ST_Teleport();
+          OnATTACK_ST_Teleport(attackDistance);
           onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer=onAttackHasFriendlyTargetsToAvoidSubroutineCooldown;
           return;
          }
@@ -209,7 +212,6 @@ namespace AKCondinoO.Sims.Actors{
                destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
                Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
               }
-              Vector3 attackDistance=AttackDistance();
               Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z*1.1f);
               //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
               MyDest=dest;
@@ -237,41 +239,19 @@ namespace AKCondinoO.Sims.Actors{
           onAttackGetDestGoLeft=true;
          }
         }
-        protected virtual void OnATTACK_ST_Teleport(){
+        protected virtual void OnATTACK_ST_Teleport(Vector3 attackDistance){
          if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
           teleport.targetDest=MyEnemy.transform.position;
           teleport.cooldown=0f;
           teleport.useRandom=true;
-          teleport.randomMaxDis=AttackDistance().z*1.1f;
+          teleport.randomMaxDis=attackDistance.z*1.1f;
           teleport.DoSkill(this,1);
          }
         }
         protected virtual void OnATTACK_ST_Attack(bool canAttack){
-         if(characterController!=null){
-          Vector3 lookDir=MyEnemy.transform.position-transform.position;
-          Vector3 planarLookDir=lookDir;
-          planarLookDir.y=0f;
-          onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(planarLookDir);
-          characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
-          //Debug.DrawRay(characterController.character.transform.position,characterController.character.transform.forward,Color.gray);
-          if(simUMA!=null){
-           Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
-           if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
-            animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
-           }
-           Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
-           Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
-           animatorLookEuler.y+=180f;
-           Vector3 animatorPlanarLookEuler=animatorLookEuler;
-           animatorPlanarLookEuler.x=0f;
-           animatorPlanarLookEuler.z=0f;
-           Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
-           //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-           if(Vector3.Angle(characterController.character.transform.forward,animatorPlanarLookDir)<=1f){
-            if(canAttack){
-             DoAttackOnAnimationEvent();
-            }
-           }
+         if(LookToMyEnemy()){
+          if(canAttack){
+           DoAttackOnAnimationEvent();
           }
          }
         }

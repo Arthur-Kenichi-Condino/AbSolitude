@@ -117,6 +117,7 @@ namespace AKCondinoO.Sims.Weapons{
           if(holder is BaseAI actor&&actor.characterController!=null){
            Vector3 shootDir=(actor.characterController.aimingAt-muzzle.transform.position).normalized;
            Ray shootRay=new Ray(muzzle.transform.position,shootDir);
+           Debug.DrawRay(shootRay.origin,shootRay.direction*shootDis,Color.white,1f);
            _GetShootHits:{
             shootHitsLength=Physics.RaycastNonAlloc(shootRay,shootHits,shootDis,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide);
            }

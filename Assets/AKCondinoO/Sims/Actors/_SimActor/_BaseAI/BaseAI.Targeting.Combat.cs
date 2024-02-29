@@ -78,14 +78,14 @@ namespace AKCondinoO.Sims.Actors{
           radius+Mathf.Max(MyAttackRange.z,weaponRange)
          );
         }
-        internal virtual bool IsInAttackRange(SimObject simObject,bool checkWeapon=false){
+        internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,bool checkWeapon=false){
          Vector3 delta=new Vector3(
           Mathf.Abs(simObject.transform.position.x-transform.position.x),
           Mathf.Abs(simObject.transform.position.y-transform.position.y),
           Mathf.Abs(simObject.transform.position.z-transform.position.z)
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
-         Vector3 attackDistance=AttackDistance(checkWeapon);
+         attackDistance=AttackDistance(checkWeapon);
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
          if((disXZPlane<=attackDistance.z+simObjectRadius||disXZPlane<=attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
@@ -144,16 +144,16 @@ namespace AKCondinoO.Sims.Actors{
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
          }
          ApplyAggressionModeForThenAddTarget(hitbox.actor);
-         SetTargetToBeRemoved(hitbox.actor,15f);
+         SetTargetToBeRemoved(hitbox.actor,5f);
          foreach(var slaveId in slaves){
           if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)&&slaveSimObject is BaseAI slaveAI){
            slaveAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-           slaveAI.SetTargetToBeRemoved(hitbox.actor,15f);
+           slaveAI.SetTargetToBeRemoved(hitbox.actor,5f);
           }
          }
          if(masterSimObject is BaseAI masterAI){
           masterAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-          masterAI.SetTargetToBeRemoved(hitbox.actor,15f);
+          masterAI.SetTargetToBeRemoved(hitbox.actor,5f);
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){

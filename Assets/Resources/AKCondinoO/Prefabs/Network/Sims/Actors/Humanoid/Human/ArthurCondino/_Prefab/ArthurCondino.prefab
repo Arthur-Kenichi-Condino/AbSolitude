@@ -80,7 +80,7 @@ MonoBehaviour:
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 30
+  AFKTimeToUseAI: 10
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
@@ -111,6 +111,10 @@ MonoBehaviour:
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
+  onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+    dealWithGimbalLock: 1
+    tgtRotLerpSpeed: 38
+    tgtRotLerpMaxTime: 0.0005
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0

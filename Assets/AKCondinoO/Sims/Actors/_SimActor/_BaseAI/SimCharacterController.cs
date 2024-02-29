@@ -184,7 +184,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
-         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationRaw*Vector3.forward)*aimAtMaxDistance;
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(true))*aimAtMaxDistance;
          Quaternion?isFollowingViewRotation=null;
          if(MainCamera.singleton.isFollowing){
           MainCamera.singleton.PredictCameraPosFollowing(character.transform,viewRotationRaw,out Vector3 predictCameraPos,out Quaternion predictCameraRot);
@@ -201,10 +201,37 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           viewRotationForAiming=viewRotation;
          }
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(viewRotationForAiming*Vector3.forward)*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(aimDir())*aimAtMaxDistance;
          OnReloadInput();
          OnAction2();
          OnAction1();
+        }
+        internal void ManualUpdateUsingAI(){
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(true))*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(aimDir())*aimAtMaxDistance;
+        }
+        Vector3 aimDir(bool raw=false){
+         if(actor.isUsingAI){
+          if(actor.enemy!=null){
+           //Log.DebugMessage("aimDir:actor.enemy!=null");
+           if(actor.enemy is BaseAI enemyAI){
+            return((enemyAI.characterController.character.transform.position)-(character.transform.position+(character.transform.rotation*headOffset))).normalized;
+           }else{
+            return(actor.enemy.transform.position-(character.transform.position+(character.transform.rotation*headOffset))).normalized;
+           }
+          }else{
+           //Log.DebugMessage("aimDir:actor.enemy==null");
+           return actor.animatorController.transform.forward;
+          }
+         }else{
+          if(raw){
+           //Log.DebugMessage("aimDir:!actor.isUsingAI:raw==true");
+           return viewRotationRaw*Vector3.forward;
+          }else{
+           //Log.DebugMessage("aimDir:!actor.isUsingAI");
+           return viewRotationForAiming*Vector3.forward;
+          }
+         }
         }
     }
 }
