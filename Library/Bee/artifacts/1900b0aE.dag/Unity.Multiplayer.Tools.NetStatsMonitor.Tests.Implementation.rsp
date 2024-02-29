@@ -349,7 +349,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -analyzer:"C:/Unity/Hub/Editor/2022.3.16f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"C:/Unity/Hub/Editor/2022.3.16f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
--analyzer:"Library/PackageCache/com.unity.transport@2.0.1/Analyzers/Unity.Transport.Analyzers.dll"
+-analyzer:"Library/PackageCache/com.unity.transport@2.1.0/Analyzers/Unity.Transport.Analyzers.dll"
 "Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsMonitor/Tests/Implementation/Component/RnsmCustomDataDisplayUpdateTests.cs"
 "Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsMonitor/Tests/Implementation/Component/RnsmDisplayUpdateStatus.cs"
 "Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsMonitor/Tests/Implementation/Component/RnsmDisplayUpdateTests.cs"

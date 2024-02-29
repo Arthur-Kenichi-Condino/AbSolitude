@@ -266,9 +266,11 @@ namespace AKCondinoO.Sims{
           persistentData.UpdateData(this);
           if(Core.singleton.isServer){
            if(IsOwner){
-            netPosition.Value=persistentData.position  ;
-            netRotation.Value=persistentData.rotation  ;
-            netScale   .Value=persistentData.localScale;
+            if(NetworkManager!=null){
+             netPosition.Value=persistentData.position  ;
+             netRotation.Value=persistentData.rotation  ;
+             netScale   .Value=persistentData.localScale;
+            }
            }
           }
             transform.hasChanged=false;
