@@ -42,6 +42,17 @@ namespace AKCondinoO.Sims.Actors{
           MyState=State.DEAD_ST;
           goto _MyStateSet;
          }else{
+          if      (MyState==State. SNIPE_ST){
+           if(IsShooting()||IsReloading()){//  so the animation is completed
+            MyState=State. SNIPE_ST;
+            goto _MyStateSet;
+           }
+          }else if(MyState==State.ATTACK_ST){
+           if(IsAttacking()){//  so the animation is completed
+            MyState=State.ATTACK_ST;
+            goto _MyStateSet;
+           }
+          }
           if(MyEnemy!=null){
            if(isInAttackRangeWithWeapon){
             if(!isInAttackRange||(IsFasterThan(MyEnemy)&&(
@@ -90,6 +101,9 @@ namespace AKCondinoO.Sims.Actors{
             OnSNIPE_ST_Reset();
           }else if(lastState==State.ATTACK_ST){
            OnATTACK_ST_Reset();
+           if(MyState==State.CHASE_ST){
+            onChaseAlternateMoveAttack=true;
+           }
           }else if(lastState==State. CHASE_ST){
             OnCHASE_ST_Reset();
           }

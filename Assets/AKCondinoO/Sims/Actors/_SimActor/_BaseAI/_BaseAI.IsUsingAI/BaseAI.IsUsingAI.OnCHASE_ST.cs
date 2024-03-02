@@ -133,6 +133,7 @@ namespace AKCondinoO.Sims.Actors{
      protected float onChaseIsUnreachableSubroutineTime;
      protected int onChaseIsUnreachableSubroutineDestModifiersChangeAfterMoves=2;
      protected int onChaseIsUnreachableSubroutineMoves;
+     protected bool onChaseAlternateMoveAttack=false;
         protected virtual void OnCHASE_ST_Start(){
          onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
          onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
@@ -149,9 +150,27 @@ namespace AKCondinoO.Sims.Actors{
          onChaseIsUnreachable=false;
         }
         protected virtual void OnCHASE_ST_Routine(Vector3 attackDistance){
+         if(MyEnemy==null){
+          return;
+         }
          stopPathfindingOnTimeout=false;//
-         //if(MyEnemy is BaseAI enemyAI&&enemyAI.enemy!=null&&enemyAI.enemy.id==masterId){
-         //}
+         if(
+          !IsTraversingPath()
+         ){
+          bool attack=false;
+          if(onChaseAlternateMoveAttack){
+           attack=true;
+          }
+          if(attack){
+           if(IsAttacking()){
+            onChaseAlternateMoveAttack=false;//  change when entered attack but left state too soon
+            return;
+           }else{
+            OnCHASE_ST_Attack(true);
+            return;
+           }
+          }
+         }
          bool moveToDestination=false;
          if(onChaseMyEnemyMovedSoChangeDestinationTimer>0f){
           onChaseMyEnemyMovedSoChangeDestinationTimer-=Time.deltaTime;
@@ -243,6 +262,8 @@ namespace AKCondinoO.Sims.Actors{
           onChaseCount++;
           if(onChaseCount>=onChaseMaxCount){
            onChaseCount=0;
+           //if(MyEnemy is BaseAI enemyAI&&enemyAI.enemy!=null&&enemyAI.enemy.id==masterId){
+           //}//  ...and/or took damage and delay
            OnCHASE_ST_Teleport(attackDistance);
            return;
           }
@@ -367,6 +388,13 @@ namespace AKCondinoO.Sims.Actors{
         protected virtual void OnCHASE_ST_Move(bool useModifiers=true){
          OnCHASE_ST_GetDest(useModifiers);
          navMeshAgent.destination=MyDest;
+        }
+        protected virtual void OnCHASE_ST_Attack(bool canAttack){
+         if(LookToMyEnemy()){
+          if(canAttack){
+           DoAttackOnAnimationEvent();
+          }
+         }
         }
     }
 }

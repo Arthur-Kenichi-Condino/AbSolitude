@@ -135,6 +135,9 @@ namespace AKCondinoO.Sims.Actors{
      protected int onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves=2;
      protected int onAttackHasFriendlyTargetsToAvoidSubroutineMoves;
         protected virtual void OnATTACK_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
+         if(MyEnemy==null){
+          return;
+         }
          //Log.DebugMessage("OnATTACK_ST_Routine(),this:"+this);
          bool canAttack=true;
          bool shouldAvoid=(onAttackHasFriendlyTargetsToAvoid.Count>0);

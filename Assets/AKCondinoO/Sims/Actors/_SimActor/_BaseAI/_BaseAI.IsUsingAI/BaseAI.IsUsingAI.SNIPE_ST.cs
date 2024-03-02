@@ -29,6 +29,9 @@ namespace AKCondinoO.Sims.Actors{
      bool onSnipeReloading;
      bool onSnipeShooting;
         protected virtual void OnSNIPE_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
+         if(MyEnemy==null){
+          return;
+         }
          Log.DebugMessage("OnSNIPE_ST_Routine()");
          float myMoveSpeed=Mathf.Max(moveMaxVelocity.x,moveMaxVelocity.y,moveMaxVelocity.z);
          float myEnemyMoveSpeed=0f;
