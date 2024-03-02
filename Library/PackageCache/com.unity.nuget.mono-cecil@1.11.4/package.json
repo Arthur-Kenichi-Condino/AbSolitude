@@ -15,5 +15,6 @@
     "url": "https://github.cds.internal.unity3d.com/unity/com.unity.nuget.mono-cecil.git",
     "type": "git",
     "revision": "d0133ce672d724694b56bfd20672acf6f8737fec"
-  }
+  },
+  "_fingerprint": "d6f9955a5d5f84d45442ff1ad0fb694cc6e2fd62"
 }

@@ -24,5 +24,6 @@
     "url": "https://github.cds.internal.unity3d.com/unity/Addressables.git",
     "type": "git",
     "revision": "a981d4bc6c5de7a6a62ec3f63f3bdfc87ece371a"
-  }
+  },
+  "_fingerprint": "682bcd05e64e45815c9bbd6cf1e7225d4d41dfd6"
 }

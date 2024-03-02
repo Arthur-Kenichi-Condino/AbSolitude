@@ -171,6 +171,7 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
         }
      internal bool isUsingAI=true;
+      internal bool wasUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
      [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;

@@ -67,5 +67,6 @@
       "description": "A basic script that instantiates and destroys a prefab AssetReference.",
       "path": "Samples~/PrefabSpawner"
     }
-  ]
+  ],
+  "_fingerprint": "19724bd5f889fdda28b396bc10cef1be48211c68"
 }

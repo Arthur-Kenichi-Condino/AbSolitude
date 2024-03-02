@@ -72,7 +72,7 @@ namespace AKCondinoO.Sims.Actors{
           }else if(Vector3.Distance(transform.position,MyEnemy.transform.position)<=onSnipeRetreatDis){
            moveToDestination|=true;
           }else{
-           alternateRoutineAction=true;
+           onSnipeAlternateRetreatShoot=true;
           }
          }
          if(alternateRoutineAction){
@@ -81,6 +81,9 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(!onSnipeAlternateRetreatShoot){
           Log.DebugMessage("OnSNIPE_ST_Routine():move");
+          if(characterController!=null){
+             characterController.isAiming=false;
+          }
           if(moveToDestination){
            Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
            MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis;

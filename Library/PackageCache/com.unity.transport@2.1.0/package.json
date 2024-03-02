@@ -51,5 +51,6 @@
       "description": "Simplest possible client and server implementations. Meant to tie in with the package documentation.",
       "path": "Samples~/SimpleClientServer"
     }
-  ]
+  ],
+  "_fingerprint": "6d461370b7a64478864ae52825d9050de835b1e3"
 }
