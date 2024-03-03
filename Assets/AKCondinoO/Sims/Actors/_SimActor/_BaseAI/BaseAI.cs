@@ -295,6 +295,9 @@ namespace AKCondinoO.Sims.Actors{
              AI();
             }
            }else{
+            if(wasUsingAI){
+             OnStopUsingAI();
+            }
             DisableNavMeshAgent();
             if(characterController!=null){
                characterController.ManualUpdate();

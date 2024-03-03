@@ -21,11 +21,24 @@ namespace AKCondinoO.Sims.Actors{
           characterController.character.transform.rotation=transform.rotation;
          }
         }
+        protected virtual void OnStopUsingAI(){
+         if(characterController!=null){
+          transform.rotation=characterController.character.transform.rotation;
+          characterController.character.transform.rotation=transform.rotation;
+         }
+        }
         protected virtual void AI(){
          bool isInAttackRange=false;
          bool isInAttackRangeWithWeapon=false;
          Vector3 attackDistance;
          Vector3 attackDistanceWithWeapon;
+         if(resettingRotation){
+          characterController.character.transform.rotation=resettingRotationRotLerp.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+          transform.rotation=characterController.character.transform.rotation;
+          if(resettingRotationRotLerp.tgtRotLerpVal>=1f){
+           OnStopResetRotation();
+          }
+         }
          if(MyEnemy!=null){
           isInAttackRange=IsInAttackRange(MyEnemy,out attackDistance);
           isInAttackRangeWithWeapon=IsInAttackRange(MyEnemy,out attackDistanceWithWeapon,true);
@@ -97,6 +110,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          _MyStateSet:{}
          if(lastState!=MyState){
+          OnStopResetRotation();
           if      (lastState==State. SNIPE_ST){
             OnSNIPE_ST_Reset();
           }else if(lastState==State.ATTACK_ST){
@@ -151,13 +165,28 @@ namespace AKCondinoO.Sims.Actors{
          }
          dir.y=0f;
         }
-        void ResetRotation(QuaternionRotLerpHelper rotLerp){
+     protected bool resettingRotation;
+      protected QuaternionRotLerpHelper resettingRotationRotLerp;
+        void ResetRotation(QuaternionRotLerpHelper rotLerp,bool instantly=false){
          if(characterController!=null){
           ToResetRotation(out Vector3 dir);
           rotLerp.tgtRot=Quaternion.LookRotation(dir,Vector3.up);
-          characterController.character.transform.rotation=rotLerp.EndRotation();
+          if(instantly||rotLerp==null){
+           characterController.character.transform.rotation=rotLerp.EndRotation();
+           transform.rotation=characterController.character.transform.rotation;
+          }else{
+           resettingRotationRotLerp=rotLerp;
+           resettingRotation=true;
+          }
+         }
+        }
+        void OnStopResetRotation(bool end=true){
+         if(end){
+          characterController.character.transform.rotation=resettingRotationRotLerp.EndRotation();
           transform.rotation=characterController.character.transform.rotation;
          }
+         resettingRotationRotLerp=null;
+         resettingRotation=false;
         }
         protected virtual bool LookToMyEnemy(){
          if(characterController!=null){
