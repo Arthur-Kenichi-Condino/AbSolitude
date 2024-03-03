@@ -100,7 +100,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
-     [SerializeField]internal QuaternionRotLerpHelper onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
+     [SerializeField]internal QuaternionRotLerpHelper onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
      protected Vector3 onChaseMyEnemyPos,onChaseMyEnemyPos_Last;
      protected float onChaseRenewDestinationTimeInterval=4f;
      protected float onChaseRenewDestinationTimer=4f;

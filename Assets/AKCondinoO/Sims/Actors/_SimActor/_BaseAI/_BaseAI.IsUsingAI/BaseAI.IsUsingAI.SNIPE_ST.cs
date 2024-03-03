@@ -24,7 +24,7 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.destination=navMeshAgent.transform.position;
          }
         }
-     [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
+     [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
      bool onSnipeMoving;
      bool onSnipeReloading;
      bool onSnipeShooting;

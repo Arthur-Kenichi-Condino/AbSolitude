@@ -124,7 +124,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
         }
-     [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(38,.0005f);
+     [SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
      protected bool onAttackGetDestGoLeft;
      protected bool onAttackGetDestGoRight;
      protected bool onAttackGetDestGoRandom;

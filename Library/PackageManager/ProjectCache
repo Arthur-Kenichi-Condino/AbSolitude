@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638450146936858059
-    m_Hash: 449008986
+      ticks: 638450451617976737
+    m_Hash: 2537992478
   m_LockFileStatus:
     m_FilePath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638450146936897435
-    m_Hash: 750841998
+      ticks: 638450451618027229
+    m_Hash: 1911794175
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -143,12 +143,12 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-- packageId: com.unity.addressables@1.21.19
+- packageId: com.unity.addressables@1.21.20
   testable: 0
   isDirectDependency: 1
-  version: 1.21.19
+  version: 1.21.20
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.addressables@1.21.19
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.addressables@1.21.20
   assetPath: Packages/com.unity.addressables
   name: com.unity.addressables
   displayName: Addressables
@@ -298,7 +298,7 @@ m_ResolvedPackages:
     deprecated: []
   dependencies:
   - name: com.unity.scriptablebuildpipeline
-    version: 1.21.21
+    version: 1.21.22
   - name: com.unity.modules.assetbundle
     version: 1.0.0
   - name: com.unity.modules.imageconversion
@@ -311,7 +311,7 @@ m_ResolvedPackages:
     version: 1.0.0
   resolvedDependencies:
   - name: com.unity.scriptablebuildpipeline
-    version: 1.21.21
+    version: 1.21.22
   - name: com.unity.modules.assetbundle
     version: 1.0.0
   - name: com.unity.modules.imageconversion
@@ -340,13 +340,13 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638342531680000000
+  datePublishedTicks: 638433333360000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/Addressables.git
-    revision: f50f07ff121c5aa50ac3d852373c2c50ecbd73cf
+    revision: c34a3696939031a32903c278ecd646f4d845377f
     path: 
   unityLifecycle:
     version: 1.21.19
@@ -363,7 +363,20 @@ m_ResolvedPackages:
     were very likely when using dynamic internal asset naming\n- Fixed catalogs to
     use back slashes rather than forward slashes for android builds.\n- Fixed an
     issue where \"Failed to remove scene from Addressables profiler\" warning occurs
-    when a scene is unloaded."}'
+    when a scene is unloaded.\n- Prevent a KeyNotFoundException from being logged
+    to the console.\n- Fix error message to report not found when loading non-Addressable
+    asset by guid\n- Fixed issue where a NullReferenceException occurs when using
+    WaitForCompletion and the max number of concurrent requests is set to 1.\n- Fixed
+    issue where there is missing asset data in the Addressables Profiler for binary
+    catalogs.\n- Added note about the limitations of the Check for Content Update
+    Restrictions tool.\n- Add migration upgrade prompt for legacy path pairs (ex.
+    RemoteLoadPath)\n- Fixed an issue where a broken script on any Addressable Asset
+    would make it impossible to select Addressable Assets in the AssetReference inspector\n-
+    Add logging of catalog and asset bundle http operations.\n- Add UI to trigger
+    CCD management API http call logging (requires newer CCD package)\n- CCD Automatic
+    Profiles can now be one per-profile, rather than one per AddressableSettings
+    instance\n- CCD Manager is built when using the Build to CCD and the standard
+    Build content menu\n- Add support for CCD Management SDK 3.0"}'
   assetStore:
     productId: 
 - packageId: com.unity.ai.navigation@2.0.0
@@ -606,12 +619,12 @@ m_ResolvedPackages:
     is already locked."}'
   assetStore:
     productId: 
-- packageId: com.unity.ide.rider@3.0.27
+- packageId: com.unity.ide.rider@3.0.28
   testable: 0
   isDirectDependency: 1
-  version: 3.0.27
+  version: 3.0.28
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.rider@3.0.27
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.ide.rider@3.0.28
   assetPath: Packages/com.unity.ide.rider
   name: com.unity.ide.rider
   displayName: JetBrains Rider Editor
@@ -693,13 +706,13 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638373878680000000
+  datePublishedTicks: 638447139880000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.ide.rider@3.0/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.rider.git
-    revision: 1d471c19a7f21834ae5b8d0358fd6f9b242c1ee8
+    revision: f4880c72477e9bbd7321c0dbda4428fa10d916df
     path: 
   unityLifecycle:
     version: 3.0.27
@@ -712,10 +725,9 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"- Restore the ability to select Rider installation
-    from the custom location\n- Fix possible extra project regeneration on moving
-    focus from Rider to Unity\n- Improve performance of code generation for very
-    large projects"}'
+  upmReserved: '{"changelog":"- fix RIDER-103933 \"PlayerSettings.suppressCommonWarnings\"
+    is not supported in Unity 2019.4.40f\n- fix https://github.com/JetBrains/resharper-unity/issues/2431
+    and [RIDER-104221](https://youtrack.jetbrains.com/issue/RIDER-104221)"}'
   assetStore:
     productId: 
 - packageId: com.unity.ide.visualstudio@2.0.22
@@ -5102,12 +5114,12 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-- packageId: com.unity.scriptablebuildpipeline@1.21.21
+- packageId: com.unity.scriptablebuildpipeline@1.21.22
   testable: 0
   isDirectDependency: 0
-  version: 1.21.21
+  version: 1.21.22
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.scriptablebuildpipeline@1.21.21
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.scriptablebuildpipeline@1.21.22
   assetPath: Packages/com.unity.scriptablebuildpipeline
   name: com.unity.scriptablebuildpipeline
   displayName: Scriptable Build Pipeline
@@ -5220,13 +5232,13 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638342531640000000
+  datePublishedTicks: 638433333340000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.scriptablebuildpipeline@1.21/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/Addressables.git
-    revision: a981d4bc6c5de7a6a62ec3f63f3bdfc87ece371a
+    revision: 6bd4bdae79fcdd3902dce37b766b3fae82d62fde
     path: 
   unityLifecycle:
     version: 1.21.21
@@ -5239,8 +5251,11 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"- Fix CalculateSceneDependencyData given changed sprite
-    atlas"}'
+  upmReserved: '{"changelog":"- Fixed a bug where calculating scene dependency data
+    could throw an error\n- Fixed a bug that lead to builds being much slower than
+    they should be\n- Fixed issue where \"Build Task CalculateSceneDependencyData
+    failed with exception: Object reference not set to an instance of an object\"
+    is thrown when building."}'
   assetStore:
     productId: 
 - packageId: com.unity.test-framework.performance@3.0.2

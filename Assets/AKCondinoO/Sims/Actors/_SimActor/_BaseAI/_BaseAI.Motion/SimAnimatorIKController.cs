@@ -121,6 +121,7 @@ namespace AKCondinoO.Sims.Actors{
             animatorController.animator.SetLookAtWeight(1f);
             animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
            }else{
+            //  TO DO: olhar pra frente se está usando AI
             animatorController.animator.SetLookAtWeight(0f);
            }
           }

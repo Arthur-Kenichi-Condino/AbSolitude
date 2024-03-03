@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 3740330996
+  InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -161,19 +162,19 @@ MonoBehaviour:
   MyAggressionMode: 2
   onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpSpeed: 10
+    tgtRotLerpMaxTime: 0.5
   onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpSpeed: 10
+    tgtRotLerpMaxTime: 0.5
   doIdleMove: 1
   useRunSpeedChance: 0.5
   delayToRandomMove: 4
   onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0005
+    tgtRotLerpSpeed: 10
+    tgtRotLerpMaxTime: 0.5
 --- !u!114 &-5906123023762645204
 MonoBehaviour:
   m_ObjectHideFlags: 0

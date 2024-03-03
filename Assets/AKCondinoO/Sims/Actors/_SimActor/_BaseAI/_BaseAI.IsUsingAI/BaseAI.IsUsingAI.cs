@@ -36,7 +36,7 @@ namespace AKCondinoO.Sims.Actors{
           characterController.character.transform.rotation=resettingRotationRotLerp.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
           transform.rotation=characterController.character.transform.rotation;
           if(resettingRotationRotLerp.tgtRotLerpVal>=1f){
-           OnStopResetRotation();
+           OnResetRotationEnd();
           }
          }
          if(MyEnemy!=null){
@@ -110,7 +110,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          _MyStateSet:{}
          if(lastState!=MyState){
-          OnStopResetRotation();
+          OnResetRotationEnd();
           if      (lastState==State. SNIPE_ST){
             OnSNIPE_ST_Reset();
           }else if(lastState==State.ATTACK_ST){
@@ -180,7 +180,10 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-        void OnStopResetRotation(bool end=true){
+        void OnResetRotationEnd(bool end=true){
+         if(!resettingRotation){
+          return;
+         }
          if(end){
           characterController.character.transform.rotation=resettingRotationRotLerp.EndRotation();
           transform.rotation=characterController.character.transform.rotation;

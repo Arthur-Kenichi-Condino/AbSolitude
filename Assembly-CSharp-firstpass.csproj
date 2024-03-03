@@ -1088,6 +1088,10 @@
       <Project>{4E9CD833-7173-613F-BC11-8984A56D365E}</Project>
       <Name>Unity.Rider.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.DependencyInjection.UIElements.csproj">
+      <Project>{B932821C-50CB-514D-BF12-FBD13AA70787}</Project>
+      <Name>Unity.Multiplayer.Tools.DependencyInjection.UIElements</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.MetricTestData.csproj">
       <Project>{12109503-918C-D436-7977-74CB509E4F70}</Project>
       <Name>Unity.Multiplayer.Tools.MetricTestData</Name>
@@ -1168,6 +1172,10 @@
       <Project>{958AE388-5188-6801-BC60-3AF07F57F199}</Project>
       <Name>Unity.Collections</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Editor.UI.csproj">
+      <Project>{0D4DA136-FBC6-DC13-0985-CD0273E22897}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Editor.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetworkSimulator.Runtime.csproj">
       <Project>{0605E234-8F27-8C47-EF64-B7AFBE289BB4}</Project>
       <Name>Unity.Multiplayer.Tools.NetworkSimulator.Runtime</Name>
@@ -1199,6 +1207,10 @@
     <ProjectReference Include="SteamNetworkingSockets Transport for Netcode for GameObjects.csproj">
       <Project>{FD5997EA-D7BD-1AF4-35B1-A6540B2FBECA}</Project>
       <Name>SteamNetworkingSockets Transport for Netcode for GameObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.DependencyInjection.csproj">
+      <Project>{64A0971E-8F0E-46E8-B126-C9F601E875CE}</Project>
+      <Name>Unity.Multiplayer.Tools.DependencyInjection</Name>
     </ProjectReference>
     <ProjectReference Include="Netcode for GameObjects Community Extensions.csproj">
       <Project>{DF6E1670-3A49-7609-D5F2-AE1E339C2683}</Project>
@@ -1280,6 +1292,10 @@
       <Project>{98E45CA9-4200-01C2-8029-EAAC23524FC7}</Project>
       <Name>Unity.Networking.Transport</Name>
     </ProjectReference>
+    <ProjectReference Include="com.unity.multiplayer.tools.window.csproj">
+      <Project>{3A588CD0-6669-6BFA-AC28-ADA5C06C30D1}</Project>
+      <Name>com.unity.multiplayer.tools.window</Name>
+    </ProjectReference>
     <ProjectReference Include="UMA_Core.csproj">
       <Project>{8B809ED7-2EEB-19A3-F708-D8B162C8C678}</Project>
       <Name>UMA_Core</Name>
@@ -1288,6 +1304,10 @@
       <Project>{60CADFD3-BAC8-C854-69D9-BE8265E7B5CE}</Project>
       <Name>Unity.MemoryProfiler.Editor.MemoryProfilerModule</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Editor.Visualization.csproj">
+      <Project>{C03C4D96-040A-D97C-CE43-A855074A3BE3}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Editor.Visualization</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.State.csproj">
       <Project>{50673C4B-D51B-F337-6DA7-258F97E55B89}</Project>
       <Name>Unity.VisualScripting.State</Name>
@@ -1295,6 +1315,10 @@
     <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
       <Project>{24E29617-C26A-B672-2E2C-C6F6B14DF034}</Project>
       <Name>Unity.Postprocessing.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Configuration.csproj">
+      <Project>{302488F5-672A-EBAB-9633-0F500567F272}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.AI.Navigation.Editor.ConversionSystem.csproj">
       <Project>{E829E590-095B-3FA7-1437-7598FB4D5960}</Project>
