@@ -62,13 +62,13 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSolutionInterface\Runtime\NullNetworkObjectProvider.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSolutionInterface\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSolutionInterface\Runtime\INetworkObjectProvider.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSolutionInterface\Runtime\NetworkSolutionInterface.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSolutionInterface\Runtime\NullNetworkObjectProvider.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSolutionInterface\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSolutionInterface\Runtime\INetworkObjectProvider.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSolutionInterface\Runtime\NetworkSolutionInterface.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSolutionInterface\Runtime\Unity.Multiplayer.Tools.NetworkSolutionInterface.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSolutionInterface\Runtime\Unity.Multiplayer.Tools.NetworkSolutionInterface.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -193,6 +193,7 @@ namespace AKCondinoO.Sims.Actors{
               DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
             OnThirdPersonCamFollow();
            }
+           wasUsingAI=isUsingAI;
            if(MainCamera.singleton.toFollowActor==this){
             //Log.DebugMessage("following this:"+this);
             if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){

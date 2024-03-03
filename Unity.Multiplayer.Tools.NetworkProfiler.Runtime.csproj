@@ -62,22 +62,21 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\MetricCounters.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\EventCounterFactory.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\CounterWrapper.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\ProfilerAdapterEventListener.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\ICounter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\ICounterFactory.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Models\Profiler\BytesSentAndReceived.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\MetricEventCounters.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\MetricByteCounters.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Frame\FrameInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\ProfilerCounters.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Counter\ByteCounterFactory.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\MetricCounters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\EventCounterFactory.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\CounterWrapper.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\ProfilerAdapterEventListener.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\ICounter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\ICounterFactory.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\MetricEventCounters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\MetricByteCounters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Frame\FrameInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\ProfilerCounters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Counter\ByteCounterFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkProfiler\Runtime\Unity.Multiplayer.Tools.NetworkProfiler.Runtime.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkProfiler\Runtime\Unity.Multiplayer.Tools.NetworkProfiler.Runtime.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

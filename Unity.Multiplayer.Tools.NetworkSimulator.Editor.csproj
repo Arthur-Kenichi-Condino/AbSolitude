@@ -62,37 +62,37 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\LagSpikeView.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkTypeView.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\PropertyDrawers\ConnectionsSwapPropertyDrawers.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ToggleButtonStrip\ToggleButtonStrip.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\Elements\NetworkScenarioSettings.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkSimulatorEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkScenarioView.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\PropertyDrawers\MinMaxPropertyDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkScenarioTypesLibrary.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\PropertyDrawers\ConnectionsCyclePropertyDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStrip.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\Templates\NetworkScenarioTemplateMenu.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkEventsView.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\Elements\NetworkPresetDropdown.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\LagSpikeView.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkTypeView.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\PropertyDrawers\ConnectionsSwapPropertyDrawers.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ToggleButtonStrip\ToggleButtonStrip.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\Elements\NetworkScenarioSettings.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkSimulatorEditor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkScenarioView.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\PropertyDrawers\MinMaxPropertyDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkScenarioTypesLibrary.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\PropertyDrawers\ConnectionsCyclePropertyDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStrip.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\Templates\NetworkScenarioTemplateMenu.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkEventsView.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\Elements\NetworkPresetDropdown.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStrip.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkScenarioView.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\Templates\NewScenarioBehaviour.cs.txt" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStripDark.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkScenarioView.uxml" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkTypeView.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ToggleButtonStrip\ToggleButtonStrip.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkTypeView.uxml" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStripLight.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkEventsView.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\Templates\NewScenarioTask.cs.txt" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\LagSpikeView.uxml" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\LagSpikeView.uss" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\Unity.Multiplayer.Tools.NetworkSimulator.Editor.asmdef" />
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Editor\UI\NetworkEventsView.uxml" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStrip.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkScenarioView.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\Templates\NewScenarioBehaviour.cs.txt" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStripDark.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkScenarioView.uxml" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkTypeView.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ToggleButtonStrip\ToggleButtonStrip.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkTypeView.uxml" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\ButtonStrip\ButtonStripLight.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkEventsView.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\Templates\NewScenarioTask.cs.txt" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\LagSpikeView.uxml" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\LagSpikeView.uss" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\Unity.Multiplayer.Tools.NetworkSimulator.Editor.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Editor\UI\NetworkEventsView.uxml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

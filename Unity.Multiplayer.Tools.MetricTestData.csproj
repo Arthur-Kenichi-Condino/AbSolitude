@@ -62,20 +62,20 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\TestDataGenerator.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Definitions\Verbs.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\TestDataTrends.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\TestDataDefinition.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\TestDataDispatcher.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Definitions\Nouns.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\TestDataGeneratorComponent.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Dispatch\ITestDataTracker.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Dispatch\TestDataTracker.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Definitions\Adjectives.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\TestDataGenerator.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Definitions\Verbs.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\TestDataTrends.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\TestDataDefinition.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\TestDataDispatcher.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Definitions\Nouns.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\TestDataGeneratorComponent.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Dispatch\ITestDataTracker.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Dispatch\TestDataTracker.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Definitions\Adjectives.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricTestData\Runtime\Unity.Multiplayer.Tools.MetricTestData.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricTestData\Runtime\Unity.Multiplayer.Tools.MetricTestData.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

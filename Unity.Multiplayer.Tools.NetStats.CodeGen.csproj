@@ -62,18 +62,18 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\CodeGenHelpers.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\PostProcessorReflectionImporterProvider.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\MetricIdTypeRegistrationAssemblyProcessor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\PostProcessorAssemblyResolver.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\EventPayloadRegistrationAssemblyProcessor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\AssemblyProcessorMain.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\PostProcessorReflectionImporter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\IAssemblyProcessingLogger.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\IAssemblyProcesor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\CodeGenHelpers.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\PostProcessorReflectionImporterProvider.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\MetricIdTypeRegistrationAssemblyProcessor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\PostProcessorAssemblyResolver.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\EventPayloadRegistrationAssemblyProcessor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\AssemblyProcessorMain.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\PostProcessorReflectionImporter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\IAssemblyProcessingLogger.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\IAssemblyProcesor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStats\CodeGen\Unity.Multiplayer.Tools.NetStats.CodeGen.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStats\CodeGen\Unity.Multiplayer.Tools.NetStats.CodeGen.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -367,7 +367,9 @@
 -r:"Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime/Newtonsoft.Json.dll"
 -r:"Library/PackageCache/com.unity.visualscripting@1.9.1/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.Adapters.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.Common.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.MetricEvents.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.MetricTypes.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.NetStats.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Netcode.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
@@ -376,9 +378,10 @@
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport@2.1.0/Analyzers/Unity.Transport.Analyzers.dll"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/Adapters/Ngo1/AssemblyInfo.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/Adapters/Ngo1/Ngo1Adapter.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/Adapters/Ngo1/Ngo1AdapterInitializer.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1/Ngo1Adapter.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1/Ngo1AdapterInitializer.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1/ObjectBandwidthCache.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1/ObjectRpcCountCache.cs"
 -langversion:9.0
 
 /deterministic

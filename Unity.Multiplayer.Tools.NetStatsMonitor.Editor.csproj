@@ -62,19 +62,19 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\Util\CustomInspectorUtils.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\PositionConfigurationDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\GraphConfigurationDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\CounterConfigurationDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\CustomTestDataGeneratorEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\NetStatsMonitorConfigurationEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\MetricIdPropertyDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\RuntimeNetStatsMonitorEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Inspector\DisplayElementConfigurationDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\Util\CustomInspectorUtils.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\PositionConfigurationDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\GraphConfigurationDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\CounterConfigurationDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\CustomTestDataGeneratorEditor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\NetStatsMonitorConfigurationEditor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\MetricIdPropertyDrawer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\RuntimeNetStatsMonitorEditor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Inspector\DisplayElementConfigurationDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsMonitor\Editor\Unity.Multiplayer.Tools.NetStatsMonitor.Editor.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsMonitor\Editor\Unity.Multiplayer.Tools.NetStatsMonitor.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -62,35 +62,37 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Metadata\AdapterMetadata.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Actions\ISimulateDisconnect.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetTransformLastKnown.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\IAdapterComponent.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Metadata\PackageVersion.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetObjectIds.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetPriority.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\INetworkAdapter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetOwnership.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Actions\IHandleNetworkParameters.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Events\IMetricCollectionEvent.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetTransformWithoutArtificialLatency.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\DataTypes\ClientId.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Actions\ISimulateDisconnectAndReconnect.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\DataTypes\ObjectId.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetClientId.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Metadata\PackageInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetGameObject.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\INetworkAvailability.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetBandwidth.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetRpcCount.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Actions\ISimulateReconnect.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetInterest.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Components\Queries\IGetTransformPredicted.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\NetworkAdapters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Metadata\AdapterMetadata.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Actions\ISimulateDisconnect.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Exceptions\NoSubscribersException.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetTransformLastKnown.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\IAdapterComponent.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Metadata\PackageVersion.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetObjectIds.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetPriority.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\INetworkAdapter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetOwnership.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Actions\IHandleNetworkParameters.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Events\IMetricCollectionEvent.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetTransformWithoutArtificialLatency.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\DataTypes\ClientId.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Actions\ISimulateDisconnectAndReconnect.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\DataTypes\ObjectId.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetClientId.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Metadata\PackageInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetGameObject.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\INetworkAvailability.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetBandwidth.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetRpcCount.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Actions\ISimulateReconnect.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetInterest.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Events\IGetConnectedClients.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Components\Queries\IGetTransformPredicted.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\NetworkAdapters.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Unity.Multiplayer.Tools.Adapters.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Unity.Multiplayer.Tools.Adapters.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

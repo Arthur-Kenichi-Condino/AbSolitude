@@ -1,0 +1,13 @@
+{
+  "name": "Unity.Multiplayer.Tools.NetVis.Configuration",
+  "rootNamespace": "Unity.Multiplayer.Tools.NetVis.Configuration",
+  "references": [
+    "Unity.Multiplayer.Tools.Common",
+    "Unity.Multiplayer.Tools.Adapters",
+    "Unity.Burst",
+    "Unity.Mathematics"
+  ],
+  "defineConstraints": [
+    "UNITY_2023_2_OR_NEWER"
+  ]
+}

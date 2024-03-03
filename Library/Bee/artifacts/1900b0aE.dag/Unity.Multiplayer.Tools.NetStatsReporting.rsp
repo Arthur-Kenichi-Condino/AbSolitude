@@ -385,14 +385,8 @@
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport@2.1.0/Analyzers/Unity.Transport.Analyzers.dll"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/AssemblyInfo.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/MetricObserverFactory.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/Definitions/Adjectives.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/Definitions/Nouns.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/Definitions/Verbs.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/TestDataDefinition.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/TestDataDispatcher.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/NetStatsReporting/Runtime/TestData/TestDataGeneratorComponent.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/NetStatsReporting/Runtime/AssemblyInfo.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/NetStatsReporting/Runtime/MetricObserverFactory.cs"
 -langversion:9.0
 
 /deterministic

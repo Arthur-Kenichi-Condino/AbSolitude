@@ -62,11 +62,11 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1WithUtp2\Ngo1WithUtp2AdapterInitializer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1WithUtp2\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1WithUtp2\Ngo1WithUtp2AdapterInitializer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1WithUtp2\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1WithUtp2\Unity.Multiplayer.Tools.Adapters.Ngo1WithUtp2.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1WithUtp2\Unity.Multiplayer.Tools.Adapters.Ngo1WithUtp2.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

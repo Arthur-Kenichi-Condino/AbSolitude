@@ -62,17 +62,11 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\TestDataGeneratorComponent.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\Definitions\Nouns.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\TestDataDefinition.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\MetricObserverFactory.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\Definitions\Adjectives.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\TestDataDispatcher.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\TestData\Definitions\Verbs.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsReporting\Runtime\MetricObserverFactory.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsReporting\Runtime\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetStatsReporting\Runtime\Unity.Multiplayer.Tools.NetStatsReporting.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetStatsReporting\Runtime\Unity.Multiplayer.Tools.NetStatsReporting.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -62,12 +62,12 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricEvents\Runtime\MetricObserver.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricEvents\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricEvents\Runtime\MetricEvents.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricEvents\Runtime\MetricObserver.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricEvents\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricEvents\Runtime\MetricEvents.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\MetricEvents\Runtime\Unity.Multiplayer.Tools.MetricEvents.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\MetricEvents\Runtime\Unity.Multiplayer.Tools.MetricEvents.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

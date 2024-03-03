@@ -62,27 +62,27 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkSimulator.EventsApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkSimulator.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NoOpNetworkTransportApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkSimulatorPreset.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkSimulatorPresetAsset.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\BuiltInScenarios\ConnectionsCycle.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\Attributes\MinMaxRangeAttribute.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\INetworkSimulatorPreset.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\INetworkTransportApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\BuiltInScenarios\PresetConfiguration.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkEventsApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NoOpNetworkEventsApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\BuiltInScenarios\RandomConnectionsSwap.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkTransportApi.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkScenario.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\NetworkSimulatorPresets.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\INetworkEventsApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkSimulator.EventsApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkSimulator.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NoOpNetworkTransportApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkSimulatorPreset.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkSimulatorPresetAsset.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\BuiltInScenarios\ConnectionsCycle.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\Attributes\MinMaxRangeAttribute.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\INetworkSimulatorPreset.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\INetworkTransportApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\BuiltInScenarios\PresetConfiguration.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkEventsApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NoOpNetworkEventsApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\BuiltInScenarios\RandomConnectionsSwap.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkTransportApi.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkScenario.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\NetworkSimulatorPresets.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\INetworkEventsApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\NetworkSimulator\Runtime\Unity.Multiplayer.Tools.NetworkSimulator.Runtime.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\NetworkSimulator\Runtime\Unity.Multiplayer.Tools.NetworkSimulator.Runtime.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

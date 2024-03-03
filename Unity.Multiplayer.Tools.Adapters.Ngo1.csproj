@@ -62,12 +62,13 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1\Ngo1Adapter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1\Ngo1AdapterInitializer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1\ObjectBandwidthCache.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1\Ngo1Adapter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1\ObjectRpcCountCache.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1\Ngo1AdapterInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Adapters\Ngo1\Unity.Multiplayer.Tools.Adapters.Ngo1.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Adapters\Ngo1\Unity.Multiplayer.Tools.Adapters.Ngo1.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1036,9 +1037,17 @@
       <Project>{9895DF69-7E54-6B85-36FA-1823A14EFDFC}</Project>
       <Name>Unity.Multiplayer.Tools.Adapters</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.Common.csproj">
+      <Project>{5B98964E-19A0-1550-DE18-1EFF26288F06}</Project>
+      <Name>Unity.Multiplayer.Tools.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.MetricEvents.csproj">
       <Project>{5135F4E0-93DF-CD3E-8CEF-74786CFB9A80}</Project>
       <Name>Unity.Multiplayer.Tools.MetricEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.MetricTypes.csproj">
+      <Project>{4DF818B2-B6C2-75BE-D23B-4A48FF4F07F4}</Project>
+      <Name>Unity.Multiplayer.Tools.MetricTypes</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetStats.csproj">
       <Project>{5801252D-88AB-0486-6100-AE6527C4A515}</Project>

@@ -1,0 +1,30 @@
+{
+    "name": "Unity.Multiplayer.Tools.NetVis.Editor.Visualization",
+    "rootNamespace": "Unity.Multiplayer.Tools.NetVis.Editor.Visualization",
+    "references": [
+        "Unity.Multiplayer.Tools.Common",
+        "Unity.Multiplayer.Tools.Adapters",
+        "Unity.Multiplayer.Tools.NetStats",
+        "Unity.Multiplayer.Tools.NetVis.Configuration",
+        "Unity.RenderPipelines.Core.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_2023_2_OR_NEWER"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.core",
+            "expression": "15.0.3",
+            "define": "UNITY_SRP_CORE_15_OR_HIGHER"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.unity.multiplayer.tools/Editor/MultiplayerToolsWindow/UI/MultiplayerToolsWindow.uss?fileID=7433441132597879392&amp;guid=6ae7e6ef1caa2464f947c46603ae3704&amp;type=3#MultiplayerToolsWindow" />
+    <ui:VisualElement class="titleLine" style="flex-grow: 0; flex-direction: row; min-width: auto; min-height: auto; flex-shrink: 0;">
+        <ui:Label text="Enabled features" name="EnabledFeaturesTitle" class="featureTitle" style="flex-direction: row; flex-grow: 0;" />
+        <ui:VisualElement name="DocButton" class="docIcon" />
+        <ui:VisualElement style="flex-grow: 1;" />
+        <ui:Button text="Button" name="OpenButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="StatusLine" class="contentLine" style="flex-direction: row; min-height: 25px; height: initial;">
+        <ui:VisualElement name="StatusIcon" style="flex-grow: 1;" />
+        <ui:Label text="Label" name="EnabledFeaturesText" class="unity-disabled" style="flex-grow: 1; -unity-text-align: middle-left;" />
+    </ui:VisualElement>
+</ui:UXML>

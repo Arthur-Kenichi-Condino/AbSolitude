@@ -62,11 +62,11 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Initialization\ContextsInitializer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Initialization\ContextsDefinition.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Initialization\ContextsInitializer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Initialization\ContextsDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Initialization\Unity.Multiplayer.Tools.Initializationt.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Initialization\Unity.Multiplayer.Tools.Initializationt.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1070,6 +1070,22 @@
     <ProjectReference Include="Unity.Multiplayer.Tools.Common.csproj">
       <Project>{5B98964E-19A0-1550-DE18-1EFF26288F06}</Project>
       <Name>Unity.Multiplayer.Tools.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Configuration.csproj">
+      <Project>{302488F5-672A-EBAB-9633-0F500567F272}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Editor.UI.csproj">
+      <Project>{0D4DA136-FBC6-DC13-0985-CD0273E22897}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Editor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Editor.Visualization.csproj">
+      <Project>{C03C4D96-040A-D97C-CE43-A855074A3BE3}</Project>
+      <Name>Unity.Multiplayer.Tools.NetVis.Editor.Visualization</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.Adapters.csproj">
+      <Project>{9895DF69-7E54-6B85-36FA-1823A14EFDFC}</Project>
+      <Name>Unity.Multiplayer.Tools.Adapters</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{6118397E-BB10-2F93-229C-EABA67351BC0}</Project>

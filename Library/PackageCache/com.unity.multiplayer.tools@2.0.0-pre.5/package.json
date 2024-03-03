@@ -1,0 +1,45 @@
+{
+  "name": "com.unity.multiplayer.tools",
+  "displayName": "Multiplayer Tools",
+  "version": "2.0.0-pre.5",
+  "unity": "2021.3",
+  "description": "Adds a suite of tools that improve workflows for multiplayer development",
+  "dependencies": {
+    "com.unity.profiling.core": "1.0.0-pre.1",
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.nuget.mono-cecil": "1.10.1",
+    "com.unity.collections": "1.1.0",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.burst": "1.6.6",
+    "com.unity.mathematics": "1.2.6"
+  },
+  "keywords": [
+    "Multiplayer",
+    "Netcode",
+    "GameObjects",
+    "Tools"
+  ],
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Network Scenario Samples",
+      "description": "Samples showcasing the different ways of building custom network simulator scenarios.\n\nNote: In order to use these Samples, make sure you have Netcode for GameObjects (com.unity.netcode.gameobjects) 1.1.0 or later and Unity Transport (com.unity.transport) 2.0.0 or later. For more info, please check the Network Simulator documentation: https://docs-multiplayer.unity3d.com/tools/current/tools-network-simulator",
+      "path": "Samples~/NetworkSimulator"
+    }
+  ],
+  "relatedPackages": {
+    "com.unity.multiplayer.tools.tests": "2.0.0-pre.5"
+  },
+  "_upm": {
+    "changelog": "### *General*\n- *New*: Find all the multiplayer tools in a central place in the multiplayer tools window.\n\n### *Network Profiler*\n- Fixed an issue causing inconsistent foldout behavior.\n- Fixed a bug where switching frames would reset the sorting filter.\n- Improved UI for the Network Profiler.\n\n### *Runtime Net Stats Monitor*\n- Fix an index out of range exception that could occur when adding a new RNSM graph at runtime.\n- Renamed the Component in the \"Add Component\" menu from \"RuntimeNetStatsMonitor\" to \"Runtime Network Stats Monitor\".\n\n### *Network Simulator*\n- Added presets for common home broadband connections and situations.\n\n### *Network Scene Visualization*\n- Text Overlays now also work in 2D scenes with 2D colliders.\n- Removed slight delay between bandwidth text and color change.\n- Made bandwidth update instantly after switching back from Ownership mode"
+  },
+  "upmCi": {
+    "footprint": "a187bba923f2faf7e30aa469d6210347819519ee"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git",
+    "type": "git",
+    "revision": "eebc576fe34a7e8bc7b5c7edcbd4b44108ca431c"
+  },
+  "_fingerprint": "02e4a2e8525501a545bd45db2b73ed59ab54c6e4"
+}

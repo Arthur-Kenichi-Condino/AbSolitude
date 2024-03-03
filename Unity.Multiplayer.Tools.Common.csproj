@@ -62,29 +62,38 @@
     <Analyzer Include="C:\Unity\Hub\Editor\2023.2.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Compiler\RuntimeUtils.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\ListUtil.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\VisualElementExtensions.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\ContinuousExponentialMovingAverage.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\MVVM\ViewModel.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\LogNormalRandomWalk.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Context\Context.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Constants\StringConstants.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\TaskExtensions.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\StringUtil.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\MinAndMax.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\RingBuffer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\ReadOnlyListExtensions.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\RingBufferExtensions.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Compiler\IsExternalInit.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\EnumMap.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\EnumUtil.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Data\ExponentialMovingAverage.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Extensions\DebugUtils.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Compiler\RuntimeUtils.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\ListUtil.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Visualization\CategoricalColorPalette.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\VisualElementExtensions.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Visualization\CategoricalColorPaletteVisualizer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\ContinuousExponentialMovingAverage.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\MVVM\ViewModel.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\LogNormalRandomWalk.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Context\Context.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Constants\StringConstants.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\TaskExtensions.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\StringUtil.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\NetworkTypes\NetworkDirection.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\MinAndMax.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\RingBuffer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Profiling\MultiSampleTimer.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\NetworkTypes\BandwidthTypes.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\ReadOnlyListExtensions.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\NetworkTypes\BytesSentAndReceived.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\RingBufferExtensions.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Compiler\IsExternalInit.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Helpers\RuntimeUpdaterBehaviour.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\EnumMap.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\EnumUtil.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\ProfilerUtilities.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Data\ExponentialMovingAverage.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Extensions\DebugUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.multiplayer.tools@1.1.0\Common\Runtime\Unity.Multiplayer.Tools.Common.asmdef" />
+    <None Include="Library\PackageCache\com.unity.multiplayer.tools@2.0.0-pre.5\Common\Runtime\Unity.Multiplayer.Tools.Common.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

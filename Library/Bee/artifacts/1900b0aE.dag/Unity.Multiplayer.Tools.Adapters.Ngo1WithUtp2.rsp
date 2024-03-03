@@ -377,8 +377,8 @@
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/2023.2.9f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport@2.1.0/Analyzers/Unity.Transport.Analyzers.dll"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/Adapters/Ngo1WithUtp2/AssemblyInfo.cs"
-"Library/PackageCache/com.unity.multiplayer.tools@1.1.0/Adapters/Ngo1WithUtp2/Ngo1WithUtp2AdapterInitializer.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1WithUtp2/AssemblyInfo.cs"
+"Library/PackageCache/com.unity.multiplayer.tools@2.0.0-pre.5/Adapters/Ngo1WithUtp2/Ngo1WithUtp2AdapterInitializer.cs"
 -langversion:9.0
 /unsafe+
 /deterministic

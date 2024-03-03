@@ -16,6 +16,8 @@ Library\Bee\artifacts\mvdfrm\Unity.MemoryProfiler.Editor.ref.dll_CB0D5363E6A8635
 Library\Bee\artifacts\mvdfrm\Unity.MemoryProfiler.ref.dll_B196C2D9333A09D8.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.Adapters.ref.dll_06015E8ACD63AE79.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.Common.ref.dll_F418D3A5857884B0.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.DependencyInjection.UIElements.ref.dll_D714F02426972192.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.DependencyInjection.ref.dll_75A1BCF658F5601D.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.Editor.ref.dll_F101CBA0869FAF32.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.Initialization.ref.dll_8EA380F851C134B5.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.MetricEvents.ref.dll_9142329BE4154E5E.mvfrm
@@ -27,6 +29,9 @@ Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetStatsMonitor.Configurati
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetStatsMonitor.Editor.ref.dll_A577982BFAF59298.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetStatsMonitor.Implementation.ref.dll_1ADF693E9C8C61ED.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetStatsReporting.ref.dll_066DFACD0C0803AD.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetVis.Configuration.ref.dll_8FD04C5957DD0900.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetVis.Editor.UI.ref.dll_93839C3E5523445F.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetVis.Editor.Visualization.ref.dll_A4A04CC2349BCC0F.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetworkProfiler.Editor.ref.dll_C404697FFDE7D549.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetworkProfiler.Runtime.ref.dll_69C5A646342D97D2.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Multiplayer.Tools.NetworkSimulator.Editor.ref.dll_4D5573F605E348F6.mvfrm
