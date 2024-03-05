@@ -17,6 +17,7 @@ namespace AKCondinoO.Sims.Actors{
      internal float onSnipeRetreatDis;
      protected bool onSnipeAlternateRetreatShoot=false;
         protected virtual void OnSNIPE_ST_Start(){
+         Log.DebugMessage("OnSNIPE_ST_Start()");
          onSnipeAlternateRetreatShoot=false;
          if(
           IsTraversingPath()
@@ -26,6 +27,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
      bool onSnipeMoving;
+     bool onSnipeTryingShooting;
      bool onSnipeReloading;
      bool onSnipeShooting;
         protected virtual void OnSNIPE_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
@@ -49,51 +51,51 @@ namespace AKCondinoO.Sims.Actors{
          onSnipeRetreatDis=ratio*dis1;
          Log.DebugMessage("onSnipeRetreatDis:"+onSnipeRetreatDis);
          //
-         bool alternateRoutineAction=false;
-         bool moveToDestination=false;
-         if(
-          !IsTraversingPath()
-         ){
-          if(onSnipeReloading){
-           if(!IsReloading()){
-            OnSNIPE_ST_Reset();
-            alternateRoutineAction=true;
-            onSnipeReloading=false;
-           }
-          }else if(onSnipeShooting){
-           if(!IsShooting()){
-            OnSNIPE_ST_Reset();
-            alternateRoutineAction=true;
-            onSnipeShooting=false;
-           }
-          }else if(onSnipeMoving){
-           alternateRoutineAction=true;
-           onSnipeMoving=false;
-          }else if(Vector3.Distance(transform.position,MyEnemy.transform.position)<=onSnipeRetreatDis){
-           moveToDestination|=true;
-          }else{
+         if(onSnipeReloading){
+          Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeReloading");
+          if(
+           IsTraversingPath()
+          ){
+           navMeshAgent.destination=navMeshAgent.transform.position;
+          }
+          if(!IsReloading()){
+           OnSNIPE_ST_Reset();
+           onSnipeAlternateRetreatShoot=false;
+           onSnipeReloading=false;
+          }
+         }else if(onSnipeShooting){
+          Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeShooting");
+          if(
+           IsTraversingPath()
+          ){
+           navMeshAgent.destination=navMeshAgent.transform.position;
+          }
+          if(!IsShooting()){
+           OnSNIPE_ST_Reset();
+           onSnipeAlternateRetreatShoot=false;
+           onSnipeShooting=false;
+          }
+         }else if(onSnipeMoving){
+          Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeMoving");
+          if(
+           !IsTraversingPath()
+          ){
            onSnipeAlternateRetreatShoot=true;
+           onSnipeMoving=false;
           }
          }
-         if(alternateRoutineAction){
-          onSnipeAlternateRetreatShoot=!onSnipeAlternateRetreatShoot;
-          alternateRoutineAction=false;
-         }
-         if(!onSnipeAlternateRetreatShoot){
-          Log.DebugMessage("OnSNIPE_ST_Routine():move");
-          if(characterController!=null){
-             characterController.isAiming=false;
-          }
-          if(moveToDestination){
-           Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
-           MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis;
-           navMeshAgent.destination=MyDest;
-           Debug.DrawRay(MyEnemy.transform.position,dir*onSnipeRetreatDis,Color.yellow,5f);
-           onSnipeMoving=true;
+         Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeAlternateRetreatShoot:"+onSnipeAlternateRetreatShoot);
+         if(!onSnipeReloading&&
+            !onSnipeShooting&&
+            !onSnipeMoving
+         ){
+          if(onSnipeAlternateRetreatShoot){
+           Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeAlternateRetreatShoot==true");
+           onSnipeTryingShooting=true;
           }
          }
-         if(onSnipeAlternateRetreatShoot){
-          Log.DebugMessage("OnSNIPE_ST_Routine():shoot");
+         if(onSnipeTryingShooting){
+          Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeTryingShooting");
           if(
            !IsTraversingPath()
           ){
@@ -101,16 +103,45 @@ namespace AKCondinoO.Sims.Actors{
               !onSnipeShooting
            ){
             if(OnSNIPE_ST_Shoot()){
+             Log.DebugMessage("OnSNIPE_ST_Routine():shoot");
+             onSnipeTryingShooting=false;
             }
            }
           }
+         }else{
+          if(!onSnipeAlternateRetreatShoot){
+           Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeAlternateRetreatShoot==false");
+           if(characterController!=null){
+              characterController.isAiming=false;
+           }
+           bool moveToDestination=!onSnipeMoving;
+           if(Vector3.Distance(transform.position,MyEnemy.transform.position)<=onSnipeRetreatDis){
+            if(
+             !IsTraversingPath()
+            ){
+             moveToDestination|=true;
+            }
+           }
+           if(moveToDestination){
+            Log.DebugMessage("OnSNIPE_ST_Routine():move");
+            Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
+            dir.y=0f;
+            MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis+Vector3.down*(height/2f);
+            navMeshAgent.destination=MyDest;
+            Debug.DrawRay(MyEnemy.transform.position,dir*onSnipeRetreatDis,Color.blue,5f);
+            onSnipeMoving=true;
+           }
+          }
+         }
+         if(animatorController.animatorIKController!=null){
+          Debug.DrawLine(GetHeadPosition(true),animatorController.animatorIKController.headLookAtPositionLerp.tgtPos,Color.yellow);
          }
         }
         protected virtual bool OnSNIPE_ST_Shoot(){
          if(LookToMyEnemy()){
           //
           characterController.isAiming=true;
-          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerp.tgtPos,animatorController.animatorIKController.headLookAtPositionLerped)<=1f){
+          if(animatorController.animatorIKController==null||(Vector3.Distance(animatorController.animatorIKController.headLookAtPositionLerp.tgtPos,animatorController.animatorIKController.headLookAtPositionLerped)<=.125f)){
            if(itemsEquipped!=null){
             if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
              if(simWeapon.ammoLoaded<=0){

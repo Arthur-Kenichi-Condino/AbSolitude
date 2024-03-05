@@ -170,8 +170,13 @@ namespace AKCondinoO.Sims.Actors{
         void ResetRotation(QuaternionRotLerpHelper rotLerp,bool instantly=false){
          if(characterController!=null){
           ToResetRotation(out Vector3 dir);
+          if(rotLerp==null){
+           transform.rotation=characterController.character.transform.rotation;
+           characterController.character.transform.rotation=transform.rotation;
+           return;
+          }
           rotLerp.tgtRot=Quaternion.LookRotation(dir,Vector3.up);
-          if(instantly||rotLerp==null){
+          if(instantly){
            characterController.character.transform.rotation=rotLerp.EndRotation();
            transform.rotation=characterController.character.transform.rotation;
           }else{

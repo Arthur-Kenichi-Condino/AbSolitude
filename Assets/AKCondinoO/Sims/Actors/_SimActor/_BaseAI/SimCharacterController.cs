@@ -207,8 +207,12 @@ namespace AKCondinoO.Sims.Actors{
          OnAction1();
         }
         internal void ManualUpdateUsingAI(){
-         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(true))*aimAtMaxDistance;
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(aimDir())*aimAtMaxDistance;
+         Vector3 dir=aimDir();
+         Vector3 dirRaw=aimDir(true);
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*aimAtMaxDistance;
+         viewRotation=Quaternion.LookRotation(dir);
+         viewRotationForAiming=viewRotation;
         }
         Vector3 aimDir(bool raw=false){
          if(actor.isUsingAI){

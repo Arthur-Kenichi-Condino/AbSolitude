@@ -103,18 +103,18 @@ MonoBehaviour:
   MyAggressionMode: 0
   onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 10
+    tgtRotLerpSpeed: 64
     tgtRotLerpMaxTime: 0.5
   onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 10
+    tgtRotLerpSpeed: 64
     tgtRotLerpMaxTime: 0.5
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
   onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 10
+    tgtRotLerpSpeed: 64
     tgtRotLerpMaxTime: 0.5
 --- !u!114 &-3747231846007095047
 MonoBehaviour:

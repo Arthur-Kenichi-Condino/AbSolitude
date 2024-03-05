@@ -57,13 +57,7 @@ namespace AKCondinoO.Sims.Actors{
            Log.DebugMessage("add SimActorAnimatorIKController");
            animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
            animatorIKController.animatorController=this;
-           animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=Mathf.Max(
-            rotLerp.tgtRotLerpSpeed+1f,
-            posLerp.xLerp.tgtValLerpSpeed+1f,
-            posLerp.yLerp.tgtValLerpSpeed+1f,
-            posLerp.zLerp.tgtValLerpSpeed+1f,
-            46.875f
-           );
+           animatorIKController.ResetHeadLookAtPositionLerpSpeed();
            layerCount=animator.layerCount;
            weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
             weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
@@ -115,7 +109,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-     [SerializeField]float layerTransitionSpeed=64.0f;
+     [SerializeField]float layerTransitionSpeed=32.0f;
      Coroutine layerTransitionCoroutine;
       internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
        internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
