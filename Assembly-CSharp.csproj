@@ -1489,13 +1489,13 @@
       <Project>{DF6E1670-3A49-7609-D5F2-AE1E339C2683}</Project>
       <Name>Netcode for GameObjects Community Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Multiplayer.Tools.NetStatsMonitor.Configuration.csproj">
-      <Project>{7795D0D8-A67C-8A37-5523-2D200F0BBF39}</Project>
-      <Name>Unity.Multiplayer.Tools.NetStatsMonitor.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Collections.Editor.csproj">
       <Project>{B77A46A2-AE79-F17F-AE6B-FC7D6E1DE2F3}</Project>
       <Name>Unity.Collections.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.NetStatsMonitor.Configuration.csproj">
+      <Project>{7795D0D8-A67C-8A37-5523-2D200F0BBF39}</Project>
+      <Name>Unity.Multiplayer.Tools.NetStatsMonitor.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Profiling.Core.csproj">
       <Project>{DD243D5F-E65B-38A3-FA90-98A44A5B1E8B}</Project>

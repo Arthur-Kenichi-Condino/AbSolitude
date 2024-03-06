@@ -197,8 +197,8 @@
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\AddressableEditorInitialization.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\GUI\AddressableReadOnlyAttribute.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\Diagnostics\Profiler\BuildLayoutsManager.cs" />
-    <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\Diagnostics\Profiler\AddressablesProfilerDetailsTreeView.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\Build\AddressablesDataBuilderInput.cs" />
+    <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\Diagnostics\Profiler\AddressablesProfilerDetailsTreeView.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\GUI\AddressableAssetsSettingsGroupEditorBuildMenu.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\GUI\HostingServicesProfileVarsTreeView.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables@1.21.20\Editor\Build\Layout\BuildLayoutSummary.cs" />
