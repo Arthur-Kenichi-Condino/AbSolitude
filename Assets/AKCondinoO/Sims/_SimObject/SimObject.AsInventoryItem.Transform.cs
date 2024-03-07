@@ -43,7 +43,7 @@ namespace AKCondinoO.Sims{
               if(layerName!=null){
                //Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
                if(settings.transformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
-                (Type containerSimType,ActorMotion?containerSimMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,layerName);
+                (Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,containerAsBaseAI.weaponLayerMotion,containerAsBaseAI.toolLayerMotion,layerName);
                 if(transformSettingsForSimHands.TryGetValue(key,out var transformSettingsForParentBodyPartName)){
                  int priority=int.MaxValue;
                  Transform bodyPart=null;
