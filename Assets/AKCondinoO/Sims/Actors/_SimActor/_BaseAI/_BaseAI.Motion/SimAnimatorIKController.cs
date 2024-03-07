@@ -93,12 +93,12 @@ namespace AKCondinoO.Sims.Actors{
          if(animatorController.actor.characterController.isAiming||head==null){
           var characterController=animatorController.actor.characterController.character;
           var headOffset=animatorController.actor.characterController.headOffset;
-          var viewRotation=animatorController.actor.characterController.viewRotationForAiming;
           var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
           Vector3 aimAt;
           Quaternion viewRotationClamped;
           if(animatorController.actor.isUsingAI&&animatorController.actor.enemy!=null){
-           Vector3 dir=animatorController.actor.enemy.transform.position-(characterController.transform.position+(characterController.transform.rotation*headOffset));
+           Vector3 enemyPos=animatorController.actor.enemy is BaseAI enemyAI?enemyAI.GetHeadPosition(true):animatorController.actor.enemy.transform.position;
+           Vector3 dir=enemyPos-(characterController.transform.position+(characterController.transform.rotation*headOffset));
            dir.Normalize();
            viewRotationClamped=RotationHelper.Clamp(
             Quaternion.LookRotation(dir),

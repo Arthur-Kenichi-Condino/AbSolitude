@@ -211,12 +211,12 @@ namespace AKCondinoO.Sims.Actors{
          Vector3 dirRaw=aimDir(true);
          aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*aimAtMaxDistance;
          aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*aimAtMaxDistance;
-         viewRotation=Quaternion.LookRotation(dir);
+         viewRotation=Quaternion.LookRotation(aimDir(false,true));
          viewRotationForAiming=viewRotation;
         }
-        Vector3 aimDir(bool raw=false){
+        Vector3 aimDir(bool raw=false,bool ignoreEnemy=false){
          if(actor.isUsingAI){
-          if(actor.enemy!=null){
+          if(actor.enemy!=null&&!ignoreEnemy){
            //Log.DebugMessage("aimDir:actor.enemy!=null");
            if(actor.enemy is BaseAI enemyAI){
             return((enemyAI.characterController.character.transform.position)-(character.transform.position+(character.transform.rotation*headOffset))).normalized;

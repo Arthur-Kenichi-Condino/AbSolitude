@@ -141,7 +141,7 @@ namespace AKCondinoO.Sims.Actors{
          if(LookToMyEnemy()){
           //
           characterController.isAiming=true;
-          if(animatorController.animatorIKController==null||(Vector3.Distance(animatorController.animatorIKController.headLookAtPositionLerp.tgtPos,animatorController.animatorIKController.headLookAtPositionLerped)<=.125f)){
+          if(animatorController.animatorIKController==null||(animatorController.animatorIKController.headLookAtPositionLerp.tgtPosLerpVal>=1f)){
            if(itemsEquipped!=null){
             if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
              if(simWeapon.ammoLoaded<=0){
@@ -153,6 +153,7 @@ namespace AKCondinoO.Sims.Actors{
              }else{
               if(simWeapon.TryStartShootingAction(simAiming:this)){
                onSnipeShooting=true;
+               Debug.DrawLine(GetHeadPosition(true),animatorController.animatorIKController.headLookAtPositionLerped,Color.blue,5f);
                return true;
               }
              }
