@@ -184,7 +184,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          afterMovePos=character.transform.position;
          moveDelta=afterMovePos-beforeMovePos;
-         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(true))*aimAtMaxDistance;
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(out _,true))*aimAtMaxDistance;
          Quaternion?isFollowingViewRotation=null;
          if(MainCamera.singleton.isFollowing){
           MainCamera.singleton.PredictCameraPosFollowing(character.transform,viewRotationRaw,out Vector3 predictCameraPos,out Quaternion predictCameraRot);
@@ -201,27 +201,32 @@ namespace AKCondinoO.Sims.Actors{
          }else{
           viewRotationForAiming=viewRotation;
          }
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(aimDir())*aimAtMaxDistance;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(aimDir(out _))*aimAtMaxDistance;
          OnReloadInput();
          OnAction2();
          OnAction1();
         }
         internal void ManualUpdateUsingAI(){
-         Vector3 dir=aimDir();
-         Vector3 dirRaw=aimDir(true);
-         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*aimAtMaxDistance;
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*aimAtMaxDistance;
-         viewRotation=Quaternion.LookRotation(aimDir(false,true));
+         Vector3 dir=aimDir(out float dirDis,false,false,true);
+         Vector3 dirRaw=aimDir(out float dirRawDis,true,false,true);
+         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*dirRawDis;
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*dirDis;
+         viewRotation=Quaternion.LookRotation(aimDir(out _,false,true,true));
          viewRotationForAiming=viewRotation;
         }
-        Vector3 aimDir(bool raw=false,bool ignoreEnemy=false){
+        Vector3 aimDir(out float dis,bool raw=false,bool ignoreEnemy=false,bool forShooting=false){
+         dis=aimAtMaxDistance;
          if(actor.isUsingAI){
           if(actor.enemy!=null&&!ignoreEnemy){
            //Log.DebugMessage("aimDir:actor.enemy!=null");
+           Vector3 myHead=character.transform.position+(character.transform.rotation*headOffset);
            if(actor.enemy is BaseAI enemyAI){
-            return((enemyAI.characterController.character.transform.position)-(character.transform.position+(character.transform.rotation*headOffset))).normalized;
+            Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
+            dis=Vector3.Distance(enemyHead,myHead);
+            return((enemyHead)-(myHead)).normalized;
            }else{
-            return(actor.enemy.transform.position-(character.transform.position+(character.transform.rotation*headOffset))).normalized;
+            dis=Vector3.Distance(actor.enemy.transform.position,myHead);
+            return(actor.enemy.transform.position-(myHead)).normalized;
            }
           }else{
            //Log.DebugMessage("aimDir:actor.enemy==null");

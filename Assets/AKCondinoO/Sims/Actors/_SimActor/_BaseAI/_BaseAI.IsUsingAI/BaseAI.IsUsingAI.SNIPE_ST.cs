@@ -141,7 +141,7 @@ namespace AKCondinoO.Sims.Actors{
          if(LookToMyEnemy()){
           //
           characterController.isAiming=true;
-          if(animatorController.animatorIKController==null||(animatorController.animatorIKController.headLookAtPositionLerp.tgtPosLerpVal>=1f)){
+          if(animatorController.animatorIKController==null||(Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=.125f&&animatorController.animatorIKController.headLookAtPositionLerp.tgtPos==animatorController.animatorIKController.headLookAtPositionLerp.tgtPos_Last&&animatorController.animatorIKController.headLookAtPositionLerp.tgtPosLerpVal>=1f)){
            if(itemsEquipped!=null){
             if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
              if(simWeapon.ammoLoaded<=0){

@@ -497,12 +497,15 @@ namespace AKCondinoO.Sims.Actors{
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
-        internal Vector3 GetHeadPosition(bool fromAnimator){
+        internal Vector3 GetHeadPosition(bool fromAnimator,bool forShooting=false){
          Vector3 headPos;
          if(fromAnimator&&animatorController!=null&&animatorController.animator!=null){
           headPos=animatorController.animator.transform.position+animatorController.animator.transform.rotation*(new Vector3(0f,characterController.character.height/2f+characterController.character.radius,0f)+characterController.headOffset);
          }else{
           headPos=characterController.character.transform.position+characterController.character.transform.rotation*characterController.headOffset;
+         }
+         if(forShooting){
+          headPos-=new Vector3(0f,.5f,0f);
          }
          return headPos;
         }

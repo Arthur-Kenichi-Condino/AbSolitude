@@ -97,15 +97,16 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 aimAt;
           Quaternion viewRotationClamped;
           if(animatorController.actor.isUsingAI&&animatorController.actor.enemy!=null){
-           Vector3 enemyPos=animatorController.actor.enemy is BaseAI enemyAI?enemyAI.GetHeadPosition(true):animatorController.actor.enemy.transform.position;
+           Vector3 enemyPos=animatorController.actor.enemy is BaseAI enemyAI?(enemyAI.GetHeadPosition(true,true)):animatorController.actor.enemy.transform.position;
            Vector3 dir=enemyPos-(characterController.transform.position+(characterController.transform.rotation*headOffset));
            dir.Normalize();
            viewRotationClamped=RotationHelper.Clamp(
             Quaternion.LookRotation(dir),
-            animatorController.actor.characterController.viewRotation,
-            new Vector3(0f,45f,360f),
-            new Vector3(0f,45f,360f)
+            animatorController.animator.transform.rotation,
+            new Vector3(90f,90f,360f),
+            new Vector3(90f,90f,360f)
            );
+           aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Vector3.forward)*aimAtMaxDistance;
           }else{
            viewRotationClamped=RotationHelper.Clamp(
             animatorController.actor.characterController.viewRotationForAiming,
@@ -113,8 +114,8 @@ namespace AKCondinoO.Sims.Actors{
             new Vector3(0f,45f,360f),
             new Vector3(0f,45f,360f)
            );
+           aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           }
-          aimAt=characterController.transform.position+(characterController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
           float disToTarget=aimAtMaxDistance;
           if(animatorController.actor.characterController.predictCameraTarget!=null){
            disToTarget=Vector3.Distance(characterController.transform.position+(characterController.transform.rotation*headOffset),animatorController.actor.characterController.predictCameraTarget.Value);
