@@ -49,6 +49,18 @@ namespace AKCondinoO.UI.Context{
          }
          selectButtonPressed=true;
         }
+     internal bool isOpen;
+        void OnGUI(){
+         if(isOpen){
+          if(!panel.gameObject.activeSelf){
+           panel.gameObject.SetActive(true);
+          }
+         }else{
+          if(panel.gameObject.activeSelf){
+           panel.gameObject.SetActive(false);
+          }
+         }
+        }
         void Update(){
          if(Cursor.lockState==CursorLockMode.Locked){
           Close();
@@ -110,9 +122,7 @@ namespace AKCondinoO.UI.Context{
          selectButtonPressed=false;
         }
         void Close(){
-         if(panel.gameObject.activeSelf){
-          panel.gameObject.SetActive(false);
-         }
+         isOpen=false;
         }
      internal SimObject contextSimObject=null;
         void Open(SimObject openFor){
@@ -153,9 +163,7 @@ namespace AKCondinoO.UI.Context{
          pos.x+=size.x/2f;
          pos.y-=size.y/2f;
          panel.position=new Vector2(pos.x,pos.y);
-         if(!panel.gameObject.activeSelf){
-          panel.gameObject.SetActive(true);
-         }
+         isOpen=true;
         }
      [SerializeField]internal RectTransform interactionButtonPrefabRect;
      internal Button interactionButtonPrefab;

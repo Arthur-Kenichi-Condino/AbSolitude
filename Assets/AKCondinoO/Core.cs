@@ -5,6 +5,7 @@ using AKCondinoO.Ambience.Clouds;
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Music;
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors.Pathfinding;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
 using AKCondinoO.Sims.Inventory;
@@ -124,6 +125,7 @@ namespace AKCondinoO{
           {o++,VoxelSystem              .singleton},
           {o++,VoxelTerrainEditing      .singleton},
           {o++,VoxelWaterEditing        .singleton},
+          {o++,AStarPathfinding         .singleton},
           {o++,SimInventoryManager      .singleton},
           {o++,SimObjectManager         .singleton},
           {o++,SimObjectSpawner         .singleton},

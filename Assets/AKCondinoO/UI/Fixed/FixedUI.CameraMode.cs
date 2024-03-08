@@ -7,17 +7,22 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace AKCondinoO.UI.Fixed{
     internal partial class FixedUI{
-        public void UpdateUIForCameraMode(){
-         if(followerCameraModeButton==null){
-          followerCameraModeButton=followerCameraModeButtonRect.GetComponent<Button>();
+        void AwakeUIForCameraMode(){
+         followerCameraModeButton=followerCameraModeButtonRect.GetComponent<Button>();
+        }
+        void UpdateUIForCameraMode(){
+        }
+        void OnGUIForCameraMode(){
+         if(ScreenInput.singleton.currentActiveSim!=null&&ScreenInput.singleton.currentActiveSim.canBeThirdPersonCamFollowed){
+          followerCameraModeButton.interactable=true;
+         }else{
+          followerCameraModeButton.interactable=false;
          }
-         if(followerCameraModeButton!=null){
-          if(ScreenInput.singleton.currentActiveSim!=null&&ScreenInput.singleton.currentActiveSim.canBeThirdPersonCamFollowed){
-           followerCameraModeButton.interactable=true;
-          }else{
-           followerCameraModeButton.interactable=false;
-          }
-         }
+        }
+  [SerializeField]internal RectTransform theSims3CameraModeButtonRect;
+     internal Button theSims3CameraModeButton;
+        public void OnTheSims3CameraModeButtonPress(){
+         Log.DebugMessage("FixedUI:OnTheSims3CameraModeButtonPress");
         }
         public void OnFreeCameraModeButtonPress(){
          Log.DebugMessage("FixedUI:OnFreeCameraModeButtonPress");

@@ -228,6 +228,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Rendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\rlabrecque\SteamManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />

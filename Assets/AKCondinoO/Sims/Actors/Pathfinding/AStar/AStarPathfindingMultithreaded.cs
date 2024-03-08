@@ -1,0 +1,21 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+namespace AKCondinoO.Sims.Actors.Pathfinding{
+    internal class AStarPathfindingBackgroundContainer:BackgroundContainer{
+        protected override void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+         }
+         //  free unmanaged resources here
+         base.Dispose(disposing);
+        }
+    }
+    internal class AStarPathfindingMultithreaded:BaseMultithreaded<AStarPathfindingBackgroundContainer>{
+        protected override void Execute(){
+        }
+    }
+}

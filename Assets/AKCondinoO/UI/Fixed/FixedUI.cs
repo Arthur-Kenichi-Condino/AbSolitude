@@ -15,6 +15,7 @@ namespace AKCondinoO.UI.Fixed{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          (buildBuyEditModeUIContent.buildCategoryTableFloors=Instantiate(buildBuyEditModeUIContent.buildCategorySimObjectsTablePrefab,buildBuyEditModeUIContent.buildCategoryRectTransform,false).AddComponent<TableFloors>()).name="TableFloors";
+         AwakeUIForCameraMode();
         }
         public void Init(){
          //  Change UI for game mode:
@@ -51,6 +52,9 @@ namespace AKCondinoO.UI.Fixed{
          }
         }
      [SerializeField]SimObject DEBUG_SET_PLACEHOLDER=null;
+        void OnGUI(){
+         OnGUIForCameraMode();
+        }
         void LateUpdate(){
         }
         void Update(){
