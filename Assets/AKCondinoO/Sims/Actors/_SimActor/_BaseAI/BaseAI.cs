@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
+using AKCondinoO.Sims.Actors.Pathfinding;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Inventory;
@@ -24,6 +25,7 @@ namespace AKCondinoO.Sims.Actors{
     ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     internal partial class BaseAI:SimActor{
+     internal AStarPathfindingBackgroundContainer aStarPathfindingBG;
      internal SimCharacterController characterController;
       internal float height;
        internal float heightCrouching;
@@ -55,6 +57,8 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
+         aStarPathfindingBG=new AStarPathfindingBackgroundContainer();
+         AStarPathfinding.singleton.aStarPathfindingContainers.Add(aStarPathfindingBG);
         }
      protected bool canSense;
         protected override void OnUMACharacterUpdated(UMAData simUMAData){
