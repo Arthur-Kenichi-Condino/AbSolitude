@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Pathfinding{
     internal class AStarPathfindingBackgroundContainer:BackgroundContainer{
+     internal Vector3 dest;
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here

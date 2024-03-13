@@ -3,7 +3,7 @@
 #endif
 using UnityEngine;
 using UnityEngine.AI;
-namespace AKCondinoO.Sims.Actors {
+namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Actors {
           if(pathPendingTimer<=0f){
            if(stopPathfindingOnTimeout){
             Log.DebugMessage("pathPendingTimer<=0f:PathfindingResult.TIMEOUT");
-            navMeshAgent.destination=navMeshAgent.transform.position;
+            MoveStop();
            }
            return PathfindingResult.TIMEOUT;
           }
@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims.Actors {
           if(pathfindingTimer<=0f){
            if(stopPathfindingOnTimeout){
             Log.DebugMessage("pathfindingTimer<=0f:PathfindingResult.TIMEOUT");
-            navMeshAgent.destination=navMeshAgent.transform.position;
+            MoveStop();
            }
            return PathfindingResult.TIMEOUT;
           }

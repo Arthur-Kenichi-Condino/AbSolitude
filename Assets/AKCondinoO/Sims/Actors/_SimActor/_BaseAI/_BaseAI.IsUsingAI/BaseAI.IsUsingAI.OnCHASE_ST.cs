@@ -387,7 +387,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual void OnCHASE_ST_Move(bool useModifiers=true){
          OnCHASE_ST_GetDest(useModifiers);
-         navMeshAgent.destination=MyDest;
+         Move(MyDest);
         }
         protected virtual void OnCHASE_ST_Attack(bool canAttack){
          if(LookToMyEnemy()){

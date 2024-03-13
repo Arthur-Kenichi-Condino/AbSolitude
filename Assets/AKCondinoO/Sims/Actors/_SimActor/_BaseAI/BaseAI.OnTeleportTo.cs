@@ -19,7 +19,7 @@ namespace AKCondinoO.Sims.Actors{
          if(navMeshAgent!=null&&navMeshAgent.enabled){
           if(NavMesh.SamplePosition(position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
            if(navMeshAgent.Warp(hitResult.position+Vector3.up*navMeshAgent.height/2f)){
-            navMeshAgent.destination=navMeshAgent.transform.position;
+            MoveStop();
             teleportedMove=true;
            }
            if(!navMeshAgent.isOnNavMesh){

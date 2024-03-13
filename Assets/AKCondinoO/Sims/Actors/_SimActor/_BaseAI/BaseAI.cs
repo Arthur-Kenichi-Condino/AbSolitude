@@ -193,6 +193,7 @@ namespace AKCondinoO.Sims.Actors{
          bool shouldCrouch=false;//  is crouching required?
          if(Core.singleton.isServer){
           if(IsOwner){
+           ManualUpdateAStarPathfinding();
            if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
               DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
             OnThirdPersonCamFollow();

@@ -157,7 +157,7 @@ namespace AKCondinoO.Sims.Actors{
          if(
           IsTraversingPath()
          ){
-          navMeshAgent.destination=navMeshAgent.transform.position;
+          MoveStop();
          }
          OnATTACK_ST_Attack(canAttack);
         }
@@ -217,8 +217,7 @@ namespace AKCondinoO.Sims.Actors{
               }
               Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z*1.1f);
               //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
-              MyDest=dest;
-              navMeshAgent.destination=MyDest;
+              Move(dest);
               onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
              }
             }else{

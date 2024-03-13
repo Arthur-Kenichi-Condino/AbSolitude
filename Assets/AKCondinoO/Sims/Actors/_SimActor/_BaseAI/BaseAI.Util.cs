@@ -55,13 +55,13 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected void MoveToMasterRandom(BaseAI masterAI,float dis){
          if(GetRandomPosition(masterAI.transform.position,dis,out Vector3 dest)){
-          navMeshAgent.destination=dest;
+          Move(dest);
          }
         }
         protected void MoveToMaster      (BaseAI masterAI,float dis){
          Vector3 dir=(this.transform.position-masterAI.transform.position).normalized;
          Vector3 dest=masterAI.transform.position+dir*(this.characterController.character.radius/2f+masterAI.characterController.character.radius/2f);
-         navMeshAgent.destination=dest;
+         Move(dest);
         }
     }
 }

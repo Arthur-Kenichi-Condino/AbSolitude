@@ -94,6 +94,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Integrity.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\GetVoxelMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectUtil.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.AStarPathfinding.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Concurrent.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataLoadingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\Teleport\TeleportSkillBuff.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Assets\AKCondinoO\MemoryManagement.cs" />
     <Compile Include="Assets\AKCondinoO\ISingletonInitialization.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.Functions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\AtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.Stats.cs" />

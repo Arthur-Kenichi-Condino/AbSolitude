@@ -38,7 +38,7 @@ namespace AKCondinoO.Sims.Actors{
             }else{
              navMeshAgent.speed=navMeshAgentWalkSpeed;
             }
-            navMeshAgent.destination=result;
+            Move(result);
            }
           }
          }

@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims.Actors{
          if(
           IsTraversingPath()
          ){
-          navMeshAgent.destination=navMeshAgent.transform.position;
+          MoveStop();
          }
         }
      [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
@@ -56,7 +56,7 @@ namespace AKCondinoO.Sims.Actors{
           if(
            IsTraversingPath()
           ){
-           navMeshAgent.destination=navMeshAgent.transform.position;
+           MoveStop();
           }
           if(!IsReloading()){
            OnSNIPE_ST_Reset();
@@ -68,7 +68,7 @@ namespace AKCondinoO.Sims.Actors{
           if(
            IsTraversingPath()
           ){
-           navMeshAgent.destination=navMeshAgent.transform.position;
+           MoveStop();
           }
           if(!IsShooting()){
            OnSNIPE_ST_Reset();
@@ -127,7 +127,7 @@ namespace AKCondinoO.Sims.Actors{
             Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
             dir.y=0f;
             MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis+Vector3.down*(height/2f);
-            navMeshAgent.destination=MyDest;
+            Move(MyDest);
             Debug.DrawRay(MyEnemy.transform.position,dir*onSnipeRetreatDis,Color.blue,5f);
             onSnipeMoving=true;
            }
