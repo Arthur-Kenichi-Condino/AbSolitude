@@ -199,6 +199,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.Transform.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AStarPathfindingHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />

@@ -30,7 +30,7 @@ namespace AKCondinoO{
         static void SetLayer(ref int layer,string[]layerNames){
          for(int i=0;i<layerNames.Length;++i){
           if(i==0){
-           layer=LayerMask.GetMask(layerNames[i]);
+           layer= LayerMask.GetMask(layerNames[i]);
           }else{
            layer|=LayerMask.GetMask(layerNames[i]);
           }

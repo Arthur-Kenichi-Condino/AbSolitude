@@ -3,20 +3,72 @@
   "WorkspaceRootPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.move.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.move.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfindingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfindingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.astarpathfinding.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.astarpathfinding.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.navmeshagent.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.navmeshagent.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\astarpathfindinghelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\astarpathfindinghelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\navmeshhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\navmeshhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\voxelsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\voxelsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\gameplaypersistentdatasavingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\gameplaypersistentdatasavingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\gameplayermanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\gameplayermanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.navmeshagent.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.navmeshagent.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.snipe_st.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,18 +87,6 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.isusingai\\baseai.isusingai.onchase_st.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.astarpathfinding.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.astarpathfinding.pathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\baseai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.motion\\baseai.motion.updatemotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\_baseai.motion\\baseai.motion.updatemotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -55,32 +95,8 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\maincamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\screeninput.util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\screeninput.util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\voxelsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\voxelsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfindingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\pathfinding\\astar\\astarpathfindingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\gameplayermanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\gameplayermanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsimobjectsplacing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -97,14 +113,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\_simobject\\simobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\_simobject\\simobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\gameplaypersistentdatasavingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\gameplaypersistentdatasavingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\_simobject\\siminventoryitemsincontainersettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -251,10 +259,6 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\util\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\navmeshhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\sims\\actors\\_simactor\\_baseai\\navmeshhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\ui\\fixed\\buildbuyeditmode\\fixedui.buildbuyeditmode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\ui\\fixed\\buildbuyeditmode\\fixedui.buildbuyeditmode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -314,11 +318,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 43,
+          "SelectedChildIndex": 33,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 73,
+              "DocumentIndex": 74,
               "Title": "AISensor.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AISensor.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AISensor.cs",
@@ -331,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 33,
               "Title": "SimWeapon.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Weapons\\_SimWeapon\\SimWeapon.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Weapons\\_SimWeapon\\SimWeapon.cs",
@@ -344,7 +348,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 16,
               "Title": "BaseAI.IsUsingAI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.cs",
@@ -353,12 +357,11 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-01-13T16:25:06.626Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 50,
+              "DocumentIndex": 52,
               "Title": "BaseAI.Targeting.Sight.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Sight.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Sight.cs",
@@ -371,7 +374,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 32,
               "Title": "SimCharacterController.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.cs",
@@ -384,7 +387,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 41,
               "Title": "SimAnimatorController.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\SimAnimatorController.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\SimAnimatorController.cs",
@@ -397,7 +400,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 37,
               "Title": "SimAnimatorIKController.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\SimAnimatorIKController.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\SimAnimatorIKController.cs",
@@ -410,7 +413,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 72,
+              "DocumentIndex": 73,
               "Title": "RotationHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\RotationHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\RotationHelper.cs",
@@ -423,7 +426,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 39,
               "Title": "QuaternionRotLerpHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\QuaternionRotLerpHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\QuaternionRotLerpHelper.cs",
@@ -436,7 +439,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 69,
+              "DocumentIndex": 70,
               "Title": "InputHandler.Command.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.Command.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.Command.cs",
@@ -449,7 +452,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 70,
+              "DocumentIndex": 71,
               "Title": "InputHandler.Enabled.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.Enabled.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.Enabled.cs",
@@ -462,7 +465,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 71,
+              "DocumentIndex": 72,
               "Title": "InputHandler.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.cs",
@@ -475,7 +478,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 53,
+              "DocumentIndex": 55,
               "Title": "ScreenInput.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\ScreenInput.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\ScreenInput.cs",
@@ -488,7 +491,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "ContextMenuUI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\UI\\Context\\ContextMenuUI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\UI\\Context\\ContextMenuUI.cs",
@@ -501,7 +504,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 19,
               "Title": "BaseAI.IsUsingAI.OnATTACK_ST.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnATTACK_ST.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnATTACK_ST.cs",
@@ -514,20 +517,21 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 6,
               "Title": "BaseAI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
-              "ViewState": "AQIAALkAAAAAAAAAAAAgwMMAAAALAAAA",
+              "ViewState": "AQIAADEAAAAAAAAAAAAQwD4AAABvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-11T15:42:05.785Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 47,
               "Title": "BaseAI.GetV.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.GetV.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.GetV.cs",
@@ -540,7 +544,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 22,
               "Title": "MainCamera.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\MainCamera.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\MainCamera.cs",
@@ -553,7 +557,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 68,
+              "DocumentIndex": 69,
               "Title": "BuildBuyEditModeUIContent.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\UI\\Fixed\\BuildBuyEditMode\\BuildBuyEditModeUIContent.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\UI\\Fixed\\BuildBuyEditMode\\BuildBuyEditModeUIContent.cs",
@@ -566,7 +570,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 63,
+              "DocumentIndex": 64,
               "Title": "FixedUI.BuildBuyEditMode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\UI\\Fixed\\BuildBuyEditMode\\FixedUI.BuildBuyEditMode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\UI\\Fixed\\BuildBuyEditMode\\FixedUI.BuildBuyEditMode.cs",
@@ -579,7 +583,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 67,
+              "DocumentIndex": 68,
               "Title": "MainCamera.PersistentData.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\MainCamera.PersistentData.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\MainCamera.PersistentData.cs",
@@ -592,7 +596,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 27,
               "Title": "SimObject.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.cs",
@@ -605,7 +609,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 58,
+              "DocumentIndex": 60,
               "Title": "Interactable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\Interactable.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\Interactable.cs",
@@ -618,7 +622,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 56,
+              "DocumentIndex": 58,
               "Title": "SimObject.Interactions.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.Interactions.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.Interactions.cs",
@@ -631,7 +635,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 57,
+              "DocumentIndex": 59,
               "Title": "VoxelTerrainChunk.Interactions.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.Interactions.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.Interactions.cs",
@@ -644,7 +648,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 50,
               "Title": "Interaction.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Interactions\\Interaction.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Interactions\\Interaction.cs",
@@ -657,7 +661,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 49,
               "Title": "GoHere.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Interactions\\GoHere.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Interactions\\GoHere.cs",
@@ -670,7 +674,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 17,
               "Title": "BaseAI.IsUsingAI.SNIPE_ST.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.SNIPE_ST.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.SNIPE_ST.cs",
@@ -683,7 +687,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 35,
               "Title": "BaseAI.Targeting.Combat.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Combat.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Combat.cs",
@@ -696,7 +700,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 20,
               "Title": "BaseAI.IsUsingAI.OnCHASE_ST.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnCHASE_ST.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnCHASE_ST.cs",
@@ -709,7 +713,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "FixedUI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\UI\\Fixed\\FixedUI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\UI\\Fixed\\FixedUI.cs",
@@ -722,7 +726,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 31,
               "Title": "FixedUI.CameraMode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\UI\\Fixed\\FixedUI.CameraMode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\UI\\Fixed\\FixedUI.CameraMode.cs",
@@ -735,33 +739,35 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 5,
               "Title": "AStarPathfinding.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfinding.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfinding.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfinding.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfinding.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAcwCQAAAAmAAAA",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-08T00:50:16.656Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 0,
               "Title": "AStarPathfindingMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfindingMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfindingMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfindingMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\Pathfinding\\AStar\\AStarPathfindingMultithreaded.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAAwBAAAAAwAAAA",
+              "ViewState": "AQIAACIAAAAAAAAAAAA5wCcAAABZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-08T04:30:41.931Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 13,
               "Title": "GameplayerManagement.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\GameplayerManagement.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\GameplayerManagement.cs",
@@ -774,7 +780,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 12,
               "Title": "GameplayPersistentDataSavingMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\GameplayPersistentDataSavingMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\GameplayPersistentDataSavingMultithreaded.cs",
@@ -787,33 +793,21 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 4,
               "Title": "Core.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Core.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Core.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Core.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Core.cs",
-              "ViewState": "AQIAACQAAAAAAAAAAAAYwEoAAAAjAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAADwv08AAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-18T23:09:38.129Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 24,
-              "Title": "VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ViewState": "AQIAAFcAAAAAAAAAAAAiwBkAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-08T21:13:33.529Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
               "Title": "VoxelTerrainSimObjectsPlacing.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSimObjectsPlacing.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSimObjectsPlacing.cs",
@@ -827,67 +821,106 @@
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
+              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
+              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
+              "ViewState": "AQIAAEYAAAAAAAAAAAAnwFQAAABeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-08T21:13:33.529Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAtwBgAAAA7AAAA",
+              "ViewState": "AQIAAF8AAAAAAAAAAADwv20AAABEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-08T22:37:55.422Z",
               "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 11,
               "Title": "VoxelSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
-              "ViewState": "AQIAANEAAAAAAAAAAAAWwOEAAAAkAAAA",
+              "ViewState": "AQIAABAAAAAAAAAAAAAjwBoAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-19T02:57:47.291Z",
               "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
               "Title": "BaseAI.AStarPathfinding.Pathfinding.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.AStarPathfinding.Pathfinding.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.AStarPathfinding.Pathfinding.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.AStarPathfinding.Pathfinding.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.AStarPathfinding.Pathfinding.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAgAAAAiAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAADwvxwAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-11T01:59:51.834Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "BaseAI.NavMeshAgent.Pathfinding.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.Pathfinding.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.Pathfinding.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.Pathfinding.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.Pathfinding.cs",
-              "ViewState": "AQIAADIAAAAAAAAAAADwvzwAAAAZAAAA",
+              "ViewState": "AQIAAC4AAAAAAAAAAAAkwDwAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-11T01:22:55.747Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 14,
               "Title": "BaseAI.IsUsingAI.Move.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.Move.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-11T22:49:23.057Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AStarPathfindingHelper.cs",
+              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AStarPathfindingHelper.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AStarPathfindingHelper.cs",
+              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AStarPathfindingHelper.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\AStarPathfindingHelper.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAWwA0AAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-14T18:51:31.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "NavMeshHelper.cs",
+              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
+              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAswBAAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T02:27:41.714Z",
               "EditorCaption": ""
             },
             {
@@ -896,7 +929,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 15,
               "Title": "BaseAI.Util.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Util.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Util.cs",
@@ -904,12 +937,11 @@
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Util.cs",
               "ViewState": "AQIAAC8AAAAAAAAAAAAwwDgAAABRAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-11T22:32:55.412Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-11T22:32:55.412Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 18,
               "Title": "BaseAI.IsUsingAI.OnIDLE_ST.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnIDLE_ST.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.IsUsingAI.OnIDLE_ST.cs",
@@ -921,7 +953,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 23,
               "Title": "ScreenInput.Util.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\ScreenInput.Util.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\ScreenInput.Util.cs",
@@ -933,7 +965,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 26,
               "Title": "SimActor.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\SimActor.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\SimActor.cs",
@@ -945,7 +977,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 36,
               "Title": "Hurtboxes.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\Hurtboxes.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\Hurtboxes.cs",
@@ -957,7 +989,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 44,
               "Title": "InContainerTransformData.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\InContainerTransformData.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\InContainerTransformData.cs",
@@ -969,7 +1001,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 43,
               "Title": "SimObject.AsInventoryItem.Transform.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.AsInventoryItem.Transform.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.AsInventoryItem.Transform.cs",
@@ -981,7 +1013,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "SimInventoryItemsInContainerSettings.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimInventoryItemsInContainerSettings.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimInventoryItemsInContainerSettings.cs",
@@ -993,7 +1025,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 38,
               "Title": "Vector3PosLerpHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\Vector3PosLerpHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\Vector3PosLerpHelper.cs",
@@ -1005,7 +1037,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 40,
               "Title": "Log.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Log.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Log.cs",
@@ -1017,7 +1049,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 74,
+              "DocumentIndex": 75,
               "Title": "NetworkVariable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.netcode.gameobjects@1.7.1\\Runtime\\NetworkVariable\\NetworkVariable.cs",
               "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.netcode.gameobjects@1.7.1\\Runtime\\NetworkVariable\\NetworkVariable.cs",
@@ -1029,7 +1061,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 75,
+              "DocumentIndex": 76,
               "Title": "NetworkVariableBase.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.netcode.gameobjects@1.7.1\\Runtime\\NetworkVariable\\NetworkVariableBase.cs",
               "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.netcode.gameobjects@1.7.1\\Runtime\\NetworkVariable\\NetworkVariableBase.cs",
@@ -1041,7 +1073,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 51,
+              "DocumentIndex": 53,
               "Title": "BaseAI.Targeting.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.cs",
@@ -1053,7 +1085,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 46,
               "Title": "SimCharacterController.Action1.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.Action1.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.Action1.cs",
@@ -1065,7 +1097,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 48,
               "Title": "SimCharacterController.Action2.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.Action2.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.Action2.cs",
@@ -1077,7 +1109,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 34,
               "Title": "RemingtonModel700BDL.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Weapons\\Rifle\\SniperRifle\\RemingtonModel700BDL\\RemingtonModel700BDL.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Weapons\\Rifle\\SniperRifle\\RemingtonModel700BDL\\RemingtonModel700BDL.cs",
@@ -1089,7 +1121,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 25,
               "Title": "BaseMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\BaseMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\BaseMultithreaded.cs",
@@ -1101,7 +1133,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 51,
               "Title": "DynamicCharacterAvatar.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\UMA\\Core\\Extensions\\DynamicCharacterSystem\\Scripts\\DynamicCharacterAvatar.cs",
               "RelativeDocumentMoniker": "Assets\\UMA\\Core\\Extensions\\DynamicCharacterSystem\\Scripts\\DynamicCharacterAvatar.cs",
@@ -1113,19 +1145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 62,
-              "Title": "NavMeshHelper.cs",
-              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
-              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAIA9wBUAAAAzAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-23T02:27:41.714Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 52,
+              "DocumentIndex": 54,
               "Title": "SimCharacterController.OnInput.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.OnInput.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.OnInput.cs",
@@ -1137,7 +1157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 54,
+              "DocumentIndex": 56,
               "Title": "BaseAI.State.Enum.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.State.Enum.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.IsUsingAI\\BaseAI.State.Enum.cs",
@@ -1149,19 +1169,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 8,
               "Title": "PhysUtil.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\PhysUtil.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\PhysUtil.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\PhysUtil.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Util\\PhysUtil.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAAwBgAAAAgAAAA",
+              "ViewState": "AQIAABgAAAAAAAAAAAAywCAAAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-23T02:31:43.679Z"
+              "WhenOpened": "2024-02-23T02:31:43.679Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 55,
+              "DocumentIndex": 57,
               "Title": "UMAGeneratorBuiltin.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\UMA\\Core\\StandardAssets\\UMA\\Scripts\\UMAGeneratorBuiltin.cs",
               "RelativeDocumentMoniker": "Assets\\UMA\\Core\\StandardAssets\\UMA\\Scripts\\UMAGeneratorBuiltin.cs",
@@ -1173,7 +1194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 60,
+              "DocumentIndex": 62,
               "Title": "SimObjectSpawner.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectSpawner.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectSpawner.cs",
@@ -1185,7 +1206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 59,
+              "DocumentIndex": 61,
               "Title": "VoxelTerrainChunk.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.cs",
@@ -1197,7 +1218,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 61,
+              "DocumentIndex": 63,
               "Title": "Util.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\Util.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\Util.cs",
@@ -1209,7 +1230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 64,
+              "DocumentIndex": 65,
               "Title": "SimObjectManager.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectManager.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectManager.cs",
@@ -1221,7 +1242,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 65,
+              "DocumentIndex": 66,
               "Title": "PersistentDataSavingMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\PersistentDataSavingMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\PersistentDataSavingMultithreaded.cs",
@@ -1233,7 +1254,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 66,
+              "DocumentIndex": 67,
               "Title": "SimObject.PersistentData.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.PersistentData.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObject.PersistentData.cs",
@@ -1245,7 +1266,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 42,
               "Title": "BaseAI.Motion.Enum.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\BaseAI.Motion.Enum.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\BaseAI.Motion.Enum.cs",
@@ -1257,7 +1278,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 21,
               "Title": "BaseAI.Motion.UpdateMotion.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\BaseAI.Motion.UpdateMotion.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\_BaseAI.Motion\\BaseAI.Motion.UpdateMotion.cs",
@@ -1269,7 +1290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 45,
               "Title": "SimCharacterController.ProcessCommand.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.ProcessCommand.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.ProcessCommand.cs",

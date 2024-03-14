@@ -58,9 +58,9 @@ namespace AKCondinoO.Sims.Actors{
          Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
-         aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingMaxHits);
-         aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(Width*Depth                        ,Allocator.Persistent);
-         aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth*aStarPathfindingMaxHits,Allocator.Persistent);
+         aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingWidth,aStarPathfindingDepth,aStarPathfindingMaxHits);
+         aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(aStarPathfindingWidth*aStarPathfindingDepth                        ,Allocator.Persistent);
+         aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingMaxHits,Allocator.Persistent);
          AStarPathfinding.singleton.aStarPathfindingContainers.Add(aStarPathfindingBG);
         }
      protected bool canSense;

@@ -2,11 +2,14 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Pathfinding;
+using AKCondinoO.Voxels;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+     [SerializeField]internal int aStarPathfindingWidth=VoxelSystem.Width;
+     [SerializeField]internal int aStarPathfindingDepth=VoxelSystem.Depth;
      [SerializeField]internal int aStarPathfindingMaxHits=20;
      protected Vector3?MyAStarDest=null;
         internal void GetAStarPath(Vector3 dest){
@@ -25,6 +28,7 @@ namespace AKCondinoO.Sims.Actors{
              if(curGetAStarDest!=MyAStarDest){
               if(MyAStarDest!=null){
                aStarPathfindingBG.dest=MyAStarDest.Value;
+               aStarPathfindingBG.execution=AStarPathfindingBackgroundContainer.Execution.GetGround;
                curGetAStarDest=MyAStarDest;
                settingGetGroundRays=true;
                AStarPathfindingMultithreaded.Schedule(aStarPathfindingBG);

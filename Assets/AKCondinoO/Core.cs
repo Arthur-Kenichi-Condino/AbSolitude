@@ -77,6 +77,7 @@ namespace AKCondinoO{
            RenderingUtil.SetUtil();
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
+         AStarPathfindingHelper.SetAStarPathfindingSettings();
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
          Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
