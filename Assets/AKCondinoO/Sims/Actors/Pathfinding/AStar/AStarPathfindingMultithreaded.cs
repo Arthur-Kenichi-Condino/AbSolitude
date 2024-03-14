@@ -8,6 +8,10 @@ using Unity.Jobs;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Pathfinding{
     internal class AStarPathfindingBackgroundContainer:BackgroundContainer{
+     internal readonly int maxHits;
+        internal AStarPathfindingBackgroundContainer(int maxHits){
+         this.maxHits=maxHits;
+        }
      internal Vector3 dest;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
