@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+     [SerializeField]internal int aStarPathfindingMaxHits=10;
      protected Vector3?MyAStarDest=null;
         internal void GetAStarPath(Vector3 dest){
          MyAStarDest=dest;

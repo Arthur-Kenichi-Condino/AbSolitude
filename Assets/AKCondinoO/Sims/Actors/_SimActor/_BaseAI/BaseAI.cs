@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UMA;
 using UMA.CharacterSystem;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.GameMode;
@@ -58,6 +59,8 @@ namespace AKCondinoO.Sims.Actors{
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
          aStarPathfindingBG=new AStarPathfindingBackgroundContainer();
+         aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(Width*Depth                        ,Allocator.Persistent);
+         aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(Width*Depth*aStarPathfindingMaxHits,Allocator.Persistent);
          AStarPathfinding.singleton.aStarPathfindingContainers.Add(aStarPathfindingBG);
         }
      protected bool canSense;
