@@ -10,27 +10,30 @@ namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      [SerializeField]internal int aStarPathfindingWidth=VoxelSystem.Width;
      [SerializeField]internal int aStarPathfindingDepth=VoxelSystem.Depth;
-     [SerializeField]internal int aStarPathfindingMaxHits=20;
+     [SerializeField]internal int aStarPathfindingHeight=16;
      protected Vector3?MyAStarDest=null;
         internal void GetAStarPath(Vector3 dest){
          MyAStarDest=dest;
         }
      bool settingGetGroundRays;
+     bool buildingHeap;
      Vector3?curGetAStarDest=null;
         internal void ManualUpdateAStarPathfinding(){
          Log.DebugMessage("ManualUpdateAStarPathfinding");
-         if(settingGetGroundRays){
+         if(buildingHeap){
              if(aStarPathfindingBG.IsCompleted(AStarPathfinding.singleton.aStarPathfindingBGThreads[0].IsRunning)){
               Log.DebugMessage("aStarPathfindingBG.IsCompleted");
-              settingGetGroundRays=false;
+              buildingHeap=false;
              }
          }else{
              if(curGetAStarDest!=MyAStarDest){
               if(MyAStarDest!=null){
+               aStarPathfindingBG.nodeWidth=GetRadius()*2f;
+               aStarPathfindingBG.nodeHeight=GetHeight();
                aStarPathfindingBG.dest=MyAStarDest.Value;
-               aStarPathfindingBG.execution=AStarPathfindingBackgroundContainer.Execution.GetGround;
+               aStarPathfindingBG.execution=AStarPathfindingBackgroundContainer.Execution.BuildHeap;
                curGetAStarDest=MyAStarDest;
-               settingGetGroundRays=true;
+               buildingHeap=true;
                AStarPathfindingMultithreaded.Schedule(aStarPathfindingBG);
               }
              }

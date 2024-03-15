@@ -155,6 +155,8 @@ namespace AKCondinoO.Sims.Actors{
             MyState==State. CHASE_ST
          ){
           dir=(MyEnemy.transform.position-transform.position).normalized;
+         }else if(characterController!=null){
+          dir=characterController.transform.forward;
          }else if(animatorController!=null){
           dir=animatorController.transform.forward;
          }else{

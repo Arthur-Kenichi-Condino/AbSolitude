@@ -136,6 +136,9 @@ MonoBehaviour:
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 2461128663094476801, guid: 49d00260215b5494381f6fb86baff6b6, type: 3}
   goToSimUMA: {fileID: 0}
+  aStarPathfindingWidth: 16
+  aStarPathfindingDepth: 16
+  aStarPathfindingHeight: 16
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 0

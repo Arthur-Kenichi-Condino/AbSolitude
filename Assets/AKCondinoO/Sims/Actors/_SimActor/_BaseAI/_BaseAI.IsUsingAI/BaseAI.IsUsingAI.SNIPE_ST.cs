@@ -124,6 +124,7 @@ namespace AKCondinoO.Sims.Actors{
            }
            if(moveToDestination){
             Log.DebugMessage("OnSNIPE_ST_Routine():move");
+            OnSNIPE_ST_Reset();
             Vector3 dir=(transform.position-MyEnemy.transform.position).normalized;
             dir.y=0f;
             MyDest=MyEnemy.transform.position+dir*onSnipeRetreatDis+Vector3.down*(height/2f);

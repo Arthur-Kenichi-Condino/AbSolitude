@@ -10,7 +10,7 @@ namespace AKCondinoO.Sims{
          return transform.rotation;
         }
         internal virtual float GetHeight(){
-         return localBounds.extents.y;
+         return localBounds.extents.y*2f;
         }
         internal virtual float GetRadius(){
          return Mathf.Max(localBounds.extents.x,localBounds.extents.z);
