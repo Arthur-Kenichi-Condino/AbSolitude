@@ -16,6 +16,7 @@ using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Water.Editing.VoxelWaterEditingMultithreaded;
+using AKCondinoO.Voxels.Terrain.MarchingCubes;
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
@@ -59,11 +60,18 @@ namespace AKCondinoO.Voxels.Water{
      internal readonly Queue<Dictionary<Vector3Int,WaterEditOutputData>>waterEditOutputDataPool=new Queue<Dictionary<Vector3Int,WaterEditOutputData>>();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataFromFileToMerge=new();
      readonly Dictionary<Vector2Int,Dictionary<Vector3Int,WaterEditOutputData>>dataForSavingToFile=new();
+     readonly Dictionary<int,Voxel[]>terrainVoxels=new Dictionary<int,Voxel[]>();
+     readonly     double[][][]     noiseCache1=new     double[biome.cacheLength][][];
+     readonly MaterialId[][][]materialIdCache1=new MaterialId[biome.cacheLength][][];
         internal WaterSpreadingMultithreaded(){
          for(int i=0;i<voxels.Length;++i){
                        voxels[i]=new Dictionary<int,VoxelWater>();
                        absorbing[i]=new Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>();
                        spreading[i]=new Dictionary<Vector3Int,(double spread,VoxelWater voxel)>();
+         }
+         for(int i=0;i<biome.cacheLength;++i){
+               noiseCache1[i]=new     double[9][];
+          materialIdCache1[i]=new MaterialId[9][];
          }
         }
         protected override void Cleanup(){
@@ -76,6 +84,15 @@ namespace AKCondinoO.Voxels.Water{
          dataFromFileToMerge.Clear();
          foreach(var editData in dataForSavingToFile){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
          dataForSavingToFile.Clear();
+         for(int i=0;i<biome.cacheLength;++i){
+          for(int j=0;j<     noiseCache1[i].Length;++j){if(     noiseCache1[i][j]!=null)Array.Clear(     noiseCache1[i][j],0,     noiseCache1[i][j].Length);}
+          for(int j=0;j<materialIdCache1[i].Length;++j){if(materialIdCache1[i][j]!=null)Array.Clear(materialIdCache1[i][j],0,materialIdCache1[i][j].Length);}
+         }
+         foreach(var kvp in terrainVoxels){
+          Array.Clear(kvp.Value,0,kvp.Value.Length);
+          VoxelSystem.Concurrent.voxelsArrayPool.Enqueue(kvp.Value);
+         }
+         terrainVoxels.Clear();
         }
         internal static(int vxlIdx,VoxelWater voxel)BinaryReadVoxelWater(BinaryReader cacheBinaryReader){
          int vxlIdx            =cacheBinaryReader.ReadInt32();
@@ -101,6 +118,7 @@ namespace AKCondinoO.Voxels.Water{
          //Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
          Vector2Int cCoord1=container.cCoord.Value;
          int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
+         int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
          if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData1)){
           editData1=new Dictionary<Vector3Int,WaterEditOutputData>();
          }
@@ -265,6 +283,8 @@ namespace AKCondinoO.Voxels.Water{
           bool VerticalSpread(){
            if(!(vCoord3.y>=0)){
             return false;
+           }else if(HasBlockageAt(vCoord3)){
+            return false;
            }else{
             Log.DebugMessage("VerticalSpread:"+vCoord3);
             int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
@@ -300,6 +320,15 @@ namespace AKCondinoO.Voxels.Water{
           }
          }
          bool HasBlockageAt(Vector3Int vCoord){//  testar com array de voxels do terreno ou array de bool para objetos de estruturas
+          int vxlIdx=GetvxlIdx(vCoord.x,vCoord.y,vCoord.z);
+          bool arrayIsNull;
+          if((arrayIsNull=!terrainVoxels.TryGetValue(cnkIdx1,out Voxel[]terrainVoxelArray))||!terrainVoxelArray[vxlIdx].isCreated){
+           VoxelSystem.Concurrent.GetVoxelsBG(cCoord1,new Vector2Int(0,0),terrainVoxels,noiseCache1,materialIdCache1,vCoord);
+           if(arrayIsNull){terrainVoxelArray=terrainVoxels[cnkIdx1];}
+          }
+          if(-terrainVoxelArray[vxlIdx].density<MarchingCubesTerrain.isoLevel){
+           return true;
+          }
           return false;
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
@@ -391,7 +420,7 @@ namespace AKCondinoO.Voxels.Water{
           }
          }
          sw.Stop();
-         //Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
+         Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
         }
     }
 }

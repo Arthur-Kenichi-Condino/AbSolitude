@@ -329,6 +329,7 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\FixedUI.BuildBuyEditMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Vanilmirth\ChaoticBlessing\ChaoticBlessing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.cs" />
+    <Compile Include="Assets\AKCondinoO\Util\Heap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainOutput.cginc" />

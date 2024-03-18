@@ -87,6 +87,8 @@ namespace AKCondinoO.Voxels.Terrain{
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
           pendingMarchingCubes=true;
+          this.name=id+".VoxelTerrainChunk";
+          wCnk.name=id+".VoxelWaterChunk";
          }
         }
         internal void OnEdited(){

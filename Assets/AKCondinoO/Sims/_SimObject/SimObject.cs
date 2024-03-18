@@ -143,7 +143,11 @@ namespace AKCondinoO.Sims{
          if(Core.singleton.isServer){
           if(!netObj.IsSpawned){
            //Log.DebugMessage("netObj should be spawned now");
-           netObj.Spawn(destroyWithScene:false);
+           try{
+            netObj.Spawn(destroyWithScene:false);
+           }catch(Exception e){
+            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           }
            netObj.DontDestroyWithOwner=true;
           }else if(IsOwner){
            Log.DebugMessage("set net variables");

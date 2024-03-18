@@ -87,6 +87,9 @@ namespace AKCondinoO.Voxels.Water{
             VoxelSystem.Concurrent.waterCache_rwl.ExitReadLock();
            }
           }
+          if(DEBUG_DRAW_WATER_DENSITY_VOXELS==null){
+           return;
+          }
           Vector3Int vCoord1;
           for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
           for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){

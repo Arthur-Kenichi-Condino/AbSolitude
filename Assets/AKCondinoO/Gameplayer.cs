@@ -5,6 +5,7 @@ using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,10 +69,18 @@ namespace AKCondinoO{
          }
          if(Core.singleton.isServer){
           if(this==Gameplayer.main){
-           netObj.Spawn(destroyWithScene:false);
+           try{
+            netObj.Spawn(destroyWithScene:false);
+           }catch(Exception e){
+            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           }
            netObj.DontDestroyWithOwner=true;
           }else{
-           netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           try{
+            netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           }catch(Exception e){
+            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           }
            netObj.DontDestroyWithOwner=true;
           }
          }

@@ -186,7 +186,11 @@ namespace AKCondinoO.Voxels{
                          cnkMsgr=Instantiate(_VoxelTerrainChunkUnnamedMessageHandlerPrefab);
                          terrainMessageHandlers.Add(cnkMsgr);
                          cnkMsgr.OnInstantiated();
-                         cnkMsgr.netObj.Spawn(destroyWithScene:false);
+                         try{
+                          cnkMsgr.netObj.Spawn(destroyWithScene:false);
+                         }catch(Exception e){
+                          Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                         }
                          cnkMsgr.netObj.DontDestroyWithOwner=true;
                      }
                          bool firstCall=cnkMsgr.id==null;
