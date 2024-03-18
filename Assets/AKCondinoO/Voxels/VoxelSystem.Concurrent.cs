@@ -37,37 +37,39 @@ namespace AKCondinoO.Voxels{
               MaterialId[][][]materialIdCache1,
              Vector3Int?vCoordToGet=null
             ){
-             VoxelSystem.Concurrent.terrainFiles_rwl.EnterReadLock();
-             try{
-              for(int x=-dis.x;x<=dis.x;x++){
-              for(int y=-dis.y;y<=dis.y;y++){
-               Vector2Int cCoord1=cCoord+new Vector2Int(x,y);
-               if(Math.Abs(cCoord1.x)>=MaxcCoordx||
-                  Math.Abs(cCoord1.y)>=MaxcCoordy)
-               {
-                continue;
+             for(int x=-dis.x;x<=dis.x;x++){
+             for(int y=-dis.y;y<=dis.y;y++){
+              Vector2Int cCoord1=cCoord+new Vector2Int(x,y);
+              if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+                 Math.Abs(cCoord1.y)>=MaxcCoordy)
+              {
+               continue;
+              }
+              int cnkIdx=GetcnkIdx(cCoord1.x,cCoord1.y);
+              if(!voxels.TryGetValue(cnkIdx,out Voxel[]voxelsArray)){
+               if(!voxelsArrayPool.TryDequeue(out voxelsArray)){
+                voxelsArray=new Voxel[VoxelsPerChunk];
                }
-               int cnkIdx=GetcnkIdx(cCoord1.x,cCoord1.y);
-               if(!voxels.TryGetValue(cnkIdx,out Voxel[]voxelsArray)){
-                if(!voxelsArrayPool.TryDequeue(out voxelsArray)){
-                 voxelsArray=new Voxel[VoxelsPerChunk];
-                }
-                voxels.Add(cnkIdx,voxelsArray);
-               }
-               //  TO DO: create Binary cache file
+               voxels.Add(cnkIdx,voxelsArray);
+              }
+              //  TO DO: create Binary cache file
+              VoxelSystem.Concurrent.terrainFiles_rwl.EnterReadLock();
+              try{
                FileStream fileStream;
                StreamReader fileStreamReader;
-               if(!editsFileCacheName.TryGetValue(cnkIdx,out string editsFileName)){
-                editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
-                if(!File.Exists(editsFileName)){
-                 goto _SkipFiles;
+               lock(editsFileCacheStream){
+                if(!editsFileCacheName.TryGetValue(cnkIdx,out string editsFileName)){
+                 editsFileName=string.Format(CultureInfoUtil.en_US,VoxelTerrainEditing.terrainEditingFileFormat,VoxelTerrainEditing.terrainEditingPath,cCoord1.x,cCoord1.y);
+                 if(!File.Exists(editsFileName)){
+                  goto _SkipFiles;
+                 }
+                 editsFileCacheStream      .Add(cnkIdx,fileStream=new FileStream(editsFileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite));
+                 editsFileCacheStreamReader.Add(cnkIdx,fileStreamReader=new StreamReader(editsFileCacheStream[cnkIdx]));
+                 editsFileCacheName        .Add(cnkIdx,editsFileName);
+                }else{
+                 fileStream=editsFileCacheStream[cnkIdx];
+                 fileStreamReader=editsFileCacheStreamReader[cnkIdx];
                 }
-                editsFileCacheStream      .Add(cnkIdx,fileStream=new FileStream(editsFileName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite));
-                editsFileCacheStreamReader.Add(cnkIdx,fileStreamReader=new StreamReader(editsFileCacheStream[cnkIdx]));
-                editsFileCacheName        .Add(cnkIdx,editsFileName);
-               }else{
-                fileStream=editsFileCacheStream[cnkIdx];
-                fileStreamReader=editsFileCacheStreamReader[cnkIdx];
                }
                fileStream.Position=0L;
                fileStreamReader.DiscardBufferedData();
@@ -95,44 +97,52 @@ namespace AKCondinoO.Voxels{
                 }
                }
                _SkipFiles:{}
-               Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1);
-               if(vCoordToGet!=null){
-                Vector3Int vCoord1=vCoordToGet.Value;
+              }catch{
+               throw;
+              }finally{
+               VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
+              }
+              Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1);
+              if(vCoordToGet!=null){
+               Vector3Int vCoord1=vCoordToGet.Value;
+               GetVoxelAt(vCoord1);
+               return;
+              }else{
+               Vector3Int vCoord1;
+               for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
+               for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
+               for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
                 GetVoxelAt(vCoord1);
+               }}}
+              }
+              void GetVoxelAt(Vector3Int vCoord1){
+               int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+               if(voxelsArray[vxlIdx1].isCreated){
                 return;
-               }else{
-                Vector3Int vCoord1;
-                for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-                for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-                for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-                 GetVoxelAt(vCoord1);
-                }}}
                }
-               void GetVoxelAt(Vector3Int vCoord1){
-                int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
-                if(voxelsArray[vxlIdx1].isCreated){
-                 return;
-                }
-                Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
-                                              noiseInput.z+=cnkRgn1.y;
-                VoxelSystem.biome.Setvxl(
-                 noiseInput,
-                  noiseCache1,
-                   materialIdCache1,
-                    0,
-                     vCoord1.z+vCoord1.x*Depth,
-                      ref voxelsArray[vxlIdx1]
-                );
-               }
-              }}
-             }catch{
-              throw;
-             }finally{
-              VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
-             }
+               Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
+                                             noiseInput.z+=cnkRgn1.y;
+               VoxelSystem.biome.Setvxl(
+                noiseInput,
+                 noiseCache1,
+                  materialIdCache1,
+                   0,
+                    vCoord1.z+vCoord1.x*Depth,
+                     ref voxelsArray[vxlIdx1]
+               );
+              }
+             }}
             }
             //  TO DO: this:
             internal static void ReleaseCacheAndDispose(){
+             foreach(var kvp in editsFileCacheStream){
+              kvp.Value                          .Dispose();
+              editsFileCacheStreamReader[kvp.Key].Dispose();
+             }
+             editsFileCacheName        .Clear();
+             editsFileCacheStream      .Clear();
+             editsFileCacheStreamReader.Clear();
+             editsFileCacheLifetime    .Clear();
             }
         }
     }

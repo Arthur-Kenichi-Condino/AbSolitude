@@ -257,6 +257,7 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.  waterCache_rwl.Dispose();
          VoxelSystem.Concurrent.  waterCache   .Clear();
          VoxelSystem.Concurrent.  waterCacheIds.Clear();
+         VoxelSystem.Concurrent.ReleaseCacheAndDispose();
         }
         void OnDestroy(){
         }
