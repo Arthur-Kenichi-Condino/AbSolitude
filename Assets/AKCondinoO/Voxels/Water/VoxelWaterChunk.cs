@@ -38,6 +38,12 @@ namespace AKCondinoO.Voxels.Water{
                  waitingWaterSpread=true;
              }
          }
+         if(pendingMarchingCubes){
+             if(CanBeginMarchingCubes()){
+                 pendingMarchingCubes=false;
+                 waitingMarchingCubes=true;
+             }
+         }
         }
         bool CanSpreadWater(){
          spreadTimer-=Time.deltaTime;
@@ -57,6 +63,12 @@ namespace AKCondinoO.Voxels.Water{
           //Log.DebugMessage("OnWaterSpread");
           return true;
          }
+         return false;
+        }
+        bool CanBeginMarchingCubes(){
+         //if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+         // return true;
+         //}
          return false;
         }
         void OnDrawGizmos(){

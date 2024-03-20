@@ -270,6 +270,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainGetFileEditDataToNetSyncMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Buff\BuffSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWater.cs" />
