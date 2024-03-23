@@ -20,7 +20,7 @@ using AKCondinoO.Voxels.Terrain.MarchingCubes;
 namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
-    internal class WaterSpreadingContainer:BackgroundContainer{
+    internal class WaterSpreadingBackgroundContainer:BackgroundContainer{
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
@@ -52,7 +52,7 @@ namespace AKCondinoO.Voxels.Water{
          base.Dispose(disposing);
         }
     }
-    internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingContainer>{
+    internal class WaterSpreadingMultithreaded:BaseMultithreaded<WaterSpreadingBackgroundContainer>{
      internal const double stopSpreadingDensity=30.0d;
      readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>>absorbing=new();

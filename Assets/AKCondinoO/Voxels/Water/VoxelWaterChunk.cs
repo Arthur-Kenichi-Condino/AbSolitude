@@ -15,7 +15,8 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Water{
     internal class VoxelWaterChunk:MonoBehaviour{
      internal VoxelTerrainChunk tCnk;
-     internal WaterSpreadingContainer waterSpreadingBG=new WaterSpreadingContainer();
+     internal WaterSpreadingBackgroundContainer waterSpreadingBG=new WaterSpreadingBackgroundContainer();
+     internal MarchingCubesWaterBackgroundContainer marchingCubesBG=new MarchingCubesWaterBackgroundContainer();
         internal void OnInstantiated(){
         }
         internal void OnDestroyingCore(){
