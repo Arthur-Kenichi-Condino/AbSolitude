@@ -16,11 +16,12 @@ namespace AKCondinoO.Voxels.Water{
     internal class VoxelWaterChunk:MonoBehaviour{
      internal VoxelTerrainChunk tCnk;
      internal WaterSpreadingBackgroundContainer waterSpreadingBG=new WaterSpreadingBackgroundContainer();
-     internal MarchingCubesWaterBackgroundContainer marchingCubesBG=new MarchingCubesWaterBackgroundContainer();
+     internal MarchingCubesWaterBackgroundContainer marchingCubesWaterBG=new MarchingCubesWaterBackgroundContainer();
         internal void OnInstantiated(){
         }
         internal void OnDestroyingCore(){
          waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning,-1);
+         marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning,-1);
         }
      [SerializeField]float spreadTimeInterval=1.0f;
      float spreadTimer=1.0f;
@@ -67,9 +68,9 @@ namespace AKCondinoO.Voxels.Water{
          return false;
         }
         bool CanBeginMarchingCubes(){
-         //if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
-         // return true;
-         //}
+         if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+          return true;
+         }
          return false;
         }
         void OnDrawGizmos(){

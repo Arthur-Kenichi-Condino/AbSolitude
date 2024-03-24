@@ -10,6 +10,7 @@ using AKCondinoO.Voxels.Terrain.Networking;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using AKCondinoO.Voxels.Water;
 using AKCondinoO.Voxels.Water.Editing;
+using AKCondinoO.Voxels.Water.MarchingCubes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,6 +112,7 @@ namespace AKCondinoO.Voxels{
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal readonly WaterSpreadingMultithreaded[]waterSpreadingBGThreads=new WaterSpreadingMultithreaded[Environment.ProcessorCount];
+     internal readonly MarchingCubesWaterMultithreaded[]marchingCubesWaterBGThreads=new MarchingCubesWaterMultithreaded[Environment.ProcessorCount];
      internal VoxelWaterEditingMultithreaded waterEditingBGThread;
      internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(9,9);//  pool size
@@ -140,6 +142,10 @@ namespace AKCondinoO.Voxels{
          WaterSpreadingMultithreaded.Stop=false;
          for(int i=0;i<waterSpreadingBGThreads.Length;++i){
                        waterSpreadingBGThreads[i]=new WaterSpreadingMultithreaded();
+         }
+         MarchingCubesWaterMultithreaded.Stop=false;
+         for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
+                       marchingCubesWaterBGThreads[i]=new MarchingCubesWaterMultithreaded();
          }
          VoxelWaterEditingMultithreaded.Stop=false;
          waterEditingBGThread=new VoxelWaterEditingMultithreaded();
@@ -214,6 +220,13 @@ namespace AKCondinoO.Voxels{
          WaterSpreadingMultithreaded.Stop=true;
          for(int i=0;i<waterSpreadingBGThreads.Length;++i){
                        waterSpreadingBGThreads[i].Wait();
+         }
+         if(MarchingCubesWaterMultithreaded.Clear()!=0){
+          Log.Error("MarchingCubesWaterMultithreaded will stop with pending work");
+         }
+         MarchingCubesWaterMultithreaded.Stop=true;
+         for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
+                       marchingCubesWaterBGThreads[i].Wait();
          }
          VoxelWaterEditingMultithreaded.Stop=true;
          waterEditingBGThread.Wait();
