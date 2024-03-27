@@ -220,8 +220,7 @@ namespace AKCondinoO.Voxels{
          for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
                        marchingCubesWaterBGThreads[i].Wait();
          }
-         VoxelWaterEditingMultithreaded.Stopped=true;
-         waterEditingBGThread.Wait();
+         VoxelWaterEditingMultithreaded.Stop(waterEditingBGThread);
          VoxelWaterEditing.singleton.waterEditingBG.Dispose();
          if(MarchingCubesMultithreaded.Clear()!=0){
           Log.Error("MarchingCubesMultithreaded will stop with pending work");
@@ -249,6 +248,7 @@ namespace AKCondinoO.Voxels{
                         surfaceSimObjectsPlacerBG.
                          Dispose();
            terrain[i].wCnk.waterSpreadingBG.Dispose();
+           terrain[i].wCnk.marchingCubesWaterBG.Dispose();
           }
          }
          VoxelTerrainEditingMultithreaded.Stopped=true;
