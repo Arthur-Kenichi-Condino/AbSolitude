@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
         public void Init(){
-         AStarPathfindingMultithreaded.Stop=false;
+         AStarPathfindingMultithreaded.Stopped=false;
          for(int i=0;i<aStarPathfindingBGThreads.Length;++i){
                        aStarPathfindingBGThreads[i]=new AStarPathfindingMultithreaded();
          }
@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          if(AStarPathfindingMultithreaded.Clear()!=0){
           Log.Error("AStarPathfindingMultithreaded will stop with pending work");
          }
-         AStarPathfindingMultithreaded.Stop=true;
+         AStarPathfindingMultithreaded.Stopped=true;
          for(int i=0;i<aStarPathfindingBGThreads.Length;++i){
                        aStarPathfindingBGThreads[i].Wait();
          }

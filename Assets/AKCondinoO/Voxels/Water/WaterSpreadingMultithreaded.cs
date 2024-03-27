@@ -420,7 +420,7 @@ namespace AKCondinoO.Voxels.Water{
           }
          }
          sw.Stop();
-         //Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
+         Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
         }
     }
 }

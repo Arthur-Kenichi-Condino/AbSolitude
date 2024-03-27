@@ -37,17 +37,17 @@ namespace AKCondinoO.Sims{
          System.Random seedGenerator=new System.Random();
          SimObject.Stats.seedGenerator=new System.Random(seedGenerator.Next());
          BaseAI         .seedGenerator=new System.Random(seedGenerator.Next());
-         PersistentDataSavingMultithreaded.Stop=false;
+         PersistentDataSavingMultithreaded.Stopped=false;
          persistentDataSavingBG=new PersistentDataSavingBackgroundContainer();
          persistentDataSavingBGThread=new PersistentDataSavingMultithreaded();
-         PersistentDataLoadingMultithreaded.Stop=false;
+         PersistentDataLoadingMultithreaded.Stopped=false;
          persistentDataLoadingBG=new PersistentDataLoadingBackgroundContainer();
          persistentDataLoadingBGThread=new PersistentDataLoadingMultithreaded();
           #region SimInventoryManager
-              PersistentSimInventoryDataSavingMultithreaded.Stop=false;
+              PersistentSimInventoryDataSavingMultithreaded.Stopped=false;
               SimInventoryManager.singleton.persistentSimInventoryDataSavingBG=new PersistentSimInventoryDataSavingBackgroundContainer();
               SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread=new PersistentSimInventoryDataSavingMultithreaded();
-              PersistentSimInventoryDataLoadingMultithreaded.Stop=false;
+              PersistentSimInventoryDataLoadingMultithreaded.Stopped=false;
               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG=new PersistentSimInventoryDataLoadingBackgroundContainer();
               SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread=new PersistentSimInventoryDataLoadingMultithreaded();
           #endregion
@@ -80,13 +80,13 @@ namespace AKCondinoO.Sims{
           if(PersistentDataLoadingMultithreaded.Clear()!=0){
            Log.Error("PersistentDataLoadingMultithreaded will stop with pending work");
           }
-          PersistentDataLoadingMultithreaded.Stop=true;
+          PersistentDataLoadingMultithreaded.Stopped=true;
           persistentDataLoadingBGThread.Wait();
            #region SimInventoryManager
                if(PersistentSimInventoryDataLoadingMultithreaded.Clear()!=0){
                 Log.Error("PersistentSimInventoryDataLoadingMultithreaded will stop with pending work");
                }
-               PersistentSimInventoryDataLoadingMultithreaded.Stop=true;
+               PersistentSimInventoryDataLoadingMultithreaded.Stopped=true;
                SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.Wait();
            #endregion
           foreach(var kvp in persistentDataLoadingBGThread.simObjectFileStream){
@@ -154,13 +154,13 @@ namespace AKCondinoO.Sims{
           if(PersistentDataSavingMultithreaded.Clear()!=0){
            Log.Error("PersistentDataSavingMultithreaded will stop with pending work");
           }
-          PersistentDataSavingMultithreaded.Stop=true;
+          PersistentDataSavingMultithreaded.Stopped=true;
           persistentDataSavingBGThread.Wait();
            #region SimInventoryManager
                if(PersistentSimInventoryDataSavingMultithreaded.Clear()!=0){
                 Log.Error("PersistentSimInventoryDataSavingMultithreaded will stop with pending work");
                }
-               PersistentSimInventoryDataSavingMultithreaded.Stop=true;
+               PersistentSimInventoryDataSavingMultithreaded.Stopped=true;
                SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.Wait();
            #endregion
           if(Core.singleton.isServer){

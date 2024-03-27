@@ -19,7 +19,7 @@ namespace AKCondinoO.Gameplaying{
      internal GameplayPersistentDataSavingMultithreaded       persistentDataSavingBGThread;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         GameplayPersistentDataSavingMultithreaded.Stop=false;
+         GameplayPersistentDataSavingMultithreaded.Stopped=false;
          persistentDataSavingBG=new GameplayPersistentDataSavingBackgroundContainer();
          persistentDataSavingBGThread=new GameplayPersistentDataSavingMultithreaded();
         }
@@ -44,7 +44,7 @@ namespace AKCondinoO.Gameplaying{
          if(GameplayPersistentDataSavingMultithreaded.Clear()!=0){
           Log.Error("GameplayPersistentDataSavingMultithreaded will stop with pending work");
          }
-         GameplayPersistentDataSavingMultithreaded.Stop=true;
+         GameplayPersistentDataSavingMultithreaded.Stopped=true;
          persistentDataSavingBGThread.Wait();
          persistentDataSavingBG.Dispose();
         }
