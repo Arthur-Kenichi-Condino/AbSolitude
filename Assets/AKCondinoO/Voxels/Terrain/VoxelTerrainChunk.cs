@@ -82,6 +82,17 @@ namespace AKCondinoO.Voxels.Terrain{
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.Dispose();
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.Dispose();
         }
+        internal void OnDisposal(){
+         marchingCubesBG.Dispose();
+         simObjectsPlacing.
+          surface.
+           surfaceSimObjectsPlacerBG.
+            Dispose();
+         #region water
+             wCnk.waterSpreadingBG.Dispose();
+             wCnk.marchingCubesWaterBG.Dispose();
+         #endregion water
+        }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          hasPhysMeshBaked=false;
          if(firstCall||cCoord1!=id.Value.cCoord){

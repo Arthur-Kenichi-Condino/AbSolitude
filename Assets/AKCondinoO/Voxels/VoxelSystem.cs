@@ -242,13 +242,7 @@ namespace AKCondinoO.Voxels{
          }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
-           terrain[i].marchingCubesBG.Dispose();
-           terrain[i].simObjectsPlacing.
-                       surface.
-                        surfaceSimObjectsPlacerBG.
-                         Dispose();
-           terrain[i].wCnk.waterSpreadingBG.Dispose();
-           terrain[i].wCnk.marchingCubesWaterBG.Dispose();
+           terrain[i].OnDisposal();
           }
          }
          VoxelTerrainEditingMultithreaded.Stopped=true;
