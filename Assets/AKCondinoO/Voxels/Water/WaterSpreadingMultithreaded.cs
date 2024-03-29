@@ -158,10 +158,12 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterReadLock();
          try{
-          container.cacheStream.Position=0L;
-          while(container.cacheBinaryReader.BaseStream.Position!=container.cacheBinaryReader.BaseStream.Length){
-           var v=BinaryReadVoxelWater(container.cacheBinaryReader);
-           voxels[oftIdx1][v.vxlIdx]=v.voxel;
+          lock(container.cacheStream){
+           container.cacheStream.Position=0L;
+           while(container.cacheBinaryReader.BaseStream.Position!=container.cacheBinaryReader.BaseStream.Length){
+            var v=BinaryReadVoxelWater(container.cacheBinaryReader);
+            voxels[oftIdx1][v.vxlIdx]=v.voxel;
+           }
           }
          }catch{
           throw;

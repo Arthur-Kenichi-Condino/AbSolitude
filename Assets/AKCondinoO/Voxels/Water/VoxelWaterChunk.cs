@@ -40,10 +40,13 @@ namespace AKCondinoO.Voxels.Water{
                  waitingWaterSpread=true;
              }
          }
-         if(pendingMarchingCubes){
-             if(CanBeginMarchingCubes()){
-                 pendingMarchingCubes=false;
-                 waitingMarchingCubes=true;
+         if(waitingMarchingCubes){
+         }else{
+             if(pendingMarchingCubes){
+                 if(CanBeginMarchingCubes()){
+                     pendingMarchingCubes=false;
+                     waitingMarchingCubes=true;
+                 }
              }
          }
         }
@@ -69,6 +72,10 @@ namespace AKCondinoO.Voxels.Water{
         }
         bool CanBeginMarchingCubes(){
          if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+          marchingCubesWaterBG.cCoord=tCnk.id.Value.cCoord;
+          marchingCubesWaterBG.cnkRgn=tCnk.id.Value.cnkRgn;
+          marchingCubesWaterBG.cnkIdx=tCnk.id.Value.cnkIdx;
+          MarchingCubesWaterMultithreaded.Schedule(marchingCubesWaterBG);
           return true;
          }
          return false;
