@@ -9,19 +9,25 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Collections;
 using UnityEngine;
-using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.VoxelSystem;
+using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
+using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWaterBackgroundContainer;
 namespace AKCondinoO.Voxels.Water{
     internal class VoxelWaterChunk:MonoBehaviour{
      internal VoxelTerrainChunk tCnk;
      internal WaterSpreadingBackgroundContainer waterSpreadingBG=new WaterSpreadingBackgroundContainer();
      internal MarchingCubesWaterBackgroundContainer marchingCubesWaterBG=new MarchingCubesWaterBackgroundContainer();
         internal void OnInstantiated(){
+         marchingCubesWaterBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
+         marchingCubesWaterBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
         }
         internal void OnDestroyingCore(){
          waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning,-1);
          marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning,-1);
+         if(marchingCubesWaterBG.TempVer.IsCreated)marchingCubesWaterBG.TempVer.Dispose();
+         if(marchingCubesWaterBG.TempTri.IsCreated)marchingCubesWaterBG.TempTri.Dispose();
         }
      [SerializeField]float spreadTimeInterval=1.0f;
      float spreadTimer=1.0f;

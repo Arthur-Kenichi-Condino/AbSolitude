@@ -5,17 +5,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
+using Unity.Collections;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.Water.WaterSpreadingMultithreaded;
 namespace AKCondinoO.Voxels.Water.MarchingCubes{
     internal class MarchingCubesWaterBackgroundContainer:BackgroundContainer{
+     internal FileStream readCacheStream;
+     internal BinaryReader readCacheBinaryReader;
+     internal NativeList<Vertex>TempVer;[StructLayout(LayoutKind.Sequential)]internal struct Vertex{
+          internal Vector4 pos;
+          internal Vector3 normal;
+             internal Vertex(Vector3 p,Vector3 n){
+              pos=p;
+              pos.w=1f;
+              normal=n;
+             }
+     }
+     internal NativeList<UInt32>TempTri;
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
-     internal FileStream readCacheStream;
-     internal BinaryReader readCacheBinaryReader;
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here
