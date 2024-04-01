@@ -334,3 +334,19 @@ Memory consumption went from 228.7 MB to 225.6 MB.
 Total: 24.970700 ms (FindLiveObjects: 0.856700 ms CreateObjectMapping: 1.444300 ms MarkObjects: 4.827500 ms  DeleteObjects: 17.840600 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 140058.384118 seconds.
+  path: Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/AISensor.prefab
+  artifactKey: Guid(06c4ff6742db12a439405dd80b5a666d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/AISensor.prefab using Guid(06c4ff6742db12a439405dd80b5a666d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '369c694dd21c3fc178861d7c40f45988') in 4.460454 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 10243.507404 seconds.
+  path: Assets/AKCondinoO/Sims/_SimObject/SimObject.cs
+  artifactKey: Guid(64f00dd7507b66c4396ea42c738233ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/_SimObject/SimObject.cs using Guid(64f00dd7507b66c4396ea42c738233ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '08ef817bfdd08f5d87ea44061d52fc20') in 0.1420008 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
