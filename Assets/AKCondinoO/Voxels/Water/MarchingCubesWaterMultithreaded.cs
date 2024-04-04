@@ -62,6 +62,20 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
      #region marching cubes
          readonly VoxelWater[]polygonCell=new VoxelWater[8];   
           readonly VoxelWater[]tmpvxl=new VoxelWater[6];
+         readonly    Vector3[] vertices=new    Vector3[12];
+         readonly    Vector3[]  normals=new    Vector3[12];
+          readonly Vector3[][][]verticesCache=new Vector3[3][][]{
+           new Vector3[1            ][]{new Vector3[4],},
+           new Vector3[Depth        ][],//  inicializar no construtor e limpar com Cleanup...
+           new Vector3[FlattenOffset][],
+          };
+         #region vertexInterp
+             readonly     double[] density=new     double[2];
+             readonly    Vector3[]  vertex=new    Vector3[2];
+             readonly      float[]distance=new      float[2];
+         #endregion
+         readonly     int[]   idx=new     int[3];
+         readonly Vector3[]verPos=new Vector3[3];
      #endregion
         internal MarchingCubesWaterMultithreaded(){
          for(int i=0;i<voxels.Length;++i){
@@ -76,6 +90,14 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
          for(int i=0;i<biome.cacheLength;++i){
                noiseCache1[i]=new     double[9][];
          }
+         #region marching cubes
+             for(int i=0;i<verticesCache[2].Length;++i){
+                           verticesCache[2][i]=new Vector3[4];
+                      if(i<verticesCache[1].Length){
+                           verticesCache[1][i]=new Vector3[4];
+                      }
+             }
+         #endregion
         }
         protected override void Cleanup(){
          for(int i=0;i<voxels.Length;++i){
@@ -92,6 +114,11 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
          for(int i=0;i<biome.cacheLength;++i){
           for(int j=0;j<     noiseCache1[i].Length;++j){if(     noiseCache1[i][j]!=null)Array.Clear(     noiseCache1[i][j],0,     noiseCache1[i][j].Length);}
          }
+         #region marching cubes
+             for(int i=0;i<verticesCache[0].Length;++i){Array.Clear(verticesCache[0][i],0,verticesCache[0][i].Length);}
+             for(int i=0;i<verticesCache[1].Length;++i){Array.Clear(verticesCache[1][i],0,verticesCache[1][i].Length);}
+             for(int i=0;i<verticesCache[2].Length;++i){Array.Clear(verticesCache[2][i],0,verticesCache[2][i].Length);}
+         #endregion
         }
         protected override void Execute(){
          if(container.cnkIdx==null){
@@ -272,6 +299,21 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
                   voxelsCache2[2][vCoord2.z+vCoord2.x*Depth]=polygonCell[corner];
                  }
                 }
+          DoMarchingCubes(
+           polygonCell,
+            vCoord1,
+             vertices,
+              verticesCache,
+               normals,
+                density,
+                 vertex,
+                  distance,
+                   idx,
+                    verPos,
+                     ref vertexCount,
+                      container.TempVer,
+                      container.TempTri
+          );
          }}}
         }
     }

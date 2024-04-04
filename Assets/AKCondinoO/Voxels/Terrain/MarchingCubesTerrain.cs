@@ -1,13 +1,16 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
 using paulbourke.MarchingCubes;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Unity.Collections;
 using UnityEngine;
-using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
-using System.Collections.ObjectModel;
-using System.Collections.Concurrent;
+using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
     internal class MarchingCubesTerrain{
      internal const double isoLevel=-50.0d;
