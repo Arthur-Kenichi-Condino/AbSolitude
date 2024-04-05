@@ -2,6 +2,8 @@
     #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
+using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Terrain;
 using AKCondinoO.Voxels.Water.MarchingCubes;
 using System;
@@ -10,7 +12,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWater;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWaterBackgroundContainer;
@@ -19,39 +23,78 @@ namespace AKCondinoO.Voxels.Water{
      internal VoxelTerrainChunk tCnk;
      internal WaterSpreadingBackgroundContainer waterSpreadingBG=new WaterSpreadingBackgroundContainer();
      internal MarchingCubesWaterBackgroundContainer marchingCubesWaterBG=new MarchingCubesWaterBackgroundContainer();
-        internal void OnInstantiated(){
+     internal Bounds worldBounds=new Bounds(
+      Vector3.zero,
+      new Vector3(Width,Height,Depth)
+     );
+     MeshFilter filter;
+        void Awake(){
+         mesh=new Mesh(){
+          bounds=worldBounds,
+         };
+         filter=GetComponent<MeshFilter>();
+         filter.mesh=mesh;
+         bakeJob=new BakeJob(){
+          meshId=mesh.GetInstanceID(),
+         };
+         meshCollider=GetComponent<MeshCollider>();
          marchingCubesWaterBG.TempVer=new NativeList<Vertex>(Allocator.Persistent);
          marchingCubesWaterBG.TempTri=new NativeList<UInt32>(Allocator.Persistent);
         }
+        internal void OnInstantiated(){
+        }
         internal void OnDestroyingCore(){
          waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning,-1);
+         bakeJobHandle.Complete();
          marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning,-1);
          if(marchingCubesWaterBG.TempVer.IsCreated)marchingCubesWaterBG.TempVer.Dispose();
          if(marchingCubesWaterBG.TempTri.IsCreated)marchingCubesWaterBG.TempTri.Dispose();
         }
+        internal void OncCoordChanged(bool rebuild){
+         hasPhysMeshBaked=false;
+         if(rebuild){
+          pendingMarchingCubes=true;
+          this.name=tCnk.id+".VoxelWaterChunk";
+         }
+        }
      [SerializeField]float spreadTimeInterval=1.0f;
      float spreadTimer=1.0f;
+     bool waitingBakeJob;
      bool waitingMarchingCubes;
      bool pendingMarchingCubes;
      bool waitingWaterSpread;
         internal void ManualUpdate(){
          //Log.DebugMessage("ManualUpdate");
          if(waitingWaterSpread){
-             if(OnWaterSpread()){
+             if(OnWaterSpread(out bool hadChanges)){
                  waitingWaterSpread=false;
-                 pendingMarchingCubes=true;
+                 if(hadChanges){
+                  pendingMarchingCubes=true;
+                 }
              }
          }else{
              if(CanSpreadWater()){
                  waitingWaterSpread=true;
              }
          }
-         if(waitingMarchingCubes){
+         if(waitingBakeJob){
+             if(OnPhysMeshBaked()){
+                 waitingBakeJob=false;
+                 //simObjectsPlacing.OnVoxelTerrainReady();
+             }
          }else{
-             if(pendingMarchingCubes){
-                 if(CanBeginMarchingCubes()){
-                     pendingMarchingCubes=false;
-                     waitingMarchingCubes=true;
+             if(waitingMarchingCubes){
+                 if(OnMarchingCubesDone()){
+                     waitingMarchingCubes=false;
+                     SchedulePhysBakeMeshJob();
+                     waitingBakeJob=true;
+                 }
+             }else{
+                 if(pendingMarchingCubes){
+                     if(CanBeginMarchingCubes()){
+                         pendingMarchingCubes=false;
+                         waitingMarchingCubes=true;
+                     }
                  }
              }
          }
@@ -64,24 +107,96 @@ namespace AKCondinoO.Voxels.Water{
           waterSpreadingBG.cCoord=tCnk.id.Value.cCoord;
           waterSpreadingBG.cnkRgn=tCnk.id.Value.cnkRgn;
           waterSpreadingBG.cnkIdx=tCnk.id.Value.cnkIdx;
+          waterSpreadingBG.result=false;
           WaterSpreadingMultithreaded.Schedule(waterSpreadingBG);
           return true;
          }
          return false;
         }
-        bool OnWaterSpread(){
+        bool OnWaterSpread(out bool hadChanges){
+         hadChanges=false;
          if(waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning)){
           //Log.DebugMessage("OnWaterSpread");
+          hadChanges=waterSpreadingBG.result;
           return true;
          }
          return false;
         }
         bool CanBeginMarchingCubes(){
          if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+          worldBounds.center=transform.position=new Vector3(tCnk.id.Value.cnkRgn.x,0,tCnk.id.Value.cnkRgn.y);
           marchingCubesWaterBG.cCoord=tCnk.id.Value.cCoord;
           marchingCubesWaterBG.cnkRgn=tCnk.id.Value.cnkRgn;
           marchingCubesWaterBG.cnkIdx=tCnk.id.Value.cnkIdx;
           MarchingCubesWaterMultithreaded.Schedule(marchingCubesWaterBG);
+          return true;
+         }
+         return false;
+        }
+     #region Rendering
+         static readonly VertexAttributeDescriptor[]layout=new[]{
+          new VertexAttributeDescriptor(VertexAttribute.Position ,VertexAttributeFormat.Float32,4),
+          new VertexAttributeDescriptor(VertexAttribute.Normal   ,VertexAttributeFormat.Float32,3),
+          //new VertexAttributeDescriptor(VertexAttribute.Color    ,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord4,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord5,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord6,VertexAttributeFormat.Float32,4),
+          //new VertexAttributeDescriptor(VertexAttribute.TexCoord7,VertexAttributeFormat.Float32,4),
+         };
+         MeshUpdateFlags meshFlags=MeshUpdateFlags.DontValidateIndices|
+                                   MeshUpdateFlags.DontNotifyMeshUsers|
+                                   MeshUpdateFlags.DontRecalculateBounds|
+                                   MeshUpdateFlags.DontResetBoneBounds;
+         internal Mesh mesh;
+     #endregion
+        bool OnMarchingCubesDone(){
+         if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+          bool resize;
+          if(resize=marchingCubesWaterBG.TempVer.Length>mesh.vertexCount){
+           mesh.SetVertexBufferParams(marchingCubesWaterBG.TempVer.Length,layout);
+          }
+          mesh.SetVertexBufferData(marchingCubesWaterBG.TempVer.AsArray(),0,0,marchingCubesWaterBG.TempVer.Length,0,meshFlags);
+          if(resize){
+           mesh.SetIndexBufferParams(marchingCubesWaterBG.TempTri.Length,IndexFormat.UInt32);
+          }
+          mesh.SetIndexBufferData(marchingCubesWaterBG.TempTri.AsArray(),0,0,marchingCubesWaterBG.TempTri.Length,meshFlags);
+          mesh.subMeshCount=1;
+          mesh.SetSubMesh(0,new SubMeshDescriptor(0,marchingCubesWaterBG.TempTri.Length){firstVertex=0,vertexCount=marchingCubesWaterBG.TempVer.Length},meshFlags);
+          return true;
+         }
+         return false;
+        }
+     BakeJob bakeJob;struct BakeJob:IJob{
+          public int meshId;
+             public void Execute(){
+              Physics.BakeMesh(meshId,false);
+             }
+     }
+      JobHandle bakeJobHandle;
+     internal MeshCollider meshCollider;
+        void SchedulePhysBakeMeshJob(){
+         bakeJobHandle.Complete();
+         bakeJobHandle=bakeJob.Schedule();
+        }
+     internal bool hasPhysMeshBaked{get;private set;}
+        bool OnPhysMeshBaked(){
+         if(bakeJobHandle.IsCompleted){
+            bakeJobHandle.Complete();
+          meshCollider.sharedMesh=null;
+          meshCollider.sharedMesh=mesh;
+          hasPhysMeshBaked=true;
+          //navMeshSource.transform=transform.localToWorldMatrix;
+          //VoxelSystem.singleton.navMeshSources[gameObject.GetInstanceID()]=navMeshSource;
+          //VoxelSystem.singleton.navMeshMarkups[gameObject.GetInstanceID()]=navMeshMarkup;
+          //VoxelSystem.singleton.navMeshSourcesCollectionChanged=true;
+          //SimObjectSpawner.singleton.OnVoxelTerrainChunkPhysMeshBaked(this);
+          //foreach(var gameplayer in GameplayerManagement.singleton.all){
+          // gameplayer.Value.OnVoxelTerrainChunkBaked(this);
+          //}
           return true;
          }
          return false;

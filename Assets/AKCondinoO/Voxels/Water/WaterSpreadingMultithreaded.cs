@@ -21,6 +21,7 @@ namespace AKCondinoO.Voxels.Water{
     //  handles data processing in background;
     //  passively gets data from VoxelSystem.Concurrent
     internal class WaterSpreadingBackgroundContainer:BackgroundContainer{
+     internal bool result;
      internal Vector2Int?cCoord,lastcCoord;
      internal Vector2Int?cnkRgn,lastcnkRgn;
      internal        int?cnkIdx,lastcnkIdx;
@@ -116,6 +117,7 @@ namespace AKCondinoO.Voxels.Water{
           return;
          }
          //Log.DebugMessage("WaterSpreadingMultithreaded:Execute()");
+         bool hadChanges=false;
          Vector2Int cCoord1=container.cCoord.Value;
          int oftIdx1=GetoftIdx(cCoord1-container.cCoord.Value);
          int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
@@ -209,6 +211,7 @@ namespace AKCondinoO.Voxels.Water{
           //}
           if(voxel.density!=0.0d||voxel.previousDensity!=0.0d){
            if(!voxel.sleeping){
+            hadChanges=true;
             if(voxel.density<voxel.previousDensity){
              Log.DebugMessage("to absorb:"+vCoord1);
              absorbing[oftIdx1][vCoord1]=(voxel.previousDensity-voxel.density,voxel);
@@ -421,6 +424,7 @@ namespace AKCondinoO.Voxels.Water{
            VoxelSystem.Concurrent.waterFiles_rwl.ExitReadLock();
           }
          }
+         container.result=hadChanges;
          sw.Stop();
          Log.DebugMessage("WaterSpreadingMultithreaded Execute time:"+sw.ElapsedMilliseconds+" ms");
         }

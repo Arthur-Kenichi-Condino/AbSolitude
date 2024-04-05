@@ -95,12 +95,14 @@ namespace AKCondinoO.Voxels.Terrain{
         }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          hasPhysMeshBaked=false;
+         bool rebuild=false;
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
           pendingMarchingCubes=true;
           this.name=id+".VoxelTerrainChunk";
-          wCnk.name=id+".VoxelWaterChunk";
+          rebuild=true;
          }
+         wCnk.OncCoordChanged(rebuild);
         }
         internal void OnEdited(){
          Log.DebugMessage("OnEdited():chunk:"+id);
