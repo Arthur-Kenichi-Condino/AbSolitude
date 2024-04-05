@@ -271,6 +271,7 @@ namespace AKCondinoO.Sims{
         private void LateUpdate(){
          foreach(var a in active){
           var simObject=a.Value;
+          if(simObject==null||simObject.gameObject==null){continue;}
           simObject.ManualLateUpdate();
          }
          foreach(var nA in netActive){
