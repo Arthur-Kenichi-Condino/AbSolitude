@@ -245,6 +245,7 @@ namespace AKCondinoO.Sims{
          }
          foreach(var a in active){
           var simObject=a.Value;
+          if(simObject==null||simObject.gameObject==null){continue;}
           simObject.ManualUpdate(terrainMovedFlag);
          }
          while(deactivateQueue.Count>0){var toDeactivate=deactivateQueue.Dequeue();
