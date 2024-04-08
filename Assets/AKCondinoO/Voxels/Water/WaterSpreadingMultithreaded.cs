@@ -161,13 +161,14 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterReadLock();
          try{
-          lock(container.cacheStream[oftIdx1]){
-           FileStream fileStream=container.cacheStream[oftIdx1];
-           BinaryReader binReader=container.cacheBinaryReader[oftIdx1];
-           fileStream.Position=0L;
-           while(binReader.BaseStream.Position!=binReader.BaseStream.Length){
-            var v=BinaryReadVoxelWater(binReader);
-            voxels[oftIdx1][v.vxlIdx]=v.voxel;
+          if(container.cacheStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+           lock(fileStream){
+            BinaryReader binReader=container.cacheBinaryReader[oftIdx1];
+            fileStream.Position=0L;
+            while(binReader.BaseStream.Position!=binReader.BaseStream.Length){
+             var v=BinaryReadVoxelWater(binReader);
+             voxels[oftIdx1][v.vxlIdx]=v.voxel;
+            }
            }
           }
          }catch{
@@ -359,17 +360,18 @@ namespace AKCondinoO.Voxels.Water{
          try{
           Vector2Int cCoord2=container.cCoord.Value;
           int oftIdx2=GetoftIdx(cCoord2-container.cCoord.Value);
-          FileStream fileStream=container.cacheStream[oftIdx2];
-          BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
-          BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
-          fileStream.SetLength(0L);
-          foreach(var kvp in voxels[oftIdx2]){
-           BinaryWriteVoxelWater(kvp,binWriter);
-          }
-          binWriter.Flush();
-          if(hasChangedIndex){
-           VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
-           VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
+          if(container.cacheStream.TryGetValue(oftIdx2,out FileStream fileStream)){
+           BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
+           BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
+           fileStream.SetLength(0L);
+           foreach(var kvp in voxels[oftIdx2]){
+            BinaryWriteVoxelWater(kvp,binWriter);
+           }
+           binWriter.Flush();
+           if(hasChangedIndex){
+            VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
+            VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
+           }
           }
          }catch{
           throw;
