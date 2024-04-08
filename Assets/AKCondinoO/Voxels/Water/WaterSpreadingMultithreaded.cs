@@ -148,7 +148,7 @@ namespace AKCondinoO.Voxels.Water{
             container.cacheBinaryReader.Remove(oftIdx1);
            }
           }
-          if(container.cacheStream==null){
+          if(!container.cacheStream.ContainsKey(oftIdx1)){
            string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterCacheFileFormat,VoxelSystem.Concurrent.waterCachePath,container.cCoord.Value.x,container.cCoord.Value.y);
            container.cacheStream.Add(oftIdx1,new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
            container.cacheBinaryWriter.Add(oftIdx1,new BinaryWriter(container.cacheStream[oftIdx1]));
@@ -184,35 +184,20 @@ namespace AKCondinoO.Voxels.Water{
           //  carregar dados do bioma aqui em voxels,
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           VoxelWater voxel;
-          lock(voxels[oftIdx1]){
-           if(voxels[oftIdx1].TryGetValue(vxlIdx1,out VoxelWater v1)){
-            voxel=v1;
-           }else{
-            //  TO DO: valor do bioma
-            voxel=new VoxelWater(0.0d,0.0d,true,-1f);
-           }
+          if(voxels[oftIdx1].TryGetValue(vxlIdx1,out VoxelWater v1)){
+           voxel=v1;
+          }else{
+           //  TO DO: valor do bioma
+           voxel=new VoxelWater(0.0d,0.0d,true,-1f);
           }
           if(editData1.ContainsKey(vCoord1)){
            WaterEditOutputData voxelData=editData1[vCoord1];
-           //VoxelWater voxelFromFile=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping,voxelData.evaporateAfter);
-           //voxel.previousDensity=Math.Max(voxelFromFile.previousDensity,Math.Max(voxelFromFile.density,Math.Max(voxel.previousDensity,voxel.density)));
-           //voxel.previousDensity=Math.Max(voxelFromFile.previousDensity,Math.Max(voxelFromFile.density,Math.Max(voxel.previousDensity,voxel.density)));
-           //voxel.sleeping=(voxel.sleeping&&voxelFromFile.sleeping);
-           //voxel.evaporateAfter=Mathf.Max(voxel.evaporateAfter,voxelFromFile.evaporateAfter);
-           //voxel.density=voxelFromFile.density;
-           //voxel.density
            voxel.density        =voxelData.density;
            voxel.previousDensity=voxelData.previousDensity;
            voxel.sleeping       =voxelData.sleeping;
            voxel.evaporateAfter =voxelData.evaporateAfter;
           }
           voxel.sleeping=voxel.sleeping&&(voxel.density==voxel.previousDensity);
-          //  voxel is not default
-          //if(voxel.density==voxel.previousDensity){
-          // voxel.sleeping=true;
-          //}else{
-          // voxel.sleeping=false;
-          //}
           if(voxel.density!=0.0d||voxel.previousDensity!=0.0d){
            if(!voxel.sleeping){
             hadChanges=true;
@@ -224,18 +209,10 @@ namespace AKCondinoO.Voxels.Water{
              spreading[oftIdx1][vCoord1]=(voxel.density-voxel.previousDensity,voxel);
             }
            }
-           lock(voxels[oftIdx1]){
-            voxels[oftIdx1][vxlIdx1]=voxel;
-           }
+           voxels[oftIdx1][vxlIdx1]=voxel;
           }else{
-           lock(voxels[oftIdx1]){
-            voxels[oftIdx1].Remove(vxlIdx1);
-           }
+           voxels[oftIdx1].Remove(vxlIdx1);
           }
-          //if(!voxel.sleeping){
-          // voxel.previousDensity=voxel.density;
-          //voxels[oftIdx1][vxlIdx1]=voxel;
-          //}
          }}}
          //  calcular absorb e spread aqui
          foreach(var vCoordAbsorbingPair in absorbing[oftIdx1]){
@@ -255,32 +232,26 @@ namespace AKCondinoO.Voxels.Water{
             bool Absorb(){
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
-             lock(voxels[oftIdx1]){
-              if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
-               oldVoxel=v3;
-              }else{
-               //  TO DO: valor do bioma
-               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
-              }
+             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+              oldVoxel=v3;
+             }else{
+              //  TO DO: valor do bioma
+              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
              }
              VoxelWater newVoxel=new VoxelWater(oldVoxel.density-absorbValue,oldVoxel.density,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
              if(newVoxel.density>0d){//  
               newVoxel.density=oldVoxel.density;
              }
-             Log.DebugMessage("VerticalAbsorb:Absorb:"+vxlIdx3);
-             lock(voxels[oftIdx1]){
-              voxels[oftIdx1][vxlIdx3]=newVoxel;
-             }
+             Log.DebugMessage("VerticalAbsorb:Absorb:"+absorbValue+":newVoxel.density:"+newVoxel.density);
+             voxels[oftIdx1][vxlIdx3]=newVoxel;
              return true;
             }
            }
           }
           absorbVoxel.previousDensity=absorbVoxel.density;
           absorbVoxel.sleeping=true;
-          lock(voxels[oftIdx1]){
-           voxels[oftIdx1][vxlIdx2]=absorbVoxel;
-          }
+          voxels[oftIdx1][vxlIdx2]=absorbVoxel;
          }
          foreach(var vCoordSpreadingPair in spreading[oftIdx1]){
           Vector3Int vCoord2=vCoordSpreadingPair.Key;
@@ -311,38 +282,60 @@ namespace AKCondinoO.Voxels.Water{
             bool Spread(){
              //  se bloqueado por terreno, retorna falso
              VoxelWater oldVoxel;
-             lock(voxels[oftIdx1]){
-              if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
-               oldVoxel=v3;
-              }else{
-               //  TO DO: valor do bioma
-               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
-              }
+             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+              oldVoxel=v3;
+             }else{
+              //  TO DO: valor do bioma
+              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
              }
-             VoxelWater newVoxel=new VoxelWater(spreadVoxel.density/* sem perda porque é vertical */,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+             VoxelWater newVoxel=new VoxelWater(spreadValue/* sem perda porque é vertical */,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
              if(oldVoxel.density>=newVoxel.density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
               return true;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
              }
-             Log.DebugMessage("VerticalSpread:Spread:"+vxlIdx3);
-             lock(voxels[oftIdx1]){
-              voxels[oftIdx1][vxlIdx3]=newVoxel;
-             }
+             Log.DebugMessage("VerticalSpread:Spread:"+spreadValue);
+             voxels[oftIdx1][vxlIdx3]=newVoxel;
              return true;
             }
            }
           }
           void HorizontalSpread(){
+           Log.DebugMessage("HorizontalSpread:"+vCoord3);
+           if(vCoord3.x<0||vCoord3.x>=Width||
+              vCoord3.z<0||vCoord3.z>=Depth
+           ){
+            return;
+           }
            if(HasBlockageAt(vCoord3)){
             return;
            }else{
+            int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+            Spread();
+            void Spread(){
+             //  se bloqueado por terreno, retorna falso
+             VoxelWater oldVoxel;
+             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+              oldVoxel=v3;
+             }else{
+              //  TO DO: valor do bioma
+              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+             }
+             VoxelWater newVoxel=new VoxelWater(spreadValue-5.0d,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+             newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
+             if(oldVoxel.density>=newVoxel.density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
+              return;
+             }
+             if(newVoxel.density<30.0d){
+              return;
+             }
+             Log.DebugMessage("HorizontalSpread:Spread:"+spreadValue);
+             voxels[oftIdx1][vxlIdx3]=newVoxel;
+            }
            }
           }
           spreadVoxel.previousDensity=spreadVoxel.density;
           spreadVoxel.sleeping=true;
-          lock(voxels[oftIdx1]){
-           voxels[oftIdx1][vxlIdx2]=spreadVoxel;
-          }
+          voxels[oftIdx1][vxlIdx2]=spreadVoxel;
          }
          bool HasBlockageAt(Vector3Int vCoord){//  testar com array de voxels do terreno ou array de bool para objetos de estruturas
           int vxlIdx=GetvxlIdx(vCoord.x,vCoord.y,vCoord.z);
@@ -377,6 +370,18 @@ namespace AKCondinoO.Voxels.Water{
           throw;
          }finally{
           VoxelSystem.Concurrent.waterCache_rwl.ExitWriteLock();
+         }
+         VoxelSystem.Concurrent.waterFiles_rwl.EnterWriteLock();
+         try{
+          if(container.editsFileStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+           StreamWriter fileStreamWriter=container.editsFileStreamWriter[oftIdx1];
+           fileStream.SetLength(0L);
+           fileStreamWriter.Flush();
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.waterFiles_rwl.ExitWriteLock();
          }
          // //  salvar neighbourhood changes
          // for(int x=-1;x<=1;x++){

@@ -115,7 +115,9 @@ namespace AKCondinoO.Voxels.Water.Editing{
            //  TO DO: valor do bioma
            currentVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
           }
-          previousDensity=currentVoxel.density;
+          if(previousDensity<0d){
+           previousDensity=currentVoxel.density;
+          }
           sleeping=false;
           if(!dataForSavingToFile.ContainsKey(cCoord)){
            if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
