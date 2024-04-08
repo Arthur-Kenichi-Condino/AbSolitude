@@ -30,9 +30,9 @@ namespace AKCondinoO.Voxels.Water{
      internal readonly Dictionary<int,StreamWriter>editsFileStreamWriter=new Dictionary<int,StreamWriter>();
      internal readonly Dictionary<int,StreamReader>editsFileStreamReader=new Dictionary<int,StreamReader>();
      internal float deltaTime;
-     internal FileStream cacheStream;
-     internal BinaryWriter cacheBinaryWriter;
-     internal BinaryReader cacheBinaryReader;
+     internal readonly Dictionary<int,FileStream>cacheStream=new();
+     internal readonly Dictionary<int,BinaryWriter>cacheBinaryWriter=new();
+     internal readonly Dictionary<int,BinaryReader>cacheBinaryReader=new();
         protected override void Dispose(bool disposing){
          if(disposed)return;
          if(disposing){//  free managed resources here
@@ -41,13 +41,11 @@ namespace AKCondinoO.Voxels.Water{
           editsFileStream      .Clear();
           editsFileStreamWriter.Clear();
           editsFileStreamReader.Clear();
-          if(cacheStream!=null){
-           cacheBinaryWriter.Dispose();
-           cacheBinaryReader.Dispose();
-           cacheStream=null;
-           cacheBinaryWriter=null;
-           cacheBinaryReader=null;
-          }
+          foreach(var cBW in cacheBinaryWriter){if(cBW.Value!=null){cBW.Value.Dispose();}}
+          foreach(var cBR in cacheBinaryReader){if(cBR.Value!=null){cBR.Value.Dispose();}}
+          cacheStream      .Clear();
+          cacheBinaryWriter.Clear();
+          cacheBinaryReader.Clear();
          }
          //  free unmanaged resources here
          base.Dispose(disposing);
@@ -133,25 +131,28 @@ namespace AKCondinoO.Voxels.Water{
          VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
           if(hasChangedIndex){
-           if(container.cacheStream!=null){
-            if(VoxelSystem.Concurrent.waterCacheIds.TryGetValue(container.cacheStream,out var cacheOldId)){
-             if(VoxelSystem.Concurrent.waterCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCache)&&object.ReferenceEquals(oldIdCache.stream,container.cacheStream)){
+           if(container.cacheStream.TryGetValue(oftIdx1,out FileStream cS)){
+            if(VoxelSystem.Concurrent.waterCacheIds.TryGetValue(cS,out var cacheOldId)){
+             if(VoxelSystem.Concurrent.waterCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCache)&&
+              object.ReferenceEquals(oldIdCache.stream,cS)
+             ){
               VoxelSystem.Concurrent.waterCache.Remove(cacheOldId.cnkIdx);
+              VoxelSystem.Concurrent.waterCacheIds.Remove(cS);
               Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
              }
             }
-            container.cacheBinaryWriter.Dispose();
-            container.cacheBinaryReader.Dispose();
-            container.cacheStream=null;
-            container.cacheBinaryWriter=null;
-            container.cacheBinaryReader=null;
+            container.cacheBinaryWriter[oftIdx1].Dispose();
+            container.cacheBinaryReader[oftIdx1].Dispose();
+            container.cacheStream.Remove(oftIdx1);
+            container.cacheBinaryWriter.Remove(oftIdx1);
+            container.cacheBinaryReader.Remove(oftIdx1);
            }
           }
           if(container.cacheStream==null){
            string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterCacheFileFormat,VoxelSystem.Concurrent.waterCachePath,container.cCoord.Value.x,container.cCoord.Value.y);
-           container.cacheStream=new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
-           container.cacheBinaryWriter=new BinaryWriter(container.cacheStream);
-           container.cacheBinaryReader=new BinaryReader(container.cacheStream);
+           container.cacheStream.Add(oftIdx1,new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
+           container.cacheBinaryWriter.Add(oftIdx1,new BinaryWriter(container.cacheStream[oftIdx1]));
+           container.cacheBinaryReader.Add(oftIdx1,new BinaryReader(container.cacheStream[oftIdx1]));
           }
          }catch{
           throw;
@@ -160,10 +161,12 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterReadLock();
          try{
-          lock(container.cacheStream){
-           container.cacheStream.Position=0L;
-           while(container.cacheBinaryReader.BaseStream.Position!=container.cacheBinaryReader.BaseStream.Length){
-            var v=BinaryReadVoxelWater(container.cacheBinaryReader);
+          lock(container.cacheStream[oftIdx1]){
+           FileStream fileStream=container.cacheStream[oftIdx1];
+           BinaryReader binReader=container.cacheBinaryReader[oftIdx1];
+           fileStream.Position=0L;
+           while(binReader.BaseStream.Position!=binReader.BaseStream.Length){
+            var v=BinaryReadVoxelWater(binReader);
             voxels[oftIdx1][v.vxlIdx]=v.voxel;
            }
           }
@@ -285,6 +288,16 @@ namespace AKCondinoO.Voxels.Water{
           VoxelWater spreadVoxel=vCoordSpreadingPair.Value.voxel;
           Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
           bool waterfall=VerticalSpread();
+          if(!waterfall){
+           vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
+           HorizontalSpread();
+           vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
+           HorizontalSpread();
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
+           HorizontalSpread();
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
+           HorizontalSpread();
+          }
           bool VerticalSpread(){
            if(!(vCoord3.y>=0)){
             return false;
@@ -318,6 +331,12 @@ namespace AKCondinoO.Voxels.Water{
             }
            }
           }
+          void HorizontalSpread(){
+           if(HasBlockageAt(vCoord3)){
+            return;
+           }else{
+           }
+          }
           spreadVoxel.previousDensity=spreadVoxel.density;
           spreadVoxel.sleeping=true;
           lock(voxels[oftIdx1]){
@@ -338,16 +357,19 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
-          container.cacheStream.SetLength(0L);
           Vector2Int cCoord2=container.cCoord.Value;
           int oftIdx2=GetoftIdx(cCoord2-container.cCoord.Value);
+          FileStream fileStream=container.cacheStream[oftIdx2];
+          BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
+          BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
+          fileStream.SetLength(0L);
           foreach(var kvp in voxels[oftIdx2]){
-           BinaryWriteVoxelWater(kvp,container.cacheBinaryWriter);
+           BinaryWriteVoxelWater(kvp,binWriter);
           }
-          container.cacheBinaryWriter.Flush();
+          binWriter.Flush();
           if(hasChangedIndex){
-           VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(container.cacheStream,container.cacheBinaryWriter,container.cacheBinaryReader);
-           VoxelSystem.Concurrent.waterCacheIds[container.cacheStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
+           VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
+           VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
           }
          }catch{
           throw;
