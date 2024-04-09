@@ -156,6 +156,8 @@ namespace AKCondinoO.Voxels{
          if(Core.singleton.isServer){
           VoxelSystem.Concurrent.waterCachePath=string.Format("{0}{1}",Core.savePath,"WaterChunkCache/");
           Directory.CreateDirectory(VoxelSystem.Concurrent.waterCachePath);
+          VoxelSystem.Concurrent.waterCacheNeighbourhoodPath=string.Format("{0}{1}",VoxelSystem.Concurrent.waterCachePath,"Neighbourhood/");
+          Directory.CreateDirectory(VoxelSystem.Concurrent.waterCacheNeighbourhoodPath);
           chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
           Directory.CreateDirectory(chunkStatePath);
           chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");

@@ -351,13 +351,11 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
-          Vector2Int cCoord2=container.cCoord.Value;
-          int oftIdx2=GetoftIdx(cCoord2-container.cCoord.Value);
-          if(container.cacheStream.TryGetValue(oftIdx2,out FileStream fileStream)){
-           BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
-           BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
+          if(container.cacheStream.TryGetValue(oftIdx1,out FileStream fileStream)){
+           BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx1];
+           BinaryReader binReader=container.cacheBinaryReader[oftIdx1];
            fileStream.SetLength(0L);
-           foreach(var kvp in voxels[oftIdx2]){
+           foreach(var kvp in voxels[oftIdx1]){
             BinaryWriteVoxelWater(kvp,binWriter);
            }
            binWriter.Flush();
