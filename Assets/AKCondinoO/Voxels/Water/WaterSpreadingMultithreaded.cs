@@ -273,9 +273,8 @@ namespace AKCondinoO.Voxels.Water{
           bool VerticalSpread(){
            if(!(vCoord3.y>=0)){
             return false;
-           }else if(HasBlockageAt(vCoord3)){
-            return false;
            }else{
+            bool hasBlockage=HasBlockageAt(vCoord3);
             Log.DebugMessage("VerticalSpread:"+vCoord3);
             int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
             return Spread();
@@ -290,11 +289,18 @@ namespace AKCondinoO.Voxels.Water{
              }
              VoxelWater newVoxel=new VoxelWater(spreadValue/* sem perda porque é vertical */,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
+             if(hasBlockage){
+              newVoxel.sleeping=true;
+              newVoxel.previousDensity=newVoxel.density;
+             }
              if(oldVoxel.density>=newVoxel.density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
               return true;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
              }
              Log.DebugMessage("VerticalSpread:Spread:"+spreadValue);
              voxels[oftIdx1][vxlIdx3]=newVoxel;
+             if(hasBlockage){
+              return false;
+             }
              return true;
             }
            }
@@ -306,31 +312,32 @@ namespace AKCondinoO.Voxels.Water{
            ){
             return;
            }
-           if(HasBlockageAt(vCoord3)){
-            return;
-           }else{
-            int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-            Spread();
-            void Spread(){
-             //  se bloqueado por terreno, retorna falso
-             VoxelWater oldVoxel;
-             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
-              oldVoxel=v3;
-             }else{
-              //  TO DO: valor do bioma
-              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
-             }
-             VoxelWater newVoxel=new VoxelWater(spreadValue-5.0d,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
-             newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-             if(oldVoxel.density>=newVoxel.density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
-              return;
-             }
-             if(newVoxel.density<30.0d){
-              return;
-             }
-             Log.DebugMessage("HorizontalSpread:Spread:"+spreadValue);
-             voxels[oftIdx1][vxlIdx3]=newVoxel;
+           bool hasBlockage=HasBlockageAt(vCoord3);
+           int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+           Spread();
+           void Spread(){
+            //  se bloqueado por terreno, retorna falso
+            VoxelWater oldVoxel;
+            if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+             oldVoxel=v3;
+            }else{
+             //  TO DO: valor do bioma
+             oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
             }
+            VoxelWater newVoxel=new VoxelWater(spreadValue-5.0d,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+            newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
+            if(hasBlockage){
+             newVoxel.sleeping=true;
+             newVoxel.previousDensity=newVoxel.density;
+            }
+            if(oldVoxel.density>=newVoxel.density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
+             return;
+            }
+            if(newVoxel.density<30.0d){
+             return;
+            }
+            Log.DebugMessage("HorizontalSpread:Spread:"+spreadValue);
+            voxels[oftIdx1][vxlIdx3]=newVoxel;
            }
           }
           spreadVoxel.previousDensity=spreadVoxel.density;
