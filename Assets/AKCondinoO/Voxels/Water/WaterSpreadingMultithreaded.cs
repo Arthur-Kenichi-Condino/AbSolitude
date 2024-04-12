@@ -294,11 +294,18 @@ namespace AKCondinoO.Voxels.Water{
             }
             Log.DebugMessage("oldVoxel.density-(absorbValue-5.0d):"+(oldVoxel.density-(absorbValue-5.0d)));
             double previousDensity=oldVoxel.density;
+            double density=oldVoxel.density-(absorbValue-5.0d);
             bool wasAbsorbed;
             if(wasAbsorbed=absorbed[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater absorbedVoxel)){
              previousDensity=absorbedVoxel.density;
+             if(absorbedVoxel.density>0f){
+              double newDensity=absorbedVoxel.density-(absorbValue-5.0d);
+              if(newDensity<oldVoxel.density){
+               density=newDensity;
+              }
+             }
             }
-            VoxelWater newVoxel=new VoxelWater(oldVoxel.density-(absorbValue-5.0d),previousDensity,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+            VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
             newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
             if(newVoxel.density>0d){//  
              newVoxel.density=oldVoxel.density;

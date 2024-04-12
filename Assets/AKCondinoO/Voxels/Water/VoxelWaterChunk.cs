@@ -84,9 +84,11 @@ namespace AKCondinoO.Voxels.Water{
              }
          }else{
              if(waitingMarchingCubes){
-                 if(OnMarchingCubesDone()){
+                 if(OnMarchingCubesDone(out int vertexCount)){
                      waitingMarchingCubes=false;
-                     SchedulePhysBakeMeshJob();
+                     if(vertexCount>0){
+                      SchedulePhysBakeMeshJob();
+                     }
                      waitingBakeJob=true;
                  }
              }else{
@@ -153,10 +155,11 @@ namespace AKCondinoO.Voxels.Water{
                                    MeshUpdateFlags.DontResetBoneBounds;
          internal Mesh mesh;
      #endregion
-        bool OnMarchingCubesDone(){
+        bool OnMarchingCubesDone(out int vertexCount){
+         vertexCount=0;
          if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
           bool resize;
-          if(resize=marchingCubesWaterBG.TempVer.Length>mesh.vertexCount){
+          if(resize=(vertexCount=marchingCubesWaterBG.TempVer.Length)>mesh.vertexCount){
            mesh.SetVertexBufferParams(marchingCubesWaterBG.TempVer.Length,layout);
           }
           mesh.SetVertexBufferData(marchingCubesWaterBG.TempVer.AsArray(),0,0,marchingCubesWaterBG.TempVer.Length,0,meshFlags);

@@ -3,7 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\voxels\\water\\waterspreadingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\voxels\\water\\voxelwaterchunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\water\\voxelwaterchunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\water\\marchingcubeswater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\water\\marchingcubeswater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\water\\waterspreadingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\water\\waterspreadingmultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -41,14 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\basemultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\basemultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\water\\marchingcubeswater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\water\\marchingcubeswater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\water\\voxelwaterchunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\water\\voxelwaterchunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\sims\\_simobject\\simobjectmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -194,11 +194,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "Core.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Core.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Core.cs",
@@ -211,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "BaseBiome.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiome.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiome.cs",
@@ -237,7 +237,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "MarchingCubesMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesMultithreaded.cs",
@@ -250,7 +250,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "MarchingCubesWaterMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWaterMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWaterMultithreaded.cs",
@@ -263,21 +263,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "WaterSpreadingMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
-              "ViewState": "AQIAACYBAAAAAAAAAAAAACoBAAAyAAAA",
+              "ViewState": "AQIAACYBAAAAAAAAAAAAAC4BAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-16T17:48:12.44Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "VoxelWaterEditingMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterEditingMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterEditingMultithreaded.cs",
@@ -290,7 +289,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "VoxelSystem.Concurrent.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.Concurrent.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.Concurrent.cs",
@@ -316,16 +315,17 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 1,
               "Title": "MarchingCubesWater.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWater.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWater.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWater.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Water\\MarchingCubesWater.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAADwvxwAAAAiAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAuwBwAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-16T20:21:40.204Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -342,20 +342,21 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 0,
               "Title": "VoxelWaterChunk.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterChunk.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterChunk.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterChunk.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Water\\VoxelWaterChunk.cs",
-              "ViewState": "AQIAAD4AAAAAAAAAAAAgwG0AAAAhAAAA",
+              "ViewState": "AQIAAEkAAAAAAAAAAAAAAFEAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-16T20:22:22.028Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "VoxelSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
@@ -368,7 +369,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "BaseMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\BaseMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\BaseMultithreaded.cs",
@@ -457,7 +458,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Log.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Log.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Log.cs",
