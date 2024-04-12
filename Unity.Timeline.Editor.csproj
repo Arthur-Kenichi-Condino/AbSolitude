@@ -152,8 +152,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Window\ViewModel\TimelineAssetViewModel_versions.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Window\TimelineWindow_PlaybackControls.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\treeview\Drawers\InfiniteTrackDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Window\ViewModel\ScriptableObjectViewPrefs.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Animation\AnimationClipCurveCache.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Window\ViewModel\ScriptableObjectViewPrefs.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Manipulators\EditModeInputHandler.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\Window\TimelineWindow_StateChange.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.8.6\Editor\CustomEditors\ClipEditor.cs" />

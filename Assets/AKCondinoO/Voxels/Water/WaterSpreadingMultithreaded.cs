@@ -255,7 +255,19 @@ namespace AKCondinoO.Voxels.Water{
               //  TO DO: valor do bioma
               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
              }
-             VoxelWater newVoxel=new VoxelWater(oldVoxel.density-absorbValue,oldVoxel.density,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+             double previousDensity=oldVoxel.density;
+             double density=oldVoxel.density-absorbValue;
+             bool wasAbsorbed;
+             if(wasAbsorbed=absorbed[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater absorbedVoxel)){
+              previousDensity=absorbedVoxel.density;
+              if(absorbedVoxel.density>0f){
+               double newDensity=absorbedVoxel.density-absorbValue;
+               if(newDensity<oldVoxel.density){
+                density=newDensity;
+               }
+              }
+             }
+             VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(absorbVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
              if(newVoxel.density>0d){//  
               newVoxel.density=oldVoxel.density;
@@ -266,6 +278,9 @@ namespace AKCondinoO.Voxels.Water{
              }
              Log.DebugMessage("VerticalAbsorb:Absorb:"+absorbValue+":newVoxel.density:"+newVoxel.density);
              voxels[oftIdx1][vxlIdx3]=newVoxel;
+             if(!wasAbsorbed){
+              absorbed[oftIdx1][vxlIdx3]=oldVoxel;
+             }
              if(hasBlockage){
               return false;
              }
@@ -359,7 +374,17 @@ namespace AKCondinoO.Voxels.Water{
               //  TO DO: valor do bioma
               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
              }
-             VoxelWater newVoxel=new VoxelWater(spreadValue/* sem perda porque é vertical */,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+             double previousDensity=oldVoxel.density;
+             double density=spreadValue;
+             bool wasSpreaded;
+             if(wasSpreaded=spreaded[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater spreadedVoxel)){
+              previousDensity=spreadedVoxel.density;
+              double newDensity=spreadValue;
+              if(newDensity>oldVoxel.density){
+               density=newDensity;
+              }
+             }
+             VoxelWater newVoxel=new VoxelWater(density/* sem perda porque é vertical */,previousDensity,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
              if(hasBlockage){
               newVoxel.sleeping=true;
@@ -370,6 +395,9 @@ namespace AKCondinoO.Voxels.Water{
              }
              Log.DebugMessage("VerticalSpread:Spread:"+spreadValue);
              voxels[oftIdx1][vxlIdx3]=newVoxel;
+             if(!wasSpreaded){
+              spreaded[oftIdx1][vxlIdx3]=oldVoxel;
+             }
              if(hasBlockage){
               return false;
              }
@@ -396,7 +424,17 @@ namespace AKCondinoO.Voxels.Water{
              //  TO DO: valor do bioma
              oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
             }
-            VoxelWater newVoxel=new VoxelWater(spreadValue-5.0d,oldVoxel.density,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+            double previousDensity=oldVoxel.density;
+            double density=spreadValue-5.0d;
+            bool wasSpreaded;
+            if(wasSpreaded=spreaded[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater spreadedVoxel)){
+             previousDensity=spreadedVoxel.density;
+             double newDensity=spreadValue-5.0d;
+             if(newDensity>oldVoxel.density){
+              density=newDensity;
+             }
+            }
+            VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
             newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
             if(hasBlockage){
              newVoxel.sleeping=true;
@@ -410,6 +448,9 @@ namespace AKCondinoO.Voxels.Water{
             }
             Log.DebugMessage("HorizontalSpread:Spread:"+spreadValue);
             voxels[oftIdx1][vxlIdx3]=newVoxel;
+            if(!wasSpreaded){
+             spreaded[oftIdx1][vxlIdx3]=oldVoxel;
+            }
            }
           }
           spreadVoxel.previousDensity=spreadVoxel.density;

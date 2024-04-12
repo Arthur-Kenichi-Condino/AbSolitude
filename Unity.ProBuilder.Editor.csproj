@@ -181,8 +181,8 @@
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\EntityUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Editors\NewBezierShape.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\MenuActionShortcutAttribute.cs" />
-    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Selection\SelectEdgeLoop.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\EditorHandleUtility.cs" />
+    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Selection\SelectEdgeLoop.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\TextureMoveTool.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Geometry\CollapseVertices.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\BooleanEditor.cs" />
@@ -197,8 +197,8 @@
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\UVEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Object\SetTrigger.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\ShapeMenuItems.cs" />
-    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Interaction\ToggleXRay.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\VertexOnFaceEditor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Interaction\ToggleXRay.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\HandleGUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\RepairActions.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\EditorGUILayout.cs" />
@@ -228,8 +228,8 @@
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\DimensionsEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\EditorHandleDrawing.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Object\ConformObjectNormals.cs" />
-    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Geometry\BevelEdges.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Geometry\WeldVertices.cs" />
+    <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Geometry\BevelEdges.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\ContextClickManipulator.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\EditorCore\MenuItems.cs" />
     <Compile Include="Library\PackageCache\com.unity.probuilder@5.2.2\Editor\MenuActions\Geometry\ConnectEdges.cs" />

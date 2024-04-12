@@ -1080,10 +1080,6 @@
       <Project>{6118397E-BB10-2F93-229C-EABA67351BC0}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.AI.Navigation.csproj">
-      <Project>{BC4B44E2-EBEB-E5C9-D813-8E51A3CB4BCA}</Project>
-      <Name>Unity.AI.Navigation</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Rider.Editor.csproj">
       <Project>{4E9CD833-7173-613F-BC11-8984A56D365E}</Project>
       <Name>Unity.Rider.Editor</Name>
@@ -1091,6 +1087,10 @@
     <ProjectReference Include="Unity.Multiplayer.Tools.DependencyInjection.UIElements.csproj">
       <Project>{B932821C-50CB-514D-BF12-FBD13AA70787}</Project>
       <Name>Unity.Multiplayer.Tools.DependencyInjection.UIElements</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.AI.Navigation.csproj">
+      <Project>{BC4B44E2-EBEB-E5C9-D813-8E51A3CB4BCA}</Project>
+      <Name>Unity.AI.Navigation</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.MetricTestData.csproj">
       <Project>{12109503-918C-D436-7977-74CB509E4F70}</Project>
@@ -1176,13 +1176,17 @@
       <Project>{0D4DA136-FBC6-DC13-0985-CD0273E22897}</Project>
       <Name>Unity.Multiplayer.Tools.NetVis.Editor.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.Editor.csproj">
+      <Project>{2B965E08-AA3B-D720-0BC1-C4B40655E7B5}</Project>
+      <Name>Unity.ProBuilder.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetworkSimulator.Runtime.csproj">
       <Project>{0605E234-8F27-8C47-EF64-B7AFBE289BB4}</Project>
       <Name>Unity.Multiplayer.Tools.NetworkSimulator.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Addressables.csproj">
-      <Project>{C53A7894-3769-AE8A-01A5-79426AD414EB}</Project>
-      <Name>Unity.Addressables</Name>
+    <ProjectReference Include="Unity.ProBuilder.AddOns.Editor.csproj">
+      <Project>{EB21A7DB-E0BB-8011-B073-C66209AE82B1}</Project>
+      <Name>Unity.ProBuilder.AddOns.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Netcode.Editor.PackageChecker.csproj">
       <Project>{505337F0-156E-C8DC-B8E3-E5E940331783}</Project>
@@ -1196,6 +1200,10 @@
       <Project>{112B1E51-00C3-347B-C9BD-10355F4C0113}</Project>
       <Name>Unity.VisualScripting.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Addressables.csproj">
+      <Project>{C53A7894-3769-AE8A-01A5-79426AD414EB}</Project>
+      <Name>Unity.Addressables</Name>
+    </ProjectReference>
     <ProjectReference Include="com.rlabrecque.steamworks.net.csproj">
       <Project>{8DB201DD-E581-E145-D37C-F5AC9F102F1A}</Project>
       <Name>com.rlabrecque.steamworks.net</Name>
@@ -1208,6 +1216,10 @@
       <Project>{FD5997EA-D7BD-1AF4-35B1-A6540B2FBECA}</Project>
       <Name>SteamNetworkingSockets Transport for Netcode for GameObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.AssetIdRemapUtility.csproj">
+      <Project>{528D1409-AD6C-AB96-EDB1-19BCFB2F8617}</Project>
+      <Name>Unity.ProBuilder.AssetIdRemapUtility</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.DependencyInjection.csproj">
       <Project>{64A0971E-8F0E-46E8-B126-C9F601E875CE}</Project>
       <Name>Unity.Multiplayer.Tools.DependencyInjection</Name>
@@ -1216,13 +1228,13 @@
       <Project>{DF6E1670-3A49-7609-D5F2-AE1E339C2683}</Project>
       <Name>Netcode for GameObjects Community Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Collections.Editor.csproj">
-      <Project>{B77A46A2-AE79-F17F-AE6B-FC7D6E1DE2F3}</Project>
-      <Name>Unity.Collections.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetStatsMonitor.Configuration.csproj">
       <Project>{7795D0D8-A67C-8A37-5523-2D200F0BBF39}</Project>
       <Name>Unity.Multiplayer.Tools.NetStatsMonitor.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Collections.Editor.csproj">
+      <Project>{B77A46A2-AE79-F17F-AE6B-FC7D6E1DE2F3}</Project>
+      <Name>Unity.Collections.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Profiling.Core.csproj">
       <Project>{DD243D5F-E65B-38A3-FA90-98A44A5B1E8B}</Project>
@@ -1303,6 +1315,10 @@
     <ProjectReference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule.csproj">
       <Project>{60CADFD3-BAC8-C854-69D9-BE8265E7B5CE}</Project>
       <Name>Unity.MemoryProfiler.Editor.MemoryProfilerModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ProBuilder.csproj">
+      <Project>{AFC13592-433A-33EF-65BB-31FB0111EEB5}</Project>
+      <Name>Unity.ProBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetVis.Editor.Visualization.csproj">
       <Project>{C03C4D96-040A-D97C-CE43-A855074A3BE3}</Project>
