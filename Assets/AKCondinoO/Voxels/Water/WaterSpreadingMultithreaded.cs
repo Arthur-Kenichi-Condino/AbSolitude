@@ -375,7 +375,7 @@ namespace AKCondinoO.Voxels.Water{
               oldVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
              }
              double previousDensity=oldVoxel.density;
-             double density=spreadValue;
+             double density=spreadValue;/* sem perda porque é vertical */
              bool wasSpreaded;
              if(wasSpreaded=spreaded[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater spreadedVoxel)){
               previousDensity=spreadedVoxel.density;
@@ -384,7 +384,7 @@ namespace AKCondinoO.Voxels.Water{
                density=newDensity;
               }
              }
-             VoxelWater newVoxel=new VoxelWater(density/* sem perda porque é vertical */,previousDensity,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
+             VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(spreadVoxel.evaporateAfter,oldVoxel.evaporateAfter));
              newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
              if(hasBlockage){
               newVoxel.sleeping=true;
