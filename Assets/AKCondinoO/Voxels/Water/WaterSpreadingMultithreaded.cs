@@ -210,6 +210,9 @@ namespace AKCondinoO.Voxels.Water{
             if(voxel.density<voxel.previousDensity){
              Log.DebugMessage("to absorb:"+vCoord1);
              absorbing[oftIdx1][vCoord1]=(voxel.previousDensity-voxel.density,voxel);
+            }else if(voxel.density==voxel.previousDensity){
+             Log.DebugMessage("to spread (voxel.density==voxel.previousDensity):"+vCoord1);
+             spreading[oftIdx1][vCoord1]=(voxel.density,voxel);
             }else{
              Log.DebugMessage("to spread:"+vCoord1);
              spreading[oftIdx1][vCoord1]=(voxel.density-voxel.previousDensity,voxel);
@@ -297,8 +300,16 @@ namespace AKCondinoO.Voxels.Water{
            Log.DebugMessage("HorizontalAbsorb:"+vCoord3);
            bool hasBlockage=HasBlockageAt(vCoord3);
            int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-           Absorb();
-           void Absorb(){
+           if(!Absorb()){
+            if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
+             if(v3.density>0f){
+              v3.sleeping=false;
+              voxels[oftIdx1][vxlIdx3]=v3;
+             }
+            }
+           }
+           bool Absorb(){
+            bool result=true;
             //  se bloqueado por terreno, retorna falso
             VoxelWater oldVoxel;
             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
@@ -324,16 +335,19 @@ namespace AKCondinoO.Voxels.Water{
             newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
             if(newVoxel.density>0d){//  
              newVoxel.density=oldVoxel.density;
+             result=false;
             }
             if(hasBlockage){
              newVoxel.sleeping=true;
              newVoxel.previousDensity=newVoxel.density;
+             result=false;
             }
             Log.DebugMessage("HorizontalAbsorb:Absorb:"+absorbValue+":newVoxel.density:"+newVoxel.density+":hasBlockage:"+hasBlockage);
             voxels[oftIdx1][vxlIdx3]=newVoxel;
             if(!wasAbsorbed){
              absorbed[oftIdx1][vxlIdx3]=oldVoxel;
             }
+            return result;
            }
           }
           absorbVoxel.previousDensity=absorbVoxel.density;

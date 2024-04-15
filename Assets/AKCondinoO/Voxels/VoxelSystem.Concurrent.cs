@@ -25,7 +25,6 @@ namespace AKCondinoO.Voxels{
          internal static string waterCacheFileFormat="{0}waterChunkCache.{1}.{2}.bin";
          internal static string waterCacheNeighbourhoodPath;
          internal static string waterCacheNeighbourhoodSpreadingFileFormat="{0}spreadingWater.{1}.{2}.bin";
-         internal static string waterCacheNeighbourhoodAbsorbingFileFormat="{0}absorbingWater.{1}.{2}.bin";
          internal static ReaderWriterLockSlim   waterCache_rwl;
          internal static readonly Dictionary<int,(FileStream stream,BinaryWriter writer,BinaryReader reader)>waterCache   =new();
          internal static readonly Dictionary<FileStream,(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>    waterCacheIds=new();
