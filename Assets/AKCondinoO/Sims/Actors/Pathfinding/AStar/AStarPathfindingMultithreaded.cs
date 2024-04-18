@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.Pathfinding.AStarPathfinding;
 namespace AKCondinoO.Sims.Actors.Pathfinding{
     internal class AStarPathfindingBackgroundContainer:BackgroundContainer{
      internal readonly int width;
@@ -29,6 +30,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
       internal JobHandle doRaycastsHandle{get;set;}
+     internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
          BuildHeap,
          GetGround,
