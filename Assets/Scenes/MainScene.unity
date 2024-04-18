@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2861845273881161631, guid: b0e20afb5e207aa4d945fc0e24ab0518, type: 3}
       propertyPath: DEBUG_ADD_WATER_SOURCE_AT.x
-      value: 48
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2861845273881161631, guid: b0e20afb5e207aa4d945fc0e24ab0518, type: 3}
       propertyPath: DEBUG_ADD_WATER_SOURCE_AT.y
@@ -503,7 +503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2861845273881161631, guid: b0e20afb5e207aa4d945fc0e24ab0518, type: 3}
       propertyPath: DEBUG_ADD_WATER_SOURCE_AT.z
-      value: -192
+      value: -144
       objectReference: {fileID: 0}
     - target: {fileID: 4728692760434497940, guid: b0e20afb5e207aa4d945fc0e24ab0518, type: 3}
       propertyPath: m_LocalPosition.x

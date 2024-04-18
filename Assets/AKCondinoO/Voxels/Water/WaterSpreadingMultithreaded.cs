@@ -233,13 +233,32 @@ namespace AKCondinoO.Voxels.Water{
           bool waterfall=VerticalAbsorb();
           if(!waterfall){
            vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-           HorizontalAbsorb();
+           if(HorizontalAbsorb()){WakeTop();}
            vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-           HorizontalAbsorb();
+           if(HorizontalAbsorb()){WakeTop();}
            vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
-           HorizontalAbsorb();
+           if(HorizontalAbsorb()){WakeTop();}
            vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
-           HorizontalAbsorb();
+           if(HorizontalAbsorb()){WakeTop();}
+           void WakeTop(){
+            Vector3Int vCoord4=new Vector3Int(vCoord3.x,vCoord3.y+1,vCoord3.z);
+                   int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+            if(voxels[oftIdx1].TryGetValue(vxlIdx4,out VoxelWater v4)){
+             if(v4.density>0f){
+              v4.sleeping=false;
+              voxels[oftIdx1][vxlIdx4]=v4;
+             }
+            }
+           }
+          }else{
+           Vector3Int vCoord4=new Vector3Int(vCoord2.x,vCoord2.y+1,vCoord2.z);
+                  int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+           if(voxels[oftIdx1].TryGetValue(vxlIdx4,out VoxelWater v4)){
+            if(v4.density>0f){
+             v4.sleeping=false;
+             voxels[oftIdx1][vxlIdx4]=v4;
+            }
+           }
           }
           bool VerticalAbsorb(){
            if(!(vCoord3.y>=0)){
@@ -291,16 +310,17 @@ namespace AKCondinoO.Voxels.Water{
             }
            }
           }
-          void HorizontalAbsorb(){
+          bool HorizontalAbsorb(){
            if(vCoord3.x<0||vCoord3.x>=Width||
               vCoord3.z<0||vCoord3.z>=Depth
            ){
-            return;
+            return false;
            }
            Log.DebugMessage("HorizontalAbsorb:"+vCoord3);
            bool hasBlockage=HasBlockageAt(vCoord3);
            int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-           if(!Absorb()){
+           bool absorb=false;
+           if(!(absorb=Absorb())){
             if(voxels[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater v3)){
              if(v3.density>0f){
               v3.sleeping=false;
@@ -349,6 +369,7 @@ namespace AKCondinoO.Voxels.Water{
             }
             return result;
            }
+           return absorb;
           }
           absorbVoxel.previousDensity=absorbVoxel.density;
           absorbVoxel.sleeping=true;
