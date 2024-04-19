@@ -42,10 +42,10 @@ namespace AKCondinoO{
           var parentIdx=(item.heapIndex-1)/2;//  Se o valor Child for 6, Parent sempre será (int)((6-1)/2)=2
           var parentItm=items[parentIdx];
           if(item.CompareTo(parentItm)>0){//  Parent tem valor maior, trocar: colocar o Parent (menor prioridade) para baixo e o Child (maior prioridade) para cima 
-           Log.DebugMessage("_parent[index:"+parentItm.heapIndex+((parentItm is Node)?",(Node.F:"+(parentItm as Node).F+"),(Node.H:"+(parentItm as Node).H+")":(""))+ "]_>_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).F+"),(Node.H:"+(item as Node).H+")":"")+"]_:_item_has_higher_priority_;_pull_item_up_;");
+           Log.DebugMessage("_parent[index:"+parentItm.heapIndex+((parentItm is Node)?",(Node.F:"+(parentItm as Node).heuristics+"),(Node.H:"+(parentItm as Node).disToTarget+")":(""))+ "]_>_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).heuristics+"),(Node.H:"+(item as Node).disToTarget+")":"")+"]_:_item_has_higher_priority_;_pull_item_up_;");
            Swap(item,parentItm);
           }else{
-           Log.DebugMessage("_parent[index:"+parentItm.heapIndex+((parentItm is Node)?",(Node.F:"+(parentItm as Node).F+"),(Node.H:"+(parentItm as Node).H+")":(""))+"]_<=_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).F+"),(Node.H:"+(item as Node).H+")":"")+"]_:_item_has_equal_or_lower_priority_;_stop_moving_item_;");
+           Log.DebugMessage("_parent[index:"+parentItm.heapIndex+((parentItm is Node)?",(Node.F:"+(parentItm as Node).heuristics+"),(Node.H:"+(parentItm as Node).disToTarget+")":(""))+"]_<=_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).heuristics+"),(Node.H:"+(item as Node).disToTarget+")":"")+"]_:_item_has_equal_or_lower_priority_;_stop_moving_item_;");
            goto _End;
           }
           goto _Loop;
@@ -81,10 +81,10 @@ namespace AKCondinoO{
            }
            //  Tentar Swap
            if(item.CompareTo(items[indexToSwap])<0){//  Se o item para Sort Down tem menor prioridade (é maior) que seu Child para Swap,
-            Log.DebugMessage("T item["+item.heapIndex+"];_child[index:"+items[indexToSwap].heapIndex+((items[indexToSwap] is Node)?",(Node.F:"+(items[indexToSwap] as Node).F+"),(Node.H:"+(items[indexToSwap] as Node).H+")":(""))+"]_<=_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).F+"),(Node.H:"+(item as Node).H+")":"")+"]_:_item_has_equal_or_lower_priority_;_push_item_down_");
+            Log.DebugMessage("T item["+item.heapIndex+"];_child[index:"+items[indexToSwap].heapIndex+((items[indexToSwap] is Node)?",(Node.F:"+(items[indexToSwap] as Node).heuristics+"),(Node.H:"+(items[indexToSwap] as Node).disToTarget+")":(""))+"]_<=_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).heuristics+"),(Node.H:"+(item as Node).disToTarget+")":"")+"]_:_item_has_equal_or_lower_priority_;_push_item_down_");
             Swap(item,items[indexToSwap]);          // realizar o Swap para baixo
            }else{
-            Log.DebugMessage("T item["+item.heapIndex+"];_child[index:"+items[indexToSwap].heapIndex+((items[indexToSwap] is Node)?",(Node.F:"+(items[indexToSwap] as Node).F+"),(Node.H:"+(items[indexToSwap] as Node).H+")":(""))+ "]_>_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).F+"),(Node.H:"+(item as Node).H+")":"")+"]_:_item_has_higher_priority_;_stop_moving_item_");
+            Log.DebugMessage("T item["+item.heapIndex+"];_child[index:"+items[indexToSwap].heapIndex+((items[indexToSwap] is Node)?",(Node.F:"+(items[indexToSwap] as Node).heuristics+"),(Node.H:"+(items[indexToSwap] as Node).disToTarget+")":(""))+ "]_>_item[index:"+item.heapIndex+((item is Node)?",(Node.F:"+(item as Node).heuristics+"),(Node.H:"+(item as Node).disToTarget+")":"")+"]_:_item_has_higher_priority_;_stop_moving_item_");
             goto _End;//  Child tem menor prioridade (é maior), então não realizar mais Swaps
            }
           }else{

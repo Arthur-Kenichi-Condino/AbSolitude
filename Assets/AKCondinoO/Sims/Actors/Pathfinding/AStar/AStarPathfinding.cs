@@ -41,13 +41,14 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
         }
         internal class Node:IHeapItem<Node>{
          public int heapIndex{get;set;}
-         public float F{get;private set;}//  heuristics
-         public float G{get{return g;}set{g=value;F=g+h;}}float g;//  node dis to start
-         public float H{get{return h;}set{h=value;F=g+h;}}float h;//  node dis to target
+         public float heuristics{get;private set;}//  heuristics
+         public float disToStart {get{return g;}set{g=value;heuristics=g+h;}}float g;//  node dis to start
+         public float disToTarget{get{return h;}set{h=value;heuristics=g+h;}}float h;//  node dis to target
+         public Vector3 center{get;set;}
             public int CompareTo(Node toCompare){
-             int comparison=F.CompareTo(toCompare.F);
+             int comparison=heuristics.CompareTo(toCompare.heuristics);
              if(comparison==0){
-              comparison=H.CompareTo(toCompare.H);
+              comparison=disToTarget.CompareTo(toCompare.disToTarget);
              }
             return -comparison;}
         }

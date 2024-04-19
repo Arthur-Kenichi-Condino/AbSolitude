@@ -54,6 +54,15 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
             for(vCoord1.y=0;vCoord1.y<container.height;vCoord1.y++){
              center.y=vCoord1.y*container.nodeHeight;
              center.y+=container.dest.y-(container.height*container.nodeHeight)/2f+container.nodeHeight/2f;
+             if(!container.nodes.TryGetValue(vCoord1,out Node node)){
+              container.nodes.Add(vCoord1,node=new Node());
+             }
+             node.center=center;
+             Vector3 from=center+new Vector3(0f,container.nodeHeight/2f,0f);
+             //RaycastCommand raycast=new RaycastCommand(,);
+             //container.GetGroundRays.AddNoResize();
+             //container.GetGroundHits.AddNoResize();
+             ++i;
             }
            }}
            break;
