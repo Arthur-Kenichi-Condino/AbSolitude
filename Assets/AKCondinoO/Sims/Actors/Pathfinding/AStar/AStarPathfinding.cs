@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          }
          foreach(AStarPathfindingBackgroundContainer container in aStarPathfindingContainers){
           container.Dispose();
-          container.doRaycastsHandle.Complete();
+          container.getGroundRaycastCommandJobHandle.Complete();
           if(container.GetGroundRays.IsCreated)container.GetGroundRays.Dispose();
           if(container.GetGroundHits.IsCreated)container.GetGroundHits.Dispose();
          }

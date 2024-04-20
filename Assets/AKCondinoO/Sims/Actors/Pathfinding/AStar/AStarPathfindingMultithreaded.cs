@@ -29,19 +29,22 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal Vector3 dest;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
-      internal JobHandle doRaycastsHandle{get;set;}
+      internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
-         BuildHeap,
          GetGround,
+         BuildHeap,
         }
      internal Execution execution;
     }
     internal class AStarPathfindingMultithreaded:BaseMultithreaded<AStarPathfindingBackgroundContainer>{
         protected override void Execute(){
          switch(container.execution){
-          case(AStarPathfindingBackgroundContainer.Execution.BuildHeap):{
-           Log.DebugMessage("Execution.BuildHeap");
+          case(AStarPathfindingBackgroundContainer.Execution.GetGround):{
+           Log.DebugMessage("Execution.GetGround");
+           container.GetGroundRays.Clear();
+           container.GetGroundHits.Clear();
+           QueryParameters queryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer,true);
            Vector3Int vCoord1=new Vector3Int(0,0,0);
            int i=0;
            for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
@@ -59,17 +62,16 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
              }
              node.center=center;
              Vector3 from=center+new Vector3(0f,container.nodeHeight/2f,0f);
-             //RaycastCommand raycast=new RaycastCommand(,);
-             //container.GetGroundRays.AddNoResize();
-             //container.GetGroundHits.AddNoResize();
+             RaycastCommand raycast=new RaycastCommand(from,Vector3.down,queryParameters,container.nodeHeight);
+             container.GetGroundRays.AddNoResize(raycast         );
+             container.GetGroundHits.AddNoResize(new RaycastHit());
              ++i;
             }
            }}
            break;
           }
-          case(AStarPathfindingBackgroundContainer.Execution.GetGround):{
-           Log.DebugMessage("Execution.GetGround");
-           QueryParameters queryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer);
+          case(AStarPathfindingBackgroundContainer.Execution.BuildHeap):{
+           Log.DebugMessage("Execution.BuildHeap");
            break;
           }
          }
