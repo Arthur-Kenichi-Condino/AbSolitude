@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
     internal class AStarPathfinding:MonoBehaviour,ISingletonInitialization{
      internal static AStarPathfinding singleton{get;set;}
      internal readonly AStarPathfindingMultithreaded[]aStarPathfindingBGThreads=new AStarPathfindingMultithreaded[Environment.ProcessorCount];
-     internal readonly List<AStarPathfindingBackgroundContainer>aStarPathfindingContainers=new List<AStarPathfindingBackgroundContainer>();
+     internal readonly List<(BaseAI ai,AStarPathfindingBackgroundContainer aStar)>aStarPathfindingContainers=new();
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
         }
@@ -21,8 +21,12 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("AStarPathfinding:OnDestroyingCoreEvent");
-         foreach(AStarPathfindingBackgroundContainer container in aStarPathfindingContainers){
-          container.IsCompleted(aStarPathfindingBGThreads[0].IsRunning,-1);
+         foreach(var container in aStarPathfindingContainers){
+          container.aStar.IsCompleted(aStarPathfindingBGThreads[0].IsRunning,-1);
+          container.aStar.getGroundRaycastCommandJobHandle.Complete();
+          if(container.ai!=null&&container.ai.gameObject!=null){
+           if(container.ai.nativeToManagedCoroutine!=null){container.ai.StopCoroutine(container.ai.nativeToManagedCoroutine);}
+          }
          }
          if(AStarPathfindingMultithreaded.Clear()!=0){
           Log.Error("AStarPathfindingMultithreaded will stop with pending work");
@@ -31,11 +35,10 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          for(int i=0;i<aStarPathfindingBGThreads.Length;++i){
                        aStarPathfindingBGThreads[i].Wait();
          }
-         foreach(AStarPathfindingBackgroundContainer container in aStarPathfindingContainers){
-          container.Dispose();
-          container.getGroundRaycastCommandJobHandle.Complete();
-          if(container.GetGroundRays.IsCreated)container.GetGroundRays.Dispose();
-          if(container.GetGroundHits.IsCreated)container.GetGroundHits.Dispose();
+         foreach(var container in aStarPathfindingContainers){
+          container.aStar.Dispose();
+          if(container.aStar.GetGroundRays.IsCreated)container.aStar.GetGroundRays.Dispose();
+          if(container.aStar.GetGroundHits.IsCreated)container.aStar.GetGroundHits.Dispose();
          }
          aStarPathfindingContainers.Clear();
         }

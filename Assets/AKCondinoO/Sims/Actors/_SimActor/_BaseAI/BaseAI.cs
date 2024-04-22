@@ -61,7 +61,8 @@ namespace AKCondinoO.Sims.Actors{
          aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingWidth,aStarPathfindingDepth,aStarPathfindingHeight);
          aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
          aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
-         AStarPathfinding.singleton.aStarPathfindingContainers.Add(aStarPathfindingBG);
+         AStarPathfinding.singleton.aStarPathfindingContainers.Add((this,aStarPathfindingBG));
+         nativeToManagedCoroutine=StartCoroutine(NativeToManagedCoroutine());
         }
      protected bool canSense;
         protected override void OnUMACharacterUpdated(UMAData simUMAData){

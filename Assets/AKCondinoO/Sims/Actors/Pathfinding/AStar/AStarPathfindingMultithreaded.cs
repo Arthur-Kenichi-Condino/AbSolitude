@@ -29,6 +29,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal Vector3 dest;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
+      internal readonly List<(RaycastHit hit,bool hitTerrain)>getGroundHitsManaged=new();
       internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
