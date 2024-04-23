@@ -61,6 +61,8 @@ namespace AKCondinoO.Sims.Actors{
          aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingWidth,aStarPathfindingDepth,aStarPathfindingHeight);
          aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
          aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
+         aStarPathfindingBG.GetObstaclesCommands=new NativeList<OverlapBoxCommand>(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight                                       ,Allocator.Persistent);
+         aStarPathfindingBG.GetObstaclesOverlaps=new NativeList<ColliderHit      >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight*aStarPathfindingBG.getObstaclesMaxHits,Allocator.Persistent);
          AStarPathfinding.singleton.aStarPathfindingContainers.Add((this,aStarPathfindingBG));
          nativeToManagedCoroutine=StartCoroutine(NativeToManagedCoroutine());
         }

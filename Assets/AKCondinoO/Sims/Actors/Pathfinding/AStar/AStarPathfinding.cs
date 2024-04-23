@@ -39,6 +39,8 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
           container.aStar.Dispose();
           if(container.aStar.GetGroundRays.IsCreated)container.aStar.GetGroundRays.Dispose();
           if(container.aStar.GetGroundHits.IsCreated)container.aStar.GetGroundHits.Dispose();
+          if(container.aStar.GetObstaclesCommands.IsCreated)container.aStar.GetObstaclesCommands.Dispose();
+          if(container.aStar.GetObstaclesOverlaps.IsCreated)container.aStar.GetObstaclesOverlaps.Dispose();
          }
          aStarPathfindingContainers.Clear();
         }

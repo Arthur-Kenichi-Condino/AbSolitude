@@ -12,10 +12,11 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal readonly int width;
      internal readonly int depth;
      internal readonly int height;
-        internal AStarPathfindingBackgroundContainer(int width,int depth,int height){
+        internal AStarPathfindingBackgroundContainer(int width,int depth,int height,int getObstaclesMaxHits=8){
          this.width=width;
          this.depth=depth;
          this.height=height;
+         this.getObstaclesMaxHits=getObstaclesMaxHits;
         }
         protected override void Dispose(bool disposing){
          if(disposed)return;
@@ -30,6 +31,9 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
       internal readonly List<(RaycastHit hit,bool hitTerrain)>getGroundHitsManaged=new();
+     internal NativeList<OverlapBoxCommand>GetObstaclesCommands;
+     internal NativeList<ColliderHit      >GetObstaclesOverlaps;
+      internal readonly int getObstaclesMaxHits;
       internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
@@ -66,6 +70,8 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
              RaycastCommand raycast=new RaycastCommand(from,Vector3.down,queryParameters,container.nodeHeight);
              container.GetGroundRays.AddNoResize(raycast         );
              container.GetGroundHits.AddNoResize(new RaycastHit());
+             for(int j=0;j<container.getObstaclesMaxHits;++j){
+             }
              ++i;
             }
            }}
