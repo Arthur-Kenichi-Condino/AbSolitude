@@ -35,6 +35,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal NativeList<ColliderHit      >GetObstaclesOverlaps;
       internal readonly int getObstaclesMaxHits;
       internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
+      internal JobHandle getObstaclesCommandJobHandle{get;set;}
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
          GetGround,
@@ -49,7 +50,10 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
            Log.DebugMessage("Execution.GetGround");
            container.GetGroundRays.Clear();
            container.GetGroundHits.Clear();
+           container.GetObstaclesCommands.Clear();
+           container.GetObstaclesOverlaps.Clear();
            QueryParameters queryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer,true);
+           QueryParameters getObstaclesQueryParameters=new QueryParameters(AStarPathfindingHelper.aStarGetObstaclesLayer,true);
            Vector3Int vCoord1=new Vector3Int(0,0,0);
            int i=0;
            for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
@@ -70,7 +74,19 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
              RaycastCommand raycast=new RaycastCommand(from,Vector3.down,queryParameters,container.nodeHeight);
              container.GetGroundRays.AddNoResize(raycast         );
              container.GetGroundHits.AddNoResize(new RaycastHit());
+             OverlapBoxCommand overlapBox=new OverlapBoxCommand(
+              center,
+              new Vector3(
+               container.nodeWidth /2f,
+               container.nodeHeight/2f,
+               container.nodeWidth /2f
+              ),
+              Quaternion.identity,
+              getObstaclesQueryParameters
+             );
+              container.GetObstaclesCommands.AddNoResize(overlapBox       );
              for(int j=0;j<container.getObstaclesMaxHits;++j){
+              container.GetObstaclesOverlaps.AddNoResize(new ColliderHit());
              }
              ++i;
             }

@@ -36,7 +36,7 @@ namespace AKCondinoO{
           }
          }
          job.windDirection=WindZoneControl.singleton.transform.forward;
-         Log.DebugMessage("ps.particleCount:"+ps.particleCount);
+         //Log.DebugMessage("ps.particleCount:"+ps.particleCount);
         }
      private UpdateParticlesJob job=new UpdateParticlesJob();
         void OnParticleUpdateJobScheduled(){

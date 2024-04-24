@@ -110,6 +110,8 @@ namespace AKCondinoO.Voxels{
      internal static string chunkStateFile;
       internal static readonly object chunkStateFileSync=new();
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
+     [SerializeField]internal int _SpreadWaterExecutionCountLimit=7;
+     [SerializeField]internal int _MarchingCubesWaterExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
@@ -138,7 +140,9 @@ namespace AKCondinoO.Voxels{
          }
          VoxelTerrainEditingMultithreaded.Stopped=false;
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
+         VoxelWaterChunk.sSpreadWaterExecutionCount=0;
          WaterSpreadingMultithreaded.Start(waterSpreadingBGThreads,typeof(WaterSpreadingMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
+         VoxelWaterChunk.sMarchingCubesWaterExecutionCount=0;
          MarchingCubesWaterMultithreaded.Stopped=false;
          for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
                        marchingCubesWaterBGThreads[i]=new MarchingCubesWaterMultithreaded();

@@ -11,12 +11,25 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
        "VoxelTerrain",
        "Construction",
       };
+     internal static int aStarGetObstaclesLayer;
+      internal static readonly string[]aStarGetObstaclesLayerNames=new string[]{
+       "Default",
+       "VoxelTerrain",
+       "Construction",
+      };
         internal static void SetAStarPathfindingSettings(){
          for(int i=0;i<aStarLayerNames.Length;++i){
           if(i==0){
            aStarLayer= LayerMask.GetMask(aStarLayerNames[i]);
           }else{
            aStarLayer|=LayerMask.GetMask(aStarLayerNames[i]);
+          }
+         }
+         for(int i=0;i<aStarGetObstaclesLayerNames.Length;++i){
+          if(i==0){
+           aStarGetObstaclesLayer= LayerMask.GetMask(aStarGetObstaclesLayerNames[i]);
+          }else{
+           aStarGetObstaclesLayer|=LayerMask.GetMask(aStarGetObstaclesLayerNames[i]);
           }
          }
         }

@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Actors{
          if(MyEnemy==null){
           return;
          }
-         Log.DebugMessage("OnSNIPE_ST_Routine()");
+         //Log.DebugMessage("OnSNIPE_ST_Routine()");
          float myMoveSpeed=Mathf.Max(moveMaxVelocity.x,moveMaxVelocity.y,moveMaxVelocity.z);
          float myEnemyMoveSpeed=0f;
          if(MyEnemy is BaseAI myEnemyAI){
@@ -49,10 +49,10 @@ namespace AKCondinoO.Sims.Actors{
           ratio=dis1/dis2;
          }
          onSnipeRetreatDis=ratio*dis1;
-         Log.DebugMessage("onSnipeRetreatDis:"+onSnipeRetreatDis);
+         //Log.DebugMessage("onSnipeRetreatDis:"+onSnipeRetreatDis);
          //
          if(onSnipeReloading){
-          Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeReloading");
+          //Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeReloading");
           if(
            IsTraversingPath()
           ){
@@ -84,7 +84,7 @@ namespace AKCondinoO.Sims.Actors{
            onSnipeMoving=false;
           }
          }
-         Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeAlternateRetreatShoot:"+onSnipeAlternateRetreatShoot);
+         //Log.DebugMessage("OnSNIPE_ST_Routine():onSnipeAlternateRetreatShoot:"+onSnipeAlternateRetreatShoot);
          if(!onSnipeReloading&&
             !onSnipeShooting&&
             !onSnipeMoving

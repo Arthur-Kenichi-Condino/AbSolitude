@@ -101,15 +101,20 @@ namespace AKCondinoO.Voxels.Water{
              }
          }
         }
+     internal static int sSpreadWaterExecutionCount;
         bool CanSpreadWater(){
          spreadTimer-=Time.deltaTime;
          if(spreadTimer<=0f){
+          if(sSpreadWaterExecutionCount>=VoxelSystem.singleton._SpreadWaterExecutionCountLimit){
+           return false;
+          }
           //Log.DebugMessage("CanSpreadWater");
           spreadTimer=spreadTimeInterval;
           waterSpreadingBG.cCoord=tCnk.id.Value.cCoord;
           waterSpreadingBG.cnkRgn=tCnk.id.Value.cnkRgn;
           waterSpreadingBG.cnkIdx=tCnk.id.Value.cnkIdx;
           waterSpreadingBG.result=false;
+          sSpreadWaterExecutionCount++;
           WaterSpreadingMultithreaded.Schedule(waterSpreadingBG);
           return true;
          }
@@ -118,18 +123,24 @@ namespace AKCondinoO.Voxels.Water{
         bool OnWaterSpread(out bool hadChanges){
          hadChanges=false;
          if(waterSpreadingBG.IsCompleted(VoxelSystem.singleton.waterSpreadingBGThreads[0].IsRunning)){
+          sSpreadWaterExecutionCount--;
           //Log.DebugMessage("OnWaterSpread");
           hadChanges=waterSpreadingBG.result;
           return true;
          }
          return false;
         }
+     internal static int sMarchingCubesWaterExecutionCount;
         bool CanBeginMarchingCubes(){
+         if(sMarchingCubesWaterExecutionCount>=VoxelSystem.singleton._MarchingCubesWaterExecutionCountLimit){
+          return false;
+         }
          if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
           worldBounds.center=transform.position=new Vector3(tCnk.id.Value.cnkRgn.x,0,tCnk.id.Value.cnkRgn.y);
           marchingCubesWaterBG.cCoord=tCnk.id.Value.cCoord;
           marchingCubesWaterBG.cnkRgn=tCnk.id.Value.cnkRgn;
           marchingCubesWaterBG.cnkIdx=tCnk.id.Value.cnkIdx;
+          sMarchingCubesWaterExecutionCount++;
           MarchingCubesWaterMultithreaded.Schedule(marchingCubesWaterBG);
           return true;
          }
@@ -158,6 +169,7 @@ namespace AKCondinoO.Voxels.Water{
         bool OnMarchingCubesDone(out int vertexCount){
          vertexCount=0;
          if(marchingCubesWaterBG.IsCompleted(VoxelSystem.singleton.marchingCubesWaterBGThreads[0].IsRunning)){
+          sMarchingCubesWaterExecutionCount--;
           bool resize;
           if(resize=(vertexCount=marchingCubesWaterBG.TempVer.Length)>mesh.vertexCount){
            mesh.SetVertexBufferParams(marchingCubesWaterBG.TempVer.Length,layout);

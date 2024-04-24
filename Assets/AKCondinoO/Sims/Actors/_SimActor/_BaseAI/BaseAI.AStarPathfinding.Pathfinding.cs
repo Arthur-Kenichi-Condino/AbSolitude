@@ -24,7 +24,7 @@ namespace AKCondinoO.Sims.Actors{
      bool settingGetGroundRays;
      Vector3?curGetAStarDest=null;
         internal void ManualUpdateAStarPathfinding(){
-         Log.DebugMessage("ManualUpdateAStarPathfinding");
+         //Log.DebugMessage("ManualUpdateAStarPathfinding");
          if(buildingHeap){
              if(OnBuiltHeap()){
               Log.DebugMessage("aStarPathfindingBG.IsCompleted");
@@ -89,7 +89,7 @@ namespace AKCondinoO.Sims.Actors{
              for(int c=0;c<aStarPathfindingBG.GetGroundHits.Length;c++){
               RaycastHit hit=aStarPathfindingBG.GetGroundHits[c];
               if(hit.colliderInstanceID!=0){
-               Log.DebugMessage("hit.colliderInstanceID!=0");
+               //Log.DebugMessage("hit.colliderInstanceID!=0");
               }
               aStarPathfindingBG.getGroundHitsManaged.Add((hit,hit.colliderInstanceID!=0&&hit.collider.GetComponent<VoxelTerrainChunk>()!=null));
              }
@@ -113,6 +113,14 @@ namespace AKCondinoO.Sims.Actors{
           commands:aStarPathfindingBG.GetGroundRays.AsArray(),
            results:aStarPathfindingBG.GetGroundHits.AsArray(),
           minCommandsPerJob:1,maxHits:1
+         );
+        }
+        void ScheduleGetObstaclesCommandJob(){
+         aStarPathfindingBG.getObstaclesCommandJobHandle.Complete();
+         aStarPathfindingBG.getObstaclesCommandJobHandle=OverlapBoxCommand.ScheduleBatch(
+          commands:aStarPathfindingBG.GetObstaclesCommands.AsArray(),
+           results:aStarPathfindingBG.GetObstaclesOverlaps.AsArray(),
+          minCommandsPerJob:1,maxHits:aStarPathfindingBG.getObstaclesMaxHits
          );
         }
         bool OnGetGroundRaycastsDone(){
