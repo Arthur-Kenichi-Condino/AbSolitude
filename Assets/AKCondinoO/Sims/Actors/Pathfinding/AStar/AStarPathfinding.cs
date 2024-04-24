@@ -24,6 +24,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          foreach(var container in aStarPathfindingContainers){
           container.aStar.IsCompleted(aStarPathfindingBGThreads[0].IsRunning,-1);
           container.aStar.getGroundRaycastCommandJobHandle.Complete();
+          container.aStar.    getObstaclesCommandJobHandle.Complete();
           if(container.ai!=null&&container.ai.gameObject!=null){
            if(container.ai.nativeToManagedCoroutine!=null){container.ai.StopCoroutine(container.ai.nativeToManagedCoroutine);}
           }

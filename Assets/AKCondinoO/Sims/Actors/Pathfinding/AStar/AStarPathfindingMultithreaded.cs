@@ -30,12 +30,13 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal Vector3 dest;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
-      internal readonly List<(RaycastHit hit,bool hitTerrain)>getGroundHitsManaged=new();
+      internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
+       internal readonly List<(RaycastHit hit,bool hitTerrain)>getGroundHitsManaged=new();
      internal NativeList<OverlapBoxCommand>GetObstaclesCommands;
      internal NativeList<ColliderHit      >GetObstaclesOverlaps;
       internal readonly int getObstaclesMaxHits;
-      internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
       internal JobHandle getObstaclesCommandJobHandle{get;set;}
+       internal readonly List<(ColliderHit hit,bool hitObstacle)>getObstaclesHitsManaged=new();
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
          GetGround,
@@ -55,7 +56,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
            QueryParameters queryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer,true);
            QueryParameters getObstaclesQueryParameters=new QueryParameters(AStarPathfindingHelper.aStarGetObstaclesLayer,true);
            Vector3Int vCoord1=new Vector3Int(0,0,0);
-           int i=0;
+           int c=0;
            for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
            for(vCoord1.z=0             ;vCoord1.z<container.depth;vCoord1.z++){
             Vector3 center=vCoord1;
@@ -85,10 +86,10 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
               getObstaclesQueryParameters
              );
               container.GetObstaclesCommands.AddNoResize(overlapBox       );
-             for(int j=0;j<container.getObstaclesMaxHits;++j){
+             for(int i=0;i<container.getObstaclesMaxHits;++i){
               container.GetObstaclesOverlaps.AddNoResize(new ColliderHit());
              }
-             ++i;
+             ++c;
             }
            }}
            break;
