@@ -155,8 +155,11 @@ namespace AKCondinoO.Voxels.Water{
               if(VoxelSystem.Concurrent.waterNeighbourhoodCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCacheList)){
                oldIdCacheList.Remove(cache);
                if(oldIdCacheList.Count<=0){
+                VoxelSystem.Concurrent.waterNeighbourhoodCacheListPool.Enqueue(oldIdCacheList);
+                VoxelSystem.Concurrent.waterNeighbourhoodCache.Remove(cacheOldId.cnkIdx);
                }
               }
+              VoxelSystem.Concurrent.waterNeighbourhoodCacheIds.Remove(cS);
              // if(VoxelSystem.Concurrent.waterCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCache)&&
              //  object.ReferenceEquals(oldIdCache.stream,cS)
              // ){
