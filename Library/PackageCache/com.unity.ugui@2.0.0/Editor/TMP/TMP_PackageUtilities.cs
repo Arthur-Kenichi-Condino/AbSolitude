@@ -1082,11 +1082,11 @@ namespace TMPro
         {
             // Restore backup of TMP Settings from byte[]
             File.WriteAllBytes(k_SettingsFilePath, k_SettingsBackup);
+            AssetDatabase.Refresh();
 
             TMP_Settings.instance.SetAssetVersion();
             EditorUtility.SetDirty(TMP_Settings.instance);
             AssetDatabase.SaveAssetIfDirty(TMP_Settings.instance);
-            AssetDatabase.Refresh();
 
             AssetDatabase.importPackageCompleted -= ImportCallback;
         }

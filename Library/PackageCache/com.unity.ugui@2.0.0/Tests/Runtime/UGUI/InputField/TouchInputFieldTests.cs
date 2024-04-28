@@ -129,16 +129,25 @@ namespace InputfieldTests
             inputField.characterValidation = validation;
             inputField.text = input;
 
-            inputField.OnSelect(eventData);
-
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            // On Xbox, the onScreenKeyboard is going to constrain the application and make it go out of focus. 
-            // We need to wait for the application to go out of focus before we can close the onScreenKeyboard.
-            while (Application.isFocused)
+            // Address instabilities: UUM-34900, UUM-32902
+            // Cause:
+            //      On Xbox devkits, the PLM (Process Lifetime Management) suspends the application when the on-screen keyboard is opened.
+            //      This cause subsequent tests to fail because the event system will ignore input when the application is not focused.
+            // Resolution:
+            //      Yielding any call that trigger OSK (open and closure) to ensure the OSK is in the expected stated before continuing the test.
+            // Note:
+            //      UNITY_GAMECORE affects all GDK compatible platforms (Xbox One, Series and Windows).
+            //      As PLM is only a GDK for consoles feature, this fix have to be enforced on console platforms only.
+
+            do
             {
+                inputField.OnSelect(eventData);
                 yield return null;
             }
+            while (!TouchScreenKeyboard.visible);
 #else
+            inputField.OnSelect(eventData);
             yield return null;
 #endif
 
@@ -148,16 +157,18 @@ namespace InputfieldTests
                 validation));
 
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            // On Xbox, we then need to close onScreenKeyboard and wait for the application to be focused again.
-            // If this is not done, it could have an impact on subsequent tests that require the application to be focused in order to function correctly.
-            while (!Application.isFocused)
+            do
             {
+                // We manually close the OSK as we don't need to assert the inputField afterward.
                 if (inputField.touchScreenKeyboard != null)
                 {
                     inputField.touchScreenKeyboard.active = false;
                 }
+
+                // No delay is needed here as we don't use inputField.OnDeselect.
                 yield return null;
             }
+            while (TouchScreenKeyboard.visible);
 #endif
         }
 
@@ -187,30 +198,34 @@ namespace InputfieldTests
         {
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
             BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
-            inputField.OnSelect(eventData);
 
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (Application.isFocused)
+            do
             {
-                yield return null;
+                inputField.OnSelect(eventData);
+
+                // If 2 tests trying to open and close the OSK are called in a row, the seconds test would always hang for 2 to 3 minutes.
+                // This seemed to happens everytime the OSK is disabled using input.OnDeselect before being re-enabled using input.OnSelect.
+                // Adding these 0.2s delay on in these case allows to get rid of the hang.
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (!TouchScreenKeyboard.visible);
 #else
+            inputField.OnSelect(eventData);
             yield return null;
 #endif
             var called = false;
             inputField.onEndEdit.AddListener((s) => { called = true; });
 
-            inputField.OnDeselect(eventData);
-
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (!Application.isFocused)
+            do
             {
-                if (inputField.touchScreenKeyboard != null)
-                {
-                    inputField.touchScreenKeyboard.active = false;
-                }
-                yield return null;
+                inputField.OnDeselect(eventData);
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (TouchScreenKeyboard.visible);
+#else
+            inputField.OnDeselect(eventData);
 #endif
 
             Assert.IsTrue(called, "Expected invocation of onEndEdit");
@@ -235,28 +250,28 @@ namespace InputfieldTests
                 yield break;
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
             BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
-            inputField.OnSelect(eventData);
 
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (Application.isFocused)
+            do
             {
-                yield return null;
+                inputField.OnSelect(eventData);
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (!TouchScreenKeyboard.visible);
 #else
+            inputField.OnSelect(eventData);
             yield return null;
 #endif
 
             Assert.NotNull(inputField.touchScreenKeyboard, "Expect a keyboard to be opened");
 
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (!Application.isFocused)
+            do
             {
-                if (inputField.touchScreenKeyboard != null)
-                {
-                    inputField.touchScreenKeyboard.active = false;
-                }
-                yield return null;
+                inputField.OnDeselect(eventData);
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (TouchScreenKeyboard.visible);
 #endif
         }
 
@@ -288,31 +303,29 @@ namespace InputfieldTests
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
             BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
 
-            inputField.OnSelect(eventData);
-
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (Application.isFocused)
+            do
             {
-                yield return null;
+                inputField.OnSelect(eventData);
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (!TouchScreenKeyboard.visible);
 #else
+            inputField.OnSelect(eventData);
             yield return null;
 #endif
 
             Assert.IsTrue(TouchScreenKeyboard.visible);
 
-            inputField.OnDeselect(eventData);
-
 #if UNITY_GAMECORE && !UNITY_EDITOR
-            while (!Application.isFocused)
+            do
             {
-                if (inputField.touchScreenKeyboard != null)
-                {
-                    inputField.touchScreenKeyboard.active = false;
-                }
-                yield return null;
+                inputField.OnDeselect(eventData);
+                yield return new WaitForSecondsRealtime(0.2f);
             }
+            while (TouchScreenKeyboard.visible);
 #else
+            inputField.OnDeselect(eventData);
             yield return null;
 #endif
 

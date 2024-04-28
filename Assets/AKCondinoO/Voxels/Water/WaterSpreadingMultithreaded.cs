@@ -134,6 +134,47 @@ namespace AKCondinoO.Voxels.Water{
          if(container.lastcnkIdx==null||container.cnkIdx.Value!=container.lastcnkIdx.Value){
           hasChangedIndex=true;
          }
+         VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl.EnterWriteLock();
+         try{
+          if(hasChangedIndex){
+           for(int x=-1;x<=1;x++){
+           for(int y=-1;y<=1;y++){
+            Vector2Int cCoord2=cCoord1+new Vector2Int(x,y);
+            if(Math.Abs(cCoord2.x)>=MaxcCoordx||
+               Math.Abs(cCoord2.y)>=MaxcCoordy)
+            {
+             continue;
+            }
+            int oftIdx2=GetoftIdx(cCoord2-cCoord1);
+            if(oftIdx2==oftIdx1){
+             continue;
+            }
+            if(container.cacheStream.TryGetValue(oftIdx2,out FileStream cS)){
+             var cache=(cS,container.cacheBinaryWriter[oftIdx2],container.cacheBinaryReader[oftIdx2]);
+             if(VoxelSystem.Concurrent.waterNeighbourhoodCacheIds.TryGetValue(cS,out var cacheOldId)){
+              if(VoxelSystem.Concurrent.waterNeighbourhoodCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCacheList)){
+               oldIdCacheList.Remove(cache);
+               if(oldIdCacheList.Count<=0){
+               }
+              }
+             // if(VoxelSystem.Concurrent.waterCache.TryGetValue(cacheOldId.cnkIdx,out var oldIdCache)&&
+             //  object.ReferenceEquals(oldIdCache.stream,cS)
+             // ){
+             //  VoxelSystem.Concurrent.waterCache.Remove(cacheOldId.cnkIdx);
+             //  VoxelSystem.Concurrent.waterCacheIds.Remove(cS);
+             //  Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
+             // }
+             }
+            }
+            string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterNeighbourhoodCacheSpreadingFileFormat,VoxelSystem.Concurrent.waterNeighbourhoodCachePath,cCoord2.x,cCoord2.y);
+            //Log.DebugMessage("cacheFileName:"+cacheFileName);
+           }}
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl.ExitWriteLock();
+         }
          VoxelSystem.Concurrent.waterCache_rwl.EnterWriteLock();
          try{
           if(hasChangedIndex){

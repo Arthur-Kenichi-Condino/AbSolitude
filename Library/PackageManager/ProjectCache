@@ -5,22 +5,22 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638484836877521815
-    m_Hash: 1244328663
+      ticks: 638496019576508070
+    m_Hash: 3572084194
   m_LockFileStatus:
     m_FilePath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638484836877551823
-    m_Hash: 2316585532
+      ticks: 638496020041543646
+    m_Hash: 1527587939
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
 m_ProjectPath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages
-m_EditorVersion: 2023.2.9f1 (0c9c2e1f4bef)
+m_EditorVersion: 2023.2.19f1 (95c298372b1e)
 m_ResolvedPackages:
 - packageId: com.community.netcode.transport.steamnetworkingsockets@https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworkingsockets
   testable: 0
@@ -287,13 +287,14 @@ m_ResolvedPackages:
     - 2.0.4
     - 2.0.6
     - 2.0.8
+    - 2.1.0
     compatible:
-    - 1.21.19
     - 1.21.20
     - 2.0.3
     - 2.0.4
     - 2.0.6
     - 2.0.8
+    - 2.1.0
     recommended: 1.21.20
     deprecated: []
   dependencies:
@@ -349,7 +350,7 @@ m_ResolvedPackages:
     revision: c34a3696939031a32903c278ecd646f4d845377f
     path: 
   unityLifecycle:
-    version: 1.21.19
+    version: 1.21.20
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -459,12 +460,12 @@ m_ResolvedPackages:
     next frame after any of the link''s ends change their world position."}'
   assetStore:
     productId: 
-- packageId: com.unity.collab-proxy@2.2.0
+- packageId: com.unity.collab-proxy@2.3.1
   testable: 0
   isDirectDependency: 1
-  version: 2.2.0
+  version: 2.3.1
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collab-proxy@2.2.0
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collab-proxy@2.3.1
   assetPath: Packages/com.unity.collab-proxy
   name: com.unity.collab-proxy
   displayName: Version Control
@@ -552,9 +553,8 @@ m_ResolvedPackages:
     - 2.2.0
     - 2.3.1
     compatible:
-    - 2.2.0
     - 2.3.1
-    recommended: 2.2.0
+    recommended: 2.3.1
     deprecated: []
   dependencies: []
   resolvedDependencies: []
@@ -585,16 +585,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638326189440000000
-  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.2/manual/index.html
+  datePublishedTicks: 638448201880000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.3/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.cloud.collaborate.git
-    revision: 33c8fba1793946be3c73f738edf70db0b5546afd
+    revision: 613362ccb4468f55ee42e0a35809fb9a61f3f8f1
     path: 
   unityLifecycle:
-    version: 2.2.0
+    version: 2.3.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -612,11 +612,18 @@ m_ResolvedPackages:
     Asset Store Plug-In:\n\n- Select the PlasticSCM folder in the Assets\\Plugins
     folder on the Project tab, then click Edit > Delete\n- Close the Unity Editor
     and open your project again. You will find the Plastic SCM menu item in the Window
-    menu.\n\n### Added\n\n- Added button for organization owner/admins to upgrade
-    to DevOps subscription.\n- Included new decorators for retained & locked files.\n\n###
-    Changed\n\n- Updated description in the package.json, including an updated link
-    to get started.\n\n### Fixed\n\n- Fixed failed operations when the workspace
-    is already locked."}'
+    menu.\n\n### Added\n\n- New view to list and manage locks.\n\n### Fixed\n\n-
+    Fixed DropdownField not working properly on a ModalUtility window on MacOS.\n-
+    Fixed issue with existing checkout operations locking the workspace.\n- Retained
+    locks prevented to checkout assets.\n- Reviewed initialization and application
+    lifecycle.\n- Fixed layout error when switching checkout status in the inspector.\n-
+    Fixed Diff option unavailable for .prefab.\n- Fixed UI error when opening and
+    closing multiple closable tabs.\n- Ensured branch creations start from the latest
+    changeset.\n- Unable to expand added item list after collapsing.\n- Pending Changes
+    context menu had the view file history greyed out for asset+meta.\n- Preconfigured
+    date format was not recognized as a valid DateTime.\n- Fixed finding changes
+    operation being firing constantly.\n- Removed obsolete content in package documentation.\n-
+    Fixed typo in locks tooltip."}'
   assetStore:
     productId: 
 - packageId: com.unity.ide.rider@3.0.28
@@ -683,7 +690,6 @@ m_ResolvedPackages:
     - 3.0.27
     - 3.0.28
     compatible:
-    - 3.0.27
     - 3.0.28
     recommended: 3.0.28
     deprecated: []
@@ -715,7 +721,7 @@ m_ResolvedPackages:
     revision: f4880c72477e9bbd7321c0dbda4428fa10d916df
     path: 
   unityLifecycle:
-    version: 3.0.27
+    version: 3.0.28
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1012,7 +1018,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.2.1
   - name: com.unity.burst
-    version: 1.8.12
+    version: 1.8.13
   - name: com.unity.mathematics
     version: 1.3.1
   - name: com.unity.modules.jsonserialize
@@ -1129,10 +1135,11 @@ m_ResolvedPackages:
     - 1.7.1
     - 1.8.0
     - 1.8.1
+    - 1.9.1
     - 2.0.0-exp.2
     compatible:
-    - 1.8.0
     - 1.8.1
+    - 1.9.1
     recommended: 1.8.1
     deprecated: []
   dependencies:
@@ -1148,7 +1155,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.2.1
   - name: com.unity.burst
-    version: 1.8.12
+    version: 1.8.13
   - name: com.unity.mathematics
     version: 1.3.1
   - name: com.unity.modules.jsonserialize
@@ -1187,7 +1194,7 @@ m_ResolvedPackages:
     revision: eb213838233cbee2030891203bcb72d2354a5a7d
     path: 
   unityLifecycle:
-    version: 1.8.0
+    version: 1.8.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1527,6 +1534,7 @@ m_ResolvedPackages:
     - 1.4.1
     - 1.4.2
     - 1.4.3
+    - 1.4.4
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12
@@ -1537,6 +1545,7 @@ m_ResolvedPackages:
     - 1.4.1
     - 1.4.2
     - 1.4.3
+    - 1.4.4
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12
@@ -1872,7 +1881,7 @@ m_ResolvedPackages:
   - name: com.unity.collections
     version: 2.2.1
   - name: com.unity.burst
-    version: 1.8.12
+    version: 1.8.13
   - name: com.unity.mathematics
     version: 1.3.1
   - name: com.unity.modules.jsonserialize
@@ -1981,6 +1990,7 @@ m_ResolvedPackages:
     - 2.0.0
     - 3.0.0-exp.1
     - 3.0.0-exp.3
+    - 3.0.0-exp.4
     compatible:
     - 2.0.0
     - 3.0.0-exp.1
@@ -2091,11 +2101,13 @@ m_ResolvedPackages:
     - 1.9.0
     - 1.9.1
     - 1.9.2
+    - 1.9.4
     compatible:
     - 1.8.0
     - 1.9.0
     - 1.9.1
     - 1.9.2
+    - 1.9.4
     recommended: 1.8.0
     deprecated:
     - 1.8.0-pre.1
@@ -4518,7 +4530,7 @@ m_ResolvedPackages:
     version: 3.0.2
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.12
+    version: 1.8.13
   - name: com.unity.mathematics
     version: 1.3.1
   - name: com.unity.modules.jsonserialize
@@ -4584,12 +4596,12 @@ m_ResolvedPackages:
     package"}'
   assetStore:
     productId: 
-- packageId: com.unity.burst@1.8.12
+- packageId: com.unity.burst@1.8.13
   testable: 0
   isDirectDependency: 0
-  version: 1.8.12
+  version: 1.8.13
   source: 1
-  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.burst@1.8.12
+  resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.burst@1.8.13
   assetPath: Packages/com.unity.burst
   name: com.unity.burst
   displayName: Burst
@@ -4732,10 +4744,11 @@ m_ResolvedPackages:
     - 1.8.11
     - 1.8.12
     - 1.8.13
+    - 1.8.14
     compatible:
-    - 1.8.12
     - 1.8.13
-    recommended: 1.8.13
+    - 1.8.14
+    recommended: 1.8.14
     deprecated: []
   dependencies:
   - name: com.unity.mathematics
@@ -4760,16 +4773,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638406469710000000
+  datePublishedTicks: 638459163600000000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: git@github.cds.internal.unity3d.com:unity/burst
-    revision: a18fd968a92da11c38d1edd157e68ad9a490e67b
+    revision: 018c84715a0efcfda7f76841a1b0b0366e55f407
     path: 
   unityLifecycle:
-    version: 1.8.12
+    version: 1.8.13
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -4779,23 +4792,23 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"### Fixed\n- Fixed the managed fallback for bursts
-    intrinsic functions `cvt_ss2si`, `cvtss_si32`, and `cvtss_si64` to follow midpoint
-    rounding standard of nearest even.\n- Fixed an issue where use of certain intrinsics
-    could cause a compile error even if properly guarded by the appropriate `IsXXXSupported`
-    property.\n- If an exception is thrown from burst compiled code in the Editor
-    on Windows there was potential for certain callee saved registers to be corrupted. 
-    In order to fix this ( editor only - player builds are unaffected), we now save
-    some additional context on each entry point.\n- Fixed burst not differentiating
-    between overloaded generic functions such as T foo(int val) and T foo(T val)
-    when the function calls are foo(1); foo<int>(1). Burst would previously only
-    compile the T foo(T val) function.\n- Fixed android builds throwing a NullReferenceException.\n-
-    Fixed arithmetic and bitwise negation on native integers.\n- Fixed an issue where
-    underflows of nint and nuint at compile time would lead to incorrect code.\n-
-    Burst recompiles assemblies due to hashes mismatching because of the way assembly
-    defines are combined into the hash.\n- Fixed constant SHUFFLE function not seen
-    as a constant when called indirectly through a `FunctionPointer`\n\n### Added\n\n###
-    Removed\n\n### Changed\n- Update default LLVM to version 16\n\n### Known Issues"}'
+  upmReserved: '{"changelog":"### Added\n- Added clearer diagnostic error for certain
+    bad usages of IsSupportedXXX intrinsics.\n- Added support for Burst with the
+    visionOS Simulator SDK.\n- Added support for Windows Arm64.\n\n### Fixed\n- Fixed
+    InvalidCompilerException  when usage of IsSupportedXXX intrinsic results in no
+    branches being generated.\n- Fixed information in documentation regarding scheduling
+    generic jobs through generic methods.\n- Fixed a crash caused by arithmetic or
+    bitwise negation on native integers followed by a cast to a pointer.\n- Fixed
+    that the burst debug information folder would sometimes be saved in project root
+    folder.\n- Fixed `System.ArgumentNullException` exception in ILPostProcessing
+    when encountering a library using `mscorlib`\n- Fixed an issue where if two modules
+    were referencing the same external method (dllImport) an internal compiler error
+    could occur - \"Burst internal compiler error: Burst.Compiler.IL.CompilerException:
+    Error while verifying module: DISubprogram attached to more than one function\"\n-
+    Fixed \"Failed to find entry-points: ... An item with the same key has already
+    been added\" error that could occur in the presence of precompiled (usually obfuscated)
+    assemblies that contained methods overloaded only by return type\n\n### Removed\n\n###
+    Changed\n\n### Known Issues"}'
   assetStore:
     productId: 
 - packageId: com.unity.mathematics@1.3.1
@@ -4983,12 +4996,19 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: 
+  type: asset
   description: A framework for making any serializable field a setting, complete
     with a pre-built settings interface.
   errors: []
   versions:
     all:
+    - 0.1.0-preview.4
+    - 0.1.0-preview.8
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 2.0.0
     - 2.0.1
     compatible:
     - 2.0.1
@@ -5007,9 +5027,9 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   entitlements:
-    licensingModel: 0
+    licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637744099390000000
   documentationUrl: 
   hasRepository: 1
   repository:
@@ -5422,13 +5442,14 @@ m_ResolvedPackages:
     - 2.0.2
     - 2.1.0
     - 2.1.2
+    - 2.1.3
     compatible:
-    - 1.21.21
     - 1.21.22
     - 2.0.1
     - 2.0.2
     - 2.1.0
     - 2.1.2
+    - 2.1.3
     recommended: 1.21.22
     deprecated: []
   dependencies: []
@@ -5461,7 +5482,7 @@ m_ResolvedPackages:
     revision: 6bd4bdae79fcdd3902dce37b766b3fae82d62fde
     path: 
   unityLifecycle:
-    version: 1.21.21
+    version: 1.21.22
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0

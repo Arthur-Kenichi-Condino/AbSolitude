@@ -331,7 +331,7 @@ namespace TMPro
 
         private bool m_IsTextComponentUpdateRequired = false;
 
-        private bool m_isLastKeyBackspace = false;
+        private bool m_HasTextBeenRemoved = false;
         private float m_PointerDownClickStartTime;
         private float m_KeyDownStartTime;
         private float m_DoubleClickDelay = 0.5f;
@@ -1782,7 +1782,7 @@ namespace TMPro
                             hasValidateUpdatedText = textBeforeValidate != m_Text;
 						}
 
-                        if (lineType == LineType.MultiLineSubmit && c == '\n')
+                        if (lineType != LineType.MultiLineNewline && c == '\n')
                         {
                             m_SoftKeyboard.text = m_Text;
 
@@ -3090,7 +3090,7 @@ namespace TMPro
 
             if (hasSelection)
             {
-                m_isLastKeyBackspace = true;
+                m_HasTextBeenRemoved = true;
 
                 Delete();
                 UpdateTouchKeyboardFromEditChanges();
@@ -3108,7 +3108,7 @@ namespace TMPro
                         else
                             m_Text = text.Remove(stringPositionInternal, 1);
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         UpdateTouchKeyboardFromEditChanges();
                         SendOnValueChangedAndUpdateLabel();
@@ -3129,7 +3129,7 @@ namespace TMPro
 
                         m_Text = text.Remove(nextCharacterStringPosition, numberOfCharactersToRemove);
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         SendOnValueChangedAndUpdateLabel();
                     }
@@ -3151,7 +3151,7 @@ namespace TMPro
 
             if (hasSelection)
             {
-                m_isLastKeyBackspace = true;
+                m_HasTextBeenRemoved = true;
 
                 Delete();
                 UpdateTouchKeyboardFromEditChanges();
@@ -3175,7 +3175,7 @@ namespace TMPro
 
                         caretSelectPositionInternal = caretPositionInternal = caretPositionInternal - 1;
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         UpdateTouchKeyboardFromEditChanges();
                         SendOnValueChangedAndUpdateLabel();
@@ -3206,7 +3206,7 @@ namespace TMPro
                         caretSelectPositionInternal = caretPositionInternal = caretPositionIndex;
                     }
 
-                    m_isLastKeyBackspace = true;
+                    m_HasTextBeenRemoved = true;
 
                     UpdateTouchKeyboardFromEditChanges();
                     SendOnValueChangedAndUpdateLabel();
@@ -3258,6 +3258,9 @@ namespace TMPro
 
             if (selectionFocusPosition != selectionAnchorPosition)
             {
+
+                m_HasTextBeenRemoved = true;
+
                 if (m_isRichTextEditingAllowed || m_isSelectAll)
                 {
                     // Handling of Delete when Rich Text is allowed.
@@ -3867,7 +3870,7 @@ namespace TMPro
             }
 
             // Adjust the position of the RectTransform based on the caret position in the viewport (only if we have focus).
-            if (isFocused && startPosition != m_LastPosition || m_forceRectTransformAdjustment || m_isLastKeyBackspace)
+            if (isFocused && startPosition != m_LastPosition || m_forceRectTransformAdjustment || m_HasTextBeenRemoved)
                 AdjustRectTransformRelativeToViewport(startPosition, height, currentCharacter.isVisible);
 
             m_LastPosition = startPosition;
@@ -4115,8 +4118,8 @@ namespace TMPro
                 }
             }
 
-            // Special handling of backspace
-            if (m_isLastKeyBackspace)
+            // Special handling of backspace/text being removed
+            if (m_HasTextBeenRemoved)
             {
                 float anchoredPositionX = m_TextComponent.rectTransform.anchoredPosition.x;
 
@@ -4145,7 +4148,7 @@ namespace TMPro
                     AssignPositioningIfNeeded();
                 }
 
-                m_isLastKeyBackspace = false;
+                m_HasTextBeenRemoved = false;
             }
 
             m_forceRectTransformAdjustment = false;

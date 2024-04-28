@@ -79,8 +79,10 @@ namespace AKCondinoO.Sims.Actors{
         IEnumerator NativeToManagedCoroutine(){
          runNativeToManagedCoroutineMode=-1;
          runNativeToManagedCoroutine=new WaitUntil(()=>{return runNativeToManagedCoroutineMode>=0;});
+         System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
          _Loop:{
           yield return runNativeToManagedCoroutine;
+          sw.Restart();
           switch(runNativeToManagedCoroutineMode){
            case(0):{
             aStarPathfindingBG.   getGroundHitsManaged.Clear();
@@ -111,6 +113,8 @@ namespace AKCondinoO.Sims.Actors{
           }
           runNativeToManagedCoroutineMode=-1;
          }
+         sw.Stop();
+         Log.DebugMessage("NativeToManagedCoroutine sw elapsed time:"+sw.ElapsedMilliseconds+" ms");
          goto _Loop;
         }
         bool OnSetGetGroundRays(){

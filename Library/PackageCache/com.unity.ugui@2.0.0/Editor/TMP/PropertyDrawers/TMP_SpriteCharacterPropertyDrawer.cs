@@ -127,7 +127,7 @@ namespace TMPro.EditorUtilities
                         if (elementIndex != -1)
                         {
                             // Get a reference to the Sprite Glyph Table
-                            SerializedProperty prop_SpriteGlyphTable = property.serializedObject.FindProperty("m_SpriteGlyphTable");
+                            SerializedProperty prop_SpriteGlyphTable = property.serializedObject.FindProperty("m_GlyphTable");
 
                             SerializedProperty prop_SpriteGlyph = prop_SpriteGlyphTable.GetArrayElementAtIndex(elementIndex);
                             SerializedProperty prop_GlyphMetrics = prop_SpriteGlyph.FindPropertyRelative("m_Metrics");

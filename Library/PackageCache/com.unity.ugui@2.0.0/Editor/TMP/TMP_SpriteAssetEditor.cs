@@ -24,6 +24,8 @@ namespace TMPro.EditorUtilities
 
         int m_moveToIndex;
         int m_selectedElement = -1;
+        bool m_isCharacterSelected = false;
+        bool m_isSpriteSelected = false;
         int m_CurrentCharacterPage;
         int m_CurrentGlyphPage;
 
@@ -257,7 +259,7 @@ namespace TMPro.EditorUtilities
 
                         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                         {
-                            EditorGUI.BeginDisabledGroup(i != m_selectedElement);
+                            EditorGUI.BeginDisabledGroup(i != m_selectedElement || !m_isCharacterSelected);
                             {
                                 EditorGUILayout.PropertyField(spriteCharacterProperty);
                             }
@@ -275,16 +277,19 @@ namespace TMPro.EditorUtilities
                             if (m_selectedElement == i)
                             {
                                 m_selectedElement = -1;
+                                m_isCharacterSelected = false;
                             }
                             else
                             {
                                 m_selectedElement = i;
+                                m_isCharacterSelected = true;
+                                m_isSpriteSelected = false;
                                 GUIUtility.keyboardControl = 0;
                             }
                         }
 
                         // Draw & Handle Section Area
-                        if (m_selectedElement == i)
+                        if (m_selectedElement == i && m_isCharacterSelected)
                         {
                             // Draw selection highlight
                             TMP_EditorUtility.DrawBox(selectionArea, 2f, new Color32(40, 192, 255, 255));
@@ -482,7 +487,7 @@ namespace TMPro.EditorUtilities
 
                         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                         {
-                            EditorGUI.BeginDisabledGroup(i != m_selectedElement);
+                            EditorGUI.BeginDisabledGroup(i != m_selectedElement || !m_isSpriteSelected);
                             {
                                 EditorGUILayout.PropertyField(spriteGlyphProperty);
                             }
@@ -500,16 +505,19 @@ namespace TMPro.EditorUtilities
                             if (m_selectedElement == i)
                             {
                                 m_selectedElement = -1;
+                                m_isSpriteSelected = false;
                             }
                             else
                             {
                                 m_selectedElement = i;
+                                m_isCharacterSelected = false;
+                                m_isSpriteSelected = true;
                                 GUIUtility.keyboardControl = 0;
                             }
                         }
 
                         // Draw & Handle Section Area
-                        if (m_selectedElement == i)
+                        if (m_selectedElement == i && m_isSpriteSelected)
                         {
                             // Draw selection highlight
                             TMP_EditorUtility.DrawBox(selectionArea, 2f, new Color32(40, 192, 255, 255));

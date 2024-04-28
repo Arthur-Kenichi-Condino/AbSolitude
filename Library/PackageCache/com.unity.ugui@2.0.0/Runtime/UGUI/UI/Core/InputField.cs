@@ -1513,7 +1513,7 @@ namespace UnityEngine.UI
                         else if (characterValidation != CharacterValidation.None)
                             c = Validate(m_Text, m_Text.Length, c);
 
-                        if (lineType == LineType.MultiLineSubmit && c == '\n')
+                        if (lineType != LineType.MultiLineNewline && c == '\n')
                         {
                             m_Keyboard.text = m_Text;
 
@@ -2538,7 +2538,7 @@ namespace UnityEngine.UI
                 // To fix case 1320719; we need to rebuild the layout before we check the number of characters that can fit within the extents.
                 // Otherwise, the extents provided may not be good.
                 textComponent.SetLayoutDirty();
-                Canvas.ForceUpdateCanvases();
+
 
                 if (!isEmpty)
                 {

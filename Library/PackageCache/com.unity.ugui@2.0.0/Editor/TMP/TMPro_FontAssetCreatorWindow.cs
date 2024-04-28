@@ -438,7 +438,8 @@ namespace TMPro.EditorUtilities
                 {
                     m_SelectedFontAsset = null;
                     m_IsFontAtlasInvalid = true;
-                    m_SourceFontFaces = GetFontFaces();
+                    if (m_SourceFont != null)
+                        m_SourceFontFaces = GetFontFaces();
                     m_SourceFontFaceIndex = 0;
                 }
 
@@ -734,7 +735,12 @@ namespace TMPro.EditorUtilities
                         // Get list of characters that need to be packed and rendered to the atlas texture.
                         if (m_CharacterSetSelectionMode == 7 || m_CharacterSetSelectionMode == 8)
                         {
-                            List<uint> char_List = new List<uint>();
+                            // Ensure these characters are always added
+                            List<uint> char_List = new List<uint>()
+                            {
+                                9, // Space
+                                95 // Underline
+                            };
 
                             for (int i = 0; i < m_CharacterSequence.Length; i++)
                             {
@@ -1580,7 +1586,8 @@ namespace TMPro.EditorUtilities
             }
 
             // Set texture to non readable
-            FontEngineEditorUtilities.SetAtlasTextureIsReadable(fontAsset.atlasTexture, false);
+            if (fontAsset.atlasPopulationMode == AtlasPopulationMode.Static)
+                FontEngineEditorUtilities.SetAtlasTextureIsReadable(fontAsset.atlasTexture, false);
 
             // Add list of GlyphRects to font asset.
             fontAsset.freeGlyphRects = m_FreeGlyphRects;
@@ -1774,7 +1781,8 @@ namespace TMPro.EditorUtilities
             //File.WriteAllBytes("Assets/Textures/Debug Distance Field.png", pngData);
 
             // Set texture to non readable
-            FontEngineEditorUtilities.SetAtlasTextureIsReadable(fontAsset.atlasTexture, false);
+            if (fontAsset.atlasPopulationMode == AtlasPopulationMode.Static)
+                FontEngineEditorUtilities.SetAtlasTextureIsReadable(fontAsset.atlasTexture, false);
 
             // Add list of GlyphRects to font asset.
             fontAsset.freeGlyphRects = m_FreeGlyphRects;
@@ -1837,7 +1845,8 @@ namespace TMPro.EditorUtilities
         {
             m_SourceFont = AssetDatabase.LoadAssetAtPath<Font>(AssetDatabase.GUIDToAssetPath(settings.sourceFontFileGUID));
             m_SourceFontFaceIndex = settings.faceIndex;
-            m_SourceFontFaces = GetFontFaces();
+            if (m_SourceFont != null)
+                m_SourceFontFaces = GetFontFaces();
             m_PointSizeSamplingMode  = settings.pointSizeSamplingMode;
             m_PointSize = settings.pointSize;
             m_Padding = settings.padding;

@@ -23,11 +23,15 @@ namespace AKCondinoO.Voxels{
          internal static ReaderWriterLockSlim   waterFiles_rwl;
          internal static string waterCachePath;
          internal static string waterCacheFileFormat="{0}waterChunkCache.{1}.{2}.bin";
-         internal static string waterCacheNeighbourhoodPath;
-         internal static string waterCacheNeighbourhoodSpreadingFileFormat="{0}spreadingWater.{1}.{2}.bin";
+         internal static string waterNeighbourhoodCachePath;
+         internal static string waterNeighbourhoodCacheSpreadingFileFormat="{0}spreadingWater.{1}.{2}.bin";
          internal static ReaderWriterLockSlim   waterCache_rwl;
          internal static readonly Dictionary<int,(FileStream stream,BinaryWriter writer,BinaryReader reader)>waterCache   =new();
          internal static readonly Dictionary<FileStream,(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>    waterCacheIds=new();
+         internal static readonly Dictionary<int,HashSet<(FileStream stream,BinaryWriter writer,BinaryReader reader)>>waterNeighbourhoodCache   =new();
+         internal static readonly Dictionary<FileStream,(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>             waterNeighbourhoodCacheIds=new();
+          internal static readonly ConcurrentQueue<HashSet<(FileStream stream,BinaryWriter writer,BinaryReader reader)>>waterNeighbourhoodCacheListPool=new();
+         internal static ReaderWriterLockSlim   waterNeighbourhoodCache_rwl;
          static readonly Dictionary<int,string      >editsFileCacheName        =new Dictionary<int,string      >();
          static readonly Dictionary<int,FileStream  >editsFileCacheStream      =new Dictionary<int,FileStream  >();
          static readonly Dictionary<int,StreamReader>editsFileCacheStreamReader=new Dictionary<int,StreamReader>();

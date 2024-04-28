@@ -128,9 +128,10 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystem.Concurrent.terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.  waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.  waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.           terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.             waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.             waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          voxelTerrainLayer=LayerMask.GetMask("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Start(marchingCubesBGThreads,typeof(MarchingCubesMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
@@ -160,8 +161,8 @@ namespace AKCondinoO.Voxels{
          if(Core.singleton.isServer){
           VoxelSystem.Concurrent.waterCachePath=string.Format("{0}{1}",Core.savePath,"WaterChunkCache/");
           Directory.CreateDirectory(VoxelSystem.Concurrent.waterCachePath);
-          VoxelSystem.Concurrent.waterCacheNeighbourhoodPath=string.Format("{0}{1}",VoxelSystem.Concurrent.waterCachePath,"Neighbourhood/");
-          Directory.CreateDirectory(VoxelSystem.Concurrent.waterCacheNeighbourhoodPath);
+          VoxelSystem.Concurrent.waterNeighbourhoodCachePath=string.Format("{0}{1}",VoxelSystem.Concurrent.waterCachePath,"Neighbourhood/");
+          Directory.CreateDirectory(VoxelSystem.Concurrent.waterNeighbourhoodCachePath);
           chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
           Directory.CreateDirectory(chunkStatePath);
           chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
@@ -248,9 +249,10 @@ namespace AKCondinoO.Voxels{
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
-         VoxelSystem.Concurrent.terrainFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.  waterFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.  waterCache_rwl.Dispose();
+         VoxelSystem.Concurrent.             terrainFiles_rwl.Dispose();
+         VoxelSystem.Concurrent.               waterFiles_rwl.Dispose();
+         VoxelSystem.Concurrent.               waterCache_rwl.Dispose();
+         VoxelSystem.Concurrent.  waterNeighbourhoodCache_rwl.Dispose();
          VoxelSystem.Concurrent.  waterCache   .Clear();
          VoxelSystem.Concurrent.  waterCacheIds.Clear();
          VoxelSystem.Concurrent.ReleaseCacheAndDispose();
