@@ -168,7 +168,18 @@ namespace AKCondinoO.Voxels.Water{
              //  Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
              // }
              }
+             container.cacheBinaryWriter[oftIdx2].Dispose();
+             container.cacheBinaryReader[oftIdx2].Dispose();
+             container.cacheStream.Remove(oftIdx2);
+             container.cacheBinaryWriter.Remove(oftIdx2);
+             container.cacheBinaryReader.Remove(oftIdx2);
             }
+            //if(!container.cacheStream.ContainsKey(oftIdx1)){
+            // string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterCacheFileFormat,VoxelSystem.Concurrent.waterCachePath,container.cCoord.Value.x,container.cCoord.Value.y);
+            // container.cacheStream.Add(oftIdx1,new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
+            // container.cacheBinaryWriter.Add(oftIdx1,new BinaryWriter(container.cacheStream[oftIdx1]));
+            // container.cacheBinaryReader.Add(oftIdx1,new BinaryReader(container.cacheStream[oftIdx1]));
+            //}
             string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterNeighbourhoodCacheSpreadingFileFormat,VoxelSystem.Concurrent.waterNeighbourhoodCachePath,cCoord2.x,cCoord2.y);
             //Log.DebugMessage("cacheFileName:"+cacheFileName);
            }}
