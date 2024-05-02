@@ -81,10 +81,10 @@ namespace AKCondinoO.Voxels.Water{
          for(int i=0;i<voxels.Length;++i){
                        voxels[i].Clear();
          }
-         foreach(var cnkIdxAbsorbingPair in absorbing){cnkIdxAbsorbingPair.Value.Clear();}
-         foreach(var cnkIdxSpreadingPair in spreading){cnkIdxSpreadingPair.Value.Clear();}
-         foreach(var cnkIdxAbsorbedPair in absorbed){cnkIdxAbsorbedPair.Value.Clear();}
-         foreach(var cnkIdxSpreadedPair in spreaded){cnkIdxSpreadedPair.Value.Clear();}
+         foreach(var oftIdxAbsorbingPair in absorbing){oftIdxAbsorbingPair.Value.Clear();}
+         foreach(var oftIdxSpreadingPair in spreading){oftIdxSpreadingPair.Value.Clear();}
+         foreach(var oftIdxAbsorbedPair in absorbed){oftIdxAbsorbedPair.Value.Clear();}
+         foreach(var oftIdxSpreadedPair in spreaded){oftIdxSpreadedPair.Value.Clear();}
          foreach(var editData in dataFromFileToMerge){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
          dataFromFileToMerge.Clear();
          foreach(var editData in dataForSavingToFile){editData.Value.Clear();waterEditOutputDataPool.Enqueue(editData.Value);}
@@ -368,7 +368,7 @@ namespace AKCondinoO.Voxels.Water{
             Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
             int        cnkIdx3=GetcnkIdx(cCoord3.x,cCoord3.y);
             int        oftIdx3=GetoftIdx(cCoord3-container.cCoord.Value);
-            //absorbing[oftIdx1][vCoord1]=(voxel.previousDensity-voxel.density,voxel);
+            absorbing[oftIdx3][vCoord3]=(absorbValue,absorbVoxel);
             return false;
            }
            Log.DebugMessage("HorizontalAbsorb:"+vCoord3);

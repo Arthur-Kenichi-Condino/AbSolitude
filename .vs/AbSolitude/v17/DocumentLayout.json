@@ -262,8 +262,7 @@
               "ViewState": "AQIAAAoBAAAAAAAAAAAAAA4BAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-16T18:08:04.032Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -286,7 +285,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
-              "ViewState": "AQIAAF8BAAAAAAAAAAAAwHIBAAAOAAAA",
+              "ViewState": "AQIAAEkAAAAAAAAAAAAwwFYAAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-16T17:48:12.44Z",
               "IsPinned": true,
@@ -381,8 +380,7 @@
               "ViewState": "AQIAAD4AAAAAAAAAAAAWwEAAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-19T02:57:47.291Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
