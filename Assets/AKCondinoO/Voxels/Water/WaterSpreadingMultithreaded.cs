@@ -591,44 +591,42 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl.EnterWriteLock();
          try{
-          if(hasChangedIndex){
-           for(int x=-1;x<=1;x++){
-           for(int y=-1;y<=1;y++){
-            Vector2Int cCoord2=cCoord1+new Vector2Int(x,y);
-            if(Math.Abs(cCoord2.x)>=MaxcCoordx||
-               Math.Abs(cCoord2.y)>=MaxcCoordy)
-            {
-             continue;
+          for(int x=-1;x<=1;x++){
+          for(int y=-1;y<=1;y++){
+           Vector2Int cCoord2=cCoord1+new Vector2Int(x,y);
+           if(Math.Abs(cCoord2.x)>=MaxcCoordx||
+              Math.Abs(cCoord2.y)>=MaxcCoordy)
+           {
+            continue;
+           }
+           int oftIdx2=GetoftIdx(cCoord2-cCoord1);
+           if(oftIdx2==oftIdx1){
+            continue;
+           }
+           Vector2Int cnkRgn2=cCoordTocnkRgn(cCoord2);
+           int        cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+           if(container.cacheStream.TryGetValue(oftIdx2,out FileStream fileStream)){
+            BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
+            BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
+            fileStream.SetLength(0L);
+            foreach(var vCoordAbsorbingPair in absorbing[oftIdx2]){
+           //  BinaryWriteVoxelWater(kvp,binWriter);
             }
-            int oftIdx2=GetoftIdx(cCoord2-cCoord1);
-            if(oftIdx2==oftIdx1){
-             continue;
-            }
-            Vector2Int cnkRgn2=cCoordTocnkRgn(cCoord2);
-            int        cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
-            if(container.cacheStream.TryGetValue(oftIdx2,out FileStream fileStream)){
-             BinaryWriter binWriter=container.cacheBinaryWriter[oftIdx2];
-             BinaryReader binReader=container.cacheBinaryReader[oftIdx2];
-             fileStream.SetLength(0L);
-             foreach(var vCoordAbsorbingPair in absorbing[oftIdx2]){
-            //  BinaryWriteVoxelWater(kvp,binWriter);
-             }
-             binWriter.Flush();
-             if(hasChangedIndex){
-              if(!VoxelSystem.Concurrent.waterNeighbourhoodCache.TryGetValue(cnkIdx2,out var cacheList)){
-               if(!VoxelSystem.Concurrent.waterNeighbourhoodCacheListPool.TryDequeue(out cacheList)){
-                cacheList=new();
-               }
-               VoxelSystem.Concurrent.waterNeighbourhoodCache.Add(cnkIdx2,cacheList);
+            binWriter.Flush();
+            if(hasChangedIndex){
+             if(!VoxelSystem.Concurrent.waterNeighbourhoodCache.TryGetValue(cnkIdx2,out var cacheList)){
+              if(!VoxelSystem.Concurrent.waterNeighbourhoodCacheListPool.TryDequeue(out cacheList)){
+               cacheList=new();
               }
-              VoxelSystem.Concurrent.waterNeighbourhoodCache[cnkIdx2].Add((fileStream,binWriter,binReader));
-              VoxelSystem.Concurrent.waterNeighbourhoodCacheIds[fileStream]=(cCoord2,cnkRgn2,cnkIdx2);
-              //VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
-              //VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
+              VoxelSystem.Concurrent.waterNeighbourhoodCache.Add(cnkIdx2,cacheList);
              }
+             VoxelSystem.Concurrent.waterNeighbourhoodCache[cnkIdx2].Add((fileStream,binWriter,binReader));
+             VoxelSystem.Concurrent.waterNeighbourhoodCacheIds[fileStream]=(cCoord2,cnkRgn2,cnkIdx2);
+             //VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
+             //VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
             }
-           }}
-          }
+           }
+          }}
          }catch{
           throw;
          }finally{
