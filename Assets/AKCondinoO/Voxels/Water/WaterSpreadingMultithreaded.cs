@@ -497,11 +497,13 @@ namespace AKCondinoO.Voxels.Water{
           if(neighbourhoodAbsorb[oftIdx1].TryGetValue(vCoord1,out var absorbValue)){
            Log.DebugMessage("cCoord1:"+cCoord1+";absorbValue:"+absorbValue);
            HorizontalAbsorbSetVoxel(oftIdx1,vxlIdx1,absorbValue.absorb,absorbValue.voxel,HasBlockageAt(vCoord1));
+           hadChanges|=absorbed[oftIdx1].TryGetValue(vxlIdx1,out _);
            voxels[oftIdx1].TryGetValue(vxlIdx1,out voxel);
           }
           if(neighbourhoodSpread[oftIdx1].TryGetValue(vCoord1,out var spreadValue)){
            Log.DebugMessage("cCoord1:"+cCoord1+";spreadValue:"+spreadValue);
            HorizontalSpreadSetVoxel(oftIdx1,vxlIdx1,spreadValue.spread,spreadValue.voxel,HasBlockageAt(vCoord1));
+           hadChanges|=spreaded[oftIdx1].TryGetValue(vxlIdx1,out _);
            voxels[oftIdx1].TryGetValue(vxlIdx1,out voxel);
           }
           voxel.sleeping=voxel.sleeping&&(voxel.density==voxel.previousDensity);
