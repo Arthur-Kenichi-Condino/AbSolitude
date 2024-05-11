@@ -57,6 +57,9 @@ namespace AKCondinoO.Voxels.Water{
           this.name=tCnk.id+".VoxelWaterChunk";
          }
         }
+        internal void OnNeighbourhoodHadChanges(VoxelWaterChunk chunk){
+         pendingMarchingCubes=true;
+        }
      [SerializeField]float spreadTimeInterval=1.0f;
      float spreadTimer=1.0f;
      bool waitingBakeJob;
@@ -69,7 +72,14 @@ namespace AKCondinoO.Voxels.Water{
              if(OnWaterSpread(out bool hadChanges)){
                  waitingWaterSpread=false;
                  if(hadChanges){
-                  pendingMarchingCubes=true;
+                  for(int x=-1;x<=1;x++){
+                  for(int y=-1;y<=1;y++){
+                   Vector2Int cCoord1=tCnk.id.Value.cCoord+new Vector2Int(x,y);
+                   int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                   if(VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx1,out VoxelTerrainChunk chunk)){
+                    chunk.wCnk.OnNeighbourhoodHadChanges(this);
+                   }
+                  }}
                  }
              }
          }else{

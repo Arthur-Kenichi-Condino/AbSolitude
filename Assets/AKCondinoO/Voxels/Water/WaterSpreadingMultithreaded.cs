@@ -372,7 +372,7 @@ namespace AKCondinoO.Voxels.Water{
             }
             if(!container.neighbourhoodCacheStream.ContainsKey(oftIdx2)){
              string cacheFileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.waterNeighbourhoodCacheSpreadingFileFormat,VoxelSystem.Concurrent.waterNeighbourhoodCachePath,cCoord2.x,cCoord2.y);
-             Log.DebugMessage("cacheFileName:"+cacheFileName);
+             //Log.DebugMessage("cacheFileName:"+cacheFileName);
              container.neighbourhoodCacheStream.Add(oftIdx2,new FileStream(cacheFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
              container.neighbourhoodCacheBinaryWriter.Add(oftIdx2,new BinaryWriter(container.neighbourhoodCacheStream[oftIdx2]));
              container.neighbourhoodCacheBinaryReader.Add(oftIdx2,new BinaryReader(container.neighbourhoodCacheStream[oftIdx2]));
