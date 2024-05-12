@@ -112,8 +112,17 @@ namespace AKCondinoO.Voxels.Water.Editing{
            WaterEditOutputData voxelData=dataFromFileToMerge[cCoord][vCoord];
            currentVoxel=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping,voxelData.evaporateAfter);
           }else{
-           //  TO DO: valor do bioma
-           currentVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+           //  valor do bioma
+           currentVoxel=new VoxelWater();
+           Vector3Int noiseInput=vCoord;noiseInput.x+=cnkRgn.x;
+                                        noiseInput.z+=cnkRgn.y;
+           VoxelSystem.biome.SetvxlWater(
+            noiseInput,
+             null,
+              0,
+               vCoord.z+vCoord.x*Depth,
+                ref currentVoxel
+           );
           }
           if(previousDensity<0d){
            previousDensity=currentVoxel.density;
