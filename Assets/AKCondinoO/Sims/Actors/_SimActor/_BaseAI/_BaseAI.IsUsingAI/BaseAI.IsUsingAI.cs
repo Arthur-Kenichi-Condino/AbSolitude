@@ -163,9 +163,9 @@ namespace AKCondinoO.Sims.Actors{
          ){
           dir=(MyEnemy.transform.position-transform.position).normalized;
          }else if(characterController!=null){
-          dir=characterController.transform.forward;
+          dir=characterController.character.transform.forward;
          }else if(animatorController!=null){
-          dir=animatorController.transform.forward;
+          dir=animatorController.animator.transform.forward;
          }else{
           dir=transform.forward;
          }

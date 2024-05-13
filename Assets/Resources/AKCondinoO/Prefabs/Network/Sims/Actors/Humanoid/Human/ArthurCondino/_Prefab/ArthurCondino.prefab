@@ -115,10 +115,11 @@ MonoBehaviour:
   doIdleMove: 0
   useRunSpeedChance: 0.5
   delayToRandomMove: 8
+  snipeMinTimeBeforeCanChase: 8
   onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 64
-    tgtRotLerpMaxTime: 0.5
+    tgtRotLerpSpeed: 32
+    tgtRotLerpMaxTime: 1
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0

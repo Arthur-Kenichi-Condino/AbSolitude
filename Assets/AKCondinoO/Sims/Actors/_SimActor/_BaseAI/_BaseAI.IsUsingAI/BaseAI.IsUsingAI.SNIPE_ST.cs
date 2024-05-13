@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Actors{
           MoveStop();
          }
         }
-     [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
+     [SerializeField]internal QuaternionRotLerpHelper onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,1.0f);
      bool onSnipeMoving;
      bool onSnipeTryingShooting;
      bool onSnipeReloading;
