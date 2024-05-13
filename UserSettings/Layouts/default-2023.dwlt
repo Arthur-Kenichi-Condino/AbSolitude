@@ -217,7 +217,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 312
     y: 0
-    width: 674.6667
+    width: 677.3333
     height: 627.3333
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
@@ -240,7 +240,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 674.6667
+    width: 677.3333
     height: 406
   m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
@@ -268,7 +268,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 406
-    width: 674.6667
+    width: 677.3333
     height: 221.33331
   m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
@@ -292,9 +292,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 986.6667
+    x: 989.3333
     y: 0
-    width: 293.3333
+    width: 290.6667
     height: 627.3333
   m_MinSize: {x: 276, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
@@ -446,7 +446,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: b6faffff
+      m_ExpandedIDs: 9876fcff9c89feff5c3cffffb6faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -518,7 +518,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/AKCondinoO/Sims/Actors/Homunculi/Lif/_3D/Original
+    - Assets/AKCondinoO/Voxels/Terrain
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -528,15 +528,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/AKCondinoO/Sims/Actors/Homunculi/Lif/_3D/Original
+  - Assets/AKCondinoO/Voxels/Terrain
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arthu\Documentos\GitHub\AbSolitude
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 228.33334}
-    m_SelectedIDs: 9eb30000
-    m_LastClickedID: 45982
+    scrollPos: {x: 0, y: 1860.3334}
+    m_SelectedIDs: 74b50000
+    m_LastClickedID: 46452
     m_ExpandedIDs: 000000000eb3000010b3000012b3000014b3000016b3000018b300001ab300001cb300001eb3000020b3000022b3000024b3000026b3000028b300002ab300002cb300002eb3000030b3000032b3000034b3000036b3000038b300003ab300003cb300003eb3000040b3000042b3000044b3000046b3000048b300004ab300004cb300004eb3000050b3000052b3000054b3000056b3000058b300005ab300005cb300005eb3000060b3000062b3000064b3000066b3000068b300006ab300006cb300006eb3000070b3000072b3000074b3000076b3000078b300007ab300007cb300007eb3000080b3000082b3000084b3000086b3000088b300008ab300008cb300008eb3000090b3000092b3000094b3000096b3000098b300009ab300009cb300009eb30000a0b30000a2b30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -594,7 +594,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009a9100003ca300000000000004430000d04300000e1801006254000062570000ee590000c055000064b8ffffe6d4ffff3c590000ca5900001e6c0000b6630000608f00003c8f00003a630000f6610000386600002074000026710000367400004a730000ae720000d2740000947100006e72000096bc000040b20000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -620,7 +620,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 79.33334}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 223.40005
@@ -647,7 +647,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1
     y: 19
-    width: 672.6667
+    width: 675.3333
     height: 385
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1129,9 +1129,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.29845613, y: -0.16175988, z: 0.051154617, w: -0.9393475}
   m_Size:
-    m_Target: 3.3165922
+    m_Target: 4.2841873
     speed: 2
-    m_Value: 3.3165922
+    m_Value: 4.2841873
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1325,7 +1325,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1
     y: 425
-    width: 672.6667
+    width: 675.3333
     height: 200.33331
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1359,9 +1359,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 987.6667
+    x: 990.3333
     y: 19
-    width: 292.3333
+    width: 289.6667
     height: 606.3333
   m_SerializedDataModeController:
     m_DataMode: 0

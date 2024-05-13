@@ -13,11 +13,14 @@ namespace AKCondinoO.Sims.Actors{
          }
          ResetRotation(onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
         }
+     [SerializeField]internal float snipeMinTimeBeforeCanChase=8f;
+     internal float onSnipeTime;
      internal float onSnipeRetreatTime=3f;
      internal float onSnipeRetreatDis;
      protected bool onSnipeAlternateRetreatShoot=false;
         protected virtual void OnSNIPE_ST_Start(){
          Log.DebugMessage("OnSNIPE_ST_Start()");
+         onSnipeTime=0f;
          onSnipeAlternateRetreatShoot=false;
          if(
           IsTraversingPath()
@@ -31,6 +34,7 @@ namespace AKCondinoO.Sims.Actors{
      bool onSnipeReloading;
      bool onSnipeShooting;
         protected virtual void OnSNIPE_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
+         onSnipeTime+=Time.deltaTime;
          if(MyEnemy==null){
           return;
          }

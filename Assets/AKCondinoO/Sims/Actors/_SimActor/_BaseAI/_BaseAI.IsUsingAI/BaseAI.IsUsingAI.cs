@@ -68,11 +68,12 @@ namespace AKCondinoO.Sims.Actors{
           }
           if(MyEnemy!=null){
            if(isInAttackRangeWithWeapon){
-            if(!isInAttackRange||(IsFasterThan(MyEnemy)&&(
+            if(!isInAttackRange||(
+              IsFasterThan(MyEnemy)&&(
               attackDistance.z<attackDistanceWithWeapon.z||
               attackDistance.x<attackDistanceWithWeapon.x||
-              attackDistance.y<attackDistanceWithWeapon.y
-             ))
+              attackDistance.y<attackDistanceWithWeapon.y)
+             )
             ){
              if(MyState!=State.SNIPE_ST){
               OnSNIPE_ST_Start();
@@ -84,6 +85,12 @@ namespace AKCondinoO.Sims.Actors{
            if(isInAttackRange){
             MyState=State.ATTACK_ST;
             goto _MyStateSet;
+           }
+           if(MyState==State.SNIPE_ST){
+            if(onSnipeTime<snipeMinTimeBeforeCanChase){
+             MyState=State.SNIPE_ST;
+             goto _MyStateSet;
+            }
            }
            if(MyState!=State.CHASE_ST){
             OnCHASE_ST_Start();
