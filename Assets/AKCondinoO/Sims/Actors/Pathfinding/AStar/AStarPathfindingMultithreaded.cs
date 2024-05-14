@@ -96,6 +96,21 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
           }
           case(AStarPathfindingBackgroundContainer.Execution.BuildHeap):{
            Log.DebugMessage("Execution.BuildHeap");
+           Vector3Int vCoord1=new Vector3Int(0,0,0);
+           int c=0;
+           for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
+           for(vCoord1.z=0             ;vCoord1.z<container.depth;vCoord1.z++){
+            for(vCoord1.y=0;vCoord1.y<container.height;vCoord1.y++){
+             var ground=container.GetGroundHits.ElementAt(c);
+             bool hasGround=ground.colliderInstanceID!=0;
+             Log.DebugMessage("hasGround:"+hasGround);
+             for(int i=0;i<container.getObstaclesMaxHits;++i){
+              int index=(c*container.getObstaclesMaxHits)+i;
+              var obstacle=container.GetObstaclesOverlaps.ElementAt(index);
+             }
+             ++c;
+            }
+           }}
            break;
           }
          }
