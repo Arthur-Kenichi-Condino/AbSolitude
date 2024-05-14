@@ -85,29 +85,17 @@ namespace AKCondinoO.Sims.Actors{
           sw.Restart();
           switch(runNativeToManagedCoroutineMode){
            case(0):{
-            aStarPathfindingBG.   getGroundHitsManaged.Clear();
-            aStarPathfindingBG.getObstaclesHitsManaged.Clear();
             if(aStarPathfindingBG.GetGroundHits.Length>0){
              Log.DebugMessage("aStarPathfindingBG.GetGroundHits.Length>0");
             }
-            //Vector3Int vCoord1=new Vector3Int(0,0,0);
-            //int c=0;
-            //for(vCoord1.x=0             ;vCoord1.x<aStarPathfindingBG.width;vCoord1.x++){
-            //for(vCoord1.z=0             ;vCoord1.z<aStarPathfindingBG.depth;vCoord1.z++){
-            // for(vCoord1.y=0;vCoord1.y<aStarPathfindingBG.height;vCoord1.y++){
-            //  RaycastHit hit=aStarPathfindingBG.GetGroundHits[c];
-            //  if(hit.colliderInstanceID!=0){
-            //   //Log.DebugMessage("hit.colliderInstanceID!=0");
-            //  }
-            //  aStarPathfindingBG.getGroundHitsManaged.Add((hit,hit.colliderInstanceID!=0&&hit.collider.GetComponent<VoxelTerrainChunk>()!=null));
-            //  for(int i=0;i<aStarPathfindingBG.getObstaclesMaxHits;++i){
-            //   int index=(c*aStarPathfindingBG.getObstaclesMaxHits)+i;
-            //   ColliderHit collider=aStarPathfindingBG.GetObstaclesOverlaps[index];
-            //   aStarPathfindingBG.getObstaclesHitsManaged.Add((collider,collider.instanceID!=0&&collider.collider!=null));
-            //  }
-            //  ++c;
-            // }
-            //}}
+            Vector3Int vCoord1=new Vector3Int(0,0,0);
+            int c=0;
+            for(vCoord1.x=0             ;vCoord1.x<aStarPathfindingBG.width;vCoord1.x++){
+            for(vCoord1.z=0             ;vCoord1.z<aStarPathfindingBG.depth;vCoord1.z++){
+             for(vCoord1.y=0;vCoord1.y<aStarPathfindingBG.height;vCoord1.y++){
+              ++c;
+             }
+            }}
             break;
            }
           }

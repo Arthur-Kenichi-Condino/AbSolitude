@@ -31,12 +31,10 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
       internal JobHandle getGroundRaycastCommandJobHandle{get;set;}
-       internal readonly List<(RaycastHit hit,bool hitTerrain)>getGroundHitsManaged=new();
      internal NativeList<OverlapBoxCommand>GetObstaclesCommands;
      internal NativeList<ColliderHit      >GetObstaclesOverlaps;
       internal readonly int getObstaclesMaxHits;
       internal JobHandle getObstaclesCommandJobHandle{get;set;}
-       internal readonly List<(ColliderHit hit,bool hitObstacle)>getObstaclesHitsManaged=new();
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
          GetGround,
@@ -104,9 +102,14 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
              var ground=container.GetGroundHits.ElementAt(c);
              bool hasGround=ground.colliderInstanceID!=0;
              Log.DebugMessage("hasGround:"+hasGround);
+             bool hasObstacle=false;
              for(int i=0;i<container.getObstaclesMaxHits;++i){
               int index=(c*container.getObstaclesMaxHits)+i;
               var obstacle=container.GetObstaclesOverlaps.ElementAt(index);
+              hasObstacle|=(obstacle.instanceID!=0);
+              if(obstacle.instanceID==0){
+               break;
+              }
              }
              ++c;
             }
