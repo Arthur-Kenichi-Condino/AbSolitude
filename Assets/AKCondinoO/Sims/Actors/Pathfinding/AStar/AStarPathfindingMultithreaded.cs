@@ -102,15 +102,20 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
              var ground=container.GetGroundHits.ElementAt(c);
              bool hasGround=ground.colliderInstanceID!=0;
              Log.DebugMessage("hasGround:"+hasGround);
-             bool invalid=false;
+             bool invalidObstaclesOverlap=false;
              bool hasObstacle=false;
              for(int i=0;i<container.getObstaclesMaxHits;++i){
               int index=(c*container.getObstaclesMaxHits)+i;
               var obstacle=container.GetObstaclesOverlaps.ElementAt(index);
-              invalid|=obstacle.instanceID==0;
-              hasObstacle|=!invalid;
-              if(!invalid){
+              invalidObstaclesOverlap|=obstacle.instanceID==0;
+              hasObstacle|=!invalidObstaclesOverlap;
+              if(!invalidObstaclesOverlap){
               }
+             }
+             Log.DebugMessage("hasObstacle:"+hasObstacle);
+             if(container.nodes.TryGetValue(vCoord1,out Node node)){
+              node.hasGround=hasGround;
+              node.hasObstacle=hasObstacle;
              }
              ++c;
             }

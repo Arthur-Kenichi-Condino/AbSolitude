@@ -46,6 +46,8 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          aStarPathfindingContainers.Clear();
         }
         internal class Node:IHeapItem<Node>{
+         public bool hasGround;
+         public bool hasObstacle;
          public int heapIndex{get;set;}
          public float heuristics{get;private set;}//  heuristics
          public float disToStart {get{return g;}set{g=value;heuristics=g+h;}}float g;//  node dis to start
