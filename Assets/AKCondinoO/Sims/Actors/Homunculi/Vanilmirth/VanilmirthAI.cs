@@ -22,10 +22,10 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
          requiredSkills.Add(typeof(ChaoticBlessing),new SkillData(){skill=typeof(ChaoticBlessing),level=10,});
          base.OnActivated();
         }
-        protected override void OnIDLE_ST_Routine(){
-         //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);
-         //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
-         base.OnIDLE_ST_Routine();
-        }
+        //protected override void OnIDLE_ST_Routine(){
+        // //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);
+        // //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterSimObject:"+masterSimObject);
+        // base.OnIDLE_ST_Routine();
+        //}
     }
 }

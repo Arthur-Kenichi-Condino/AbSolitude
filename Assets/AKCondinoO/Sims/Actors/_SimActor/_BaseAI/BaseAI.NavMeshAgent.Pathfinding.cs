@@ -5,7 +5,10 @@ using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
+     internal Vector3 dest{get{return ai==null?transform.position:ai.MyDest;}}
+        internal partial class AI{
+         internal Vector3 MyDest;
+        }
      protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
         internal enum PathfindingResult:int{
          IDLE                      =0,
@@ -16,6 +19,7 @@ namespace AKCondinoO.Sims.Actors{
          TRAVELLING_BUT_UNREACHABLE=5,
          TIMEOUT                   =6,
          UNREACHABLE               =7,
+         PAUSED                    =8,
         }
      [SerializeField]protected float pathfindingTimeout=3f;
       protected float pathfindingTimer;
@@ -23,6 +27,9 @@ namespace AKCondinoO.Sims.Actors{
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
+         if(movePaused){
+          return PathfindingResult.PAUSED;
+         }
          if(pathPendingTimer>0f){
             pathPendingTimer-=Time.deltaTime;
           if(pathPendingTimer<=0f){

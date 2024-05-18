@@ -15,32 +15,32 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-        protected virtual void OnFOLLOW_ST_Routine(){
-         //Log.DebugMessage("OnFOLLOW_ST_Routine()");
-         stopPathfindingOnTimeout=false;//
-         if(
-          !IsTraversingPath()
-         ){
-          if(masterSimObject is BaseAI masterAI){
-           if(masterAI.isUsingAI){
-            if(masterAI.state==State.IDLE_ST){
-             MoveToMasterRandom(masterAI,4f);
-            }else{
-             MoveToMaster      (masterAI,0f);
-            }
-           }else{
-            if(!masterAI.IsMoving()){
-             MoveToMasterRandom(masterAI,4f);
-            }else{
-             MoveToMaster      (masterAI,0f);
-            }
-           }
-          }else{
-          }
-         }
-        }
-        protected bool IsMoving(){
-         return moveVelocityFlattened!=0f||teleportedMove;
-        }
+        //protected virtual void OnFOLLOW_ST_Routine(){
+        // //Log.DebugMessage("OnFOLLOW_ST_Routine()");
+        // stopPathfindingOnTimeout=false;//
+        // if(
+        //  !IsTraversingPath()
+        // ){
+        //  if(masterSimObject is BaseAI masterAI){
+        //   if(masterAI.isUsingAI){
+        //    if(masterAI.state==State.IDLE_ST){
+        //     MoveToMasterRandom(masterAI,4f);
+        //    }else{
+        //     MoveToMaster      (masterAI,0f);
+        //    }
+        //   }else{
+        //    if(!masterAI.IsMoving()){
+        //     MoveToMasterRandom(masterAI,4f);
+        //    }else{
+        //     MoveToMaster      (masterAI,0f);
+        //    }
+        //   }
+        //  }else{
+        //  }
+        // }
+        //}
+        //protected bool IsMoving(){
+        // return moveVelocityFlattened!=0f||teleportedMove;
+        //}
     }
 }

@@ -118,8 +118,8 @@ MonoBehaviour:
   snipeMinTimeBeforeCanChase: 8
   onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 32
-    tgtRotLerpMaxTime: 1
+    tgtRotLerpSpeed: 10
+    tgtRotLerpMaxTime: 1.5
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
     zLerp:
       tgtValLerpSpeed: 76
       tgtValLerpMaxTime: 0.0005
-  layerTransitionSpeed: 64
+  layerTransitionSpeed: 10
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer

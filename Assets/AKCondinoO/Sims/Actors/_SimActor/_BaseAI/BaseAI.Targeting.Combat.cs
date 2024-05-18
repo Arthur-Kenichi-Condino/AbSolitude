@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        internal partial class AI{
+         protected Vector3 MyAttackRange{get{return me.attackRange;}}
+        }
         internal override bool IsMonster(){
          return MyAggressionMode==AggressionMode.AggressiveToAll;
         }
@@ -61,7 +64,7 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
+     [SerializeField]internal Vector3 attackRange=new Vector3(1f,1f,1f);
      readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
         internal Vector3 AttackDistance(bool checkWeapon=false){
          float radius=GetRadius();
@@ -72,10 +75,11 @@ namespace AKCondinoO.Sims.Actors{
            weaponRange=Mathf.Max(weaponRange,weapon.shootDis);
           }
          }
+         float height=GetHeight();
          return new Vector3(
-          radius+MyAttackRange.x,
-          GetHeight()+MyAttackRange.y,
-          radius+Mathf.Max(MyAttackRange.z,weaponRange)
+          radius+attackRange.x,
+          height+attackRange.y,
+          Mathf.Max(radius+attackRange.z,radius+weaponRange)
          );
         }
         internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,bool checkWeapon=false){

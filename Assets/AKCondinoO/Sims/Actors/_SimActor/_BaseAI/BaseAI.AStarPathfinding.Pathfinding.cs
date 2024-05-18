@@ -88,11 +88,11 @@ namespace AKCondinoO.Sims.Actors{
             if(aStarPathfindingBG.GetGroundHits.Length>0){
              Log.DebugMessage("aStarPathfindingBG.GetGroundHits.Length>0");
             }
-            Vector3Int vCoord1=new Vector3Int(0,0,0);
+            Vector3Int nCoord1=new Vector3Int(0,0,0);
             int c=0;
-            for(vCoord1.x=0             ;vCoord1.x<aStarPathfindingBG.width;vCoord1.x++){
-            for(vCoord1.z=0             ;vCoord1.z<aStarPathfindingBG.depth;vCoord1.z++){
-             for(vCoord1.y=0;vCoord1.y<aStarPathfindingBG.height;vCoord1.y++){
+            for(nCoord1.x=0             ;nCoord1.x<aStarPathfindingBG.width;nCoord1.x++){
+            for(nCoord1.z=0             ;nCoord1.z<aStarPathfindingBG.depth;nCoord1.z++){
+             for(nCoord1.y=0;nCoord1.y<aStarPathfindingBG.height;nCoord1.y++){
               ++c;
              }
             }}

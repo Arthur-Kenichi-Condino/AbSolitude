@@ -32,7 +32,11 @@ namespace AKCondinoO.Sims.Actors{
        internal float heightCrouching;
      internal SimAnimatorController animatorController;
      internal AISensor aiSensor;
+     protected AI ai;
         protected override void Awake(){
+         if(ai==null){
+          ai=new AI(this);
+         }
          InitTargets();
          base.Awake();
          aiSensor=GetComponentInChildren<AISensor>();
@@ -141,14 +145,14 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
          lastForward=transform.forward;
          OnResetMotion();
-         if(onAttackGetDataCoroutine!=null){
-          StopCoroutine(onAttackGetDataCoroutine);onAttackGetDataCoroutine=null;
+         if(ai.attackSt.getDataCoroutine!=null){
+          StopCoroutine(ai.attackSt.getDataCoroutine);ai.attackSt.getDataCoroutine=null;
          }
-         onAttackGetDataCoroutine=StartCoroutine(OnAttackGetDataCoroutine());
-         if(onChaseGetDataCoroutine!=null){
-          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         ai.attackSt.getDataCoroutine=StartCoroutine(ai.attackSt.GetDataCoroutine());
+         if(ai.chaseSt.getDataCoroutine!=null){
+          StopCoroutine(ai.chaseSt.getDataCoroutine);ai.chaseSt.getDataCoroutine=null;
          }
-         onChaseGetDataCoroutine=StartCoroutine(OnChaseGetDataCoroutine());
+         ai.chaseSt.getDataCoroutine=StartCoroutine(ai.chaseSt.GetDataCoroutine());
          if(animatorController!=null){
           if(animatorController.animationEventsHandler!=null){
            animatorController.animationEventsHandler.CancelAllEvents();
@@ -160,8 +164,11 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController!=null){
           characterController.weaponsReloading.Clear();
          }
-         if(onChaseGetDataCoroutine!=null){
-          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         if(ai.attackSt.getDataCoroutine!=null){
+          StopCoroutine(ai.attackSt.getDataCoroutine);ai.attackSt.getDataCoroutine=null;
+         }
+         if(ai.chaseSt.getDataCoroutine!=null){
+          StopCoroutine(ai.chaseSt.getDataCoroutine);ai.chaseSt.getDataCoroutine=null;
          }
          if(aiSensor){
           aiSensor.Deactivate();
@@ -303,7 +310,18 @@ namespace AKCondinoO.Sims.Actors{
              if(characterController!=null){
                 characterController.ManualUpdateUsingAI();
              }
-             AI();
+             ai.main();
+             if(
+              IsTraversingPath()
+             ){
+              if(
+               IsAttacking()||
+               !IsTurnedToTargetDir()
+              ){
+               MoveStop();
+              }
+             }
+             UpdateMotion(true);
             }
            }else{
             if(wasUsingAI){

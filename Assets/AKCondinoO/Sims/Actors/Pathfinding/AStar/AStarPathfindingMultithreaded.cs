@@ -35,6 +35,10 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
      internal NativeList<ColliderHit      >GetObstaclesOverlaps;
       internal readonly int getObstaclesMaxHits;
       internal JobHandle getObstaclesCommandJobHandle{get;set;}
+     internal NativeList<BoxcastCommand>GetFloorRays;
+     internal NativeList<RaycastHit    >GetFloorHits;
+     internal NativeList<BoxcastCommand>GetCeilingRays;
+     internal NativeList<RaycastHit    >GetCeilingHits;
      internal readonly Dictionary<Vector3Int,Node>nodes=new();
         internal enum Execution{
          GetGround,
@@ -51,26 +55,26 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
            container.GetGroundHits.Clear();
            container.GetObstaclesCommands.Clear();
            container.GetObstaclesOverlaps.Clear();
-           QueryParameters queryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer,true);
+           QueryParameters getGroundQueryParameters=new QueryParameters(AStarPathfindingHelper.aStarLayer,true);
            QueryParameters getObstaclesQueryParameters=new QueryParameters(AStarPathfindingHelper.aStarGetObstaclesLayer,true);
-           Vector3Int vCoord1=new Vector3Int(0,0,0);
+           Vector3Int nCoord1=new Vector3Int(0,0,0);
            int c=0;
-           for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
-           for(vCoord1.z=0             ;vCoord1.z<container.depth;vCoord1.z++){
-            Vector3 center=vCoord1;
+           for(nCoord1.x=0             ;nCoord1.x<container.width;nCoord1.x++){
+           for(nCoord1.z=0             ;nCoord1.z<container.depth;nCoord1.z++){
+            Vector3 center=nCoord1;
                     center.x*=container.nodeWidth;
                     center.z*=container.nodeWidth;
                     center.x+=container.dest.x-(container.width*container.nodeWidth)/2f+container.nodeWidth/2f;
                     center.z+=container.dest.z-(container.depth*container.nodeWidth)/2f+container.nodeWidth/2f;
-            for(vCoord1.y=0;vCoord1.y<container.height;vCoord1.y++){
-             center.y=vCoord1.y*container.nodeHeight;
+            for(nCoord1.y=0;nCoord1.y<container.height;nCoord1.y++){
+             center.y=nCoord1.y*container.nodeHeight;
              center.y+=container.dest.y-(container.height*container.nodeHeight)/2f+container.nodeHeight/2f;
-             if(!container.nodes.TryGetValue(vCoord1,out Node node)){
-              container.nodes.Add(vCoord1,node=new Node());
+             if(!container.nodes.TryGetValue(nCoord1,out Node node)){
+              container.nodes.Add(nCoord1,node=new Node());
              }
              node.center=center;
              Vector3 from=center+new Vector3(0f,container.nodeHeight/2f,0f);
-             RaycastCommand raycast=new RaycastCommand(from,Vector3.down,queryParameters,container.nodeHeight);
+             RaycastCommand raycast=new RaycastCommand(from,Vector3.down,getGroundQueryParameters,container.nodeHeight);
              container.GetGroundRays.AddNoResize(raycast         );
              container.GetGroundHits.AddNoResize(new RaycastHit());
              OverlapBoxCommand overlapBox=new OverlapBoxCommand(
@@ -94,11 +98,11 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
           }
           case(AStarPathfindingBackgroundContainer.Execution.BuildHeap):{
            Log.DebugMessage("Execution.BuildHeap");
-           Vector3Int vCoord1=new Vector3Int(0,0,0);
+           Vector3Int nCoord1=new Vector3Int(0,0,0);
            int c=0;
-           for(vCoord1.x=0             ;vCoord1.x<container.width;vCoord1.x++){
-           for(vCoord1.z=0             ;vCoord1.z<container.depth;vCoord1.z++){
-            for(vCoord1.y=0;vCoord1.y<container.height;vCoord1.y++){
+           for(nCoord1.x=0             ;nCoord1.x<container.width;nCoord1.x++){
+           for(nCoord1.z=0             ;nCoord1.z<container.depth;nCoord1.z++){
+            for(nCoord1.y=0;nCoord1.y<container.height;nCoord1.y++){
              var ground=container.GetGroundHits.ElementAt(c);
              bool hasGround=ground.colliderInstanceID!=0;
              Log.DebugMessage("hasGround:"+hasGround);
@@ -113,7 +117,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
               }
              }
              Log.DebugMessage("hasObstacle:"+hasObstacle);
-             if(container.nodes.TryGetValue(vCoord1,out Node node)){
+             if(container.nodes.TryGetValue(nCoord1,out Node node)){
               node.hasGround=hasGround;
               node.hasObstacle=hasObstacle;
              }

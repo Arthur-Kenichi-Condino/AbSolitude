@@ -8,7 +8,10 @@ using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected SimObject MyEnemy=null;internal SimObject enemy{get{return MyEnemy;}}
+     internal SimObject enemy{get{return ai?.MyEnemy;}}
+        internal partial class AI{
+         internal SimObject MyEnemy=null;
+        }
         internal enum GotTargetMode:int{
          FromMaster=0,
          FromSlave=1,
@@ -44,7 +47,7 @@ namespace AKCondinoO.Sims.Actors{
           OnRemoveTarget(id);
          }
          targetsToRemove.Clear();
-         MyEnemy=null;
+         ai.MyEnemy=null;
         }
       internal readonly Dictionary<(Type simType,ulong number),(GotTargetMode mode,EnemyPriority priority)>targetsByPriority=new Dictionary<(Type,ulong),(GotTargetMode,EnemyPriority)>();
        internal readonly Dictionary<(Type simType,ulong number),float>targetTimeouts=new Dictionary<(Type,ulong),float>();
@@ -53,20 +56,20 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]protected float renewEnemyInterval=3f;
       protected float renewEnemyTimer=3f;
         internal virtual void RenewTargets(){
-         if(MyEnemy!=null){
-          if(MyEnemy.id==null||(targetTimeouts.TryGetValue(MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)){
-           MyEnemy=null;
+         if(ai.MyEnemy!=null){
+          if(ai.MyEnemy.id==null||(targetTimeouts.TryGetValue(ai.MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)){
+           ai.MyEnemy=null;
           }else{
            renewEnemyTimer-=Time.deltaTime;
            if(renewEnemyTimer<=0f){
             renewEnemyTimer=renewEnemyInterval;
-            MyEnemy=null;
+            ai.MyEnemy=null;
            }
           }
          }else{
           renewEnemyTimer=renewEnemyInterval;
          }
-         SimObject myEnemy=MyEnemy;
+         SimObject myEnemy=ai.MyEnemy;
          foreach(var targetsByGottenMode in targetsGotten){
           GotTargetMode gotTargetMode=targetsByGottenMode.Key;
           foreach(var targetsByPriority in targetsByGottenMode.Value){
@@ -93,10 +96,10 @@ namespace AKCondinoO.Sims.Actors{
             targetDis[id]=Vector3.Distance(transform.position,target.transform.position);
             if(myEnemy==null&&targetDis[id]<closestDis){
              closestDis=targetDis[id];
-             MyEnemy=target;
+             ai.MyEnemy=target;
             }
            }
-           myEnemy=MyEnemy;
+           myEnemy=ai.MyEnemy;
           }
          }
          foreach((Type simType,ulong number)id in targetsToRemove){
@@ -122,9 +125,9 @@ namespace AKCondinoO.Sims.Actors{
           targetDis     .Remove(id);
          }
          if(validateMyEnemy){
-          if(MyEnemy!=null){
-           if(MyEnemy.id==id){
-            MyEnemy=null;
+          if(ai.MyEnemy!=null){
+           if(ai.MyEnemy.id==id){
+            ai.MyEnemy=null;
            }
           }
          }
