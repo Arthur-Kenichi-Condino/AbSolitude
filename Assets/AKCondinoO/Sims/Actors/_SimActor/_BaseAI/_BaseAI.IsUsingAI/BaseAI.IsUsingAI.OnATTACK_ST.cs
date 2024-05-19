@@ -29,44 +29,60 @@ namespace AKCondinoO.Sims.Actors{
                 internal void Start(){
                  targetsToAvoidRefreshedFlag=false;
                  shouldAvoid=false;
+                 avoiding=false;
                 }
              bool shouldAvoid;
+              bool avoiding;
                 internal void DoRoutine(){
                  if(MyEnemy==null){
                   me.MoveStop();
                   return;
                  }
-                 if(targetsToAvoidRefreshedFlag){
-                  shouldAvoid=hasFriendlyTargetsToAvoid.Count>0;
+                 if(avoiding){
+                  if(!me.IsTraversingPath()){
+                   Log.DebugMessage("stop avoiding");
+                   shouldAvoid=false;
+                   avoiding=false;
+                  }else{
+                   Log.DebugMessage("I am avoiding");
+                  }
                  }
-                 me.MoveStop();
+                 if(targetsToAvoidRefreshedFlag){
+                  targetsToAvoidRefreshedFlag=false;
+                  shouldAvoid=hasFriendlyTargetsToAvoid.Count>0;
+                  //shouldAvoid=true;
+                 }
                  Log.DebugMessage("shouldAvoid:"+shouldAvoid);
                  if(shouldAvoid){
-                  Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
-                  destDir.y=0f;
-                  float destAngle=0f;
-                  for(int i=0;i<hasFriendlyTargetsToAvoid.Count;++i){
-                   Log.DebugMessage("hasFriendlyTargetsToAvoid[i]:"+hasFriendlyTargetsToAvoid[i].sim.name);
-                   RaycastHit hit=hasFriendlyTargetsToAvoid[i].hit;
-                   SimObject simHit=hasFriendlyTargetsToAvoid[i].sim;
-                   Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
-                   dirFromAllyToEnemy.y=0f;
-                   //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
-                   Vector3 dirFromEnemyToMe=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
-                   dirFromEnemyToMe.y=0f;
-                   //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
-                   float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
-                   destAngle+=angle;
+                  if(!avoiding){
+                   Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
+                   destDir.y=0f;
+                   float destAngle=0f;
+                   for(int i=0;i<hasFriendlyTargetsToAvoid.Count;++i){
+                    Log.DebugMessage("hasFriendlyTargetsToAvoid[i]:"+hasFriendlyTargetsToAvoid[i].sim.name);
+                    RaycastHit hit=hasFriendlyTargetsToAvoid[i].hit;
+                    SimObject simHit=hasFriendlyTargetsToAvoid[i].sim;
+                    Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
+                    dirFromAllyToEnemy.y=0f;
+                    //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
+                    Vector3 dirFromEnemyToMe=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
+                    dirFromEnemyToMe.y=0f;
+                    //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
+                    float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
+                    destAngle+=angle;
+                   }
+                   if(destAngle!=0f){
+                    destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+                    Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
+                   }
+                   Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.1f);
+                   //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
+                   ai.MyDest=dest;
+                   avoiding=true;
                   }
-                  if(destAngle!=0f){
-                   destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-                   Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
-                  }
-                  Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.1f);
-                  //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
-                  ai.MyDest=dest;
                   me.Move(ai.MyDest);
                  }else{
+                  me.MoveStop();
                   me.Attack(ai.MyEnemy);
                  }
                 }
@@ -77,7 +93,6 @@ namespace AKCondinoO.Sims.Actors{
              protected RaycastHit[]inTheWayColliderHits=new RaycastHit[8];
               protected int inTheWayColliderHitsCount=0;
              readonly List<(SimObject sim,RaycastHit hit)>hasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
-             bool targetsToAvoidWaitingRefreshFlag;
              bool targetsToAvoidRefreshedFlag;
                 internal virtual IEnumerator GetDataCoroutine(){
                  getDataThrottler=new WaitUntil(
