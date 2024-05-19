@@ -100,7 +100,7 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 4
   pathfindingTimeout: 3
   pathPendingTimeout: 6
-  attackRange: {x: 0.25, y: 0.25, z: 0.75}
+  attackRange: {x: 0.25, y: 0.25, z: 1.125}
   hitboxesPrefabs: {fileID: 4173842238774049089, guid: 16800c44b6c3fc44880fdc75a70aa0f5, type: 3}
   hurtboxesPrefabs: {fileID: 4038989006948901071, guid: 9dc5281f352071a43a66aa62b7241d77, type: 3}
   renewEnemyInterval: 3
