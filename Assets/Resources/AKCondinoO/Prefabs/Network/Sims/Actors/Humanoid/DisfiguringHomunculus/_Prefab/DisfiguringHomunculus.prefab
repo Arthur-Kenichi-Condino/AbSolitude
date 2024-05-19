@@ -158,27 +158,16 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 1.5
   pathfindingTimeout: 3
   pathPendingTimeout: 6
-  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
+  attackRange: {x: 0.25, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 5174956497298777513, guid: a78bf211ae2cf5c4688024ffd00ea111, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 2
-  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
+  sniper: 0
+  aiRotTurnTo:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 64
-    tgtRotLerpMaxTime: 0.5
-  onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 64
-    tgtRotLerpMaxTime: 0.5
-  doIdleMove: 1
-  useRunSpeedChance: 0.5
-  delayToRandomMove: 4
-  snipeMinTimeBeforeCanChase: 8
-  onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 32
-    tgtRotLerpMaxTime: 1
+    tgtRotLerpSpeed: 10
+    tgtRotLerpMaxTime: 1.5
 --- !u!114 &-5906123023762645204
 MonoBehaviour:
   m_ObjectHideFlags: 0

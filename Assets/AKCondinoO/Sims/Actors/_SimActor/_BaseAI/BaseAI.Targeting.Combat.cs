@@ -64,7 +64,7 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     [SerializeField]internal Vector3 attackRange=new Vector3(1f,1f,1f);
+     [SerializeField]internal Vector3 attackRange=new Vector3(0.25f,0.25f,0.25f);
      readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
         internal Vector3 AttackDistance(bool checkWeapon=false){
          float radius=GetRadius();
@@ -90,8 +90,9 @@ namespace AKCondinoO.Sims.Actors{
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
          attackDistance=AttackDistance(checkWeapon);
+         float radius=GetRadius();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
-         if((disXZPlane<=attackDistance.z+simObjectRadius||disXZPlane<=attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
+         if((disXZPlane<=radius+attackDistance.z+simObjectRadius||disXZPlane<=radius+attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
           return true;
          }

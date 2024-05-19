@@ -10,9 +10,9 @@ namespace AKCondinoO.Sims.Actors{
         internal partial class AI{
         }
      protected Vector3 moveDest;
-        internal void Move(Vector3 dest){
+        internal bool Move(Vector3 dest){
          if(ai==null){
-          return;
+          return false;
          }
          if(
           !IsTraversingPath()
@@ -22,7 +22,9 @@ namespace AKCondinoO.Sims.Actors{
          moveDest=dest;
          if(TurnToMoveDest()){
           navMeshAgent.destination=moveDest;
+          return true;
          }
+         return false;
         }
         internal void MoveStop(){
          if(ai==null){
@@ -53,10 +55,12 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.destination=moveDest;
          }
         }
-        internal void Attack(SimObject enemy){
-         if(TurnToMyEnemy()){
+        internal bool Attack(SimObject enemy){
+         bool result=false;
+         if(result=TurnToMyEnemy()){
           DoAttackOnAnimationEvent();
          }
+         return result;
         }
     }
 }
