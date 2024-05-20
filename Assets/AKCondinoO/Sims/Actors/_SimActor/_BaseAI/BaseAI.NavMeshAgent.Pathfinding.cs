@@ -21,12 +21,15 @@ namespace AKCondinoO.Sims.Actors{
          UNREACHABLE               =7,
          PAUSED                    =8,
         }
-     [SerializeField]protected float pathfindingTimeout=3f;
+     [SerializeField]protected float pathfindingTimeout=8f;
       protected float pathfindingTimer;
       [SerializeField]protected float pathPendingTimeout=4f;
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
+         if(Vector3.Distance(navMeshAgent.destination,transform.position)<=navMeshAgent.stoppingDistance){
+          return PathfindingResult.IDLE;
+         }
          if(movePaused){
           return PathfindingResult.PAUSED;
          }
@@ -49,6 +52,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          pathPendingTimer=0f;
          if(!navMeshAgent.hasPath){
+          Log.DebugMessage("!navMeshAgent.hasPath");
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }
@@ -57,6 +61,7 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.remainingDistance==float.NaN     ||
           navMeshAgent.remainingDistance<0
          ){
+          Log.DebugMessage("navMeshAgent.remainingDistance invalid:"+navMeshAgent.remainingDistance);
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }

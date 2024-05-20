@@ -156,9 +156,9 @@ MonoBehaviour:
   canBeThirdPersonCamFollowed: 0
   navMeshAgentWalkSpeed: 1
   navMeshAgentRunSpeed: 1.5
-  pathfindingTimeout: 3
+  pathfindingTimeout: 8
   pathPendingTimeout: 6
-  attackRange: {x: 0.25, y: 0.25, z: 0.25}
+  attackRange: {x: 0.5, y: 0.5, z: 0.5}
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 5174956497298777513, guid: a78bf211ae2cf5c4688024ffd00ea111, type: 3}
   renewEnemyInterval: 3

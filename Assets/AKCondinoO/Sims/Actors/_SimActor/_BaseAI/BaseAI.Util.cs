@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,6 +63,18 @@ namespace AKCondinoO.Sims.Actors{
          Vector3 dir=(this.transform.position-masterAI.transform.position).normalized;
          Vector3 dest=masterAI.transform.position+dir*(this.characterController.character.radius/2f+masterAI.characterController.character.radius/2f);
          Move(dest);
+        }
+        protected virtual void TeleportToRandomNearMyEnemy(Vector3 distance){
+         if(ai==null){
+          return;
+         }
+         if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
+          teleport.targetDest=ai.MyEnemy.transform.position;
+          teleport.cooldown=0f;
+          teleport.useRandom=true;
+          teleport.randomMaxDis=distance.z*1.1f;
+          teleport.DoSkill(this,1);
+         }
         }
      Vector3 targetDir;
         protected virtual void TurnToTargetDir(Vector3 lookDir){

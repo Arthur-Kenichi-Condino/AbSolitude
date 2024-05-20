@@ -53,7 +53,6 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 attackDistanceWithWeapon;
             internal virtual void main(){
              me.RenewTargets();
-             me.MyPathfinding=me.GetPathfindingResult();
              me.stopPathfindingOnTimeout=true;
              //Log.DebugMessage("me.MyPathfinding is:"+me.MyPathfinding);
              isInAttackRange          =false;

@@ -310,15 +310,18 @@ namespace AKCondinoO.Sims.Actors{
              if(characterController!=null){
                 characterController.ManualUpdateUsingAI();
              }
+             MyPathfinding=GetPathfindingResult();
              ai.main();
              if(
               IsTraversingPath()
              ){
               if(
-               IsAttacking()||
-               !IsTurnedToTargetDir()
+               IsAttacking()
               ){
                MoveStop();
+               TurnToMyEnemy();
+              }else{
+               TurnToMoveDest();
               }
              }
              UpdateMotion(true);
