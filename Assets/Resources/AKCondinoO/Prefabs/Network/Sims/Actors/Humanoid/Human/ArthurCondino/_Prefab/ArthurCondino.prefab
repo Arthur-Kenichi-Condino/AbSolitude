@@ -107,8 +107,8 @@ MonoBehaviour:
   sniper: 0
   aiRotTurnTo:
     dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 10
-    tgtRotLerpMaxTime: 1.5
+    tgtRotLerpSpeed: 20
+    tgtRotLerpMaxTime: 1.25
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0

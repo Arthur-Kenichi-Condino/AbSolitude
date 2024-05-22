@@ -6,10 +6,11 @@ using UnityEngine.AI;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      internal Vector3 dest{get{return ai==null?transform.position:ai.MyDest;}}
+     internal PathfindingResult pathfinding{get{return ai==null?PathfindingResult.IDLE:ai.MyPathfinding;}}
         internal partial class AI{
          internal Vector3 MyDest;
+         internal PathfindingResult MyPathfinding=PathfindingResult.IDLE;
         }
-     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
         internal enum PathfindingResult:int{
          IDLE                      =0,
          REACHED                   =1,
@@ -96,11 +97,11 @@ namespace AKCondinoO.Sims.Actors{
          return PathfindingResult.REACHED;
         }
         internal virtual bool IsTraversingPath(){
-         return!(
-          MyPathfinding==PathfindingResult.IDLE||
-          MyPathfinding==PathfindingResult.REACHED||
-          MyPathfinding==PathfindingResult.TIMEOUT||
-          MyPathfinding==PathfindingResult.UNREACHABLE
+         return ai!=null&&!(
+          ai.MyPathfinding==PathfindingResult.IDLE||
+          ai.MyPathfinding==PathfindingResult.REACHED||
+          ai.MyPathfinding==PathfindingResult.TIMEOUT||
+          ai.MyPathfinding==PathfindingResult.UNREACHABLE
          );
         }
     }

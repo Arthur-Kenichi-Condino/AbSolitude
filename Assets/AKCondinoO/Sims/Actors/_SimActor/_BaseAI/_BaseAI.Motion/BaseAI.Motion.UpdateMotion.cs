@@ -118,9 +118,10 @@ namespace AKCondinoO.Sims.Actors{
                       (moveVelocityFlattened!=0f||moveStrafeVelocityFlattened!=0f)&&
                       (
                        (!fromAI)||
-                       (MyPathfinding!=PathfindingResult.REACHED&&
-                        MyPathfinding!=PathfindingResult.IDLE&&
-                        MyPathfinding!=PathfindingResult.TRAVELLING_BUT_NO_SPEED
+                       (ai!=null&&
+                        ai.MyPathfinding!=PathfindingResult.REACHED&&
+                        ai.MyPathfinding!=PathfindingResult.IDLE&&
+                        ai.MyPathfinding!=PathfindingResult.TRAVELLING_BUT_NO_SPEED
                        )
                       )
                      ){

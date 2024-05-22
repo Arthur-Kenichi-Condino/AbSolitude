@@ -1,0 +1,204 @@
+Using pre-set license
+Built from '2023.2/staging' branch; Version is '2023.2.19f1 (95c298372b1e) revision 9814680'; Using compiler version '193431935'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22631) 64bit Professional' Language: 'pt' Physical Memory: 31648 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Unity\Hub\Editor\2023.2.19f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/arthu/Documentos/GitHub/AbSolitude
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+1799
+-job-worker-count
+7
+-background-job-worker-count
+8
+-asset-garbage-collectors
+1
+Successfully changed project path to: C:/Users/arthu/Documentos/GitHub/AbSolitude
+C:/Users/arthu/Documentos/GitHub/AbSolitude
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [18972] Host "[IP] 192.168.15.2 [Port] 0 [Flags] 2 [Guid] 1020069386 [EditorId] 1020069386 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [18972] Host "[IP] 192.168.15.2 [Port] 0 [Flags] 2 [Guid] 1020069386 [EditorId] 1020069386 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+JobSystem: Creating JobQueue using job-worker-count value 7
+[Physics::Module] Initialized MultithreadedJobDispatcher with 7 workers.
+Library Redirect Path: Library/
+Refreshing native plugins compatible for Editor in 277.37 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2023.2.19f1 (95c298372b1e)
+[Subsystems] Discovering subsystems at path C:/Unity/Hub/Editor/2023.2.19f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/arthu/Documentos/GitHub/AbSolitude/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 2060 (ID=0x1e89)
+    Vendor:   NVIDIA
+    VRAM:     5945 MB
+    Driver:   31.0.15.5244
+Initialize mono
+Mono path[0] = 'C:/Unity/Hub/Editor/2023.2.19f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Unity/Hub/Editor/2023.2.19f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Unity/Hub/Editor/2023.2.19f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56476
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Unity/Hub/Editor/2023.2.19f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003344 seconds.
+- Loaded All Assemblies, in  1.485 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.306 seconds
+Domain Reload Profiling: 1789ms
+	BeginReloadAssembly (299ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (344ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (49ms)
+	LoadAllAssembliesAndSetupDomain (778ms)
+		LoadAssemblies (296ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (776ms)
+			TypeCache.Refresh (775ms)
+				TypeCache.ScanAssembly (540ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (307ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (249ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (5ms)
+			ProcessInitializeOnLoadAttributes (180ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  3.101 seconds
+Refreshing native plugins compatible for Editor in 1.36 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.857 seconds
+Domain Reload Profiling: 3953ms
+	BeginReloadAssembly (988ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (29ms)
+	RebuildCommonClasses (34ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (2032ms)
+		LoadAssemblies (1851ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (278ms)
+			TypeCache.Refresh (227ms)
+				TypeCache.ScanAssembly (208ms)
+			BuildScriptInfoCaches (40ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (858ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (663ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (72ms)
+			ProcessInitializeOnLoadAttributes (536ms)
+			ProcessInitializeOnLoadMethodAttributes (44ms)
+			AfterProcessingInitializeOnLoad (6ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
+Refreshing native plugins compatible for Editor in 1.75 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 125 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6455 unused Assets / (3.9 MB). Loaded Objects now: 7126.
+Memory consumption went from 236.3 MB to 232.4 MB.
+Total: 9.219800 ms (FindLiveObjects: 0.743000 ms CreateObjectMapping: 1.146600 ms MarkObjects: 4.932100 ms  DeleteObjects: 2.397200 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 75508.052976 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Humanoid/Human/ArthurCondino/_Prefab/ArthurCondino.prefab
+  artifactKey: Guid(a39b44ed1a220f74b9d4f3e0183afa17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Humanoid/Human/ArthurCondino/_Prefab/ArthurCondino.prefab using Guid(a39b44ed1a220f74b9d4f3e0183afa17) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd9b924690a1ac9df88a1e5963720a4af') in 1.2824973 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 240
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.396034 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Humanoid/Human/ArthurCondino/_Prefab/ArthurCondino.prefab
+  artifactKey: Guid(a39b44ed1a220f74b9d4f3e0183afa17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Humanoid/Human/ArthurCondino/_Prefab/ArthurCondino.prefab using Guid(a39b44ed1a220f74b9d4f3e0183afa17) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8c4e5bdc3d9b98e277f97e0ab226cbc6') in 0.650947 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 240
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.900363 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Homunculi/Vanilmirth/Arquimedes/_Prefab/Arquimedes.prefab
+  artifactKey: Guid(7f7f9a9bd1ecb5c4daa742908f21d6d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Homunculi/Vanilmirth/Arquimedes/_Prefab/Arquimedes.prefab using Guid(7f7f9a9bd1ecb5c4daa742908f21d6d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '090b2a50ededc926073b4dd579e85394') in 0.0607518 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 75
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.521494 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Homunculi/Vanilmirth/Arquimedes/_Prefab/Arquimedes.prefab
+  artifactKey: Guid(7f7f9a9bd1ecb5c4daa742908f21d6d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Actors/Homunculi/Vanilmirth/Arquimedes/_Prefab/Arquimedes.prefab using Guid(7f7f9a9bd1ecb5c4daa742908f21d6d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'cd3b066197b6cf583008510edd7e56fb') in 0.0517506 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 75
+

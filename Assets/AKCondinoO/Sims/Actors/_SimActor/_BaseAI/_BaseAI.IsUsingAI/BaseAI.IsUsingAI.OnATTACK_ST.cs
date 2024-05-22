@@ -51,7 +51,7 @@ namespace AKCondinoO.Sims.Actors{
                  }
                  if(avoiding&&avoidingMoving){
                   if(!me.IsTraversingPath()){
-                   Log.DebugMessage("stop avoiding:"+me.MyPathfinding);
+                   Log.DebugMessage("stop avoiding:"+ai.MyPathfinding);
                    shouldAvoid=false;
                    avoiding=false;
                    avoidingMoving=false;

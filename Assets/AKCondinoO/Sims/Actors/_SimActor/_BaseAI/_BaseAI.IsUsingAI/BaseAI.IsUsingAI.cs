@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      [SerializeField]internal bool sniper=false;
-     [SerializeField]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(10,1.5f);
+     [SerializeField]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(20,1.25f);
         internal partial class AI{
          BaseAI me;
             internal AI(BaseAI me){
@@ -59,7 +59,7 @@ namespace AKCondinoO.Sims.Actors{
              //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();
              me.stopPathfindingOnTimeout=true;
-             //Log.DebugMessage("me.MyPathfinding is:"+me.MyPathfinding);
+             //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
              isInAttackRange          =false;
              isInAttackRangeWithWeapon=false;
              if(MyEnemy!=null){
