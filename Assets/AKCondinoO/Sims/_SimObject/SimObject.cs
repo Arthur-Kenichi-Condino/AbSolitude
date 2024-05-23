@@ -232,6 +232,7 @@ namespace AKCondinoO.Sims{
         internal void OnPoolRequest(){
          poolRequested=true;
         }
+     [SerializeField]bool DEBUG_UNPLACE=false;
      Vector3?safePosition;
      [NonSerialized]bool updateRenderersFlag;
      [NonSerialized]bool isOverlapping;
@@ -239,6 +240,10 @@ namespace AKCondinoO.Sims{
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
+         if(DEBUG_UNPLACE){
+            DEBUG_UNPLACE=false;
+          OnUnplaceRequest();
+         }
          if(masterId!=null&&(masterSimObject==null||masterSimObject.id==null||masterSimObject.id.Value!=masterId.Value)){
           Log.DebugMessage("master sim [id:"+masterId+"] validation failed: renew masterObject with GetMaster(); myid:"+id);
           masterSimObject=GetMaster();

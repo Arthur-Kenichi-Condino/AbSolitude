@@ -11,6 +11,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Water.MarchingCubes.MarchingCubesWaterBackgroundContainer;
 namespace AKCondinoO.Voxels.Water.MarchingCubes{
+    //  TO DO: VoxelWater to binary e from binary
     //  marching cubes functions
     internal class MarchingCubesWater{
      internal const double isoLevel=-50.0d;

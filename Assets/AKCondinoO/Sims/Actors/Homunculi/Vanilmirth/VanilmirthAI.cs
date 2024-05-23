@@ -21,6 +21,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
          requiredSkills.Clear();
          requiredSkills.Add(typeof(ChaoticBlessing),new SkillData(){skill=typeof(ChaoticBlessing),level=10,});
          base.OnActivated();
+         attackRange=new Vector3(0.5f,0.5f,.5f);
         }
         //protected override void OnIDLE_ST_Routine(){
         // //Log.DebugMessage("VanilmirthAI:OnIDLE_ST():masterId:"+masterId);

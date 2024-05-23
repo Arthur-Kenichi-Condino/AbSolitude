@@ -80,7 +80,7 @@ MonoBehaviour:
   aStarPathfindingWidth: 16
   aStarPathfindingDepth: 16
   aStarPathfindingHeight: 16
-  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
+  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
@@ -99,7 +99,6 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 4
   pathfindingTimeout: 8
   pathPendingTimeout: 6
-  attackRange: {x: 0.5, y: 0.5, z: 0.5}
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
   renewEnemyInterval: 3
@@ -121,8 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headMaxVerticalRotationAngle: 40
-  headMaxHorizontalRotationAngle: 60
   rotLerp:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 38

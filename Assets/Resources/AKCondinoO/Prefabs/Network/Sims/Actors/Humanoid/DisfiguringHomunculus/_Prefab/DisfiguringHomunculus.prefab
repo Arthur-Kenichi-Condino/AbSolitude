@@ -158,7 +158,7 @@ MonoBehaviour:
   navMeshAgentRunSpeed: 1.5
   pathfindingTimeout: 8
   pathPendingTimeout: 6
-  attackRange: {x: 0.5, y: 0.5, z: 0.5}
+  attackRange: {x: 0.25, y: 0.25, z: 0.125}
   hitboxesPrefabs: {fileID: 5282973744922983389, guid: db9046456634605419f509c44f211884, type: 3}
   hurtboxesPrefabs: {fileID: 5174956497298777513, guid: a78bf211ae2cf5c4688024ffd00ea111, type: 3}
   renewEnemyInterval: 3
@@ -180,8 +180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headMaxVerticalRotationAngle: 40
-  headMaxHorizontalRotationAngle: 60
   rotLerp:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 38

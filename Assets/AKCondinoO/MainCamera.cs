@@ -245,9 +245,9 @@ namespace AKCondinoO{
          }
         }
      QuaternionRotLerpHelper predictCameraPosFollowing_posRotLerp=new QuaternionRotLerpHelper();
-        internal void PredictCameraPosFollowing(Transform transform,Quaternion tgtRot,out Vector3 predictCameraPos,out Quaternion predictCameraRot){
+        internal void PredictCameraPosRawFollowing(Transform transform,Quaternion tgtRot,out Vector3 predictCameraPos,out Quaternion predictCameraRot){
          predictCameraPosFollowing_posRotLerp.tgtRot=tgtRot;
-         Vector3 onlyHeightOffsetTgtPos=transform.position+predictCameraPosFollowing_posRotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
+         //Vector3 onlyHeightOffsetTgtPos=transform.position+predictCameraPosFollowing_posRotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
          predictCameraPos=transform.position+(predictCameraPosFollowing_posRotLerp.tgtRot*thirdPersonOffset);
          predictCameraRot=predictCameraPosFollowing_posRotLerp.tgtRot;
         }

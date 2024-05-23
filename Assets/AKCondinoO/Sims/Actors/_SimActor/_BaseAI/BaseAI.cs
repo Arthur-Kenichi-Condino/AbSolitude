@@ -90,6 +90,7 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
+         attackRange=new Vector3(0.125f,0.125f,0.0625f);
          requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
          requiredSkills.Add(typeof(Teleport        ),new SkillData(){skill=typeof(Teleport        ),level=1 ,});
          //  load skills from file here:

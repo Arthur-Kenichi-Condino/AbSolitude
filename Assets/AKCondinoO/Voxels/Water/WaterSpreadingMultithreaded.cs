@@ -521,21 +521,23 @@ namespace AKCondinoO.Voxels.Water{
          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
           //  carregar dados do bioma aqui em voxels,
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
+          VoxelWater biomeVoxel=new VoxelWater();
+          Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
+                                        noiseInput.z+=cnkRgn1.y;
+          VoxelSystem.biome.SetvxlWater(
+           noiseInput,
+            noiseCache1,
+             oftIdx1,
+              vCoord1.z+vCoord1.x*Depth,
+               ref biomeVoxel
+          );
           VoxelWater voxel;
           if(voxels[oftIdx1].TryGetValue(vxlIdx1,out VoxelWater v1)){
            voxel=v1;
           }else{
+           //  TO DO: remover se é igual ao valor do bioma
            //  valor do bioma
-           voxel=new VoxelWater();
-           Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
-                                         noiseInput.z+=cnkRgn1.y;
-           VoxelSystem.biome.SetvxlWater(
-            noiseInput,
-             noiseCache1,
-              oftIdx1,
-               vCoord1.z+vCoord1.x*Depth,
-                ref voxel
-           );
+           voxel=biomeVoxel;
           }
           if(editData1.ContainsKey(vCoord1)){
            WaterEditOutputData voxelData=editData1[vCoord1];

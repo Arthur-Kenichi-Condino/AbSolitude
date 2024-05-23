@@ -19,6 +19,7 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController!=null){
           transform.rotation=characterController.character.transform.rotation;
           characterController.character.transform.rotation=transform.rotation;
+          characterController.isAiming=false;
          }
         }
         protected virtual void OnStopUsingAI(){
@@ -52,9 +53,6 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 attackDistance          ;
           Vector3 attackDistanceWithWeapon;
             internal virtual void main(){
-             //  colocar MyPathfinding em AI
-             //  aumentar velocidade de rotação
-             //  desativar mira em AI se ativado fora da AI
              //  ajustar corpo para virar para direção da mira com menos diferença de rotação
              //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();
