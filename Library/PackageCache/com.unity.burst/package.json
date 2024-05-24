@@ -1,0 +1,24 @@
+{
+  "name": "com.unity.burst",
+  "displayName": "Burst",
+  "version": "1.8.14",
+  "unity": "2020.3",
+  "description": "Burst is a compiler that translates from IL/.NET bytecode to highly optimized native code using LLVM.",
+  "dependencies": {
+    "com.unity.mathematics": "1.2.1",
+    "com.unity.modules.jsonserialize": "1.0.0"
+  },
+  "_upm": {
+    "changelog": "### Fixed\n- Fixed burst sometimes throwing `FileNotFoundException`\n\n### Added\n\n### Removed\n\n### Changed"
+  },
+  "upmCi": {
+    "footprint": "0c92e2676b0eb6ffbfac8c2a1af3f90807072290"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/burst.git",
+    "type": "git",
+    "revision": "28ccba98c0e235cd4132430d27c667e67cb3fca2"
+  },
+  "_fingerprint": "3864c618b14959368128f2977899d6c8ecf6c3fc"
+}

@@ -26,7 +26,7 @@ namespace AKCondinoO.Sims.Actors{
          [SerializeField]internal ActorMotion motion;
          [SerializeField]internal Transform adjustment;
         }
-     internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
+     internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper(76.0f*8f,0.0005f/8f);
      internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
          foreach(TransformAdjustment transformAdjustment in transformAdjustments){

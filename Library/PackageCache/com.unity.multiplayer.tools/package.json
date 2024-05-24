@@ -1,0 +1,45 @@
+{
+  "name": "com.unity.multiplayer.tools",
+  "displayName": "Multiplayer Tools",
+  "version": "2.1.0",
+  "unity": "2023.3",
+  "description": "Adds a suite of tools that improve workflows for multiplayer development",
+  "dependencies": {
+    "com.unity.profiling.core": "1.0.0-pre.1",
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.nuget.mono-cecil": "1.10.1",
+    "com.unity.collections": "1.1.0",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.burst": "1.6.6",
+    "com.unity.mathematics": "1.2.6"
+  },
+  "keywords": [
+    "Multiplayer",
+    "Netcode",
+    "GameObjects",
+    "Tools"
+  ],
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Network Scenario Samples",
+      "description": "Samples showcasing the different ways of building custom network simulator scenarios.\n\nNote: In order to use these Samples, make sure you have Netcode for GameObjects (com.unity.netcode.gameobjects) 1.1.0 or later and Unity Transport (com.unity.transport) 2.0.0 or later. For more info, please check the Network Simulator documentation: https://docs-multiplayer.unity3d.com/tools/current/tools-network-simulator",
+      "path": "Samples~/NetworkSimulator"
+    }
+  ],
+  "relatedPackages": {
+    "com.unity.multiplayer.tools.tests": "2.1.0"
+  },
+  "_upm": {
+    "changelog": "### *General*\n- Increased minimum version to 2023.3+\n\n### *Network Simulator*\n- Fixed an issue with execution order dependend initialization of NetworkAdapters.\n\n### *Network Scene Visualization*\n- Improved usability when pausing the editor."
+  },
+  "upmCi": {
+    "footprint": "8641f7caa9ed1d413a8e97b33ea2da9f3cad4fdb"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git",
+    "type": "git",
+    "revision": "d39910e6f89deb4d735562fa620e4d4d298c3976"
+  },
+  "_fingerprint": "0dcebea94ca9b890dab09a768fa02e3b9f28c908"
+}

@@ -73,6 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ZAxisIsUp: 0
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
+  DEBUG_UNPLACE: 0
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
@@ -80,7 +81,7 @@ MonoBehaviour:
   aStarPathfindingWidth: 16
   aStarPathfindingDepth: 16
   aStarPathfindingHeight: 16
-  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
+  DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
@@ -103,7 +104,7 @@ MonoBehaviour:
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 0
-  sniper: 0
+  sniper: 1
   aiRotTurnTo:
     dealWithGimbalLock: 1
     tgtRotLerpSpeed: 20
@@ -120,25 +121,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0001
-  viewRotationSmoothValue: 0.025
-  posLerp:
-    tgtPosLerpSpeed: 38
-    tgtPosLerpMaxTime: 0.0001
+  actor: {fileID: 0}
+  character: {fileID: 0}
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
   moveSpeedRunMultiplier: 2
-  isRunningMoveSpeedMultiplierLerp:
-    tgtValLerpSpeed: 76
-    tgtValLerpMaxTime: 0.0005
-  jumpTimeLength: 0.125
-  jumpSpeed: 8
-  aimAtMaxDistance: 1000
 --- !u!114 &4284808389878888570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,23 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  animator: {fileID: 0}
+  skinnedMesh: {fileID: 0}
+  animatorIKController: {fileID: 0}
   transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments: []
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 76
-    tgtRotLerpMaxTime: 0.0005
-  posLerp:
-    xLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-    yLerp:
-      tgtValLerpSpeed: 19
-      tgtValLerpMaxTime: 0.0005
-    zLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-  layerTransitionSpeed: 10
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -247,7 +225,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

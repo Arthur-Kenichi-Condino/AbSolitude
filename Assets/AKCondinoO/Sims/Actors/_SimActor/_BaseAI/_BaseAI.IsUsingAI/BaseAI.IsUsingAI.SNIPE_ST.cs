@@ -16,10 +16,9 @@ namespace AKCondinoO.Sims.Actors{
              internal float minTimeBeforeCanChase=8f;
              internal float time;
                 internal void Finish(){
-                 //if(characterController!=null){
-                 //   characterController.isAiming=false;
-                 //}
-             //    AI_ResetRotation(onSnipePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
+                 if(me.characterController!=null){
+                    me.characterController.isAiming=false;
+                 }
                 }
                 internal void Start(){
                 }

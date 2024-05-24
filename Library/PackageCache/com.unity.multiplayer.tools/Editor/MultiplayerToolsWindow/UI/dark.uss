@@ -1,0 +1,4 @@
+:root {
+    --tools-icon: url('Icons/d_Tools.png');
+    --package-icon: url('Icons/d_Package.png');
+}

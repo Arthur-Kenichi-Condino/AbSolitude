@@ -1,0 +1,80 @@
+.docIcon {
+    background-image: url('Icons/Help@2x.png');
+    -unity-background-scale-mode: scale-to-fit;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+.docIcon:hover {
+    background-color: darkgray;
+}
+
+.titleLine {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.contentLine {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 100%;
+}
+
+.contentLine > .unity-label {
+    white-space: normal;
+    flex-wrap: wrap;
+    padding-right: 20px;
+}
+
+.featureTitle {
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+}
+
+.toolsIcon {
+    background-image: var(--tools-icon);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.horizontalLine {
+    background-color: darkgray;
+    height: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#StatusIcon {
+    -unity-background-scale-mode: scale-to-fit;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    margin-right: 2px;
+    margin-bottom: 5px; /* Will mostly affect 2021.3 where background-position-y is not available   */
+}
+
+.logIcon {
+    background-image: var(--unity-icons-console_entry_info);
+    margin-top: 2px;
+}
+
+.okIcon {
+    background-image: url('Icons/GreenCheckmark@2x.png');
+    margin-top: 5px;
+}
+
+.packageIcon {
+    background-image: var(--package-icon);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+#Header > .unity-label {
+    -unity-font-style: bold;
+    margin-left: 5px;
+}
+
+#PackageRoot {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
