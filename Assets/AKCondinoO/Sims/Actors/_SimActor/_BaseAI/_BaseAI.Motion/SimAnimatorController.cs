@@ -17,6 +17,7 @@ namespace AKCondinoO.Sims.Actors{
       internal Vector3 actorLeft;
        internal Vector3 actorRight;
      [SerializeField]internal Animator animator;
+     [SerializeField]internal SkinnedMeshRenderer skinnedMesh;
      [SerializeField]internal SimAnimatorIKController animatorIKController;
      [SerializeField]internal Transform transformAdjustmentsForUMA;
      [SerializeField][Tooltip("adjust transform rotation, position and scale to correct motion wrong offsets or rotations")]TransformAdjustment[]transformAdjustments;
@@ -114,6 +115,14 @@ namespace AKCondinoO.Sims.Actors{
                    }
                #endregion
            #endregion
+          }
+         }
+         if(actor.simUMA!=null){
+          if(skinnedMesh==null){
+           skinnedMesh=actor.simUMA.GetComponentInChildren<SkinnedMeshRenderer>();
+           if(skinnedMesh!=null){
+            skinnedMesh.updateWhenOffscreen=true;
+           }
           }
          }
         }

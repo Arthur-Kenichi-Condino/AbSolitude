@@ -73,6 +73,7 @@ namespace AKCondinoO.Sims.Actors{
           if(leftFoot!=null&&rightFoot!=null){
            Log.DebugMessage("OnAnimatorIK:found feet Bones");
           }
+          headLookAtPositionLerped=headLookAtPositionLerp.tgtPos=headLookAtPositionLerp.tgtPos_Last=animatorController.actor.characterController.character.transform.position+(animatorController.actor.characterController.character.transform.rotation*animatorController.actor.characterController.headOffset)+animatorController.actor.characterController.character.transform.forward;
           initialized=true;
          }
          void OnStartedAiming(){
@@ -90,6 +91,22 @@ namespace AKCondinoO.Sims.Actors{
            OnStoppedAiming();
           }
          }
+         var characterController=animatorController.actor.characterController.character;
+         var headOffset=animatorController.actor.characterController.headOffset;
+         var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
+         if(animatorController.actor.characterController.isAiming||head==null){
+          Quaternion viewRotationClamped=RotationHelper.Clamp(
+           animatorController.actor.characterController.viewRotationForAiming,
+           animatorController.animator.transform.rotation,
+           new Vector3(90f,30f,360f),
+           new Vector3(90f,30f,360f)
+          );
+          Vector3 aimAt=animatorController.transform.position+(animatorController.transform.rotation*headOffset)+(viewRotationClamped*Quaternion.Euler(aimAtTorsoAdjust)*Vector3.forward)*aimAtMaxDistance;
+          headLookAtPositionLerp.tgtPos=aimAt;
+         }
+         headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+         //animatorController.animator.SetLookAtWeight(1f,1f,1f,1f,0.5f);
+         //animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
          //if(animatorController.actor.characterController.isAiming||head==null){
          // var characterController=animatorController.actor.characterController.character;
          // var headOffset=animatorController.actor.characterController.headOffset;
@@ -177,99 +194,99 @@ namespace AKCondinoO.Sims.Actors{
          // }
          // animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
          //}
-         //if(leftFoot!=null&&rightFoot!=null){
-         // float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;
-         // //Log.DebugMessage("disBetweenFeet:"+disBetweenFeet);
-         // Vector3 leftFootIKEuler=leftFoot.eulerAngles;
-         // Quaternion leftFootIKRotation=leftFoot.rotation;
-         // Vector3 leftFootIKPosition=new Vector3(
-         //  leftFoot.position.x,
-         //  leftFoot.position.y,
-         //  leftFoot.position.z
-         // );
-         // Vector3 leftToFloorRaycastOrigin=animatorController.actor.transform.position+(animatorController.actorLeft*(disBetweenFeet/2f));
-         // if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit,animatorController.actor.height,PhysUtil.considerGroundLayer)){
-         //  leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
-         //  Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,animatorController.animator.transform.right);
-         //  leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
-         //  Debug.DrawRay(leftFootIKPosition,-animatorController.animator.transform.right,Color.blue);
-         //  Quaternion leftFootIKRotationClamped;
-         //  leftFootIKRotationClamped=RotationHelper.Clamp(
-         //   leftFootIKRotation,
-         //   animatorController.actor.characterController.character.transform.rotation,
-         //   new Vector3(5f,15f,5f),
-         //   new Vector3(5f,15f,5f)
-         //  );
-         //  leftFootIKRotation=leftFootIKRotationClamped;
-         //  Debug.DrawRay(leftFootIKPosition,leftFootIKRotation*-Vector3.right,Color.green);
-         //  //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
-         // }
-         // Vector3 rightFootIKEuler=rightFoot.eulerAngles;
-         // Quaternion rightFootIKRotation=rightFoot.rotation;
-         // Vector3 rightFootIKPosition=new Vector3(
-         //  rightFoot.position.x,
-         //  rightFoot.position.y,
-         //  rightFoot.position.z
-         // );
-         // Vector3 rightToFloorRaycastOrigin=animatorController.actor.transform.position+(animatorController.actorRight*(disBetweenFeet/2f));
-         // if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit,animatorController.actor.height,PhysUtil.considerGroundLayer)){
-         //  rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
-         //  Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,animatorController.animator.transform.right);
-         //  rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
-         //  Debug.DrawRay(rightFootIKPosition,animatorController.animator.transform.right,Color.blue);
-         //  Quaternion rightFootIKRotationClamped;
-         //  rightFootIKRotationClamped=RotationHelper.Clamp(
-         //   rightFootIKRotation,
-         //   animatorController.actor.characterController.character.transform.rotation,
-         //   new Vector3(5f,15f,5f),
-         //   new Vector3(5f,15f,5f)
-         //  );
-         //  rightFootIKRotation=rightFootIKRotationClamped;
-         //  Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);
-         //  //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
-         // }
-         // if(animatorController.actor.motion==BaseAI.ActorMotion.MOTION_STAND||
-         //    animatorController.actor.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
-         // ){
-         //   leftFootIKPositionWeightLerp.tgtVal=1f;
-         //   leftFootIKRotationWeightLerp.tgtVal=1f;
-         //  rightFootIKPositionWeightLerp.tgtVal=1f;
-         //  rightFootIKRotationWeightLerp.tgtVal=1f;
-         // }else{
-         //   leftFootIKPositionWeightLerp.tgtVal=0f;
-         //   leftFootIKRotationWeightLerp.tgtVal=0f;
-         //  rightFootIKPositionWeightLerp.tgtVal=0f;
-         //  rightFootIKRotationWeightLerp.tgtVal=0f;
-         //  if(animatorController.actor.motion==BaseAI.ActorMotion.MOTION_HIT||
-         //     animatorController.actor.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE
-         //  ){
-         //    leftFootIKPositionWeight= leftFootIKPositionWeightLerp.EndFloat();
-         //    leftFootIKRotationWeight= leftFootIKRotationWeightLerp.EndFloat();
-         //   rightFootIKPositionWeight=rightFootIKPositionWeightLerp.EndFloat();
-         //   rightFootIKRotationWeight=rightFootIKRotationWeightLerp.EndFloat();
-         //  }
-         // }
-         //  leftFootIKPositionWeight= leftFootIKPositionWeightLerp.UpdateFloat( leftFootIKPositionWeight,Core.magicDeltaTimeNumber);
-         //  leftFootIKRotationWeight= leftFootIKRotationWeightLerp.UpdateFloat( leftFootIKRotationWeight,Core.magicDeltaTimeNumber);
-         // rightFootIKPositionWeight=rightFootIKPositionWeightLerp.UpdateFloat(rightFootIKPositionWeight,Core.magicDeltaTimeNumber);
-         // rightFootIKRotationWeight=rightFootIKRotationWeightLerp.UpdateFloat(rightFootIKRotationWeight,Core.magicDeltaTimeNumber);
-         // float height=animatorController.actor.height;
-         // Vector3 heightLimit=animatorController.actor.transform.position+Vector3.down*(height*.5f);
-         // #region LeftFoot
-         //     animatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,leftFootIKPositionWeight);
-         //     animatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,leftFootIKRotationWeight);
-         //     leftFootIKPosition.y=Mathf.Min(heightLimit.y,leftFootIKPosition.y);
-         //     animatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
-         //     animatorController.animator.SetIKRotation(AvatarIKGoal.LeftFoot,leftFootIKRotation);
-         // #endregion
-         // #region RightFoot
-         //     animatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,rightFootIKPositionWeight);
-         //     animatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,rightFootIKRotationWeight);
-         //     rightFootIKPosition.y=Mathf.Min(heightLimit.y,rightFootIKPosition.y);
-         //     animatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
-         //     animatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
-         // #endregion
-         //}
+         if(leftFoot!=null&&rightFoot!=null){
+          float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;
+          //Log.DebugMessage("disBetweenFeet:"+disBetweenFeet);
+          Vector3 leftFootIKEuler=leftFoot.eulerAngles;
+          Quaternion leftFootIKRotation=leftFoot.rotation;
+          Vector3 leftFootIKPosition=new Vector3(
+           leftFoot.position.x,
+           leftFoot.position.y,
+           leftFoot.position.z
+          );
+          Vector3 leftToFloorRaycastOrigin=animatorController.actor.transform.position+(animatorController.actorLeft*(disBetweenFeet/2f));
+          if(Physics.Raycast(leftToFloorRaycastOrigin,Vector3.down,out RaycastHit leftToFloorHit,animatorController.actor.height,PhysUtil.considerGroundLayer)){
+           leftFootIKPosition.y=leftToFloorHit.point.y+footHeight;
+           Vector3 slopeCorrected=-Vector3.Cross(leftToFloorHit.normal,animatorController.animator.transform.right);
+           leftFootIKRotation=Quaternion.LookRotation(slopeCorrected,leftToFloorHit.normal);
+           Debug.DrawRay(leftFootIKPosition,-animatorController.animator.transform.right,Color.blue);
+           Quaternion leftFootIKRotationClamped;
+           leftFootIKRotationClamped=RotationHelper.Clamp(
+            leftFootIKRotation,
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
+           );
+           leftFootIKRotation=leftFootIKRotationClamped;
+           Debug.DrawRay(leftFootIKPosition,leftFootIKRotation*-Vector3.right,Color.green);
+           //Debug.DrawRay(leftToFloorHit.point,leftToFloorHit.normal);
+          }
+          Vector3 rightFootIKEuler=rightFoot.eulerAngles;
+          Quaternion rightFootIKRotation=rightFoot.rotation;
+          Vector3 rightFootIKPosition=new Vector3(
+           rightFoot.position.x,
+           rightFoot.position.y,
+           rightFoot.position.z
+          );
+          Vector3 rightToFloorRaycastOrigin=animatorController.actor.transform.position+(animatorController.actorRight*(disBetweenFeet/2f));
+          if(Physics.Raycast(rightToFloorRaycastOrigin,Vector3.down,out RaycastHit rightToFloorHit,animatorController.actor.height,PhysUtil.considerGroundLayer)){
+           rightFootIKPosition.y=rightToFloorHit.point.y+footHeight;
+           Vector3 slopeCorrected=-Vector3.Cross(rightToFloorHit.normal,animatorController.animator.transform.right);
+           rightFootIKRotation=Quaternion.LookRotation(slopeCorrected,rightToFloorHit.normal);
+           Debug.DrawRay(rightFootIKPosition,animatorController.animator.transform.right,Color.blue);
+           Quaternion rightFootIKRotationClamped;
+           rightFootIKRotationClamped=RotationHelper.Clamp(
+            rightFootIKRotation,
+            animatorController.actor.characterController.character.transform.rotation,
+            new Vector3(5f,15f,5f),
+            new Vector3(5f,15f,5f)
+           );
+           rightFootIKRotation=rightFootIKRotationClamped;
+           Debug.DrawRay(rightFootIKPosition,rightFootIKRotation*Vector3.right,Color.green);
+           //Debug.DrawRay(rightToFloorHit.point,rightToFloorHit.normal);
+          }
+          if(animatorController.actor.motion==BaseAI.ActorMotion.MOTION_STAND||
+             animatorController.actor.motion==BaseAI.ActorMotion.MOTION_STAND_RIFLE
+          ){
+            leftFootIKPositionWeightLerp.tgtVal=1f;
+            leftFootIKRotationWeightLerp.tgtVal=1f;
+           rightFootIKPositionWeightLerp.tgtVal=1f;
+           rightFootIKRotationWeightLerp.tgtVal=1f;
+          }else{
+            leftFootIKPositionWeightLerp.tgtVal=0f;
+            leftFootIKRotationWeightLerp.tgtVal=0f;
+           rightFootIKPositionWeightLerp.tgtVal=0f;
+           rightFootIKRotationWeightLerp.tgtVal=0f;
+           if(animatorController.actor.motion==BaseAI.ActorMotion.MOTION_HIT||
+              animatorController.actor.motion==BaseAI.ActorMotion.MOTION_HIT_RIFLE
+           ){
+             leftFootIKPositionWeight= leftFootIKPositionWeightLerp.EndFloat();
+             leftFootIKRotationWeight= leftFootIKRotationWeightLerp.EndFloat();
+            rightFootIKPositionWeight=rightFootIKPositionWeightLerp.EndFloat();
+            rightFootIKRotationWeight=rightFootIKRotationWeightLerp.EndFloat();
+           }
+          }
+           leftFootIKPositionWeight= leftFootIKPositionWeightLerp.UpdateFloat( leftFootIKPositionWeight,Core.magicDeltaTimeNumber);
+           leftFootIKRotationWeight= leftFootIKRotationWeightLerp.UpdateFloat( leftFootIKRotationWeight,Core.magicDeltaTimeNumber);
+          rightFootIKPositionWeight=rightFootIKPositionWeightLerp.UpdateFloat(rightFootIKPositionWeight,Core.magicDeltaTimeNumber);
+          rightFootIKRotationWeight=rightFootIKRotationWeightLerp.UpdateFloat(rightFootIKRotationWeight,Core.magicDeltaTimeNumber);
+          float height=animatorController.actor.height;
+          Vector3 heightLimit=animatorController.actor.transform.position+Vector3.down*(height*.5f);
+          #region LeftFoot
+              animatorController.animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,leftFootIKPositionWeight);
+              animatorController.animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot,leftFootIKRotationWeight);
+              leftFootIKPosition.y=Mathf.Min(heightLimit.y,leftFootIKPosition.y);
+              animatorController.animator.SetIKPosition(AvatarIKGoal.LeftFoot,leftFootIKPosition);
+              animatorController.animator.SetIKRotation(AvatarIKGoal.LeftFoot,leftFootIKRotation);
+          #endregion
+          #region RightFoot
+              animatorController.animator.SetIKPositionWeight(AvatarIKGoal.RightFoot,rightFootIKPositionWeight);
+              animatorController.animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,rightFootIKRotationWeight);
+              rightFootIKPosition.y=Mathf.Min(heightLimit.y,rightFootIKPosition.y);
+              animatorController.animator.SetIKPosition(AvatarIKGoal.RightFoot,rightFootIKPosition);
+              animatorController.animator.SetIKRotation(AvatarIKGoal.RightFoot,rightFootIKRotation);
+          #endregion
+         }
          wasAiming=animatorController.actor.characterController.isAiming;
         }
     }

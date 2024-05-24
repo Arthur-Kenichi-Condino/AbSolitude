@@ -124,7 +124,7 @@ namespace AKCondinoO.Sims.Actors{
                    RotateBodyToView();
                   }
                   void RotateBodyToView(){
-                   bodyRotLerp.tgtRot=Quaternion.Euler(bodyEuler.x,viewEuler.y,bodyEuler.z);
+                   bodyRotLerp.tgtRot=Quaternion.Euler(0f,viewEuler.y,0f);
                   }
                  }
                  float bodyToHeadRotationYComponentSignedAngle=RotationHelper.SignedAngleFromRotationYComponentFromAToB(bodyRotation,viewRotation);
@@ -134,9 +134,14 @@ namespace AKCondinoO.Sims.Actors{
                   float angleToRotateBody=Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)-headMaxHorizontalRotationAngle;
                   angleToRotateBody*=Mathf.Sign(bodyToHeadRotationYComponentSignedAngle);
                   //Log.DebugMessage("rotate body in degrees:"+angleToRotateBody);
-                  bodyRotLerp.tgtRot*=Quaternion.AngleAxis(angleToRotateBody,bodyRotation*Vector3.up);
+                  bodyRotLerp.tgtRot*=Quaternion.AngleAxis(angleToRotateBody,bodyRotLerp.tgtRot*Vector3.up);
                  }
                  bodyRotation=bodyRotLerp.UpdateRotation(bodyRotation,Core.magicDeltaTimeNumber);
+                 bodyRotation.eulerAngles=new Vector3(
+                  0f,
+                  bodyRotation.eulerAngles.y,
+                  0f
+                 );
                  character.transform.rotation=bodyRotation;
              #endregion
          #endregion
@@ -226,30 +231,44 @@ namespace AKCondinoO.Sims.Actors{
          OnAction1();
         }
         internal void ManualUpdateUsingAI(){
-         Vector3 dir=aimDir(out float dirDis,false,false,true);
          Vector3 dirRaw=aimDir(out float dirRawDis,true,false,true);
-         aimingAtRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*dirRawDis;
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*dirDis;
-         viewRotation=Quaternion.LookRotation(aimDir(out _,false,true,true));
+         rotLerp.tgtRot=Quaternion.LookRotation(dirRaw);
+         viewRotationRaw=rotLerp.tgtRot;
+         viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
+         bodyRotLerp.tgtRot=Quaternion.Euler(0f,viewRotation.eulerAngles.y,0f);
+         bodyRotation=bodyRotLerp.UpdateRotation(bodyRotation,Core.magicDeltaTimeNumber);
+         bodyRotation.eulerAngles=new Vector3(
+          0f,
+          bodyRotation.eulerAngles.y,
+          0f
+         );
+         Vector3 toAim=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*dirRawDis;
+         aimingAtRaw=toAim;
          viewRotationForAiming=viewRotation;
+         Vector3 dir=aimDir(out float dirDis,false,false,true);
+         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*dirDis;
         }
         Vector3 aimDir(out float dis,bool raw=false,bool ignoreEnemy=false,bool forShooting=false){
          dis=aimAtMaxDistance;
          if(actor.isUsingAI){
-          if(actor.enemy!=null&&!ignoreEnemy){
-           //Log.DebugMessage("aimDir:actor.enemy!=null");
-           Vector3 myHead=character.transform.position+(character.transform.rotation*headOffset);
-           if(actor.enemy is BaseAI enemyAI){
-            Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
-            dis=Vector3.Distance(enemyHead,myHead);
-            return((enemyHead)-(myHead)).normalized;
+          if(raw){
+           if(actor.enemy!=null&&!ignoreEnemy){
+            //Log.DebugMessage("aimDir:actor.enemy!=null");
+            Vector3 myHead=character.transform.position+(character.transform.rotation*headOffset);
+            if(actor.enemy is BaseAI enemyAI){
+             Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
+             dis=Vector3.Distance(enemyHead,myHead);
+             return((enemyHead)-(myHead)).normalized;
+            }else{
+             dis=Vector3.Distance(actor.enemy.transform.position,myHead);
+             return(actor.enemy.transform.position-(myHead)).normalized;
+            }
            }else{
-            dis=Vector3.Distance(actor.enemy.transform.position,myHead);
-            return(actor.enemy.transform.position-(myHead)).normalized;
+            //Log.DebugMessage("aimDir:actor.enemy==null");
+            return character.transform.forward;
            }
           }else{
-           //Log.DebugMessage("aimDir:actor.enemy==null");
-           return actor.animatorController.transform.forward;
+           return viewRotationForAiming*Vector3.forward;
           }
          }else{
           if(raw){
