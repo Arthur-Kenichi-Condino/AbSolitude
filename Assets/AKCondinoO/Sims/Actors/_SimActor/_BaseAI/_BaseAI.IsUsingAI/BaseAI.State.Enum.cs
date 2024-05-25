@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims.Actors{
                 goto _MyStateSet;
                }
                if(MyState==State.SNIPE_ST){
-                if(snipeSt.time<snipeSt.minTimeBeforeCanChase){
+                if(snipeSt.timer<snipeSt.minTimeBeforeCanChase){
                  SetMyState(State.SNIPE_ST);
                  goto _MyStateSet;
                 }

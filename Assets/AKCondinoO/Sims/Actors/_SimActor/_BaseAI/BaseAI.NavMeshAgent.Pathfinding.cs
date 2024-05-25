@@ -22,17 +22,14 @@ namespace AKCondinoO.Sims.Actors{
          UNREACHABLE               =7,
          PAUSED                    =8,
         }
-     [SerializeField]protected float pathfindingTimeout=8f;
+     protected float pathfindingTimeout=16f;
       protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=4f;
+      protected float pathPendingTimeout=8f;
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
          if(Vector3.Distance(navMeshAgent.destination,transform.position)<=navMeshAgent.stoppingDistance){
           return PathfindingResult.IDLE;
-         }
-         if(movePaused){
-          return PathfindingResult.PAUSED;
          }
          if(pathPendingTimer>0f){
             pathPendingTimer-=Time.deltaTime;
@@ -84,6 +81,9 @@ namespace AKCondinoO.Sims.Actors{
          if(navMeshAgent.remainingDistance>navMeshAgent.stoppingDistance){
           if(pathfindingTimer<=0f){
              pathfindingTimer=pathfindingTimeout;
+          }
+          if(movePaused){
+           return PathfindingResult.PAUSED;
           }
           if(Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
            return PathfindingResult.TRAVELLING_BUT_NO_SPEED;

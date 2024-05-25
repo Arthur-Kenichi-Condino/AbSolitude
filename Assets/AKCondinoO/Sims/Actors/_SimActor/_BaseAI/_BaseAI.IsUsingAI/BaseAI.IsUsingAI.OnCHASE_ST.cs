@@ -40,6 +40,10 @@ namespace AKCondinoO.Sims.Actors{
              //    onChaseIsUnreachable=false;
                 }
                 internal void DoRoutine(){
+                 if(MyEnemy==null){
+                  me.MoveStop();
+                  return;
+                 }
                  ai.MyDest=ai.MyEnemy.transform.position;
                  me.Move(ai.MyDest);
                  //if(me.TurnToMyDest(me.aiRotTurnTo)){

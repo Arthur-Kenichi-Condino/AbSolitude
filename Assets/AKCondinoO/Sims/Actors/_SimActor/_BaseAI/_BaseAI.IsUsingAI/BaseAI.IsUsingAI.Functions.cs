@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Skills;
+using AKCondinoO.Sims.Weapons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,11 @@ namespace AKCondinoO.Sims.Actors{
          moveDest=dest;
          if(TurnToMoveDest()){
           navMeshAgent.destination=moveDest;
-          return true;
+          if(
+           IsTraversingPath()
+          ){
+           return true;
+          }
          }
          return false;
         }
@@ -60,6 +65,34 @@ namespace AKCondinoO.Sims.Actors{
          bool result=false;
          if(result=TurnToMyEnemy()){
           DoAttackOnAnimationEvent();
+         }
+         return result;
+        }
+        internal bool TryShoot(SimObject enemy,out bool reloading,out bool shooting){
+         reloading=false;
+         shooting=false;
+         bool result=false;
+         if(TurnToMyEnemy()){
+          characterController.isAiming=true;
+          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=(.125f/2f)){
+           if(itemsEquipped!=null){
+            if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
+             if(simWeapon.ammoLoaded<=0){
+              if(simWeapon.TryStartReloadingAction(simAiming:this)){
+               characterController.weaponsReloading.Add(simWeapon);
+               reloading=true;
+               result=true;
+              }
+             }else{
+              if(simWeapon.TryStartShootingAction(simAiming:this)){
+               Debug.DrawLine(GetHeadPosition(true),animatorController.animatorIKController.headLookAtPositionLerped,Color.blue,5f);
+               shooting=true;
+               result=true;
+              }
+             }
+            }
+           }
+          }
          }
          return result;
         }

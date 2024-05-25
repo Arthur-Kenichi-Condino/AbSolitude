@@ -53,6 +53,8 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 attackDistance          ;
           Vector3 attackDistanceWithWeapon;
             internal virtual void main(){
+             //  regular para acertar tiros em 100% de chance por enquanto
+             //  ao terminar chase, sempre fazer um ataque
              //  ajustar corpo para virar para direção da mira com menos diferença de rotação
              //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();

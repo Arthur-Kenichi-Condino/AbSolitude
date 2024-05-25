@@ -14,15 +14,145 @@ namespace AKCondinoO.Sims.Actors{
                 internal SNIPE_ST(BaseAI me,AI ai):base(me,ai){
                 }
              internal float minTimeBeforeCanChase=8f;
-             internal float time;
+             internal float timer;
+             internal bool alternateRetreatShoot=false;
+             internal float retreatTime=3f;
+             internal float retreatDis;
+             bool moving;
+             bool tryingShooting;
+             bool reloading;
+             bool shooting;
                 internal void Finish(){
                  if(me.characterController!=null){
                     me.characterController.isAiming=false;
                  }
                 }
                 internal void Start(){
+                 timer=0f;
+                 alternateRetreatShoot=false;
                 }
                 internal void DoRoutine(){
+                 timer+=Time.deltaTime;
+                 if(MyEnemy==null){
+                  me.MoveStop();
+                  return;
+                 }
+                 float myMoveSpeed=Mathf.Max(
+                  me.moveMaxVelocity.x,
+                  me.moveMaxVelocity.y,
+                  me.moveMaxVelocity.z
+                 );
+                 float myEnemyMoveSpeed=0f;
+                 if(MyEnemy is BaseAI myEnemyAI){
+                  myEnemyMoveSpeed=Mathf.Max(
+                   myEnemyAI.moveMaxVelocity.x,
+                   myEnemyAI.moveMaxVelocity.y,
+                   myEnemyAI.moveMaxVelocity.z
+                  );
+                 }
+                 float dis1=     myMoveSpeed*retreatTime;
+                 float dis2=myEnemyMoveSpeed*retreatTime;
+                 float ratio;
+                 if(dis2<=0f){
+                  ratio=1f;
+                 }else{
+                  ratio=dis1/dis2;
+                 }
+                 retreatDis=ratio*dis1;
+                 Log.DebugMessage("retreatDis:"+retreatDis);
+                 if(reloading){
+                  if(!me.IsReloading()){
+                   alternateRetreatShoot=false;
+                   reloading=false;
+                   if(me.characterController!=null){
+                      me.characterController.isAiming=false;
+                   }
+                  }else{
+                   if(
+                    me.IsTraversingPath()
+                   ){
+                    if(!me.TurnToMoveDest()){
+                     me.MovePause();
+                    }else{
+                     me.MoveResume();
+                    }
+                   }else{
+                    me.TurnToMyEnemy();
+                   }
+                  }
+                 }
+                 if(shooting){
+                  if(
+                   me.IsTraversingPath()
+                  ){
+                   me.MoveStop();
+                  }
+                  if(!me.IsShooting()){
+                   alternateRetreatShoot=false;
+                   shooting=false;
+                   if(me.characterController!=null){
+                      me.characterController.isAiming=false;
+                   }
+                  }else{
+                   me.TurnToMyEnemy();
+                  }
+                 }
+                 if(moving){
+                  if(
+                   !me.IsTraversingPath()
+                  ){
+                   Log.DebugMessage("not me.IsTraversingPath:moving=false");
+                   alternateRetreatShoot=true;
+                   moving=false;
+                  }else{
+                   if(!me.TurnToMoveDest()){
+                    me.MovePause();
+                   }else{
+                    me.MoveResume();
+                   }
+                  }
+                 }
+                 if(!reloading&&
+                    !shooting&&
+                    !moving
+                 ){
+                  if(alternateRetreatShoot){
+                   alternateRetreatShoot=false;
+                   tryingShooting=true;
+                  }
+                  if(tryingShooting){
+                   if(
+                    !me.IsTraversingPath()
+                   ){
+                    if(me.TryShoot(MyEnemy,out bool r,out bool s)){
+                     tryingShooting=false;
+                     if(s){
+                      shooting=true;
+                     }else if(r){
+                      reloading=true;
+                     }
+                    }
+                   }else{
+                    if(!me.TurnToMoveDest()){
+                     me.MovePause();
+                    }else{
+                     me.MoveResume();
+                    }
+                   }
+                  }else{
+                   if(Vector3.Distance(me.transform.position,MyEnemy.transform.position)<=retreatDis){
+                    Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;
+                    dir.y=0f;
+                    ai.MyDest=MyEnemy.transform.position+dir*retreatDis+Vector3.down*(me.height/2f);
+                    if(me.Move(ai.MyDest)){
+                     Debug.DrawRay(MyEnemy.transform.position,dir*retreatDis,Color.blue,5f);
+                     moving=true;
+                    }
+                   }else{
+                    alternateRetreatShoot=true;
+                   }
+                  }
+                 }
                 }
             }
         }

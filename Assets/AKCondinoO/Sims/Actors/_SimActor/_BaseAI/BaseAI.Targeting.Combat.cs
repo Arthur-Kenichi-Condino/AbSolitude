@@ -64,7 +64,7 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     internal Vector3 attackRange=new Vector3(0.125f,0.125f,0.0625f);
+     internal Vector3 attackRange=new Vector3(0.125f/2f,0.125f/2f,0.0625f/2f);
      readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
         internal Vector3 AttackDistance(bool checkWeapon=false){
          float radius=GetRadius();

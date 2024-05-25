@@ -113,6 +113,9 @@ namespace AKCondinoO.Sims.Actors{
           return false;
          }
          if(characterController!=null){
+          if(Vector3.Distance(moveDest,transform.position)<=.1f){
+           return true;
+          }
           Vector3 lookDir=moveDest-transform.position;
           TurnToTargetDir(lookDir);
           return IsTurnedToTargetDir();
