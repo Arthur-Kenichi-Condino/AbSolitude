@@ -21,18 +21,21 @@ namespace AKCondinoO.Sims.Actors{
                 internal ATTACK_ST(BaseAI me,AI ai):base(me,ai){
                 }
                 internal void Finish(){
+                 firstAttack=false;
              //    AI_ResetRotation(onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
                        //if(MyState==State.CHASE_ST){
                        // me.onChaseAlternateMoveAttack=true;
                        //}
                 }
                 internal void Start(){
+                 firstAttack=true;
                  targetsToAvoidRefreshedFlag=false;
                  avoidMode=AvoidMode.MoveAway;
                  shouldAvoid=false;
                  avoiding=false;
                  avoidingMoving=false;
                 }
+             internal bool firstAttack;
              AvoidMode avoidMode=AvoidMode.MoveAway;
                 enum AvoidMode:int{
                  MoveAway=0,
@@ -45,6 +48,14 @@ namespace AKCondinoO.Sims.Actors{
                  float hasFriendlyTargetsToAvoidMaxTime=8f;
                  float hasFriendlyTargetsToAvoidTimer;
                 internal void DoRoutine(){
+                 if(firstAttack){
+                  me.MoveStop();
+                  if(me.Attack(ai.MyEnemy)){
+                   firstAttack=false;
+                  }else{
+                   return;
+                  }
+                 }
                  if(MyEnemy==null){
                   me.MoveStop();
                   return;

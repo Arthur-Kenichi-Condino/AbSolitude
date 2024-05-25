@@ -29,6 +29,9 @@ namespace AKCondinoO.Sims.Actors{
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
          if(Vector3.Distance(navMeshAgent.destination,transform.position)<=navMeshAgent.stoppingDistance){
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           return PathfindingResult.IDLE;
          }
          if(pathPendingTimer>0f){

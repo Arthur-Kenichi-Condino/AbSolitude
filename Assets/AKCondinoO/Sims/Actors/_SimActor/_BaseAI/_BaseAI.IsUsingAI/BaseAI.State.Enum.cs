@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims.Actors{
                }
               }else if(MyState==State.ATTACK_ST){
                //  so the animation is completed
-               if(me.IsAttacking()){
+               if(me.IsAttacking()||attackSt.firstAttack){
                 SetMyState(State.ATTACK_ST);
                 goto _MyStateSet;
                }
