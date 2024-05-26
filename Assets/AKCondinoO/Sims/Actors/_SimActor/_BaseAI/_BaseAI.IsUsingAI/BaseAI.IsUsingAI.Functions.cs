@@ -71,10 +71,13 @@ namespace AKCondinoO.Sims.Actors{
         internal bool TryShoot(SimObject enemy,out bool reloading,out bool shooting){
          reloading=false;
          shooting=false;
+         if(IsReloading()||IsShooting()){
+          return false;
+         }
          bool result=false;
          if(TurnToMyEnemy()){
           characterController.isAiming=true;
-          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=(.125f/2f)){
+          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=(.125f/4f)){
            if(itemsEquipped!=null){
             if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
              if(simWeapon.ammoLoaded<=0){
