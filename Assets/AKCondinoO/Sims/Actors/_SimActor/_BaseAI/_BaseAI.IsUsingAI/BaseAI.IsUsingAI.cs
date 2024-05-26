@@ -72,6 +72,15 @@ namespace AKCondinoO.Sims.Actors{
              UpdateMyState();
              ProcessStateRoutine();
             }
+        // bool callingSlaves=false;
+        // foreach(var slave in slaves){
+        //  if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
+        //   if(!callingSlaves){
+        //    SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
+        //    callingSlaves=true;
+        //   }
+        //  }
+        // }
         }
         //protected virtual void mainAIFunction(){
         // if(resettingRotation){
