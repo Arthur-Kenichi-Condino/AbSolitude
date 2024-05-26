@@ -23,6 +23,8 @@ namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
      [SerializeField]protected HurtboxesPrefabsList hurtboxesPrefabs;
       protected readonly List<Hurtboxes>hurtboxes=new List<Hurtboxes>();
+      internal readonly Dictionary<Transform,List<Hurtboxes>>hurtboxesByBodyPart=new();
+       readonly Queue<List<Hurtboxes>>hurtboxesByBodyPartListPool=new();
         protected virtual void OnCreateHurtboxes(DynamicCharacterAvatar simUMA,UMAData simUMAData){
          foreach(Hurtboxes hurtbox in hurtboxes){
           if(hurtbox!=null){
@@ -30,6 +32,11 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          hurtboxes.Clear();
+         foreach(var kvp in hurtboxesByBodyPart){
+          kvp.Value.Clear();
+          hurtboxesByBodyPartListPool.Enqueue(kvp.Value);
+         }
+         hurtboxesByBodyPart.Clear();
          if(hurtboxesPrefabs!=null&&hurtboxesPrefabs.prefabs.Length>0){
           foreach(Hurtboxes hurtboxPrefab in hurtboxesPrefabs.prefabs){
            if(nameToBodyPart.TryGetValue(hurtboxPrefab.name,out Transform bodyPart)){
@@ -45,6 +52,13 @@ namespace AKCondinoO.Sims.Actors{
             hurtbox.kinematicRigidbody.isKinematic=true;
             hurtbox.actor=this;
             hurtboxes.Add(hurtbox);
+            if(!hurtboxesByBodyPart.TryGetValue(bodyPart,out List<Hurtboxes>hurtboxesList)){
+             if(!hurtboxesByBodyPartListPool.TryDequeue(out hurtboxesList)){
+              hurtboxesList=new List<Hurtboxes>();
+             }
+             hurtboxesByBodyPart.Add(bodyPart,hurtboxesList);
+            }
+            hurtboxesByBodyPart[bodyPart].Add(hurtbox);
            }
           }
          }

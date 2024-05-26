@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Inventory;
 using System.Collections;
 using System.Collections.Generic;
@@ -261,9 +262,15 @@ namespace AKCondinoO.Sims.Actors{
             //Log.DebugMessage("aimDir:actor.enemy!=null");
             Vector3 myHead=character.transform.position+(character.transform.rotation*headOffset);
             if(actor.enemy is BaseAI enemyAI){
-             Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
-             dis=Vector3.Distance(enemyHead,myHead);
-             return((enemyHead)-(myHead)).normalized;
+             if(enemyAI.head!=null&&enemyAI.hurtboxesByBodyPart.TryGetValue(enemyAI.head,out _)){
+              Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
+              dis=Vector3.Distance(enemyHead,myHead);
+              return((enemyHead)-(myHead)).normalized;
+             }else{
+              Vector3 enemyPos=enemyAI.transform.position;
+              dis=Vector3.Distance(enemyPos,myHead);
+              return((enemyPos)-(myHead)).normalized;
+             }
             }else{
              dis=Vector3.Distance(actor.enemy.transform.position,myHead);
              return(actor.enemy.transform.position-(myHead)).normalized;
