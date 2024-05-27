@@ -9,10 +9,16 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Skill MySkill=null;internal Skill skillToUse{get{return MySkill;}}
+     internal Skill skillToUse{get{return ai?.MySkill;}}
+        internal partial class AI{
+         internal Skill MySkill=null;
+        }
         protected virtual void DoSkill(){
+         if(ai==null){
+          return;
+         }
          SimObject target=this;//  TO DO: use best my skill target
-         MySkill.DoSkill(target,MySkill.level);
+         ai.MySkill.DoSkill(target,ai.MySkill.level);
         }
     }
 }

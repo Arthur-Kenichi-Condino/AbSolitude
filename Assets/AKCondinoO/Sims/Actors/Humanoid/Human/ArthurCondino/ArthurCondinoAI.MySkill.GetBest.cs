@@ -8,8 +8,11 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
     internal partial class ArthurCondinoAI{
         protected override void SetBestSkillToUse(Skill.SkillUseContext context,bool fromDerived=false){
+         if(ai==null){
+          return;
+         }
          if(!fromDerived){
-          if(MySkill==null&&skillsToUse.Count<=0){
+          if(ai.MySkill==null&&skillsToUse.Count<=0){
            GetBest(context,skillsToUse);
           }
          }

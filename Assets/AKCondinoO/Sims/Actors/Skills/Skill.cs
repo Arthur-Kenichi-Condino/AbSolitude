@@ -13,6 +13,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          OnWillTakeDamage,
          OnTookDamage,
          OnIdle,
+         OnFollow,
         }
      protected float castDelay_value=1.0f;
      /// <summary>

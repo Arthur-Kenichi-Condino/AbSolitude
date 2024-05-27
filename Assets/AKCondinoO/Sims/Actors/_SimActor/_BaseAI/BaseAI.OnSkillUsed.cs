@@ -10,9 +10,12 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnSkillUsed(Skill skill,bool done,bool revoked){
          base.OnSkillUsed(skill,done,revoked);
          Log.DebugMessage("OnSkillUsed:"+skill);
-         if(MySkill==skill){
+         if(ai==null){
+          return;
+         }
+         if(ai.MySkill==skill){
           Log.DebugMessage("OnSkillUsed:MySkill==skill:clear used skill");
-          MySkill=null;
+          ai.MySkill=null;
           if(revoked){
           }
           if(done){

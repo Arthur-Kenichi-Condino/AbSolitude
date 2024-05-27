@@ -67,6 +67,7 @@ namespace AKCondinoO.Voxels.Water{
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>>neighbourhoodAbsorb=new();
      readonly Dictionary<int,Dictionary<Vector3Int,(double spread,VoxelWater voxel)>>neighbourhoodSpread=new();
      readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
+      readonly Dictionary<int,VoxelWater>biomeVoxels=new Dictionary<int,VoxelWater>();
      readonly Dictionary<Vector3Int,(double absorb,VoxelWater voxel)>absorbing=new();
      readonly Dictionary<Vector3Int,(double spread,VoxelWater voxel)>spreading=new();
      readonly Dictionary<int,Dictionary<int,VoxelWater>>absorbed=new();
@@ -96,6 +97,7 @@ namespace AKCondinoO.Voxels.Water{
          for(int i=0;i<voxels.Length;++i){
                        voxels[i].Clear();
          }
+         biomeVoxels.Clear();
          absorbing.Clear();
          spreading.Clear();
          foreach(var oftIdxAbsorbedPair in absorbed){oftIdxAbsorbedPair.Value.Clear();}
@@ -537,7 +539,7 @@ namespace AKCondinoO.Voxels.Water{
           }else{
            //  TO DO: remover se é igual ao valor do bioma
            //  valor do bioma
-           voxel=biomeVoxel;
+           biomeVoxels[vxlIdx1]=voxel=biomeVoxel;
           }
           if(editData1.ContainsKey(vCoord1)){
            WaterEditOutputData voxelData=editData1[vCoord1];

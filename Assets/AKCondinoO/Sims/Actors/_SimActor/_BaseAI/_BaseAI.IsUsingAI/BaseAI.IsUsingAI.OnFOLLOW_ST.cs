@@ -15,6 +15,35 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        internal partial class AI{
+         internal FOLLOW_ST followSt;
+            internal class FOLLOW_ST:ST{
+                internal FOLLOW_ST(BaseAI me,AI ai):base(me,ai){
+                }
+                internal void DoRoutine(){
+                 me.stopPathfindingOnTimeout=false;//
+                 if(
+                  !me.IsTraversingPath()
+                 ){
+                  if(me.masterSimObject is BaseAI masterAI){
+                   if(masterAI.isUsingAI){
+                    if(masterAI.state==State.IDLE_ST){
+                     me.MoveToMasterRandom(masterAI,4f);
+                    }else{
+                     me.MoveToMaster      (masterAI,0f);
+                    }
+                   }else{
+                    if(!masterAI.IsMoving()){
+                     me.MoveToMasterRandom(masterAI,4f);
+                    }else{
+                     me.MoveToMaster      (masterAI,0f);
+                    }
+                   }
+                  }
+                 }
+                }
+            }
+        }
         //protected virtual void OnFOLLOW_ST_Routine(){
         // //Log.DebugMessage("OnFOLLOW_ST_Routine()");
         // stopPathfindingOnTimeout=false;//
@@ -38,9 +67,6 @@ namespace AKCondinoO.Sims.Actors{
         //  }else{
         //  }
         // }
-        //}
-        //protected bool IsMoving(){
-        // return moveVelocityFlattened!=0f||teleportedMove;
         //}
     }
 }

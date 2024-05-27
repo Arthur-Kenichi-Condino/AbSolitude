@@ -115,7 +115,7 @@ namespace AKCondinoO.Sims.Actors{
              }else if(MyState==State. CHASE_ST){
                chaseSt.DoRoutine();
              }else if(MyState==State.FOLLOW_ST){
-              //followSt.DoRoutine();
+              followSt.DoRoutine();
              }else{
                 //idleSt.DoRoutine();
              }

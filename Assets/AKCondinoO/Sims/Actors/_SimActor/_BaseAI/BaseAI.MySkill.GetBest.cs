@@ -13,6 +13,9 @@ namespace AKCondinoO.Sims.Actors{
        readonly HashSet<Skill>skillsToUseIterator=new HashSet<Skill>();
         internal virtual void GetBest(Skill.SkillUseContext context,HashSet<Skill>skills){
          switch(context){
+          case Skill.SkillUseContext.OnFollow:{
+           break;
+          }
           case Skill.SkillUseContext.OnIdle:{
            break;
           }
@@ -42,13 +45,16 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         protected virtual void SetBestSkillToUse(Skill.SkillUseContext context,bool fromDerived=false){
+         if(ai==null){
+          return;
+         }
          //  TO DO: skillsToUse.Clear() ao trocar de estado da AI ou em situações específicas, como depois de um delay
          if(!fromDerived){
-          if(MySkill==null&&skillsToUse.Count<=0){
+          if(ai.MySkill==null&&skillsToUse.Count<=0){
            GetBest(context,skillsToUse);
           }
          }
-         if(MySkill==null){
+         if(ai.MySkill==null){
           skillsToUseIterator.Clear();
           skillsToUseIterator.UnionWith(skillsToUse);
           foreach(Skill skill in skillsToUseIterator){
@@ -58,25 +64,25 @@ namespace AKCondinoO.Sims.Actors{
             if(skill.IsAvailable(target,skill.level)){
              if(ReflectionUtil.IsTypeDerivedFrom(skillType,typeof(GenerateHomunculus))){
               if(requiredSlaves.Count>0){
-               MySkill=skill;
+               ai.MySkill=skill;
                Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use:"+skillType);
               }
              }else{
-              MySkill=skill;
+              ai.MySkill=skill;
               Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use:"+skillType);
              }
             }
             skillsToUse.Remove(skill);
            }
-           if(MySkill!=null){
+           if(ai.MySkill!=null){
             break;
            }
           }
          }
-         if(MySkill!=null){
+         if(ai.MySkill!=null){
           return;
          }
-         if(MySkill==null){
+         if(ai.MySkill==null){
           skillsToUse.Clear();
          }
         }

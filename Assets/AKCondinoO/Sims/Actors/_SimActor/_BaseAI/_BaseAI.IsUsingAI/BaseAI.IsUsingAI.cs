@@ -37,6 +37,7 @@ namespace AKCondinoO.Sims.Actors{
               snipeSt=new  SNIPE_ST(me,this);
              attackSt=new ATTACK_ST(me,this);
               chaseSt=new  CHASE_ST(me,this);
+             followSt=new FOLLOW_ST(me,this);
             }
             internal class ST{
              protected BaseAI me;
@@ -52,11 +53,9 @@ namespace AKCondinoO.Sims.Actors{
           bool isInAttackRangeWithWeapon=false;
           Vector3 attackDistance          ;
           Vector3 attackDistanceWithWeapon;
-            internal virtual void main(){
+            internal virtual void Main(){
              //  adicionar hitbox da cabeça do homunculus inimigo
-             //  se não houver hitbox da cabela, mirar corpo
-             //  regular para acertar tiros em 100% de chance por enquanto
-             //  ao terminar chase, sempre fazer um ataque
+             //  melhorar sistema de perseguição para inimigo que se move
              //  ajustar corpo para virar para direção da mira com menos diferença de rotação
              //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();
@@ -72,17 +71,39 @@ namespace AKCondinoO.Sims.Actors{
               attackDistanceWithWeapon=me.AttackDistance(true);
              }
              UpdateMyState();
+             SetSkill();
              ProcessStateRoutine();
             }
-        // bool callingSlaves=false;
-        // foreach(var slave in slaves){
-        //  if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
-        //   if(!callingSlaves){
-        //    SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
-        //    callingSlaves=true;
-        //   }
-        //  }
-        // }
+            internal void SetSkill(){
+             bool callingSlaves=false;
+             foreach(var slave in me.slaves){
+              if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
+               if(!callingSlaves){
+                me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
+                callingSlaves=true;
+               }
+              }
+             }
+             Log.DebugMessage(me+":me.SetSkill():MyState:"+MyState);
+             if      (MyState==State.  DEAD_ST){
+              //
+             }else if(MyState==State. SNIPE_ST){
+              
+             }else if(MyState==State.ATTACK_ST){
+              
+             }else if(MyState==State. CHASE_ST){
+              
+             }else if(MyState==State.FOLLOW_ST){
+              //Log.DebugMessage(me+":me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow)");
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow);
+             }else{
+              //Log.DebugMessage(me+":me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle)");
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle);
+             }
+             if(MySkill!=null){
+              me.DoSkill();
+             }
+            }
         }
         //protected virtual void mainAIFunction(){
         // if(resettingRotation){

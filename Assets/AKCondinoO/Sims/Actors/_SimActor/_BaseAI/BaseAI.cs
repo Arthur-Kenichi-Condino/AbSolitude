@@ -312,7 +312,7 @@ namespace AKCondinoO.Sims.Actors{
                 characterController.ManualUpdateUsingAI();
              }
              ai.MyPathfinding=GetPathfindingResult();
-             ai.main();
+             ai.Main();
              if(
               IsTraversingPath()
              ){
