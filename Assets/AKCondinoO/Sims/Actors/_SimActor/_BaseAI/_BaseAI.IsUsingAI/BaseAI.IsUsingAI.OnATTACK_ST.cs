@@ -48,6 +48,10 @@ namespace AKCondinoO.Sims.Actors{
                  float hasFriendlyTargetsToAvoidMaxTime=8f;
                  float hasFriendlyTargetsToAvoidTimer;
                 internal void DoRoutine(){
+                 if(MyEnemy==null){
+                  me.MoveStop();
+                  return;
+                 }
                  if(firstAttack){
                   me.MoveStop();
                   if(me.Attack(ai.MyEnemy)){
@@ -56,10 +60,7 @@ namespace AKCondinoO.Sims.Actors{
                    return;
                   }
                  }
-                 if(MyEnemy==null){
-                  me.MoveStop();
-                  return;
-                 }
+                 ai.DoSkill();
                  if(avoiding&&avoidingMoving){
                   if(!me.IsTraversingPath()){
                    Log.DebugMessage("stop avoiding:"+ai.MyPathfinding);

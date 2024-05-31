@@ -118,6 +118,7 @@ namespace AKCondinoO.Sims.Weapons{
            Vector3 shootDir=(actor.characterController.aimingAt-muzzle.transform.position).normalized;
            Ray shootRay=new Ray(muzzle.transform.position,shootDir);
            Debug.DrawRay(shootRay.origin,shootRay.direction*shootDis,Color.white,1f);
+           Debug.DrawLine(shootRay.origin,shootRay.origin+(shootRay.direction*shootDis),Color.blue,5f);
            _GetShootHits:{
             shootHitsLength=Physics.RaycastNonAlloc(shootRay,shootHits,shootDis,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide);
            }
@@ -128,6 +129,7 @@ namespace AKCondinoO.Sims.Weapons{
             }
            }
            for(int i=shootHits.Length-1;i>=0;--i){
+            Log.DebugMessage("shootHits[i]:"+shootHits[i].transform?.name);
             if(i>=shootHitsLength){
              shootHits[i]=default(RaycastHit);
              continue;

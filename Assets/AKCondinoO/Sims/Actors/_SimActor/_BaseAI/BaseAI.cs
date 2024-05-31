@@ -59,6 +59,7 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController==null){
           height=heightCrouching;
          }
+         aiRotTurnTo.tgtRot=aiRotTurnTo.tgtRot_Last=transform.rotation;
          Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
@@ -90,7 +91,7 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
-         attackRange=new Vector3(0.125f/2f,0.125f/2f,0.0625f/2f);
+         attackRange=new Vector3(0.125f/8f,0.125f/8f,0.0625f/8f);
          requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
          requiredSkills.Add(typeof(Teleport        ),new SkillData(){skill=typeof(Teleport        ),level=1 ,});
          //  load skills from file here:
@@ -304,15 +305,12 @@ namespace AKCondinoO.Sims.Actors{
              DisableNavMeshAgent();
             }
             if(navMeshAgent.enabled){
-             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
-              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
-              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
-             }
              if(characterController!=null){
                 characterController.ManualUpdateUsingAI();
              }
              ai.MyPathfinding=GetPathfindingResult();
              ai.Main();
+             characterController.character.transform.rotation=aiRotTurnTo.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
              if(
               IsTraversingPath()
              ){
@@ -320,12 +318,24 @@ namespace AKCondinoO.Sims.Actors{
                IsAttacking()
               ){
                MoveStop();
-               TurnToMyEnemy();
+               if(ai.MyEnemy!=null){
+                TurnToMyEnemy();
+               }
               }else{
-               TurnToMoveDest();
+               if(!TurnToMoveDest()){
+                MovePause();
+               }else{
+                MoveResume();
+               }
               }
              }
              UpdateMotion(true);
+             bool stopNavMesh=navMeshAgentShouldBeStopped;
+             stopNavMesh|=movePaused;
+             if(navMeshAgent.isStopped!=stopNavMesh){
+              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
+              navMeshAgent.isStopped=stopNavMesh;
+             }
             }
            }else{
             if(wasUsingAI){

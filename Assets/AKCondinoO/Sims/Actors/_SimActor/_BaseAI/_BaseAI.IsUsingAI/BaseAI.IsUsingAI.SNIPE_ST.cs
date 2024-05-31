@@ -60,6 +60,7 @@ namespace AKCondinoO.Sims.Actors{
                  }
                  retreatDis=ratio*dis1;
                  Log.DebugMessage("retreatDis:"+retreatDis);
+                 ai.DoSkill();
                  if(reloading){
                   if(!me.IsReloading()){
                    alternateRetreatShoot=false;
@@ -69,14 +70,8 @@ namespace AKCondinoO.Sims.Actors{
                    }
                   }else{
                    if(
-                    me.IsTraversingPath()
+                    !me.IsTraversingPath()
                    ){
-                    if(!me.TurnToMoveDest()){
-                     me.MovePause();
-                    }else{
-                     me.MoveResume();
-                    }
-                   }else{
                     me.TurnToMyEnemy();
                    }
                   }
@@ -104,14 +99,9 @@ namespace AKCondinoO.Sims.Actors{
                    Log.DebugMessage("not me.IsTraversingPath:moving=false");
                    alternateRetreatShoot=true;
                    moving=false;
-                  }else{
-                   if(!me.TurnToMoveDest()){
-                    me.MovePause();
-                   }else{
-                    me.MoveResume();
-                   }
                   }
                  }
+                 Log.DebugMessage("ai.MyPathfinding:"+ai.MyPathfinding);
                  if(!reloading&&
                     !shooting&&
                     !moving
@@ -121,22 +111,13 @@ namespace AKCondinoO.Sims.Actors{
                    tryingShooting=true;
                   }
                   if(tryingShooting){
-                   if(
-                    !me.IsTraversingPath()
-                   ){
-                    if(me.TryShoot(MyEnemy,out bool r,out bool s)){
-                     tryingShooting=false;
-                     if(s){
-                      shooting=true;
-                     }else if(r){
-                      reloading=true;
-                     }
-                    }
-                   }else{
-                    if(!me.TurnToMoveDest()){
-                     me.MovePause();
-                    }else{
-                     me.MoveResume();
+                   me.MoveStop();
+                   if(me.TryShoot(MyEnemy,out bool r,out bool s)){
+                    tryingShooting=false;
+                    if(s){
+                     shooting=true;
+                    }else if(r){
+                     reloading=true;
                     }
                    }
                   }else{

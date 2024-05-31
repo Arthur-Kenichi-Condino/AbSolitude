@@ -20,6 +20,7 @@ namespace AKCondinoO.Sims.Actors{
           transform.rotation=characterController.character.transform.rotation;
           characterController.character.transform.rotation=transform.rotation;
           characterController.isAiming=false;
+          aiRotTurnTo.tgtRot=aiRotTurnTo.tgtRot_Last=characterController.character.transform.rotation;
          }
         }
         protected virtual void OnStopUsingAI(){
@@ -29,7 +30,8 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      [SerializeField]internal bool sniper=false;
-     [SerializeField]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(20,1.25f);
+     [SerializeField]protected bool doIdleMove=true;
+     internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(1f/2f),0.0005f*(2f));
         internal partial class AI{
          BaseAI me;
             internal AI(BaseAI me){
@@ -38,6 +40,7 @@ namespace AKCondinoO.Sims.Actors{
              attackSt=new ATTACK_ST(me,this);
               chaseSt=new  CHASE_ST(me,this);
              followSt=new FOLLOW_ST(me,this);
+               idleSt=new   IDLE_ST(me,this);
             }
             internal class ST{
              protected BaseAI me;
@@ -54,6 +57,10 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 attackDistance          ;
           Vector3 attackDistanceWithWeapon;
             internal virtual void Main(){
+             //  reescrever modo de salvar arquivo de alterações de terreno pra ser igual ao modo de água
+             //  se chase por algum tempo e não alcança, evadeSt
+             //  se path unreachable / CalculatePath false, evadeSt
+             //  se evadeSt por muito tempo, teleport away
              //  adicionar hitbox da cabeça do homunculus inimigo
              //  melhorar sistema de perseguição para inimigo que se move
              //  ajustar corpo para virar para direção da mira com menos diferença de rotação
@@ -100,6 +107,8 @@ namespace AKCondinoO.Sims.Actors{
               //Log.DebugMessage(me+":me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle)");
               me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle);
              }
+            }
+            internal void DoSkill(){
              if(MySkill!=null){
               me.DoSkill();
              }

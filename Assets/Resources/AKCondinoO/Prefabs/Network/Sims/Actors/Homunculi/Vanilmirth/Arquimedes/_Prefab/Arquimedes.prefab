@@ -74,6 +74,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ZAxisIsUp: 0
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
+  DEBUG_UNPLACE: 0
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 3290482251516891750, guid: 6f5fd54ff986cf149baab03c924a292a, type: 3}
@@ -98,18 +99,12 @@ MonoBehaviour:
   canBeThirdPersonCamFollowed: 0
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
-  pathfindingTimeout: 8
-  pathPendingTimeout: 6
-  attackRange: {x: 0.5, y: 0.5, z: 1.125}
   hitboxesPrefabs: {fileID: 4173842238774049089, guid: 16800c44b6c3fc44880fdc75a70aa0f5, type: 3}
   hurtboxesPrefabs: {fileID: 4038989006948901071, guid: 9dc5281f352071a43a66aa62b7241d77, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 0
   sniper: 0
-  aiRotTurnTo:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 20
-    tgtRotLerpMaxTime: 1.25
+  doIdleMove: 0
 --- !u!114 &2273105198794575747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,27 +117,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headMaxVerticalRotationAngle: 40
-  headMaxHorizontalRotationAngle: 60
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0001
-  viewRotationSmoothValue: 0.025
-  posLerp:
-    tgtPosLerpSpeed: 38
-    tgtPosLerpMaxTime: 0.0001
+  actor: {fileID: 0}
+  character: {fileID: 0}
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
   moveSpeedRunMultiplier: 2
-  isRunningMoveSpeedMultiplierLerp:
-    tgtValLerpSpeed: 76
-    tgtValLerpMaxTime: 0.0005
-  jumpTimeLength: 0.125
-  jumpSpeed: 8
-  aimAtMaxDistance: 1000
 --- !u!114 &-2704640476733430876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,23 +136,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  animator: {fileID: 0}
+  skinnedMesh: {fileID: 0}
+  animatorIKController: {fileID: 0}
   transformAdjustmentsForUMA: {fileID: 5699977945363918326}
   transformAdjustments: []
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 76
-    tgtRotLerpMaxTime: 0.0005
-  posLerp:
-    xLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-    yLerp:
-      tgtValLerpSpeed: 19
-      tgtValLerpMaxTime: 0.0005
-    zLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -195,8 +165,8 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 240
-  m_StoppingDistance: 0
+  m_AngularSpeed: 270
+  m_StoppingDistance: 0.0625
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -251,7 +221,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

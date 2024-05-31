@@ -98,17 +98,12 @@ MonoBehaviour:
   canBeThirdPersonCamFollowed: 1
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
-  pathfindingTimeout: 8
-  pathPendingTimeout: 6
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 0
   sniper: 1
-  aiRotTurnTo:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 20
-    tgtRotLerpMaxTime: 1.25
+  doIdleMove: 0
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,8 +164,8 @@ NavMeshAgent:
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 240
-  m_StoppingDistance: 0
+  m_AngularSpeed: 270
+  m_StoppingDistance: 0.0625
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

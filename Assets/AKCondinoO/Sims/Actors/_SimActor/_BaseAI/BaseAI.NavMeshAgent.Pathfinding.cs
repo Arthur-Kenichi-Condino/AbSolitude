@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+    #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace AKCondinoO.Sims.Actors{
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
-         if(Vector3.Distance(navMeshAgent.destination,transform.position)<=navMeshAgent.stoppingDistance){
+         if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)<=navMeshAgent.stoppingDistance){
           if(movePaused){
            return PathfindingResult.PAUSED;
           }
@@ -54,6 +55,9 @@ namespace AKCondinoO.Sims.Actors{
          pathPendingTimer=0f;
          if(!navMeshAgent.hasPath){
           Log.DebugMessage("!navMeshAgent.hasPath");
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }
@@ -63,6 +67,9 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.remainingDistance<0
          ){
           Log.DebugMessage("navMeshAgent.remainingDistance invalid:"+navMeshAgent.remainingDistance);
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }
@@ -96,6 +103,9 @@ namespace AKCondinoO.Sims.Actors{
           }
           return PathfindingResult.TRAVELLING;
          }
+         if(movePaused){
+          return PathfindingResult.PAUSED;
+         }
          pathfindingTimer=0f;
          return PathfindingResult.REACHED;
         }
@@ -106,6 +116,21 @@ namespace AKCondinoO.Sims.Actors{
           ai.MyPathfinding==PathfindingResult.TIMEOUT||
           ai.MyPathfinding==PathfindingResult.UNREACHABLE
          );
+        }
+        protected override void OnDrawGizmos(){
+         base.OnDrawGizmos();
+         #if UNITY_EDITOR
+          if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
+           Color gizmosColor=Gizmos.color;
+           Gizmos.color=Color.white;
+           //  Draw lines joining each path corner
+           Vector3[]pathCorners=navMeshAgent.path.corners;
+           for(int i=0;i<pathCorners.Length-1;i++){
+            Gizmos.DrawLine(pathCorners[i],pathCorners[i+1]);
+           }
+           Gizmos.color=gizmosColor;
+          }
+         #endif
         }
     }
 }

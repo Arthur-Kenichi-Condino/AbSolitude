@@ -99,8 +99,10 @@ namespace AKCondinoO.Sims.Actors{
                attackSt.Start();
               }else if(state==State. CHASE_ST){
                 chaseSt.Start();
-              }else if(state==State.  IDLE_ST){
-                 //idleSt.Start();
+              }else if(state==State.FOLLOW_ST){
+               //
+              }else{
+                 idleSt.Start();
               }
              }
              MyState=state;
@@ -117,7 +119,7 @@ namespace AKCondinoO.Sims.Actors{
              }else if(MyState==State.FOLLOW_ST){
               followSt.DoRoutine();
              }else{
-                //idleSt.DoRoutine();
+                idleSt.DoRoutine();
              }
             }
         }

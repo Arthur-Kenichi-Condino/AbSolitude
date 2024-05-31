@@ -5,6 +5,7 @@ using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Inventory;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO.Sims.Actors{
@@ -51,7 +52,7 @@ namespace AKCondinoO.Sims.Actors{
        internal Quaternion bodyRotation,lastBodyRotation;
         internal QuaternionRotLerpHelper bodyRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f/4f);//
         internal Quaternion viewRotationForAiming;
-         internal QuaternionRotLerpHelper aimingRotLerp=new QuaternionRotLerpHelper();//
+         internal QuaternionRotLerpHelper aimingRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f/4f);//
      internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(0.125f,0.125f,0.125f);
@@ -266,11 +267,18 @@ namespace AKCondinoO.Sims.Actors{
               Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
               dis=Vector3.Distance(enemyHead,myHead);
               return((enemyHead)-(myHead)).normalized;
-             }else{
-              Vector3 enemyPos=enemyAI.transform.position;
-              dis=Vector3.Distance(enemyPos,myHead);
-              return((enemyPos)-(myHead)).normalized;
+             }else if(enemyAI.hurtboxesByBodyPart.Count>0){
+              foreach(var kvp in enemyAI.hurtboxesByBodyPart){
+               if(kvp.Value.Count>0){
+                Vector3 enemyHurtboxPos=kvp.Value.First().transform.position;
+                dis=Vector3.Distance(enemyHurtboxPos,myHead);
+                return((enemyHurtboxPos)-(myHead)).normalized;
+               }
+              }
              }
+             Vector3 enemyPos=enemyAI.transform.position;
+             dis=Vector3.Distance(enemyPos,myHead);
+             return((enemyPos)-(myHead)).normalized;
             }else{
              dis=Vector3.Distance(actor.enemy.transform.position,myHead);
              return(actor.enemy.transform.position-(myHead)).normalized;

@@ -81,9 +81,11 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController!=null){
           Vector3 planarLookDir=lookDir;
           planarLookDir.y=0f;
-          targetDir=planarLookDir;
-          aiRotTurnTo.tgtRot=Quaternion.LookRotation(planarLookDir);
-          characterController.character.transform.rotation=aiRotTurnTo.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+          targetDir=planarLookDir.normalized;
+          if(targetDir==Vector3.zero){
+           targetDir=transform.forward;
+          }
+          aiRotTurnTo.tgtRot=Quaternion.LookRotation(targetDir);
          }
         }
         protected bool IsTurnedToTargetDir(){
@@ -101,7 +103,7 @@ namespace AKCondinoO.Sims.Actors{
            animatorPlanarLookEuler.z=0f;
            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
            //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-           if(Vector3.Angle(targetDir,animatorPlanarLookDir)<=.5f){
+           if(Vector3.Angle(targetDir,animatorPlanarLookDir)<=1.25f){
             return true;
            }
           }
@@ -110,13 +112,17 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual bool TurnToMoveDest(){
          if(ai==null){
-          return false;
+          return true;
          }
          if(characterController!=null){
-          if(Vector3.Distance(moveDest,transform.position)<=.1f){
-           return true;
+          Vector3 lookDir=transform.forward;
+          if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
+           if(Vector3.Distance(navMeshAgent.steeringTarget,transform.position)>.0625f){
+            lookDir=navMeshAgent.steeringTarget-transform.position;
+           }
+          }else if(Vector3.Distance(moveDest,transform.position)>.0625f){
+           lookDir=moveDest-transform.position;
           }
-          Vector3 lookDir=moveDest-transform.position;
           TurnToTargetDir(lookDir);
           return IsTurnedToTargetDir();
          }
@@ -124,7 +130,10 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected virtual bool TurnToMyEnemy(){
          if(ai==null){
-          return false;
+          return true;
+         }
+         if(ai.MyEnemy==null){
+          return true;
          }
          if(characterController!=null){
           Vector3 lookDir=ai.MyEnemy.transform.position-transform.position;

@@ -12,9 +12,9 @@ namespace AKCondinoO.Sims.Actors{
         internal partial class AI{
         }
      protected Vector3 moveDest;
-        internal bool Move(Vector3 dest){
+        internal bool Move(Vector3 dest,bool run=false){
          if(ai==null){
-          return false;
+          return true;
          }
          if(
           !IsTraversingPath()
@@ -23,6 +23,11 @@ namespace AKCondinoO.Sims.Actors{
          }
          moveDest=dest;
          if(TurnToMoveDest()){
+          if(run){
+           navMeshAgent.speed=navMeshAgentRunSpeed;
+          }else{
+           navMeshAgent.speed=navMeshAgentWalkSpeed;
+          }
           navMeshAgent.destination=moveDest;
           if(
            IsTraversingPath()
@@ -41,7 +46,9 @@ namespace AKCondinoO.Sims.Actors{
           IsTraversingPath()
          ){
           moveDest=navMeshAgent.transform.position;
-          navMeshAgent.destination=moveDest;
+          if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)>navMeshAgent.stoppingDistance){
+           navMeshAgent.destination=moveDest;
+          }
          }
         }
      internal bool movePaused;
@@ -49,8 +56,13 @@ namespace AKCondinoO.Sims.Actors{
          if(ai==null){
           return;
          }
+         if(movePaused){
+          return;
+         }
          movePaused=true;
-         navMeshAgent.destination=navMeshAgent.transform.position;
+         if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)>navMeshAgent.stoppingDistance){
+          //navMeshAgent.destination=navMeshAgent.transform.position;
+         }
         }
         internal void MoveResume(){
          if(ai==null){
@@ -58,7 +70,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(movePaused){
           movePaused=false;
-          navMeshAgent.destination=moveDest;
+          //navMeshAgent.destination=moveDest;
          }
         }
         internal bool Attack(SimObject enemy){
@@ -68,16 +80,20 @@ namespace AKCondinoO.Sims.Actors{
          }
          return result;
         }
+     RaycastHit[]tryShootHits=new RaycastHit[4];
         internal bool TryShoot(SimObject enemy,out bool reloading,out bool shooting){
          reloading=false;
          shooting=false;
+         if(ai.MyEnemy==null){
+          return false;
+         }
          if(IsReloading()||IsShooting()){
           return false;
          }
          bool result=false;
          if(TurnToMyEnemy()){
           characterController.isAiming=true;
-          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=(.125f/4f)){
+          if(animatorController.animatorIKController==null||Vector3.Angle(animatorController.animatorIKController.headLookAtPositionLerped,animatorController.animatorIKController.headLookAtPositionLerp.tgtPos)<=(.0625f)){
            if(itemsEquipped!=null){
             if(itemsEquipped.Value.forAction1 is SimWeapon simWeapon){
              if(simWeapon.ammoLoaded<=0){
@@ -87,8 +103,18 @@ namespace AKCondinoO.Sims.Actors{
                result=true;
               }
              }else{
+              simWeapon.OnShootGetHits(this,ref tryShootHits,out int shootHitsLength);
+              if(shootHitsLength>0){
+               Log.DebugMessage("shootHitsLength>0");
+               for(int h=0;h<shootHitsLength;h++){
+                Log.DebugMessage("tryShootHits[h]:"+tryShootHits[h].transform.name);
+                if(tryShootHits[h].transform.root==ai.MyEnemy.transform.root){
+                 break;
+                }
+               }
+              }
               if(simWeapon.TryStartShootingAction(simAiming:this)){
-               Debug.DrawLine(GetHeadPosition(true),animatorController.animatorIKController.headLookAtPositionLerped,Color.blue,5f);
+               Vector3 head=GetHeadPosition(true);
                shooting=true;
                result=true;
               }

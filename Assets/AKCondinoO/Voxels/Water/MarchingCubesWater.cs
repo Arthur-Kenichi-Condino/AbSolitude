@@ -41,6 +41,12 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
             }
          internal static VoxelWater air    {get;}=new VoxelWater(0.0,0.0,true);
          internal static VoxelWater bedrock{get;}=new VoxelWater(0.0,0.0,true);
+         public static bool operator==(VoxelWater lhs,VoxelWater rhs){
+          return lhs.density==rhs.density&&lhs.previousDensity==rhs.previousDensity&&lhs.sleeping==rhs.sleeping&&lhs.evaporateAfter==rhs.evaporateAfter;
+         }
+         public static bool operator!=(VoxelWater lhs,VoxelWater rhs){
+          return!(lhs==rhs);
+         }
         }
      internal static Vector3 trianglePosAdj{get;}=new Vector3(
       (Width /2.0f)-0.5f,

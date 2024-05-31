@@ -45,6 +45,7 @@ namespace AKCondinoO.Sims.Actors{
                   return;
                  }
                  ai.MyDest=ai.MyEnemy.transform.position;
+                 ai.DoSkill();
                  me.Move(ai.MyDest);
                  //if(me.TurnToMyDest(me.aiRotTurnTo)){
                  // if(!me.IsTraversingPath()){

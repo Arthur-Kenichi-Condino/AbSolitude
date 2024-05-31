@@ -22,6 +22,7 @@ namespace AKCondinoO.Sims.Actors{
                 }
                 internal void DoRoutine(){
                  me.stopPathfindingOnTimeout=false;//
+                 ai.DoSkill();
                  if(
                   !me.IsTraversingPath()
                  ){

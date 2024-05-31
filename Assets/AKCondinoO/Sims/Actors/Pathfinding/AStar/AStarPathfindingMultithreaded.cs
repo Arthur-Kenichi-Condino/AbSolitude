@@ -105,7 +105,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
             for(nCoord1.y=0;nCoord1.y<container.height;nCoord1.y++){
              var ground=container.GetGroundHits.ElementAt(c);
              bool hasGround=ground.colliderInstanceID!=0;
-             Log.DebugMessage("hasGround:"+hasGround);
+             //Log.DebugMessage("hasGround:"+hasGround);
              bool invalidObstaclesOverlap=false;
              bool hasObstacle=false;
              for(int i=0;i<container.getObstaclesMaxHits;++i){
@@ -116,7 +116,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
               if(!invalidObstaclesOverlap){
               }
              }
-             Log.DebugMessage("hasObstacle:"+hasObstacle);
+             //Log.DebugMessage("hasObstacle:"+hasObstacle);
              if(container.nodes.TryGetValue(nCoord1,out Node node)){
               node.hasGround=hasGround;
               node.hasObstacle=hasObstacle;
