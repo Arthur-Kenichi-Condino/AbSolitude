@@ -19,9 +19,16 @@ namespace AKCondinoO.Sims.Actors{
              internal float retreatTime=3f;
              internal float retreatDis;
              bool moving;
+              Vector3?movingDestSet;
              bool tryingShooting;
              bool reloading;
              bool shooting;
+             float noDestMaxTime=1f;
+              float noDestTimer;
+             float tryMoveMaxTime=2f;
+              float tryMoveTimer;
+             float tryShootMaxTime=4f;
+              float tryShootTimer;
                 internal void Finish(){
                  if(me.characterController!=null){
                     me.characterController.isAiming=false;
@@ -30,8 +37,15 @@ namespace AKCondinoO.Sims.Actors{
                 internal void Start(){
                  timer=0f;
                  alternateRetreatShoot=false;
+                 movingDestSet=null;
+                 noDestTimer=0f;
+                 tryMoveTimer=0f;
+                 tryShootTimer=0f;
                 }
                 internal void DoRoutine(){
+                 //  TO DO
+                 //  se tentar mover várias vezes depois de um tempo e não conseguir ficar longe o suficiente, atirar
+                 //  corrigir direção do tiro
                  timer+=Time.deltaTime;
                  if(MyEnemy==null){
                   me.MoveStop();
@@ -63,7 +77,7 @@ namespace AKCondinoO.Sims.Actors{
                  ai.DoSkill();
                  if(reloading){
                   if(!me.IsReloading()){
-                   alternateRetreatShoot=false;
+                   alternateRetreatShoot=true;
                    reloading=false;
                    if(me.characterController!=null){
                       me.characterController.isAiming=false;
@@ -83,7 +97,7 @@ namespace AKCondinoO.Sims.Actors{
                    me.MoveStop();
                   }
                   if(!me.IsShooting()){
-                   alternateRetreatShoot=false;
+                   alternateRetreatShoot=true;
                    shooting=false;
                    if(me.characterController!=null){
                       me.characterController.isAiming=false;
@@ -108,26 +122,71 @@ namespace AKCondinoO.Sims.Actors{
                  ){
                   if(alternateRetreatShoot){
                    alternateRetreatShoot=false;
-                   tryingShooting=true;
+                   movingDestSet=null;
+                   noDestTimer=0f;
+                   tryMoveTimer=0f;
+                   tryShootTimer=0f;
+                   tryingShooting=!tryingShooting;
                   }
                   if(tryingShooting){
                    me.MoveStop();
+                   Log.DebugMessage("tryingShooting");
                    if(me.TryShoot(MyEnemy,out bool r,out bool s)){
-                    tryingShooting=false;
                     if(s){
                      shooting=true;
                     }else if(r){
                      reloading=true;
+                    }else{
+                     alternateRetreatShoot=true;
+                    }
+                   }else{
+                    tryShootTimer+=Time.deltaTime;
+                    if(tryShootTimer>=tryShootMaxTime){
+                     tryShootTimer=0f;
+                     //  timer to cancel shoot and try movement
+                     // then total snipe try count ++
+                     // then add cooldown to SNIPE_ST
+                     alternateRetreatShoot=true;
                     }
                    }
                   }else{
+                   Log.DebugMessage("!tryingShooting");
                    if(Vector3.Distance(me.transform.position,MyEnemy.transform.position)<=retreatDis){
-                    Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;
-                    dir.y=0f;
-                    ai.MyDest=MyEnemy.transform.position+dir*retreatDis+Vector3.down*(me.height/2f);
-                    if(me.Move(ai.MyDest)){
-                     Debug.DrawRay(MyEnemy.transform.position,dir*retreatDis,Color.blue,5f);
-                     moving=true;
+                    if(movingDestSet==null){
+                     Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;
+                     dir.y=0f;
+                     Vector3 dest=MyEnemy.transform.position+dir*retreatDis+Vector3.down*(me.height/2f);
+                     if(Vector3.Distance(ai.MyDest,me.transform.position)<=.125f){
+                      if(me.GetRandomPosition(MyEnemy.transform.position,retreatDis,out Vector3 randomPos)){
+                       dest=randomPos;
+                       movingDestSet=dest;
+                      }
+                     }else{
+                      movingDestSet=dest;
+                     }
+                    }
+                    if(movingDestSet!=null){
+                     ai.MyDest=movingDestSet.Value;
+                     if(me.Move(ai.MyDest)){
+                      Debug.DrawLine(MyEnemy.transform.position,ai.MyDest,Color.blue,5f);
+                      moving=true;
+                     }else{
+                      tryMoveTimer+=Time.deltaTime;
+                      if(tryMoveTimer>=tryMoveMaxTime){
+                       tryMoveTimer=0f;
+                       //  timer to cancel movement and try shoot
+                       // then total snipe try count ++
+                       // then add cooldown to SNIPE_ST
+                       alternateRetreatShoot=true;
+                      }
+                     }
+                    }else{
+                     noDestTimer+=Time.deltaTime;
+                     if(noDestTimer>=noDestMaxTime){
+                      noDestTimer=0f;
+                      //  try count ++
+                      alternateRetreatShoot=true;
+                     }
                     }
                    }else{
                     alternateRetreatShoot=true;

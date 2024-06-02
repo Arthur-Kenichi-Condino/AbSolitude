@@ -80,8 +80,8 @@ namespace AKCondinoO.Sims.Actors{
         protected virtual void TurnToTargetDir(Vector3 lookDir){
          if(characterController!=null){
           Vector3 planarLookDir=lookDir;
-          planarLookDir.y=0f;
           targetDir=planarLookDir.normalized;
+          targetDir=Vector3.ProjectOnPlane(targetDir,Vector3.up);
           if(targetDir==Vector3.zero){
            targetDir=transform.forward;
           }

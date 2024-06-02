@@ -190,7 +190,7 @@ namespace AKCondinoO.Sims.Actors{
                   yield return getDataThrottler;
                   Log.DebugMessage("GetDataCoroutine:Loop");
                   //  TO DO: don't attack allies, handle MOTION_ATTACK_RIFLE (or motions that are not processed or implemented),
-                  if(me.characterController!=null){
+                  if(me.characterController!=null&&MyEnemy!=null){
                    Quaternion rotation=me.GetRotation();
                    float height=me.GetHeight();
                    float radius=me.GetRadius();

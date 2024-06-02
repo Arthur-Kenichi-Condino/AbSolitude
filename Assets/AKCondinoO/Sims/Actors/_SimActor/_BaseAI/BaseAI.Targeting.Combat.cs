@@ -77,9 +77,9 @@ namespace AKCondinoO.Sims.Actors{
          }
          float height=GetHeight();
          return new Vector3(
-          radius*.25f+attackRange.x,
-          height*.25f+attackRange.y,
-          Mathf.Max(radius*.25f+attackRange.z,radius+weaponRange)
+          radius*.95f+attackRange.x,
+          height*.95f+attackRange.y,
+          Mathf.Max(radius*.95f+attackRange.z,radius+weaponRange)
          );
         }
         internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,bool checkWeapon=false){

@@ -83,13 +83,20 @@ namespace AKCondinoO.Sims.Actors{
             }
             internal void SetSkill(){
              bool callingSlaves=false;
+             if(me.requiredSlaves.Count>0){
+              callingSlaves=true;
+             }
              foreach(var slave in me.slaves){
+              Log.DebugMessage("slave:"+slave);
               if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
                if(!callingSlaves){
-                me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
                 callingSlaves=true;
                }
               }
+             }
+             if(callingSlaves){
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
+              Log.DebugMessage("me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves)");
              }
              Log.DebugMessage(me+":me.SetSkill():MyState:"+MyState);
              if      (MyState==State.  DEAD_ST){

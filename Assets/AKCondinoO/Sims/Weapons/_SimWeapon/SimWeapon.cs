@@ -115,7 +115,8 @@ namespace AKCondinoO.Sims.Weapons{
          shootHitsLength=0;
          if(muzzle!=null){
           if(holder is BaseAI actor&&actor.characterController!=null){
-           Vector3 shootDir=(actor.characterController.aimingAt-muzzle.transform.position).normalized;
+           //  TO DO: este valor está errado: shootDir
+           Vector3 shootDir=(actor.characterController.aimingAtRaw-muzzle.transform.position).normalized;
            Ray shootRay=new Ray(muzzle.transform.position,shootDir);
            Debug.DrawRay(shootRay.origin,shootRay.direction*shootDis,Color.white,1f);
            Debug.DrawLine(shootRay.origin,shootRay.origin+(shootRay.direction*shootDis),Color.blue,5f);

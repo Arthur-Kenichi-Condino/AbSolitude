@@ -48,11 +48,11 @@ namespace AKCondinoO.Sims.Actors{
        float viewRotationSmoothValue=.025f;
       internal Quaternion viewRotation;
        internal Quaternion viewRotationRaw;
-       internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper();//
+       internal QuaternionRotLerpHelper rotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f*(1f/4f));//
        internal Quaternion bodyRotation,lastBodyRotation;
-        internal QuaternionRotLerpHelper bodyRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f/4f);//
+        internal QuaternionRotLerpHelper bodyRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f*(1f/4f));//
         internal Quaternion viewRotationForAiming;
-         internal QuaternionRotLerpHelper aimingRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f/4f);//
+         internal QuaternionRotLerpHelper aimingRotLerp=new QuaternionRotLerpHelper(76.0f*4f,0.0005f*(1f/4f));//
      internal Vector3PosLerpHelper posLerp=new Vector3PosLerpHelper();
       internal Vector3 inputMoveVelocity=Vector3.zero;
        [SerializeField]Vector3 moveAcceleration=new Vector3(0.125f,0.125f,0.125f);
@@ -207,7 +207,7 @@ namespace AKCondinoO.Sims.Actors{
              moveDelta=afterMovePos-beforeMovePos;
          #endregion
          #region viewRotationForAiming and aimingAt
-             Vector3 dirRaw=aimDir(out float dirRawDis,raw:true,ignoreEnemy:true,forShooting:true);
+             Vector3 dirRaw=aimDir(out float dirRawDis,out Vector3 aimTargetRaw,raw:true,ignoreEnemy:true,forShooting:true);
              Vector3 toAimRaw=character.transform.position+(character.transform.rotation*headOffset)+dirRaw*dirRawDis;
              aimingAtRaw=toAimRaw;
              Quaternion?isFollowingViewRotation=null;
@@ -229,7 +229,7 @@ namespace AKCondinoO.Sims.Actors{
              viewRotationForAiming=aimingRotLerp.UpdateRotation(viewRotationForAiming,Core.magicDeltaTimeNumber);
              //viewRotationForAiming=aimingRotLerp.UpdateRotation(viewRotationForAiming,Core.magicDeltaTimeNumber);
              //Debug.DrawLine(character.transform.position+(character.transform.rotation*headOffset),character.transform.position+(character.transform.rotation*headOffset)+viewRotationForAiming*Vector3.forward*aimAtMaxDistance);
-             Vector3 dir=aimDir(out float dirDis,raw:false,ignoreEnemy:true,forShooting:true);
+             Vector3 dir=aimDir(out float dirDis,out Vector3 aimTarget,raw:false,ignoreEnemy:true,forShooting:true);
              Vector3 toAim=character.transform.position+(character.transform.rotation*headOffset)+dir*dirDis;
              aimingAt=toAim;
          #endregion
@@ -238,7 +238,7 @@ namespace AKCondinoO.Sims.Actors{
          OnAction1();
         }
         internal void ManualUpdateUsingAI(){
-         Vector3 dirRaw=aimDir(out float dirRawDis,raw:true,ignoreEnemy:false,forShooting:true);
+         Vector3 dirRaw=aimDir(out float dirRawDis,out Vector3 aimTargetRaw,raw:true,ignoreEnemy:false,forShooting:true);
          rotLerp.tgtRot=Quaternion.LookRotation(dirRaw);
          viewRotationRaw=rotLerp.tgtRot;
          viewRotation=rotLerp.UpdateRotation(viewRotation,Core.magicDeltaTimeNumber);
@@ -250,12 +250,14 @@ namespace AKCondinoO.Sims.Actors{
           0f
          );
          Vector3 toAimRaw=character.transform.position+(character.transform.rotation*headOffset)+(dirRaw)*dirRawDis;
-         aimingAtRaw=toAimRaw;
-         viewRotationForAiming=viewRotation;
-         Vector3 dir=aimDir(out float dirDis,raw:false,ignoreEnemy:false,forShooting:true);
-         aimingAt=character.transform.position+(character.transform.rotation*headOffset)+(dir)*dirDis;
+         aimingAtRaw=aimTargetRaw;
+         aimingRotLerp.tgtRot=Quaternion.LookRotation(dirRaw);
+         viewRotationForAiming=aimingRotLerp.UpdateRotation(viewRotationForAiming,Core.magicDeltaTimeNumber);
+         Vector3 dir=aimDir(out float dirDis,out Vector3 aimTarget,raw:false,ignoreEnemy:false,forShooting:true);
+         Vector3 toAim=character.transform.position+(character.transform.rotation*headOffset)+(dir)*dirDis;
+         aimingAt=aimTarget;
         }
-        Vector3 aimDir(out float dis,bool raw=false,bool ignoreEnemy=false,bool forShooting=false){
+        Vector3 aimDir(out float dis,out Vector3 aimTarget,bool raw=false,bool ignoreEnemy=false,bool forShooting=false){
          dis=aimAtMaxDistance;
          if(actor.isUsingAI){
           if(raw){
@@ -266,37 +268,44 @@ namespace AKCondinoO.Sims.Actors{
              if(enemyAI.head!=null&&enemyAI.hurtboxesByBodyPart.TryGetValue(enemyAI.head,out _)){
               Vector3 enemyHead=enemyAI.GetHeadPosition(true,forShooting);
               dis=Vector3.Distance(enemyHead,myHead);
-              return((enemyHead)-(myHead)).normalized;
+              return((aimTarget=enemyHead)-(myHead)).normalized;
              }else if(enemyAI.hurtboxesByBodyPart.Count>0){
               foreach(var kvp in enemyAI.hurtboxesByBodyPart){
                if(kvp.Value.Count>0){
                 Vector3 enemyHurtboxPos=kvp.Value.First().transform.position;
                 dis=Vector3.Distance(enemyHurtboxPos,myHead);
-                return((enemyHurtboxPos)-(myHead)).normalized;
+                return((aimTarget=enemyHurtboxPos)-(myHead)).normalized;
                }
               }
              }
              Vector3 enemyPos=enemyAI.transform.position;
              dis=Vector3.Distance(enemyPos,myHead);
-             return((enemyPos)-(myHead)).normalized;
+             return((aimTarget=enemyPos)-(myHead)).normalized;
             }else{
              dis=Vector3.Distance(actor.enemy.transform.position,myHead);
-             return(actor.enemy.transform.position-(myHead)).normalized;
+             return((aimTarget=actor.enemy.transform.position)-(myHead)).normalized;
             }
            }else{
             //Log.DebugMessage("aimDir:actor.enemy==null");
-            return character.transform.forward;
+            Vector3 dir=character.transform.forward;
+            aimTarget=transform.position+(dir)*dis;
+            return dir;
            }
           }else{
+           aimTarget=transform.position+(viewRotationForAiming*Vector3.forward)*dis;
            return viewRotationForAiming*Vector3.forward;
           }
          }else{
           if(raw){
            //Log.DebugMessage("aimDir:!actor.isUsingAI:raw==true");
-           return viewRotationRaw*Vector3.forward;
+           Vector3 dir=viewRotationRaw*Vector3.forward;
+           aimTarget=transform.position+(dir)*dis;
+           return dir;
           }else{
            //Log.DebugMessage("aimDir:!actor.isUsingAI");
-           return viewRotationForAiming*Vector3.forward;
+           Vector3 dir=viewRotationForAiming*Vector3.forward;
+           aimTarget=transform.position+(dir)*dis;
+           return dir;
           }
          }
         }

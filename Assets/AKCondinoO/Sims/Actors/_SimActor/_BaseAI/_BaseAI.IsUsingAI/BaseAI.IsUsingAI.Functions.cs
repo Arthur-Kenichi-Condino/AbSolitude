@@ -109,14 +109,21 @@ namespace AKCondinoO.Sims.Actors{
                for(int h=0;h<shootHitsLength;h++){
                 Log.DebugMessage("tryShootHits[h]:"+tryShootHits[h].transform.name);
                 if(tryShootHits[h].transform.root==ai.MyEnemy.transform.root){
+                 if(simWeapon.TryStartShootingAction(simAiming:this)){
+                  Vector3 head=GetHeadPosition(true);
+                  shooting=true;
+                  result=true;
+                 }
                  break;
+                }else{
+                 BaseAI baseAI;
+                 if((baseAI=tryShootHits[h].collider.transform.root.GetComponentInChildren<BaseAI>())!=null){
+                  if(baseAI.IsFriendlyTo(this)){
+                   break;
+                  }
+                 }
                 }
                }
-              }
-              if(simWeapon.TryStartShootingAction(simAiming:this)){
-               Vector3 head=GetHeadPosition(true);
-               shooting=true;
-               result=true;
               }
              }
             }
