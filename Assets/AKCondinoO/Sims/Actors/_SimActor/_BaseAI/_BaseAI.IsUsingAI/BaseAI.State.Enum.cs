@@ -39,17 +39,24 @@ namespace AKCondinoO.Sims.Actors{
                }
               }
               if(MyEnemy!=null){
-               if(me.sniper){
-                if(isInAttackRangeWithWeapon){
-                 if(!isInAttackRange||(
-                   me.IsFasterThan(MyEnemy)&&(
-                   attackDistance.z<attackDistanceWithWeapon.z||
-                   attackDistance.x<attackDistanceWithWeapon.x||
-                   attackDistance.y<attackDistanceWithWeapon.y)
-                  )
-                 ){
-                  SetMyState(State.SNIPE_ST);
-                  goto _MyStateSet;
+               bool canSnipe=snipeSt.tryCount<snipeSt.maxTryCount;
+               if(snipeSt.onStateCooldown>0f){
+                snipeSt.onStateCooldown-=Time.deltaTime;
+               }
+               canSnipe&=snipeSt.onStateCooldown<=0f;
+               if(canSnipe){
+                if(me.sniper){
+                 if(isInAttackRangeWithWeapon){
+                  if(!isInAttackRange||(
+                    me.IsFasterThan(MyEnemy)&&(
+                    attackDistance.z<attackDistanceWithWeapon.z||
+                    attackDistance.x<attackDistanceWithWeapon.x||
+                    attackDistance.y<attackDistanceWithWeapon.y)
+                   )
+                  ){
+                   SetMyState(State.SNIPE_ST);
+                   goto _MyStateSet;
+                  }
                  }
                 }
                }
@@ -57,10 +64,12 @@ namespace AKCondinoO.Sims.Actors{
                 SetMyState(State.ATTACK_ST);
                 goto _MyStateSet;
                }
-               if(MyState==State.SNIPE_ST){
-                if(snipeSt.timer<snipeSt.minTimeBeforeCanChase){
-                 SetMyState(State.SNIPE_ST);
-                 goto _MyStateSet;
+               if(canSnipe){
+                if(MyState==State.SNIPE_ST){
+                 if(snipeSt.timer<snipeSt.minTimeBeforeCanChase){
+                  SetMyState(State.SNIPE_ST);
+                  goto _MyStateSet;
+                 }
                 }
                }
                SetMyState(State.CHASE_ST);
@@ -129,6 +138,7 @@ namespace AKCondinoO.Sims.Actors{
           CHASE_ST= 2,
          ATTACK_ST= 3,
           SNIPE_ST=14,
+          EVADE_ST=15,
            DEAD_ST=16,
         }
     }

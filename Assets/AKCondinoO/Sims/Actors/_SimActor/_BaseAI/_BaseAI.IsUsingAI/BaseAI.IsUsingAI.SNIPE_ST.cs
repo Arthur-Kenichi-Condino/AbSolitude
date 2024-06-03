@@ -15,6 +15,11 @@ namespace AKCondinoO.Sims.Actors{
                 }
              internal float minTimeBeforeCanChase=8f;
              internal float timer;
+             internal int maxTryCount=10;
+              internal int tryCount;
+               internal float tryCountToCooldownMultiplier=1f;
+             internal float maxStateCooldown=10f;
+              internal float onStateCooldown;
              internal bool alternateRetreatShoot=false;
              internal float retreatTime=3f;
              internal float retreatDis;
@@ -33,6 +38,10 @@ namespace AKCondinoO.Sims.Actors{
                  if(me.characterController!=null){
                     me.characterController.isAiming=false;
                  }
+                 onStateCooldown=tryCount*tryCountToCooldownMultiplier;
+                 onStateCooldown=Mathf.Min(onStateCooldown,maxStateCooldown);
+                 tryCount=0;
+                 Log.DebugMessage("onStateCooldown:"+onStateCooldown);
                 }
                 internal void Start(){
                  timer=0f;
@@ -143,6 +152,7 @@ namespace AKCondinoO.Sims.Actors{
                     tryShootTimer+=Time.deltaTime;
                     if(tryShootTimer>=tryShootMaxTime){
                      tryShootTimer=0f;
+                     tryCount++;
                      //  timer to cancel shoot and try movement
                      // then total snipe try count ++
                      // then add cooldown to SNIPE_ST
@@ -174,6 +184,7 @@ namespace AKCondinoO.Sims.Actors{
                       tryMoveTimer+=Time.deltaTime;
                       if(tryMoveTimer>=tryMoveMaxTime){
                        tryMoveTimer=0f;
+                       tryCount++;
                        //  timer to cancel movement and try shoot
                        // then total snipe try count ++
                        // then add cooldown to SNIPE_ST
@@ -184,6 +195,7 @@ namespace AKCondinoO.Sims.Actors{
                      noDestTimer+=Time.deltaTime;
                      if(noDestTimer>=noDestMaxTime){
                       noDestTimer=0f;
+                      tryCount++;
                       //  try count ++
                       alternateRetreatShoot=true;
                      }

@@ -52,6 +52,7 @@ namespace AKCondinoO.Sims.Actors{
                  this.ai=ai;
                 }
             }
+          internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
           bool isInAttackRange          =false;
           bool isInAttackRangeWithWeapon=false;
           Vector3 attackDistance          ;
