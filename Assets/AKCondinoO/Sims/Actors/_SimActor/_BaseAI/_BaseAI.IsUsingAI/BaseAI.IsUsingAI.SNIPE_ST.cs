@@ -66,11 +66,11 @@ namespace AKCondinoO.Sims.Actors{
                   me.moveMaxVelocity.z
                  );
                  float myEnemyMoveSpeed=0f;
-                 if(MyEnemy is BaseAI myEnemyAI){
+                 if(MyEnemy is BaseAI myEnemyBaseAI){
                   myEnemyMoveSpeed=Mathf.Max(
-                   myEnemyAI.moveMaxVelocity.x,
-                   myEnemyAI.moveMaxVelocity.y,
-                   myEnemyAI.moveMaxVelocity.z
+                   myEnemyBaseAI.moveMaxVelocity.x,
+                   myEnemyBaseAI.moveMaxVelocity.y,
+                   myEnemyBaseAI.moveMaxVelocity.z
                   );
                  }
                  float dis1=     myMoveSpeed*retreatTime;

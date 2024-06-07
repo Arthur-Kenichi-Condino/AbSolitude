@@ -53,6 +53,7 @@ namespace AKCondinoO.Sims.Actors{
                   return;
                  }
                  if(firstAttack){
+                  Log.DebugMessage("firstAttack");
                   me.MoveStop();
                   if(me.Attack(ai.MyEnemy)){
                    firstAttack=false;

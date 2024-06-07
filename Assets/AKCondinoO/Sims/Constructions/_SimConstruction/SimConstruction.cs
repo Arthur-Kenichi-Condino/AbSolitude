@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class SimConstruction:SimObject{
-     float snapTimer=0f;
+     internal float snapTimer=0f;
+     internal SimObject snappedTo;
+     internal readonly Dictionary<SimObject,float>connections=new();
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if(transform.hasChanged){

@@ -5,6 +5,8 @@ using AKCondinoO.Sims;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
     internal class BuildCategorySimObjectsTable:MonoBehaviour{
      internal readonly SortedDictionary<string,SimObject>tableSimObjects=new SortedDictionary<string,SimObject>();
@@ -27,6 +29,7 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
         }
         internal void OnCreateTable(){
          RectTransform simObjectButtonPrefabRectTransform=(RectTransform)FixedUI.singleton.buildBuyEditModeUIContent.buildCategorySimObjectButtonPrefab.transform;
+         TableFloors tableFloors=this as TableFloors;
          int x=0;
          int y=0;
          foreach(var typeNameSimObjectPair in tableSimObjects){
@@ -41,6 +44,14 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
           GameObject simObjectButton=Instantiate(FixedUI.singleton.buildBuyEditModeUIContent.buildCategorySimObjectButtonPrefab,tableScrollViewContent.transform);
           Log.DebugMessage("simObjectButton pos:"+pos);
           simObjectButton.transform.localPosition=pos;
+          Button simObjectButtonComponent=simObjectButton.GetComponent<Button>();
+          Log.DebugMessage("simObjectButtonComponent:"+simObjectButtonComponent,simObjectButtonComponent);
+          if(tableFloors!=null){
+           simObjectButtonComponent.onClick.RemoveAllListeners();
+           UnityAction call=delegate{tableFloors.OnPlaceSimFloorButtonPress(typeName);};
+           simObjectButtonComponent.onClick.AddListener(call);
+           Log.DebugMessage("added listener:"+call,this);
+          }
           x++;
           if(x>1){
            x=0;

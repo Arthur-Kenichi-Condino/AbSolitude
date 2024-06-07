@@ -115,7 +115,7 @@ namespace AKCondinoO.Sims.Actors{
           return true;
          }
          if(characterController!=null){
-          Vector3 lookDir=transform.forward;
+          Vector3 lookDir=characterController.character.transform.forward;
           if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
            if(Vector3.Distance(navMeshAgent.steeringTarget,transform.position)>.0625f){
             lookDir=navMeshAgent.steeringTarget-transform.position;

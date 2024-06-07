@@ -21,11 +21,27 @@ namespace AKCondinoO.Sims.Actors{
             internal class CHASE_ST:ST{
                 internal CHASE_ST(BaseAI me,AI ai):base(me,ai){
                 }
+             protected Vector3 myEnemyPos,previousMyEnemyPos;
+              protected bool myEnemyMoved;
+             protected bool predictMyEnemyDest;
+              protected float predictMyEnemyDestDis;
+             protected float stoppedPredictingMyEnemyDestCanPredictAgainTimeInterval=2f;
+              protected float stoppedPredictingMyEnemyDestCanPredictAgainTimer;
+             protected float renewDestinationTimeInterval=2f;
+              protected float renewDestinationTimer;
+             protected float renewDestinationMyEnemyIsMovingTimeInterval=.125f;
+              protected float renewDestinationMyEnemyIsMovingTimer;
                 internal void Finish(){
                 // AI_ResetRotation(onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
                 }
                 internal void Start(){
-             //    onChaseMyEnemyPos=onChaseMyEnemyPos_Last=MyEnemy.transform.position;
+                 if(MyEnemy!=null){
+                  myEnemyPos=previousMyEnemyPos=MyEnemy.transform.position;
+                 }
+                 myEnemyMoved=false;
+                 predictMyEnemyDest=false;
+                 renewDestinationTimer=0f;
+                 renewDestinationMyEnemyIsMovingTimer=0f;
              //    onChaseRenewDestinationTimer=onChaseRenewDestinationTimeInterval;
              //    onChaseMyEnemyMovedSoChangeDestinationTimer=0f;
              //    onChaseMyEnemyMovedSoChangeDestination=true;
@@ -44,9 +60,85 @@ namespace AKCondinoO.Sims.Actors{
                   me.MoveStop();
                   return;
                  }
-                 ai.MyDest=ai.MyEnemy.transform.position;
+                 BaseAI myEnemyBaseAI=MyEnemy as BaseAI;
+                 bool myEnemyIsMoving=false;
+                 myEnemyPos=MyEnemy.transform.position;
+                 bool myEnemyChangedPos=myEnemyPos!=previousMyEnemyPos;
+                 myEnemyMoved|=myEnemyChangedPos;
+                 bool shouldPredictMyEnemyDest=false;
+                 shouldPredictMyEnemyDest|=myEnemyChangedPos;
+                 if(myEnemyBaseAI!=null){
+                  myEnemyIsMoving=myEnemyBaseAI.IsMoving();
+                  myEnemyMoved|=myEnemyIsMoving;
+                  shouldPredictMyEnemyDest|=myEnemyIsMoving;
+                 }
+                 float myMoveSpeed=Mathf.Max(
+                  me.moveMaxVelocity.x,
+                  me.moveMaxVelocity.y,
+                  me.moveMaxVelocity.z
+                 );
+                 float myEnemyMoveSpeed=0f;
+                 if(myEnemyBaseAI!=null){
+                  myEnemyMoveSpeed=Mathf.Max(
+                   myEnemyBaseAI.moveMaxVelocity.x,
+                   myEnemyBaseAI.moveMaxVelocity.y,
+                   myEnemyBaseAI.moveMaxVelocity.z
+                  );
+                 }
+                 float dis1=     myMoveSpeed*renewDestinationTimeInterval;
+                 float dis2=myEnemyMoveSpeed*renewDestinationTimeInterval;
+                 float ratio;
+                 if(dis2<=0f){
+                  ratio=1f;
+                 }else{
+                  ratio=dis1/dis2;
+                 }
+                 predictMyEnemyDestDis=ratio*dis1;
+                 bool getDestination=false;
+                 if(ai.damageSources.ContainsKey(MyEnemy)){
+                 }
+                 if(renewDestinationTimer>0f){
+                  renewDestinationTimer-=Time.deltaTime;
+                 }
+                 if(renewDestinationTimer<=0f){
+                  renewDestinationTimer=renewDestinationTimeInterval;
+                  getDestination|=true;
+                 }
+                 if(renewDestinationMyEnemyIsMovingTimer>0f){
+                  renewDestinationMyEnemyIsMovingTimer-=Time.deltaTime;
+                 }
+                 if(renewDestinationMyEnemyIsMovingTimer<=0f){
+                  if(myEnemyMoved){
+                   renewDestinationMyEnemyIsMovingTimer=renewDestinationMyEnemyIsMovingTimeInterval;
+                   myEnemyMoved=false;
+                   getDestination|=true;
+                  }
+                 }
+                 if(stoppedPredictingMyEnemyDestCanPredictAgainTimer>0f){
+                  stoppedPredictingMyEnemyDestCanPredictAgainTimer-=Time.deltaTime;
+                 }
+                 if(getDestination){
+                  if(shouldPredictMyEnemyDest){
+                   if(stoppedPredictingMyEnemyDestCanPredictAgainTimer<=0f){
+                    predictMyEnemyDest=true;
+                   }
+                  }
+                  if(predictMyEnemyDest){
+                   if(!shouldPredictMyEnemyDest){
+                    predictMyEnemyDest=false;
+                    stoppedPredictingMyEnemyDestCanPredictAgainTimer=stoppedPredictingMyEnemyDestCanPredictAgainTimeInterval;
+                   }
+                  }
+                  ai.MyDest=ai.MyEnemy.transform.position;
+                  if(predictMyEnemyDest){
+                   if(myEnemyBaseAI!=null&&myEnemyBaseAI.characterController!=null){
+                    ai.MyDest=ai.MyEnemy.transform.position+myEnemyBaseAI.characterController.transform.forward*predictMyEnemyDestDis;
+                   }
+                  }
+                 }
                  ai.DoSkill();
                  me.Move(ai.MyDest);
+                 previousMyEnemyPos=myEnemyPos;
                  //if(me.TurnToMyDest(me.aiRotTurnTo)){
                  // if(!me.IsTraversingPath()){
                  //  

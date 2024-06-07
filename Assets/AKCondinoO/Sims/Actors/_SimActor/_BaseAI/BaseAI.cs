@@ -311,6 +311,9 @@ namespace AKCondinoO.Sims.Actors{
              ai.MyPathfinding=GetPathfindingResult();
              ai.Main();
              characterController.character.transform.rotation=aiRotTurnTo.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+             if(movePauseDelay>0f){
+              movePauseDelay-=Time.deltaTime;
+             }
              if(
               IsTraversingPath()
              ){
@@ -323,7 +326,9 @@ namespace AKCondinoO.Sims.Actors{
                }
               }else{
                if(!TurnToMoveDest()){
-                MovePause();
+                if(movePauseDelay<=0f){
+                 MovePause();
+                }
                }else{
                 MoveResume();
                }

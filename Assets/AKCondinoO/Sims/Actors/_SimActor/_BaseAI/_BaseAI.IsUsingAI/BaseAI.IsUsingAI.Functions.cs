@@ -51,7 +51,9 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-     internal bool movePaused;
+     [NonSerialized]internal bool movePaused;
+      [NonSerialized]internal float movePauseInterval=1f;
+       [NonSerialized]internal float movePauseDelay;
         internal void MovePause(){
          if(ai==null){
           return;
@@ -59,10 +61,8 @@ namespace AKCondinoO.Sims.Actors{
          if(movePaused){
           return;
          }
+         movePauseDelay=movePauseInterval;
          movePaused=true;
-         if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)>navMeshAgent.stoppingDistance){
-          //navMeshAgent.destination=navMeshAgent.transform.position;
-         }
         }
         internal void MoveResume(){
          if(ai==null){
@@ -70,7 +70,6 @@ namespace AKCondinoO.Sims.Actors{
          }
          if(movePaused){
           movePaused=false;
-          //navMeshAgent.destination=moveDest;
          }
         }
         internal bool Attack(SimObject enemy){

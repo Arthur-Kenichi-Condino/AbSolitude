@@ -52,7 +52,9 @@ namespace AKCondinoO.Sims.Actors{
                  this.ai=ai;
                 }
             }
-          internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
+          internal float damageSourceForgiveTime=20f;
+           internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
+            protected readonly List<SimObject>damageSourcesIterator=new();
           bool isInAttackRange          =false;
           bool isInAttackRangeWithWeapon=false;
           Vector3 attackDistance          ;
@@ -67,6 +69,17 @@ namespace AKCondinoO.Sims.Actors{
              //  ajustar corpo para virar para direção da mira com menos diferença de rotação
              //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();
+             damageSourcesIterator.AddRange(damageSources.Keys);
+             foreach(SimObject damageSourceSim in damageSourcesIterator){
+              float damageSourceForgiveTimer=damageSources[damageSourceSim];
+              damageSourceForgiveTimer-=Time.deltaTime;
+              if(damageSourceForgiveTimer<=0f){
+               damageSources.Remove(damageSourceSim);
+              }else{
+               damageSources[damageSourceSim]=damageSourceForgiveTimer;
+              }
+             }
+             damageSourcesIterator.Clear();
              me.stopPathfindingOnTimeout=true;
              //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
              isInAttackRange          =false;
