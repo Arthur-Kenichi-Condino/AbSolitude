@@ -9,7 +9,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
     internal class BuildCategorySimObjectsTable:MonoBehaviour{
-     internal readonly SortedDictionary<string,SimObject>tableSimObjects=new SortedDictionary<string,SimObject>();
+     internal readonly SortedDictionary<string,SimObject>tableSimObjectPrefabs=new SortedDictionary<string,SimObject>();
+      internal readonly Dictionary<SimObject,PlaceholderObject>tableSimObjectPlaceholders=new();
      internal RectTransform tableScrollViewContent;
         void Awake(){
          TraverseHierarchy(transform);
@@ -32,7 +33,7 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
          TableFloors tableFloors=this as TableFloors;
          int x=0;
          int y=0;
-         foreach(var typeNameSimObjectPair in tableSimObjects){
+         foreach(var typeNameSimObjectPair in tableSimObjectPrefabs){
           string typeName=typeNameSimObjectPair.Key;
           SimObject simObject=typeNameSimObjectPair.Value;
           Log.DebugMessage("OnCreateTable:"+typeName+"..."+simObject);

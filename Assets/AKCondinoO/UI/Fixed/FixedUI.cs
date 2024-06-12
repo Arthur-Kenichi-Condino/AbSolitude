@@ -25,7 +25,7 @@ namespace AKCondinoO.UI.Fixed{
           GameObject prefab=typePrefabPair.Value;
           switch(prefab.GetComponent<SimObject>()){
            case SimFloor simFloor:{
-            buildBuyEditModeUIContent.buildCategoryTableFloors.tableSimObjects.Add(t.ToString(),simFloor);
+            buildBuyEditModeUIContent.buildCategoryTableFloors.tableSimObjectPrefabs.Add(t.ToString(),simFloor);
             break;
            }
           }

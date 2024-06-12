@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
@@ -90,6 +91,12 @@ namespace AKCondinoO{
           return -1;
          }
          return Vector3.Distance(Camera.main.transform.root.position,a.point).CompareTo(Vector3.Distance(Camera.main.transform.root.position,b.point));
+        }
+        internal void SetActiveSim(SimObject selectedSimObject){
+         ScreenInput.singleton.currentActiveSim=null;
+         if(selectedSimObject is BaseAI baseAI){
+          ScreenInput.singleton.currentActiveSim=baseAI;
+         }
         }
     }
 }

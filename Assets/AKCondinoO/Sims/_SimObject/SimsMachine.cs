@@ -25,6 +25,7 @@ namespace AKCondinoO.Sims{
          Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
         }
      internal readonly Dictionary<(Type simType,ulong number),SimActor>actors=new Dictionary<(Type,ulong),SimActor>();
+      internal readonly IdSortedList<SimActor>selectableActorsList=new();
         internal void OnActorSpawn(SimActor simActor){
          Type simType=simActor.id.Value.simObjectType;
          if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
@@ -32,6 +33,11 @@ namespace AKCondinoO.Sims{
           Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
          }
          actors.Add(simActor.id.Value,simActor);//  remember to remove in both types of despawn
+         if(simActor is BaseAI baseAI){
+          if(baseAI.canBeThirdPersonCamFollowed){
+           selectableActorsList.Add(baseAI);
+          }
+         }
         }
         internal void OnActorDespawn(SimActor simActor){
          Type simType=simActor.id.Value.simObjectType;
@@ -40,6 +46,7 @@ namespace AKCondinoO.Sims{
           Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
          }
          actors.Remove(simActor.id.Value);
+         selectableActorsList.Remove(simActor);
         }
      Vector3 mainCamPos,lastMainCamPos;
       bool initMainCamPos=true;

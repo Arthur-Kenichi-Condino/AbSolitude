@@ -225,6 +225,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditing.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.Events.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoEManager.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunTransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnFOLLOW_ST.cs" />
+    <Compile Include="Assets\AKCondinoO\Util\IdSortedList.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SimTime.cs" />
     <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\SimObjectScreenshotHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainGetFileEditDataToNetSyncMultithreaded.cs" />
@@ -329,6 +331,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\FixedUI.BuildBuyEditMode.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\PlaceholderObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Vanilmirth\ChaoticBlessing\ChaoticBlessing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Heap.cs" />
