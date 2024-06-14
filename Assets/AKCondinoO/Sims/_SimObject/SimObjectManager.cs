@@ -34,6 +34,7 @@ namespace AKCondinoO.Sims{
       internal readonly HashSet<SimObject>netActive=new HashSet<SimObject>();
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         SimConstruction.constructionLayer=LayerMask.GetMask("Construction");
          System.Random seedGenerator=new System.Random();
          SimObject.Stats.seedGenerator=new System.Random(seedGenerator.Next());
          BaseAI         .seedGenerator=new System.Random(seedGenerator.Next());

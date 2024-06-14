@@ -15,7 +15,7 @@ C:/Users/arthu/Documentos/GitHub/AbSolitude
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-2055
+4430
 -job-worker-count
 7
 -background-job-worker-count
@@ -59,18 +59,18 @@ C:/Users/arthu/Documentos/GitHub/AbSolitude
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [29292]  Target information:
+Player connection [20556]  Target information:
 
-Player connection [29292]  * "[IP] 192.168.15.2 [Port] 0 [Flags] 2 [Guid] 1220393294 [EditorId] 1220393294 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [20556]  * "[IP] 192.168.15.2 [Port] 0 [Flags] 2 [Guid] 147678955 [EditorId] 147678955 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [29292]  * "[IP] 192.168.0.2 [Port] 0 [Flags] 2 [Guid] 1220393294 [EditorId] 1220393294 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [20556]  * "[IP] 192.168.0.2 [Port] 0 [Flags] 2 [Guid] 147678955 [EditorId] 147678955 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [29292] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [29292] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [20556] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [20556] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 7
 Library Redirect Path: Library/
 [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
-Refreshing native plugins compatible for Editor in 346.64 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 334.51 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.3f1 (019aa96b6ed9)
 [Subsystems] Discovering subsystems at path C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/Resources/UnitySubsystems
@@ -86,43 +86,43 @@ Initialize mono
 Mono path[0] = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56804
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56616
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.003657 seconds.
-- Loaded All Assemblies, in  9.490 seconds
+Registered in 0.003252 seconds.
+- Loaded All Assemblies, in  1.749 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.417 seconds
-Domain Reload Profiling: 9904ms
-	BeginReloadAssembly (7828ms)
+- Finished resetting the current domain, in  0.491 seconds
+Domain Reload Profiling: 2237ms
+	BeginReloadAssembly (394ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (545ms)
-	RebuildNativeTypeToScriptingClass (13ms)
-	initialDomainReloadingComplete (52ms)
-	LoadAllAssembliesAndSetupDomain (1049ms)
-		LoadAssemblies (7824ms)
+	RebuildCommonClasses (383ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (64ms)
+	LoadAllAssembliesAndSetupDomain (888ms)
+		LoadAssemblies (390ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (1047ms)
-			TypeCache.Refresh (1045ms)
-				TypeCache.ScanAssembly (800ms)
+		AnalyzeDomain (885ms)
+			TypeCache.Refresh (884ms)
+				TypeCache.ScanAssembly (624ms)
 			BuildScriptInfoCaches (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (418ms)
+	FinalizeReload (492ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (356ms)
+		SetupLoadedEditorAssemblies (427ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (25ms)
+			InitializePlatformSupportModulesInManaged (26ms)
 			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (6ms)
-			ProcessInitializeOnLoadAttributes (155ms)
-			ProcessInitializeOnLoadMethodAttributes (166ms)
+			BeforeProcessingInitializeOnLoad (5ms)
+			ProcessInitializeOnLoadAttributes (198ms)
+			ProcessInitializeOnLoadMethodAttributes (193ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -132,1552 +132,184 @@ Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in 13.193 seconds
-Refreshing native plugins compatible for Editor in 1.79 ms, found 4 plugins.
+- Loaded All Assemblies, in  3.803 seconds
+Refreshing native plugins compatible for Editor in 1.83 ms, found 4 plugins.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.85 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 1.83 ms, found 4 plugins.
 [MODES] ModeService[none].Initialize
 [MODES] ModeService[none].LoadModes
 [MODES] Loading mode Default (0) for mode-current-id-AbSolitude
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.085 seconds
-Domain Reload Profiling: 14267ms
-	BeginReloadAssembly (1270ms)
+- Finished resetting the current domain, in  1.605 seconds
+Domain Reload Profiling: 5400ms
+	BeginReloadAssembly (1331ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (6ms)
+		DisableScriptedObjects (7ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (29ms)
-	RebuildCommonClasses (37ms)
-	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (11831ms)
-		LoadAssemblies (10982ms)
+		CreateAndSetChildDomain (31ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (2382ms)
+		LoadAssemblies (1998ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (948ms)
-			TypeCache.Refresh (850ms)
-				TypeCache.ScanAssembly (791ms)
-			BuildScriptInfoCaches (86ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1086ms)
+		AnalyzeDomain (489ms)
+			TypeCache.Refresh (373ms)
+				TypeCache.ScanAssembly (343ms)
+			BuildScriptInfoCaches (104ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1605ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (848ms)
+		SetupLoadedEditorAssemblies (1342ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (94ms)
-			ProcessInitializeOnLoadAttributes (512ms)
-			ProcessInitializeOnLoadMethodAttributes (228ms)
+			InitializePlatformSupportModulesInManaged (4ms)
+			SetLoadedEditorAssemblies (6ms)
+			BeforeProcessingInitializeOnLoad (516ms)
+			ProcessInitializeOnLoadAttributes (568ms)
+			ProcessInitializeOnLoadMethodAttributes (240ms)
 			AfterProcessingInitializeOnLoad (7ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (6ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
-Refreshing native plugins compatible for Editor in 1.90 ms, found 4 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 1.91 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 176 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7746 unused Assets / (8.6 MB). Loaded Objects now: 8411.
-Memory consumption went from 261.6 MB to 253.0 MB.
-Total: 11.488000 ms (FindLiveObjects: 0.893200 ms CreateObjectMapping: 1.518900 ms MarkObjects: 5.466900 ms  DeleteObjects: 3.608200 ms)
+Unloading 7747 unused Assets / (8.4 MB). Loaded Objects now: 8412.
+Memory consumption went from 257.7 MB to 249.3 MB.
+Total: 10.971300 ms (FindLiveObjects: 0.921200 ms CreateObjectMapping: 1.408100 ms MarkObjects: 5.341600 ms  DeleteObjects: 3.299100 ms)
 
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 1.81 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7733 unused Assets / (8.3 MB). Loaded Objects now: 8411.
-Memory consumption went from 234.4 MB to 226.1 MB.
-Total: 14.064200 ms (FindLiveObjects: 0.978900 ms CreateObjectMapping: 1.510500 ms MarkObjects: 7.830500 ms  DeleteObjects: 3.742500 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.863 seconds
-Refreshing native plugins compatible for Editor in 1.77 ms, found 4 plugins.
-Native extension for WindowsStandalone target not found
-[MODES] ModeService[none].Initialize
-[MODES] ModeService[none].LoadModes
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.895 seconds
-Domain Reload Profiling: 1754ms
-	BeginReloadAssembly (218ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (56ms)
-	RebuildCommonClasses (36ms)
-	RebuildNativeTypeToScriptingClass (14ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (561ms)
-		LoadAssemblies (405ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (252ms)
-			TypeCache.Refresh (15ms)
-				TypeCache.ScanAssembly (4ms)
-			BuildScriptInfoCaches (221ms)
-			ResolveRequiredComponents (13ms)
-	FinalizeReload (895ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (651ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (86ms)
-			ProcessInitializeOnLoadAttributes (329ms)
-			ProcessInitializeOnLoadMethodAttributes (223ms)
-			AfterProcessingInitializeOnLoad (7ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.75 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7744 unused Assets / (8.3 MB). Loaded Objects now: 8416.
-Memory consumption went from 237.7 MB to 229.3 MB.
-Total: 10.594400 ms (FindLiveObjects: 0.872900 ms CreateObjectMapping: 1.492500 ms MarkObjects: 4.989700 ms  DeleteObjects: 3.238500 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 170812.331874 seconds.
-  path: Assets/AKCondinoO/UI/Placeholder.prefab
-  artifactKey: Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/Placeholder.prefab using Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '43094aa49df4810316b047eeca36ee81') in 0.270705 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.659465 seconds.
-  path: Assets/AKCondinoO/UI/Placeholder.cs
-  artifactKey: Guid(bd31825aa3d6e0d489f345516df465a3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/Placeholder.cs using Guid(bd31825aa3d6e0d489f345516df465a3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '0c400a41332c96447b2a9f6a4bf16fda') in 0.0013094 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 7501.380766 seconds.
-  path: Assets/AKCondinoO/UI
-  artifactKey: Guid(53a6bb6c7da579647a054c990f086678) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI using Guid(53a6bb6c7da579647a054c990f086678) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '5aaaa989db9386181f6e2a5db55ec958') in 0.0031886 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.16 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7734 unused Assets / (7.3 MB). Loaded Objects now: 8420.
-Memory consumption went from 238.5 MB to 231.1 MB.
-Total: 55.751800 ms (FindLiveObjects: 1.292500 ms CreateObjectMapping: 2.227300 ms MarkObjects: 48.226600 ms  DeleteObjects: 4.004000 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 19.652092 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '2457538ff28d3da3d36c8d46f60e5c05') in 0.0225749 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  4.184 seconds
-Refreshing native plugins compatible for Editor in 1.68 ms, found 4 plugins.
-Native extension for WindowsStandalone target not found
-[MODES] ModeService[none].Initialize
-[MODES] ModeService[none].LoadModes
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.935 seconds
-Domain Reload Profiling: 5118ms
-	BeginReloadAssembly (627ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (1ms)
-		CreateAndSetChildDomain (165ms)
-	RebuildCommonClasses (163ms)
-	RebuildNativeTypeToScriptingClass (14ms)
-	initialDomainReloadingComplete (37ms)
-	LoadAllAssembliesAndSetupDomain (3341ms)
-		LoadAssemblies (3144ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (518ms)
-			TypeCache.Refresh (30ms)
-				TypeCache.ScanAssembly (6ms)
-			BuildScriptInfoCaches (471ms)
-			ResolveRequiredComponents (10ms)
-	FinalizeReload (935ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (685ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (89ms)
-			ProcessInitializeOnLoadAttributes (348ms)
-			ProcessInitializeOnLoadMethodAttributes (234ms)
-			AfterProcessingInitializeOnLoad (6ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.82 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7745 unused Assets / (7.8 MB). Loaded Objects now: 8425.
-Memory consumption went from 238.2 MB to 230.4 MB.
-Total: 12.200200 ms (FindLiveObjects: 0.893300 ms CreateObjectMapping: 1.379400 ms MarkObjects: 5.626600 ms  DeleteObjects: 4.300000 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 30025.724019 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0133476 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.122061 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.prefab
-  artifactKey: Guid(c159780157311ac40b725955a819233f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.prefab using Guid(c159780157311ac40b725955a819233f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'a6ba7b1c90f247af0232d3926e6687bc') in 0.0339446 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.075129 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005434 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.005168 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004648 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.003467 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.000436 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.005267 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004505 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007685 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004621 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008398 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004828 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008608 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005041 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008146 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004522 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008658 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004516 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007786 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006082 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008386 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004894 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008718 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004825 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008404 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005197 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008355 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004599 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008996 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004737 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009332 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006551 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.010109 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004977 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009473 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004718 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008592 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006011 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001430 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.000432 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008906 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004572 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008457 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004806 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001809 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005334 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008361 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004534 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009493 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004502 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008836 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004644 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001591 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004485 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007893 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005138 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009231 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004863 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008049 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004711 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008209 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004746 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008855 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004695 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008351 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005562 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007795 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004495 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008343 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004521 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008453 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005276 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008880 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005062 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008634 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004774 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008206 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004422 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008946 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004427 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008785 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004838 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008027 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005671 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001807 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004412 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008158 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004494 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008732 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004601 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008743 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004695 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008868 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005551 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008752 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004469 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009154 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004608 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008083 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004745 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008974 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004573 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001530 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004402 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008204 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004502 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007780 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004806 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007979 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004864 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009064 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005025 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008254 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005093 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007873 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004746 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008578 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004794 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008656 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006115 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008231 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004488 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008111 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004586 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007945 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004733 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008565 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004798 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008617 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004464 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008177 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004692 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007764 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004617 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008199 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0007624 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009078 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006415 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008300 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004899 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008278 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004508 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008566 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004594 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008495 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0006871 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007577 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005289 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009638 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0005679 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001476 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.000517 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008017 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004858 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008254 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004844 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007941 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004523 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.009019 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004447 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008188 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004933 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.007806 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.000497 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008288 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004443 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008396 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004764 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.008120 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.cs
-  artifactKey: Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.cs using Guid(fd152eea87a174f4a8a6b45d41685cf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '00000000000000000000000000000000') in 0.0004639 seconds
-Import Error Code:(4)
-Message: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-  ERROR: Build asset version error: assets/akcondinoo/ui/placeholderobject.cs in SourceAssetDB has modification time of '2024-06-11T21:15:36.0972745Z' while content on disk has modification time of '2024-06-12T05:35:00.3439207Z'
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.238127 seconds.
-  path: Assets/AKCondinoO/UI/PlaceholderObject.prefab
-  artifactKey: Guid(c159780157311ac40b725955a819233f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/PlaceholderObject.prefab using Guid(c159780157311ac40b725955a819233f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'a25ba97192a8790d1967ede6d8822f29') in 0.0019514 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 4.20 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7734 unused Assets / (8.6 MB). Loaded Objects now: 8425.
-Memory consumption went from 238.5 MB to 229.9 MB.
-Total: 24.955200 ms (FindLiveObjects: 1.958200 ms CreateObjectMapping: 3.135400 ms MarkObjects: 14.424400 ms  DeleteObjects: 5.435800 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.870 seconds
-Refreshing native plugins compatible for Editor in 1.67 ms, found 4 plugins.
-Native extension for WindowsStandalone target not found
-[MODES] ModeService[none].Initialize
-[MODES] ModeService[none].LoadModes
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.917 seconds
-Domain Reload Profiling: 1784ms
-	BeginReloadAssembly (212ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (61ms)
-	RebuildCommonClasses (36ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (30ms)
-	LoadAllAssembliesAndSetupDomain (573ms)
-		LoadAssemblies (428ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (242ms)
-			TypeCache.Refresh (16ms)
-				TypeCache.ScanAssembly (4ms)
-			BuildScriptInfoCaches (213ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (917ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (653ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (90ms)
-			ProcessInitializeOnLoadAttributes (329ms)
-			ProcessInitializeOnLoadMethodAttributes (222ms)
-			AfterProcessingInitializeOnLoad (6ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.84 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7745 unused Assets / (8.3 MB). Loaded Objects now: 8430.
-Memory consumption went from 238.3 MB to 230.0 MB.
-Total: 11.788500 ms (FindLiveObjects: 1.074100 ms CreateObjectMapping: 1.773900 ms MarkObjects: 5.464300 ms  DeleteObjects: 3.475200 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 28.893415 seconds.
-  path: Assets/AKCondinoO/UI/Placeholder.prefab
-  artifactKey: Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/Placeholder.prefab using Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'e4832821ad41cc847c69b6f64cf23b98') in 0.0374263 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.039327 seconds.
-  path: Assets/AKCondinoO/UI/Placeholder.prefab
-  artifactKey: Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AKCondinoO/UI/Placeholder.prefab using Guid(e31fe46eea813cd40a3c73e23d4b616d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '12aa9f7b3fe7f9efadc6bb67f6431d7c') in 0.0024927 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 9
-
-========================================================================
 Received Import Request.
-  Time since last request: 188.156940 seconds.
+  Time since last request: 71952.421125 seconds.
   path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab
   artifactKey: Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab using Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '0631b11c583ba7c1ef22b27d498069d9') in 0.0972519 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 85
-
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 1.87 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7734 unused Assets / (8.2 MB). Loaded Objects now: 8437.
-Memory consumption went from 238.9 MB to 230.7 MB.
-Total: 13.658800 ms (FindLiveObjects: 1.122900 ms CreateObjectMapping: 1.725500 ms MarkObjects: 7.271300 ms  DeleteObjects: 3.537500 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.852 seconds
-Refreshing native plugins compatible for Editor in 1.85 ms, found 4 plugins.
-Native extension for WindowsStandalone target not found
-[MODES] ModeService[none].Initialize
-[MODES] ModeService[none].LoadModes
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.932 seconds
-Domain Reload Profiling: 1781ms
-	BeginReloadAssembly (212ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (8ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (52ms)
-	RebuildCommonClasses (37ms)
-	RebuildNativeTypeToScriptingClass (14ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (554ms)
-		LoadAssemblies (409ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (244ms)
-			TypeCache.Refresh (16ms)
-				TypeCache.ScanAssembly (4ms)
-			BuildScriptInfoCaches (214ms)
-			ResolveRequiredComponents (10ms)
-	FinalizeReload (933ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (674ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (96ms)
-			ProcessInitializeOnLoadAttributes (339ms)
-			ProcessInitializeOnLoadMethodAttributes (224ms)
-			AfterProcessingInitializeOnLoad (7ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.92 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7745 unused Assets / (8.3 MB). Loaded Objects now: 8441.
-Memory consumption went from 238.5 MB to 230.1 MB.
-Total: 12.067400 ms (FindLiveObjects: 0.939900 ms CreateObjectMapping: 1.448800 ms MarkObjects: 5.529600 ms  DeleteObjects: 4.148000 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.32 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7734 unused Assets / (8.6 MB). Loaded Objects now: 8441.
-Memory consumption went from 238.6 MB to 230.0 MB.
-Total: 23.973700 ms (FindLiveObjects: 0.949100 ms CreateObjectMapping: 2.045500 ms MarkObjects: 16.931500 ms  DeleteObjects: 4.046200 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.273 seconds
-Refreshing native plugins compatible for Editor in 1.86 ms, found 4 plugins.
-Native extension for WindowsStandalone target not found
-[MODES] ModeService[none].Initialize
-[MODES] ModeService[none].LoadModes
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.330 seconds
-Domain Reload Profiling: 2599ms
-	BeginReloadAssembly (613ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (6ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (456ms)
-	RebuildCommonClasses (37ms)
-	RebuildNativeTypeToScriptingClass (14ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (574ms)
-		LoadAssemblies (431ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (239ms)
-			TypeCache.Refresh (15ms)
-				TypeCache.ScanAssembly (4ms)
-			BuildScriptInfoCaches (210ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1331ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (1080ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (92ms)
-			ProcessInitializeOnLoadAttributes (333ms)
-			ProcessInitializeOnLoadMethodAttributes (641ms)
-			AfterProcessingInitializeOnLoad (7ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.81 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7745 unused Assets / (8.2 MB). Loaded Objects now: 8446.
-Memory consumption went from 238.5 MB to 230.2 MB.
-Total: 10.812800 ms (FindLiveObjects: 0.925000 ms CreateObjectMapping: 1.328900 ms MarkObjects: 5.156300 ms  DeleteObjects: 3.402100 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 656.188619 seconds.
-  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab
-  artifactKey: Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab using Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '2bdbd4c0c9f3c972bda04e1095a5790d') in 0.0953601 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 85
-
-========================================================================
-Received Import Request.
-  Time since last request: 129.891505 seconds.
-  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab
-  artifactKey: Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Constructions/Floors/Floor10x10x10/_Prefab/Floor10x10x10.prefab using Guid(9341b3b4cbec1fd49a3505abf35fadde) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'a444412efb8ec5eb7ef850fa0efaded4') in 0.0097265 seconds
+ -> (artifact id: '573cdcf3053f09c3bf06eb75634ca73d') in 0.098422 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 84
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 1.86 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 2.20 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7734 unused Assets / (8.2 MB). Loaded Objects now: 8447.
-Memory consumption went from 238.7 MB to 230.5 MB.
-Total: 15.482900 ms (FindLiveObjects: 0.987500 ms CreateObjectMapping: 2.015000 ms MarkObjects: 8.535900 ms  DeleteObjects: 3.942500 ms)
+Unloading 7734 unused Assets / (8.4 MB). Loaded Objects now: 8422.
+Memory consumption went from 231.5 MB to 223.0 MB.
+Total: 13.871800 ms (FindLiveObjects: 1.062000 ms CreateObjectMapping: 1.924600 ms MarkObjects: 6.969900 ms  DeleteObjects: 3.914000 ms)
 
 Prepare: number of updated asset objects reloaded= 0
 ========================================================================
 Received Prepare
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.882 seconds
-Refreshing native plugins compatible for Editor in 1.80 ms, found 4 plugins.
+- Loaded All Assemblies, in  0.890 seconds
+Refreshing native plugins compatible for Editor in 1.93 ms, found 4 plugins.
 Native extension for WindowsStandalone target not found
 [MODES] ModeService[none].Initialize
 [MODES] ModeService[none].LoadModes
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.970 seconds
-Domain Reload Profiling: 1849ms
-	BeginReloadAssembly (218ms)
+- Finished resetting the current domain, in  0.991 seconds
+Domain Reload Profiling: 1878ms
+	BeginReloadAssembly (223ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (5ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (65ms)
+		CreateAndSetChildDomain (60ms)
+	RebuildCommonClasses (56ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (31ms)
+	LoadAllAssembliesAndSetupDomain (559ms)
+		LoadAssemblies (429ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (233ms)
+			TypeCache.Refresh (16ms)
+				TypeCache.ScanAssembly (4ms)
+			BuildScriptInfoCaches (205ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (992ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (680ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (99ms)
+			ProcessInitializeOnLoadAttributes (341ms)
+			ProcessInitializeOnLoadMethodAttributes (226ms)
+			AfterProcessingInitializeOnLoad (7ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 2.07 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 7745 unused Assets / (8.3 MB). Loaded Objects now: 8426.
+Memory consumption went from 236.4 MB to 228.1 MB.
+Total: 12.259200 ms (FindLiveObjects: 0.967400 ms CreateObjectMapping: 1.541700 ms MarkObjects: 5.635500 ms  DeleteObjects: 4.113200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.04 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 7734 unused Assets / (8.1 MB). Loaded Objects now: 8426.
+Memory consumption went from 236.5 MB to 228.4 MB.
+Total: 13.569400 ms (FindLiveObjects: 0.924200 ms CreateObjectMapping: 1.705200 ms MarkObjects: 7.022800 ms  DeleteObjects: 3.915600 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.836 seconds
+Refreshing native plugins compatible for Editor in 1.76 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.901 seconds
+Domain Reload Profiling: 1734ms
+	BeginReloadAssembly (203ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (5ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (51ms)
 	RebuildCommonClasses (36ms)
 	RebuildNativeTypeToScriptingClass (14ms)
 	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (580ms)
-		LoadAssemblies (405ms)
+	LoadAllAssembliesAndSetupDomain (549ms)
+		LoadAssemblies (397ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (270ms)
+		AnalyzeDomain (248ms)
 			TypeCache.Refresh (15ms)
 				TypeCache.ScanAssembly (4ms)
-			BuildScriptInfoCaches (242ms)
-			ResolveRequiredComponents (10ms)
-	FinalizeReload (971ms)
+			BuildScriptInfoCaches (220ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (901ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (705ms)
+		SetupLoadedEditorAssemblies (660ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (93ms)
-			ProcessInitializeOnLoadAttributes (369ms)
-			ProcessInitializeOnLoadMethodAttributes (227ms)
-			AfterProcessingInitializeOnLoad (8ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (89ms)
+			ProcessInitializeOnLoadAttributes (327ms)
+			ProcessInitializeOnLoadMethodAttributes (231ms)
+			AfterProcessingInitializeOnLoad (7ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.79 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 1.78 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 47 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 7745 unused Assets / (8.3 MB). Loaded Objects now: 8451.
-Memory consumption went from 238.5 MB to 230.2 MB.
-Total: 11.265100 ms (FindLiveObjects: 0.925800 ms CreateObjectMapping: 1.431500 ms MarkObjects: 5.323100 ms  DeleteObjects: 3.584000 ms)
+Unloading 7745 unused Assets / (8.1 MB). Loaded Objects now: 8431.
+Memory consumption went from 236.4 MB to 228.3 MB.
+Total: 10.524400 ms (FindLiveObjects: 0.900200 ms CreateObjectMapping: 1.395100 ms MarkObjects: 5.043000 ms  DeleteObjects: 3.185000 ms)
 
 Prepare: number of updated asset objects reloaded= 0

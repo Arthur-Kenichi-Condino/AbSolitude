@@ -1,11 +1,25 @@
+#if UNITY_EDITOR
+    #define ENABLE_LOG_DEBUG
+#endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 namespace AKCondinoO.Sims{
     internal class SimConstruction:SimObject{
+     internal static int constructionLayer;
+     [SerializeField]internal ParentConstraint[]snappingConstraints;
+     internal readonly Dictionary<Collider,Ray[]>snappingRays=new();
+      protected Type customSnapping=typeof(SimConstruction);
      internal float snapTimer=0f;
      internal SimObject snappedTo;
      internal readonly Dictionary<SimObject,float>connections=new();
+        protected override void Awake(){
+         base.Awake();
+        }
+        internal virtual void GetSnappingRays(Collider collider,Dictionary<Collider,Ray[]>snappingRays){
+        }
         internal override int ManualUpdate(bool doValidationChecks){
          int result=0;
          if(transform.hasChanged){

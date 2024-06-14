@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.Voxels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +24,30 @@ namespace AKCondinoO.UI{
          PlaceholderObject placeholderObject=Instantiate(placeholderObjectPrefab);
          placeholderObject.BuildFrom(simObjectPrefab);
          return placeholderObject;
+        }
+     internal PlaceholderObject currentPlaceholder;
+        internal void SetCurrentPlaceholder(PlaceholderObject placeholder){
+         currentPlaceholder=placeholder;
+        }
+        void Update(){
+         if(currentPlaceholder!=null){
+          if(ScreenInput.singleton.screenPointRaycastResultsCount>0){
+           for(int i=0;i<ScreenInput.singleton.screenPointRaycastResultsCount;++i){
+            RaycastHit hit=ScreenInput.singleton.screenPointRaycastResults[i];
+            if(hit.collider==null){
+             continue;
+            }
+            if(hit.collider.CompareTag("SimObjectVolume")){
+             if((SimConstruction.constructionLayer&(1<<hit.collider.gameObject.layer))!=0){
+              Log.DebugMessage("currentPlaceholder will touch constructionLayer");
+             }
+            }
+            if((VoxelSystem.voxelTerrainLayer&(1<<hit.collider.gameObject.layer))!=0){
+             Log.DebugMessage("currentPlaceholder will touch voxelTerrainLayer");
+            }
+           }
+          }
+         }
         }
     }
 }
