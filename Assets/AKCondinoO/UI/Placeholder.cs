@@ -28,8 +28,28 @@ namespace AKCondinoO.UI{
      internal PlaceholderObject currentPlaceholder;
         internal void SetCurrentPlaceholder(PlaceholderObject placeholder){
          currentPlaceholder=placeholder;
+         activatePlaceholder=false;
         }
+     internal bool activatePlaceholder{
+      get{
+       return activatePlaceholder_value;
+      }
+      set{
+       if(value){
+        if(currentPlaceholder!=null&&!currentPlaceholder.gameObject.activeSelf){
+         currentPlaceholder.gameObject.SetActive(true);
+        }
+       }else{
+        if(currentPlaceholder!=null&&currentPlaceholder.gameObject.activeSelf){
+         currentPlaceholder.gameObject.SetActive(false);
+        }
+       }
+       activatePlaceholder_value=value;
+      }
+     }
+     bool activatePlaceholder_value=false;
         void Update(){
+         bool placeholderActivated=false;
          if(currentPlaceholder!=null){
           if(ScreenInput.singleton.screenPointRaycastResultsCount>0){
            for(int i=0;i<ScreenInput.singleton.screenPointRaycastResultsCount;++i){
@@ -40,14 +60,27 @@ namespace AKCondinoO.UI{
             if(hit.collider.CompareTag("SimObjectVolume")){
              if((SimConstruction.constructionLayer&(1<<hit.collider.gameObject.layer))!=0){
               Log.DebugMessage("currentPlaceholder will touch constructionLayer");
+              activatePlaceholder=true;
+              placeholderActivated=true;
+              break;
              }
             }
             if((VoxelSystem.voxelTerrainLayer&(1<<hit.collider.gameObject.layer))!=0){
              Log.DebugMessage("currentPlaceholder will touch voxelTerrainLayer");
+             activatePlaceholder=true;
+             placeholderActivated=true;
+             PreviewOnTerrain(hit);
+             break;
             }
            }
           }
          }
+         if(placeholderActivated){
+         }else{
+         }
+        }
+        void PreviewOnTerrain(RaycastHit center){
+         currentPlaceholder.transform.position=center.point;
         }
     }
 }
