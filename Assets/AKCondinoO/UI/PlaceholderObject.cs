@@ -26,9 +26,8 @@ namespace AKCondinoO.UI{
            }
            instantiatedCollider.tag="Placeholder";
            instantiatedCollider.isTrigger=true;
-           gameObjectsCloned.Add(collider.gameObject);
-           foreach(Transform child in collider.transform){
-            gameObjectsCloned.Add(child.gameObject);
+           foreach(Transform transform in collider.gameObject.GetComponentsInChildren<Transform>()){
+            gameObjectsCloned.Add(transform.gameObject);
            }
            if(simConstruction!=null){
             simConstruction.GetSnappingRays(instantiatedCollider,snappingRays);
@@ -46,9 +45,8 @@ namespace AKCondinoO.UI{
              DestroyImmediate(component);
             }
            }
-           gameObjectsCloned.Add(renderer.gameObject);
-           foreach(Transform child in renderer.transform){
-            gameObjectsCloned.Add(child.gameObject);
+           foreach(Transform transform in renderer.gameObject.GetComponentsInChildren<Transform>()){
+            gameObjectsCloned.Add(transform.gameObject);
            }
           }
          }
