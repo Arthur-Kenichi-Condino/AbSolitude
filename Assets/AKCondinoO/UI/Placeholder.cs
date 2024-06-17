@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.InputHandler;
 namespace AKCondinoO.UI{
     internal class Placeholder:MonoBehaviour,ISingletonInitialization{
      internal static Placeholder singleton{get;set;}
@@ -27,6 +28,9 @@ namespace AKCondinoO.UI{
         }
      internal PlaceholderObject currentPlaceholder;
         internal void SetCurrentPlaceholder(PlaceholderObject placeholder){
+         if(currentPlaceholder!=null){//  disable the one before
+          activatePlaceholder=false;
+         }
          currentPlaceholder=placeholder;
          activatePlaceholder=false;
         }
@@ -50,6 +54,14 @@ namespace AKCondinoO.UI{
      bool activatePlaceholder_value=false;
         void Update(){
          bool placeholderActivated=false;
+         if(
+          InputHandler.singleton.escape||
+          InputHandler.singleton.tab
+         ){
+          if(currentPlaceholder!=null){
+           SetCurrentPlaceholder(null);
+          }
+         }
          if(currentPlaceholder!=null){
           if(ScreenInput.singleton.screenPointRaycastResultsCount>0){
            for(int i=0;i<ScreenInput.singleton.screenPointRaycastResultsCount;++i){

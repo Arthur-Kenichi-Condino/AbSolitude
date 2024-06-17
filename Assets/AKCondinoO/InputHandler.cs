@@ -76,6 +76,7 @@ namespace AKCondinoO{
          this.focus=focus;
         }
         internal bool escape;
+        internal bool tab;
         //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
         void Update(){
          activityDetected=false;
@@ -87,6 +88,8 @@ namespace AKCondinoO{
           }
          }
          escape=Input.GetKey(KeyCode.Escape)||Input.GetKeyUp(KeyCode.Escape)||Input.GetKeyDown(KeyCode.Escape);
+         tab   =Input.GetKey(KeyCode.Tab   )||Input.GetKeyUp(KeyCode.Tab   )||Input.GetKeyDown(KeyCode.Tab   );
+         //Log.DebugMessage("escape:"+escape);
          foreach(var command in CommandDictionary){
           string        name=command.Key;
           Type          type=command.Value.input.GetType();
