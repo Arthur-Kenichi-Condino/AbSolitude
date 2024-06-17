@@ -55,8 +55,7 @@ namespace AKCondinoO.UI{
         void Update(){
          bool placeholderActivated=false;
          if(
-          InputHandler.singleton.escape||
-          InputHandler.singleton.tab
+          InputHandler.singleton.escape
          ){
           if(currentPlaceholder!=null){
            SetCurrentPlaceholder(null);

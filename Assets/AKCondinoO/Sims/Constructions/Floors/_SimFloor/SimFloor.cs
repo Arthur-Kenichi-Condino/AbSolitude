@@ -19,10 +19,10 @@ namespace AKCondinoO.Sims{
           Vector3 extents=floorBoxCollider.bounds.extents;
           Log.DebugMessage("extents:"+extents);
           Ray[]rays=new Ray[4]{
-           new Ray(new Vector3( extents.x,-extents.y, extents.z),Vector3.down),
-           new Ray(new Vector3(-extents.x,-extents.y, extents.z),Vector3.down),
-           new Ray(new Vector3( extents.x,-extents.y,-extents.z),Vector3.down),
-           new Ray(new Vector3(-extents.x,-extents.y,-extents.z),Vector3.down)
+           new Ray(new Vector3( extents.x,extents.y, extents.z),Vector3.down),
+           new Ray(new Vector3(-extents.x,extents.y, extents.z),Vector3.down),
+           new Ray(new Vector3( extents.x,extents.y,-extents.z),Vector3.down),
+           new Ray(new Vector3(-extents.x,extents.y,-extents.z),Vector3.down)
           };
           snappingRays.Add(floorBoxCollider,rays);
          }

@@ -17,6 +17,7 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
           if(!tableSimObjectPlaceholders.TryGetValue(prefab,out var placeholder)){
            tableSimObjectPlaceholders.Add(prefab,placeholder=Placeholder.singleton.GetPlaceholderFor(prefabType));
           }
+          ScreenInput.singleton.SetToBeSelected(null);
           Placeholder.singleton.SetCurrentPlaceholder(placeholder);
          }
         }

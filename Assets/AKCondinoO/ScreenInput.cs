@@ -98,5 +98,8 @@ namespace AKCondinoO{
           ScreenInput.singleton.currentActiveSim=baseAI;
          }
         }
+        internal void SetToBeSelected(GameObject toBeSelectedGameObject){
+         EventSystem.current.SetSelectedGameObject(toBeSelectedGameObject);
+        }
     }
 }

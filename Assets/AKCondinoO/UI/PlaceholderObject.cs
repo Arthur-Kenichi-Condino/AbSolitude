@@ -27,6 +27,9 @@ namespace AKCondinoO.UI{
            instantiatedCollider.tag="Placeholder";
            instantiatedCollider.isTrigger=true;
            gameObjectsCloned.Add(collider.gameObject);
+           foreach(Transform child in collider.transform){
+            gameObjectsCloned.Add(child.gameObject);
+           }
            if(simConstruction!=null){
             simConstruction.GetSnappingRays(instantiatedCollider,snappingRays);
            }
@@ -44,6 +47,9 @@ namespace AKCondinoO.UI{
             }
            }
            gameObjectsCloned.Add(renderer.gameObject);
+           foreach(Transform child in renderer.transform){
+            gameObjectsCloned.Add(child.gameObject);
+           }
           }
          }
         }
@@ -68,7 +74,7 @@ namespace AKCondinoO.UI{
               Collider collider=kvp.Key;
               Ray[]rays=kvp.Value;
               foreach(Ray ray in rays){
-               Debug.DrawRay(collider.transform.position+ray.origin,ray.direction,Color.green);
+               Debug.DrawRay(collider.transform.position+ray.origin,ray.direction*11f,Color.green);
               }
              }
              Gizmos.color=gizmosColor;
