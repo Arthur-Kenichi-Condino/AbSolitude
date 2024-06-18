@@ -20,6 +20,7 @@ namespace AKCondinoO{
          internal static readonly EnabledState ACTION_2          =new EnabledState{curState=false,lastState=false};
          internal static readonly EnabledState WALK              =new EnabledState{curState=true,lastState=true};
          internal static readonly EnabledState RELOAD            =new EnabledState{curState=false,lastState=false};
+         internal static readonly EnabledState DELETE            =new EnabledState{curState=false,lastState=false};
         }
     }
 }

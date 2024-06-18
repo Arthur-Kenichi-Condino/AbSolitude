@@ -32,7 +32,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
             if(slaveSimObject is BaseAI slaveAI){
              if(slaveAI.state==BaseAI.State.IDLE_ST){
               Log.DebugMessage("teleport to master:"+slaveSimObject);
-              toTeleport.Add(slaveSimObject);
+              if(toTeleport!=null){
+                 toTeleport.Add(slaveSimObject);
+              }
              }
             }
             //  TO DO: teleport

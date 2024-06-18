@@ -72,13 +72,22 @@ namespace AKCondinoO{
                                        return((Func<Func<string ,bool>,string ,bool>)delegates[inputType]).Invoke((Func<string ,bool>)getters[inputType][(int)returnMode],(string )command.Value.input);
         }
         internal bool focus=true;
+         internal bool hadFocus=true;
+          bool skipHadFocusUpdate=false;
         void OnApplicationFocus(bool focus){
+         hadFocus=this.focus;
          this.focus=focus;
+         skipHadFocusUpdate=true;
         }
         internal bool escape;
         internal bool tab;
         //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
         void Update(){
+         if(skipHadFocusUpdate){
+          skipHadFocusUpdate=false;
+         }else{
+          hadFocus=this.focus;
+         }
          activityDetected=false;
          void SetActivityDetectionFlag(EnabledState enabledState){
           if(activityDetectionInputState.Contains(enabledState)){

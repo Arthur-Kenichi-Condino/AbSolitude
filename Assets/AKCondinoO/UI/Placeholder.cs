@@ -23,7 +23,7 @@ namespace AKCondinoO.UI{
         internal PlaceholderObject GetPlaceholderFor(Type t){
          SimObject simObjectPrefab=SimObjectSpawner.singleton.simObjectPrefabs[t].GetComponent<SimObject>();
          PlaceholderObject placeholderObject=Instantiate(placeholderObjectPrefab);
-         placeholderObject.BuildFrom(simObjectPrefab);
+         placeholderObject.BuildFrom(simObjectPrefab,t);
          return placeholderObject;
         }
      internal PlaceholderObject currentPlaceholder;
@@ -52,10 +52,13 @@ namespace AKCondinoO.UI{
       }
      }
      bool activatePlaceholder_value=false;
+     internal readonly SpawnData spawnData=new SpawnData(1);
         void Update(){
+         bool placeholderActive=activatePlaceholder;
          bool placeholderActivated=false;
          if(
-          InputHandler.singleton.escape
+          InputHandler.singleton.escape||
+          Enabled.DELETE.curState
          ){
           if(currentPlaceholder!=null){
            SetCurrentPlaceholder(null);
@@ -86,8 +89,33 @@ namespace AKCondinoO.UI{
            }
           }
          }
+         placeholderActive|=placeholderActivated;
          if(placeholderActivated){
-         }else{
+         }
+         if(placeholderActive){
+          if(spawnData.dequeued){
+           //Log.DebugMessage("focus:"+InputHandler.singleton.focus);
+           //Log.DebugMessage("hadFocus:"+InputHandler.singleton.hadFocus);
+           //Log.DebugMessage("focus!=hadFocus:"+(InputHandler.singleton.focus!=InputHandler.singleton.hadFocus));
+           if(
+            InputHandler.singleton.focus&&InputHandler.singleton.focus==InputHandler.singleton.hadFocus&&
+            Enabled.ACTION_1.curState&&Enabled.ACTION_1.curState!=Enabled.ACTION_1.lastState
+           ){
+            Log.DebugMessage("place placeholder sim object");
+            spawnData.at.Add(
+             (
+              currentPlaceholder.transform.position,
+              currentPlaceholder.transform.eulerAngles,
+              currentPlaceholder.transform.localScale,
+              currentPlaceholder.prefabToPlaceType,
+              null,
+              new SimObject.PersistentData()
+             )
+            );
+            spawnData.dequeued=false;
+            SimObjectSpawner.singleton.spawnQueue.Enqueue(spawnData);
+           }
+          }
          }
         }
         void PreviewOnTerrain(RaycastHit center){

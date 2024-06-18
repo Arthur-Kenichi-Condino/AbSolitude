@@ -175,7 +175,7 @@ namespace AKCondinoO.Sims.Inventory{
           persistentSimInventoryDataToSave.Clear();
          }
          bool loop=false;
-         releasedInventoryStrings.ForEach(kvp=>inventoryStringsToReleaseSimObjects.Add(kvp.Key,kvp.Value));
+         releasedInventoryStrings.ForEach(kvp=>inventoryStringsToReleaseSimObjects[kvp.Key]=kvp.Value);
          releasedInventoryStrings.Clear();
          foreach(var releasedInventoryString in inventoryStringsToReleaseSimObjects){
           SimInventory.PersistentSimInventoryData persistentSimInventoryData=SimInventory.PersistentSimInventoryData.Parse(releasedInventoryString.Value);

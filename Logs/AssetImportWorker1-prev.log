@@ -1,0 +1,192 @@
+Using pre-set license
+Built from 'trunk' branch; Version is '6000.0.3f1 (019aa96b6ed9) revision 105129'; Using compiler version '193933522'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22631) 64bit Professional' Language: 'pt' Physical Memory: 32167 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Unity\Hub\Editor\6000.0.3f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker1
+-projectPath
+C:/Users/arthu/Documentos/GitHub/AbSolitude
+-logFile
+Logs/AssetImportWorker1.log
+-srvPort
+2307
+-job-worker-count
+7
+-background-job-worker-count
+8
+-asset-garbage-collectors
+1
+Successfully changed project path to: C:/Users/arthu/Documentos/GitHub/AbSolitude
+C:/Users/arthu/Documentos/GitHub/AbSolitude
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [35664]  Target information:
+
+Player connection [35664]  * "[IP] 192.168.15.2 [Port] 0 [Flags] 2 [Guid] 3170563429 [EditorId] 3170563429 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [35664]  * "[IP] 192.168.0.2 [Port] 0 [Flags] 2 [Guid] 3170563429 [EditorId] 3170563429 [Version] 1048832 [Id] WindowsEditor(7,ARTHUR-DESKTOP) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [35664] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [35664] Host joined alternative multi-casting on [225.0.0.222:34997]...
+JobSystem: Creating JobQueue using job-worker-count value 7
+Library Redirect Path: Library/
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+Refreshing native plugins compatible for Editor in 401.11 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.0.3f1 (019aa96b6ed9)
+[Subsystems] Discovering subsystems at path C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/arthu/Documentos/GitHub/AbSolitude/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 2060 (ID=0x1e89)
+    Vendor:   NVIDIA
+    VRAM:     5945 MB
+    Driver:   32.0.15.5599
+Initialize mono
+Mono path[0] = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56684
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Unity/Hub/Editor/6000.0.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.005424 seconds.
+- Loaded All Assemblies, in  2.615 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.763 seconds
+Domain Reload Profiling: 3374ms
+	BeginReloadAssembly (515ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (599ms)
+	RebuildNativeTypeToScriptingClass (24ms)
+	initialDomainReloadingComplete (92ms)
+	LoadAllAssembliesAndSetupDomain (1382ms)
+		LoadAssemblies (510ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (1377ms)
+			TypeCache.Refresh (1375ms)
+				TypeCache.ScanAssembly (943ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (764ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (649ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (42ms)
+			SetLoadedEditorAssemblies (8ms)
+			BeforeProcessingInitializeOnLoad (9ms)
+			ProcessInitializeOnLoadAttributes (293ms)
+			ProcessInitializeOnLoadMethodAttributes (298ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  6.132 seconds
+Refreshing native plugins compatible for Editor in 2.35 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 3.11 ms, found 4 plugins.
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-AbSolitude
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.342 seconds
+Domain Reload Profiling: 8463ms
+	BeginReloadAssembly (1859ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (9ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (57ms)
+	RebuildCommonClasses (61ms)
+	RebuildNativeTypeToScriptingClass (24ms)
+	initialDomainReloadingComplete (61ms)
+	LoadAllAssembliesAndSetupDomain (4115ms)
+		LoadAssemblies (3689ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (599ms)
+			TypeCache.Refresh (453ms)
+				TypeCache.ScanAssembly (421ms)
+			BuildScriptInfoCaches (129ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (2343ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1965ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (159ms)
+			ProcessInitializeOnLoadAttributes (1401ms)
+			ProcessInitializeOnLoadMethodAttributes (384ms)
+			AfterProcessingInitializeOnLoad (9ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 43.20 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 176 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 7747 unused Assets / (7.7 MB). Loaded Objects now: 8412.
+Memory consumption went from 259.7 MB to 252.1 MB.
+Total: 26.098900 ms (FindLiveObjects: 1.784500 ms CreateObjectMapping: 2.294500 ms MarkObjects: 13.726100 ms  DeleteObjects: 8.292100 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 86280.784451 seconds.
+  path: Assets/AKCondinoO/Sims/_SimObject/PersistentSimInventoryDataSavingMultithreaded.cs
+  artifactKey: Guid(5ad2a879a3c549e4d88b07c0d0c317c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AKCondinoO/Sims/_SimObject/PersistentSimInventoryDataSavingMultithreaded.cs using Guid(5ad2a879a3c549e4d88b07c0d0c317c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'f3d663ac30066c55e4c6f398bc277dc8') in 0.0115738 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+

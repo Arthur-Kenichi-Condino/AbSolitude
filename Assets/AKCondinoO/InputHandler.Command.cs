@@ -28,6 +28,7 @@ namespace AKCondinoO{
          internal static CommandState ACTION_2          =new CommandState{input=(int)1,mode=Modes.AlternateDown};
          internal static CommandState WALK              =new CommandState{input=KeyCode.CapsLock,mode=Modes.AlternateDown};
          internal static CommandState RELOAD            =new CommandState{input=KeyCode.R,mode=Modes.WhenDown};
+         internal static CommandState DELETE            =new CommandState{input=KeyCode.Delete,mode=Modes.WhenDown};
         }
     }
 }

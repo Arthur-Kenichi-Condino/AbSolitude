@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.UI{
@@ -10,7 +11,11 @@ namespace AKCondinoO.UI{
       readonly HashSet<GameObject>gameObjectsCloned=new HashSet<GameObject>();
      internal readonly List<Renderer>renderersForPreview=new List<Renderer>();
      internal readonly Dictionary<Collider,Ray[]>snappingRays=new();
-        internal void BuildFrom(SimObject simObjectPrefab){
+     internal SimObject prefabToPlace;
+      internal Type prefabToPlaceType;
+        internal void BuildFrom(SimObject simObjectPrefab,Type simObjectPrefabType){
+         prefabToPlace=simObjectPrefab;
+         prefabToPlaceType=simObjectPrefabType;
          SimObject simObjectPrefabComponent=simObjectPrefab.GetComponent<SimObject>();
          SimConstruction simConstruction=simObjectPrefabComponent as SimConstruction;
          gameObjectsCloned.Clear();

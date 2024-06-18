@@ -5,6 +5,7 @@ using AKCondinoO.Gameplaying;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Inventory;
+using AKCondinoO.Sims.Trees;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
 using System;
@@ -190,6 +191,9 @@ namespace AKCondinoO.Sims{
          }
          interactionsEnabled=true;
          isOverlapping=IsOverlappingNonAlloc(instantCheck:true);
+         //Log.DebugMessage("isOverlappingReversal:"+isOverlappingReversal);
+         isOverlapping|=isOverlappingReversal;
+         isOverlappingReversal=false;
          //Log.DebugMessage("EnableInteractions:isOverlapping:"+isOverlapping);
          if(isOverlapping){
           safePosition=null;
@@ -236,6 +240,7 @@ namespace AKCondinoO.Sims{
      Vector3?safePosition;
      [NonSerialized]bool updateRenderersFlag;
      [NonSerialized]bool isOverlapping;
+      [NonSerialized]bool isOverlappingReversal;
      [NonSerialized]bool unplaceRequested;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
@@ -294,6 +299,10 @@ namespace AKCondinoO.Sims{
            }
           }
          }
+         //Log.DebugMessage("isOverlappingReversal:"+isOverlappingReversal);
+         isOverlapping|=isOverlappingReversal;
+         isOverlappingReversal=false;
+         //Log.DebugMessage("isOverlapping:"+isOverlapping);
          bool returnedToSafePos=false;
          GetCollidersTouchingNonAlloc(instantCheck:false);
          if(unplaceRequested){
@@ -384,9 +393,6 @@ namespace AKCondinoO.Sims{
          int result=0;
          return result;
         }
-        internal virtual bool OnTeleportTo(Vector3 position,Quaternion rotation){
-         return false;
-        }
         void TransformBoundsVertices(){
          worldBoundsVertices[0]=transform.TransformPoint(localBounds.min.x,localBounds.min.y,localBounds.min.z);
          worldBoundsVertices[1]=transform.TransformPoint(localBounds.max.x,localBounds.min.y,localBounds.min.z);
@@ -397,31 +403,8 @@ namespace AKCondinoO.Sims{
          worldBoundsVertices[6]=transform.TransformPoint(localBounds.max.x,localBounds.max.y,localBounds.max.z);
          worldBoundsVertices[7]=transform.TransformPoint(localBounds.min.x,localBounds.max.y,localBounds.max.z);
         }
-        protected virtual bool IsOutOfSight(){
-         //Log.DebugMessage("test if IsOutOfSight:id:"+id);
-         return worldBoundsVertices.Any(
-          v=>{
-           Vector2Int cCoord=vecPosTocCoord(v);
-           int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
-           return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
-          }
-         );
-        }
-        protected virtual bool IsInPlayerActiveWorldBounds(Gameplayer gameplayer){
-         return worldBoundsVertices.Any(
-          v=>{
-           //Log.DebugMessage("IsInPlayerActiveWorldBounds:testing v");
-           return gameplayer.activeWorldBounds.Contains(v);
-          }
-         );
-        }
-        protected virtual bool IsInPlayerWorldBounds(Gameplayer gameplayer){
-         return worldBoundsVertices.Any(
-          v=>{
-           //Log.DebugMessage("IsInPlayerWorldBounds:testing v");
-           return gameplayer.worldBounds.Contains(v);
-          }
-         );
+        internal virtual bool OnTeleportTo(Vector3 position,Quaternion rotation){
+         return false;
         }
      [NonSerialized]private Collider[]overlappedColliders=new Collider[8];
         protected virtual bool IsOverlappingNonAlloc(bool instantCheck){
@@ -472,12 +455,62 @@ namespace AKCondinoO.Sims{
          return result;
         }
         internal void OnOverlapping(Collider overlappedCollider){
-         //Log.DebugMessage("OnOverlapping:"+this.transform.root.gameObject.name+"-> overlapping <-"+overlappedCollider.transform.root.gameObject.name);
+         Log.DebugMessage("OnOverlapping:"+this.transform.root.gameObject.name+"-> overlapping <-"+overlappedCollider.transform.root.gameObject.name);
          if(Core.singleton.isServer){
           if(!overlappedCollider.transform.root.hasChanged){
            isOverlapping|=SetOverlapResult(overlappedCollider);
           }
          }
+        }
+        bool SetOverlapResult(Collider overlappedCollider){
+         SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
+         if(overlappedSimObject!=null){
+          if(this is SimConstruction&&overlappedSimObject is SimTree){
+           overlappedSimObject.OnOverlappingReversal(this);
+           return false;
+          }
+          if(!(overlappedSimObject is SimActor||(overlappedSimObject.hasRigidbody!=null&&!overlappedSimObject.hasRigidbody.isKinematic))){
+           return true;
+          }
+         }
+         return false;
+        }
+        internal void OnOverlappingReversal(SimObject overlappedSimObject){
+         Log.DebugMessage(this+":OnOverlappingReversal");
+         isOverlappingReversal=true;
+         safePosition=null;
+         //Log.DebugMessage("isOverlappingReversal:"+isOverlappingReversal);
+        }
+     protected bool gotCollidersTouchingFromInstantCheck;
+     protected Collider[]collidersTouching=new Collider[8];
+        protected virtual void GetCollidersTouchingNonAlloc(bool instantCheck){
+         gotCollidersTouchingFromInstantCheck=false;
+        }
+        protected virtual bool IsOutOfSight(){
+         //Log.DebugMessage("test if IsOutOfSight:id:"+id);
+         return worldBoundsVertices.Any(
+          v=>{
+           Vector2Int cCoord=vecPosTocCoord(v);
+           int cnkIdx=GetcnkIdx(cCoord.x,cCoord.y);
+           return!VoxelSystem.singleton.terrainActive.TryGetValue(cnkIdx,out VoxelTerrainChunk cnk)||!cnk.hasPhysMeshBaked;
+          }
+         );
+        }
+        protected virtual bool IsInPlayerActiveWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerActiveWorldBounds:testing v");
+           return gameplayer.activeWorldBounds.Contains(v);
+          }
+         );
+        }
+        protected virtual bool IsInPlayerWorldBounds(Gameplayer gameplayer){
+         return worldBoundsVertices.Any(
+          v=>{
+           //Log.DebugMessage("IsInPlayerWorldBounds:testing v");
+           return gameplayer.worldBounds.Contains(v);
+          }
+         );
         }
      protected Coroutine updateSafePositionCoroutine;
      protected WaitForFixedUpdate waitForFixedUpdate;
@@ -495,20 +528,6 @@ namespace AKCondinoO.Sims{
           }
          }
          goto Loop;
-        }
-        bool SetOverlapResult(Collider overlappedCollider){
-         SimObject overlappedSimObject=overlappedCollider.GetComponentInParent<SimObject>();
-         if(overlappedSimObject!=null){
-          if(!(overlappedSimObject is SimActor||(overlappedSimObject.hasRigidbody!=null&&!overlappedSimObject.hasRigidbody.isKinematic))){
-           return true;
-          }
-         }
-         return false;
-        }
-     protected bool gotCollidersTouchingFromInstantCheck;
-     protected Collider[]collidersTouching=new Collider[8];
-        protected virtual void GetCollidersTouchingNonAlloc(bool instantCheck){
-         gotCollidersTouchingFromInstantCheck=false;
         }
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();
