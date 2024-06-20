@@ -55,6 +55,7 @@ namespace AKCondinoO.Sims.Actors{
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
+           animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
            Log.DebugMessage("add SimActorAnimatorIKController");
            #region init SimAnimatorIKController
                animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
