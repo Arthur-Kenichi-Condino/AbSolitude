@@ -148,9 +148,9 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\Floor10x10x10\Floor10x10x10.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\Tables\BuildCategorySimObjectsTable.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DepthOfFieldEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\Tables\BuildSimObjectsTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillsManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.PersistentSimActorData.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ListWrapper.cs" />

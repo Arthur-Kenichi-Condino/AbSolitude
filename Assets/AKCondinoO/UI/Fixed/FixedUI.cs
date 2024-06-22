@@ -14,7 +14,7 @@ namespace AKCondinoO.UI.Fixed{
      internal static FixedUI singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         (buildBuyEditModeUIContent.buildCategoryTableFloors=Instantiate(buildBuyEditModeUIContent.buildCategorySimObjectsTablePrefab,buildBuyEditModeUIContent.buildCategoryRectTransform,false).AddComponent<TableFloors>()).name="TableFloors";
+         (buildBuyEditModeUIContent.tableFloors=Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent<TableFloors>()).name="TableFloors";
          AwakeUIForCameraMode();
         }
         public void Init(){
@@ -25,12 +25,12 @@ namespace AKCondinoO.UI.Fixed{
           GameObject prefab=typePrefabPair.Value;
           switch(prefab.GetComponent<SimObject>()){
            case SimFloor simFloor:{
-            buildBuyEditModeUIContent.buildCategoryTableFloors.tableSimObjectPrefabs.Add(t.ToString(),simFloor);
+            buildBuyEditModeUIContent.tableFloors.tableSimObjectPrefabs.Add(t.ToString(),simFloor);
             break;
            }
           }
          }
-         buildBuyEditModeUIContent.buildCategoryTableFloors.OnCreateTable();
+         buildBuyEditModeUIContent.tableFloors.OnCreateTable();
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){

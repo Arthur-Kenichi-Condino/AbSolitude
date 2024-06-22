@@ -674,7 +674,7 @@
 "Assets/AKCondinoO/Sims/_SimObject/SpawnData.cs"
 "Assets/AKCondinoO/UI/Context/ContextMenuUI.cs"
 "Assets/AKCondinoO/UI/Fixed/BuildBuyEditMode/BuildBuyEditModeUIContent.cs"
-"Assets/AKCondinoO/UI/Fixed/BuildBuyEditMode/BuildCategory/Tables/BuildCategorySimObjectsTable.cs"
+"Assets/AKCondinoO/UI/Fixed/BuildBuyEditMode/BuildCategory/Tables/BuildSimObjectsTable.cs"
 "Assets/AKCondinoO/UI/Fixed/BuildBuyEditMode/BuildCategory/Tables/TableFloors.cs"
 "Assets/AKCondinoO/UI/Fixed/BuildBuyEditMode/FixedUI.BuildBuyEditMode.cs"
 "Assets/AKCondinoO/UI/Fixed/ConsoleInputField.cs"

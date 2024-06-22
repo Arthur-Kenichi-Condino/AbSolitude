@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.GameMode;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
-    internal class TableFloors:BuildCategorySimObjectsTable{
+    internal class TableFloors:BuildSimObjectsTable{
         public void OnPlaceSimFloorButtonPress(string type){
          Log.DebugMessage("TableFloors:OnPlaceSimFloorButtonPress:type:"+type);
          if(tableSimObjectPrefabs.TryGetValue(type,out SimObject prefab)){

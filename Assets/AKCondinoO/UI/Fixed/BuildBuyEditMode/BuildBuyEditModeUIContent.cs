@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode{
     [Serializable]internal class BuildBuyEditModeUIContent{
-     [SerializeField]internal GameObject buildCategorySimObjectsTablePrefab;
-     [SerializeField]internal GameObject buildCategorySimObjectButtonPrefab;
-     [SerializeField]internal RectTransform buildCategoryRectTransform;
-      internal BuildCategorySimObjectsTable buildCategoryTableFloors;
+     [SerializeField]internal GameObject tablePrefab;
+     [SerializeField]internal GameObject tableButtonPrefab;
+     [SerializeField]internal RectTransform tablesParent;
+      [NonSerialized]internal BuildSimObjectsTable tableFloors;
     }
 }
