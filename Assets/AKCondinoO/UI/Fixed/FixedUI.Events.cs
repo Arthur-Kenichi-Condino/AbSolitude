@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace AKCondinoO.UI.Fixed{
     internal partial class FixedUI{
         public void OnFindNextSelectableSimButtonPress(){
-         Log.DebugMessage("FixedUI:OnFindNextSelectableSimButtonPress");
+         //Log.DebugMessage("FixedUI:OnFindNextSelectableSimButtonPress");
          if(SimsMachine.singleton.selectableActorsList.TraverseNext(out SimActor simActor)){
           ContextMenuUI.singleton.SetSelectedSimObject(simActor);
          }

@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,22 +10,22 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
     internal class BuildSimObjectsTable:MonoBehaviour{
-     internal readonly SortedDictionary<string,SimObject>tableSimObjectPrefabs=new SortedDictionary<string,SimObject>();
-      internal readonly Dictionary<SimObject,PlaceholderObject>tableSimObjectPlaceholders=new();
-     internal RectTransform tableScrollViewContent;
+     [NonSerialized]internal readonly SortedDictionary<string,SimObject>tableSimObjectPrefabs=new SortedDictionary<string,SimObject>();
+      [NonSerialized]internal readonly Dictionary<SimObject,PlaceholderObject>tableSimObjectPlaceholders=new();
+     [NonSerialized]internal RectTransform tableScrollViewContent;
         void Awake(){
          TraverseHierarchy(transform);
         }
         void TraverseHierarchy(Transform parent){
          foreach(Transform child in parent){
-          Log.DebugMessage("BuildCategorySimObjectsTable child:"+child.name);
+          //Log.DebugMessage("BuildSimObjectsTable:TraverseHierarchy:child:"+child.name);
           if(child.name=="TableScrollView"){
            TraverseHierarchy(child);
           }else if(child.name=="Viewport"){
            TraverseHierarchy(child);
           }else if(child.name=="Content"){
            tableScrollViewContent=(RectTransform)child;
-           Log.DebugMessage("tableScrollViewContent set");
+           //Log.DebugMessage("'tableScrollViewContent set'");
           }
          }
         }
