@@ -14,13 +14,11 @@ namespace AKCondinoO.UI.Fixed{
      internal static FixedUI singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         //buildBuyEditModeUIContent.tables
          foreach(Type tableType in buildBuyEditModeUIContent.tablesTypes){
           BuildSimObjectsTable table;
           (table=(BuildSimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
           buildBuyEditModeUIContent.tables.Add(tableType,table);
          }
-         //(buildBuyEditModeUIContent.tableFloors=Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent<TableFloors>()).name="TableFloors";
          AwakeUIForCameraMode();
         }
         public void Init(){
@@ -39,15 +37,10 @@ namespace AKCondinoO.UI.Fixed{
            foreach(Type tableType in simTypeTablesTypes.Value){
             BuildSimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
             table.tableSimObjectPrefabs.Add(t.ToString(),prefabSimObject);
-            //buildBuyEditModeUIContent.tableFloors.tableSimObjectPrefabs.Add(t.ToString(),simFloor);
            }
-           //foreach(var tableTypeTable in buildBuyEditModeUIContent.tables){
-           // [];
-           //}
           }
           switch(prefabSimObject){
            case SimFloor simFloor:{
-            //buildBuyEditModeUIContent.tableFloors.tableSimObjectPrefabs.Add(t.ToString(),simFloor);
             break;
            }
           }

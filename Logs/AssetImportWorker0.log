@@ -896,3 +896,13 @@ Memory consumption went from 237.2 MB to 229.1 MB.
 Total: 17.182200 ms (FindLiveObjects: 1.223700 ms CreateObjectMapping: 2.066300 ms MarkObjects: 9.269100 ms  DeleteObjects: 4.621200 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 131539.177459 seconds.
+  path: Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Weapons/Rifle/SniperRifle/RemingtonModel700BDL/_Prefab/RemingtonModel700BDL.prefab
+  artifactKey: Guid(380e76e7b0449704aa3054026665ee51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AKCondinoO/Prefabs/Network/Sims/Weapons/Rifle/SniperRifle/RemingtonModel700BDL/_Prefab/RemingtonModel700BDL.prefab using Guid(380e76e7b0449704aa3054026665ee51) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '0010202656877bda0e95fbb285c23267') in 0.5806632 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 140
+

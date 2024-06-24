@@ -14,9 +14,9 @@ using UnityEngine.Animations;
 using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     protected InContainerTransformData inContainerTransformData=null;
+     [NonSerialized]protected InContainerTransformData inContainerTransformData=null;
         internal void SetAsInventoryItemTransform(){
-         //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
+         //Log.DebugMessage("SimObject:SetAsInventoryItemTransform:id:"+id);
          if(asInventoryItem.container is SimHands simHands){
           if(simHands.leftHand!=null&&simHands.rightHand!=null){
            Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
@@ -56,13 +56,13 @@ namespace AKCondinoO.Sims{
                     priority=layerPriority;
                     bodyPart=parentBodyPart;
                     inContainerTransformData=kvp.Value;
-                    //Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
+                    //Log.DebugMessage("SimObject:SetAsInventoryItemTransform:layerName:"+layerName);
                    }
                   }
                  }
                  if(bodyPart!=null){
                   if(inContainerTransformData!=this.inContainerTransformData){
-                   Log.DebugMessage("set ParentConstraint:"+layerName);
+                   Log.DebugMessage("set ParentConstraint:layerName:"+layerName);
                    this.inContainerTransformData=inContainerTransformData;
                    if(parentConstraint!=null){
                     parentConstraint.locked=false;

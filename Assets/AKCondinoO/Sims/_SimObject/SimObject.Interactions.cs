@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     protected readonly List<Interaction>interactions=new List<Interaction>();
+     [NonSerialized]protected readonly List<Interaction>interactions=new List<Interaction>();
         public virtual void SetInteractionsList(){
         }
         public virtual void GetInteractions(out List<Interaction>interactions){

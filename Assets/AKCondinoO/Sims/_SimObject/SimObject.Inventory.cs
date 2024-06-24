@@ -14,14 +14,14 @@ using UnityEngine.Animations;
 using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal readonly Dictionary<Type,Dictionary<ulong,SimInventory>>inventory=new Dictionary<Type,Dictionary<ulong,SimInventory>>();
-     internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
-     internal SpawnData inventoryItemsSpawnData;
+     [NonSerialized]internal readonly Dictionary<Type,Dictionary<ulong,SimInventory>>inventory=new Dictionary<Type,Dictionary<ulong,SimInventory>>();
+     [NonSerialized]internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
+     [NonSerialized]internal SpawnData inventoryItemsSpawnData;
         internal bool AddToInventory(SimObject simObject,bool addingList=false){
-         Log.DebugMessage("AddToInventory");
+         Log.DebugMessage("SimObject:AddToInventory");
          if(InventoryContains(simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData)){
-          Log.DebugMessage("AddToInventory InventoryContains True");
-          //  TO DO: "materialize" if needed
+          Log.DebugMessage("SimObject:AddToInventory:'InventoryContains is true'");
+          Log.Warning("'TO DO: 'materialize' asInventoryItem if needed'");
          }else{
           Log.DebugMessage("AddToInventory InventoryContains False");
           if(inventory.TryGetValue(typeof(SimHands),out Dictionary<ulong,SimInventory>simHandsInventories)){
