@@ -4,6 +4,7 @@
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Weapons;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +15,9 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float physicalPowerFlatValue_value_stats;
-                 protected float physicalPowerFlatValue_value_set;
-                 protected float physicalPowerFlatValue_value_buffs;
+                 [NonSerialized]protected float physicalPowerFlatValue_value_stats;
+                 [NonSerialized]protected float physicalPowerFlatValue_value_set;
+                 [NonSerialized]protected float physicalPowerFlatValue_value_buffs;
                   internal float PhysicalPowerFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
                    return physicalPowerFlatValue_value_stats+physicalPowerFlatValue_value_set;
@@ -27,7 +28,7 @@ namespace AKCondinoO.Sims{
                     updatedPhysicalPowerFlatValue=true;
                     SetPendingRefresh(statsSim,forceRefresh);
                    }
-                    protected bool updatedPhysicalPowerFlatValue;
+                    [NonSerialized]protected bool updatedPhysicalPowerFlatValue;
                      internal void OnRefresh_PhysicalPowerFlatValue(SimObject statsSim=null){
                       if(refreshedSimLevel||
                          refreshedAgeLevel||
@@ -47,13 +48,13 @@ namespace AKCondinoO.Sims{
                        refreshedPhysicalPowerFlatValue=true;
                       }
                      }
-                      protected bool refreshedPhysicalPowerFlatValue;
+                      [NonSerialized]protected bool refreshedPhysicalPowerFlatValue;
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float physicalDefenseFlatValue_value_stats;
-                 protected float physicalDefenseFlatValue_value_set;
-                 protected float physicalDefenseFlatValue_value_buffs;
+                 [NonSerialized]protected float physicalDefenseFlatValue_value_stats;
+                 [NonSerialized]protected float physicalDefenseFlatValue_value_set;
+                 [NonSerialized]protected float physicalDefenseFlatValue_value_buffs;
                   internal float PhysicalDefenseFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
                    return physicalDefenseFlatValue_value_stats+physicalDefenseFlatValue_value_set;
@@ -64,7 +65,7 @@ namespace AKCondinoO.Sims{
                     updatedPhysicalDefenseFlatValue=true;
                     SetPendingRefresh(statsSim,forceRefresh);
                    }
-                    protected bool updatedPhysicalDefenseFlatValue;
+                    [NonSerialized]protected bool updatedPhysicalDefenseFlatValue;
                      internal void OnRefresh_PhysicalDefenseFlatValue(SimObject statsSim=null){
                       if(refreshedSimLevel||
                          refreshedAgeLevel||
@@ -84,25 +85,25 @@ namespace AKCondinoO.Sims{
                        refreshedPhysicalDefenseFlatValue=true;
                       }
                      }
-                      protected bool refreshedPhysicalDefenseFlatValue;
+                      [NonSerialized]protected bool refreshedPhysicalDefenseFlatValue;
             internal static float ProcessStatPhysicalDamageOn(SimObject simObject,SimObject fromSimObject){
              var stats=simObject.stats;
              if(stats!=null){
               float integrity=stats.IntegrityGet(simObject);
-              //Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+              //Log.DebugMessage("ProcessStatPhysicalDamageOn:'current integrity':integrity:"+integrity);
               float damageFromSimObject=1f;
               var fromSimObjectStats=fromSimObject.stats;
               if(fromSimObjectStats!=null){
                float fromSimObjectPhysicalPowerFlatValue=fromSimObjectStats.PhysicalPowerFlatValueGet(fromSimObject);
-               //Log.DebugMessage("OnHitProcessStatDamageFrom:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
+               //Log.DebugMessage("ProcessStatPhysicalDamageOn:fromSimObjectPhysicalPowerFlatValue:"+fromSimObjectPhysicalPowerFlatValue);
                float physicalDefenseFlatValue=stats.PhysicalDefenseFlatValueGet(simObject);
-               //Log.DebugMessage("OnHitProcessStatDamageFrom:physicalDefenseFlatValue:"+physicalDefenseFlatValue);
+               //Log.DebugMessage("ProcessStatPhysicalDamageOn:physicalDefenseFlatValue:"+physicalDefenseFlatValue);
                damageFromSimObject=fromSimObjectPhysicalPowerFlatValue*((4000f+physicalDefenseFlatValue)/(4000f+physicalDefenseFlatValue*10f));
-               //Log.DebugMessage("OnHitProcessStatDamageFrom:hard damageFromSimObject:"+damageFromSimObject);
+               //Log.DebugMessage("ProcessStatPhysicalDamageOn:'hard damageFromSimObject':damageFromSimObject:"+damageFromSimObject);
                if(simObject is BaseAI baseAI){
                 double randomMultiplier=baseAI.math_random.NextDouble(.5d,1.5d);
                 damageFromSimObject*=(float)randomMultiplier;
-                //Log.DebugMessage("OnHitProcessStatDamageFrom:random damageFromSimObject:"+damageFromSimObject);
+                //Log.DebugMessage("ProcessStatPhysicalDamageOn:'random damageFromSimObject':damageFromSimObject:"+damageFromSimObject);
                }
               }
               integrity-=damageFromSimObject;
@@ -115,7 +116,7 @@ namespace AKCondinoO.Sims{
              var stats=simObject.stats;
              if(stats!=null){
               float integrity=stats.IntegrityGet(simObject);
-              //Log.DebugMessage("OnHitProcessStatDamageFrom:current integrity:"+integrity);
+              //Log.DebugMessage("ProcessStatPhysicalDamageOn:'current integrity':integrity:"+integrity);
               float maxIntegrity=stats.MaxIntegrityGet(simObject);
               float damageFromSimWeapon=Mathf.Max(1f,hurtbox.bodyPartDamageMultiplierForFirearm*maxIntegrity);
               integrity-=damageFromSimWeapon;
@@ -127,7 +128,7 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float magicalPowerFlatValue;
+                 [NonSerialized]protected float magicalPowerFlatValue;
                   internal float MagicalPowerFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
                    return magicalPowerFlatValue;
@@ -135,7 +136,7 @@ namespace AKCondinoO.Sims{
                  /// <summary>
                  ///  Substats
                  /// </summary>
-                 protected float magicalDefenseFlatValue;
+                 [NonSerialized]protected float magicalDefenseFlatValue;
                   internal float MagicalDefenseFlatValueGet(SimObject statsSim=null){
                    OnRefresh(statsSim);
                    return magicalDefenseFlatValue;

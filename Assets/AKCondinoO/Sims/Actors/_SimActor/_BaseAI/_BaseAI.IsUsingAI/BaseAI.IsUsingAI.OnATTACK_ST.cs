@@ -16,16 +16,12 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal partial class AI{
-         internal ATTACK_ST attackSt;
+         [NonSerialized]internal ATTACK_ST attackSt;
             internal class ATTACK_ST:ST{
                 internal ATTACK_ST(BaseAI me,AI ai):base(me,ai){
                 }
                 internal void Finish(){
                  firstAttack=false;
-             //    AI_ResetRotation(onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy);
-                       //if(MyState==State.CHASE_ST){
-                       // me.onChaseAlternateMoveAttack=true;
-                       //}
                 }
                 internal void Start(){
                  firstAttack=true;
@@ -35,25 +31,25 @@ namespace AKCondinoO.Sims.Actors{
                  avoiding=false;
                  avoidingMoving=false;
                 }
-             internal bool firstAttack;
-             AvoidMode avoidMode=AvoidMode.MoveAway;
+             [NonSerialized]internal bool firstAttack;
+             [NonSerialized]AvoidMode avoidMode=AvoidMode.MoveAway;
                 enum AvoidMode:int{
                  MoveAway=0,
                  MoveRandom=1,
                 }
-             bool shouldAvoid;
-              bool avoiding;
-               bool avoidingMoving;
-                bool hasJustAvoided;
-                 float hasFriendlyTargetsToAvoidMaxTime=8f;
-                 float hasFriendlyTargetsToAvoidTimer;
+             [NonSerialized]bool shouldAvoid;
+              [NonSerialized]bool avoiding;
+               [NonSerialized]bool avoidingMoving;
+                [NonSerialized]bool hasJustAvoided;
+                 [NonSerialized]float hasFriendlyTargetsToAvoidMaxTime=8f;
+                 [NonSerialized]float hasFriendlyTargetsToAvoidTimer;
                 internal void DoRoutine(){
                  if(MyEnemy==null){
                   me.MoveStop();
                   return;
                  }
                  if(firstAttack){
-                  Log.DebugMessage("firstAttack");
+                  //Log.DebugMessage("'firstAttack'");
                   me.MoveStop();
                   if(me.Attack(ai.MyEnemy)){
                    firstAttack=false;
@@ -64,20 +60,19 @@ namespace AKCondinoO.Sims.Actors{
                  ai.DoSkill();
                  if(avoiding&&avoidingMoving){
                   if(!me.IsTraversingPath()){
-                   Log.DebugMessage("stop avoiding:"+ai.MyPathfinding);
+                   //Log.DebugMessage("'stop avoiding':ai.MyPathfinding:"+ai.MyPathfinding);
                    shouldAvoid=false;
                    avoiding=false;
                    avoidingMoving=false;
                    hasJustAvoided=true;
                   }else{
-                   Log.DebugMessage("I am avoiding");
-                   Debug.DrawLine(me.transform.root.position,ai.MyDest,Color.green,1f);
+                   //Log.DebugMessage("'I am avoiding'");
+                   //Debug.DrawLine(me.transform.root.position,ai.MyDest,Color.gray,1f);
                   }
                  }
                  if(targetsToAvoidRefreshedFlag){
                   targetsToAvoidRefreshedFlag=false;
                   shouldAvoid=hasFriendlyTargetsToAvoid.Count>0;
-                  //shouldAvoid=true;
                  }
                  if(!shouldAvoid){
                   avoiding=false;
@@ -86,13 +81,13 @@ namespace AKCondinoO.Sims.Actors{
                  }else{
                   hasFriendlyTargetsToAvoidTimer+=Time.deltaTime;
                  }
-                 Log.DebugMessage("shouldAvoid:"+shouldAvoid);
+                 //Log.DebugMessage("shouldAvoid:"+shouldAvoid);
                  if(shouldAvoid&&!hasJustAvoided){
                   if(!me.IsAttacking()){
                    if(hasFriendlyTargetsToAvoidTimer>=hasFriendlyTargetsToAvoidMaxTime){
                     hasFriendlyTargetsToAvoidTimer=0f;
                     me.MoveStop();
-                    Log.DebugMessage("TeleportToRandomNearMyEnemy");
+                    //Log.DebugMessage("'TeleportToRandomNearMyEnemy(ai.attackDistance)'");
                     me.TeleportToRandomNearMyEnemy(ai.attackDistance);
                    }else{
                     if(!me.IsTraversingPath()){
@@ -103,28 +98,28 @@ namespace AKCondinoO.Sims.Actors{
                         destDir.y=0f;
                         float destAngle=0f;
                         for(int i=0;i<hasFriendlyTargetsToAvoid.Count;++i){
-                         Log.DebugMessage("hasFriendlyTargetsToAvoid[i]:"+hasFriendlyTargetsToAvoid[i].sim.name);
+                         //Log.DebugMessage("hasFriendlyTargetsToAvoid["+i+"].sim.name:"+hasFriendlyTargetsToAvoid[i].sim.name);
                          RaycastHit hit=hasFriendlyTargetsToAvoid[i].hit;
                          SimObject simHit=hasFriendlyTargetsToAvoid[i].sim;
                          Vector3 dirFromEnemyToAlly=(simHit.transform.root.position-MyEnemy.transform.root.position).normalized;
                          dirFromEnemyToAlly.y=0f;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
+                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.gray,1f);
                          Vector3 dirFromEnemyToMe=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
                          dirFromEnemyToMe.y=0f;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
+                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.gray,1f);
                          float angle=180f-Vector3.Angle(dirFromEnemyToMe,dirFromEnemyToAlly);
                          destAngle+=angle;
                         }
                         if(destAngle!=0f){
                          destAngle/=hasFriendlyTargetsToAvoid.Count;
                          destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-                         Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
+                         //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
                         }
                         Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.1f);
-                        Debug.DrawLine(me.transform.root.position,dest,Color.cyan,1f);
+                        //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
                         ai.MyDest=dest;
-                        Log.DebugMessage("avoiding, move away");
-                        //avoidMode=AvoidMode.MoveRandom;
+                        //Log.DebugMessage("'avoiding, move away'");
+                        avoidMode=AvoidMode.MoveRandom;
                         break;
                        }
                        case(AvoidMode.MoveRandom):{
@@ -134,12 +129,12 @@ namespace AKCondinoO.Sims.Actors{
                         destAngle+=(float)me.math_random.NextDouble(-180f,180f);
                         if(destAngle!=0f){
                          destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-                         Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
+                         //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
                         }
                         Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.1f);
-                        Debug.DrawLine(me.transform.root.position,dest,Color.cyan,1f);
+                        //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
                         ai.MyDest=dest;
-                        Log.DebugMessage("avoiding, random move");
+                        //Log.DebugMessage("'avoiding, random move'");
                         avoidMode=AvoidMode.MoveAway;
                         break;
                        }
@@ -148,13 +143,13 @@ namespace AKCondinoO.Sims.Actors{
                      }
                      if(me.Move(ai.MyDest)){
                       avoidingMoving=true;
-                      Log.DebugMessage("avoiding, move!");
+                      //Log.DebugMessage("'avoiding, move!'");
                      }
                     }
                    }
                   }
                  }else{
-                  Log.DebugMessage("MoveStop()");
+                  //Log.DebugMessage("'MoveStop()'");
                   me.MoveStop();
                   if(me.Attack(ai.MyEnemy)){
                    hasJustAvoided=false;

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,9 +12,9 @@ namespace AKCondinoO.Sims{
              /// <summary>
              ///  Secondary Stats AGI
              /// </summary>
-             protected float agility_value_stats;
-             protected float agility_value_set;
-             protected float agility_value_buffs;
+             [NonSerialized]protected float agility_value_stats;
+             [NonSerialized]protected float agility_value_set;
+             [NonSerialized]protected float agility_value_buffs;
               internal float AgilityGet(SimObject statsSim=null){
                OnRefresh(statsSim);
                return agility_value_stats+agility_value_set;
@@ -24,7 +25,7 @@ namespace AKCondinoO.Sims{
                 updatedAgility=true;
                 SetPendingRefresh(statsSim,forceRefresh);
                }
-                protected bool updatedAgility;
+                [NonSerialized]protected bool updatedAgility;
                  internal void OnRefresh_Agility(SimObject statsSim=null){
                   if(updatedBodily_kinesthetic  ||
                      updatedInterpersonal       ||
@@ -48,15 +49,15 @@ namespace AKCondinoO.Sims{
                    refreshedAgility=true;
                   }
                  }
-                  protected bool refreshedAgility;
+                  [NonSerialized]protected bool refreshedAgility;
              #endregion
              #region Dexterity
              /// <summary>
              ///  Secondary Stats DEX
              /// </summary>
-             protected float dexterity_value_stats;
-             protected float dexterity_value_set;
-             protected float dexterity_value_buffs;
+             [NonSerialized]protected float dexterity_value_stats;
+             [NonSerialized]protected float dexterity_value_set;
+             [NonSerialized]protected float dexterity_value_buffs;
               internal float DexterityGet(SimObject statsSim=null){
                OnRefresh(statsSim);
                return dexterity_value_stats+dexterity_value_set;
@@ -67,7 +68,7 @@ namespace AKCondinoO.Sims{
                 updatedDexterity=true;
                 SetPendingRefresh(statsSim,forceRefresh);
                }
-                protected bool updatedDexterity;
+                [NonSerialized]protected bool updatedDexterity;
                  internal void OnRefresh_Dexterity(SimObject statsSim=null){
                   if(updatedBodily_kinesthetic  ||
                      updatedInterpersonal       ||
@@ -91,15 +92,15 @@ namespace AKCondinoO.Sims{
                    refreshedDexterity=true;
                   }
                  }
-                  protected bool refreshedDexterity;
+                  [NonSerialized]protected bool refreshedDexterity;
              #endregion
              #region Intelligence
              /// <summary>
              ///  Secondary Stats INT
              /// </summary>
-             protected float intelligence_value_stats;
-             protected float intelligence_value_set;
-             protected float intelligence_value_buffs;
+             [NonSerialized]protected float intelligence_value_stats;
+             [NonSerialized]protected float intelligence_value_set;
+             [NonSerialized]protected float intelligence_value_buffs;
               internal float IntelligenceGet(SimObject statsSim=null){
                OnRefresh(statsSim);
                return intelligence_value_stats+intelligence_value_set;
@@ -110,7 +111,7 @@ namespace AKCondinoO.Sims{
                 updatedIntelligence=true;
                 SetPendingRefresh(statsSim,forceRefresh);
                }
-                protected bool updatedIntelligence;
+                [NonSerialized]protected bool updatedIntelligence;
                  internal void OnRefresh_Intelligence(SimObject statsSim=null){
                   if(updatedInterpersonal       ||
                      updatedIntrapersonal       ||
@@ -134,15 +135,15 @@ namespace AKCondinoO.Sims{
                    refreshedIntelligence=true;
                   }
                  }
-                  protected bool refreshedIntelligence;
+                  [NonSerialized]protected bool refreshedIntelligence;
              #endregion
              #region Strength
              /// <summary>
              ///  Secondary Stats STR
              /// </summary>
-             protected float strength_value_stats;
-             protected float strength_value_set;
-             protected float strength_value_buffs;
+             [NonSerialized]protected float strength_value_stats;
+             [NonSerialized]protected float strength_value_set;
+             [NonSerialized]protected float strength_value_buffs;
               internal float StrengthGet(SimObject statsSim=null){
                OnRefresh(statsSim);
                return strength_value_stats+strength_value_set;
@@ -153,7 +154,7 @@ namespace AKCondinoO.Sims{
                 updatedStrength=true;
                 SetPendingRefresh(statsSim,forceRefresh);
                }
-                protected bool updatedStrength;
+                [NonSerialized]protected bool updatedStrength;
                  internal void OnRefresh_Strength(SimObject statsSim=null){
                   if(updatedBodily_kinesthetic  
                   ){
@@ -167,15 +168,15 @@ namespace AKCondinoO.Sims{
                    refreshedStrength=true;
                   }
                  }
-                  protected bool refreshedStrength;
+                  [NonSerialized]protected bool refreshedStrength;
              #endregion
              #region Vitality
              /// <summary>
              ///  Secondary Stats VIT
              /// </summary>
-             protected float vitality_value_stats;
-             protected float vitality_value_set;
-             protected float vitality_value_buffs;
+             [NonSerialized]protected float vitality_value_stats;
+             [NonSerialized]protected float vitality_value_set;
+             [NonSerialized]protected float vitality_value_buffs;
               internal float VitalityGet(SimObject statsSim=null){
                OnRefresh(statsSim);
                return vitality_value_stats+vitality_value_set;
@@ -186,7 +187,7 @@ namespace AKCondinoO.Sims{
                 updatedVitality=true;
                 SetPendingRefresh(statsSim,forceRefresh);
                }
-                protected bool updatedVitality;
+                [NonSerialized]protected bool updatedVitality;
                  internal void OnRefresh_Vitality(SimObject statsSim=null){
                   if(updatedBodily_kinesthetic  ||
                      updatedIntrapersonal       ||
@@ -204,7 +205,7 @@ namespace AKCondinoO.Sims{
                    refreshedVitality=true;
                   }
                  }
-                  protected bool refreshedVitality;
+                  [NonSerialized]protected bool refreshedVitality;
              #endregion
         }
     }

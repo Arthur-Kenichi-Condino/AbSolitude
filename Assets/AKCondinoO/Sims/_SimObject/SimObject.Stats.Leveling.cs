@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims{
              //Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value);
             }
          #region IsTranscendent
-         protected bool isTranscendent_value;
+         [NonSerialized]protected bool isTranscendent_value;
           internal bool IsTranscendentGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return isTranscendent_value;
@@ -37,21 +37,21 @@ namespace AKCondinoO.Sims{
             updatedIsTranscendent=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedIsTranscendent;
+            [NonSerialized]protected bool updatedIsTranscendent;
              internal void OnRefresh_IsTranscendent(SimObject statsSim=null){
               if(updatedIsTranscendent){
                refreshedIsTranscendent=true;
               }
              }
-              protected bool refreshedIsTranscendent;
+              [NonSerialized]protected bool refreshedIsTranscendent;
          #endregion
           #region SimLevel
           /// <summary>
           ///  Based on all character's interactions (which gives Exp)
           /// </summary>
-          protected int simLevel_value;
-           protected int totalStatPoints_value;
-           protected int statPointsSpent_value;
+          [NonSerialized]protected int simLevel_value;
+           [NonSerialized]protected int totalStatPoints_value;
+           [NonSerialized]protected int statPointsSpent_value;
            internal int SimLevelGet(SimObject statsSim=null){
             OnRefresh(statsSim);
             return simLevel_value;
@@ -61,7 +61,7 @@ namespace AKCondinoO.Sims{
              updatedSimLevel=true;
              SetPendingRefresh(statsSim,forceRefresh);
             }
-             protected bool updatedSimLevel;
+             [NonSerialized]protected bool updatedSimLevel;
               internal void OnRefresh_SimLevel(SimObject statsSim=null){
                if(updatedSimLevel||
                   refreshedIsTranscendent
@@ -71,8 +71,8 @@ namespace AKCondinoO.Sims{
                 refreshedSimLevel=true;
                }
               }
-               protected bool refreshedSimLevel;
-         static readonly Dictionary<(int currentLevel,bool transcendent),int>totalStatPointsAtLevel=new Dictionary<(int,bool),int>();
+               [NonSerialized]protected bool refreshedSimLevel;
+         [NonSerialized]static readonly Dictionary<(int currentLevel,bool transcendent),int>totalStatPointsAtLevel=new Dictionary<(int,bool),int>();
             internal static int AddStatPointsFrom1To99(int currentLevel,bool transcendent){
              lock(totalStatPointsAtLevel){
               if(totalStatPointsAtLevel.TryGetValue((currentLevel,transcendent),out int cached)){
@@ -128,7 +128,7 @@ namespace AKCondinoO.Sims{
            /// <summary>
            ///  Based on character's existence time (which raises Age)
            /// </summary>
-           protected int ageLevel_value;
+           [NonSerialized]protected int ageLevel_value;
            internal int AgeLevelGet(SimObject statsSim=null){
             OnRefresh(statsSim);
             return ageLevel_value;
@@ -138,14 +138,14 @@ namespace AKCondinoO.Sims{
              updatedAgeLevel=true;
              SetPendingRefresh(statsSim,forceRefresh);
             }
-             protected bool updatedAgeLevel;
+             [NonSerialized]protected bool updatedAgeLevel;
               internal void OnRefresh_AgeLevel(SimObject statsSim=null){
                if(updatedAgeLevel
                ){
                 refreshedAgeLevel=true;
                }
               }
-               protected bool refreshedAgeLevel;
+               [NonSerialized]protected bool refreshedAgeLevel;
            #endregion
         }
     }

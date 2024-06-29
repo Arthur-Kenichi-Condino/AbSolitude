@@ -10,11 +10,11 @@ namespace AKCondinoO.Sims{
         internal partial class Stats{
          //
          #region Integrity
-         protected float scaleIntegrity;
+         [NonSerialized]protected float scaleIntegrity;
          /// <summary>
          ///  Integridade física atual para o objeto Sim: se este valor chegar a 0f, o Sim irá morrer ou ser destruído
          /// </summary>
-         protected float integrity_value;
+         [NonSerialized]protected float integrity_value;
           internal float IntegrityGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return integrity_value;
@@ -24,11 +24,11 @@ namespace AKCondinoO.Sims{
             updatedIntegrity=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedIntegrity;
+            [NonSerialized]protected bool updatedIntegrity;
              internal void OnRefresh_Integrity(SimObject statsSim=null){
                if(refreshedMaxIntegrity
                ){
-                //Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+";scaleIntegrity:"+scaleIntegrity);
+                //Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+":scaleIntegrity:"+scaleIntegrity);
                 if(scaleIntegrity<0f){
                  integrity_value=maxIntegrity_value_stats+maxIntegrity_value_set;
                 }else{
@@ -41,14 +41,14 @@ namespace AKCondinoO.Sims{
                 refreshedIntegrity=true;
                }
              }
-              protected bool refreshedIntegrity;
+              [NonSerialized]protected bool refreshedIntegrity;
           #region MaxIntegrity
           /// <summary>
           ///  Integridade física máxima do Sim: valor calculado com base em outros atributos
           /// </summary>
-          protected float maxIntegrity_value_stats;
-          protected float maxIntegrity_value_set;
-          protected float maxIntegrity_value_buffs;
+          [NonSerialized]protected float maxIntegrity_value_stats;
+          [NonSerialized]protected float maxIntegrity_value_set;
+          [NonSerialized]protected float maxIntegrity_value_buffs;
            internal float MaxIntegrityGet(SimObject statsSim=null){
             OnRefresh(statsSim);
             return maxIntegrity_value_stats+maxIntegrity_value_set;
@@ -65,7 +65,7 @@ namespace AKCondinoO.Sims{
              updatedMaxIntegrity=true;
              SetPendingRefresh(statsSim,forceRefresh);
             }
-             protected bool updatedMaxIntegrity;
+             [NonSerialized]protected bool updatedMaxIntegrity;
               internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
                if(refreshedSimLevel||
                   refreshedAgeLevel||
@@ -98,12 +98,12 @@ namespace AKCondinoO.Sims{
                 refreshedMaxIntegrity=true;
                }
               }
-               protected bool refreshedMaxIntegrity;
+               [NonSerialized]protected bool refreshedMaxIntegrity;
            #region Stamina
            /// <summary>
            ///  Energia física disponível para realizar ações
            /// </summary>
-           protected float stamina_value;
+           [NonSerialized]protected float stamina_value;
             internal float StaminaGet(SimObject statsSim=null){
              OnRefresh(statsSim);
              return stamina_value;
@@ -113,14 +113,14 @@ namespace AKCondinoO.Sims{
               updatedStamina=true;
               SetPendingRefresh(statsSim,forceRefresh);
              }
-              protected bool updatedStamina;
+              [NonSerialized]protected bool updatedStamina;
             #region MaxStamina
             /// <summary>
             ///  Energia física máxima para o Sim realizar ações: valor calculado com base em outros atributos
             /// </summary>
-            protected float maxStamina_value_stats;
-            protected float maxStamina_value_set;
-            protected float maxStamina_value_buffs;
+            [NonSerialized]protected float maxStamina_value_stats;
+            [NonSerialized]protected float maxStamina_value_set;
+            [NonSerialized]protected float maxStamina_value_buffs;
              internal float MaxStaminaGet(SimObject statsSim=null){
               OnRefresh(statsSim);
               return maxStamina_value_stats+maxStamina_value_set;
@@ -131,7 +131,7 @@ namespace AKCondinoO.Sims{
                updatedMaxStamina=true;
                SetPendingRefresh(statsSim,forceRefresh);
               }
-               protected bool updatedMaxStamina;
+               [NonSerialized]protected bool updatedMaxStamina;
             #endregion
            #endregion
           #endregion

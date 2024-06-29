@@ -11,7 +11,7 @@ namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal partial class AI{
         }
-     protected Vector3 moveDest;
+     [NonSerialized]protected Vector3 moveDest;
         internal bool Move(Vector3 dest,bool run=false){
          if(ai==null){
           return true;
@@ -79,7 +79,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return result;
         }
-     RaycastHit[]tryShootHits=new RaycastHit[4];
+     [NonSerialized]RaycastHit[]tryShootHits=new RaycastHit[4];
         internal bool TryShoot(SimObject enemy,out bool reloading,out bool shooting){
          reloading=false;
          shooting=false;
@@ -104,9 +104,9 @@ namespace AKCondinoO.Sims.Actors{
              }else{
               simWeapon.OnShootGetHits(this,ref tryShootHits,out int shootHitsLength);
               if(shootHitsLength>0){
-               Log.DebugMessage("shootHitsLength>0");
+               //Log.DebugMessage("'shootHitsLength>0'");
                for(int h=0;h<shootHitsLength;h++){
-                Log.DebugMessage("tryShootHits[h]:"+tryShootHits[h].transform.name);
+                //Log.DebugMessage("tryShootHits["+h+"].transform.name:"+tryShootHits[h].transform.name);
                 if(tryShootHits[h].transform.root==ai.MyEnemy.transform.root){
                  if(simWeapon.TryStartShootingAction(simAiming:this)){
                   Vector3 head=GetHeadPosition(true);

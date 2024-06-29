@@ -236,7 +236,7 @@ namespace AKCondinoO.Sims.Actors{
             if(AFKTimerToUseAI<=0f){
              OnStartUsingAI();
              isUsingAI=true;
-             Log.DebugMessage("AFK for too long, use AI:"+this);
+             //Log.DebugMessage("'AFK for too long, use AI':"+this);
             }
            }
            if(DEBUG_TOGGLE_HOLSTER_WEAPON){

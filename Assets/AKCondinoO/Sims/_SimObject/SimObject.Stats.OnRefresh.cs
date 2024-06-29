@@ -1,13 +1,14 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
-         protected bool pendingRefresh;
+         [NonSerialized]protected bool pendingRefresh;
             internal void SetPendingRefresh(SimObject statsSim=null,bool forceRefresh=false){
              pendingRefresh=true;
              if(forceRefresh){

@@ -19,13 +19,13 @@ using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal NetworkObject netObj;
+     [NonSerialized]internal NetworkObject netObj;
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isServer){
-          //Log.DebugMessage("SimObject:OnNetworkSpawn:isServer");
+          //Log.DebugMessage("SimObject:OnNetworkSpawn:'isServer'");
           if(IsOwner){
-           //Log.DebugMessage("init net variables");
+           //Log.DebugMessage("SimObject:OnNetworkSpawn:'IsOwner':'init net variables'");
            netPosition.Value=persistentData.position  ;
            netRotation.Value=persistentData.rotation  ;
            netScale   .Value=persistentData.localScale;
@@ -38,7 +38,7 @@ namespace AKCondinoO.Sims{
           netScale   .OnValueChanged+=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
-          Log.DebugMessage("SimObject:OnNetworkSpawn:isClient");
+          Log.DebugMessage("SimObject:OnNetworkSpawn:'isClient'");
           OnClientSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnClientSideNetPositionValueChanged;
           OnClientSideNetRotationValueChanged(transform.rotation  ,netRotation.Value);//  update on spawn
@@ -53,13 +53,13 @@ namespace AKCondinoO.Sims{
         }
         public override void OnNetworkDespawn(){
          if(Core.singleton.isServer){
-          //Log.DebugMessage("SimObject:OnNetworkDespawn:isServer");
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:'isServer'");
           netPosition.OnValueChanged-=OnServerSideNetPositionValueChanged;
           netRotation.OnValueChanged-=OnServerSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnServerSideNetScaleValueChanged   ;
          }
          if(Core.singleton.isClient){
-          //Log.DebugMessage("SimObject:OnNetworkDespawn:isClient");
+          //Log.DebugMessage("SimObject:OnNetworkDespawn:'isClient'");
           netPosition.OnValueChanged-=OnClientSideNetPositionValueChanged;
           netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
@@ -70,10 +70,10 @@ namespace AKCondinoO.Sims{
          }
          base.OnNetworkDespawn();
         }
-      private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
-       NetworkVariableReadPermission.Everyone,
-       NetworkVariableWritePermission.Owner
-      );
+     [NonSerialized]private readonly NetworkVariable<Vector3>netPosition=new NetworkVariable<Vector3>(default,
+      NetworkVariableReadPermission.Everyone,
+      NetworkVariableWritePermission.Owner
+     );
        private void OnClientSideNetPositionValueChanged(Vector3 previous,Vector3 current){
         if(Core.singleton.isClient){
          if(!IsOwner){
@@ -88,10 +88,10 @@ namespace AKCondinoO.Sims{
          }
         }
        }
-      private readonly NetworkVariable<Quaternion>netRotation=new NetworkVariable<Quaternion>(default,
-       NetworkVariableReadPermission.Everyone,
-       NetworkVariableWritePermission.Owner
-      );
+     [NonSerialized]private readonly NetworkVariable<Quaternion>netRotation=new NetworkVariable<Quaternion>(default,
+      NetworkVariableReadPermission.Everyone,
+      NetworkVariableWritePermission.Owner
+     );
        private void OnClientSideNetRotationValueChanged(Quaternion previous,Quaternion current){
         if(Core.singleton.isClient){
          if(!IsOwner){
@@ -106,10 +106,10 @@ namespace AKCondinoO.Sims{
          }
         }
        }
-      private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>(default,
-       NetworkVariableReadPermission.Everyone,
-       NetworkVariableWritePermission.Owner
-      );
+     [NonSerialized]private readonly NetworkVariable<Vector3>netScale=new NetworkVariable<Vector3>(default,
+      NetworkVariableReadPermission.Everyone,
+      NetworkVariableWritePermission.Owner
+     );
        private void OnClientSideNetScaleValueChanged(Vector3 previous,Vector3 current){
         if(Core.singleton.isClient){
          if(!IsOwner){

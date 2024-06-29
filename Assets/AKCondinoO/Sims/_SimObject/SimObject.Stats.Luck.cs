@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +13,8 @@ namespace AKCondinoO.Sims{
          /// <summary>
          ///  Primary Stats LUK
          /// </summary>
-         protected float luck_value;
-          protected float lucky_stats_refresh_cooldown_value;
+         [NonSerialized]protected float luck_value;
+          [NonSerialized]protected float lucky_stats_refresh_cooldown_value;
           internal float LuckGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return luck_value;
@@ -24,7 +25,7 @@ namespace AKCondinoO.Sims{
             lucky_stats_refresh_cooldown_value=0f;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedLuck;
+            [NonSerialized]protected bool updatedLuck;
              internal void OnRefresh_Luck(SimObject statsSim=null){
               if(luck_value>0f){
               }

@@ -62,7 +62,7 @@ namespace AKCondinoO.Sims{
                  }
                  if(bodyPart!=null){
                   if(inContainerTransformData!=this.inContainerTransformData){
-                   Log.DebugMessage("set ParentConstraint:layerName:"+layerName);
+                   //Log.DebugMessage("'set ParentConstraint':layerName:"+layerName);
                    this.inContainerTransformData=inContainerTransformData;
                    if(parentConstraint!=null){
                     parentConstraint.locked=false;
@@ -74,9 +74,9 @@ namespace AKCondinoO.Sims{
                      weight=1f,
                     };
                     parentConstraint.AddSource(source);
-                    Log.DebugMessage("set ParentConstraint:localRotation:"+inContainerTransformData.transform.localRotation.eulerAngles);
+                    //Log.DebugMessage("'set ParentConstraint':'localRotation':"+inContainerTransformData.transform.localRotation.eulerAngles);
                     parentConstraint.SetRotationOffset   (parentConstraint.sourceCount-1,inContainerTransformData.transform.localRotation.eulerAngles);
-                    Log.DebugMessage("set ParentConstraint:localPosition:"+inContainerTransformData.transform.localPosition);
+                    //Log.DebugMessage("'set ParentConstraint':'localPosition':"+inContainerTransformData.transform.localPosition);
                     parentConstraint.SetTranslationOffset(parentConstraint.sourceCount-1,inContainerTransformData.transform.localPosition);
                     parentConstraint.locked=true;
                     parentConstraint.constraintActive=true;

@@ -10,17 +10,17 @@ using System.Reflection;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal PersistentStats persistentStats;
+     [NonSerialized]internal PersistentStats persistentStats;
         internal struct PersistentStats{
-         public ListWrapper<StatsFloatData>statsFloats;
+         [NonSerialized]public ListWrapper<StatsFloatData>statsFloats;
             public struct StatsFloatData{
              public Type simStatsType;public string fieldName;public float fieldValue;
             }
-            static readonly Dictionary<Type,Dictionary<Type,FieldInfo[]>>statsFloatFields=new Dictionary<Type,Dictionary<Type,FieldInfo[]>>();
+         [NonSerialized]static readonly Dictionary<Type,Dictionary<Type,FieldInfo[]>>statsFloatFields=new Dictionary<Type,Dictionary<Type,FieldInfo[]>>();
             internal void UpdateData(SimObject simObject){
-             //Log.DebugMessage("UpdateData");
+             //Log.DebugMessage("PersistentStats:UpdateData");
              if(simObject==null){
-              //Log.DebugMessage("collecting persistent stats from destroyed sim on exit save");
+              //Log.DebugMessage("PersistentStats:'collecting persistent stats from destroyed sim on exit save'");
              }
              simObject.stats.OnRefresh(simObject);
              Type statsType=simObject.stats.GetType();
@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims{
                  field=>{
                   if(field.FieldType==typeof(float)&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){
                    String.Intern(field.Name);
-                   //Log.DebugMessage(derived+": got field:"+field.Name);
+                   //Log.DebugMessage(derived+":'found stats field':field.Name:"+field.Name);
                    return true;
                   }
                   return false;
@@ -51,7 +51,7 @@ namespace AKCondinoO.Sims{
                kvp=>{
                 return kvp.Value.Select(
                  field=>{
-                  //Log.DebugMessage("simStatsType:"+kvp.Key+";fieldName:"+field.Name+";fieldValue:"+((float)field.GetValue(simObject.stats)));
+                  //Log.DebugMessage("simStatsType:"+kvp.Key+":field.Name:"+field.Name+":'field value':"+((float)field.GetValue(simObject.stats)));
                   return new StatsFloatData{
                    simStatsType=kvp.Key,
                    fieldName=field.Name,
@@ -64,8 +64,8 @@ namespace AKCondinoO.Sims{
              );
             }
         }
-     internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
-     internal Stats stats;
+     [NonSerialized]internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
+     [NonSerialized]internal Stats stats;
         internal virtual void RenewStats(){
          //Log.DebugMessage("RenewStats");
          if(stats==null){
@@ -89,35 +89,35 @@ namespace AKCondinoO.Sims{
         }
         internal partial class Stats{
             static Stats(){
-             Log.DebugMessage("static Stats():cache values");
+             //Log.DebugMessage("static Stats():'cache values'");
              int statPointsFor99=GetStatPointsSpentFor(99);
-             Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
-             Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):wrong cached value");
+             //Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
+             //Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):'wrong cached value'");
              int statPoints=GetStatPointsSpentFor(130);
-             Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
-             Debug.Assert(GetStatPointsSpentFor(130)==statPoints,"static Stats():GetStatPointsSpentFor(130):wrong cached value");
+             //Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
+             //Debug.Assert(GetStatPointsSpentFor(130)==statPoints,"static Stats():GetStatPointsSpentFor(130):'wrong cached value'");
              for(int statLevel=1;statLevel<130;++statLevel){
               statPoints=GetStatPointsRequired(statLevel,statLevel+1);
               //Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
-              Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):wrong cached value");
+              //Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):'wrong cached value'");
              }
              int totalStatPoints=AddStatPointsFrom1To99(99,false);
-             Log.DebugMessage("static Stats():AddStatPointsFrom1To99(99,false):"+totalStatPoints);
-             Debug.Assert(AddStatPointsFrom1To99(99,false)==totalStatPoints,"static Stats():AddStatPointsFrom1To99(99,false):wrong cached value");
+             //Log.DebugMessage("static Stats():AddStatPointsFrom1To99(99,false):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom1To99(99,false)==totalStatPoints,"static Stats():AddStatPointsFrom1To99(99,false):'wrong cached value'");
              totalStatPoints=AddStatPointsFrom151To200(200,true);
-             Log.DebugMessage("static Stats():AddStatPointsFrom151To200(200,true):"+totalStatPoints);
-             Debug.Assert(AddStatPointsFrom151To200(200,true)==totalStatPoints,"static Stats():AddStatPointsFrom151To200(200,true):wrong cached value");
+             //Log.DebugMessage("static Stats():AddStatPointsFrom151To200(200,true):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom151To200(200,true)==totalStatPoints,"static Stats():AddStatPointsFrom151To200(200,true):'wrong cached value'");
             }
-         internal static System.Random seedGenerator;
-         internal readonly System.Random math_random;
+         [NonSerialized]internal static System.Random seedGenerator;
+         [NonSerialized]internal readonly System.Random math_random;
             internal Stats(){
              math_random=new System.Random(seedGenerator.Next());
             }
             internal virtual void InitFrom(PersistentStats persistentStats,SimObject statsSim=null){
-             //Log.DebugMessage("Stats InitFrom");
+             //Log.DebugMessage("Stats:InitFrom");
             }
             internal virtual void Generate(SimObject statsSim=null,bool reset=true){
-             //Log.DebugMessage("Stats Generate");
+             //Log.DebugMessage("Stats:Generate");
              if(reset){
               OnReset(statsSim);
              }

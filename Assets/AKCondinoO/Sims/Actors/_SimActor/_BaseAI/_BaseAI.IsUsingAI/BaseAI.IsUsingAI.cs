@@ -31,9 +31,9 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]internal bool sniper=false;
      [SerializeField]protected bool doIdleMove=true;
-     internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(1f/2f),0.0005f*(2f));
+     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(1f/2f),0.0005f*(2f));
         internal partial class AI{
-         BaseAI me;
+         [NonSerialized]BaseAI me;
             internal AI(BaseAI me){
              this.me=me;
               snipeSt=new  SNIPE_ST(me,this);
@@ -43,8 +43,8 @@ namespace AKCondinoO.Sims.Actors{
                idleSt=new   IDLE_ST(me,this);
             }
             internal class ST{
-             protected BaseAI me;
-             protected AI ai;
+             [NonSerialized]protected BaseAI me;
+             [NonSerialized]protected AI ai;
               protected State MyState{get{return ai.MyState;}}
               protected SimObject MyEnemy{get{return ai.MyEnemy;}}
                 internal ST(BaseAI me,AI ai){
@@ -52,13 +52,13 @@ namespace AKCondinoO.Sims.Actors{
                  this.ai=ai;
                 }
             }
-          internal float damageSourceForgiveTime=20f;
-           internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
-            protected readonly List<SimObject>damageSourcesIterator=new();
-          bool isInAttackRange          =false;
-          bool isInAttackRangeWithWeapon=false;
-          Vector3 attackDistance          ;
-          Vector3 attackDistanceWithWeapon;
+          [NonSerialized]internal float damageSourceForgiveTime=20f;
+           [NonSerialized]internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
+            [NonSerialized]protected readonly List<SimObject>damageSourcesIterator=new();
+          [NonSerialized]bool isInAttackRange          =false;
+          [NonSerialized]bool isInAttackRangeWithWeapon=false;
+          [NonSerialized]Vector3 attackDistance          ;
+          [NonSerialized]Vector3 attackDistanceWithWeapon;
             internal virtual void Main(){
              //  reescrever modo de salvar arquivo de alterações de terreno pra ser igual ao modo de água
              //  se chase por algum tempo e não alcança, evadeSt
@@ -81,7 +81,7 @@ namespace AKCondinoO.Sims.Actors{
              }
              damageSourcesIterator.Clear();
              me.stopPathfindingOnTimeout=true;
-             //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
+             //Log.DebugMessage("'MyPathfinding state is':"+MyPathfinding);
              isInAttackRange          =false;
              isInAttackRangeWithWeapon=false;
              if(MyEnemy!=null){
@@ -101,7 +101,7 @@ namespace AKCondinoO.Sims.Actors{
               callingSlaves=true;
              }
              foreach(var slave in me.slaves){
-              Log.DebugMessage("slave:"+slave);
+              //Log.DebugMessage("slave:"+slave);
               if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
                if(!callingSlaves){
                 callingSlaves=true;
@@ -110,9 +110,9 @@ namespace AKCondinoO.Sims.Actors{
              }
              if(callingSlaves){
               me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
-              Log.DebugMessage("me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves)");
+              //Log.DebugMessage("'me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves) needed'");
              }
-             Log.DebugMessage(me+":me.SetSkill():MyState:"+MyState);
+             //Log.DebugMessage(me+":'me.SetBestSkillToUse next':MyState:"+MyState);
              if      (MyState==State.  DEAD_ST){
               //
              }else if(MyState==State. SNIPE_ST){
@@ -122,10 +122,10 @@ namespace AKCondinoO.Sims.Actors{
              }else if(MyState==State. CHASE_ST){
               
              }else if(MyState==State.FOLLOW_ST){
-              //Log.DebugMessage(me+":me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow)");
+              //Log.DebugMessage(me+":'me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow)'");
               me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow);
              }else{
-              //Log.DebugMessage(me+":me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle)");
+              //Log.DebugMessage(me+":'me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle)'");
               me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle);
              }
             }
@@ -135,75 +135,5 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
         }
-        //protected virtual void mainAIFunction(){
-        // if(resettingRotation){
-        //  characterController.character.transform.rotation=resettingRotationRotLerp.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
-        //  transform.rotation=characterController.character.transform.rotation;
-        //  if(resettingRotationRotLerp.tgtRotLerpVal>=1f){
-        //   AI_OnResetRotationEnd();
-        //  }
-        // }
-        // bool callingSlaves=false;
-        // foreach(var slave in slaves){
-        //  if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
-        //   if(!callingSlaves){
-        //    SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
-        //    callingSlaves=true;
-        //   }
-        //  }
-        // }
-        // if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
-        // if(MySkill!=null){
-        //  DoSkill();
-        // }
-        //}
-     //   void AI_ToResetRotation(out Vector3 dir){
-     //    if(MyState==State.ATTACK_ST||
-     //       MyState==State. CHASE_ST
-     //    ){
-     //     dir=(MyEnemy.transform.position-transform.position).normalized;
-     //    //}else if(characterController!=null){
-     //    // dir=characterController.character.transform.forward;
-     //    //}else if(animatorController!=null){
-     //    // dir=animatorController.animator.transform.forward;
-     //    }else{
-     //     dir=transform.forward;
-     //    }
-     //    if(dir.x==0f&&dir.z==0f){
-     //     dir=transform.forward;
-     //    }
-     //    dir.y=0f;
-     //   }
-     //protected bool resettingRotation;
-     // protected QuaternionRotLerpHelper resettingRotationRotLerp;
-     //   void AI_ResetRotation(QuaternionRotLerpHelper rotLerp,bool instantly=false){
-     //    if(characterController!=null){
-     //     AI_ToResetRotation(out Vector3 dir);
-     //     if(rotLerp==null){
-     //      //transform.rotation=characterController.character.transform.rotation;
-     //      characterController.character.transform.rotation=transform.rotation;
-     //      return;
-     //     }
-     //     rotLerp.tgtRot=Quaternion.LookRotation(dir,Vector3.up);
-     //     if(instantly){
-     //      characterController.character.transform.rotation=rotLerp.EndRotation();
-     //      transform.rotation=characterController.character.transform.rotation;
-     //     }else{
-     //      resettingRotationRotLerp=rotLerp;
-     //      resettingRotation=true;
-     //     }
-     //    }
-     //   }
-     //   void AI_OnResetRotationEnd(bool end=true){
-     //    if(!resettingRotation){
-     //     return;
-     //    }
-     //    if(end){
-     //     characterController.character.transform.rotation=resettingRotationRotLerp.EndRotation();
-     //     //transform.rotation=characterController.character.transform.rotation;
-     //    }
-     //    resettingRotationRotLerp=null;
-     //    resettingRotation=false;
-     //   }
     }
 }

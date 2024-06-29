@@ -105,7 +105,7 @@ namespace AKCondinoO.Sims{
             protected static void SpendAllRemainingPointsOn(ref float stat,ref int statPointsSpent,int totalStatPoints){
              TryRaiseStatLevelTo(ref stat,130,ref statPointsSpent,totalStatPoints);
             }
-         static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
+         [NonSerialized]static readonly Dictionary<(int fromStatLevel,int toStatLevel),int>statPointsRequired=new Dictionary<(int,int),int>();
             internal static int GetStatPointsRequired(float fromStatLevel,float toStatLevel){
              int fromStatLevelFloor=Mathf.FloorToInt(fromStatLevel);
              int   toStatLevelFloor=Mathf.FloorToInt(  toStatLevel);
@@ -127,8 +127,8 @@ namespace AKCondinoO.Sims{
              }
              return statPoints;
             }
-         static readonly Dictionary<float,int>totalStatPointsRequired=new Dictionary<float,int>();
-          static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
+         [NonSerialized]static readonly Dictionary<float,int>totalStatPointsRequired=new Dictionary<float,int>();
+          [NonSerialized]static readonly Dictionary<int,int>maxStatLevelByStatPointsAvailable=new Dictionary<int,int>();
             static void CacheMaxStatLevelByStatPointsAvailable(int level,int statPoints){
              lock(maxStatLevelByStatPointsAvailable){
               maxStatLevelByStatPointsAvailable[statPoints]=level;
@@ -195,7 +195,7 @@ namespace AKCondinoO.Sims{
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float bodily_kinesthetic_value;
+         [NonSerialized]protected float bodily_kinesthetic_value;
           internal float Bodily_kinestheticGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return bodily_kinesthetic_value;
@@ -205,13 +205,13 @@ namespace AKCondinoO.Sims{
             updatedBodily_kinesthetic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedBodily_kinesthetic;
+            [NonSerialized]protected bool updatedBodily_kinesthetic;
          #endregion
          #region Interpersonal
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float interpersonal_value;
+         [NonSerialized]protected float interpersonal_value;
           internal float InterpersonalGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return interpersonal_value;
@@ -221,13 +221,13 @@ namespace AKCondinoO.Sims{
             updatedInterpersonal=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedInterpersonal;
+            [NonSerialized]protected bool updatedInterpersonal;
          #endregion
          #region Intrapersonal
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float intrapersonal_value;
+         [NonSerialized]protected float intrapersonal_value;
           internal float IntrapersonalGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return intrapersonal_value;
@@ -237,13 +237,13 @@ namespace AKCondinoO.Sims{
             updatedIntrapersonal=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedIntrapersonal;
+            [NonSerialized]protected bool updatedIntrapersonal;
          #endregion
          #region Linguistic
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float linguistic_value;
+         [NonSerialized]protected float linguistic_value;
           internal float LinguisticGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return linguistic_value;
@@ -253,13 +253,13 @@ namespace AKCondinoO.Sims{
             updatedLinguistic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedLinguistic;
+            [NonSerialized]protected bool updatedLinguistic;
          #endregion
          #region Logical_mathematical
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float logical_mathematical_value;
+         [NonSerialized]protected float logical_mathematical_value;
           internal float Logical_mathematicalGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return logical_mathematical_value;
@@ -269,13 +269,13 @@ namespace AKCondinoO.Sims{
             updatedLogical_mathematical=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedLogical_mathematical;
+            [NonSerialized]protected bool updatedLogical_mathematical;
          #endregion
          #region Musical
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float musical_value;
+         [NonSerialized]protected float musical_value;
           internal float MusicalGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return musical_value;
@@ -285,13 +285,13 @@ namespace AKCondinoO.Sims{
             updatedMusical=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedMusical;
+            [NonSerialized]protected bool updatedMusical;
          #endregion
          #region Naturalistic
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float naturalistic_value;
+         [NonSerialized]protected float naturalistic_value;
           internal float NaturalisticGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return naturalistic_value;
@@ -301,13 +301,13 @@ namespace AKCondinoO.Sims{
             updatedNaturalistic=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedNaturalistic;
+            [NonSerialized]protected bool updatedNaturalistic;
          #endregion
          #region Spatial
          /// <summary>
          ///  Primary Stats
          /// </summary>
-         protected float spatial_value;
+         [NonSerialized]protected float spatial_value;
           internal float SpatialGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return spatial_value;
@@ -317,7 +317,7 @@ namespace AKCondinoO.Sims{
             updatedSpatial=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedSpatial;
+            [NonSerialized]protected bool updatedSpatial;
          #endregion
         }
     }
