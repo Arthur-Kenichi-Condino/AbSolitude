@@ -60,14 +60,6 @@ namespace AKCondinoO.Sims.Actors{
           [NonSerialized]Vector3 attackDistance          ;
           [NonSerialized]Vector3 attackDistanceWithWeapon;
             internal virtual void Main(){
-             //  reescrever modo de salvar arquivo de alterações de terreno pra ser igual ao modo de água
-             //  se chase por algum tempo e não alcança, evadeSt
-             //  se path unreachable / CalculatePath false, evadeSt
-             //  se evadeSt por muito tempo, teleport away
-             //  adicionar hitbox da cabeça do homunculus inimigo
-             //  melhorar sistema de perseguição para inimigo que se move
-             //  ajustar corpo para virar para direção da mira com menos diferença de rotação
-             //  detecção de objetos com mira: ignorar objeto morto ou desativar volume de objeto morto
              me.RenewTargets();
              damageSourcesIterator.AddRange(damageSources.Keys);
              foreach(SimObject damageSourceSim in damageSourcesIterator){

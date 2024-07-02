@@ -20,17 +20,6 @@ namespace AKCondinoO.Sims.Actors{
             internal class ATTACK_ST:ST{
                 internal ATTACK_ST(BaseAI me,AI ai):base(me,ai){
                 }
-                internal void Finish(){
-                 firstAttack=false;
-                }
-                internal void Start(){
-                 firstAttack=true;
-                 targetsToAvoidRefreshedFlag=false;
-                 avoidMode=AvoidMode.MoveAway;
-                 shouldAvoid=false;
-                 avoiding=false;
-                 avoidingMoving=false;
-                }
              [NonSerialized]internal bool firstAttack;
              [NonSerialized]AvoidMode avoidMode=AvoidMode.MoveAway;
                 enum AvoidMode:int{
@@ -43,6 +32,17 @@ namespace AKCondinoO.Sims.Actors{
                 [NonSerialized]bool hasJustAvoided;
                  [NonSerialized]float hasFriendlyTargetsToAvoidMaxTime=8f;
                  [NonSerialized]float hasFriendlyTargetsToAvoidTimer;
+                internal void Finish(){
+                 firstAttack=false;
+                }
+                internal void Start(){
+                 firstAttack=true;
+                 targetsToAvoidRefreshedFlag=false;
+                 avoidMode=AvoidMode.MoveAway;
+                 shouldAvoid=false;
+                 avoiding=false;
+                 avoidingMoving=false;
+                }
                 internal void DoRoutine(){
                  if(MyEnemy==null){
                   me.MoveStop();
@@ -156,14 +156,14 @@ namespace AKCondinoO.Sims.Actors{
                   }
                  }
                 }
-             internal Coroutine getDataCoroutine;
-             protected WaitUntil getDataThrottler;
-              protected float getDataThrottlerInterval=.125f;
-               protected float getDataThrottlerTimer;
-             protected RaycastHit[]inTheWayColliderHits=new RaycastHit[8];
-              protected int inTheWayColliderHitsCount=0;
-             readonly List<(SimObject sim,RaycastHit hit)>hasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
-             bool targetsToAvoidRefreshedFlag;
+             [NonSerialized]internal Coroutine getDataCoroutine;
+             [NonSerialized]protected WaitUntil getDataThrottler;
+              [NonSerialized]protected float getDataThrottlerInterval=.125f;
+               [NonSerialized]protected float getDataThrottlerTimer;
+             [NonSerialized]protected RaycastHit[]inTheWayColliderHits=new RaycastHit[8];
+              [NonSerialized]protected int inTheWayColliderHitsCount=0;
+             [NonSerialized]readonly List<(SimObject sim,RaycastHit hit)>hasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
+             [NonSerialized]bool targetsToAvoidRefreshedFlag;
                 internal virtual IEnumerator GetDataCoroutine(){
                  getDataThrottler=new WaitUntil(
                   ()=>{
@@ -184,8 +184,7 @@ namespace AKCondinoO.Sims.Actors{
                  );
                  Loop:{
                   yield return getDataThrottler;
-                  Log.DebugMessage("GetDataCoroutine:Loop");
-                  //  TO DO: don't attack allies, handle MOTION_ATTACK_RIFLE (or motions that are not processed or implemented),
+                  //Log.DebugMessage("GetDataCoroutine:Loop");
                   if(me.characterController!=null&&MyEnemy!=null){
                    Quaternion rotation=me.GetRotation();
                    float height=me.GetHeight();
@@ -193,20 +192,20 @@ namespace AKCondinoO.Sims.Actors{
                    Vector3 attackDistance=me.AttackDistance();
                    Vector3 forward=(MyEnemy.transform.root.position-me.transform.root.position).normalized;
                    forward.y=0f;
-                   Log.DebugMessage("attackDistance:"+attackDistance);
+                   //Log.DebugMessage("attackDistance:"+attackDistance);
                    Vector3 scale=new Vector3(
                     (attackDistance.x)/(radius),
                     (attackDistance.y)/(height),
                     (attackDistance.z)/(radius)
                    );
-                   Log.DebugMessage("scale:"+scale);
+                   //Log.DebugMessage("scale:"+scale);
                    Vector3 offset=-forward*(radius*2f);
                    var values=me.simCollisions.GetCapsuleValuesForCollisionTesting(me.characterController.character,me.transform.root,scale,offset);
-                   Debug.DrawLine(values.point0,values.point1,Color.red,getDataThrottlerInterval);
-                   Debug.DrawRay(values.point0,rotation*Vector3.right*radius*scale.x,Color.red,getDataThrottlerInterval);
-                   Debug.DrawRay(values.point0,rotation*Vector3.forward*radius*scale.z,Color.red,getDataThrottlerInterval);
+                   //Debug.DrawLine(values.point0,values.point1,Color.gray,getDataThrottlerInterval);
+                   //Debug.DrawRay(values.point0,rotation*Vector3.right*radius*scale.x,Color.gray,getDataThrottlerInterval);
+                   //Debug.DrawRay(values.point0,rotation*Vector3.forward*radius*scale.z,Color.gray,getDataThrottlerInterval);
                    float maxDis=radius*2f+attackDistance.z;
-                   Debug.DrawLine(me.transform.position+offset,me.transform.position+offset+(forward*maxDis),Color.red,getDataThrottlerInterval);
+                   //Debug.DrawLine(me.transform.position+offset,me.transform.position+offset+(forward*maxDis),Color.gray,getDataThrottlerInterval);
                    int inTheWayLength=0;
                    _GetInTheWayColliderHits:{
                     inTheWayLength=Physics.CapsuleCastNonAlloc(
@@ -244,7 +243,7 @@ namespace AKCondinoO.Sims.Actors{
                       if(me.IsInAttackRange(actorHit,out _)){
                        bool isFriendly=actorHit.IsFriendlyTo(me);
                        if(isFriendly){
-                        Log.DebugMessage("I need to avoid hitting a friendly target:"+actorHit.name);
+                        //Log.DebugMessage("'I need to avoid hitting a friendly target':"+actorHit.name);
                         hasFriendlyTargetsToAvoid.Add((actorHit,hit));
                        }
                       }
@@ -272,147 +271,5 @@ namespace AKCondinoO.Sims.Actors{
                 }
             }
         }
-     //[SerializeField]internal QuaternionRotLerpHelper onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy=new QuaternionRotLerpHelper(10,.5f);
-     //protected bool onAttackGetDestGoLeft;
-     //protected bool onAttackGetDestGoRight;
-     //protected bool onAttackGetDestGoRandom;
-     //protected float onAttackHasFriendlyTargetsToAvoidSubroutineMaxTime=8f;
-     //protected float onAttackHasFriendlyTargetsToAvoidSubroutineTime;
-     //protected float onAttackHasFriendlyTargetsToAvoidSubroutineCooldown=4f;
-     //protected float onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer;
-     //protected int onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves=2;
-     //protected int onAttackHasFriendlyTargetsToAvoidSubroutineMoves;
-     //   protected virtual void OnATTACK_ST_Routine(Vector3 attackDistance,Vector3 attackDistanceWithWeapon){
-     //    if(MyEnemy==null){
-     //     return;
-     //    }
-     //    //Log.DebugMessage("OnATTACK_ST_Routine(),this:"+this);
-     //    bool canAttack=true;
-     //    bool shouldAvoid=(onAttackHasFriendlyTargetsToAvoid.Count>0);
-     //    if(onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer>0f){
-     //     onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer-=Time.deltaTime;
-     //     shouldAvoid=false;
-     //    }
-     //    if(!shouldAvoid){
-     //     onAttackHasFriendlyTargetsToAvoidSubroutineTime=0f;
-     //     onAttackHasFriendlyTargetsToAvoidSubroutineMoves=0;
-     //    }
-     //    if(shouldAvoid){
-     //     canAttack=false;
-     //     OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(canAttack,attackDistance);
-     //     return;
-     //    }
-     //    if(
-     //     IsTraversingPath()
-     //    ){
-     //     MoveStop();
-     //    }
-     //    OnATTACK_ST_Attack(canAttack);
-     //   }
-     //protected bool onAttackTargetsToAvoidWaitingRefreshFlag;
-     //protected bool onAttackTargetsToAvoidRefreshFlag;
-     //protected bool onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
-     //   protected virtual void OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(bool canAttack,Vector3 attackDistance){
-     //    onAttackHasFriendlyTargetsToAvoidSubroutineTime+=Time.deltaTime;
-     //    if(onAttackHasFriendlyTargetsToAvoidSubroutineTime>=onAttackHasFriendlyTargetsToAvoidSubroutineMaxTime){
-     //     OnATTACK_ST_Teleport(attackDistance);
-     //     onAttackHasFriendlyTargetsToAvoidSubroutineCooldownTimer=onAttackHasFriendlyTargetsToAvoidSubroutineCooldown;
-     //     return;
-     //    }
-     //    if(!IsTraversingPath()){
-     //     if(onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid){
-     //      OnATTACK_ST_Attack(true);
-     //      if(IsAttacking()){
-     //       onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=false;
-     //      }
-     //     }else{
-     //      if(!IsAttacking()){
-     //       if(onAttackTargetsToAvoidWaitingRefreshFlag){
-     //        if(onAttackTargetsToAvoidRefreshFlag){
-     //         onAttackTargetsToAvoidWaitingRefreshFlag=false;
-     //         onAttackHasFriendlyTargetsToAvoidSubroutineMoves++;
-     //         if(onAttackHasFriendlyTargetsToAvoidSubroutineMoves%onAttackHasFriendlyTargetsToAvoidSubroutineDestModifiersChangeAfterMoves==0){
-     //          OnATTACK_ST_DestModifiersNext();
-     //         }
-     //         Vector3 destDir=(transform.root.position-MyEnemy.transform.root.position).normalized;
-     //         float destAngle=0f;
-     //         for(int i=0;i<onAttackHasFriendlyTargetsToAvoid.Count;++i){
-     //          //Log.DebugMessage("OnATTACK_ST_SubroutineHasFriendlyTargetsToAvoid(),onAttackHasFriendlyTargetsToAvoid[i]:"+onAttackHasFriendlyTargetsToAvoid[i].sim.name);
-     //          RaycastHit hit=onAttackHasFriendlyTargetsToAvoid[i].hit;
-     //          SimObject simHit=onAttackHasFriendlyTargetsToAvoid[i].sim;
-     //          Vector3 dirFromAllyToEnemy=(MyEnemy.transform.root.position-simHit.transform.root.position).normalized;
-     //          dirFromAllyToEnemy.y=0f;
-     //          //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.cyan,1f);
-     //          Vector3 dirFromEnemyToMe=(transform.root.position-MyEnemy.transform.root.position).normalized;
-     //          dirFromEnemyToMe.y=0f;
-     //          //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.cyan,1f);
-     //          float angle=Vector3.SignedAngle(dirFromEnemyToMe,dirFromAllyToEnemy,Vector3.up);
-     //          destAngle+=angle;
-     //         }
-     //         if(onAttackGetDestGoRandom){
-     //          destAngle*=math_random.CoinFlip()?-1f:1f;
-     //          destAngle+=(float)math_random.NextDouble(-90f,90f);
-     //         }else if(onAttackGetDestGoLeft){
-     //          destAngle=-Mathf.Abs(destAngle);
-     //          destAngle-=(float)math_random.NextDouble(0f,90f);
-     //         }else if(onAttackGetDestGoRight){
-     //          destAngle=Mathf.Abs(destAngle);
-     //          destAngle+=(float)math_random.NextDouble(0f,90f);
-     //         }
-     //         if(destAngle!=0f){
-     //          destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-     //          Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.cyan,1f);
-     //         }
-     //         Vector3 dest=MyEnemy.transform.root.position+(destDir*attackDistance.z*1.1f);
-     //         //Debug.DrawLine(transform.root.position,dest,Color.cyan,1f);
-     //         Move(dest);
-     //         onAttackDoAttackEvenIfHasFriendlyTargetsToAvoid=true;
-     //        }
-     //       }else{
-     //        onAttackTargetsToAvoidWaitingRefreshFlag=true;
-     //       }
-     //      }
-     //     }
-     //    }
-     //    onAttackTargetsToAvoidRefreshFlag=false;
-     //   }
-     //   protected virtual void OnATTACK_ST_DestModifiersNext(){
-     //    if(onAttackGetDestGoLeft){
-     //     onAttackGetDestGoLeft=false;
-     //     onAttackGetDestGoRight=true;
-     //    }else if(onAttackGetDestGoRight){
-     //     onAttackGetDestGoRight=false;
-     //     onAttackGetDestGoRandom=true;
-     //    }else if(onAttackGetDestGoRandom){
-     //     onAttackGetDestGoRandom=false;
-     //    }else{
-     //     onAttackGetDestGoLeft=true;
-     //    }
-     //   }
-     //   protected virtual void OnATTACK_ST_Teleport(Vector3 attackDistance){
-     //    if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
-     //     teleport.targetDest=MyEnemy.transform.position;
-     //     teleport.cooldown=0f;
-     //     teleport.useRandom=true;
-     //     teleport.randomMaxDis=attackDistance.z*1.1f;
-     //     teleport.DoSkill(this,1);
-     //    }
-     //   }
-     //   protected virtual void OnCHASE_ST_Teleport(Vector3 attackDistance){
-     //    if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
-     //     teleport.targetDest=MyEnemy.transform.position;
-     //     teleport.cooldown=0f;
-     //     teleport.useRandom=true;
-     //     teleport.randomMaxDis=attackDistance.z*1.1f;
-     //     teleport.DoSkill(this,1);
-     //    }
-     //   }
-     //   protected virtual void OnATTACK_ST_Attack(bool canAttack){
-     //    if(AI_LookToMyEnemy(onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy)){
-     //     if(canAttack){
-     //      DoAttackOnAnimationEvent();
-     //     }
-     //    }
-     //   }
     }
 }

@@ -82,6 +82,7 @@ namespace AKCondinoO.Sims.Actors{
           Vector3 planarLookDir=lookDir;
           targetDir=planarLookDir.normalized;
           targetDir=Vector3.ProjectOnPlane(targetDir,Vector3.up);
+          targetDir.Normalize();
           if(targetDir==Vector3.zero){
            targetDir=transform.forward;
           }
