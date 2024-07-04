@@ -21,6 +21,10 @@ namespace AKCondinoO.Sims.Actors{
             internal class CHASE_ST:ST{
                 internal CHASE_ST(BaseAI me,AI ai):base(me,ai){
                 }
+             [NonSerialized]protected float travelMaxTime=3f;
+              [NonSerialized]protected float travelTime;
+               [NonSerialized]protected bool traveledForTooLong;
+             //consider teleport
              [NonSerialized]protected Vector3 myEnemyPos,previousMyEnemyPos;
               [NonSerialized]protected bool myEnemyMoved;
              [NonSerialized]protected bool predictMyEnemyDest;
@@ -43,6 +47,8 @@ namespace AKCondinoO.Sims.Actors{
                  if(MyEnemy!=null){
                   myEnemyPos=previousMyEnemyPos=MyEnemy.transform.position;
                  }
+                 travelTime=0f;
+                 traveledForTooLong=false;
                  myEnemyMoved=false;
                  predictMyEnemyDest=false;
                  renewDestinationTimer=0f;
@@ -52,6 +58,20 @@ namespace AKCondinoO.Sims.Actors{
                  if(MyEnemy==null){
                   me.MoveStop();
                   return;
+                 }
+                 if(me.IsTraversingPath()){
+                  travelTime+=Time.deltaTime;
+                 }
+                 if(travelTime>=travelMaxTime){
+                  travelTime=0f;
+                  traveledForTooLong=true;
+                 }
+                 if(traveledForTooLong){
+                  if(ai.MyPathfinding==PathfindingResult.UNREACHABLE){
+                   Log.DebugMessage("'traveledForTooLong':'ai.MyPathfinding==PathfindingResult.UNREACHABLE':'try to evade'");
+                  }else if(ai.damageSources.ContainsKey(MyEnemy)){
+                   Log.DebugMessage("'ai.damageSources.ContainsKey(MyEnemy)':'I can reach my enemy but the pathfinding isn't fast enough':'prepare for teleport to enemy'");
+                  }
                  }
                  BaseAI myEnemyBaseAI=MyEnemy as BaseAI;
                  bool myEnemyIsMoving=false;
