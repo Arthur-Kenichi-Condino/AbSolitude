@@ -24,7 +24,9 @@ namespace AKCondinoO.Sims.Actors{
              [NonSerialized]protected float travelMaxTime=3f;
               [NonSerialized]protected float travelTime;
                [NonSerialized]protected bool traveledForTooLong;
-             //consider teleport
+             [NonSerialized]protected bool consideringTeleport;
+              [NonSerialized]protected float consideringTeleportTimeIntervalToTeleport=3f;
+               [NonSerialized]protected float consideringTeleportTimerToTeleport;
              [NonSerialized]protected Vector3 myEnemyPos,previousMyEnemyPos;
               [NonSerialized]protected bool myEnemyMoved;
              [NonSerialized]protected bool predictMyEnemyDest;
@@ -49,6 +51,8 @@ namespace AKCondinoO.Sims.Actors{
                  }
                  travelTime=0f;
                  traveledForTooLong=false;
+                 consideringTeleport=false;
+                 consideringTeleportTimerToTeleport=0f;
                  myEnemyMoved=false;
                  predictMyEnemyDest=false;
                  renewDestinationTimer=0f;
@@ -69,8 +73,23 @@ namespace AKCondinoO.Sims.Actors{
                  if(traveledForTooLong){
                   if(ai.MyPathfinding==PathfindingResult.UNREACHABLE){
                    Log.DebugMessage("'traveledForTooLong':'ai.MyPathfinding==PathfindingResult.UNREACHABLE':'try to evade'");
+                   Log.Warning("'TO DO: set to evade state for a time'");
                   }else if(ai.damageSources.ContainsKey(MyEnemy)){
                    Log.DebugMessage("'ai.damageSources.ContainsKey(MyEnemy)':'I can reach my enemy but the pathfinding isn't fast enough':'prepare for teleport to enemy'");
+                   consideringTeleport=true;
+                  }
+                 }
+                 if(consideringTeleport){
+                  if(consideringTeleportTimerToTeleport<=0f){
+                   consideringTeleportTimerToTeleport=consideringTeleportTimeIntervalToTeleport;
+                  }
+                  if(consideringTeleportTimerToTeleport>0f){
+                   consideringTeleportTimerToTeleport-=Time.deltaTime;
+                   if(consideringTeleportTimerToTeleport<=0f){
+                    Log.DebugMessage("'consideringTeleportTimerToTeleport<=0f':'teleport to enemy!'");
+                    consideringTeleport=false;
+                    Log.Warning("'TO DO: teleport to enemy on chase'");
+                   }
                   }
                  }
                  BaseAI myEnemyBaseAI=MyEnemy as BaseAI;

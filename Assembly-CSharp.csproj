@@ -71,6 +71,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.MotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Networking.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbsoluteFrenzy.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Assets\CatlikeCoding\Scripts\TangentSpaceVisualizer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.GetV.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\DeepQuagmire.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FixedUI.InteractMode.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayPersistentDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DictionaryWrapper.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\HellsGreekFire.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindZoneControl.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Interactions\Interaction.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAI.cs" />
