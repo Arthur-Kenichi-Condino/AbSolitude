@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   editorNetAsClient: 0
-  devBuildNetAsClient: 0
+  devBuildNetAsClient: 1
   manuallyAddedPrefabs:
   - {fileID: 47513358957190350, guid: 27e0aae3b40922649b43ec001a83e2fd, type: 3}
   - {fileID: 764480898399811415, guid: c8b969b87a9e7b145a2e8596787626db, type: 3}

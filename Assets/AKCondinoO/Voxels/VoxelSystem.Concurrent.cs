@@ -2,6 +2,7 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels.Terrain.Editing;
+using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;

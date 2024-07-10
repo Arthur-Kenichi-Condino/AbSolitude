@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 2899188900
+  InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
@@ -65,4 +66,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b4a2760f1b3594185fd8b4325652ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_SEND_UNCHANGED_VOXEL_DATA: 0
+  DEBUG_SEND_UNCHANGED_VOXEL_DATA: 1

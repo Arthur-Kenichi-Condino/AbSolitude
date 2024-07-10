@@ -12,6 +12,17 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
+    public enum MaterialId:ushort{
+     Air         =0,//  Default value
+     Bedrock     =1,//  Indestrutível
+     Dirt        =2,
+     Rock        =3,
+     Sand        =4,
+     Mud         =5,
+     MudGrassy   =6,
+     Gravel      =7,
+     GravelMossy =8,
+    }
     internal class MarchingCubesTerrain{
      internal const double isoLevel=-50.0d;
      internal static readonly ReadOnlyCollection<Vector3>corners=new ReadOnlyCollection<Vector3>(
@@ -26,17 +37,6 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
        new Vector3(-.5f, .5f, .5f),
       }
      );
-        internal enum MaterialId:ushort{
-         Air         =0,//  Default value
-         Bedrock     =1,//  Indestrutível
-         Dirt        =2,
-         Rock        =3,
-         Sand        =4,
-         Mud         =5,
-         MudGrassy   =6,
-         Gravel      =7,
-         GravelMossy =8,
-        }
         internal struct Voxel{
          internal double density;
          internal Vector3 normal;

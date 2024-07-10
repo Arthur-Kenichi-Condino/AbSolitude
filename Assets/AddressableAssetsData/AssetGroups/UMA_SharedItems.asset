@@ -13,153 +13,15 @@ MonoBehaviour:
   m_Name: UMA_SharedItems
   m_EditorClassIdentifier: 
   m_GroupName: UMA_SharedItems
-  m_Data:
-    m_SerializedData: []
   m_GUID: bda47f2ab33dc8b4f985588f40b6641b
   m_SerializeEntries:
-  - m_GUID: 97fffd6a3f6442a4ba80a4074727b8bc
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Torso_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d01791214901d7341b52409cd66cc65e
-    m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 823abf9c6123e4d47985592ad67dde13
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c276deea2834bfd4c99611063846736e
-    m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
-    m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cd56361a0055b3443a6a121d818041b0
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Face_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6049048ab587ace488163bbf473f247e
-    m_Address: UMA/SlotDataAsset-G8mbasefacemapd01_1001
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 744b567807b2d8b4ab23ece149d1e80c
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Eyes_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 006cf9231c755ae459be6fec82003f6e
     m_Address: UMA/SlotDataAsset-G8mbaseeyesmap02d_1007
     m_ReadOnly: 0
     m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
     - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 63c53978740d78d4ca464b44d20a2d07
-    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Arms_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
     - UMA_Base
     - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fca386a016aed0646a65c33ef2449ef1
-    m_Address: UMA/SlotDataAsset-G8mbasearmsmapd_1004
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - MorphableHumanMaleUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c0d0b5e34a7f37c48aa80f619a2c909e
-    m_Address: UMA/OverlayDataAsset-DisfiguringHomunculus_Body_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - DisfiguringHomunculusUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2abc5dfae0b5f3b4fb3a78258d3b09f9
-    m_Address: UMA/SlotDataAsset-DisfiguringHomunculus_Body
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - DisfiguringHomunculusUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 70f853c2e2c4bef49ad2f11e33ec0d04
-    m_Address: UMA/OverlayDataAsset-Eyes_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - VanilmirthUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 304929d298c52f74da0c0b0ba5436d42
-    m_Address: UMA/SlotDataAsset-Eyes
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - VanilmirthUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eeba85f40e968164eb651cc615a63c8c
-    m_Address: UMA/OverlayDataAsset-Cards_Overlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - VanilmirthUMATextRecipe
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 952687e8aafca4749b13c282e36e61c3
-    m_Address: UMA/SlotDataAsset-Cards
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UMA_Base
-    - UMA_Default
-    - VanilmirthUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1642919f8f7c6ab409683025df299722
     m_Address: UMA/OverlayDataAsset-Brain_Overlay
@@ -169,8 +31,16 @@ MonoBehaviour:
     - UMA_Default
     - VanilmirthUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: da7fb169c1774d7409f4ea63061e5ee6
-    m_Address: UMA/SlotDataAsset-Brain
+  - m_GUID: 2abc5dfae0b5f3b4fb3a78258d3b09f9
+    m_Address: UMA/SlotDataAsset-DisfiguringHomunculus_Body
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DisfiguringHomunculusUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 304929d298c52f74da0c0b0ba5436d42
+    m_Address: UMA/SlotDataAsset-Eyes
     m_ReadOnly: 0
     m_SerializedLabels:
     - UMA_Base
@@ -185,6 +55,78 @@ MonoBehaviour:
     - UMA_Default
     - VanilmirthUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ac501deb9da69243966c7cdf83ab7b8
+    m_Address: UMA/SlotDataAsset-G8mbaselegsmapd_1003
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6049048ab587ace488163bbf473f247e
+    m_Address: UMA/SlotDataAsset-G8mbasefacemapd01_1001
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63c53978740d78d4ca464b44d20a2d07
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Arms_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70f853c2e2c4bef49ad2f11e33ec0d04
+    m_Address: UMA/OverlayDataAsset-Eyes_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 744b567807b2d8b4ab23ece149d1e80c
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Eyes_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 823abf9c6123e4d47985592ad67dde13
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Mouth_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 952687e8aafca4749b13c282e36e61c3
+    m_Address: UMA/SlotDataAsset-Cards
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97fffd6a3f6442a4ba80a4074727b8bc
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Torso_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc82d6bc5d90cbe4397deb88ec3e16ab
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Legs_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c022d66bc182fb74fae7a2a376ad2de6
     m_Address: UMA/SlotDataAsset-Body
     m_ReadOnly: 0
@@ -193,9 +135,65 @@ MonoBehaviour:
     - UMA_Default
     - VanilmirthUMATextRecipe
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0d0b5e34a7f37c48aa80f619a2c909e
+    m_Address: UMA/OverlayDataAsset-DisfiguringHomunculus_Body_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DisfiguringHomunculusUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c276deea2834bfd4c99611063846736e
+    m_Address: UMA/SlotDataAsset-G8mbasemouthmapd_1005
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd56361a0055b3443a6a121d818041b0
+    m_Address: UMA/OverlayDataAsset-RaceHumanMaleMorphable_Face_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d01791214901d7341b52409cd66cc65e
+    m_Address: UMA/SlotDataAsset-G8mbasetorsomapd_1002
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da7fb169c1774d7409f4ea63061e5ee6
+    m_Address: UMA/SlotDataAsset-Brain
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eeba85f40e968164eb651cc615a63c8c
+    m_Address: UMA/OverlayDataAsset-Cards_Overlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UMA_Base
+    - UMA_Default
+    - VanilmirthUMATextRecipe
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fca386a016aed0646a65c33ef2449ef1
+    m_Address: UMA/SlotDataAsset-G8mbasearmsmapd_1004
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MorphableHumanMaleUMATextRecipe
+    - UMA_Base
+    - UMA_Default
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0882772a909c8be44a90fe6b73fd879c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d17254f1214f14a48b6888e0a0191904, type: 2}
     - {fileID: 11400000, guid: 4089349cee45b414bb8af69ca6a53c2e, type: 2}
+    - {fileID: 11400000, guid: d17254f1214f14a48b6888e0a0191904, type: 2}
