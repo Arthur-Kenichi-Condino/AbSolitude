@@ -141,7 +141,7 @@ namespace AKCondinoO.Voxels{
             System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
             bool LimitExecutionTime(){
              assigningExecutionTime+=stopwatch.Elapsed.TotalMilliseconds;
-             Log.DebugMessage("stopwatch.Elapsed.TotalMilliseconds:"+stopwatch.Elapsed.TotalMilliseconds);
+             //Log.DebugMessage("stopwatch.Elapsed.TotalMilliseconds:"+stopwatch.Elapsed.TotalMilliseconds);
              if(assigningExecutionTime>=assigningMaxExecutionTime){
               return true;
              }
