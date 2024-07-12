@@ -66,4 +66,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b4a2760f1b3594185fd8b4325652ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA: 1
+  DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA: 0
