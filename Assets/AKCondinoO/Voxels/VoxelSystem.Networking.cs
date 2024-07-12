@@ -1,6 +1,7 @@
 #if UNITY_EDITOR||DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Networking;
 using AKCondinoO.Voxels.Terrain;
 using AKCondinoO.Voxels.Terrain.Networking;
@@ -93,6 +94,7 @@ namespace AKCondinoO.Voxels{
           }
             DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
          }
+         assigningExecutionTime=0;
          VoxelTerrainChunkUnnamedMessageHandler.StaticUpdate();
          VoxelTerrainChunkArraySync.StaticUpdate();
          foreach(var kvp in terrainMessageHandlersAssigned){
@@ -133,9 +135,44 @@ namespace AKCondinoO.Voxels{
       readonly Dictionary<Gameplayer,Vector2Int>  assigningCoordinates=new Dictionary<Gameplayer,Vector2Int>();
       readonly Dictionary<Gameplayer,Vector2Int>deassigningCoordinates=new Dictionary<Gameplayer,Vector2Int>();
       readonly HashSet<Gameplayer>toAssignMessageHandlers=new HashSet<Gameplayer>();
+      [NonSerialized]double assigningMaxExecutionTime=1.0;
+       [NonSerialized]double assigningExecutionTime;
         internal IEnumerator ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine(){
+            System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
+            bool LimitExecutionTime(){
+             assigningExecutionTime+=stopwatch.Elapsed.TotalMilliseconds;
+             Log.DebugMessage("stopwatch.Elapsed.TotalMilliseconds:"+stopwatch.Elapsed.TotalMilliseconds);
+             if(assigningExecutionTime>=assigningMaxExecutionTime){
+              return true;
+             }
+             return false;
+            }
+            stopwatch.Restart();
+            int poolSize=GameplayerManagement.maxPlayers*(
+             (VoxelSystem.expropriationDistance.x*2+1)*
+             (VoxelSystem.expropriationDistance.y*2+1)
+            );
+            Log.DebugMessage("poolSize:"+poolSize);
+            //for(int p=0;p<poolSize;++p){
+            // //while(LimitExecutionTime()){
+            // // yield return null;
+            // // stopwatch.Restart();
+            // //}
+            // Log.DebugMessage("p:"+p);
+            // var cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
+            // terrainArraySyncs.Add(cnkArraySync);
+            // cnkArraySync.OnInstantiated();
+            // try{
+            //  cnkArraySync.netObj.Spawn(destroyWithScene:false);
+            // }catch(Exception e){
+            //  Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+            // }
+            // cnkArraySync.netObj.DontDestroyWithOwner=true;
+            // cnkArraySync.expropriated=terrainArraySyncsPool.AddLast(cnkArraySync);
+            //}
             Loop:{
              yield return null;
+             stopwatch.Restart();
              if(generationRequestedAssignMessageHandlers.Count>0){
               foreach(var gameplayer in generationRequestedAssignMessageHandlers){
                if(assigningCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
@@ -191,6 +228,10 @@ namespace AKCondinoO.Voxels{
                      goto _skip;
                     }
                     int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                    while(LimitExecutionTime()){
+                     yield return null;
+                     stopwatch.Restart();
+                    }
                     if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
                      if(terrainMessageHandlersPool.Count>0){
                          cnkMsgr=terrainMessageHandlersPool.First.Value;
@@ -218,6 +259,10 @@ namespace AKCondinoO.Voxels{
                           terrainMessageHandlersPool.Remove(cnkMsgr.expropriated);
                           cnkMsgr.expropriated=null;
                          }
+                    }
+                    while(LimitExecutionTime()){
+                     yield return null;
+                     stopwatch.Restart();
                     }
                     if(!terrainArraySyncsAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync cnkArraySync)){
                      if(terrainArraySyncsPool.Count>0){

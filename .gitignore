@@ -3,6 +3,6 @@
 /[Tt]emp/UnityLockfile
 /[Tt]emp/FSTimeGet-*
 /[Ll]ibrary/ArtifactDB*
-/[Ll]ibrary/Artifacts/*
-/[Ll]ogs/*
+/[Ll]ibrary/Artifacts/
+/[Ll]ogs/
 .vs/*/FileContentIndex/*.vsidx

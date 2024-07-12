@@ -13,6 +13,7 @@ namespace AKCondinoO.Gameplaying{
     internal class GameplayerManagement:MonoBehaviour,ISingletonInitialization{
      internal static GameplayerManagement singleton{get;set;}
      [SerializeField]Gameplayer _GameplayerPrefab;
+     internal static int maxPlayers=20;
      internal ulong?hostId;
      internal readonly Dictionary<ulong,Gameplayer>all=new();
      internal GameplayPersistentDataSavingBackgroundContainer persistentDataSavingBG;

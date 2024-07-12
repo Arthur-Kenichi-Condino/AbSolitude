@@ -13,6 +13,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkArraySync;
+using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync:NetworkBehaviour{
@@ -167,6 +168,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             Loop:{
              yield return waitUntilGetFileData;
              sending=false;
+             stopwatch.Restart();
              Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
              int destinationIndex=0;
              for(int i=0;i<terrainGetFileEditDataToNetSyncBG.voxels.Length;++i){
@@ -177,7 +179,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               while(LimitMessagesSentPerFrame()){
                yield return null;
               }
-              Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,voxels.Value.voxelArray,destinationIndex,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
+              //Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,voxels.Value.voxelArray,destinationIndex,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
               destinationIndex+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
               totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
               delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
