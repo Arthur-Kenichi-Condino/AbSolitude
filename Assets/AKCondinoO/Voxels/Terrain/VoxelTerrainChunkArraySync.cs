@@ -227,7 +227,7 @@ public struct NetVoxel:IEquatable<NetVoxel>{
     }
 }
 public class NetVoxelArrayContainer:IEquatable<NetVoxelArrayContainer>,INetworkSerializable{
- public NetVoxel[]voxelArray=new NetVoxel[VoxelsPerChunk];
+ public NetVoxel[]voxelArray=new NetVoxel[0];
     public NetVoxelArrayContainer(){
     }
     public void NetworkSerialize<T>(BufferSerializer<T>serializer)where T:IReaderWriter{
