@@ -4,4 +4,5 @@
 /[Tt]emp/FSTimeGet-*
 /[Ll]ibrary/ArtifactDB*
 /[Ll]ibrary/Artifacts/*
+/[Ll]ogs/*
 .vs/*/FileContentIndex/*.vsidx

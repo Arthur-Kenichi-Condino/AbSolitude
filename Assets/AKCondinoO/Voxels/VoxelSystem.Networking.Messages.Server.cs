@@ -27,6 +27,9 @@ namespace AKCondinoO.Voxels{
          if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
           cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
          }
+         if(terrainArraySyncsAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkArraySync cnkArraySync)){
+          cnkArraySync.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
+         }
         }
     }
 }

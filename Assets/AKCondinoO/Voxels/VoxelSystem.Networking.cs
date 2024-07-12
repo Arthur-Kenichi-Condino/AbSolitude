@@ -13,10 +13,14 @@ using UnityEditor;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
+     [SerializeField]VoxelTerrainChunkArraySync _VoxelTerrainChunkArraySyncPrefab;
      [SerializeField]VoxelTerrainChunkUnnamedMessageHandler _VoxelTerrainChunkUnnamedMessageHandlerPrefab;
      internal readonly List<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlers=new List<VoxelTerrainChunkUnnamedMessageHandler>();
      internal readonly     LinkedList<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersPool    =new     LinkedList<VoxelTerrainChunkUnnamedMessageHandler>();
      internal readonly Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlersAssigned=new Dictionary<int,VoxelTerrainChunkUnnamedMessageHandler>();
+     internal readonly List<VoxelTerrainChunkArraySync>terrainArraySyncs=new List<VoxelTerrainChunkArraySync>();
+     internal readonly     LinkedList<VoxelTerrainChunkArraySync>terrainArraySyncsPool    =new     LinkedList<VoxelTerrainChunkArraySync>();
+     internal readonly Dictionary<int,VoxelTerrainChunkArraySync>terrainArraySyncsAssigned=new Dictionary<int,VoxelTerrainChunkArraySync>();
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
          Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnServerReceivedUnnamedMessage;
@@ -38,6 +42,9 @@ namespace AKCondinoO.Voxels{
           for(int i=0;i<terrainMessageHandlers.Count;++i){
            terrainMessageHandlers[i].OnDestroyingCore();
           }
+          for(int i=0;i<terrainArraySyncs.Count;++i){
+           terrainArraySyncs[i].OnDestroyingCore();
+          }
          }
          if(Core.singleton.isClient){
           if(Core.singleton.netManager.CustomMessagingManager!=null){
@@ -48,10 +55,13 @@ namespace AKCondinoO.Voxels{
         internal void OnDestroyingCoreNetworkDispose(){
          if(Core.singleton.isServer){
           for(int i=0;i<terrainMessageHandlers.Count;++i){
-           terrainMessageHandlers[i].terrainGetFileEditDataToNetSyncBG.Dispose();
           }
-          //  everything has been disposed
           terrainMessageHandlers.Clear();
+          for(int i=0;i<terrainArraySyncs.Count;++i){
+           terrainArraySyncs[i].terrainGetFileEditDataToNetSyncBG.Dispose();
+          }
+          terrainArraySyncs.Clear();
+          //  everything has been disposed
          }
          if(Core.singleton.isClient){
           foreach(var clientSideRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
@@ -77,22 +87,21 @@ namespace AKCondinoO.Voxels{
            VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
            cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
           }
+          foreach(var kvp in terrainArraySyncsAssigned){
+           VoxelTerrainChunkArraySync cnkArraySync=kvp.Value;
+           cnkArraySync.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+          }
             DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
          }
-         //if(VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages>0f){
-         // VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages-=Time.deltaTime;
-         // if(VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages<=0f){
-         //  VoxelTerrainChunkUnnamedMessageHandler.messagesSent=0;
-         // }
-         //}else if(VoxelTerrainChunkUnnamedMessageHandler.messagesSent>0){
-         // VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages=VoxelTerrainChunkUnnamedMessageHandler.totalLengthOfDataSent*VoxelTerrainChunkUnnamedMessageHandler.segmentSizeToTimeInSecondsDelayRatio;
-         // VoxelTerrainChunkUnnamedMessageHandler.totalLengthOfDataSent=0;
-         // Log.DebugMessage("VoxelSystem.Networking start globalCooldownToSendNewMessages:"+VoxelTerrainChunkUnnamedMessageHandler.globalCooldownToSendNewMessages);
-         //}
-         VoxelTerrainChunkUnnamedMessageHandler.sendingExecutionTime=0d;
+         VoxelTerrainChunkUnnamedMessageHandler.StaticUpdate();
+         VoxelTerrainChunkArraySync.StaticUpdate();
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
           cnkMsgr.ManualUpdate();
+         }
+         foreach(var kvp in terrainArraySyncsAssigned){
+          VoxelTerrainChunkArraySync cnkArraySync=kvp.Value;
+          cnkArraySync.ManualUpdate();
          }
          if(clientSendMessageTimer<=0f){
             clientSendMessageTimer=clientSendMessageDelay;
@@ -160,6 +169,11 @@ namespace AKCondinoO.Voxels{
                             cnkMsgr.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr);
                            }
                           }
+                          if(terrainArraySyncsAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync cnkArraySync)){
+                           if(cnkArraySync.expropriated==null){
+                            cnkArraySync.expropriated=terrainArraySyncsPool.AddLast(cnkArraySync);
+                           }
+                          }
                      }
                      _skip:{}
                      if(eCoord.x==0){break;}
@@ -203,6 +217,34 @@ namespace AKCondinoO.Voxels{
                          if(cnkMsgr.expropriated!=null){
                           terrainMessageHandlersPool.Remove(cnkMsgr.expropriated);
                           cnkMsgr.expropriated=null;
+                         }
+                    }
+                    if(!terrainArraySyncsAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync cnkArraySync)){
+                     if(terrainArraySyncsPool.Count>0){
+                         cnkArraySync=terrainArraySyncsPool.First.Value;
+                         terrainArraySyncsPool.RemoveFirst();
+                         cnkArraySync.expropriated=null;
+                     }else{
+                         cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
+                         terrainArraySyncs.Add(cnkArraySync);
+                         cnkArraySync.OnInstantiated();
+                         try{
+                          cnkArraySync.netObj.Spawn(destroyWithScene:false);
+                         }catch(Exception e){
+                          Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                         }
+                         cnkArraySync.netObj.DontDestroyWithOwner=true;
+                     }
+                         bool firstCall=cnkArraySync.id==null;
+                         if(!firstCall&&terrainArraySyncsAssigned.ContainsKey(cnkArraySync.id.Value.cnkIdx)){
+                          terrainArraySyncsAssigned.Remove(cnkArraySync.id.Value.cnkIdx);
+                         }
+                         terrainArraySyncsAssigned.Add(cnkIdx1,cnkArraySync);
+                         cnkArraySync.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
+                    }else{
+                         if(cnkArraySync.expropriated!=null){
+                          terrainArraySyncsPool.Remove(cnkArraySync.expropriated);
+                          cnkArraySync.expropriated=null;
                          }
                     }
                     _skip:{}

@@ -54,7 +54,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          pathPendingTimer=0f;
          if(!navMeshAgent.hasPath){
-          Log.DebugMessage("!navMeshAgent.hasPath");
+          //Log.DebugMessage("'!navMeshAgent.hasPath'");
           if(movePaused){
            return PathfindingResult.PAUSED;
           }

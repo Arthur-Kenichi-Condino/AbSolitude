@@ -119,6 +119,7 @@ namespace AKCondinoO.Voxels{
      internal readonly MarchingCubesWaterMultithreaded[]marchingCubesWaterBGThreads=new MarchingCubesWaterMultithreaded[Environment.ProcessorCount];
      internal VoxelWaterEditingMultithreaded waterEditingBGThread;
      internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
+     internal readonly VoxelTerrainSendEditDataToServerMultithreaded    []terrainSendEditDataToServerBGThreads    =new VoxelTerrainSendEditDataToServerMultithreaded    [Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(9,9);//  pool size
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(6,6);
       internal static float fadeStartDis;
@@ -152,6 +153,10 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stopped=false;
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i]=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded();
+         }
+         VoxelTerrainSendEditDataToServerMultithreaded.Stopped=false;
+         for(int i=0;i<terrainSendEditDataToServerBGThreads.Length;++i){
+                       terrainSendEditDataToServerBGThreads[i]=new VoxelTerrainSendEditDataToServerMultithreaded();
          }
         }
      internal int chunkPoolMultiplier=1;
@@ -214,6 +219,10 @@ namespace AKCondinoO.Voxels{
          VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stopped=true;
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i].Wait();
+         }
+         VoxelTerrainSendEditDataToServerMultithreaded.Stopped=true;
+         for(int i=0;i<terrainSendEditDataToServerBGThreads.Length;++i){
+                       terrainSendEditDataToServerBGThreads[i].Wait();
          }
          OnDestroyingCoreNetworkDispose();
          WaterSpreadingMultithreaded.Stop(waterSpreadingBGThreads);
