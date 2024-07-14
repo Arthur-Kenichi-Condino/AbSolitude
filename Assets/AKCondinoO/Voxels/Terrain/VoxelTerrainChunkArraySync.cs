@@ -1,5 +1,9 @@
-#if UNITY_EDITOR||DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Networking;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
@@ -22,13 +26,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         void Awake(){
          netObj=GetComponent<NetworkObject>();
-         NetworkVariableUpdateTraits updateTraits=new NetworkVariableUpdateTraits();
-         int poolSize=
-          (VoxelSystem.expropriationDistance.x*2+1)*
-          (VoxelSystem.expropriationDistance.y*2+1);
-         updateTraits.MaxSecondsBetweenUpdates=poolSize*.1f;
-         updateTraits.MinSecondsBetweenUpdates=(VoxelsPerChunk/poolSize)*.005f;
-         voxels.SetUpdateTraits(updateTraits);
+         //NetworkVariableUpdateTraits updateTraits=new NetworkVariableUpdateTraits();
+         //int poolSize=
+         // (VoxelSystem.expropriationDistance.x*2+1)*
+         // (VoxelSystem.expropriationDistance.y*2+1);
+         //updateTraits.MaxSecondsBetweenUpdates=poolSize*.1f;
+         //updateTraits.MinSecondsBetweenUpdates=(VoxelsPerChunk/poolSize)*.005f;
+         //voxels.SetUpdateTraits(updateTraits);
         }
         internal void OnInstantiated(){
          if(Core.singleton.isServer){
@@ -42,13 +46,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
-      private readonly AnticipatedNetworkVariable<NetVoxelArrayContainer>voxels=new AnticipatedNetworkVariable<NetVoxelArrayContainer>(
-       new NetVoxelArrayContainer(),
-       StaleDataHandling.Ignore
-      );
+      //private readonly AnticipatedNetworkVariable<NetVoxelArrayContainer>voxels=new AnticipatedNetworkVariable<NetVoxelArrayContainer>(
+      // new NetVoxelArrayContainer(),
+      // StaleDataHandling.Ignore
+      //);
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
-         Log.DebugMessage("NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual:"+NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual);
+         //Log.DebugMessage("NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual:"+NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual);
          if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
@@ -70,15 +74,18 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
           netcnkIdx.Value=id.Value.cnkIdx;
-          pendingGetFileEditData=true;
+          pendingGetFileEditData=DEBUG_FORCE_SEND_ALL_VOXEL_DATA;
          }
         }
+     [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
          Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:'cnkIdx':"+id.Value.cnkIdx);
+         clientIdsRequestingData.Add(clientId);
+         pendingGetFileEditData=true;
         }
-     [NonSerialized]internal static int maxMessagesPerFrame=2;
+     [NonSerialized]internal static int maxMessagesPerFrame=8;
       [NonSerialized]internal static int messagesSent;
-     [NonSerialized]internal static double sendingMaxExecutionTime=1.0;
+     [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
       [NonSerialized]internal static double sendingExecutionTime;
      [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=.1f/VoxelsPerChunk;//  turns segment Length into seconds to wait
       [NonSerialized]internal static int totalLengthOfDataSent;
@@ -131,21 +138,22 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         bool OnGotFileEditData(){
          if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
           //Log.DebugMessage("OnGotFileEditData");
-          for(int i=0;i<terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
-           bool change=terrainGetFileEditDataToNetSyncBG.changes[i];
-           sending|=change;
-           terrainGetFileEditDataToNetSyncBG.changes[i]=false;
-          }
+          sending=terrainGetFileEditDataToNetSyncBG.changes.Any(c=>{return c;});
           sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
+          clientIdsToSendData.AddRange(clientIdsRequestingData);
+          clientIdsRequestingData.Clear();
           return true;
          }
          return false;
         }
+     [SerializeField]internal VoxelArraySync _VoxelArraySyncPrefab;
+     [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      [NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
       [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
        [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
       [NonSerialized]bool sending;
       [NonSerialized]int sendingcnkIdx;
+      [NonSerialized]readonly List<ulong>clientIdsToSendData=new List<ulong>();
         internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
          yield return null;
          WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
@@ -167,11 +175,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             Loop:{
              yield return waitUntilGetFileData;
-             sending=false;
              stopwatch.Restart();
              Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
-             int destinationIndex=0;
-             for(int i=0;i<terrainGetFileEditDataToNetSyncBG.voxels.Length;++i){
+             //int destinationIndex=0;
+             for(int i=0;i<terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
+              bool changed=terrainGetFileEditDataToNetSyncBG.changes[i];
+              terrainGetFileEditDataToNetSyncBG.changes[i]=false;
               while(LimitExecutionTime()){
                yield return null;
                stopwatch.Restart();
@@ -179,8 +188,30 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               while(LimitMessagesSentPerFrame()){
                yield return null;
               }
-              //Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,voxels.Value.voxelArray,destinationIndex,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
-              destinationIndex+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
+              if(!netVoxelArrays.TryGetValue(i,out VoxelArraySync netVoxelArray)){
+               if(!VoxelSystem.singleton.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
+                netVoxelArray=Instantiate(_VoxelArraySyncPrefab);
+                netVoxelArray.OnInstantiated();
+                try{
+                 netVoxelArray.netObj.Spawn(destroyWithScene:false);
+                }catch(Exception e){
+                 Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                }
+                netVoxelArray.netObj.DontDestroyWithOwner=true;
+               }
+               netVoxelArrays.Add(i,netVoxelArray);
+               netVoxelArray.arraySync=this;
+               netVoxelArray.arraySyncSegment=i;
+               VoxelSystem.singleton.netVoxelArraysActive.Add(netVoxelArray);
+              }
+              netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
+              netVoxelArray.voxels.Value.segment=i;
+              Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,netVoxelArray.voxels.Value.voxelArray,0,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
+              //netVoxelArray.voxels.Value=netVoxelArray.voxels.Value;
+              netVoxelArray.clientIdsRequestingData.Union(clientIdsToSendData);
+              VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.Union(clientIdsToSendData);
+              //Log.DebugMessage("netVoxelArray.voxels.IsDirty():"+netVoxelArray.voxels.IsDirty());
+              //destinationIndex+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
               totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
               delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
               if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
@@ -188,86 +219,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                yield return waitForDelayToSendNewMessages;
               }
              }
+             clientIdsToSendData.Clear();
+             sending=false;
             }
             goto Loop;
         }
-    }
-}
-public struct NetVoxel:IEquatable<NetVoxel>{
- public int vxlIdx;
- public double density;
- public MaterialId material;
-    public NetVoxel(int vxlIdx,double d,MaterialId m){
-     this.vxlIdx=vxlIdx;density=d;material=m;
-    }
-    public static bool operator==(NetVoxel a,NetVoxel b){
-     if(
-      a.vxlIdx==b.vxlIdx&&
-      a.density==b.density&&
-      a.material==b.material
-     ){
-      return true;
-     }
-     return false;
-    }
-    public static bool operator!=(NetVoxel a,NetVoxel b){
-     return!(a==b);
-    }
-    public override bool Equals(object obj){
-     if(!(obj is NetVoxel netVoxel)){
-      return false;
-     }
-     return this==netVoxel;
-    }
-    public override int GetHashCode(){
-     return HashCode.Combine(vxlIdx,density,material);
-    }
-    public bool Equals(NetVoxel other){
-     return this==other;
-    }
-}
-public class NetVoxelArrayContainer:IEquatable<NetVoxelArrayContainer>,INetworkSerializable{
- public NetVoxel[]voxelArray=new NetVoxel[0];
-    public NetVoxelArrayContainer(){
-    }
-    public void NetworkSerialize<T>(BufferSerializer<T>serializer)where T:IReaderWriter{
-     if(serializer.IsWriter){
-      for(int i=0;i<voxelArray.Length;++i){
-       serializer.GetFastBufferWriter().WriteValueSafe(voxelArray[i].vxlIdx);
-       serializer.GetFastBufferWriter().WriteValueSafe(voxelArray[i].density);
-       serializer.GetFastBufferWriter().WriteValueSafe((ushort)voxelArray[i].material);
-      }
-     }else{
-      for(int i=0;i<voxelArray.Length;++i){
-       serializer.GetFastBufferReader().ReadValueSafe(out int vxlIdx);
-       serializer.GetFastBufferReader().ReadValueSafe(out double density);
-       serializer.GetFastBufferReader().ReadValueSafe(out ushort material);
-       voxelArray[i]=new(vxlIdx,density,(MaterialId)material);
-      }
-     }
-    }
-    public static bool operator==(NetVoxelArrayContainer a,NetVoxelArrayContainer b){
-     if(ReferenceEquals(a,b)){
-      return true;
-     }
-     if(a.voxelArray.SequenceEqual(b.voxelArray)){
-      return true;
-     }
-     return false;
-    }
-    public static bool operator!=(NetVoxelArrayContainer a,NetVoxelArrayContainer b){
-     return!(a==b);
-    }
-    public override bool Equals(object obj){
-     if(!(obj is NetVoxelArrayContainer container)){
-      return false;
-     }
-     return this==container;
-    }
-    public override int GetHashCode(){
-     return HashCode.Combine(voxelArray);
-    }
-    public bool Equals(NetVoxelArrayContainer other){
-     return this==other;
     }
 }

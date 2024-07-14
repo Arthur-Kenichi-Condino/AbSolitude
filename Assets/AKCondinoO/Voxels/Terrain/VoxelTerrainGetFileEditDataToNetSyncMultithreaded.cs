@@ -121,10 +121,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           if(writtenDataCount<voxelsInThisSegment){
+           bool biomeVoxel=false;
            NetVoxel netVoxel;
            if(editData.TryGetValue(vCoord1,out TerrainEditOutputData edit)){
             netVoxel=new NetVoxel(vxlIdx1,edit.density,edit.material);
            }else{
+            biomeVoxel=true;
             Voxel voxel1=new Voxel();
             Vector3Int noiseInput=vCoord1;noiseInput.x+=cnkRgn1.x;
                                           noiseInput.z+=cnkRgn1.y;
@@ -138,7 +140,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             );
             netVoxel=new NetVoxel(vxlIdx1,voxel1.density,voxel1.material);
            }
-           container.changes[segment]|=(container.voxels[segment][writtenDataCount]!=netVoxel);
+           container.changes[segment]|=container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA||(!biomeVoxel&&container.voxels[segment][writtenDataCount]!=netVoxel);
            container.voxels[segment][writtenDataCount]=netVoxel;
           }
           if(++writtenDataCount>=voxelsInThisSegment){

@@ -66,3 +66,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe66c919428292646962ff1db3bf64f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_FORCE_SEND_ALL_VOXEL_DATA: 1
+  _VoxelArraySyncPrefab: {fileID: 7610534904904688977, guid: 9a29819c92bd6994caefacf1039b8da9, type: 3}

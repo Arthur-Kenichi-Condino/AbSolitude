@@ -1,5 +1,9 @@
-#if UNITY_EDITOR||DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Networking;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
@@ -230,7 +234,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             Loop:{
              yield return waitUntilGetFileData;
              Log.DebugMessage("ClientSideSendVoxelTerrainChunkEditDataFileCoroutine");
-             sending=false;
              stopwatch.Restart();
              FastBufferWriter writer;
              foreach(var segmentBufferPair in sendingDataToServer){
@@ -268,6 +271,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              Log.DebugMessage("'sent all segments':"+segmentCount);
              segmentCount=-1;//  restart loop but don't repeat for the same edit data file
              clientIdsToSendData.Clear();
+             sending=false;
             }
             goto Loop;
         }

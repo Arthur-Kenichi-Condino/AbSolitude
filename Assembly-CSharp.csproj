@@ -203,6 +203,7 @@
     <Compile Include="Assets\AKCondinoO\CoreDataSync.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.Transform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AStarPathfindingHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />

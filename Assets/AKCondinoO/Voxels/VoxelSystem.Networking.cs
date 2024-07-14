@@ -1,5 +1,9 @@
-#if UNITY_EDITOR||DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Networking;
@@ -22,6 +26,11 @@ namespace AKCondinoO.Voxels{
      internal readonly List<VoxelTerrainChunkArraySync>terrainArraySyncs=new List<VoxelTerrainChunkArraySync>();
      internal readonly     LinkedList<VoxelTerrainChunkArraySync>terrainArraySyncsPool    =new     LinkedList<VoxelTerrainChunkArraySync>();
      internal readonly Dictionary<int,VoxelTerrainChunkArraySync>terrainArraySyncsAssigned=new Dictionary<int,VoxelTerrainChunkArraySync>();
+     [NonSerialized]internal readonly Queue<VoxelArraySync>netVoxelArraysPool=new Queue<VoxelArraySync>();
+     [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArraysActive=new HashSet<VoxelArraySync>();
+      [NonSerialized]readonly HashSet<VoxelArraySync>netVoxelArraysToPool=new HashSet<VoxelArraySync>();
+     [NonSerialized]readonly HashSet<ulong>clientIdsDisconnectedToRemove=new HashSet<ulong>();
+      [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingNetVoxelArray=new HashSet<ulong>();
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
          Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnServerReceivedUnnamedMessage;
@@ -62,6 +71,14 @@ namespace AKCondinoO.Voxels{
            terrainArraySyncs[i].terrainGetFileEditDataToNetSyncBG.Dispose();
           }
           terrainArraySyncs.Clear();
+          foreach(var kvp1 in serverVoxelTerrainChunkEditDataSegmentsReceivedFromClient){
+           foreach(var kvp2 in kvp1.Value){
+            kvp2.Value.segmentData.Dispose();
+           }
+           kvp1.Value.Clear();
+           serverVoxelTerrainChunkEditDataSegmentsDictionaryPool.Enqueue(kvp1.Value);
+          }
+          serverVoxelTerrainChunkEditDataSegmentsReceivedFromClient.Clear();
           //  everything has been disposed
          }
          if(Core.singleton.isClient){
@@ -70,18 +87,17 @@ namespace AKCondinoO.Voxels{
            request.Dispose();
           }
           clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
-          foreach(var kvp1 in clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer){
-           foreach(var kvp2 in kvp1.Value){
-            kvp2.Value.segmentData.Dispose();
-           }
-           kvp1.Value.Clear();
-           clientVoxelTerrainChunkEditDataSegmentsDictionaryPool.Enqueue(kvp1.Value);
-          }
-          clientVoxelTerrainChunkEditDataSegmentsReceivedFromServer.Clear();
          }
         }
      [SerializeField]ulong DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0;
         internal void NetUpdate(){
+         if(Core.singleton.isServer){
+          foreach(ulong clientIdWaitingForNetVoxelArray in clientIdsRequestingNetVoxelArray){
+           if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdWaitingForNetVoxelArray)){
+            clientIdsDisconnectedToRemove.Add(clientIdWaitingForNetVoxelArray);
+           }
+          }
+         }
          if(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT>0uL){
           Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
           foreach(var kvp in terrainMessageHandlersAssigned){
@@ -128,6 +144,19 @@ namespace AKCondinoO.Voxels{
           }
          }else{
           clientSendMessageTimer-=Time.deltaTime;
+         }
+         foreach(var netVoxelArray in netVoxelArraysActive){
+          netVoxelArray.ManualUpdate(clientIdsDisconnectedToRemove,out bool toPool);
+          if(toPool){
+           netVoxelArraysToPool.Add(netVoxelArray);
+          }
+         }
+         foreach(var netVoxelArray in netVoxelArraysToPool){
+          netVoxelArray.OnPool();
+         }
+         netVoxelArraysToPool.Clear();
+         if(Core.singleton.isServer){
+          clientIdsDisconnectedToRemove.Clear();
          }
         }
      Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
