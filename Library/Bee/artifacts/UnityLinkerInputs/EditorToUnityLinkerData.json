@@ -1998,27 +1998,6 @@
             "usedInScenes": []
         },
         {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.PanelSettings",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.StyleSheet",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.ThemeStyleSheet",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
             "managedAssemblyName": "UnityEngine.dll",
             "nativeClass": "VideoClip",
             "fullManagedTypeName": "UnityEngine.Video.VideoClip",

@@ -131,7 +131,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
                netVoxelArray.voxels.Value.segment=i;
                Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,netVoxelArray.voxels.Value.voxelArray,0,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
-               //netVoxelArray.voxels.Value=netVoxelArray.voxels.Value;
+               netVoxelArray.voxels.SetDirty(true);
                netVoxelArray.clientIdsRequestingData.Union(clientIdsToSendData);
                VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.Union(clientIdsToSendData);
                //Log.DebugMessage("netVoxelArray.voxels.IsDirty():"+netVoxelArray.voxels.IsDirty());
@@ -139,7 +139,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
                delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
                if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
-                Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
+                //Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
                 yield return waitForDelayToSendNewMessages;
                }
               }
