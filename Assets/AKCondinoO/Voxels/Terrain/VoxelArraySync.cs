@@ -52,7 +52,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           private void OnClientSideVoxelsValueChanged(NetVoxelArrayContainer previous,NetVoxelArrayContainer current){
            if(Core.singleton.isClient){
             if(current!=null){
-             //Log.DebugMessage("'clientSideVoxelsChangesReceived'");
+             Log.DebugMessage("'clientSideVoxelsChangesReceived'");
              clientSideVoxelsChangesReceived=true;
              //Log.DebugMessage("OnClientSideVoxelsValueChanged:current.cnkIdx:"+current.cnkIdx+";current.segment:"+current.segment);
             }
