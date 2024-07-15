@@ -55,14 +55,6 @@ namespace AKCondinoO.Voxels{
         internal void NetUpdate(){
          VoxelTerrainChunkUnnamedMessageHandler.StaticUpdate();
          VoxelTerrainChunkArraySync            .StaticUpdate();
-         if(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT>0uL){
-          Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-          foreach(var kvp in terrainMessageHandlersAssigned){
-           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
-           cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-          }
-            DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
-         }
          if(Core.singleton.isServer){
           NetServerSideNetUpdate();
          }

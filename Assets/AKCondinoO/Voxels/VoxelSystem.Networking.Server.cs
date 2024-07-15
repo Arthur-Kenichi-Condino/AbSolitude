@@ -40,6 +40,14 @@ namespace AKCondinoO.Voxels{
          //  everything at server has been disposed
         }
         internal void NetServerSideNetUpdate(){
+         if(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT!=0uL){
+          Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+          foreach(var kvp in terrainMessageHandlersAssigned){
+           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
+           cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+          }
+            DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
+         }
          assigningExecutionTime=0;
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
@@ -51,14 +59,16 @@ namespace AKCondinoO.Voxels{
            clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
           }
          }
-         foreach(var netVoxelArray in netVoxelArraysActive){
-          netVoxelArray.ManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
-          if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
-         }
-         foreach(var netVoxelArray in netVoxelArraysToPool){
-          netVoxelArray.OnPool();
-         }
-         netVoxelArraysToPool.Clear();
+         #region netVoxelArrays
+             foreach(var netVoxelArray in netVoxelArraysActive){
+              netVoxelArray.ManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
+              if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
+             }
+             foreach(var netVoxelArray in netVoxelArraysToPool){
+              netVoxelArray.OnPool();
+             }
+             netVoxelArraysToPool.Clear();
+         #endregion
          clientIdsRequestingNetVoxelArrayDisconnected.Clear();
         }
      Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
