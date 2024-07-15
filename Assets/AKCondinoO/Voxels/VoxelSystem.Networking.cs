@@ -41,9 +41,6 @@ namespace AKCondinoO.Voxels{
            VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
            cnkMsgr     .OnDestroyingCore();
           }
-          if(Core.singleton.isServer){
-           continue;
-          }
           if(i<terrainArraySyncs     .Count){
            VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
            cnkArraySync.OnDestroyingCore();
@@ -55,9 +52,6 @@ namespace AKCondinoO.Voxels{
           if(i<terrainMessageHandlers.Count){
            VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
            cnkMsgr     .Dispose();
-          }
-          if(Core.singleton.isServer){
-           continue;
           }
           if(i<terrainArraySyncs     .Count){
            VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];

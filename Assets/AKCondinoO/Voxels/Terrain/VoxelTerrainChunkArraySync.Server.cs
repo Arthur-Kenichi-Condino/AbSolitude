@@ -24,7 +24,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
      [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-         Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:'cnkIdx':"+id.Value.cnkIdx);
+         Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
          clientIdsRequestingData.Add(clientId);
          pendingGetFileEditData=true;
         }
@@ -65,6 +65,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
           clientIdsToSendData.AddRange(clientIdsRequestingData);
           clientIdsRequestingData.Clear();
+          Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
           return true;
          }
          return false;
@@ -128,14 +129,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 netVoxelArray.arraySyncSegment=i;
                 VoxelSystem.singleton.netVoxelArraysActive.Add(netVoxelArray);
                }
-               netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
-               netVoxelArray.voxels.Value.segment=i;
-               Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,netVoxelArray.voxels.Value.voxelArray,0,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
+               if(netVoxelArray.voxels.Value!=null){
+                netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
+                netVoxelArray.voxels.Value.segment=i;
+                Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,netVoxelArray.voxels.Value.voxelArray,0,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
+               }
                netVoxelArray.voxels.SetDirty(true);
-               netVoxelArray.clientIdsRequestingData.Union(clientIdsToSendData);
-               VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.Union(clientIdsToSendData);
-               //Log.DebugMessage("netVoxelArray.voxels.IsDirty():"+netVoxelArray.voxels.IsDirty());
-               //destinationIndex+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
+               netVoxelArray.clientIdsRequestingData.UnionWith(clientIdsToSendData);
+               VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsToSendData);
                totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
                delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
                if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){

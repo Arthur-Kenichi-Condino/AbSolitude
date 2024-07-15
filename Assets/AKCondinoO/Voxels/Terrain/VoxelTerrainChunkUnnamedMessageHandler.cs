@@ -85,15 +85,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           dataToSendDictionaryPool.Enqueue(terrainSendEditDataToServerBG.dataToSendToServer);
           terrainSendEditDataToServerBG.dataToSendToServer=null;
          }
-         if(cnkArraySync!=null){
-            cnkArraySync.OnDestroyingCore();
-         }
         }
         internal void Dispose(){
          terrainSendEditDataToServerBG.Dispose();
-         if(cnkArraySync!=null){
-            cnkArraySync.Dispose();
-         }
         }
      [NonSerialized]internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -133,11 +127,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           sentSegments.Clear();
          }
         }
-     [NonSerialized]internal static int maxMessagesPerFrame=2;
+     [NonSerialized]internal static int maxMessagesPerFrame=splits/4;
       [NonSerialized]internal static int messagesSent;
-     [NonSerialized]internal static double sendingMaxExecutionTime=1.0;
+     [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
       [NonSerialized]internal static double sendingExecutionTime;
-     [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=.1f/VoxelsPerChunk;//  turns segment Length into seconds to wait
+     [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=.5f/(VoxelsPerChunk);//  turns segment Length into seconds to wait
       [NonSerialized]internal static int totalLengthOfDataSent;
      [NonSerialized]internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent * segmentSizeToTimeInSecondsDelayRatio
         internal static void StaticUpdate(){

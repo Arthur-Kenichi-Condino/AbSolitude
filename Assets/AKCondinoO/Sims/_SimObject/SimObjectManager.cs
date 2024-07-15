@@ -1,5 +1,9 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
@@ -244,6 +248,7 @@ namespace AKCondinoO.Sims{
            }
           }
          }
+         //Log.DebugMessage("active.Count:"+active.Count);
          foreach(var a in active){
           var simObject=a.Value;
           if(simObject==null||simObject.gameObject==null){continue;}

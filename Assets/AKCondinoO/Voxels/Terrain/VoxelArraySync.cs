@@ -21,8 +21,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          int poolSize=
           (VoxelSystem.expropriationDistance.x*2+1)*
           (VoxelSystem.expropriationDistance.y*2+1);
-         updateTraits.MaxSecondsBetweenUpdates=poolSize*.1f;
-         updateTraits.MinSecondsBetweenUpdates=(VoxelsPerChunk/poolSize)*.005f;
+         updateTraits.MinSecondsBetweenUpdates=voxels.Value.voxelArray.Length*VoxelTerrainChunkArraySync.segmentSizeToTimeInSecondsDelayRatio;
+         updateTraits.MaxSecondsBetweenUpdates=poolSize*updateTraits.MinSecondsBetweenUpdates;
          voxels.SetUpdateTraits(updateTraits);
         }
         internal void OnInstantiated(){
@@ -52,8 +52,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           private void OnClientSideVoxelsValueChanged(NetVoxelArrayContainer previous,NetVoxelArrayContainer current){
            if(Core.singleton.isClient){
             if(current!=null){
+             //Log.DebugMessage("'clientSideVoxelsChangesReceived'");
              clientSideVoxelsChangesReceived=true;
-             Log.DebugMessage("clientSideVoxelsChangesReceived:"+clientSideVoxelsChangesReceived+";current.cnkIdx:"+current.cnkIdx+";current.segment:"+current.segment);
+             //Log.DebugMessage("OnClientSideVoxelsValueChanged:current.cnkIdx:"+current.cnkIdx+";current.segment:"+current.segment);
             }
            }
           }
@@ -72,12 +73,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
          toPool=false;
+         Log.DebugMessage("clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
          if(clientIdsDisconnectedToRemove.Count>0){
           clientIdsRequestingData.ExceptWith(clientIdsDisconnectedToRemove);
          }
-         if(clientIdsRequestingData.Count<=0){
+         //if(clientIdsRequestingData.Count<=0){
+          Log.DebugMessage("'toPool'");
           toPool=true;
-         }
+         //}
         }
     }
 }

@@ -1,5 +1,9 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Humanoid;
@@ -37,9 +41,11 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void ManualUpdate(){
          GetAnimator();
+         //Log.DebugMessage("animator:"+animator);
          if(animator!=null){
           GetTransformTgtValuesFromCharacterController();
           SetTransformTgtValuesUsingActorAndPhysicData();
+          //Log.DebugMessage("actor.simUMA:"+actor.simUMA);
           if(actor.simUMA!=null){
            SetSimUMADataTransform();
           }

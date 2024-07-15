@@ -1,5 +1,9 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
@@ -416,6 +420,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          UpdateGetters();
+         //Log.DebugMessage("animatorController:"+animatorController);
          if(animatorController!=null){
             animatorController.ManualUpdate();
          }
