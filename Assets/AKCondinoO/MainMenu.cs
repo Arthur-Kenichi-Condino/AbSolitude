@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using static AKCondinoO.Sims.SimObjectSpawner;
 namespace AKCondinoO.UI{
     internal class MainMenu:MonoBehaviour{
+     [SerializeField]NetworkPrefabsList defaultPrefabList;
      internal static bool netManagerInitialized;
      NetworkManager netManager;
      [SerializeField]bool editorNetAsClient;
@@ -36,7 +37,9 @@ namespace AKCondinoO.UI{
            }
            toRemove.Clear();
            foreach(var gO in manuallyAddedPrefabs){
-            netManager.AddNetworkPrefab(gO);
+            if(!defaultPrefabList.Contains(gO)){
+             netManager.AddNetworkPrefab(gO);
+            }
            }
            foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/",typeof(GameObject))){
             GameObject gameObject=(GameObject)o;
@@ -47,7 +50,9 @@ namespace AKCondinoO.UI{
              continue;
             }
             Type t=simObject.GetType();
-            netManager.AddNetworkPrefab(simObject.gameObject);
+            if(!defaultPrefabList.Contains(simObject.gameObject)){
+             netManager.AddNetworkPrefab(simObject.gameObject);
+            }
             PooledPrefabInstanceHandler prefabInstanceHandler=new PooledPrefabInstanceHandler(simObject.gameObject);
             netManager.PrefabHandler.AddHandler(simObject.gameObject,prefabInstanceHandler);
             prefabInstanceHandlers.Add(t,prefabInstanceHandler);

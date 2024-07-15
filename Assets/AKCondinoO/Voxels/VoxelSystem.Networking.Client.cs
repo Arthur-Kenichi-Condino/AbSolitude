@@ -5,6 +5,7 @@
         #define ENABLE_LOG_DEBUG
     #endif
 #endif
+using AKCondinoO.Voxels.Terrain.Networking;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -35,6 +36,16 @@ namespace AKCondinoO.Voxels{
          //  everything at client has been disposed
         }
         internal void NetClientSideNetUpdate(){
+         for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
+          if(i<terrainMessageHandlers.Count){
+           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+           cnkMsgr     .NetClientSideManualUpdate();
+          }
+          if(i<terrainArraySyncs     .Count){
+           VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+           cnkArraySync.NetClientSideManualUpdate();
+          }
+         }
          if(clientSendMessageTimer<=0f){
             clientSendMessageTimer=clientSendMessageDelay;
           clientVoxelTerrainChunkEditDataRequestsSentToRemove.Clear();

@@ -101,6 +101,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.AStarPathfinding.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Concurrent.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataLoadingMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkArraySync.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\Teleport\TeleportSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealing.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Assets\AKCondinoO\Ambience\SimTime.cs" />
     <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\SimObjectScreenshotHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainGetFileEditDataToNetSyncMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWaterMultithreaded.cs" />
@@ -377,6 +379,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\_3D\_UMA\HairFadeCutoutSS.shader" />
+    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\_3D\Original\FBX\Readme.txt" />
     <None Include="Assets\AKCondinoO\UI\Fixed\Crosshairs\Textures\Readme.txt" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrain.shader" />

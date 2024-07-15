@@ -36,18 +36,36 @@ namespace AKCondinoO.Voxels{
          if(Core.singleton.isClient){
           NetClientSideOnDestroyingCoreNetworkDestroy();
          }
-         for(int i=0;i<terrainMessageHandlers.Count;++i){
-          terrainMessageHandlers[i].OnDestroyingCore();
+         for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
+          if(i<terrainMessageHandlers.Count){
+           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+           cnkMsgr     .OnDestroyingCore();
+          }
+          if(Core.singleton.isServer){
+           continue;
+          }
+          if(i<terrainArraySyncs     .Count){
+           VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+           cnkArraySync.OnDestroyingCore();
+          }
          }
-         //  for
         }
         internal void OnDestroyingCoreNetworkDispose(){
-         for(int i=0;i<terrainMessageHandlers.Count;++i){
-          terrainMessageHandlers[i].Dispose();
+         for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
+          if(i<terrainMessageHandlers.Count){
+           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+           cnkMsgr     .Dispose();
+          }
+          if(Core.singleton.isServer){
+           continue;
+          }
+          if(i<terrainArraySyncs     .Count){
+           VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+           cnkArraySync.Dispose();
+          }
          }
          terrainMessageHandlers.Clear();
-         //  for
-         terrainArraySyncs.Clear();
+         terrainArraySyncs     .Clear();
          if(Core.singleton.isServer){
           NetServerSideOnDestroyingCoreNetworkDispose();
          }

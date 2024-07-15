@@ -51,8 +51,8 @@ namespace AKCondinoO.Voxels{
          assigningExecutionTime=0;
          foreach(var kvp in terrainMessageHandlersAssigned){
           VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
-          cnkMsgr             .ManualUpdate();
-          cnkMsgr.cnkArraySync.ManualUpdate();
+          cnkMsgr             .NetServerSideManualUpdate();
+          cnkMsgr.cnkArraySync.NetServerSideManualUpdate();
          }
          foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
           if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
@@ -61,7 +61,7 @@ namespace AKCondinoO.Voxels{
          }
          #region netVoxelArrays
              foreach(var netVoxelArray in netVoxelArraysActive){
-              netVoxelArray.ManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
+              netVoxelArray.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
               if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
              }
              foreach(var netVoxelArray in netVoxelArraysToPool){

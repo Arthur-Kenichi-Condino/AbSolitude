@@ -27,8 +27,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         internal void OnInstantiated(){
          Log.DebugMessage("OnInstantiated");
-         if(Core.singleton.isServer){
-         }
         }
      [NonSerialized]internal NetworkObject netObj;
         public override void OnNetworkSpawn(){
@@ -61,7 +59,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           }
      [NonSerialized]internal VoxelTerrainChunkArraySync arraySync;
       [NonSerialized]internal int arraySyncSegment;
-     [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void OnPool(){
          Log.DebugMessage("OnPool");
          if(arraySync!=null){
@@ -72,7 +69,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           VoxelSystem.singleton.netVoxelArraysPool.Enqueue(this);
          }
         }
-        internal void ManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
+     [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
+        internal void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
          toPool=false;
          if(clientIdsDisconnectedToRemove.Count>0){
           clientIdsRequestingData.ExceptWith(clientIdsDisconnectedToRemove);

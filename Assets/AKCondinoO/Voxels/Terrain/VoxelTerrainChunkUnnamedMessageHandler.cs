@@ -62,16 +62,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          int voxelsInLastSegment=(VoxelsPerChunk/splits)+(VoxelsPerChunk%splits);
          terrainSendEditDataToServerBG.voxelsInLastSegment=voxelsInLastSegment;
          lastSegmentSize=terrainSendEditDataToServerBG.lastSegmentSize=(voxelsInLastSegment*voxelEditSize+headerSize);
+         if(Core.singleton.isClient){
+          VoxelSystem.singleton.terrainMessageHandlers.Add(this);
+         }
         }
         internal void OnInstantiated(){
          cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
+         cnkArraySync.cnkMsgr=this;
          cnkArraySync.OnInstantiated();
-         try{
-          cnkArraySync.netObj.Spawn(destroyWithScene:false);
-         }catch(Exception e){
-          Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-         }
-         cnkArraySync.netObj.DontDestroyWithOwner=true;
          VoxelSystem.singleton.terrainArraySyncs.Add(cnkArraySync);
         }
         internal void OnDestroyingCore(){
@@ -87,11 +85,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           dataToSendDictionaryPool.Enqueue(terrainSendEditDataToServerBG.dataToSendToServer);
           terrainSendEditDataToServerBG.dataToSendToServer=null;
          }
-         cnkArraySync.OnDestroyingCore();
+         if(cnkArraySync!=null){
+            cnkArraySync.OnDestroyingCore();
+         }
         }
         internal void Dispose(){
          terrainSendEditDataToServerBG.Dispose();
-         cnkArraySync.Dispose();
+         if(cnkArraySync!=null){
+            cnkArraySync.Dispose();
+         }
         }
      [NonSerialized]internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -101,13 +103,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isClient){
-    //  add to voxel system networking
-         }
-         if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
-         }
-         if(Core.singleton.isClient){
           clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
         }
@@ -136,20 +133,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           sentSegments.Clear();
          }
         }
-        internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
-         if(firstCall||cCoord1!=id.Value.cCoord){
-          id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
-          netcnkIdx.Value=id.Value.cnkIdx;
-          pendingGetFileEditData=true;
-         }
-         cnkArraySync.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
-        }
-        internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-         //Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:'cnkIdx':"+id.Value.cnkIdx);
-         clientIdsRequestingData.Add(clientId);
-         pendingGetFileEditData=true;
-         cnkArraySync.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
-        }
      [NonSerialized]internal static int maxMessagesPerFrame=2;
       [NonSerialized]internal static int messagesSent;
      [NonSerialized]internal static double sendingMaxExecutionTime=1.0;
@@ -169,130 +152,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           Log.DebugMessage("StaticUpdate:globalCooldownToSendNewMessages:"+globalCooldownToSendNewMessages);
          }
          sendingExecutionTime=0d;
-        }
-     [SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
-     [NonSerialized]bool waitingGetFileEditData;
-     [NonSerialized]bool pendingGetFileEditData;
-        internal void ManualUpdate(){
-            if(Core.singleton.isServer){
-             if(netObj.IsSpawned){
-              if(waitingGetFileEditData){
-                  if(OnGotFileEditData()){
-                      waitingGetFileEditData=false;
-                  }
-              }else{
-                  if(pendingGetFileEditData){
-                      if(CanGetFileEditData()){
-                          pendingGetFileEditData=false;
-                          waitingGetFileEditData=true;
-                      }
-                  }
-              }
-             }
-            }
-        }
-     //  TO DO: send interval
-     readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
-        bool CanGetFileEditData(){
-         if((DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA)&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
-          terrainSendEditDataToServerBG.DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA;
-          terrainSendEditDataToServerBG.cCoord=id.Value.cCoord;
-          terrainSendEditDataToServerBG.cnkRgn=id.Value.cnkRgn;
-          terrainSendEditDataToServerBG.cnkIdx=id.Value.cnkIdx;
-          VoxelTerrainSendEditDataToServerMultithreaded.Schedule(terrainSendEditDataToServerBG);
-          return true;
-         }
-         return false;
-        }
-        bool OnGotFileEditData(){
-         if(!sending&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
-          Log.DebugMessage("OnGotFileEditData");
-          clientIdsToSendData.AddRange(clientIdsRequestingData);
-          clientIdsRequestingData.Clear();
-          sendingcnkIdx      =terrainSendEditDataToServerBG.cnkIdx;
-          sendingDataToServer=terrainSendEditDataToServerBG.dataToSendToServer;
-          terrainSendEditDataToServerBG.dataToSendToServer=null;
-          segmentCount=sendingDataToServer.Count;
-          sending=true;
-          Log.DebugMessage("segmentCount:"+segmentCount);
-          return true;
-         }
-         return false;
-        }
-     [NonSerialized]Coroutine clientSideSendVoxelTerrainChunkEditDataFileCoroutine;
-     [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
-      [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
-     [NonSerialized]readonly List<ulong>clientIdsToSendData=new List<ulong>();
-     [NonSerialized]bool sending;
-      [NonSerialized]int sendingcnkIdx;
-      [NonSerialized]Dictionary<int,FastBufferWriter>sendingDataToServer;
-      [NonSerialized]int segmentSize;
-       [NonSerialized]int lastSegmentSize;
-      [NonSerialized]int segmentCount=-1;
-      [NonSerialized]readonly List<int>sentSegments=new List<int>();
-        internal IEnumerator ClientSideSendVoxelTerrainChunkEditDataFileCoroutine(){
-         yield return null;
-         WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
-         WaitUntil waitForDelayToSendNewMessages=new WaitUntil(()=>{if(delayToSendNewMessages>0f){delayToSendNewMessages-=Time.deltaTime;}return delayToSendNewMessages<=0f;});//  delay with WaitUntil and a cooldown
-            //Log.DebugMessage("writingMaxExecutionTime:"+writingMaxExecutionTime);
-            bool LimitMessagesSentPerFrame(){
-             if(messagesSent>=maxMessagesPerFrame){
-              return true;
-             }
-             messagesSent++;
-             return false;
-            }
-            System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
-            bool LimitExecutionTime(){
-             sendingExecutionTime+=stopwatch.Elapsed.TotalMilliseconds;
-             if(sendingExecutionTime>=sendingMaxExecutionTime){
-              return true;
-             }
-             return false;
-            }
-            Loop:{
-             yield return waitUntilGetFileData;
-             Log.DebugMessage("ClientSideSendVoxelTerrainChunkEditDataFileCoroutine");
-             stopwatch.Restart();
-             FastBufferWriter writer;
-             foreach(var segmentBufferPair in sendingDataToServer){
-              int segment=segmentBufferPair.Key;
-              Log.DebugMessage("'send segment':"+segment);
-              writer=segmentBufferPair.Value;
-              if(writer.IsInitialized){
-               //foreach(ulong clientId in clientIdsToSendData){
-                //if(NetworkManager.ConnectedClientsIds.Contains(clientId)){
-                 while(LimitExecutionTime()){
-                  yield return null;
-                  stopwatch.Restart();
-                 }
-                 while(LimitMessagesSentPerFrame()){
-                  yield return null;
-                 }
-                 totalLengthOfDataSent+=writer.Length;
-                 delayToSendNewMessages+=writer.Length*segmentSizeToTimeInSecondsDelayRatio;
-                 Log.DebugMessage("sending segment FastBufferWriter writer.Length:"+writer.Length);
-                 //NetworkManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
-                 if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
-                  Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
-                  yield return waitForDelayToSendNewMessages;
-                 }
-                //}
-               //}
-               writer.Dispose();
-              }
-              sentSegments.Add(segment);
-             }
-             sendingDataToServer.Clear();
-             dataToSendDictionaryPool.Enqueue(sendingDataToServer);
-             sendingDataToServer=null;
-             sentSegments.Clear();
-             Log.DebugMessage("'sent all segments':"+segmentCount);
-             segmentCount=-1;//  restart loop but don't repeat for the same edit data file
-             clientIdsToSendData.Clear();
-             sending=false;
-            }
-            goto Loop;
         }
     }
 }
