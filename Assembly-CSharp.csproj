@@ -67,7 +67,9 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnATTACK_ST.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.Messages.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.MotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Networking.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
@@ -243,10 +245,10 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\UnnamedMessageTypes.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.ProcessCommand.cs" />
-    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Messages.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.PersistentData.cs" />
@@ -255,7 +257,6 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
-    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Messages.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticle.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Assets\AKCondinoO\UI\PlaceholderObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Vanilmirth\ChaoticBlessing\ChaoticBlessing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Server.Messages.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Heap.cs" />
   </ItemGroup>
   <ItemGroup>

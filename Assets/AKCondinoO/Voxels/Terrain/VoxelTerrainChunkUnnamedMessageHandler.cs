@@ -25,6 +25,8 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServ
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
+     [SerializeField]VoxelTerrainChunkArraySync _VoxelTerrainChunkArraySyncPrefab;
+     [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
      /*
        sizeof(int)   : 4 bytes
        sizeof(double): 8 bytes
@@ -57,6 +59,16 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         internal void OnInstantiated(){
          if(Core.singleton.isServer){
+          cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
+          cnkArraySync.OnInstantiated();
+          try{
+           cnkArraySync.netObj.Spawn(destroyWithScene:false);
+          }catch(Exception e){
+           Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          }
+          cnkArraySync.netObj.DontDestroyWithOwner=true;
+         }
+         if(Core.singleton.isClient){
           int voxelsPerSegment=(VoxelsPerChunk/splits);
           terrainSendEditDataToServerBG.voxelsPerSegment=voxelsPerSegment;
           segmentSize=terrainSendEditDataToServerBG.segmentSize=(voxelsPerSegment*voxelEditSize+headerSize);
@@ -78,6 +90,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           dataToSendDictionaryPool.Enqueue(terrainSendEditDataToServerBG.dataToSendToServer);
           terrainSendEditDataToServerBG.dataToSendToServer=null;
          }
+         cnkArraySync.OnDestroyingCore();
+        }
+        internal void Dispose(){
+         terrainSendEditDataToServerBG.Dispose();
+         cnkArraySync.Dispose();
         }
      [NonSerialized]internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
@@ -90,7 +107,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
          }
-         if(Core.singleton.isServer){
+         if(Core.singleton.isClient){
           clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
         }
@@ -125,11 +142,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           netcnkIdx.Value=id.Value.cnkIdx;
           pendingGetFileEditData=true;
          }
+         cnkArraySync.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
         }
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
          //Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:'cnkIdx':"+id.Value.cnkIdx);
          clientIdsRequestingData.Add(clientId);
          pendingGetFileEditData=true;
+         cnkArraySync.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
         }
      [NonSerialized]internal static int maxMessagesPerFrame=2;
       [NonSerialized]internal static int messagesSent;

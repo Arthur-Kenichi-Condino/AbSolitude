@@ -22,7 +22,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync:NetworkBehaviour{
      [NonSerialized]internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
-     [NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
+     //[NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
      [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         void Awake(){
          netObj=GetComponent<NetworkObject>();
@@ -40,6 +40,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         internal void OnDestroyingCore(){
          terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
+        }
+        internal void Dispose(){
+         terrainGetFileEditDataToNetSyncBG.Dispose();
         }
      [NonSerialized]internal NetworkObject netObj;
       private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
