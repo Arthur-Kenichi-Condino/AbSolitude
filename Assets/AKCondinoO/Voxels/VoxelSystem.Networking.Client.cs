@@ -5,10 +5,18 @@
         #define ENABLE_LOG_DEBUG
     #endif
 #endif
+using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
+     [NonSerialized]float clientSendMessageDelay=0.05f;
+      [NonSerialized]float clientSendMessageTimer=10f;
+      [NonSerialized]internal readonly Dictionary<int,FastBufferWriter>clientVoxelTerrainChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
+     [NonSerialized]internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=8;
+      [NonSerialized]internal int clientVoxelTerrainChunkEditDataRequestsSent;
+       [NonSerialized]readonly List<int>clientVoxelTerrainChunkEditDataRequestsSentToRemove=new List<int>();
         internal void NetClientSideInit(){
          Log.DebugMessage("NetClientSideInit");
          Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;

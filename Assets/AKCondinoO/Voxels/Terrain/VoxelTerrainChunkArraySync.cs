@@ -35,8 +35,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          //voxels.SetUpdateTraits(updateTraits);
         }
         internal void OnInstantiated(){
-         if(Core.singleton.isServer){
-         }
         }
         internal void OnDestroyingCore(){
          terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);

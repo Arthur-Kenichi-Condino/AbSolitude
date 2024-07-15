@@ -31,7 +31,7 @@ namespace AKCondinoO.Voxels{
           }
          }
         }
-        private void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
+        void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
          //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId);
          int cnkIdx;
          reader.ReadValueSafe(out cnkIdx);

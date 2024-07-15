@@ -27,6 +27,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      [SerializeField]VoxelTerrainChunkArraySync _VoxelTerrainChunkArraySyncPrefab;
      [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
+     [NonSerialized]internal VoxelTerrainSendEditDataToServerContainer terrainSendEditDataToServerBG=new VoxelTerrainSendEditDataToServerContainer();
+     [NonSerialized]internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
+     [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      /*
        sizeof(int)   : 4 bytes
        sizeof(double): 8 bytes
@@ -51,31 +54,25 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //  voxelsPerChunk: 16*16*256=65536 voxels...
      // ...voxelsPerChunk * VoxelEditDataSize is all edit data size if whole chunk is edited:
      // 65536*20=1310720 bytes: 1.310720 Megabytes
-     [NonSerialized]internal VoxelTerrainSendEditDataToServerContainer terrainSendEditDataToServerBG=new VoxelTerrainSendEditDataToServerContainer();
-     [NonSerialized]internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
-     [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         void Awake(){
          netObj=GetComponent<NetworkObject>();
+         int voxelsPerSegment=(VoxelsPerChunk/splits);
+         terrainSendEditDataToServerBG.voxelsPerSegment=voxelsPerSegment;
+         segmentSize=terrainSendEditDataToServerBG.segmentSize=(voxelsPerSegment*voxelEditSize+headerSize);
+         int voxelsInLastSegment=(VoxelsPerChunk/splits)+(VoxelsPerChunk%splits);
+         terrainSendEditDataToServerBG.voxelsInLastSegment=voxelsInLastSegment;
+         lastSegmentSize=terrainSendEditDataToServerBG.lastSegmentSize=(voxelsInLastSegment*voxelEditSize+headerSize);
         }
         internal void OnInstantiated(){
-         if(Core.singleton.isServer){
-          cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
-          cnkArraySync.OnInstantiated();
-          try{
-           cnkArraySync.netObj.Spawn(destroyWithScene:false);
-          }catch(Exception e){
-           Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-          }
-          cnkArraySync.netObj.DontDestroyWithOwner=true;
+         cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
+         cnkArraySync.OnInstantiated();
+         try{
+          cnkArraySync.netObj.Spawn(destroyWithScene:false);
+         }catch(Exception e){
+          Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }
-         if(Core.singleton.isClient){
-          int voxelsPerSegment=(VoxelsPerChunk/splits);
-          terrainSendEditDataToServerBG.voxelsPerSegment=voxelsPerSegment;
-          segmentSize=terrainSendEditDataToServerBG.segmentSize=(voxelsPerSegment*voxelEditSize+headerSize);
-          int voxelsInLastSegment=(VoxelsPerChunk/splits)+(VoxelsPerChunk%splits);
-          terrainSendEditDataToServerBG.voxelsInLastSegment=voxelsInLastSegment;
-          lastSegmentSize=terrainSendEditDataToServerBG.lastSegmentSize=(voxelsInLastSegment*voxelEditSize+headerSize);
-         }
+         cnkArraySync.netObj.DontDestroyWithOwner=true;
+         VoxelSystem.singleton.terrainArraySyncs.Add(cnkArraySync);
         }
         internal void OnDestroyingCore(){
          terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning,-1);
@@ -103,6 +100,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
       );
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+         if(Core.singleton.isClient){
+    //  add to voxel system networking
+         }
          if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
