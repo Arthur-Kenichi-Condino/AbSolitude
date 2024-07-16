@@ -5,6 +5,7 @@ namespace AKCondinoO.Networking{
     internal enum UnnamedMessageTypes:int{
      Undefined=0,
      FromClientVoxelTerrainChunkEditDataRequest=100,
-     VoxelTerrainChunkEditDataSegment=101,
+     FromClientVoxelTerrainChunkEditDataReceived=101,
+     VoxelTerrainChunkEditDataSegment=102,
     }
 }

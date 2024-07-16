@@ -1856,17 +1856,17 @@
       "DebugActionIndex": 29
     },
     {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7e8c189315949953af34cb171781b3c7.bundle",
-      "DisplayName": "Copying overlaydataasset-body_overlay_7e8c189315949953af34cb171781b3c7.bundle",
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7b3883bc86aa0ac1bd8780c30468c9c2.bundle",
+      "DisplayName": "Copying overlaydataasset-body_overlay_7b3883bc86aa0ac1bd8780c30468c9c2.bundle",
       "ActionType": "CopyFiles",
       "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7e8c189315949953af34cb171781b3c7.bundle"
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7b3883bc86aa0ac1bd8780c30468c9c2.bundle"
       ],
       "InputFlags": [
         0
       ],
       "Outputs": [
-        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7e8c189315949953af34cb171781b3c7.bundle"
+        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-body_overlay_7b3883bc86aa0ac1bd8780c30468c9c2.bundle"
       ],
       "OutputFlags": [
         2
@@ -1874,17 +1874,17 @@
       "DebugActionIndex": 30
     },
     {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_02c015bb777e799ea8279a014a1ebfc4.bundle",
-      "DisplayName": "Copying overlaydataasset-brain_overlay_02c015bb777e799ea8279a014a1ebfc4.bundle",
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_7767339902fc9d4f3050cf3f6e08ad68.bundle",
+      "DisplayName": "Copying overlaydataasset-brain_overlay_7767339902fc9d4f3050cf3f6e08ad68.bundle",
       "ActionType": "CopyFiles",
       "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_02c015bb777e799ea8279a014a1ebfc4.bundle"
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_7767339902fc9d4f3050cf3f6e08ad68.bundle"
       ],
       "InputFlags": [
         0
       ],
       "Outputs": [
-        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_02c015bb777e799ea8279a014a1ebfc4.bundle"
+        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-brain_overlay_7767339902fc9d4f3050cf3f6e08ad68.bundle"
       ],
       "OutputFlags": [
         2
@@ -1892,17 +1892,17 @@
       "DebugActionIndex": 31
     },
     {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_94144b95eb06d59be75e47b7c882904b.bundle",
-      "DisplayName": "Copying overlaydataasset-cards_overlay_94144b95eb06d59be75e47b7c882904b.bundle",
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_0a68d05f5d6a8316b5fdaeae2babea65.bundle",
+      "DisplayName": "Copying overlaydataasset-cards_overlay_0a68d05f5d6a8316b5fdaeae2babea65.bundle",
       "ActionType": "CopyFiles",
       "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_94144b95eb06d59be75e47b7c882904b.bundle"
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_0a68d05f5d6a8316b5fdaeae2babea65.bundle"
       ],
       "InputFlags": [
         0
       ],
       "Outputs": [
-        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_94144b95eb06d59be75e47b7c882904b.bundle"
+        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-cards_overlay_0a68d05f5d6a8316b5fdaeae2babea65.bundle"
       ],
       "OutputFlags": [
         2
@@ -1928,17 +1928,17 @@
       "DebugActionIndex": 33
     },
     {
-      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_2dfb175fe40a81b9dcee61ef7cc8242f.bundle",
-      "DisplayName": "Copying overlaydataasset-eyes_overlay_2dfb175fe40a81b9dcee61ef7cc8242f.bundle",
+      "Annotation": "CopyFiles C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_cb1f358c0e3beed784717e9a4182357d.bundle",
+      "DisplayName": "Copying overlaydataasset-eyes_overlay_cb1f358c0e3beed784717e9a4182357d.bundle",
       "ActionType": "CopyFiles",
       "Inputs": [
-        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_2dfb175fe40a81b9dcee61ef7cc8242f.bundle"
+        "Library/com.unity.addressables/aa/Windows/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_cb1f358c0e3beed784717e9a4182357d.bundle"
       ],
       "InputFlags": [
         0
       ],
       "Outputs": [
-        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_2dfb175fe40a81b9dcee61ef7cc8242f.bundle"
+        "C:/Users/arthu/Documentos/GitHub/bin/AbSolitude/AbSolitude_Data/StreamingAssets/aa/StandaloneWindows64/uma_shareditems_assets_uma/overlaydataasset-eyes_overlay_cb1f358c0e3beed784717e9a4182357d.bundle"
       ],
       "OutputFlags": [
         2

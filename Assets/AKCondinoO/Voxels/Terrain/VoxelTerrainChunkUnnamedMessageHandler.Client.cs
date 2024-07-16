@@ -61,7 +61,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
         }
         bool CanWriteEditData(){
-         if((DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA)&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
+         if((DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA)&&!sending&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
           terrainSendEditDataToServerBG.DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA;
           terrainSendEditDataToServerBG.cCoord=id.Value.cCoord;
           terrainSendEditDataToServerBG.cnkRgn=id.Value.cnkRgn;
@@ -85,7 +85,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          return false;
         }
      [NonSerialized]Coroutine clientSideSendVoxelTerrainChunkEditDataFileCoroutine;
-     [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
+     [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/8f;
       [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
      [NonSerialized]bool sending;
       [NonSerialized]int sendingcnkIdx;
@@ -135,7 +135,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                Log.DebugMessage("sending segment FastBufferWriter writer.Length:"+writer.Length);
                NetworkManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,writer,NetworkDelivery.ReliableFragmentedSequenced);
                if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
-                Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
+                //Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
                 yield return waitForDelayToSendNewMessages;
                }
                writer.Dispose();

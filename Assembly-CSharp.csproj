@@ -379,11 +379,11 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\_3D\_UMA\HairFadeCutoutSS.shader" />
-    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\_3D\Original\FBX\Readme.txt" />
     <None Include="Assets\AKCondinoO\UI\Fixed\Crosshairs\Textures\Readme.txt" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrain.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\_3D\HowToExportFromBlenderToFBX.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />

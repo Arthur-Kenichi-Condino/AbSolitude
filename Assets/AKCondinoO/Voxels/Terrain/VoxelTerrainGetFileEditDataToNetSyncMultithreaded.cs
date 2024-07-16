@@ -20,7 +20,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainGetFileEditDataToNetSyncContainer:BackgroundContainer{
      [NonSerialized]internal bool DEBUG_FORCE_SEND_ALL_VOXEL_DATA=false;
-     [NonSerialized]internal const int splits=32;
+     [NonSerialized]internal const int splits=128;
         internal static int VoxelsInSegment(int segment){
          return segment<(splits-1)?VoxelsPerChunk/splits:(VoxelsPerChunk/splits)+VoxelsPerChunk%splits;
         }

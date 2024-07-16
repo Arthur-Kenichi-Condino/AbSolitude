@@ -17,6 +17,12 @@ namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
         internal void NetServerSideInit(){
          Log.DebugMessage("NetServerSideInit");
+         int poolSize=(
+          (expropriationDistance.x*2+1)*
+          (expropriationDistance.y*2+1)*
+          1
+         );
+         netVoxelArraysMaxCount=poolSize;
          Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnServerReceivedUnnamedMessage;
          serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
         }
@@ -89,11 +95,6 @@ namespace AKCondinoO.Voxels{
              return false;
             }
             stopwatch.Restart();
-            int poolSize=GameplayerManagement.maxPlayers*(
-             (VoxelSystem.expropriationDistance.x*2+1)*
-             (VoxelSystem.expropriationDistance.y*2+1)
-            );
-            Log.DebugMessage("poolSize:"+poolSize);
             Loop:{
              yield return null;
              stopwatch.Restart();

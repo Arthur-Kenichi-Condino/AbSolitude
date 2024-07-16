@@ -24,7 +24,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
      [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-         Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
+         //Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
          clientIdsRequestingData.Add(clientId);
          pendingGetFileEditData=true;
         }
@@ -34,11 +34,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal void NetServerSideManualUpdate(){
             if(cnkMsgr!=null&&cnkMsgr.netObj.IsSpawned){
              if(waitingGetFileEditData){
+                 //Log.DebugMessage("waitingGetFileEditData");
                  if(OnGotFileEditData()){
                      waitingGetFileEditData=false;
                  }
              }else{
                  if(pendingGetFileEditData){
+                     //Log.DebugMessage("pendingGetFileEditData");
                      if(CanGetFileEditData()){
                          pendingGetFileEditData=false;
                          waitingGetFileEditData=true;
@@ -48,7 +50,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
         }
         bool CanGetFileEditData(){
-         if(terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+         if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+          Log.DebugMessage("CanGetFileEditData");
           terrainGetFileEditDataToNetSyncBG.DEBUG_FORCE_SEND_ALL_VOXEL_DATA=DEBUG_FORCE_SEND_ALL_VOXEL_DATA;
           terrainGetFileEditDataToNetSyncBG.cCoord=id.Value.cCoord;
           terrainGetFileEditDataToNetSyncBG.cnkRgn=id.Value.cnkRgn;
@@ -60,7 +63,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         bool OnGotFileEditData(){
          if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
-          //Log.DebugMessage("OnGotFileEditData");
+          Log.DebugMessage("OnGotFileEditData");
           sending=terrainGetFileEditDataToNetSyncBG.changes.Any(c=>{return c;});
           sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
           clientIdsToSendData.AddRange(clientIdsRequestingData);
@@ -73,7 +76,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [SerializeField]internal VoxelArraySync _VoxelArraySyncPrefab;
       [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      [NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
-      [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=.05f;
+      [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/8f;
        [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
       [NonSerialized]bool sending;
        [NonSerialized]int sendingcnkIdx;
@@ -114,8 +117,16 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               }
               if(changed){
                if(!netVoxelArrays.TryGetValue(i,out VoxelArraySync netVoxelArray)){
+                _Dequeue:{}
                 if(!VoxelSystem.singleton.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
+                 if(VoxelSystem.singleton.netVoxelArraysCount>=VoxelSystem.singleton.netVoxelArraysMaxCount){
+                  //Log.DebugMessage("'VoxelSystem.singleton.netVoxelArraysCount>=VoxelSystem.singleton.netVoxelArraysMaxCount'");
+                  yield return null;
+                  goto _Dequeue;
+                 }
+                 VoxelSystem.singleton.netVoxelArraysCount++;
                  netVoxelArray=Instantiate(_VoxelArraySyncPrefab);
+                 netVoxelArray.name=nameof(VoxelArraySync)+VoxelSystem.singleton.netVoxelArraysCount;
                  netVoxelArray.OnInstantiated();
                  try{
                   netVoxelArray.netObj.Spawn(destroyWithScene:false);
@@ -134,9 +145,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 netVoxelArray.voxels.Value.segment=i;
                 Array.Copy(terrainGetFileEditDataToNetSyncBG.voxels[i],0,netVoxelArray.voxels.Value.voxelArray,0,terrainGetFileEditDataToNetSyncBG.voxels[i].Length);
                }
-               netVoxelArray.voxels.SetDirty(true);
                netVoxelArray.clientIdsRequestingData.UnionWith(clientIdsToSendData);
                VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsToSendData);
+               //netVoxelArray.voxels.SetDirty(true);
+               //Log.DebugMessage("'netVoxelArray.voxels.SetDirty(true)'",netVoxelArray);
                totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
                delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
                if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){

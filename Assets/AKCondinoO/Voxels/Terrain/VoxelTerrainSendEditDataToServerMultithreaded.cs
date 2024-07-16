@@ -14,7 +14,7 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainSendEditDataToServerContainer:BackgroundContainer{
      [NonSerialized]internal bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
-     [NonSerialized]internal const int splits=32;
+     [NonSerialized]internal const int splits=128;
      [NonSerialized]internal int segmentSize;
      [NonSerialized]internal int voxelsPerSegment;
       [NonSerialized]internal int lastSegmentSize;
