@@ -76,7 +76,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [SerializeField]internal VoxelArraySync _VoxelArraySyncPrefab;
       [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      [NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
-      [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/8f;
+      [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;
        [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
       [NonSerialized]bool sending;
        [NonSerialized]int sendingcnkIdx;

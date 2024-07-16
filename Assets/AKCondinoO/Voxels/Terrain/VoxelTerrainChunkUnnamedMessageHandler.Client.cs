@@ -85,7 +85,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          return false;
         }
      [NonSerialized]Coroutine clientSideSendVoxelTerrainChunkEditDataFileCoroutine;
-     [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/8f;
+     [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;
       [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
      [NonSerialized]bool sending;
       [NonSerialized]int sendingcnkIdx;

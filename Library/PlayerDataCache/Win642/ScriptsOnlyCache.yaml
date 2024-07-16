@@ -425,6 +425,9 @@ ScriptsOnlyBuild:
     fullTypeName: UnityEngine.Rendering.UI.DebugUIHandlerPanel
     methodName: ResetDebugManager
   - assembly: Assembly-CSharp
+    fullTypeName: AKCondinoO.UI.Context.ContextMenuUI
+    methodName: OnSelectButtonPress
+  - assembly: Assembly-CSharp
     fullTypeName: AKCondinoO.UI.Fixed.FixedUI
     methodName: OnFollowerCameraModeButtonPress
   - assembly: Assembly-CSharp
@@ -445,9 +448,6 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: AKCondinoO.UI.Fixed.FixedUI
     methodName: OnBuildBuyEditModeButtonPress
-  - assembly: Assembly-CSharp
-    fullTypeName: AKCondinoO.UI.Context.ContextMenuUI
-    methodName: OnSelectButtonPress
   sceneClasses:
     Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity:
     - Class: 1

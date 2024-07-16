@@ -43,11 +43,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal void Dispose(){
          terrainGetFileEditDataToNetSyncBG.Dispose();
         }
-     [NonSerialized]internal static int maxMessagesPerFrame=splits/16;
+     [NonSerialized]internal static int maxMessagesPerFrame=splits/8;
       [NonSerialized]internal static int messagesSent;
      [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
       [NonSerialized]internal static double sendingExecutionTime;
-     [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=(1.25f/4f)/(VoxelsPerChunk);//  turns segment Length into seconds to wait
+     [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=(1.25f/16f)/(VoxelsPerChunk);//  turns segment Length into seconds to wait
       [NonSerialized]internal static int totalLengthOfDataSent;
      [NonSerialized]internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent * segmentSizeToTimeInSecondsDelayRatio
         internal static void StaticUpdate(){
