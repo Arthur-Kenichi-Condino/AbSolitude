@@ -94,11 +94,18 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
+      [NonSerialized]internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
+       new bool[splits],
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isClient){
           OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
           netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
+          OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
+          netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
           clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
         }
@@ -108,6 +115,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          if(Core.singleton.isClient){
           netcnkIdx.OnValueChanged-=OnClientSideNetcnkIdxValueChanged;
+          netTerrainChunkArrayHasChanges.OnListChanged-=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
          }
          base.OnNetworkDespawn();
          if(sendingDataToServer!=null){

@@ -41,6 +41,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           }
          }
         }
+        private void OnClientSideNetTerrainChunkArrayHasChangesValueChanged(NetworkListEvent<bool>change){
+        }
      [SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
      [NonSerialized]bool waitingWriteEditData;
      [NonSerialized]bool pendingWriteEditData;
