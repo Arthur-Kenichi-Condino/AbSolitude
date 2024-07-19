@@ -41,6 +41,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           }
          }
         }
+     internal enum ChangeRequestsState:byte{
+      Reset=0,
+      Pending,
+      Synchronized,
+     }
+     [NonSerialized]readonly ChangeRequestsState[]clientSideTerrainChunkArrayChangeRequestsState=new ChangeRequestsState[splits];
         private void OnClientSideNetTerrainChunkArrayHasChangesValueChanged(NetworkListEvent<bool>change){
         }
      [SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
