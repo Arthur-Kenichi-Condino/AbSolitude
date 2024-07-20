@@ -26,6 +26,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
            if(clientSidecnkIdx==null||current!=clientSidecnkIdx.Value){
             clientSidecnkIdx=current;
             Log.DebugMessage("'ask server for chunk data'");
+            for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
+             if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Synchronized){
+              clientSideTerrainChunkArrayChangeRequestsState[i]=ChangeRequestsState.Reset;
+             }
+            }
             /*
               add sizeof(int) for the message type
               add sizeof(int) for the cnkIdx
@@ -43,11 +48,22 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
      internal enum ChangeRequestsState:byte{
       Reset=0,
-      Pending,
-      Synchronized,
+      Pending=1,
+      Synchronized=2,
      }
      [NonSerialized]readonly ChangeRequestsState[]clientSideTerrainChunkArrayChangeRequestsState=new ChangeRequestsState[splits];
         private void OnClientSideNetTerrainChunkArrayHasChangesValueChanged(NetworkListEvent<bool>change){
+         if(Core.singleton.isClient){
+          if(!IsOwner){
+           if(change.Type==NetworkListEvent<bool>.EventType.Value||change.Type==NetworkListEvent<bool>.EventType.Full){
+            if(change.Value&&change.Value!=change.PreviousValue){
+             if(change.Index<clientSideTerrainChunkArrayChangeRequestsState.Length){
+              clientSideTerrainChunkArrayChangeRequestsState[change.Index]=ChangeRequestsState.Pending;
+             }
+            }
+           }
+          }
+         }
         }
      [SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
      [NonSerialized]bool waitingWriteEditData;
