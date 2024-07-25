@@ -59,6 +59,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             if(change.Value&&change.Value!=change.PreviousValue){
              if(change.Index<clientSideTerrainChunkArrayChangeRequestsState.Length){
               clientSideTerrainChunkArrayChangeRequestsState[change.Index]=ChangeRequestsState.Pending;
+             }else{
+              Log.Error("'change.Index>=clientSideTerrainChunkArrayChangeRequestsState.Length'");
              }
             }
            }
