@@ -105,7 +105,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
 public class NetVoxelArrayContainer:IEquatable<NetVoxelArrayContainer>,INetworkSerializable{
  public int cnkIdx;
  public int segment;
- public NetVoxel[]voxelArray=new NetVoxel[VoxelsPerChunk/splits];
+ public NetVoxel[]voxelArray=new NetVoxel[VoxelsPerChunk/chunkVoxelArraySplits];
     public NetVoxelArrayContainer(){
     }
     public void NetworkSerialize<T>(BufferSerializer<T>serializer)where T:IReaderWriter{

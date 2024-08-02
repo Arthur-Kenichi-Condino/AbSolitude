@@ -18,6 +18,7 @@ using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkArraySync;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
+using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServerContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync:MonoBehaviour{
@@ -43,7 +44,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal void Dispose(){
          terrainGetFileEditDataToNetSyncBG.Dispose();
         }
-     [NonSerialized]internal static int maxMessagesPerFrame=splits/8;
+     [NonSerialized]internal static int maxMessagesPerFrame=chunkVoxelArraySplits/8;
       [NonSerialized]internal static int messagesSent;
      [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
       [NonSerialized]internal static double sendingExecutionTime;

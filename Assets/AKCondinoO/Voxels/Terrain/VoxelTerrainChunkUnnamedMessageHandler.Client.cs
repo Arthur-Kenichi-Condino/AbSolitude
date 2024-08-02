@@ -15,6 +15,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkUnnamedMessageHandler;
+using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServerContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
@@ -27,21 +28,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             clientSidecnkIdx=current;
             Log.DebugMessage("'ask server for chunk data'");
             for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
-             if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Synchronized){
+             if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Waiting||
+                clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Synchronized
+             ){
               clientSideTerrainChunkArrayChangeRequestsState[i]=ChangeRequestsState.Reset;
              }
             }
-            /*
-              add sizeof(int) for the message type
-              add sizeof(int) for the cnkIdx
-            */
-            FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent);
-            if(writer.TryBeginWrite(sizeof(int)*2)){
-             writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
-             writer.WriteValue((int)current);
-            }
-            if(VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend.TryGetValue(current,out FastBufferWriter oldRequest)){oldRequest.Dispose();}
-            VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend[current]=writer;
            }
           }
          }
@@ -49,9 +41,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      internal enum ChangeRequestsState:byte{
       Reset=0,
       Pending=1,
-      Synchronized=2,
+      Waiting=2,
+      Synchronized=3,
      }
-     [NonSerialized]readonly ChangeRequestsState[]clientSideTerrainChunkArrayChangeRequestsState=new ChangeRequestsState[splits];
+     [NonSerialized]readonly ChangeRequestsState[]clientSideTerrainChunkArrayChangeRequestsState=new ChangeRequestsState[chunkVoxelArraySplits];
         private void OnClientSideNetTerrainChunkArrayHasChangesValueChanged(NetworkListEvent<bool>change){
          if(Core.singleton.isClient){
           if(!IsOwner){
@@ -59,6 +52,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             if(change.Value&&change.Value!=change.PreviousValue){
              if(change.Index<clientSideTerrainChunkArrayChangeRequestsState.Length){
               clientSideTerrainChunkArrayChangeRequestsState[change.Index]=ChangeRequestsState.Pending;
+              hasPendingSync=true;
              }else{
               Log.Error("'change.Index>=clientSideTerrainChunkArrayChangeRequestsState.Length'");
              }
@@ -70,8 +64,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
      [NonSerialized]bool waitingWriteEditData;
      [NonSerialized]bool pendingWriteEditData;
+     [NonSerialized]bool hasPendingSync;
         internal void NetClientSideManualUpdate(){
-            if(netObj.IsSpawned){
+            if(netObj.IsSpawned&&clientSidecnkIdx!=null){
              if(waitingWriteEditData){
                  if(OnWroteEditData()){
                      waitingWriteEditData=false;
@@ -84,16 +79,34 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                      }
                  }
              }
+             if(hasPendingSync){
+              hasPendingSync=false;
+              /*
+                add sizeof(int) for the message type
+                add sizeof(int) for the cnkIdx
+              */
+              FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent);
+              if(writer.TryBeginWrite(sizeof(int)*2)){
+               writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
+               writer.WriteValue((int)clientSidecnkIdx.Value);
+               for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
+               }
+              }
+              if(VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend.TryGetValue(clientSidecnkIdx.Value,out FastBufferWriter oldRequest)){oldRequest.Dispose();}
+              VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend[clientSidecnkIdx.Value]=writer;
+             }
             }
         }
         bool CanWriteEditData(){
-         if((DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA)&&!sending&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
-          terrainSendEditDataToServerBG.DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA;
-          terrainSendEditDataToServerBG.cCoord=id.Value.cCoord;
-          terrainSendEditDataToServerBG.cnkRgn=id.Value.cnkRgn;
-          terrainSendEditDataToServerBG.cnkIdx=id.Value.cnkIdx;
-          VoxelTerrainSendEditDataToServerMultithreaded.Schedule(terrainSendEditDataToServerBG);
-          return true;
+         if(!sending&&terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning)){
+          if(DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA){
+           //terrainSendEditDataToServerBG.DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA;
+           //terrainSendEditDataToServerBG.cCoord=id.Value.cCoord;
+           //terrainSendEditDataToServerBG.cnkRgn=id.Value.cnkRgn;
+           //terrainSendEditDataToServerBG.cnkIdx=id.Value.cnkIdx;
+           //VoxelTerrainSendEditDataToServerMultithreaded.Schedule(terrainSendEditDataToServerBG);
+           //return true;
+          }
          }
          return false;
         }

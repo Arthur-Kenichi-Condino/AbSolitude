@@ -21,6 +21,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.Editing.VoxelTerrainEditingMultithreaded;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainChunkUnnamedMessageHandler;
+using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServerContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
@@ -56,10 +57,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      // 65536*20=1310720 bytes: 1.310720 Megabytes
         void Awake(){
          netObj=GetComponent<NetworkObject>();
-         int voxelsPerSegment=(VoxelsPerChunk/splits);
+         int voxelsPerSegment=(VoxelsPerChunk/voxelDataToSendSplits);
          terrainSendEditDataToServerBG.voxelsPerSegment=voxelsPerSegment;
          segmentSize=terrainSendEditDataToServerBG.segmentSize=(voxelsPerSegment*voxelEditSize+headerSize);
-         int voxelsInLastSegment=(VoxelsPerChunk/splits)+(VoxelsPerChunk%splits);
+         int voxelsInLastSegment=(VoxelsPerChunk/voxelDataToSendSplits)+(VoxelsPerChunk%voxelDataToSendSplits);
          terrainSendEditDataToServerBG.voxelsInLastSegment=voxelsInLastSegment;
          lastSegmentSize=terrainSendEditDataToServerBG.lastSegmentSize=(voxelsInLastSegment*voxelEditSize+headerSize);
          if(Core.singleton.isClient){
@@ -95,7 +96,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableWritePermission.Server
       );
       [NonSerialized]internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
-       new bool[splits],
+       new bool[chunkVoxelArraySplits],
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
@@ -135,7 +136,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           sentSegments.Clear();
          }
         }
-     [NonSerialized]internal static int maxMessagesPerFrame=splits/8;
+     [NonSerialized]internal static int maxMessagesPerFrame=voxelDataToSendSplits/8;
       [NonSerialized]internal static int messagesSent;
      [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
       [NonSerialized]internal static double sendingExecutionTime;

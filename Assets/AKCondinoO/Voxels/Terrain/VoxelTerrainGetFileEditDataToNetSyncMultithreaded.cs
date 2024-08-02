@@ -20,9 +20,9 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal class VoxelTerrainGetFileEditDataToNetSyncContainer:BackgroundContainer{
      [NonSerialized]internal bool DEBUG_FORCE_SEND_ALL_VOXEL_DATA=false;
-     [NonSerialized]internal const int splits=128;
+     [NonSerialized]internal const int chunkVoxelArraySplits=128;
         internal static int VoxelsInSegment(int segment){
-         return segment<(splits-1)?VoxelsPerChunk/splits:(VoxelsPerChunk/splits)+VoxelsPerChunk%splits;
+         return segment<(chunkVoxelArraySplits-1)?VoxelsPerChunk/chunkVoxelArraySplits:(VoxelsPerChunk/chunkVoxelArraySplits)+VoxelsPerChunk%chunkVoxelArraySplits;
         }
      [NonSerialized]internal Vector2Int cCoord;
      [NonSerialized]internal Vector2Int cnkRgn;
@@ -30,8 +30,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [NonSerialized]internal string editsFileName;
      [NonSerialized]internal FileStream editsFileStream;
      [NonSerialized]internal StreamReader editsFileStreamReader;
-     [NonSerialized]internal readonly NetVoxel[][]voxels=new NetVoxel[splits][];
-     [NonSerialized]internal readonly bool[]changes=new bool[splits];
+     [NonSerialized]internal readonly NetVoxel[][]voxels=new NetVoxel[chunkVoxelArraySplits][];
+     [NonSerialized]internal readonly bool[]changes=new bool[chunkVoxelArraySplits];
         internal VoxelTerrainGetFileEditDataToNetSyncContainer(){
          for(int i=0;i<voxels.Length;++i){
           voxels[i]=new NetVoxel[VoxelsInSegment(i)];
