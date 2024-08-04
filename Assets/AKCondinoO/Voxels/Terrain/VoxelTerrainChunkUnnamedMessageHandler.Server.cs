@@ -19,6 +19,8 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServ
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
+     [NonSerialized]internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
+     [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
          //Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:'cnkIdx':"+id.Value.cnkIdx);
          pendingWriteEditData=true;
@@ -29,7 +31,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
-          netcnkIdx.Value=id.Value.cnkIdx;
+          netChunkId.Value=new(
+           id.Value.cCoord,
+           id.Value.cnkRgn,
+           id.Value.cnkIdx
+          );
           pendingWriteEditData=true;
          }
          if(cnkArraySync!=null){

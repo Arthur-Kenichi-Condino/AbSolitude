@@ -26,7 +26,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
      [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
         internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-         //Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
+         Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
          clientIdsRequestingData.Add(clientId);
          //pendingGetFileEditData=true;
         }

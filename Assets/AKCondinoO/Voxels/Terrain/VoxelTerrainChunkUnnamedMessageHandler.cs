@@ -29,8 +29,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [SerializeField]VoxelTerrainChunkArraySync _VoxelTerrainChunkArraySyncPrefab;
      [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
      [NonSerialized]internal VoxelTerrainSendEditDataToServerContainer terrainSendEditDataToServerBG=new VoxelTerrainSendEditDataToServerContainer();
-     [NonSerialized]internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
-     [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
      /*
        sizeof(int)   : 4 bytes
        sizeof(double): 8 bytes
@@ -91,11 +89,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          terrainSendEditDataToServerBG.Dispose();
         }
      [NonSerialized]internal NetworkObject netObj;
-      private readonly NetworkVariable<int>netcnkIdx=new NetworkVariable<int>(default,
+      internal readonly NetworkVariable<NetChunkId>netChunkId=new NetworkVariable<NetChunkId>(default,
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
-      [NonSerialized]internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
+      internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
        new bool[chunkVoxelArraySplits],
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
@@ -103,8 +101,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isClient){
-          OnClientSideNetcnkIdxValueChanged(netcnkIdx.Value,netcnkIdx.Value);//  update on spawn
-          netcnkIdx.OnValueChanged+=OnClientSideNetcnkIdxValueChanged;
+          OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
+          netChunkId.OnValueChanged+=OnClientSideNetChunkIdValueChanged;
           OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
           netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
           clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
@@ -115,7 +113,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           StopCoroutine(clientSideSendVoxelTerrainChunkEditDataFileCoroutine);
          }
          if(Core.singleton.isClient){
-          netcnkIdx.OnValueChanged-=OnClientSideNetcnkIdxValueChanged;
+          netChunkId.OnValueChanged-=OnClientSideNetChunkIdValueChanged;
           netTerrainChunkArrayHasChanges.OnListChanged-=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
          }
          base.OnNetworkDespawn();
@@ -156,5 +154,53 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          sendingExecutionTime=0d;
         }
+    }
+}
+public struct NetChunkId:IEquatable<NetChunkId>,INetworkSerializable{
+ public Vector2Int cCoord;
+ public Vector2Int cnkRgn;
+ public int        cnkIdx;
+    public NetChunkId(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx){
+     this.cCoord=cCoord;this.cnkRgn=cnkRgn;this.cnkIdx=cnkIdx;
+    }
+    public void NetworkSerialize<T>(BufferSerializer<T>serializer)where T:IReaderWriter{
+     if(serializer.IsWriter){
+      serializer.GetFastBufferWriter().WriteValueSafe(cCoord);
+      serializer.GetFastBufferWriter().WriteValueSafe(cnkRgn);
+      serializer.GetFastBufferWriter().WriteValueSafe(cnkIdx);
+     }else{
+      serializer.GetFastBufferReader().ReadValueSafe(out cCoord);
+      serializer.GetFastBufferReader().ReadValueSafe(out cnkRgn);
+      serializer.GetFastBufferReader().ReadValueSafe(out cnkIdx);
+     }
+    }
+    public static bool operator==(NetChunkId a,NetChunkId b){
+     if(
+      a.cCoord==b.cCoord&&
+      a.cnkRgn==b.cnkRgn&&
+      a.cnkIdx==b.cnkIdx
+     ){
+      return true;
+     }
+     return false;
+    }
+    public static bool operator!=(NetChunkId a,NetChunkId b){
+     return!(a==b);
+    }
+    public override bool Equals(object obj){
+     if(!(obj is NetChunkId netChunkId)){
+      return false;
+     }
+     return this==netChunkId;
+    }
+    public override int GetHashCode(){
+     return HashCode.Combine(
+      cCoord,
+      cnkRgn,
+      cnkIdx
+     );
+    }
+    public bool Equals(NetChunkId other){
+     return this==other;
     }
 }

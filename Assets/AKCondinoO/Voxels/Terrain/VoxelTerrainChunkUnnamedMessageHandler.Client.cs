@@ -20,12 +20,14 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServ
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
-     [NonSerialized]int?clientSidecnkIdx=null;
-        private void OnClientSideNetcnkIdxValueChanged(int previous,int current){
+     [NonSerialized]NetChunkId?clientSideNetChunkId=null;
+      [NonSerialized](Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?clientSideId=null;
+        private void OnClientSideNetChunkIdValueChanged(NetChunkId previous,NetChunkId current){
          if(Core.singleton.isClient){
           if(!IsOwner){
-           if(clientSidecnkIdx==null||current!=clientSidecnkIdx.Value){
-            clientSidecnkIdx=current;
+           if(clientSideNetChunkId==null||current!=clientSideNetChunkId.Value){
+            clientSideNetChunkId=current;
+            clientSideId=(current.cCoord,current.cnkRgn,current.cnkIdx);
             Log.DebugMessage("'ask server for chunk data'");
             for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
              if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Waiting||
@@ -66,7 +68,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [NonSerialized]bool pendingWriteEditData;
      [NonSerialized]bool hasPendingSync;
         internal void NetClientSideManualUpdate(){
-            if(netObj.IsSpawned&&clientSidecnkIdx!=null){
+            if(netObj.IsSpawned&&clientSideId!=null){
              if(waitingWriteEditData){
                  if(OnWroteEditData()){
                      waitingWriteEditData=false;
@@ -88,12 +90,17 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent);
               if(writer.TryBeginWrite(sizeof(int)*2)){
                writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
-               writer.WriteValue((int)clientSidecnkIdx.Value);
+               writer.WriteValue((int)clientSideId.Value.cnkIdx);
                for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
+                if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Pending
+                ){
+                 clientSideTerrainChunkArrayChangeRequestsState[i]=ChangeRequestsState.Waiting;
+                 //  to do: write this segment "i" is needed
+                }
                }
               }
-              if(VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend.TryGetValue(clientSidecnkIdx.Value,out FastBufferWriter oldRequest)){oldRequest.Dispose();}
-              VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend[clientSidecnkIdx.Value]=writer;
+              if(VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend.TryGetValue(clientSideId.Value.cnkIdx,out FastBufferWriter oldRequest)){oldRequest.Dispose();}
+              VoxelSystem.singleton.clientVoxelTerrainChunkEditDataRequestsToSend[clientSideId.Value.cnkIdx]=writer;
              }
             }
         }
