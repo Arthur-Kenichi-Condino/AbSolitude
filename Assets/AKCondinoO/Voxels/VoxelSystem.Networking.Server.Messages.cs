@@ -19,6 +19,8 @@ namespace AKCondinoO.Voxels{
         internal partial class ServerData{
          [NonSerialized]internal static readonly ConcurrentQueue<Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>serverVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,(int,FastBufferReader)>>();
           [NonSerialized]internal readonly Dictionary<int,Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>serverVoxelTerrainChunkEditDataSegmentsReceivedFromClient=new Dictionary<int,Dictionary<int,(int,FastBufferReader)>>();
+            private void OnServerReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
+            }
         }
      //   private void OnServerReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
      //    var messageType=(int)UnnamedMessageTypes.Undefined;

@@ -21,6 +21,8 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
         internal partial class ClientData{
+            internal partial void NetClientSideOnDestroyingCore(){
+            }
             internal partial void NetClientSideDispose(){
              cnkMsgr.terrainSendEditDataToServerBG.Dispose();
             }

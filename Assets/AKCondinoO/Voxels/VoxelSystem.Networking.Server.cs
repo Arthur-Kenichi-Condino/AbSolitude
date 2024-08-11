@@ -102,13 +102,13 @@ namespace AKCondinoO.Voxels{
                   generationRequestedAssignMessageHandlers.Clear();
                   foreach(var gameplayer in toAssignMessageHandlers){
                    if(deassigningCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
-         //           #region expropriation
-         //               for(Vector2Int eCoord=new Vector2Int(),cCoord1=new Vector2Int();eCoord.y<=expropriationDistance.y;eCoord.y++){for(cCoord1.y=-eCoord.y+cCoord_Previous.y;cCoord1.y<=eCoord.y+cCoord_Previous.y;cCoord1.y+=eCoord.y*2){
-         //               for(           eCoord.x=0                                      ;eCoord.x<=expropriationDistance.x;eCoord.x++){for(cCoord1.x=-eCoord.x+cCoord_Previous.x;cCoord1.x<=eCoord.x+cCoord_Previous.x;cCoord1.x+=eCoord.x*2){
-         //                if(Math.Abs(cCoord1.x)>=MaxcCoordx||
-         //                   Math.Abs(cCoord1.y)>=MaxcCoordy){
-         //                 goto _skip;
-         //                }
+                    #region expropriation
+                        for(Vector2Int eCoord=new Vector2Int(),cCoord1=new Vector2Int();eCoord.y<=expropriationDistance.y;eCoord.y++){for(cCoord1.y=-eCoord.y+cCoord_Previous.y;cCoord1.y<=eCoord.y+cCoord_Previous.y;cCoord1.y+=eCoord.y*2){
+                        for(           eCoord.x=0                                      ;eCoord.x<=expropriationDistance.x;eCoord.x++){for(cCoord1.x=-eCoord.x+cCoord_Previous.x;cCoord1.x<=eCoord.x+cCoord_Previous.x;cCoord1.x+=eCoord.x*2){
+                         if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+                            Math.Abs(cCoord1.y)>=MaxcCoordy){
+                          goto _skip;
+                         }
          //                if(
          //                 assigningCoordinates.All(
          //                  kvp=>{
@@ -125,21 +125,21 @@ namespace AKCondinoO.Voxels{
          //                      }
          //                     }
          //                }
-         //                _skip:{}
-         //                if(eCoord.x==0){break;}
-         //               }}
-         //                if(eCoord.y==0){break;}
-         //               }}
-         //           #endregion
+                         _skip:{}
+                         if(eCoord.x==0){break;}
+                        }}
+                         if(eCoord.y==0){break;}
+                        }}
+                    #endregion
                    }
-         //          Vector2Int cCoord=assigningCoordinates[gameplayer];
-         //          #region instantiation
-         //              for(Vector2Int iCoord=new Vector2Int(),cCoord1=new Vector2Int();iCoord.y<=instantiationDistance.y;iCoord.y++){for(cCoord1.y=-iCoord.y+cCoord.y;cCoord1.y<=iCoord.y+cCoord.y;cCoord1.y+=iCoord.y*2){
-         //              for(           iCoord.x=0                                      ;iCoord.x<=instantiationDistance.x;iCoord.x++){for(cCoord1.x=-iCoord.x+cCoord.x;cCoord1.x<=iCoord.x+cCoord.x;cCoord1.x+=iCoord.x*2){
-         //               if(Math.Abs(cCoord1.x)>=MaxcCoordx||
-         //                  Math.Abs(cCoord1.y)>=MaxcCoordy){
-         //                goto _skip;
-         //               }
+                   Vector2Int cCoord=assigningCoordinates[gameplayer];
+                   #region instantiation
+                       for(Vector2Int iCoord=new Vector2Int(),cCoord1=new Vector2Int();iCoord.y<=instantiationDistance.y;iCoord.y++){for(cCoord1.y=-iCoord.y+cCoord.y;cCoord1.y<=iCoord.y+cCoord.y;cCoord1.y+=iCoord.y*2){
+                       for(           iCoord.x=0                                      ;iCoord.x<=instantiationDistance.x;iCoord.x++){for(cCoord1.x=-iCoord.x+cCoord.x;cCoord1.x<=iCoord.x+cCoord.x;cCoord1.x+=iCoord.x*2){
+                        if(Math.Abs(cCoord1.x)>=MaxcCoordx||
+                           Math.Abs(cCoord1.y)>=MaxcCoordy){
+                         goto _skip;
+                        }
          //               int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
          //               while(LimitExecutionTime()){
          //                yield return null;
@@ -173,12 +173,12 @@ namespace AKCondinoO.Voxels{
          //                     cnkMsgr.expropriated=null;
          //                    }
          //               }
-         //               _skip:{}
-         //               if(iCoord.x==0){break;}
-         //              }}
-         //               if(iCoord.y==0){break;}
-         //              }}
-         //          #endregion
+                        _skip:{}
+                        if(iCoord.x==0){break;}
+                       }}
+                        if(iCoord.y==0){break;}
+                       }}
+                   #endregion
                   }
                   toAssignMessageHandlers.Clear();
                  }

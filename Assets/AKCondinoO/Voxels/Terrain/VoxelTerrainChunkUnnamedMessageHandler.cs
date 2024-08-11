@@ -35,6 +35,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal ServerData(VoxelTerrainChunkUnnamedMessageHandler cnkMsgr){
              this.cnkMsgr=cnkMsgr;
             }
+            internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
         }
         [Serializable]internal partial class ClientData{
@@ -42,19 +43,24 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal ClientData(VoxelTerrainChunkUnnamedMessageHandler cnkMsgr){
              this.cnkMsgr=cnkMsgr;
             }
+            internal partial void NetClientSideOnDestroyingCore();
             internal partial void NetClientSideDispose();
         }
         void Awake(){
          netObj=GetComponent<NetworkObject>();
          if(Core.singleton.isServer){
           asServer=new ServerData(this);
+          VoxelSystem.singleton.asServer.terrainMessageHandlers.Add(this);
          }
          if(Core.singleton.isClient){
           asClient=new ClientData(this);
+          VoxelSystem.singleton.asClient.terrainMessageHandlers.Add(this);
          }
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+        }
+        internal static void StaticUpdate(){
         }
      ///*
      //  sizeof(int)   : 4 bytes

@@ -13,6 +13,8 @@ using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync{
         internal partial class ClientData{
+            internal partial void NetClientSideOnDestroyingCore(){
+            }
             internal partial void NetClientSideDispose(){
              cnkArraySync.terrainGetFileEditDataToNetSyncBG.Dispose();
             }
