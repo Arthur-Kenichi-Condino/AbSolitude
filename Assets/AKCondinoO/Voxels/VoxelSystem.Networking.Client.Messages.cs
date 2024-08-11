@@ -15,9 +15,9 @@ using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
-        private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
-         var messageType=(int)UnnamedMessageTypes.Undefined;
-         reader.ReadValueSafe(out messageType);
-        }
+        //private void OnClientReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
+        // var messageType=(int)UnnamedMessageTypes.Undefined;
+        // reader.ReadValueSafe(out messageType);
+        //}
     }
 }
