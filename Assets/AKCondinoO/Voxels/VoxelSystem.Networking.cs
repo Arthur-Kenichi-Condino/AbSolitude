@@ -22,6 +22,16 @@ namespace AKCondinoO.Voxels{
      [SerializeField]VoxelTerrainChunkArraySync             _VoxelTerrainChunkArraySyncPrefab            ;
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
+        internal void NetInit(){
+         if(Core.singleton.isServer){
+          asServer=new ServerData();
+          asServer.NetServerSideInit();
+         }
+         if(Core.singleton.isClient){
+          asClient=new ClientData();
+          asClient.NetClientSideInit();
+         }
+        }
         internal void OnDestroyingCoreNetworkDestroy(){
          Log.DebugMessage("OnDestroyingCoreNetworkDestroy");
          if(Core.singleton.isServer){

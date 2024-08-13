@@ -194,15 +194,10 @@ namespace AKCondinoO.Voxels{
           fadeEndDis  =Mathf.Min(instantiationDistance.x,instantiationDistance.y)*16f+8f
          );
          if(Core.singleton.isServer){
-          asServer=new ServerData();
-          asServer.NetServerSideInit();
           biome.Seed=0;
           proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
          }
-         if(Core.singleton.isClient){
-          asClient=new ClientData();
-          asClient.NetClientSideInit();
-         }
+         NetInit();
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
          Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");

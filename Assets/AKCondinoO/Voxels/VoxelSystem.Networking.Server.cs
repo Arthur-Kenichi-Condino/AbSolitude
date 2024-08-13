@@ -92,6 +92,7 @@ namespace AKCondinoO.Voxels{
                  stopwatch.Restart();
                  var generationRequestedAssignMessageHandlers=VoxelSystem.singleton.generationRequestedAssignMessageHandlers;
                  if(generationRequestedAssignMessageHandlers.Count>0){
+                  //  TO DO: deassign disconnected player
                   foreach(var gameplayer in generationRequestedAssignMessageHandlers){
                    if(assigningCoordinates.TryGetValue(gameplayer,out Vector2Int cCoord_Previous)){
                     deassigningCoordinates[gameplayer]=cCoord_Previous;

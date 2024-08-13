@@ -18,6 +18,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync{
         internal partial class ServerData{
             internal partial void NetServerSideOnDestroyingCore(){
+         //    if(this!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
+         //     StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
+         //    }
+             cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
             }
             internal partial void NetServerSideDispose(){
              cnkArraySync.terrainGetFileEditDataToNetSyncBG.Dispose();

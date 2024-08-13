@@ -105,7 +105,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    VoxelSystem.singleton.terrainArraySyncs.Add(cnkArraySync);
      //   }
      //   internal void OnDestroyingCore(){
-     //    terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning,-1);
      //    if(terrainSendEditDataToServerBG.dataToSendToServer!=null){
      //     foreach(var segmentBufferPair in terrainSendEditDataToServerBG.dataToSendToServer){
      //      FastBufferWriter writer=segmentBufferPair.Value;

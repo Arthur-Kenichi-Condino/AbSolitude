@@ -67,10 +67,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //   internal void OnInstantiated(){
      //   }
      //   internal void OnDestroyingCore(){
-     //    if(this!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
-     //     StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
-     //    }
-     //    terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
      //   }
      //   internal void Dispose(){
      //    terrainGetFileEditDataToNetSyncBG.Dispose();

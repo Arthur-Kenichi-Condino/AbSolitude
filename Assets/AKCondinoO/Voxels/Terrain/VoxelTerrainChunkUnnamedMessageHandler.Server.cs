@@ -21,6 +21,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler{
         internal partial class ServerData{
             internal partial void NetServerSideOnDestroyingCore(){
+             cnkMsgr.terrainSendEditDataToServerBG.IsCompleted(VoxelSystem.singleton.terrainSendEditDataToServerBGThreads[0].IsRunning,-1);
             }
             internal partial void NetServerSideDispose(){
              cnkMsgr.terrainSendEditDataToServerBG.Dispose();
