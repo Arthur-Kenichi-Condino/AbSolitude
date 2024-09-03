@@ -28,6 +28,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkUnnamedMessageHandler:NetworkBehaviour{
      [NonSerialized]internal VoxelTerrainSendEditDataToServerContainer terrainSendEditDataToServerBG=new VoxelTerrainSendEditDataToServerContainer();
      [NonSerialized]internal NetworkObject netObj;
+      internal readonly NetworkVariable<NetChunkId>netChunkId=new NetworkVariable<NetChunkId>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{
@@ -35,8 +39,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal ServerData(VoxelTerrainChunkUnnamedMessageHandler cnkMsgr){
              this.cnkMsgr=cnkMsgr;
             }
+         [NonSerialized]internal LinkedListNode<VoxelTerrainChunkUnnamedMessageHandler>expropriated;
+         [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
+            internal partial void OnInstantiated();
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
+            internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall);
         }
         [Serializable]internal partial class ClientData{
          [NonSerialized]internal VoxelTerrainChunkUnnamedMessageHandler cnkMsgr;
@@ -98,12 +106,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //     VoxelSystem.singleton.terrainMessageHandlers.Add(this);
      //    }
      //   }
-     //   internal void OnInstantiated(){
-     //    cnkArraySync=Instantiate(_VoxelTerrainChunkArraySyncPrefab);
-     //    cnkArraySync.cnkMsgr=this;
-     //    cnkArraySync.OnInstantiated();
-     //    VoxelSystem.singleton.terrainArraySyncs.Add(cnkArraySync);
-     //   }
      //   internal void OnDestroyingCore(){
      //    if(terrainSendEditDataToServerBG.dataToSendToServer!=null){
      //     foreach(var segmentBufferPair in terrainSendEditDataToServerBG.dataToSendToServer){
@@ -118,10 +120,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    }
      //   }
      //[NonSerialized]internal NetworkObject netObj;
-     // internal readonly NetworkVariable<NetChunkId>netChunkId=new NetworkVariable<NetChunkId>(default,
-     //  NetworkVariableReadPermission.Everyone,
-     //  NetworkVariableWritePermission.Server
-     // );
      // internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
      //  new bool[chunkVoxelArraySplits],
      //  NetworkVariableReadPermission.Everyone,

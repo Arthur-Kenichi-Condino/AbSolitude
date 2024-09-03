@@ -31,6 +31,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal ServerData(VoxelTerrainChunkArraySync cnkArraySync){
              this.cnkArraySync=cnkArraySync;
             }
+         [NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
         }

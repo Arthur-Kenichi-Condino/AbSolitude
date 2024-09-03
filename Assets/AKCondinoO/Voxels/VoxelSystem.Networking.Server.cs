@@ -31,7 +31,7 @@ namespace AKCondinoO.Voxels{
              if(Core.singleton.netManager.CustomMessagingManager!=null){
                 Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage-=OnServerReceivedUnnamedMessage;
              }
-             if(this!=null&&serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine!=null){
+             if(VoxelSystem.singleton!=null&&serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine!=null){
               VoxelSystem.singleton.StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
              }
              for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
@@ -69,6 +69,7 @@ namespace AKCondinoO.Voxels{
      //    //  everything at server has been disposed
             }
             internal partial void NetServerSideNetUpdate(){
+             assigningExecutionTime=0;
             }
          [NonSerialized]Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
           [NonSerialized]double assigningMaxExecutionTime=1.0;
@@ -110,22 +111,31 @@ namespace AKCondinoO.Voxels{
                             Math.Abs(cCoord1.y)>=MaxcCoordy){
                           goto _skip;
                          }
-         //                if(
-         //                 assigningCoordinates.All(
-         //                  kvp=>{
-         //                   Vector2Int assigningCoordinate=kvp.Value;
-         //                   return Mathf.Abs(cCoord1.x-assigningCoordinate.x)>instantiationDistance.x||
-         //                          Mathf.Abs(cCoord1.y-assigningCoordinate.y)>instantiationDistance.y;
-         //                  }
-         //                 )
-         //                ){
-         //                     int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
-         //                     if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
-         //                      if(cnkMsgr.expropriated==null){
-         //                       cnkMsgr.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr);
-         //                      }
-         //                     }
-         //                }
+                         while(LimitExecutionTime()){
+                          yield return null;
+                          stopwatch.Restart();
+                         }
+                         if(
+                          assigningCoordinates.All(
+                           kvp=>{
+                            Vector2Int assigningCoordinate=kvp.Value;
+                            return Mathf.Abs(cCoord1.x-assigningCoordinate.x)>instantiationDistance.x||
+                                   Mathf.Abs(cCoord1.y-assigningCoordinate.y)>instantiationDistance.y;
+                           }
+                          )
+                         ){
+                              int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                              if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     )){
+                               if(cnkMsgr     .asServer.expropriated==null){
+                                cnkMsgr     .asServer.expropriated=terrainMessageHandlersPool.AddLast(cnkMsgr     );
+                               }
+                              }
+                              if(terrainArraySyncsAssigned     .TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync             cnkArraySync)){
+                               if(cnkArraySync.asServer.expropriated==null){
+                                cnkArraySync.asServer.expropriated=terrainArraySyncsPool     .AddLast(cnkArraySync);
+                               }
+                              }
+                         }
                          _skip:{}
                          if(eCoord.x==0){break;}
                         }}
@@ -141,39 +151,42 @@ namespace AKCondinoO.Voxels{
                            Math.Abs(cCoord1.y)>=MaxcCoordy){
                          goto _skip;
                         }
-         //               int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
-         //               while(LimitExecutionTime()){
-         //                yield return null;
-         //                stopwatch.Restart();
-         //               }
-         //               if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
-         //                if(terrainMessageHandlersPool.Count>0){
-         //                    cnkMsgr=terrainMessageHandlersPool.First.Value;
-         //                    terrainMessageHandlersPool.RemoveFirst();
-         //                    cnkMsgr.expropriated=null;
-         //                }else{
-         //                    cnkMsgr=Instantiate(_VoxelTerrainChunkUnnamedMessageHandlerPrefab);
-         //                    terrainMessageHandlers.Add(cnkMsgr);
-         //                    cnkMsgr.OnInstantiated();
-         //                    try{
-         //                     cnkMsgr.netObj.Spawn(destroyWithScene:false);
-         //                    }catch(Exception e){
-         //                     Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-         //                    }
-         //                    cnkMsgr.netObj.DontDestroyWithOwner=true;
-         //                }
-         //                    bool firstCall=cnkMsgr.id==null;
-         //                    if(!firstCall&&terrainMessageHandlersAssigned.ContainsKey(cnkMsgr.id.Value.cnkIdx)){
-         //                     terrainMessageHandlersAssigned.Remove(cnkMsgr.id.Value.cnkIdx);
-         //                    }
-         //                    terrainMessageHandlersAssigned.Add(cnkIdx1,cnkMsgr);
-         //                    cnkMsgr.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
-         //               }else{
-         //                    if(cnkMsgr.expropriated!=null){
-         //                     terrainMessageHandlersPool.Remove(cnkMsgr.expropriated);
-         //                     cnkMsgr.expropriated=null;
-         //                    }
-         //               }
+                        while(LimitExecutionTime()){
+                         yield return null;
+                         stopwatch.Restart();
+                        }
+                            int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                            if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
+                             if(terrainMessageHandlersPool.Count>0){
+                                 cnkMsgr=terrainMessageHandlersPool.First.Value;
+                                 terrainMessageHandlersPool.RemoveFirst();
+                                 cnkMsgr.asServer.expropriated=null;
+                             }else{
+                                 cnkMsgr=Instantiate(VoxelSystem.singleton._VoxelTerrainChunkUnnamedMessageHandlerPrefab);
+                                 terrainMessageHandlers.Add(cnkMsgr);
+                                 cnkMsgr.asServer.OnInstantiated();
+                                 try{
+                                  cnkMsgr.netObj.Spawn(destroyWithScene:false);
+                                 }catch(Exception e){
+                                  Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                                 }
+                                 cnkMsgr.netObj.DontDestroyWithOwner=true;
+                             }
+                             bool firstCall=cnkMsgr.asServer.id==null;
+                             if(!firstCall&&terrainMessageHandlersAssigned.ContainsKey(cnkMsgr.asServer.id.Value.cnkIdx)){
+                              terrainMessageHandlersAssigned.Remove(cnkMsgr.asServer.id.Value.cnkIdx);
+                             }
+                             terrainMessageHandlersAssigned.Add(cnkIdx1,cnkMsgr);
+                             cnkMsgr.asServer.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
+                            }else{
+                             if(cnkMsgr.asServer.expropriated!=null){
+                              terrainMessageHandlersPool.Remove(cnkMsgr.asServer.expropriated);
+                              cnkMsgr.asServer.expropriated=null;
+                             }
+                            }
+         //    if(cnkArraySync!=null){
+         //       cnkArraySync.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
+         //    }
                         _skip:{}
                         if(iCoord.x==0){break;}
                        }}
@@ -196,7 +209,7 @@ namespace AKCondinoO.Voxels{
      //     }
      //       DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
      //    }
-     //    assigningExecutionTime=0;
+     ////    assigningExecutionTime=0;
      //    foreach(var kvp in terrainMessageHandlersAssigned){
      //     VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
      //     cnkMsgr             .NetServerSideManualUpdate();
