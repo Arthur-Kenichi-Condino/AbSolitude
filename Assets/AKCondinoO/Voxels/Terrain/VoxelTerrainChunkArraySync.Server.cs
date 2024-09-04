@@ -17,24 +17,35 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync{
         internal partial class ServerData{
+            internal partial void OnInstantiated(){
+            }
             internal partial void NetServerSideOnDestroyingCore(){
+             Log.DebugMessage("NetServerSideOnDestroyingCore");
          //    if(this!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
          //     StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
          //    }
              cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
             }
             internal partial void NetServerSideDispose(){
+             Log.DebugMessage("NetServerSideDispose");
              cnkArraySync.terrainGetFileEditDataToNetSyncBG.Dispose();
             }
+            internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
+             if(firstCall||cCoord1!=id.Value.cCoord){
+              id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
+              cnkArraySync.netChunkId.Value=new(
+               id.Value.cCoord,
+               id.Value.cnkRgn,
+               id.Value.cnkIdx
+              );
+              hasReadyEditData=false;
+              pendingGetFileEditData=true;
+             }
+            }
+         [NonSerialized]bool hasReadyEditData;
+         [NonSerialized]bool waitingGetFileEditData;
+         [NonSerialized]bool pendingGetFileEditData;
         }
-     //   internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
-     //    if(firstCall||cCoord1!=id.Value.cCoord){
-     //     id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
-     //     //pendingGetFileEditData=DEBUG_FORCE_SEND_ALL_VOXEL_DATA;
-     //     hasReadyEditData=false;
-     //     pendingGetFileEditData=true;
-     //    }
-     //   }
      //[NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
      //   internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
      //    Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
@@ -42,9 +53,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    //pendingGetFileEditData=true;
      //   }
      //[SerializeField]bool DEBUG_FORCE_SEND_ALL_VOXEL_DATA=false;
-     //[NonSerialized]bool hasReadyEditData;
-     //[NonSerialized]bool waitingGetFileEditData;
-     //[NonSerialized]bool pendingGetFileEditData;
      //   internal void NetServerSideManualUpdate(){
      //       if(cnkMsgr!=null&&cnkMsgr.netObj.IsSpawned){
      //        if(waitingGetFileEditData){

@@ -24,6 +24,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync:NetworkBehaviour{
      [NonSerialized]internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      [NonSerialized]internal NetworkObject netObj;
+      internal readonly NetworkVariable<NetChunkId>netChunkId=new NetworkVariable<NetChunkId>(default,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{
@@ -32,8 +36,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              this.cnkArraySync=cnkArraySync;
             }
          [NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
+         [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
+            internal partial void OnInstantiated();
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
+            internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall);
         }
         [Serializable]internal partial class ClientData{
          [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
