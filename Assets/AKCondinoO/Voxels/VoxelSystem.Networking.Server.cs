@@ -69,6 +69,14 @@ namespace AKCondinoO.Voxels{
      //    //  everything at server has been disposed
             }
             internal partial void NetServerSideNetUpdate(){
+             if(VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT!=0uL){
+              Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+         //     foreach(var kvp in terrainMessageHandlersAssigned){
+         //      VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
+         //      cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
+         //     }
+                VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
+             }
              assigningExecutionTime=0;
             }
          [NonSerialized]Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
@@ -155,21 +163,21 @@ namespace AKCondinoO.Voxels{
                          yield return null;
                          stopwatch.Restart();
                         }
-                            int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
-                            if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     )){
+                        int cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+                        if(!terrainMessageHandlersAssigned.TryGetValue(cnkIdx1,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     )){
                              if(terrainMessageHandlersPool.Count>0){
-                                 cnkMsgr     =terrainMessageHandlersPool.First.Value;
-                                 terrainMessageHandlersPool.RemoveFirst();
-                                 cnkMsgr     .asServer.expropriated=null;
+                              cnkMsgr     =terrainMessageHandlersPool.First.Value;
+                              terrainMessageHandlersPool.RemoveFirst();
+                              cnkMsgr     .asServer.expropriated=null;
                              }else{
-                                 cnkMsgr     =Instantiate(VoxelSystem.singleton._VoxelTerrainChunkUnnamedMessageHandlerPrefab);
-                                 cnkMsgr     .asServer.OnInstantiated();
-                                 try{
-                                  cnkMsgr     .netObj.Spawn(destroyWithScene:false);
-                                 }catch(Exception e){
-                                  Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-                                 }
-                                 cnkMsgr     .netObj.DontDestroyWithOwner=true;
+                              cnkMsgr     =Instantiate(VoxelSystem.singleton._VoxelTerrainChunkUnnamedMessageHandlerPrefab);
+                              cnkMsgr     .asServer.OnInstantiated();
+                              try{
+                               cnkMsgr     .netObj.Spawn(destroyWithScene:false);
+                              }catch(Exception e){
+                               Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                              }
+                              cnkMsgr     .netObj.DontDestroyWithOwner=true;
                              }
                              bool firstCall=cnkMsgr     .asServer.id==null;
                              if(!firstCall&&terrainMessageHandlersAssigned.ContainsKey(cnkMsgr     .asServer.id.Value.cnkIdx)){
@@ -177,26 +185,26 @@ namespace AKCondinoO.Voxels{
                              }
                              terrainMessageHandlersAssigned.Add(cnkIdx1,cnkMsgr     );
                              cnkMsgr     .asServer.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
-                            }else{
+                        }else{
                              if(cnkMsgr     .asServer.expropriated!=null){
                               terrainMessageHandlersPool.Remove(cnkMsgr     .asServer.expropriated);
                               cnkMsgr     .asServer.expropriated=null;
                              }
-                            }
-                            if(!terrainArraySyncsAssigned     .TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync             cnkArraySync)){
+                        }
+                        if(!terrainArraySyncsAssigned     .TryGetValue(cnkIdx1,out VoxelTerrainChunkArraySync             cnkArraySync)){
                              if(terrainArraySyncsPool     .Count>0){
-                                 cnkArraySync=terrainArraySyncsPool     .First.Value;
-                                 terrainArraySyncsPool     .RemoveFirst();
-                                 cnkArraySync.asServer.expropriated=null;
+                              cnkArraySync=terrainArraySyncsPool     .First.Value;
+                              terrainArraySyncsPool     .RemoveFirst();
+                              cnkArraySync.asServer.expropriated=null;
                              }else{
-                                 cnkArraySync=Instantiate(VoxelSystem.singleton._VoxelTerrainChunkArraySyncPrefab            );
-                                 cnkArraySync.asServer.OnInstantiated();
-                                 try{
-                                  cnkArraySync.netObj.Spawn(destroyWithScene:false);
-                                 }catch(Exception e){
-                                  Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-                                 }
-                                 cnkArraySync.netObj.DontDestroyWithOwner=true;
+                              cnkArraySync=Instantiate(VoxelSystem.singleton._VoxelTerrainChunkArraySyncPrefab            );
+                              cnkArraySync.asServer.OnInstantiated();
+                              try{
+                               cnkArraySync.netObj.Spawn(destroyWithScene:false);
+                              }catch(Exception e){
+                               Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                              }
+                              cnkArraySync.netObj.DontDestroyWithOwner=true;
                              }
                              bool firstCall=cnkArraySync.asServer.id==null;
                              if(!firstCall&&terrainArraySyncsAssigned     .ContainsKey(cnkArraySync.asServer.id.Value.cnkIdx)){
@@ -204,12 +212,12 @@ namespace AKCondinoO.Voxels{
                              }
                              terrainArraySyncsAssigned     .Add(cnkIdx1,cnkArraySync);
                              cnkArraySync.asServer.OncCoordChanged(cCoord1,cnkIdx1,firstCall);
-                            }else{
+                        }else{
                              if(cnkArraySync.asServer.expropriated!=null){
                               terrainArraySyncsPool     .Remove(cnkArraySync.asServer.expropriated);
                               cnkArraySync.asServer.expropriated=null;
                              }
-                            }
+                        }
                         _skip:{}
                         if(iCoord.x==0){break;}
                        }}
@@ -224,20 +232,6 @@ namespace AKCondinoO.Voxels{
             }
         }
      //   internal void NetServerSideNetUpdate(){
-     //    if(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT!=0uL){
-     //     Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-     //     foreach(var kvp in terrainMessageHandlersAssigned){
-     //      VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
-     //      cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-     //     }
-     //       DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
-     //    }
-     ////    assigningExecutionTime=0;
-     //    foreach(var kvp in terrainMessageHandlersAssigned){
-     //     VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
-     //     cnkMsgr             .NetServerSideManualUpdate();
-     //     cnkMsgr.cnkArraySync.NetServerSideManualUpdate();
-     //    }
      //    foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
      //     if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
      //      clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
