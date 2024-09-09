@@ -41,6 +41,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
             internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall);
+            internal partial void NetServerSideManualUpdate();
         }
         [Serializable]internal partial class ClientData{
          [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
@@ -60,6 +61,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           asClient=new ClientData(this);
           VoxelSystem.singleton.asClient.terrainArraySyncs.Add(this);
          }
+        }
+        public override void OnNetworkSpawn(){
+         base.OnNetworkSpawn();
+        }
+        public override void OnNetworkDespawn(){
+         base.OnNetworkDespawn();
         }
         internal static void StaticUpdate(){
         }

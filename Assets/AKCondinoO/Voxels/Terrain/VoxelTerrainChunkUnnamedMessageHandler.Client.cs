@@ -35,7 +35,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                if(clientSideNetChunkId==null||current!=clientSideNetChunkId.Value){
                 clientSideNetChunkId=current;
                 clientSideId=(current.cCoord,current.cnkRgn,current.cnkIdx);
-                Log.DebugMessage("'ask server for chunk data'");
+                Log.DebugMessage("'this message handler has a new id'");
+         //       Log.DebugMessage("'ask server for chunk data'");
          //       for(int i=0;i<clientSideTerrainChunkArrayChangeRequestsState.Length;++i){
          //        if(clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Waiting||
          //           clientSideTerrainChunkArrayChangeRequestsState[i]==ChangeRequestsState.Synchronized

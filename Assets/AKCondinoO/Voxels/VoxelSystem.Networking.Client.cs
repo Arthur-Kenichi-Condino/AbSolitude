@@ -16,27 +16,23 @@ namespace AKCondinoO.Voxels{
             internal partial void NetClientSideInit(){
             }
             internal partial void NetClientSideOnDestroyingCoreNetworkDestroy(){
-             for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
-              if(i<terrainMessageHandlers.Count){
-               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
-               cnkMsgr     .asClient.NetClientSideOnDestroyingCore();
-              }
-              if(i<terrainArraySyncs     .Count){
-               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
-               cnkArraySync.asClient.NetClientSideOnDestroyingCore();
-              }
+             for(int i=0;i<terrainMessageHandlers.Count;++i){
+              VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+              cnkMsgr     .asClient.NetClientSideOnDestroyingCore();
+             }
+             for(int i=0;i<terrainArraySyncs     .Count;++i){
+              VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+              cnkArraySync.asClient.NetClientSideOnDestroyingCore();
              }
             }
             internal partial void NetClientSideOnDestroyingCoreNetworkDispose(){
-             for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
-              if(i<terrainMessageHandlers.Count){
-               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
-               cnkMsgr     .asClient.NetClientSideDispose();
-              }
-              if(i<terrainArraySyncs     .Count){
-               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
-               cnkArraySync.asClient.NetClientSideDispose();
-              }
+             for(int i=0;i<terrainMessageHandlers.Count;++i){
+              VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+              cnkMsgr     .asClient.NetClientSideDispose();
+             }
+             for(int i=0;i<terrainArraySyncs     .Count;++i){
+              VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+              cnkArraySync.asClient.NetClientSideDispose();
              }
              terrainMessageHandlers.Clear();
              terrainArraySyncs     .Clear();

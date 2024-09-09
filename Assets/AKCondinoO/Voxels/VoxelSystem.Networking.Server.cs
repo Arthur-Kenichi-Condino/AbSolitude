@@ -34,27 +34,23 @@ namespace AKCondinoO.Voxels{
              if(VoxelSystem.singleton!=null&&serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine!=null){
               VoxelSystem.singleton.StopCoroutine(serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine);
              }
-             for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
-              if(i<terrainMessageHandlers.Count){
-               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
-               cnkMsgr     .asServer.NetServerSideOnDestroyingCore();
-              }
-              if(i<terrainArraySyncs     .Count){
-               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
-               cnkArraySync.asServer.NetServerSideOnDestroyingCore();
-              }
+             for(int i=0;i<terrainMessageHandlers.Count;++i){
+              VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+              cnkMsgr     .asServer.NetServerSideOnDestroyingCore();
+             }
+             for(int i=0;i<terrainArraySyncs     .Count;++i){
+              VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+              cnkArraySync.asServer.NetServerSideOnDestroyingCore();
              }
             }
             internal partial void NetServerSideOnDestroyingCoreNetworkDispose(){
-             for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
-              if(i<terrainMessageHandlers.Count){
-               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
-               cnkMsgr     .asServer.NetServerSideDispose();
-              }
-              if(i<terrainArraySyncs     .Count){
-               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
-               cnkArraySync.asServer.NetServerSideDispose();
-              }
+             for(int i=0;i<terrainMessageHandlers.Count;++i){
+              VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+              cnkMsgr     .asServer.NetServerSideDispose();
+             }
+             for(int i=0;i<terrainArraySyncs     .Count;++i){
+              VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+              cnkArraySync.asServer.NetServerSideDispose();
              }
              terrainMessageHandlers.Clear();
              terrainArraySyncs     .Clear();
@@ -78,6 +74,28 @@ namespace AKCondinoO.Voxels{
                 VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
              }
              assigningExecutionTime=0;
+     //    foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
+     //     if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
+     //      clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
+     //     }
+     //    }
+             foreach(var cnkMsgr      in terrainMessageHandlersAssigned){
+              cnkMsgr     .Value.asServer.NetServerSideManualUpdate();
+             }
+             foreach(var cnkArraySync in terrainArraySyncsAssigned     ){
+              cnkArraySync.Value.asServer.NetServerSideManualUpdate();
+             }
+     //    #region netVoxelArrays
+     //        foreach(var netVoxelArray in netVoxelArraysActive){
+     //         netVoxelArray.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
+     //         if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
+     //        }
+     //        foreach(var netVoxelArray in netVoxelArraysToPool){
+     //         netVoxelArray.OnPool();
+     //        }
+     //        netVoxelArraysToPool.Clear();
+     //    #endregion
+     //    clientIdsRequestingNetVoxelArrayDisconnected.Clear();
             }
          [NonSerialized]Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
           [NonSerialized]double assigningMaxExecutionTime=1.0;
@@ -231,23 +249,5 @@ namespace AKCondinoO.Voxels{
                 goto Loop;
             }
         }
-     //   internal void NetServerSideNetUpdate(){
-     //    foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
-     //     if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
-     //      clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
-     //     }
-     //    }
-     //    #region netVoxelArrays
-     //        foreach(var netVoxelArray in netVoxelArraysActive){
-     //         netVoxelArray.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
-     //         if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
-     //        }
-     //        foreach(var netVoxelArray in netVoxelArraysToPool){
-     //         netVoxelArray.OnPool();
-     //        }
-     //        netVoxelArraysToPool.Clear();
-     //    #endregion
-     //    clientIdsRequestingNetVoxelArrayDisconnected.Clear();
-     //   }
     }
 }

@@ -40,6 +40,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               );
              }
             }
+            internal partial void NetServerSideManualUpdate(){
+            }
         }
      //         pendingWriteEditData=true;
      //   internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
@@ -48,8 +50,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    if(cnkArraySync!=null){
      //       cnkArraySync.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
      //    }
-     //   }
-     //   internal void NetServerSideManualUpdate(){
      //   }
     }
 }

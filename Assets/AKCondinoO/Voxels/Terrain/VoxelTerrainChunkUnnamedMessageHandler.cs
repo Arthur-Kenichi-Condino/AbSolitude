@@ -45,6 +45,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
             internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall);
+            internal partial void NetServerSideManualUpdate();
         }
         [Serializable]internal partial class ClientData{
          [NonSerialized]internal VoxelTerrainChunkUnnamedMessageHandler cnkMsgr;
@@ -67,6 +68,20 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+         if(Core.singleton.isClient){
+          asClient.OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
+          netChunkId.OnValueChanged+=asClient.OnClientSideNetChunkIdValueChanged;
+     //     OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
+     //     netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+     //     clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
+         }
+        }
+        public override void OnNetworkDespawn(){
+         if(Core.singleton.isClient){
+          netChunkId.OnValueChanged-=asClient.OnClientSideNetChunkIdValueChanged;
+     //     netTerrainChunkArrayHasChanges.OnListChanged-=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+         }
+         base.OnNetworkDespawn();
         }
         internal static void StaticUpdate(){
         }
@@ -125,15 +140,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //  NetworkVariableReadPermission.Everyone,
      //  NetworkVariableWritePermission.Server
      // );
-     //   public override void OnNetworkSpawn(){
-     //    if(Core.singleton.isClient){
-     //     OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
-     //     netChunkId.OnValueChanged+=OnClientSideNetChunkIdValueChanged;
-     //     OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
-     //     netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
-     //     clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
-     //    }
-     //   }
      //   public override void OnNetworkDespawn(){
      //    if(this!=null&&clientSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
      //     StopCoroutine(clientSideSendVoxelTerrainChunkEditDataFileCoroutine);

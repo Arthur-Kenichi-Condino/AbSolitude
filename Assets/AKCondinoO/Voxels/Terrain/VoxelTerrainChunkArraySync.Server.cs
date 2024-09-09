@@ -45,6 +45,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          [NonSerialized]bool hasReadyEditData;
          [NonSerialized]bool waitingGetFileEditData;
          [NonSerialized]bool pendingGetFileEditData;
+            internal partial void NetServerSideManualUpdate(){
+            }
         }
      //[NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
      //   internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
