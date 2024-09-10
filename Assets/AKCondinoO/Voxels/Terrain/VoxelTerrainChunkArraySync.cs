@@ -64,8 +64,19 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+         if(Core.singleton.isClient){
+          asClient.OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
+          netChunkId.OnValueChanged+=asClient.OnClientSideNetChunkIdValueChanged;
+     //     OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
+     //     netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+     //     clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
+         }
         }
         public override void OnNetworkDespawn(){
+         if(Core.singleton.isClient){
+          netChunkId.OnValueChanged-=asClient.OnClientSideNetChunkIdValueChanged;
+     //     netTerrainChunkArrayHasChanges.OnListChanged-=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+         }
          base.OnNetworkDespawn();
         }
         internal static void StaticUpdate(){
