@@ -16,6 +16,7 @@ using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync{
+     [SerializeField]bool DEBUG_FORCE_SEND_ALL_VOXEL_DATA=false;
         internal partial class ServerData{
             internal partial void OnInstantiated(){
             }
@@ -42,45 +43,43 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               pendingGetFileEditData=true;
              }
             }
+         [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
+            internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
+             Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
+             clientIdsRequestingData.Add(clientId);
+            }
          [NonSerialized]bool hasReadyEditData;
          [NonSerialized]bool waitingGetFileEditData;
          [NonSerialized]bool pendingGetFileEditData;
             internal partial void NetServerSideManualUpdate(){
+                if(cnkArraySync!=null&&cnkArraySync.netObj.IsSpawned){
+                 if(waitingGetFileEditData){
+         //            //Log.DebugMessage("waitingGetFileEditData");
+         //            if(OnGotFileEditData()){
+         //                waitingGetFileEditData=false;
+         //                if(!pendingGetFileEditData){
+         //                 hasReadyEditData=true;
+         //                }
+         //            }
+                 }else{
+                     if(pendingGetFileEditData){
+                         //Log.DebugMessage("pendingGetFileEditData");
+         //                if(CanGetFileEditData()){
+         //                    pendingGetFileEditData=false;
+         //                    waitingGetFileEditData=true;
+         //                }
+                     }else{
+         //                if(hasReadyEditData){
+         //                    //  TO DO: try send
+         //                    TrySendFileEditData();
+         //                }else{
+         //                }
+                     }
+                 }
+                }
             }
         }
-     //[NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
-     //   internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-     //    Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
-     //    clientIdsRequestingData.Add(clientId);
-     //    //pendingGetFileEditData=true;
-     //   }
-     //[SerializeField]bool DEBUG_FORCE_SEND_ALL_VOXEL_DATA=false;
      //   internal void NetServerSideManualUpdate(){
-     //       if(cnkMsgr!=null&&cnkMsgr.netObj.IsSpawned){
-     //        if(waitingGetFileEditData){
-     //            //Log.DebugMessage("waitingGetFileEditData");
-     //            if(OnGotFileEditData()){
-     //                waitingGetFileEditData=false;
-     //                if(!pendingGetFileEditData){
-     //                 hasReadyEditData=true;
-     //                }
-     //            }
-     //        }else{
-     //            if(pendingGetFileEditData){
-     //                //Log.DebugMessage("pendingGetFileEditData");
-     //                if(CanGetFileEditData()){
-     //                    pendingGetFileEditData=false;
-     //                    waitingGetFileEditData=true;
-     //                }
-     //            }else{
-     //                if(hasReadyEditData){
-     //                    //  TO DO: try send
-     //                    TrySendFileEditData();
-     //                }else{
-     //                }
-     //            }
-     //        }
-     //       }
      //   }
      //   bool CanGetFileEditData(){
      //    if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
@@ -118,7 +117,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //     }
      //    }
      //   }
-     //[SerializeField]internal VoxelArraySync _VoxelArraySyncPrefab;
      // [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      //[NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
      // [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;

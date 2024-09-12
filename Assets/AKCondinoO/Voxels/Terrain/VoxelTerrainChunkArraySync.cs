@@ -22,6 +22,7 @@ using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainSendEditDataToServ
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelTerrainChunkArraySync:NetworkBehaviour{
+     [SerializeField]internal VoxelArraySync _VoxelArraySyncPrefab;
      [NonSerialized]internal VoxelTerrainGetFileEditDataToNetSyncContainer terrainGetFileEditDataToNetSyncBG=new VoxelTerrainGetFileEditDataToNetSyncContainer();
      [NonSerialized]internal NetworkObject netObj;
       internal readonly NetworkVariable<NetChunkId>netChunkId=new NetworkVariable<NetChunkId>(default,
