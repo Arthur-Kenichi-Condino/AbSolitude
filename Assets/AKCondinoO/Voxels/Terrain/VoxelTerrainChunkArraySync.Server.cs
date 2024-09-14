@@ -48,6 +48,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
              clientIdsRequestingData.Add(clientId);
             }
+         [NonSerialized]bool sending;
          [NonSerialized]bool hasReadyEditData;
          [NonSerialized]bool waitingGetFileEditData;
          [NonSerialized]bool pendingGetFileEditData;
@@ -64,10 +65,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  }else{
                      if(pendingGetFileEditData){
                          //Log.DebugMessage("pendingGetFileEditData");
-         //                if(CanGetFileEditData()){
-         //                    pendingGetFileEditData=false;
-         //                    waitingGetFileEditData=true;
-         //                }
+                         if(CanGetFileEditData()){
+                             pendingGetFileEditData=false;
+                             waitingGetFileEditData=true;
+                         }
                      }else{
          //                if(hasReadyEditData){
          //                    //  TO DO: try send
@@ -78,20 +79,20 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  }
                 }
             }
+            bool CanGetFileEditData(){
+             if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+              //Log.DebugMessage("CanGetFileEditData");
+              cnkArraySync.terrainGetFileEditDataToNetSyncBG.DEBUG_FORCE_SEND_ALL_VOXEL_DATA=cnkArraySync.DEBUG_FORCE_SEND_ALL_VOXEL_DATA;
+              cnkArraySync.terrainGetFileEditDataToNetSyncBG.cCoord=id.Value.cCoord;
+              cnkArraySync.terrainGetFileEditDataToNetSyncBG.cnkRgn=id.Value.cnkRgn;
+              cnkArraySync.terrainGetFileEditDataToNetSyncBG.cnkIdx=id.Value.cnkIdx;
+              VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Schedule(cnkArraySync.terrainGetFileEditDataToNetSyncBG);
+              return true;
+             }
+             return false;
+            }
         }
      //   internal void NetServerSideManualUpdate(){
-     //   }
-     //   bool CanGetFileEditData(){
-     //    if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
-     //     Log.DebugMessage("CanGetFileEditData");
-     //     terrainGetFileEditDataToNetSyncBG.DEBUG_FORCE_SEND_ALL_VOXEL_DATA=DEBUG_FORCE_SEND_ALL_VOXEL_DATA;
-     //     terrainGetFileEditDataToNetSyncBG.cCoord=id.Value.cCoord;
-     //     terrainGetFileEditDataToNetSyncBG.cnkRgn=id.Value.cnkRgn;
-     //     terrainGetFileEditDataToNetSyncBG.cnkIdx=id.Value.cnkIdx;
-     //     VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Schedule(terrainGetFileEditDataToNetSyncBG);
-     //     return true;
-     //    }
-     //    return false;
      //   }
      //   bool OnGotFileEditData(){
      //    if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){

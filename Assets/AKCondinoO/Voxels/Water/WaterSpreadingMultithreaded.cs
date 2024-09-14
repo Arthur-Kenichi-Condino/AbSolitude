@@ -401,9 +401,9 @@ namespace AKCondinoO.Voxels.Water{
                if(oldIdCacheList.Count<=0){
                 VoxelSystem.Concurrent.waterNeighbourhoodCacheListPool.Enqueue(oldIdCacheList);
                 VoxelSystem.Concurrent.waterNeighbourhoodCache.Remove(cacheOldId.cnkIdx);
-                Log.DebugMessage("removed empty list for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
+                //Log.DebugMessage("removed empty list for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
                }
-               Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
+               //Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
               }
               VoxelSystem.Concurrent.waterNeighbourhoodCacheIds.Remove(nCS);
              }
@@ -477,7 +477,7 @@ namespace AKCondinoO.Voxels.Water{
              ){
               VoxelSystem.Concurrent.waterCache.Remove(cacheOldId.cnkIdx);
               VoxelSystem.Concurrent.waterCacheIds.Remove(cS);
-              Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
+              //Log.DebugMessage("removed old value for cacheOldId.cnkIdx:"+cacheOldId.cnkIdx);
              }
             }
             container.cacheBinaryWriter.Dispose();

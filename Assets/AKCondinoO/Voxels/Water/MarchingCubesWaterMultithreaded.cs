@@ -124,7 +124,7 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
          if(container.cnkIdx==null){
           return;
          }
-         Log.DebugMessage("MarchingCubesWaterMultithreaded:Execute()");
+         //Log.DebugMessage("MarchingCubesWaterMultithreaded:Execute()");
          container.TempVer.Clear();
          container.TempTri.Clear();
          bool hasChangedIndex=false;

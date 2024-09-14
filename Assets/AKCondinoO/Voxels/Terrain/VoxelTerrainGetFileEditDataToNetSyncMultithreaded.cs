@@ -52,7 +52,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         protected override void Cleanup(){
         }
         protected override void Execute(){
-         Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA:"+container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA);
+         //Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA:"+container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA);
          for(int i=0;i<container.voxels.Length;++i){
           Array.Clear(container.voxels[i],0,container.voxels[i].Length);
          }
@@ -145,12 +145,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           }
           if(++writtenDataCount>=voxelsInThisSegment){
            segment++;
+           if(segment>=container.voxels.Length){
+            //Log.DebugMessage("'segment>=container.voxels.Length':segment:"+segment+":container.voxels.Length:"+container.voxels.Length);
+            goto _Break;
+           }
            voxelsInThisSegment=VoxelsInSegment(segment);
            writtenDataCount=0;
-          }
-          if(segment>=container.voxels.Length){
-           Log.Warning("'segment>=container.voxels.Length':'this should not happen'");
-           goto _Break;
           }
          }}}
          _Break:{}
