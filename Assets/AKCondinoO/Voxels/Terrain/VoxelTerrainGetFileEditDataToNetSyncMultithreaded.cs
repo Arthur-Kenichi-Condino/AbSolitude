@@ -144,9 +144,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
            container.voxels[segment][writtenDataCount]=netVoxel;
           }
           if(++writtenDataCount>=voxelsInThisSegment){
+           //Log.DebugMessage("'++writtenDataCount>=voxelsInThisSegment':segment:"+segment+":voxelsInThisSegment:"+voxelsInThisSegment);
            segment++;
            if(segment>=container.voxels.Length){
-            //Log.DebugMessage("'segment>=container.voxels.Length':segment:"+segment+":container.voxels.Length:"+container.voxels.Length);
+            //Log.DebugMessage("'segment>=container.voxels.Length':container.voxels.Length:"+container.voxels.Length);
             goto _Break;
            }
            voxelsInThisSegment=VoxelsInSegment(segment);
