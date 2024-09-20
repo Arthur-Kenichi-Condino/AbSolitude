@@ -33,7 +33,7 @@ The value of a Scrollbar is determined by the position of the handle along its l
 
 A significant difference between the Scrollbar and the similar [Slider](script-Slider.md) control is that the Scrollbar's handle can change in size to represent the distance of scrolling available; when the view can scroll only a short way, the handle will fill up most of the bar and only allow a slight shift either direction.
 
-The Scrollbar has a single event called _On Value Changed_ that responds as the user drags the handle. The current value is passed to the even function as a `float` parameter. Typical use cases for a scrollbar include:
+The Scrollbar has a single event called _On Value Changed_ that responds as the user drags the handle. The current value is passed to the event function as a `float` parameter. Typical use cases for a scrollbar include:
 
 * Scrolling a piece of text vertically.
 * Scrolling a timeline horizontally.

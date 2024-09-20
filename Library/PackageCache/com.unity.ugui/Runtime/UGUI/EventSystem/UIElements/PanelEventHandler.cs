@@ -251,15 +251,14 @@ namespace UnityEngine.UIElements
             if (m_Panel == null || !ReadPointerData(m_PointerEvent, eventData))
                 return;
 
-            var scrollDelta = eventData.scrollDelta;
-            scrollDelta.y = -scrollDelta.y;
+            var uguiScrollDelta = eventData.scrollDelta;
+            var scrollTicks = eventSystem.currentInputModule.ConvertPointerEventScrollDeltaToTicks(uguiScrollDelta);
 
-            const float kPixelPerLine = 20;
-            // The old input system reported scroll deltas in lines, we report pixels.
-            // Need to scale as the UI system expects lines.
-            scrollDelta /= kPixelPerLine;
+            // ISXB-808: Scale scrollDelta to match the UIToolkit convention.
+            var uitkScrollDelta = scrollTicks * WheelEvent.scrollDeltaPerTick;
+            uitkScrollDelta.y = -uitkScrollDelta.y;
 
-            using (var e = WheelEvent.GetPooled(scrollDelta, m_PointerEvent))
+            using (var e = WheelEvent.GetPooled(uitkScrollDelta, m_PointerEvent))
             {
                 SendEvent(e, eventData);
             }

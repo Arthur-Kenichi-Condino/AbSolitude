@@ -6,6 +6,7 @@ using UnityEngine;
 
 using Codice.Client.Common.Connection;
 using Codice.CM.Common;
+using Codice.LogWrapper;
 using Unity.PlasticSCM.Editor.AssetMenu;
 using Unity.PlasticSCM.Editor.AssetsOverlays;
 using Unity.PlasticSCM.Editor.AssetsOverlays.Cache;
@@ -29,14 +30,14 @@ namespace Unity.PlasticSCM.Editor
         /// </summary>
         public static event Action OnNotificationUpdated = delegate { };
 
-        internal static IAssetStatusCache AssetStatusCache 
-        { 
-            get { return mAssetStatusCache; } 
+        internal static IAssetStatusCache AssetStatusCache
+        {
+            get { return mAssetStatusCache; }
         }
 
-        internal static WorkspaceOperationsMonitor WorkspaceOperationsMonitor 
-        { 
-            get { return mWorkspaceOperationsMonitor; } 
+        internal static WorkspaceOperationsMonitor WorkspaceOperationsMonitor
+        {
+            get { return mWorkspaceOperationsMonitor; }
         }
 
         internal static PlasticConnectionMonitor ConnectionMonitor
@@ -100,6 +101,8 @@ namespace Unity.PlasticSCM.Editor
 
             PlasticApp.InitializeIfNeeded();
 
+            mLog.Debug("Enable");
+
             if (!FindWorkspace.HasWorkspace(ApplicationDataPath.Get()))
                 return;
 
@@ -118,6 +121,8 @@ namespace Unity.PlasticSCM.Editor
                 return;
 
             mIsEnabledForWorkspace = true;
+
+            mLog.Debug("EnableForWorkspace " + wkInfo.ClientPath);
 
             PlasticApp.SetWorkspace(wkInfo);
 
@@ -148,6 +153,16 @@ namespace Unity.PlasticSCM.Editor
             Task.Run(() => EnsureServerConnection(wkInfo, mPlasticConnectionMonitor));
         }
 
+        internal static void Shutdown()
+        {
+            mLog.Debug("Shutdown");
+
+            HandleCredsAliasAndServerCert.CleanHostUnreachableExceptionListener();
+            mPlasticConnectionMonitor.Stop();
+
+            Disable();
+        }
+
         internal static void Disable()
         {
             if (!mIsEnabled)
@@ -155,11 +170,37 @@ namespace Unity.PlasticSCM.Editor
 
             try
             {
+                mLog.Debug("Disable");
+
+                DisableForWorkspace();
+
                 PlasticApp.Dispose();
+            }
+            finally
+            {
+                mIsEnabled = false;
+            }
+        }
 
-                if (!mIsEnabledForWorkspace)
-                    return;
+        internal static void SetNotificationStatus(
+            PlasticWindow plasticWindow,
+            PlasticNotification.Status status)
+        {
+            mNotificationStatus = status;
 
+            plasticWindow.UpdateWindowIcon(status);
+
+            if (OnNotificationUpdated != null)
+                OnNotificationUpdated.Invoke();
+        }
+
+        static void DisableForWorkspace()
+        {
+            if (!mIsEnabledForWorkspace)
+                return;
+
+            try
+            {
                 mWorkspaceOperationsMonitor.Stop();
 
                 AssetsProcessors.Disable();
@@ -170,21 +211,13 @@ namespace Unity.PlasticSCM.Editor
             }
             finally
             {
-                mIsEnabled = false;
                 mIsEnabledForWorkspace = false;
             }
         }
 
-        internal static void SetNotificationStatus(
-            PlasticWindow plasticWindow,
-            PlasticNotification.Status status)
+        internal static PlasticNotification.Status GetNotificationStatus()
         {
-            mNotificationStatus = status;
-
-            plasticWindow.SetupWindowTitle(status);
-
-            if (OnNotificationUpdated != null) 
-                OnNotificationUpdated.Invoke();
+            return mNotificationStatus;
         }
 
         static WorkspaceOperationsMonitor BuildWorkspaceOperationsMonitor(
@@ -203,7 +236,7 @@ namespace Unity.PlasticSCM.Editor
         {
             if (IsUnitTesting)
                 return;
-                
+
             RepositorySpec repSpec = PlasticGui.Plastic.API.GetRepositorySpec(wkInfo);
 
             plasticConnectionMonitor.SetRepositorySpecForEventTracking(repSpec);
@@ -232,5 +265,7 @@ namespace Unity.PlasticSCM.Editor
         static PlasticConnectionMonitor mPlasticConnectionMonitor = new PlasticConnectionMonitor();
         static bool mIsEnabled;
         static bool mIsEnabledForWorkspace;
+
+        static readonly ILog mLog = PlasticApp.GetLogger("PlasticPlugin");
     }
 }

@@ -580,7 +580,7 @@ namespace Burst.Compiler.IL.Tests
             return left >= right;
         }
 
-#if UNITY_2021_3_OR_NEWER
+#if BURST_INTERNAL || UNITY_2021_3_OR_NEWER
         [TestCompiler(12321)]
         public static nint BitwiseNotNInt(int x)
         {
@@ -809,7 +809,7 @@ namespace Burst.Compiler.IL.Tests
             return ((int)left) >> right;
         }
 
-#if UNITY_2021_3_OR_NEWER
+#if BURST_INTERNAL || UNITY_2021_3_OR_NEWER
         [TestCompiler(0U)]
         [TestCompiler(1U)]
         [TestCompiler(0x212412U)]
@@ -1359,6 +1359,26 @@ namespace Burst.Compiler.IL.Tests
         {
             A = 0, B = 6, C = -128
         }
+        public enum ByteEnum : byte
+        {
+            A = 0, B = 1, C = 255
+        }
+        public enum ShortEnum : short
+        {
+            A = 0, B = 32767, C = -32768
+        }
+        public enum UShortEnum : ushort
+        {
+            A = 0, B = 1, C = 65535
+        }
+        public enum SignedEnum : int
+        {
+            A = 0, B = 0x7FFFFFFF, C = int.MinValue
+        }
+        public enum UnsignedEnum : uint
+        {
+            A = 0, B = 6, C = 0xFFFFFFFF
+        }
 
         [TestCompiler(SByteEnum.C)]
         public static float TestSByteEnum(SByteEnum a)
@@ -1366,10 +1386,56 @@ namespace Burst.Compiler.IL.Tests
             return (float) a;
         }
 
-        public enum UnsignedEnum : uint
+        [TestCompiler(ByteEnum.A)]
+        [TestCompiler(ByteEnum.B)]
+        [TestCompiler(ByteEnum.C)]
+        public static int TestInvertByteEnum(ByteEnum a)
         {
-            A = 0, B = 6, C = 0xFFFFFFFF
+            return -((int)a);
         }
+
+        [TestCompiler(SByteEnum.A)]
+        [TestCompiler(SByteEnum.B)]
+        [TestCompiler(SByteEnum.C)]
+        public static int TestInvertSByteEnum(SByteEnum a)
+        {
+            return -((int)a);
+        }
+
+        [TestCompiler(ShortEnum.A)]
+        [TestCompiler(ShortEnum.B)]
+        [TestCompiler(ShortEnum.C)]
+        public static int TestInvertShortEnum(ShortEnum a)
+        {
+            return -((int)a);
+        }
+
+        [TestCompiler(UShortEnum.A)]
+        [TestCompiler(UShortEnum.B)]
+        [TestCompiler(UShortEnum.C)]
+        public static int TestInvertUShortEnum(UShortEnum a)
+        {
+            return -((int)a);
+        }
+
+        [TestCompiler(SignedEnum.A)]
+        [TestCompiler(SignedEnum.B)]
+        [TestCompiler(SignedEnum.C)]
+        public static int TestInvertIntEnum(SignedEnum a)
+        {
+            return -((int)a);
+        }
+
+        // Disabled on older Unity versions due to an IL2CPP bug
+#if BURST_INTERNAL || UNITY_2023_1_OR_NEWER
+        [TestCompiler(UnsignedEnum.A)]
+        [TestCompiler(UnsignedEnum.B)]
+        [TestCompiler(UnsignedEnum.C)]
+        public static int TestInvertUIntEnum(UnsignedEnum a)
+        {
+            return -((int)a);
+        }
+#endif
 
         [TestCompiler(UnsignedEnum.C)]
         public static float TestUnsignedEnum(UnsignedEnum a)

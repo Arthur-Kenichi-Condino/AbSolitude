@@ -1,5 +1,9 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims;
 using System;
@@ -33,12 +37,16 @@ namespace AKCondinoO.UI{
            Log.DebugMessage("initialize netManager");
            toRemove.AddRange(netManager.NetworkConfig.Prefabs.Prefabs);
            foreach(NetworkPrefab networkPrefab in toRemove){
+            Log.DebugMessage("'netManager.NetworkConfig.Prefabs.Remove':"+networkPrefab.Prefab+":"+networkPrefab);
             netManager.NetworkConfig.Prefabs.Remove(networkPrefab);
            }
            toRemove.Clear();
            foreach(var gO in manuallyAddedPrefabs){
             if(!defaultPrefabList.Contains(gO)){
              netManager.AddNetworkPrefab(gO);
+             Log.DebugMessage("'manuallyAddedPrefabs':'netManager.AddNetworkPrefab':"+gO);
+            }else{
+             Log.DebugMessage("'manuallyAddedPrefabs':'defaultPrefabList.Contains(gO)':"+gO);
             }
            }
            foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/",typeof(GameObject))){
@@ -52,9 +60,13 @@ namespace AKCondinoO.UI{
             Type t=simObject.GetType();
             if(!defaultPrefabList.Contains(simObject.gameObject)){
              netManager.AddNetworkPrefab(simObject.gameObject);
+             Log.DebugMessage("'netManager.AddNetworkPrefab':"+simObject.gameObject);
+            }else{
+             Log.DebugMessage("'defaultPrefabList.Contains(simObject.gameObject)':"+simObject.gameObject);
             }
             PooledPrefabInstanceHandler prefabInstanceHandler=new PooledPrefabInstanceHandler(simObject.gameObject);
             netManager.PrefabHandler.AddHandler(simObject.gameObject,prefabInstanceHandler);
+            Log.DebugMessage("'prefabInstanceHandlers.Add':"+t);
             prefabInstanceHandlers.Add(t,prefabInstanceHandler);
            }
           }

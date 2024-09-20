@@ -112,7 +112,7 @@ namespace Unity.Burst.Editor
 
             // This can be setup to get more diagnostics
             var debuggingStr = Environment.GetEnvironmentVariable("UNITY_BURST_DEBUG");
-            IsDebugging = debuggingStr != null;
+            IsDebugging = debuggingStr != null && int.TryParse(debuggingStr, out var debugLevel) && debugLevel > 0;
             if (IsDebugging)
             {
                 UnityEngine.Debug.LogWarning("[com.unity.burst] Extra debugging is turned on.");

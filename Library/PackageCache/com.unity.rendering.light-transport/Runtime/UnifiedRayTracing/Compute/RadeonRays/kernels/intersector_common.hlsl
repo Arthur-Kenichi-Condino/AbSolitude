@@ -17,8 +17,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ********************************************************************/
 #define INVALID_NODE 0xFFFFFFFFu
-#define IS_INTERNAL_NODE(i, c) ((i < (c - 1)) ? 1 : 0)
-#define IS_LEAF_NODE(i, c) (!IS_INTERNAL_NODE(i, c))
+#define INVALID_IDX 0xffffffff
+
+#define BVH_NODE_SIZE 64
+#define BVH_NODE_STRIDE_SHIFT 6
+#define BVH_NODE_BYTE_OFFSET(i) ((i) << BVH_NODE_STRIDE_SHIFT)
+
+#define LEAF_NODE_INDEX(i) (i | (1 << 31))
+#define IS_LEAF_NODE(i) (i & (1 << 31))
+#define IS_INTERNAL_NODE(i) (!IS_LEAF_NODE(i))
+#define GET_LEAF_NODE_FIRST_PRIM(i) (i & ~0xE0000000)
+#define GET_LEAF_NODE_PRIM_COUNT(i) (((i & 0x60000000) >> 29) + 1)
 
 struct BvhNode
 {
@@ -82,7 +91,7 @@ struct InstanceInfo
     int blas_offset;
     int instance_mask;
     int vertex_offset;
-    int index_offset;
+    int blas_leaves_offset;
     int triangle_culling_enabled; // int instead of a bool because the shader compiler refuses to play ball
     int invert_triangle_culling; //same
     uint user_instance_id;
@@ -173,36 +182,21 @@ uint2 IntersectInternalNode(in BvhNode node, in float3 invd, in float3 o, in flo
     return (s0.x < s1.x && traverse0 != INVALID_NODE) ? uint2(traverse0, traverse1) : uint2(traverse1, traverse0);
 }
 
-struct VertexPoolDesc
+float3 FetchVertex(StructuredBuffer<uint> vertex_buffer, int vertex_stride, int vertex_offset, uint idx)
 {
-    StructuredBuffer<uint> index_buffer;
-    StructuredBuffer<uint> vertex_buffer;
-    int vertex_stride;
-};
-
-uint3 GetFaceIndices(VertexPoolDesc mesh_info, int index_offset, int tri_idx)
-{
-    return uint3(
-        mesh_info.index_buffer[index_offset + 3 * tri_idx],
-        mesh_info.index_buffer[index_offset + 3 * tri_idx + 1],
-        mesh_info.index_buffer[index_offset + 3 * tri_idx + 2]);
-}
-
-float3 FetchVertex(VertexPoolDesc mesh_info, int vertex_offset, uint idx)
-{
-    uint index_in_floats = vertex_offset + idx * mesh_info.vertex_stride;
+    uint index_in_floats = vertex_offset + idx * vertex_stride;
     return float3(
-        asfloat(mesh_info.vertex_buffer[index_in_floats]),
-        asfloat(mesh_info.vertex_buffer[index_in_floats + 1]),
-        asfloat(mesh_info.vertex_buffer[index_in_floats + 2]));
+        asfloat(vertex_buffer[index_in_floats]),
+        asfloat(vertex_buffer[index_in_floats + 1]),
+        asfloat(vertex_buffer[index_in_floats + 2]));
 }
 
-bool IntersectLeafTriangle(VertexPoolDesc mesh_info, int vertex_offset, int index_offset, int cull_mode, in BvhNode node, int triangleIndex, in float3 d, in float3 o, in float tmin, inout float closest_t, inout float2 uv, inout bool front_face)
+bool IntersectLeafTriangle(StructuredBuffer<uint> vertex_buffer, int vertex_stride, int vertex_offset, uint4 leaf_node, int cull_mode, in float3 d, in float3 o, in float tmin, inout float closest_t, inout float2 uv, inout bool front_face)
 {
-    uint3 triangle_indices = GetFaceIndices(mesh_info, index_offset, triangleIndex);
-    float3 v0 = FetchVertex(mesh_info, vertex_offset, triangle_indices.x);
-    float3 v1 = FetchVertex(mesh_info, vertex_offset, triangle_indices.y);
-    float3 v2 = FetchVertex(mesh_info, vertex_offset, triangle_indices.z);
+    uint3 triangle_indices = leaf_node.xyz;
+    float3 v0 = FetchVertex(vertex_buffer, vertex_stride, vertex_offset, triangle_indices.x);
+    float3 v1 = FetchVertex(vertex_buffer, vertex_stride, vertex_offset, triangle_indices.y);
+    float3 v2 = FetchVertex(vertex_buffer, vertex_stride, vertex_offset, triangle_indices.z);
 
     return fast_intersect_triangle(cull_mode, o, d, v0, v1, v2, tmin, closest_t, uv, front_face);
 }

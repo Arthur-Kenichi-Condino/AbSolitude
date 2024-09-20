@@ -22,7 +22,7 @@ namespace UnityEngine.Rendering
 
         [SerializeField]
         SerializedDictionary<string, SceneBakeData> m_SceneBakeData = new();
-        static Dictionary<string, ProbeVolumeBakingSet> sceneToBakingSet = new Dictionary<string, ProbeVolumeBakingSet>();
+        internal static Dictionary<string, ProbeVolumeBakingSet> sceneToBakingSet = new Dictionary<string, ProbeVolumeBakingSet>();
 
         /// <summary>
         /// Tries to add a scene to the baking set.
@@ -151,6 +151,7 @@ namespace UnityEngine.Rendering
             {
                 AssetDatabase.DeleteAsset(scenarioData.cellDataAsset.GetAssetPath());
                 AssetDatabase.DeleteAsset(scenarioData.cellOptionalDataAsset.GetAssetPath());
+                AssetDatabase.DeleteAsset(scenarioData.cellProbeOcclusionDataAsset.GetAssetPath());
                 EditorUtility.SetDirty(this);
             }
 
@@ -171,9 +172,27 @@ namespace UnityEngine.Rendering
 
         internal ProbeVolumeBakingSet Clone()
         {
-            var newSet = Instantiate(this);
-            newSet.m_SceneGUIDs.Clear();
-            newSet.m_SceneBakeData.Clear();
+            var newSet = CreateInstance<ProbeVolumeBakingSet>();
+
+            // We don't want to clone everything in the set
+            // Especially don't copy reference to baked data !
+            newSet.probeOffset = probeOffset;
+            newSet.simplificationLevels = simplificationLevels;
+            newSet.minDistanceBetweenProbes = minDistanceBetweenProbes;
+            newSet.renderersLayerMask = renderersLayerMask;
+            newSet.minRendererVolumeSize = minRendererVolumeSize;
+            newSet.skyOcclusion = skyOcclusion;
+            newSet.skyOcclusionBakingSamples = skyOcclusionBakingSamples;
+            newSet.skyOcclusionBakingBounces = skyOcclusionBakingBounces;
+            newSet.skyOcclusionAverageAlbedo = skyOcclusionAverageAlbedo;
+            newSet.skyOcclusionBackFaceCulling = skyOcclusionBackFaceCulling;
+            newSet.skyOcclusionShadingDirection = skyOcclusionShadingDirection;
+            newSet.useRenderingLayers = useRenderingLayers;
+            newSet.renderingLayerMasks = renderingLayerMasks != null ? (ProbeLayerMask[])renderingLayerMasks.Clone() : null;
+            newSet.useRenderingLayers = useRenderingLayers;
+            newSet.useRenderingLayers = useRenderingLayers;
+            newSet.useRenderingLayers = useRenderingLayers;
+            newSet.useRenderingLayers = useRenderingLayers;
             return newSet;
         }
 
@@ -210,6 +229,7 @@ namespace UnityEngine.Rendering
                     {
                         DeleteAsset(scenarioData.cellDataAsset.GetAssetPath());
                         DeleteAsset(scenarioData.cellOptionalDataAsset.GetAssetPath());
+                        DeleteAsset(scenarioData.cellProbeOcclusionDataAsset.GetAssetPath());
                     }
                 }
             }
@@ -260,9 +280,10 @@ namespace UnityEngine.Rendering
                     }
                 }
 
-                GetCellDataFileNames(name, newName, out string cellDataFileName, out string cellOptionalDataFileName);
+                GetCellDataFileNames(name, newName, out string cellDataFileName, out string cellOptionalDataFileName, out string cellProbeOcclusionDataFileName);
                 data.cellDataAsset.RenameAsset(cellDataFileName);
                 data.cellOptionalDataAsset.RenameAsset(cellOptionalDataFileName);
+                data.cellProbeOcclusionDataAsset.RenameAsset(cellProbeOcclusionDataFileName);
             }
 
             return newName;
@@ -319,32 +340,35 @@ namespace UnityEngine.Rendering
                 var scenarioName = scenario.Key;
                 var scenarioData = scenario.Value;
 
-                GetCellDataFileNames(name, scenarioName, out string cellDataFileName, out string cellOptionalDataFileName);
+                GetCellDataFileNames(name, scenarioName, out string cellDataFileName, out string cellOptionalDataFileName, out string cellProbeOcclusionDataFileName);
 
                 if (!scenarioData.cellDataAsset.GetAssetPath().Contains(cellDataFileName))
                 {
                     scenarioData.cellDataAsset.RenameAsset(cellDataFileName);
                     scenarioData.cellOptionalDataAsset.RenameAsset(cellOptionalDataFileName);
+                    scenarioData.cellProbeOcclusionDataAsset.RenameAsset(cellProbeOcclusionDataFileName);
                 }
             }
         }
 
-        internal void GetCellDataFileNames(string basePath, string scenario, out string cellDataFileName, out string cellOptionalDataFileName)
+        internal void GetCellDataFileNames(string basePath, string scenario, out string cellDataFileName, out string cellOptionalDataFileName, out string cellProbeOcclusionDataFileName)
         {
             cellDataFileName = $"{basePath}-{scenario}.CellData.bytes";
             cellOptionalDataFileName = $"{basePath}-{scenario}.CellOptionalData.bytes";
+            cellProbeOcclusionDataFileName = $"{basePath}-{scenario}.CellProbeOcclusionData.bytes";
         }
 
-        internal void GetBlobFileNames(string scenario, out string cellDataFilename, out string cellBricksDataFilename, out string cellOptionalDataFilename, out string cellSharedDataFilename, out string cellSupportDataFilename)
+        internal void GetBlobFileNames(string scenario, out string cellDataFilename, out string cellBricksDataFilename, out string cellOptionalDataFilename, out string cellProbeOcclusionDataFilename, out string cellSharedDataFilename, out string cellSupportDataFilename)
         {
             string baseDir = Path.GetDirectoryName(AssetDatabase.GetAssetPath(this));
 
             string basePath = Path.Combine(baseDir, name);
 
-            GetCellDataFileNames(basePath, scenario, out string dataFile, out string optionalDataFile);
+            GetCellDataFileNames(basePath, scenario, out string dataFile, out string optionalDataFile, out string probeOcclusionDataFile);
 
             cellDataFilename = GetOrCreateFileName(scenarios[scenario].cellDataAsset, dataFile);
             cellOptionalDataFilename = GetOrCreateFileName(scenarios[scenario].cellOptionalDataAsset, optionalDataFile);
+            cellProbeOcclusionDataFilename = GetOrCreateFileName(scenarios[scenario].cellProbeOcclusionDataAsset, probeOcclusionDataFile);
             cellBricksDataFilename = GetOrCreateFileName(cellBricksDataAsset, basePath + ".CellBricksData.bytes");
             cellSharedDataFilename = GetOrCreateFileName(cellSharedDataAsset, basePath + ".CellSharedData.bytes");
             cellSupportDataFilename = GetOrCreateFileName(cellSupportDataAsset, basePath + ".CellSupportData.bytes");
@@ -366,7 +390,7 @@ namespace UnityEngine.Rendering
             if (scenario == null || !scenarios.TryGetValue(scenario, out var data) || !data.IsValid())
                 return 0;
 
-            return GetFileSize(data.cellDataAsset.GetAssetPath()) + GetFileSize(data.cellOptionalDataAsset.GetAssetPath());
+            return GetFileSize(data.cellDataAsset.GetAssetPath()) + GetFileSize(data.cellOptionalDataAsset.GetAssetPath()) + GetFileSize(data.cellProbeOcclusionDataAsset.GetAssetPath());
         }
 
         internal void SanitizeScenes()
@@ -422,9 +446,9 @@ namespace UnityEngine.Rendering
         {
             float maxSizedDim = Mathf.Max(volumeSize.x, Mathf.Max(volumeSize.y, volumeSize.z));
             float maxSideInBricks = maxSizedDim / ProbeReferenceVolume.instance.MinDistanceBetweenProbes();
-            int subdiv = Mathf.FloorToInt(Mathf.Log(maxSideInBricks, 3));
+            int subdiv = Mathf.FloorToInt(Mathf.Log(maxSideInBricks, 3)) - 1;
 
-            return Mathf.Max(subdiv, maxSubdiv) - 1;
+            return Mathf.Max(subdiv, maxSubdiv);
         }
 
         static void InflateBound(ref Bounds bounds, ProbeVolume pv)
@@ -446,7 +470,7 @@ namespace UnityEngine.Rendering
             maxPadding = cellSizeVector - new Vector3(Mathf.Abs(maxPadding.x), Mathf.Abs(maxPadding.y), Mathf.Abs(maxPadding.z));
 
             // Find the size of the brick we can put for every axis given the padding size
-            int maxSubdiv = ProbeReferenceVolume.instance.GetMaxSubdivision();
+            int maxSubdiv = ProbeReferenceVolume.instance.GetMaxSubdivision() - 1;
             if (pv.overridesSubdivLevels) maxSubdiv = Mathf.Min(pv.highestSubdivLevelOverride, maxSubdiv);
 
             float rightPaddingSubdivLevel = ProbeReferenceVolume.instance.BrickSize(MaxSubdivLevelInProbeVolume(new Vector3(maxPadding.x, originalBounds.size.y, originalBounds.size.z), maxSubdiv));
@@ -531,12 +555,7 @@ namespace UnityEngine.Rendering
                     GameObject go = new GameObject("ProbeVolumePerSceneData");
                     go.hideFlags |= HideFlags.HideInHierarchy;
                     var perSceneData = go.AddComponent<ProbeVolumePerSceneData>();
-                    perSceneData.sceneGUID = sceneGUID;
                     SceneManager.MoveGameObjectToScene(go, scene);
-                }
-                else
-                {
-                    data.sceneGUID = sceneGUID; // Upgrade for older scenes.
                 }
             }
         }
@@ -554,10 +573,10 @@ namespace UnityEngine.Rendering
         internal static bool SceneHasProbeVolumes(string sceneGUID)
         {
             var bakingSet = GetBakingSetForScene(sceneGUID);
-            return bakingSet.GetSceneBakeData(sceneGUID)?.hasProbeVolume ?? false;
+            return bakingSet?.GetSceneBakeData(sceneGUID)?.hasProbeVolume ?? false;
         }
 
-		internal bool DialogNoProbeVolumeInSetShown()
+        internal bool DialogNoProbeVolumeInSetShown()
         {
             return dialogNoProbeVolumeInSetShown;
         }

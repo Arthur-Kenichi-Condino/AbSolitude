@@ -34,12 +34,23 @@ namespace UnityEngine.Rendering
             public abstract NativeArray<SphericalHarmonicsL2> irradiance { get; }
             /// <summary>Array storing the probe validity. A value of 1 means a probe is invalid.</summary>
             public abstract NativeArray<float> validity { get; }
+            /// <summary>Array storing 4 light occlusion values for each probe.</summary>
+            public abstract NativeArray<Vector4> occlusion { get; }
 
             /// <summary>
             /// This is called before the start of baking to allow allocating necessary resources.
             /// </summary>
+            /// <param name="bakeProbeOcclusion">Whether to bake occlusion for mixed lights for each probe.</param>
             /// <param name="probePositions">The probe positions. Also contains reflection probe positions used for normalization.</param>
-            public abstract void Initialize(NativeArray<Vector3> probePositions);
+            public abstract void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions);
+
+            /// <summary>
+            /// This is called before the start of baking to allow allocating necessary resources.
+            /// </summary>
+            /// <param name="bakeProbeOcclusion">Whether to bake occlusion for mixed lights for each probe.</param>
+            /// <param name="probePositions">The probe positions. Also contains reflection probe positions used for normalization.</param>
+            /// <param name="bakedRenderingLayerMasks">The rendering layer masks assigned to each probe. It is used when fixing seams between subdivision levels</param>
+            public abstract void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions, NativeArray<uint> bakedRenderingLayerMasks);
 
             /// <summary>
             /// Run a step of light baking. Baking is considered done when currentStep property equals stepCount.
@@ -61,20 +72,26 @@ namespace UnityEngine.Rendering
             int bakedProbeCount;
             NativeArray<Vector3> positions;
             InputExtraction.BakeInput input;
+            bool bakeProbeOcclusion;
 
             public BakeJob[] jobs;
 
             // Outputs
             public NativeArray<SphericalHarmonicsL2> irradianceResults;
             public NativeArray<float> validityResults;
+            public NativeArray<Vector4> occlusionResults;
+
+            // Baked in a other job, but used in this one if available when fixing seams
+            private NativeArray<uint> renderingLayerMasks;
 
             public override ulong currentStep => (ulong)bakedProbeCount;
             public override ulong stepCount => (ulong)positions.Length;
 
             public override NativeArray<SphericalHarmonicsL2> irradiance => irradianceResults;
             public override NativeArray<float> validity => validityResults;
+            public override NativeArray<Vector4> occlusion => occlusionResults;
 
-            public override void Initialize(NativeArray<Vector3> probePositions)
+            public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions)
             {
                 if (!InputExtraction.ExtractFromScene(out input))
                 {
@@ -87,6 +104,22 @@ namespace UnityEngine.Rendering
 
                 irradianceResults = new NativeArray<SphericalHarmonicsL2>(positions.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
                 validityResults = new NativeArray<float>(positions.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+
+                this.bakeProbeOcclusion = bakeProbeOcclusion;
+                if (bakeProbeOcclusion)
+                    occlusionResults = new NativeArray<Vector4>(positions.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            }
+
+            public override void Initialize(bool bakeProbeOcclusion, NativeArray<Vector3> probePositions, NativeArray<uint> bakedRenderingLayerMasks)
+            {
+                renderingLayerMasks.Dispose();
+                if (bakedRenderingLayerMasks.IsCreated)
+                {
+                    renderingLayerMasks = new NativeArray<uint>(bakedRenderingLayerMasks.Length, Allocator.Persistent);
+                    renderingLayerMasks.CopyFrom(bakedRenderingLayerMasks);
+                }
+
+                Initialize(bakeProbeOcclusion, probePositions);
             }
 
             public override bool Step()
@@ -94,7 +127,7 @@ namespace UnityEngine.Rendering
                 if (input == null)
                     return false;
 
-                var context = BakeContext.New(input, positions);
+                var context = BakeContext.New(input, positions, bakeProbeOcclusion);
                 if (!context.isCreated)
                     return false;
 
@@ -105,7 +138,7 @@ namespace UnityEngine.Rendering
                         ref var job = ref jobs[i];
                         if (job.probeCount != 0)
                         {
-                            if (!context.Bake(job, ref irradianceResults, ref validityResults))
+                            if (!context.Bake(job, ref irradianceResults, ref validityResults, ref occlusionResults))
                                 return false;
 
                             bakedProbeCount += job.probeCount;
@@ -117,6 +150,13 @@ namespace UnityEngine.Rendering
                     context.Dispose();
                 }
 
+                // Fixup lighting for probes part of bricks with different subdivision levels
+                // When baking reflection probes, we want to skip this step
+                if (m_BakingBatch != null)
+                {
+                    FixSeams(s_BakeData.positionRemap, positions, irradiance, validity, renderingLayerMasks);
+                }
+
                 return true;
             }
 
@@ -124,6 +164,9 @@ namespace UnityEngine.Rendering
             {
                 irradianceResults.Dispose();
                 validityResults.Dispose();
+                if (bakeProbeOcclusion)
+                    occlusionResults.Dispose();
+                renderingLayerMasks.Dispose();
             }
         }
 
@@ -139,6 +182,7 @@ namespace UnityEngine.Rendering
             public int directSampleCount;
             public int indirectSampleCount;
             public int validitySampleCount;
+            public int occlusionSampleCount;
             public int maxBounces;
 
             public int skyOcclusionBakingSamples;
@@ -184,6 +228,7 @@ namespace UnityEngine.Rendering
                 this.directSampleCount = directSampleCount * sampleCountMultiplier;
                 this.indirectSampleCount = indirectSampleCount * sampleCountMultiplier;
                 this.validitySampleCount = indirectSampleCount * sampleCountMultiplier;
+                this.occlusionSampleCount = directSampleCount * sampleCountMultiplier;
                 this.maxBounces = maxBounces;
 
                 this.indirectScale = lightingSettings.indirectScale;
@@ -216,6 +261,7 @@ namespace UnityEngine.Rendering
                     IntegrateDirectRadiance,
                     IntegrateIndirectRadiance,
                     IntegrateValidity,
+                    IntegrateOcclusion,
                     Postprocess,
                     ReadBack,
                     None
@@ -237,6 +283,8 @@ namespace UnityEngine.Rendering
             public BufferID directRadianceBufferId;
             public BufferID indirectRadianceBufferId;
             public BufferID validityBufferId;
+            public BufferID perProbeLightIndicesId;
+            public BufferID occlusionBufferId;
 
             public BufferID windowedDirectSHBufferId;
             public BufferID boostedIndirectSHBufferId;
@@ -249,11 +297,15 @@ namespace UnityEngine.Rendering
             const float k_PushOffset = 0.0001f;
             const int k_MaxProbeCountPerBatch = 128 * 1024;
 
+            const int maxOcclusionLightsPerProbe = 4;
             static readonly int sizeOfFloat = 4;
             static readonly int SHL2RGBElements = 3 * 9;
             static readonly int sizeSHL2RGB = sizeOfFloat * SHL2RGBElements;
 
-            public static BakeContext New(InputExtraction.BakeInput input, NativeArray<Vector3> probePositions)
+            int[] perProbeShadowmaskIndices;
+            bool bakeProbeOcclusion;
+
+            public static BakeContext New(InputExtraction.BakeInput input, NativeArray<Vector3> probePositions, bool bakeProbeOcclusion)
             {
                 var ctx = new BakeContext
                 {
@@ -282,41 +334,67 @@ namespace UnityEngine.Rendering
                     return ctx;
                 }
 
+                ctx.bakeProbeOcclusion = bakeProbeOcclusion;
                 ctx.CreateBuffers(probePositions.Length);
 
                 // Upload probe positions
                 var positionsSlice = new BufferSlice<Vector3>(ctx.positionsBufferID, 0);
-                var writeEvent = ctx.ctx.CreateEvent();
-                ctx.ctx.WriteBuffer(positionsSlice, probePositions, writeEvent);
-                ctx.ctx.Wait(writeEvent);
-                ctx.ctx.DestroyEvent(writeEvent);
+                var positionWriteEvent = ctx.ctx.CreateEvent();
+                ctx.ctx.WriteBuffer(positionsSlice, probePositions, positionWriteEvent);
+
+                if (bakeProbeOcclusion)
+                {
+                    // Upload per probe light indices
+                    int[] perProbeLightIndicesArray = InputExtraction.ComputeOcclusionLightIndicesFromBakeInput(input, probePositions.ToArray(), (uint)maxOcclusionLightsPerProbe);
+                    using var perProbeLightIndices = new NativeArray<int>(perProbeLightIndicesArray, Allocator.TempJob);
+                    var perProbeLightIndicesSlice = new BufferSlice<int>(ctx.perProbeLightIndicesId, 0);
+                    var perProbeLightIndicesWriteEvent = ctx.ctx.CreateEvent();
+                    ctx.ctx.WriteBuffer(perProbeLightIndicesSlice, perProbeLightIndices, perProbeLightIndicesWriteEvent);
+                    ctx.ctx.Wait(perProbeLightIndicesWriteEvent);
+                    ctx.ctx.DestroyEvent(perProbeLightIndicesWriteEvent);
+
+                    // Store per-probe shadowmask indices. They will be used to swizzle the occlusion buffer.
+                    ctx.perProbeShadowmaskIndices = InputExtraction.GetShadowmaskChannelsFromLightIndices(input, perProbeLightIndicesArray);
+                }
+
+                // Wait for writes to finish
+                ctx.ctx.Wait(positionWriteEvent);
+                ctx.ctx.DestroyEvent(positionWriteEvent);
 
                 return ctx;
             }
 
             private void CreateBuffers(int probeCount)
             {
-                // Allocate shared position buffer for all jobs
-                var positionsBytes = (ulong)(sizeOfFloat * 3 * probeCount);
-                positionsBufferID = ctx.CreateBuffer(positionsBytes);
+                // Allocate shared position and light index buffer for all jobs
+                positionsBufferID = ctx.CreateBuffer((ulong)probeCount, (ulong)(3 * sizeOfFloat));
 
                 int batchSize = Mathf.Min(k_MaxProbeCountPerBatch, probeCount);
                 var shBytes = (ulong)(sizeSHL2RGB * batchSize);
                 var validityBytes = (ulong)(sizeOfFloat * batchSize);
 
-                directRadianceBufferId = ctx.CreateBuffer(shBytes);
-                indirectRadianceBufferId = ctx.CreateBuffer(shBytes);
-                validityBufferId = ctx.CreateBuffer(validityBytes);
+                directRadianceBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+                indirectRadianceBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+                validityBufferId = ctx.CreateBuffer((ulong)batchSize, (ulong)sizeOfFloat);
 
-                windowedDirectSHBufferId = ctx.CreateBuffer(shBytes);
-                boostedIndirectSHBufferId = ctx.CreateBuffer(shBytes);
-                combinedSHBufferId = ctx.CreateBuffer(shBytes);
-                irradianceBufferId = ctx.CreateBuffer(shBytes);
+                windowedDirectSHBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+                boostedIndirectSHBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+                combinedSHBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+                irradianceBufferId = ctx.CreateBuffer((ulong)(batchSize * SHL2RGBElements), (ulong)sizeOfFloat);
+
+                if (bakeProbeOcclusion)
+                {
+                    var lightIndicesBytes = (ulong)(sizeOfFloat * maxOcclusionLightsPerProbe * probeCount);
+                    perProbeLightIndicesId = ctx.CreateBuffer((ulong)(maxOcclusionLightsPerProbe * probeCount), (ulong)sizeOfFloat);
+
+                    var occlusionBytes = (ulong)(sizeOfFloat * maxOcclusionLightsPerProbe * batchSize);
+                    occlusionBufferId = ctx.CreateBuffer((ulong)(maxOcclusionLightsPerProbe * batchSize), (ulong)sizeOfFloat);
+                }
 
                 allocatedBuffers = true;
             }
 
-            public bool Bake(in BakeJob job, ref NativeArray<SphericalHarmonicsL2> irradianceResults, ref NativeArray<float> validityResults)
+            public bool Bake(in BakeJob job, ref NativeArray<SphericalHarmonicsL2> irradianceResults, ref NativeArray<float> validityResults, ref NativeArray<Vector4> occlusionResults)
             {
                 // Divide the job into batches of 128k probes to reduce memory usage.
                 int batchCount = CoreUtils.DivRoundUp(job.probeCount, k_MaxProbeCountPerBatch);
@@ -326,6 +404,7 @@ namespace UnityEngine.Rendering
                 var directRadianceSlice = new BufferSlice<SphericalHarmonicsL2>(directRadianceBufferId, 0);
                 var indirectRadianceSlice = new BufferSlice<SphericalHarmonicsL2>(indirectRadianceBufferId, 0);
                 var validitySlice = new BufferSlice<float>(validityBufferId, 0);
+                var occlusionSlice = new BufferSlice<Vector4>(occlusionBufferId, 0);
                 var windowedDirectRadianceSlice = new BufferSlice<SphericalHarmonicsL2>(windowedDirectSHBufferId, 0);
                 var boostedIndirectRadianceSlice = indirectRadianceSlice;
                 var combinedSHSlice = new BufferSlice<SphericalHarmonicsL2>(combinedSHBufferId, 0);
@@ -337,8 +416,9 @@ namespace UnityEngine.Rendering
                     int batchOffset = batchIndex * k_MaxProbeCountPerBatch;
                     int probeCount = Mathf.Min(job.probeCount - batchOffset, k_MaxProbeCountPerBatch);
 
-                    // Get the correct slice of position as all jobs share the same array.
+                    // Get the correct slice of position and light indices as all jobs share the same array.
                     var positionsSlice = new BufferSlice<Vector3>(positionsBufferID, (ulong)(job.startOffset + batchOffset));
+                    var perProbeLightIndicesSlice = new BufferSlice<int>(perProbeLightIndicesId, (ulong)(job.startOffset + batchOffset) * maxOcclusionLightsPerProbe);
 
                     /// Baking
 
@@ -368,6 +448,17 @@ namespace UnityEngine.Rendering
                         var validityResult = integrator.IntegrateValidity(ctx, 0, probeCount, job.validitySampleCount, validitySlice);
                         if (validityResult.type != IProbeIntegrator.ResultType.Success) return false;
                         if (LightingBaker.cancel) return true;
+                    }
+
+                    // Bake occlusion
+                    if (bakeProbeOcclusion)
+                    {
+                        using (new LightTransportBakingProfiling(LightTransportBakingProfiling.Stages.IntegrateOcclusion))
+                        {
+                            var occlusionResult = integrator.IntegrateOcclusion(ctx, 0, probeCount, job.occlusionSampleCount, (int)maxOcclusionLightsPerProbe, perProbeLightIndicesSlice, occlusionSlice.SafeReinterpret<float>());
+                            if (occlusionResult.type != IProbeIntegrator.ResultType.Success) return false;
+                            if (LightingBaker.cancel) return true;
+                        }
                     }
 
                     /// Postprocess
@@ -407,23 +498,57 @@ namespace UnityEngine.Rendering
 
                     var jobIrradianceResults = irradianceResults.GetSubArray(job.startOffset + batchOffset, probeCount);
                     var jobValidityResults = validityResults.GetSubArray(job.startOffset + batchOffset, probeCount);
+                    var jobOcclusionResults = default(NativeArray<Vector4>);
+                    if (bakeProbeOcclusion)
+                        jobOcclusionResults = occlusionResults.GetSubArray(job.startOffset + batchOffset, probeCount);
 
                     // Schedule read backs to get results back from GPU memory into CPU memory.
                     var irradianceReadEvent = ctx.CreateEvent();
                     ctx.ReadBuffer(combinedSHSlice, jobIrradianceResults, irradianceReadEvent);
                     var validityReadEvent = ctx.CreateEvent();
                     ctx.ReadBuffer(validitySlice, jobValidityResults, validityReadEvent);
+                    var occlusionReadEvent = default(EventID);
+                    if (bakeProbeOcclusion)
+                    {
+                        occlusionReadEvent = ctx.CreateEvent();
+                        ctx.ReadBuffer(occlusionSlice, jobOcclusionResults, occlusionReadEvent);
+                    }
                     if (!ctx.Flush()) return false;
 
                     using (new LightTransportBakingProfiling(LightTransportBakingProfiling.Stages.ReadBack))
                     {
                         // Wait for read backs to complete.
-                        bool waitResult = ctx.Wait(irradianceReadEvent) && ctx.Wait(validityReadEvent);
+                        bool waitResult = ctx.Wait(irradianceReadEvent) && ctx.Wait(validityReadEvent) && (!bakeProbeOcclusion || ctx.Wait(occlusionReadEvent));
                         if (!waitResult) return false;
                     }
 
                     ctx.DestroyEvent(irradianceReadEvent);
                     ctx.DestroyEvent(validityReadEvent);
+
+                    if (bakeProbeOcclusion)
+                    {
+                        ctx.DestroyEvent(occlusionReadEvent);
+
+                        // Swizzle occlusion buffer so it is indexed by shadowmask channel.
+                        // This is the format expected by shader code.
+                        int baseProbeIdx = job.startOffset + batchOffset;
+                        for (int probeIdx = 0; probeIdx < probeCount; probeIdx++)
+                        {
+                            Vector4 original = jobOcclusionResults[probeIdx];
+                            Vector4 swizzled = Vector3.zero;
+
+                            for (int lightIdx = 0; lightIdx < maxOcclusionLightsPerProbe; lightIdx++)
+                            {
+                                int shadowmaskIdx = perProbeShadowmaskIndices[(baseProbeIdx + probeIdx) * maxOcclusionLightsPerProbe + lightIdx];
+                                if (shadowmaskIdx >= 0)
+                                {
+                                    swizzled[shadowmaskIdx] = original[lightIdx];
+                                }
+                            }
+
+                            jobOcclusionResults[probeIdx] = swizzled;
+                        }
+                    }
 
                     if (LightingBaker.cancel)
                         return true;
@@ -440,6 +565,11 @@ namespace UnityEngine.Rendering
                     ctx.DestroyBuffer(directRadianceBufferId);
                     ctx.DestroyBuffer(indirectRadianceBufferId);
                     ctx.DestroyBuffer(validityBufferId);
+                    if (bakeProbeOcclusion)
+                    {
+                        ctx.DestroyBuffer(occlusionBufferId);
+                        ctx.DestroyBuffer(perProbeLightIndicesId);
+                    }
 
                     ctx.DestroyBuffer(windowedDirectSHBufferId);
                     ctx.DestroyBuffer(boostedIndirectSHBufferId);
@@ -486,13 +616,18 @@ namespace UnityEngine.Rendering
             static IRayTracingShader m_ShaderSO = null;
             static IRayTracingShader m_ShaderRL = null;
 
-            internal IRayTracingAccelStruct CreateAccelerationStructure()
+            const string k_PackageLightTransport = "Packages/com.unity.rendering.light-transport";
+
+            internal AccelStructAdapter CreateAccelerationStructure()
             {
-                return context.CreateAccelerationStructure(new AccelerationStructureOptions
+                var c = context;
+                return new AccelStructAdapter(c.CreateAccelerationStructure(new AccelerationStructureOptions
                 {
                     // Use PreferFastBuild to avoid bug triggered with big meshes (UUM-52552));
                     buildFlags = BuildFlags.PreferFastBuild
-                });
+                }),
+                m_RayTracingResources
+                );
             }
 
             public RayTracingContext context
@@ -578,7 +713,7 @@ namespace UnityEngine.Rendering
                     m_SamplingResources.Load();
                 }
 
-                SamplingResources.BindSamplingTextures(cmd, m_SamplingResources);
+                SamplingResources.BindSobolBlueNoiseTextures(cmd, m_SamplingResources);
             }
 
             public bool TryGetMeshForAccelerationStructure(Renderer renderer, out Mesh mesh)
@@ -607,7 +742,15 @@ namespace UnityEngine.Rendering
                 {
                     m_Context.Dispose();
                     m_Context = null;
+
+                    // The lifetime of these shaders are bound to the lifetime of the context.
+                    m_ShaderRL = null;
+                    m_ShaderSO = null;
+                    m_ShaderVO = null;
                 }
+
+                m_SamplingResources?.Dispose();
+                m_SamplingResources = null;
             }
         }
 
@@ -621,7 +764,7 @@ namespace UnityEngine.Rendering
             var positionsInput = new NativeArray<Vector3>(positionValues, Allocator.Temp);
 
             var lightingJob = lightingOverride ?? new DefaultLightTransport();
-            lightingJob.Initialize(positionsInput);
+            lightingJob.Initialize(false, positionsInput);
 
             var defaultJob = lightingJob as DefaultLightTransport;
             if (defaultJob != null)
@@ -683,6 +826,8 @@ namespace UnityEngine.Rendering
                 m_CellPosToIndex.Clear();
                 m_CellsToDilate.Clear();
             }
+
+            Debug.Assert(bakingSet.CheckCompatibleCellLayout());
 
             // Clear loaded data
             foreach (var data in prv.perSceneDataList)
@@ -780,19 +925,20 @@ namespace UnityEngine.Rendering
                 if (!failed && skyOcclusionJob.shadingDirections.IsCreated)
                     skyOcclusionJob.Encode();
 
-                // Bake probe SH
-                var lightingJob = lightingOverride ?? new DefaultLightTransport();
-                lightingJob.Initialize(uniquePositions.AsArray());
-                if (lightingJob is DefaultLightTransport defaultLightingJob)
-                    defaultLightingJob.jobs = jobs;
-                while (!failed && lightingJob.currentStep < lightingJob.stepCount)
-                    failed |= !lightingJob.Step();
-
                 // Bake rendering layers
                 var layerMaskJob = renderingLayerOverride ?? new DefaultRenderingLayer();
                 layerMaskJob.Initialize(bakingSet, uniquePositions.AsArray());
                 while (!failed && layerMaskJob.currentStep < layerMaskJob.stepCount)
                     failed |= !layerMaskJob.Step();
+
+                // Bake probe SH
+                var lightingJob = lightingOverride ?? new DefaultLightTransport();
+                lightingJob.Initialize(ProbeVolumeLightingTab.GetLightingSettings().mixedBakeMode != MixedLightingMode.IndirectOnly, uniquePositions.AsArray(), layerMaskJob.renderingLayerMasks);
+                if (lightingJob is DefaultLightTransport defaultLightingJob)
+                    defaultLightingJob.jobs = jobs;
+                while (!failed && lightingJob.currentStep < lightingJob.stepCount)
+                    failed |= !lightingJob.Step();
+
 
                 // Upload new data in cells
                 foreach ((int uniqueProbeIndex, int cellIndex, int i) in bakedProbes)
@@ -801,7 +947,7 @@ namespace UnityEngine.Rendering
                     cell.SetBakedData(m_BakingSet, m_BakingBatch, cellVolumes[cellIndex], i, uniqueProbeIndex,
                         lightingJob.irradiance[uniqueProbeIndex], lightingJob.validity[uniqueProbeIndex],
                         layerMaskJob.renderingLayerMasks, virtualOffsetJob.offsets,
-                        skyOcclusionJob.occlusion, skyOcclusionJob.encodedDirections);
+                        skyOcclusionJob.occlusion, skyOcclusionJob.encodedDirections, lightingJob.occlusion);
                 }
 
                 skyOcclusionJob.encodedDirections.Dispose();

@@ -206,7 +206,10 @@ namespace UnityEngine.Rendering
 
             EditorSceneManager.sceneOpened -= OnSceneOpened;
 
-            AdaptiveProbeVolumes.Dispose();
+            // We keep allocated acceleration structures while the Lighting window is open in order to make subsequent bakes faster, but when the window closes we dispose of them
+            // Unless a bake is running, in which case we leave disposing to CleanBakeData()
+            if (!AdaptiveProbeVolumes.isRunning && !Lightmapping.isRunning)
+                AdaptiveProbeVolumes.Dispose();
         }
 
         #region On GUI
@@ -616,9 +619,9 @@ namespace UnityEngine.Rendering
 
                 onRemoveCallback = (list) =>
                 {
+                    var guid = (string)list.list[list.index];
+                    activeSet.RemoveScene(guid);
                     Undo.RegisterCompleteObjectUndo(new Object[] { activeSet }, "Deleted scene in baking set");
-
-                    ReorderableList.defaultBehaviours.DoRemoveButton(list);
                     EditorUtility.SetDirty(activeSet);
                 },
 
@@ -836,8 +839,14 @@ namespace UnityEngine.Rendering
             return data;
         }
 
-        internal static ProbeVolumeBakingSet GetSingleSceneSet(Scene scene)
+        internal static ProbeVolumeBakingSet GetSceneBakingSetForUI(Scene scene)
         {
+            // If the set is available, return it
+            var bakingSet = ProbeVolumeBakingSet.GetBakingSetForScene(scene);
+            if (bakingSet != null)
+                return bakingSet;
+
+            // Otherwise, a baking set might be created in the UI but not registered yet in the system
             if (instance == null || instance.activeSet == null)
                 return null;
             if (!singleSceneMode || !instance.activeSet.singleSceneMode)
@@ -860,7 +869,9 @@ namespace UnityEngine.Rendering
             else
             {
                 if (GUILayout.Button(Styles.generateAPV))
-                    AdaptiveProbeVolumes.BakeAsync();
+                {
+                    EditorApplication.delayCall += () => AdaptiveProbeVolumes.BakeAsync();
+                }
             }
         }
         #endregion
@@ -999,22 +1010,27 @@ namespace UnityEngine.Rendering
             if (AdaptiveProbeVolumes.partialBakeSceneList.Count == activeSet.sceneGUIDs.Count)
                 AdaptiveProbeVolumes.partialBakeSceneList = null;
 
-            if (AdaptiveProbeVolumes.partialBakeSceneList != null)
+            if (ProbeReferenceVolume.instance.supportLightingScenarios && !activeSet.m_LightingScenarios.Contains(activeSet.lightingScenario))
+                activeSet.SetActiveScenario(activeSet.m_LightingScenarios[0], false);
+
+            // Layout has changed and is incompatible.
+            if (activeSet.HasValidSharedData() && !activeSet.freezePlacement && !activeSet.CheckCompatibleCellLayout())
             {
-                // Layout has changed and is incompatible.
-                if (!activeSet.freezePlacement &&
-                    (activeSet.bakedMinDistanceBetweenProbes != activeSet.minDistanceBetweenProbes ||
-                    activeSet.bakedSimplificationLevels != activeSet.simplificationLevels))
+                if (AdaptiveProbeVolumes.partialBakeSceneList != null)
                 {
                     if (EditorUtility.DisplayDialog("Incompatible Layout", "You are partially baking the set with an incompatible cell layout. Proceeding will invalidate all previously bake data.\n\n" + "Do you wish to continue?", "Yes", "No"))
                         ClearBakedData();
                     else
                         return false;
                 }
+                else if (ProbeReferenceVolume.instance.supportLightingScenarios && activeSet.scenarios.Count != (activeSet.scenarios.ContainsKey(activeSet.lightingScenario) ? 1 : 0))
+                {
+                    if (EditorUtility.DisplayDialog("Incompatible Layout", "You are baking scenarios with incompatible cell layouts. Proceeding will invalidate all previously bake data.\n\n" + "Do you wish to continue?", "Yes", "No"))
+                        ClearBakedData();
+                    else
+                        return false;
+                }
             }
-
-            if (ProbeReferenceVolume.instance.supportLightingScenarios && !activeSet.m_LightingScenarios.Contains(activeSet.lightingScenario))
-                activeSet.SetActiveScenario(activeSet.m_LightingScenarios[0], false);
 
             return true;
         }
@@ -1191,7 +1207,7 @@ namespace UnityEngine.Rendering
                 EnableGroupBox(probeDistanceGroupBox, debug.drawBricks);
                 EnableGroupBox(probeSamplingGroupBox, debug.drawProbeSamplingDebug);
                 EnableTextArea(vertexSamplingWarning, ProbeReferenceVolume.instance.vertexSampling);
-                
+
                 if (debugLayers && m_LayerToggles != null)
                 {
                     if (bakingSet.bakedMaskCount != 1)

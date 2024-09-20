@@ -1,10 +1,56 @@
 # Changelog
 
-## [1.8.14] - 2024-04-12
+## [1.8.17] - 2024-07-01
+
+
+### Added
+
+### Removed
+
+### Changed
+- Improved performance of Burst-compiled code in the Windows x64 Editor by only emitting context-saving code when the code being compiled contains a `throw`
+- Improved error message for pointer-like types in non-`readonly` `static` fields
+
+### Fixed
+- Fixed another compiler crash caused by faulty alias analysis
+- BurstAotSettings files are no longer written to disk unless default settings are changed
+- Fixed the `BurstDebugInformation_DoNotShip` folder not being saved outside the player build folder for Embedded Linux and QNX platforms
+- Fixed direct negation of enums was not correctly promoting the underlying type, causing wrong results.
+- Fixed that `Mathf.Approximately` would return the wrong result approximately all of the time
+- Fixed an issue with default interface methods which would result in compiler errors due to IL corruption.
+- Creating a project with a space in the path would cause burst to fail on windows arm64.
+
+### Known Issues
+
+## [1.8.16] - 2024-05-29
+
+### Fixed
+- Fixed compiler crash caused by faulty alias analysis
+## [1.8.15] - 2024-05-10
+
+
+### Added
+
+### Removed
+
+### Changed
+
+### Fixed
+- An issue with auto promotion from bool to float that can occur with newer Roslyn.
+- Fixed compilation error when trying to use `MemoryMarshal.GetReference` on `Span`s
+- Fixed crash caused by faulty no-alias analysis
+- Fix build error when Product Name contains illegal path characters.
+- Improved the compilation time for projects with many assemblies/assembly-define symbols
+
+### Known Issues
+
+## [1.8.14] - 2024-04-04
 
 
 ### Fixed
 - Fixed burst sometimes throwing `FileNotFoundException`
+- Fixed incorrect handling of `[Conditional]` attributes in some circumstances
+- Fixed that some or all scripting symbol defines wouldn't be known by Burst in player builds
 
 ### Added
 
@@ -1729,12 +1775,12 @@
 - Add support for struct with an explicit layout.
 - Fix noalias regression (that was preventing the auto-vectorizer to work correctly on basic loops).
 
-## 0.2.3 (21 March 2018)
+## [0.2.3] - 2018-03-21
 
 - Improve error messages for static field access.
 - Improve collecting of compilable job by trying to collect concrete job type instances (issue #23).
 
-## 0.2.2 (19 March 2018)
+## [0.2.2] - 2018-03-19
 
 - Improve error messages in case using `is` or `as` cast in C#.
 - Improve error messages if a static delegate instance is used.

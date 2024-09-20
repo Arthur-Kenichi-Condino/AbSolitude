@@ -31,7 +31,7 @@ namespace UnityEngine.Rendering
         NativeArray<int> m_PhysicalIndexBufferData;
         ComputeBuffer m_DebugFragmentationBuffer;
         int[] m_DebugFragmentationData;
-        
+
         bool m_NeedUpdateIndexComputeBuffer;
         int m_UpdateMinIndex = int.MaxValue;
         int m_UpdateMaxIndex = int.MinValue;
@@ -216,11 +216,10 @@ namespace UnityEngine.Rendering
 
         public struct IndirectionEntryUpdateInfo
         {
-            public int brickCount;
             public int firstChunkIndex;
             public int numberOfChunks;
             public int minSubdivInCell;
-            // IMPORTANT, These values should be at max resolution. This means that
+            // IMPORTANT, These values should be at max resolution, independent of minSubdivInCell. This means that
             // The map to the lower possible resolution is done after.  However they are still in local space.
             public Vector3Int minValidBrickIndexForCellAtMaxRes;
             public Vector3Int maxValidBrickIndexForCellAtMaxResPlusOne;
@@ -344,7 +343,7 @@ namespace UnityEngine.Rendering
             return true;
         }
 
-        static bool BrickOverlapEntry(Vector3Int brickMin, Vector3Int brickMax, Vector3Int entryMin, Vector3Int entryMax)
+        static internal bool BrickOverlapEntry(Vector3Int brickMin, Vector3Int brickMax, Vector3Int entryMin, Vector3Int entryMax)
         {
             return brickMax.x > entryMin.x && entryMax.x > brickMin.x &&
                    brickMax.y > entryMin.y && entryMax.y > brickMin.y &&
@@ -380,7 +379,7 @@ namespace UnityEngine.Rendering
                 var entryMinIndex = entry.minValidBrickIndexForCellAtMaxRes / minBrickSize;
                 var entryMaxIndex = entry.maxValidBrickIndexForCellAtMaxResPlusOne / minBrickSize;
                 var sizeOfValid = (entryMaxIndex - entryMinIndex);
-                            
+
                 if (brickSubdivLevel >= entrySubdivLevel)
                 {
                     brickMin = Vector3Int.zero;
@@ -408,14 +407,14 @@ namespace UnityEngine.Rendering
                     brickMin -= entryMinIndex;
                     brickMax -= entryMinIndex;
                 }
-                            
+
                 // Analytically compute min and max because doing it in the inner loop with Math.Min/Max is costly (not inlined)
                 int chunkStart = entry.firstChunkIndex * kIndexChunkSize;
                 int newMin = chunkStart + LocationToIndex(brickMin.x, brickMin.y, brickMin.z, sizeOfValid);
                 int newMax = chunkStart + LocationToIndex(brickMax.x - 1, brickMax.y - 1, brickMax.z - 1, sizeOfValid);
                 m_UpdateMinIndex = Math.Min(m_UpdateMinIndex, newMin);
                 m_UpdateMaxIndex = Math.Max(m_UpdateMaxIndex, newMax);
-                            
+
                 // Loop through all touched voxels
                 for (int x = brickMin.x; x < brickMax.x; ++x)
                 {
@@ -462,7 +461,7 @@ namespace UnityEngine.Rendering
                     int brickSize = ProbeReferenceVolume.CellSize(brick.subdivisionLevel);
                     Vector3Int brickMin = brick.position;
                     Vector3Int brickMax = brick.position + new Vector3Int(brickSize, brickSize, brickSize);
-                    
+
                     // Find all entries that this brick touch (usually only one, but several in case of bigger bricks)
                     foreach (var entry in cellInfo.updateInfo.entriesInfo)
                     {

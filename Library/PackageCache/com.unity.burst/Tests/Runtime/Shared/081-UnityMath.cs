@@ -1,5 +1,4 @@
 using Burst.Compiler.IL.Tests.Helpers;
-using System.Linq.Expressions;
 using Unity.Mathematics;
 
 namespace Burst.Compiler.IL.Tests
@@ -346,6 +345,18 @@ namespace Burst.Compiler.IL.Tests
             {
                 return 42;
             }
+        }
+
+        [TestCompiler]
+        public static float TestMathfEpsilon()
+        {
+            return UnityEngine.Mathf.Epsilon;
+        }
+
+        [TestCompiler(0.0f,0.0f)]
+        public static bool TestApproximately(float a, float b)
+        {
+            return UnityEngine.Mathf.Approximately(a, b);
         }
     }
 }

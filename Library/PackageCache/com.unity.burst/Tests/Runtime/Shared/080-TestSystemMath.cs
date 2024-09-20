@@ -494,6 +494,37 @@ namespace Burst.Compiler.IL.Tests
         {
             return Math.Cbrt(a);
         }
+#else
+        // STUB the functions so delegates are still created
+        [TestCompiler(DataRange.Standard, (byte)1, (byte)50)]
+        public static byte TestClampByte(byte a, byte min, byte max) => a;
+
+        [TestCompiler(DataRange.Standard, 1.0, 50.0)]
+        public static double TestClampDouble(double a, double min, double max) => a;
+
+        [TestCompiler(DataRange.Standard, (short)1, (short)50)]
+        public static short TestClampShort(short a, short min, short max) => a;
+
+        [TestCompiler(DataRange.Standard, 1, 50)]
+        public static int TestClampInt(int a, int min, int max) => a;
+
+        [TestCompiler(DataRange.Standard, 1L, 50L)]
+        public static long TestClampLong(long a, long min, long max) => a;
+
+        [TestCompiler(DataRange.Standard, (sbyte)1, (sbyte)50)]
+        public static sbyte TestClampSByte(sbyte a, sbyte min, sbyte max) => a;
+
+        [TestCompiler(DataRange.Standard, 1.0f, 50.0f)]
+        public static float TestClampFloat(float a, float min, float max) => a;
+
+        [TestCompiler(DataRange.Standard, (ushort)1, (ushort)50)]
+        public static ushort TestClampUShort(ushort a, ushort min, ushort max) => a;
+
+        [TestCompiler(DataRange.Standard, (uint)1, (uint)50)]
+        public static uint TestClampUInt(uint a, uint min, uint max) => a;
+
+        [TestCompiler(DataRange.Standard, (ulong)1, (ulong)50)]
+        public static ulong TestClampULong(ulong a, ulong min, ulong max) => a;
 #endif
 
         [TestCompiler(DataRange.Standard)]

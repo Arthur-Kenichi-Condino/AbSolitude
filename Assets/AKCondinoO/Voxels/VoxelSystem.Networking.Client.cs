@@ -38,6 +38,14 @@ namespace AKCondinoO.Voxels{
              terrainArraySyncs     .Clear();
             }
             internal partial void NetClientSideNetUpdate(){
+             for(int i=0;i<terrainMessageHandlers.Count;++i){
+              VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
+              cnkMsgr     .asClient.NetClientSideManualUpdate();
+             }
+             for(int i=0;i<terrainArraySyncs     .Count;++i){
+              VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
+              cnkArraySync.asClient.NetClientSideManualUpdate();
+             }
             }
         }
      //[NonSerialized]float clientSendMessageDelay=0.05f;

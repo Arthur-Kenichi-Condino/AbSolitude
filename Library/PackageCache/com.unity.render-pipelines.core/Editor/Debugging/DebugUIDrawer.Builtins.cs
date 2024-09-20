@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -397,6 +398,34 @@ namespace UnityEditor.Rendering
         }
     }
 
+
+    /// <summary>
+    /// Builtin Drawer for Maskfield Debug Items.
+    /// </summary>
+    [DebugUIDrawer(typeof(DebugUI.MaskField))]
+    public sealed class DebugUIDrawerMaskField : DebugUIFieldDrawer<uint, DebugUI.MaskField, DebugStateUInt>
+    {
+        /// <summary>
+        /// Does the field of the given type
+        /// </summary>
+        /// <param name="rect">The rect to draw the field</param>
+        /// <param name="label">The label for the field</param>
+        /// <param name="field">The field</param>
+        /// <param name="state">The state</param>
+        /// <returns>The current value from the UI</returns>
+        protected override uint DoGUI(Rect rect, GUIContent label, DebugUI.MaskField field, DebugStateUInt state)
+        {
+            uint value = field.GetValue();
+
+            var enumNames = new string[field.enumNames.Length];
+            for (int i = 0; i < enumNames.Length; i++)
+                enumNames[i] = field.enumNames[i].text;
+            var mask = EditorGUI.MaskField(rect, label, (int)value, enumNames);
+
+            return (uint)mask;
+        }
+    }
+
     /// <summary>
     /// Builtin Drawer for Foldout Debug Items.
     /// </summary>
@@ -404,6 +433,22 @@ namespace UnityEditor.Rendering
     public sealed class DebugUIDrawerFoldout : DebugUIDrawer
     {
         const int k_HeaderVerticalMargin = 2;
+        static void DisplayColumns(Rect drawRect, List<GUIContent> rowContents)
+        {
+            drawRect.x += EditorGUIUtility.labelWidth;
+            drawRect.width = DebugWindow.Styles.foldoutColumnWidth;
+
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0; //be at left of rects
+            for (int i = 0; i < rowContents.Count; i++)
+            {
+                EditorGUI.LabelField(drawRect, rowContents[i], EditorStyles.miniBoldLabel);
+
+                // Offset the rect to the next possible column
+                drawRect.x += DebugWindow.Styles.foldoutColumnWidth;
+            }
+            EditorGUI.indentLevel = indent;
+        }
 
         /// <summary>
         /// Implement this to execute processing before UI rendering.
@@ -432,33 +477,8 @@ namespace UnityEditor.Rendering
 
             bool previousValue = (bool)w.GetValue();
             bool value = CoreEditorUtils.DrawHeaderFoldout(title, previousValue, isTitleHeader: w.isHeader, customMenuContextAction: fillContextMenuAction);
-
             if (previousValue != value)
                 Apply(w, s, value);
-
-            Rect drawRect = GUILayoutUtility.GetLastRect();
-            if (w.columnLabels != null && value)
-            {
-                int indent = EditorGUI.indentLevel;
-                EditorGUI.indentLevel = 0; //be at left of rects
-
-                if (w.isHeader) // display column labels on a separate row for header-styled foldouts
-                {
-                    drawRect = GUILayoutUtility.GetRect(1f, 1f, EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight);
-                    drawRect.x -= EditorGUIUtility.labelWidth / 2;
-                }
-
-                for (int i = 0; i < w.columnLabels.Length; i++)
-                {
-                    var columnRect = drawRect;
-                    columnRect.x += EditorGUIUtility.labelWidth + i * DebugWindow.Styles.foldoutColumnWidth;
-                    columnRect.width = DebugWindow.Styles.foldoutColumnWidth;
-                    string label = w.columnLabels[i] ?? "";
-                    string tooltip = w.columnTooltips?.ElementAtOrDefault(i) ?? "";
-                    EditorGUI.LabelField(columnRect, EditorGUIUtility.TrTextContent(label, tooltip), EditorStyles.miniBoldLabel);
-                }
-                EditorGUI.indentLevel = indent;
-            }
 
             EditorGUI.indentLevel++;
         }
@@ -472,6 +492,12 @@ namespace UnityEditor.Rendering
         public override bool OnGUI(DebugUI.Widget widget, DebugState state)
         {
             var w = Cast<DebugUI.Foldout>(widget);
+            if (w.opened && w.columnLabels != null)
+            {
+                var drawRect = PrepareControlRect(EditorGUIUtility.singleLineHeight);
+                drawRect.x = 0;
+                DisplayColumns(drawRect, w.rowContents);
+            }
             return w.opened;
         }
 

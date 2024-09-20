@@ -33,11 +33,11 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
 
         internal static WorkspaceInfo CreateWorkspaceForRepSpec(
             RepositorySpec repositorySpec,
-            string projectPath,
+            string wkPath,
             ILog log)
         {
             CreateWorkspaceDialogUserAssistant assistant =
-                new CreateWorkspaceDialogUserAssistant(
+                CreateWorkspaceDialogUserAssistant.ForWkPathAndName(
                     PlasticGuiConfig.Get().Configuration.DefaultWorkspaceRoot,
                     PlasticGui.Plastic.API.GetAllWorkspacesArray());
 
@@ -47,7 +47,7 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
                 string.Empty);
 
             WorkspaceInfo wkInfo = PlasticGui.Plastic.API.CreateWorkspace(
-                projectPath,
+                wkPath,
                 assistant.GetProposedWorkspaceName(),
                 repositorySpec.ToString());
 
@@ -100,7 +100,7 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
 
             try
             {
-                if (FindWorkspace.HasWorkspace(parameters.ProjectFullPath))
+                if (FindWorkspace.HasWorkspace(parameters.WorkspaceFullPath))
                 {
                     // each domain reload, the package is reloaded.
                     // way need to check if we already created it
@@ -114,8 +114,7 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
                 TokenExchangeResponse tokenExchangeResponse =
                     AutoConfig.PlasticCredentials(
                         parameters.AccessToken,
-                        parameters.RepositorySpec.Server,
-                        parameters.ProjectFullPath);
+                        parameters.RepositorySpec.Server);
 
                 if (tokenExchangeResponse.Error != null)
                 {
@@ -134,7 +133,7 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
 
                 WorkspaceInfo wkInfo = CreateWorkspaceForRepSpec(
                     parameters.RepositorySpec,
-                    parameters.ProjectFullPath,
+                    parameters.WorkspaceFullPath,
                     mLog);
 
                 mStatus = Status.PerformingInitialCheckin;
@@ -267,6 +266,6 @@ namespace Unity.PlasticSCM.Editor.Hub.Operations
         volatile bool mOperationFailed = false;
         volatile bool mDisplayProgress;
 
-        static readonly ILog mLog = LogManager.GetLogger("CreateWorkspace");
+        static readonly ILog mLog = PlasticApp.GetLogger("CreateWorkspace");
     }
 }

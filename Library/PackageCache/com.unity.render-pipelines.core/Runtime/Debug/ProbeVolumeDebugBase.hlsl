@@ -103,7 +103,7 @@ void DoCull(inout v2f o)
 // snappedProbePosition_WS : worldspace position of main probe (a corner of the 8 probes cube)
 // samplingPosition_WS : worldspace sampling position after applying 'NormalBias' and 'ViewBias' and 'ValidityAndNormalBased Leak Reduction'
 // normalizedOffset : normalized offset between sampling position and snappedProbePosition
-void FindSamplingData(float3 posWS, float3 normalWS, uint renderingLayer, out float3 snappedProbePosition_WS, out float3 samplingPosition_WS, out float3 samplingPositionNoAntiLeak_WS, out float probeDistance, out float3 normalizedOffset, out float validityWeights[8])
+void FindSamplingData(float3 posWS, float3 normalWS, uint renderingLayer, out float3 snappedProbePosition_WS, out float3 samplingPositionNoAntiLeak_WS, out float probeDistance, out float3 normalizedOffset, out float validityWeights[8])
 {
     float3 cameraPosition_WS = _WorldSpaceCameraPos;
     float3 viewDir_WS = normalize(cameraPosition_WS - posWS);
@@ -115,33 +115,41 @@ void FindSamplingData(float3 posWS, float3 normalWS, uint renderingLayer, out fl
         posWS = AddNoiseToSamplingPosition(posWS, posSS, viewDir_WS);
     }
 
-    posWS -= _WorldOffset;
+    posWS -= _APVWorldOffset;
 
+    // uvw
     APVResources apvRes = FillAPVResources();
     float3 uvw;
     uint subdiv;
     float3 biasedPosWS;
     bool valid = TryToGetPoolUVWAndSubdiv(apvRes, posWS, normalWS, viewDir_WS, uvw, subdiv, biasedPosWS);
 
+    // Validity mask
+    float3 texCoord = uvw * _APVPoolDim - .5f;
+    float3 texFrac = frac(texCoord);
+    uint validityMask = LoadValidityMask(apvRes, renderingLayer, texCoord);
+    for (uint i = 0; i < 8; i++)
+    {
+        int3 probeCoord = GetSampleOffset(i);
+        float validityWeight = ((probeCoord.x == 1) ? texFrac.x : 1.0f - texFrac.x) *
+                               ((probeCoord.y == 1) ? texFrac.y : 1.0f - texFrac.y) *
+                               ((probeCoord.z == 1) ? texFrac.z : 1.0f - texFrac.z);
+        validityWeights[i] = validityWeight * GetValidityWeight(i, validityMask);
+    }
+
+    // Sample position
+    normalizedOffset = texFrac;
+    if (_APVLeakReductionMode == APVLEAKREDUCTIONMODE_PERFORMANCE)
+    {
+        float3 warped = uvw;
+        WarpUVWLeakReduction(apvRes, renderingLayer, warped);
+        normalizedOffset += (warped - uvw) * _APVPoolDim;
+    }
+
+    // stuff
     probeDistance = ProbeDistance(subdiv);
-    snappedProbePosition_WS = GetSnappedProbePosition(biasedPosWS, subdiv);
-
-    WarpUVWLeakReduction(apvRes, posWS, normalWS, renderingLayer, subdiv, biasedPosWS, uvw, normalizedOffset, validityWeights);
-
-    biasedPosWS += _WorldOffset;
-    snappedProbePosition_WS += _WorldOffset;
-    samplingPositionNoAntiLeak_WS = biasedPosWS;
-
-    if (_LeakReductionMode != 0)
-    {
-        samplingPosition_WS = snappedProbePosition_WS + (normalizedOffset*probeDistance);
-    }
-    else
-    {
-        normalizedOffset = (biasedPosWS - snappedProbePosition_WS) / probeDistance;
-        samplingPosition_WS = biasedPosWS;
-    }
-
+    snappedProbePosition_WS = GetSnappedProbePosition(biasedPosWS, subdiv) + _APVWorldOffset;
+    samplingPositionNoAntiLeak_WS = biasedPosWS + _APVWorldOffset;
 }
 
 // Return probe sampling weight
@@ -257,7 +265,7 @@ bool ShouldCull(inout v2f o)
     int brickSize = UNITY_ACCESS_INSTANCED_PROP(Props, _IndexInAtlas).w;
 
     bool shouldCull = false;
-    if (distance(position.xyz, GetCurrentViewPosition()) > _CullDistance || brickSize > _MaxAllowedSubdiv || brickSize < _MinAllowedSubdiv)
+    if (distance(position.xyz + _APVWorldOffset, GetCurrentViewPosition()) > _CullDistance || brickSize > _MaxAllowedSubdiv || brickSize < _MinAllowedSubdiv)
     {
         DoCull(o);
         shouldCull = true;
@@ -291,9 +299,14 @@ float3 CalculateDiffuseLighting(v2f i)
     float3 normal = normalize(i.normal);
 
     float3 skyShadingDirection = normal;
-    if (_ShadingMode == DEBUGPROBESHADINGMODE_SKY_DIRECTION)
+    if (_ShadingMode == DEBUGPROBESHADINGMODE_PROBE_OCCLUSION)
     {
-        if (_EnableSkyOcclusionShadingDirection > 0)
+        float4 shadowmask = apvRes.ProbeOcclusion[texLoc];
+        return shadowmask.rgb * 0.5 + (shadowmask.a * 0.5);
+    }
+    else if (_ShadingMode == DEBUGPROBESHADINGMODE_SKY_DIRECTION)
+    {
+        if (_APVSkyDirectionWeight > 0)
         {
             float value = 1.0f / GetCurrentExposureMultiplier();
 
@@ -314,8 +327,8 @@ float3 CalculateDiffuseLighting(v2f i)
     }
     else
     {
-        float skyOcclusion = 0.0f;
-        if (_SkyOcclusionIntensity > 0)
+        float3 skyOcclusion = _DebugEmptyProbeData.xyz;
+        if (_APVSkyOcclusionWeight > 0)
         {
             // L0 L1
             float4 temp = float4(kSHBasis0, kSHBasis1 * normal.x, kSHBasis1 * normal.y, kSHBasis1 * normal.z);
@@ -324,10 +337,7 @@ float3 CalculateDiffuseLighting(v2f i)
 
         if (_ShadingMode == DEBUGPROBESHADINGMODE_SKY_OCCLUSION_SH)
         {
-            if(_SkyOcclusionIntensity > 0)
-                return skyOcclusion / GetCurrentExposureMultiplier();
-            else
-                return _DebugEmptyProbeData.xyz / GetCurrentExposureMultiplier();
+            return skyOcclusion / GetCurrentExposureMultiplier();
         }
         else
         {
@@ -355,7 +365,7 @@ float3 CalculateDiffuseLighting(v2f i)
 
             bakeDiffuseLighting += EvalL2(L0, L2_R, L2_G, L2_B, L2_C, normal);
     #endif
-            if (_SkyOcclusionIntensity > 0)
+            if (_APVSkyOcclusionWeight > 0)
                 bakeDiffuseLighting += skyOcclusion * EvaluateAmbientProbe(skyShadingDirection);
 
             return bakeDiffuseLighting;

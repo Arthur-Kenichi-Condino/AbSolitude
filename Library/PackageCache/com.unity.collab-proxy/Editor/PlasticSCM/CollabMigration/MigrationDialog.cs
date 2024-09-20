@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEditor;
 using UnityEngine;
@@ -106,7 +106,7 @@ namespace Unity.PlasticSCM.Editor.CollabMigration
 
             Paragraph("Your Unity project has been upgraded (from Collaborate) to Unity Version Control free" +
                 " of charge by your administrator. Your local workspace will now be converted to a" +
-                " Unity Version Control workspace in just a few minutes. Select “Migrate” to start the conversion process.");
+                " Unity Version Control workspace in just a few minutes. Select ?Migrate? to start the conversion process.");
 
             DrawProgressForMigration.For(
                mProgressControls.ProgressData);
@@ -277,8 +277,7 @@ namespace Unity.PlasticSCM.Editor.CollabMigration
             {
                 tokenExchangeResponse = AutoConfig.PlasticCredentials(
                     unityAccessToken,
-                    serverName,
-                    projectPath);
+                    serverName);
 
                 if (tokenExchangeResponse.Error != null)
                 {
@@ -293,7 +292,7 @@ namespace Unity.PlasticSCM.Editor.CollabMigration
                     return;
                 }
 
-                repInfo.SetExplicitServer(serverName);
+                repInfo.SetExplicitResolvedServer(serverName);
 
                 mWorkspaceInfo = CreateWorkspaceFromCollab.Create(
                     projectPath, repInfo.Name, repInfo,
@@ -412,6 +411,6 @@ namespace Unity.PlasticSCM.Editor.CollabMigration
         string mUnityAccessToken;
         WorkspaceInfo mWorkspaceInfo;
 
-        static readonly ILog mLog = LogManager.GetLogger("MigrationDialog");
+        static readonly ILog mLog = PlasticApp.GetLogger("MigrationDialog");
     }
 }

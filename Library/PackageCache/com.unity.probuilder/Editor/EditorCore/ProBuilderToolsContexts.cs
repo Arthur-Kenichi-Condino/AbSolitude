@@ -5,7 +5,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.UIElements;
 using UnityEditor.EditorTools;
 using UnityEditor.ProBuilder.Actions;
-using UnityEditor.UIElements;
+using UnityEditor.ProBuilder.Overlays;
 using UnityEditor.Actions;
 using UnityEditor.ShortcutManagement;
 
@@ -31,6 +31,8 @@ namespace UnityEditor.ProBuilder
         ProBuilderEditor editor => m_Editor ??= new ProBuilderEditor();
 
         ProBuilderShortcutContext m_ShortcutContext;
+
+        SceneInformationOverlay m_SceneInfoOverlay;
 
         protected override Type GetEditorToolType(Tool tool)
         {
@@ -74,6 +76,10 @@ namespace UnityEditor.ProBuilder
             var actions = EditorToolbarLoader.GetActions();
             var group = ToolbarGroup.Tool;
 
+            ContextMenuUtility.AddMenuItem(menu, "Edit/Select All","Select/Select All");
+            ContextMenuUtility.AddMenuItem(menu, "Edit/Deselect All","Select/Deselect All");
+            ContextMenuUtility.AddMenuItem(menu, "Edit/Invert Selection","Select/Invert Selection");
+            group = actions[0].group;
             // grouping and filtering is bespoke for demo reasons
             foreach (var action in actions)
             {
@@ -125,7 +131,7 @@ namespace UnityEditor.ProBuilder
             {
                 //STO-3001: For a better UX, Selection group is renamed to Select so that users don't think this is
                 //acting on the current selection
-                var groupName = action.group == ToolbarGroup.Selection ? "Select" : action.group.ToString();
+                var groupName = action.group == ToolbarGroup.Selection ? "ProBuilder Select" : action.group.ToString();
                 title = $"{groupName}/{action.menuTitle}";
             }
             return title;
@@ -134,13 +140,37 @@ namespace UnityEditor.ProBuilder
         public override void OnActivated()
         {
             m_Editor = new ProBuilderEditor();
+
+            ProBuilderSettings.instance.afterSettingsSaved += UpdateSceneInfoOverlay;
+            UpdateSceneInfoOverlay();
+
             ShortcutManager.RegisterContext(m_ShortcutContext ??= new ProBuilderShortcutContext());
         }
 
         public override void OnWillBeDeactivated()
         {
             m_Editor.Dispose();
+            ProBuilderSettings.instance.afterSettingsSaved -= UpdateSceneInfoOverlay;
+
+            if(m_SceneInfoOverlay != null)
+                SceneView.RemoveOverlayFromActiveView(m_SceneInfoOverlay);
+
             ShortcutManager.UnregisterContext(m_ShortcutContext);
+        }
+
+        void UpdateSceneInfoOverlay()
+        {
+            if (ProBuilderEditor.s_ShowSceneInfo)
+            {
+                if(m_SceneInfoOverlay == null)
+                    m_SceneInfoOverlay = new SceneInformationOverlay();
+
+                SceneView.AddOverlayToActiveView(m_SceneInfoOverlay);
+            }
+            else if(m_SceneInfoOverlay != null)
+            {
+                SceneView.RemoveOverlayFromActiveView(m_SceneInfoOverlay);
+            }
         }
 
         public override void OnToolGUI(EditorWindow window)

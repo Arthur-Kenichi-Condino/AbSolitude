@@ -5,11 +5,6 @@
 #include "GeometryPoolDefs.cs.hlsl"
 #include "GeometryPool.hlsl"
 
-#pragma multi_compile UV0_DIM2 UV0_DIM3 UV0_DIM4
-#pragma multi_compile UV1_DIM2 UV1_DIM3 UV1_DIM4
-
-//#pragma enable_d3d11_debug_symbols
-
 #define GROUP_SIZE_X 256
 #define GROUP_SIZE_X_HALF (GROUP_SIZE_X >> 1)
 
@@ -98,25 +93,10 @@ void MainUpdateVertexBuffer(uint3 dispatchThreadID : SV_DispatchThreadID)
         vtx.pos = asfloat(_PosBuffer.Load3(_InputPosBufferOffset + (inputVertexOffset * _InputPosBufferStride)));
 
     if (_AttributesMask & GEOPOOLVERTEXATTRIBS_UV0)
-    {
-#if UV0_DIM2
         vtx.uv0.xy = asfloat(_Uv0Buffer.Load2(_InputUv0BufferOffset + (inputVertexOffset * _InputUv0BufferStride)));
-#elif UV0_DIM3
-        vtx.uv0.xyz = asfloat(_Uv0Buffer.Load3(_InputUv0BufferOffset + (inputVertexOffset * _InputUv0BufferStride)));
-#elif UV0_DIM4
-        vtx.uv0 = asfloat(_Uv0Buffer.Load4(_InputUv0BufferOffset + (inputVertexOffset * _InputUv0BufferStride)));
-#endif
-    }
+
     if (_AttributesMask & GEOPOOLVERTEXATTRIBS_UV1)
-    {
-#if UV1_DIM2
         vtx.uv1.xy = asfloat(_Uv1Buffer.Load2(_InputUv1BufferOffset + (inputVertexOffset * _InputUv1BufferStride)));
-#elif UV1_DIM3
-        vtx.uv1.xyz = asfloat(_Uv1Buffer.Load3(_InputUv1BufferOffset + (inputVertexOffset * _InputUv1BufferStride)));
-#elif UV1_DIM4
-        vtx.uv1 = asfloat(_Uv1Buffer.Load4(_InputUv1BufferOffset + (inputVertexOffset * _InputUv1BufferStride)));
-#endif
-    }
 
     if (_AttributesMask & GEOPOOLVERTEXATTRIBS_NORMAL)
         vtx.N = asfloat(_NormalBuffer.Load3(_InputNormalBufferOffset + (inputVertexOffset * _InputNormalBufferStride)));

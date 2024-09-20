@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
+using System.IO;
+using System.Linq;
 using Codice.Client.Commands.CheckIn;
 using Codice.Client.BaseCommands;
 using Codice.Client.Common;
@@ -35,7 +35,7 @@ namespace Unity.PlasticSCM.Editor.Views.PendingChanges
                 return;
             }
 
-            Undo();
+            Undo(false);
         }
 
         void UndoChangesForMode(
@@ -57,8 +57,7 @@ namespace Unity.PlasticSCM.Editor.Views.PendingChanges
                 return;
             }
 
-            UndoChanges(
-                changesToUndo, dependenciesCandidates);
+            UndoChanges(changesToUndo, dependenciesCandidates, false);
         }
 
         void CheckinForMode(
@@ -281,7 +280,7 @@ namespace Unity.PlasticSCM.Editor.Views.PendingChanges
                 RefreshAsset.UnityAssetDatabase);
         }
 
-        void Undo()
+        void Undo(bool keepLocalChanges)
         {
             List<ChangeInfo> changesToUndo;
             List<ChangeInfo> dependenciesCandidates;
@@ -290,12 +289,13 @@ namespace Unity.PlasticSCM.Editor.Views.PendingChanges
                 null, true,
                 out changesToUndo, out dependenciesCandidates);
 
-            UndoChanges(changesToUndo, dependenciesCandidates);
+            UndoChanges(changesToUndo, dependenciesCandidates, keepLocalChanges);
         }
 
         void UndoChanges(
             List<ChangeInfo> changesToUndo,
-            List<ChangeInfo> dependenciesCandidates)
+            List<ChangeInfo> dependenciesCandidates,
+            bool keepLocalChanges)
         {
             if (CheckEmptyOperation(changesToUndo, HasPendingMergeLinks()))
             {
@@ -311,9 +311,71 @@ namespace Unity.PlasticSCM.Editor.Views.PendingChanges
                 changesToUndo,
                 dependenciesCandidates,
                 mPendingMergeLinks.Count,
-                false,
+                keepLocalChanges,
+                () => AfterUndoOperation(changesToUndo, keepLocalChanges),
+                null);
+        }
+
+        void AfterUndoOperation(List<ChangeInfo> changesToUndo, bool keepLocalChanges)
+        {
+            if (keepLocalChanges)
+            {
+                return;
+            }
+
+            if (changesToUndo.Any(change => AssetsPath.IsPackagesRootElement(change.Path) && !IsAddedChange(change)))
+            {
+                RefreshAsset.UnityAssetDatabaseAndPackageManagerAsync();
+            }
+            else
+            {
+                RefreshAsset.UnityAssetDatabase();
+            }
+        }
+
+        static bool IsAddedChange(ChangeInfo change)
+        {
+            return ChangeTypesOperator.ContainsAny(change.ChangeTypes, ChangeTypesClassifier.ADDED_TYPES);
+        }
+
+        void UndoUnchanged()
+        {
+            List<ChangeInfo> changesToUndo;
+            List<ChangeInfo> dependenciesCandidates;
+
+            mPendingChangesTreeView.GetCheckedChanges(
+                null, true,
+                out changesToUndo, out dependenciesCandidates);
+
+            UndoUnchangedFor(changesToUndo);
+        }
+
+        void UndoUnchangedFor(List<ChangeInfo> changesToUndo)
+        {
+            if (CheckEmptyOperation(changesToUndo, HasPendingMergeLinks()))
+            {
+                ((IProgressControls) mProgressControls).ShowWarning(
+                    PlasticLocalization.GetString(PlasticLocalization.Name.NoItemsToUndo));
+
+                return;
+            }
+
+            SaveAssets.ForChangesWithoutConfirmation(changesToUndo, mWorkspaceOperationsMonitor);
+
+            mPendingChangesOperations.UndoUnchanged(
+                changesToUndo,
                 RefreshAsset.UnityAssetDatabase,
                 null);
+        }
+
+        void UndoCheckoutsKeepingChanges()
+        {
+            Undo(true);
+        }
+
+        void UndoCheckoutsKeepingChangesFor(List<ChangeInfo> changesToUndo)
+        {
+            UndoChanges(changesToUndo, new List<ChangeInfo>(), true);
         }
 
         void EndCheckin()

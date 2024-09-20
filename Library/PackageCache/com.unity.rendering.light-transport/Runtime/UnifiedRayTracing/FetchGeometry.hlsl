@@ -1,9 +1,19 @@
-#ifndef UNIFIEDRAYTRACING_FETCH_GEOMETRY_HLSL
-#define UNIFIEDRAYTRACING_FETCH_GEOMETRY_HLSL
+#ifndef _UNIFIEDRAYTRACING_FETCHGEOMETRY_HLSL_
+#define _UNIFIEDRAYTRACING_FETCHGEOMETRY_HLSL_
+
+#include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Common/GeometryPool/GeometryPoolDefs.cs.hlsl"
+#include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Common/GeometryPool/GeometryPool.hlsl"
 
 #include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Bindings.hlsl"
 
 #define INTERPOLATE_ATTRIBUTE(attr, barCoords) v.attr = v0.attr * (1.0 - barCoords.x - barCoords.y) + v1.attr * barCoords.x + v2.attr * barCoords.y
+
+StructuredBuffer<UnifiedRT::InstanceData>     g_AccelStructInstanceList;
+
+StructuredBuffer<uint>             g_globalIndexBuffer;
+StructuredBuffer<uint>             g_globalVertexBuffer;
+int                                g_globalVertexBufferStride;
+StructuredBuffer<GeoPoolMeshChunk> g_MeshList;
 
 namespace UnifiedRT {
 
@@ -30,7 +40,7 @@ namespace Internal {
     GeoPoolVertex FetchVertex(GeoPoolMeshChunk meshInfo, uint vertexIndex)
     {
         GeoPoolVertex v;
-        GeometryPool::LoadVertex(meshInfo.vertexOffset + (int)vertexIndex, g_globalVertexBufferSize, 0, g_globalVertexBuffer, v);
+        GeometryPool::LoadVertex(meshInfo.vertexOffset + (int)vertexIndex, 0, g_globalVertexBuffer, v);
         return v;
     }
 }
@@ -48,24 +58,23 @@ struct HitGeomAttributes
     float3 position;
     float3 normal;
     float3 faceNormal;
-    float4 uv0;
-    float4 uv1;
+    float2 uv0;
+    float2 uv1;
 };
 
-HitGeomAttributes FetchHitGeomAttributes(RayTracingAccelStruct accelStruct, Hit hit, uint attributesToFetch = kGeomAttribAll)
+HitGeomAttributes FetchHitGeomAttributes(int geometryIndex, int primitiveIndex, float2 uvBarycentrics, uint attributesToFetch = kGeomAttribAll)
 {
     HitGeomAttributes result = (HitGeomAttributes)0;
 
-    int geometryIndex = accelStruct.instanceList[hit.instanceIndex].geometryIndex;
     GeoPoolMeshChunk meshInfo = g_MeshList[geometryIndex];
-    uint3 triangleVertexIndices = Internal::FetchTriangleIndices(meshInfo, hit.primitiveIndex);
+    uint3 triangleVertexIndices = Internal::FetchTriangleIndices(meshInfo, primitiveIndex);
 
     GeoPoolVertex v0, v1, v2;
     v0 = Internal::FetchVertex(meshInfo, triangleVertexIndices.x);
     v1 = Internal::FetchVertex(meshInfo, triangleVertexIndices.y);
     v2 = Internal::FetchVertex(meshInfo, triangleVertexIndices.z);
 
-    GeoPoolVertex v = Internal::InterpolateVertices(v0, v1, v2, hit.uvBarycentrics);
+    GeoPoolVertex v = Internal::InterpolateVertices(v0, v1, v2, uvBarycentrics);
 
     if (attributesToFetch & kGeomAttribFaceNormal)
         result.faceNormal = cross(v1.pos - v0.pos, v2.pos - v0.pos);
@@ -79,49 +88,34 @@ HitGeomAttributes FetchHitGeomAttributes(RayTracingAccelStruct accelStruct, Hit 
     if (attributesToFetch & kGeomAttribTexCoord0)
         result.uv0 = v.uv0;
 
-    if (attributesToFetch & kGeomAttribTexCoord0)
-        result.uv1 = v.uv1;
-
-    return result;
-}
-
-// For sampling geometry pool for a UV mesh that has position in UV and UV in positions - this is used for stochastic lightmap sampling
-HitGeomAttributes UVFetchHitGeomAttributes(RayTracingAccelStruct accelStruct, Hit hit, uint attributesToFetch = kGeomAttribAll)
-{
-    HitGeomAttributes result = (HitGeomAttributes)0;
-
-    int geometryIndex = accelStruct.instanceList[hit.instanceIndex].geometryIndex;
-    GeoPoolMeshChunk meshInfo = g_MeshList[geometryIndex];
-    uint3 triangleVertexIndices = Internal::FetchTriangleIndices(meshInfo, hit.primitiveIndex);
-
-    GeoPoolVertex v0, v1, v2;
-    v0 = Internal::FetchVertex(meshInfo, triangleVertexIndices.x);
-    v1 = Internal::FetchVertex(meshInfo, triangleVertexIndices.y);
-    v2 = Internal::FetchVertex(meshInfo, triangleVertexIndices.z);
-
-    GeoPoolVertex v = Internal::InterpolateVertices(v0, v1, v2, hit.uvBarycentrics);
-
-    if (attributesToFetch & kGeomAttribFaceNormal)
-        result.faceNormal = cross(v1.uv0.xyz - v0.uv0.xyz, v2.uv0.xyz - v0.uv0.xyz);
-
-    if (attributesToFetch & kGeomAttribPosition)
-        result.position = v.uv0.xyz;
-
-    if (attributesToFetch & kGeomAttribNormal)
-        result.normal = v.N;
-
-    if (attributesToFetch & kGeomAttribTexCoord0)
-        result.uv0 = float4(v.pos.xyz, 0.0);
-
     if (attributesToFetch & kGeomAttribTexCoord1)
         result.uv1 = v.uv1;
-        
+
     return result;
 }
 
-InstanceData GetInstance(RayTracingAccelStruct accelStruct, uint instanceIndex)
+
+HitGeomAttributes FetchHitGeomAttributes(Hit hit, uint attributesToFetch = kGeomAttribAll)
 {
-    return accelStruct.instanceList[instanceIndex];
+    int geometryIndex = g_AccelStructInstanceList[hit.instanceID].geometryIndex;
+    return FetchHitGeomAttributes(geometryIndex, hit.primitiveIndex, hit.uvBarycentrics, attributesToFetch);
+}
+
+HitGeomAttributes FetchHitGeomAttributesInWorldSpace(UnifiedRT::InstanceData instanceInfo, UnifiedRT::Hit hit)
+{
+    UnifiedRT::HitGeomAttributes res = UnifiedRT::FetchHitGeomAttributes(hit);
+
+    HitGeomAttributes wsRes = res;
+    wsRes.position = mul(instanceInfo.localToWorld, float4(res.position, 1)).xyz;
+    wsRes.normal = normalize(mul((float3x3)instanceInfo.localToWorldNormals, res.normal));
+    wsRes.faceNormal = normalize(mul((float3x3)instanceInfo.localToWorldNormals, res.faceNormal));
+
+    return wsRes;
+}
+
+InstanceData GetInstance(uint instanceID)
+{
+    return g_AccelStructInstanceList[instanceID];
 }
 
 } // namespace UnifiedRT

@@ -33,6 +33,36 @@ float3 Octahedral32ToNormal(uint data)
     return normalize(normal);
 }
 
+uint UvsToUint32(float2 uv)
+{
+    return (uint(uv.x * 65535.0f) & 0xFFFF) | (uint(uv.y * 65535.0f) << 16);
+}
+
+float2 Uint32ToUvs(uint data)
+{
+    return float2((data & 0xFFFF) * (1.0f/65535.0f), (data >> 16u) * (1.0f/65535.0f));
+}
+
+void StoreUvs(RWStructuredBuffer<uint> output, uint index, float2 uv)
+{
+#ifdef GEOMETRY_POOL_USE_COMPRESSED_UVS
+    output[index] = UvsToUint32(uv);
+#else
+    output[index] = asuint(uv.x);
+    output[index + 1] = asuint(uv.y);
+#endif
+}
+
+float2 LoadUvs(StructuredBuffer<uint> vertexBuffer, uint index)
+{
+#ifdef GEOMETRY_POOL_USE_COMPRESSED_UVS
+    return Uint32ToUvs(vertexBuffer[index]);
+#else
+    return asfloat(uint2(vertexBuffer[index], vertexBuffer[index + 1]));
+#endif
+}
+
+
 void StoreVertex(
     uint vertexIndex,
     in GeoPoolVertex vertex,
@@ -45,16 +75,10 @@ void StoreVertex(
     output[posIndex+2] = asuint(vertex.pos.z);
 
     uint uv0Index = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_UV0BYTE_OFFSET) / 4;
-    output[uv0Index] = asuint(vertex.uv0.x);
-    output[uv0Index + 1] = asuint(vertex.uv0.y);
-    output[uv0Index + 2] = asuint(vertex.uv0.z);
-    output[uv0Index + 3] = asuint(vertex.uv0.w);
+    StoreUvs(output, uv0Index, vertex.uv0);
 
     uint uv1Index = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_UV1BYTE_OFFSET) / 4;
-    output[uv1Index] = asuint(vertex.uv1.x);
-    output[uv1Index + 1] = asuint(vertex.uv1.y);
-    output[uv1Index + 2] = asuint(vertex.uv1.z);
-    output[uv1Index + 3] = asuint(vertex.uv1.w);
+    StoreUvs(output, uv1Index, vertex.uv1);
 
     uint normalIndex = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_NORMAL_BYTE_OFFSET) / 4;
     output[normalIndex] = NormalToOctahedral32(vertex.N);
@@ -62,7 +86,6 @@ void StoreVertex(
 
 void LoadVertex(
     uint vertexIndex,
-    int vertexBufferSize,
     int vertexFlags,
     StructuredBuffer<uint> vertexBuffer,
     out GeoPoolVertex outputVertex)
@@ -71,10 +94,10 @@ void LoadVertex(
     float3 pos = asfloat(uint3(vertexBuffer[posIndex], vertexBuffer[posIndex + 1], vertexBuffer[posIndex + 2]));
 
     uint uv0Index = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_UV0BYTE_OFFSET) / 4;
-    float4 uv0 = asfloat(uint4(vertexBuffer[uv0Index], vertexBuffer[uv0Index + 1], vertexBuffer[uv0Index + 2], vertexBuffer[uv0Index + 3]));
+    float2 uv0 = LoadUvs(vertexBuffer, uv0Index);
 
     uint uv1Index = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_UV1BYTE_OFFSET) / 4;
-    float4 uv1 = asfloat(uint4(vertexBuffer[uv1Index], vertexBuffer[uv1Index + 1], vertexBuffer[uv1Index + 2], vertexBuffer[uv1Index + 3]));
+    float2 uv1 = LoadUvs(vertexBuffer, uv1Index);
 
     uint normalIndex = (vertexIndex * GEO_POOL_VERTEX_BYTE_SIZE + GEO_POOL_NORMAL_BYTE_OFFSET) / 4;
     uint normal = uint(vertexBuffer[normalIndex]);

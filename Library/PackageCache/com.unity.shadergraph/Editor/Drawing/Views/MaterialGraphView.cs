@@ -52,7 +52,7 @@ namespace UnityEditor.ShaderGraph.Drawing
             m_UndoRedoPerformedMethodInfo = graphViewType?.GetMethod("UndoRedoPerformed",
                 BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic,
                 null,
-                new Type[] { },
+                new Type[] { typeof(UndoRedoInfo).MakeByRefType()},
                 null);
         }
 
@@ -321,7 +321,7 @@ namespace UnityEditor.ShaderGraph.Drawing
                 {
                     evt.menu.AppendSeparator();
                     var sc = ShaderGraphShortcuts.GetKeycodeForContextMenu(ShaderGraphShortcuts.summonDocumentationShortcutID);
-                    evt.menu.AppendAction($"Open Documentation _{sc}", SeeDocumentation, SeeDocumentationStatus);
+                    evt.menu.AppendAction($"Open Documentation {sc}", SeeDocumentation, SeeDocumentationStatus);
                 }
                 if (selection.OfType<IShaderNodeView>().Count() == 1 && selection.OfType<IShaderNodeView>().First().node is SubGraphNode)
                 {
@@ -691,10 +691,13 @@ namespace UnityEditor.ShaderGraph.Drawing
         {
             get
             {
-                return selection.Any(x => !(x is IShaderNodeView nodeView) || nodeView.node.canDeleteNode);
+                return selection.Any(x =>
+                {
+                    if (x is ContextView) return false; //< context view must not be deleted. ( eg, Vertex, Fragment )
+                    return !(x is IShaderNodeView nodeView) || nodeView.node.canDeleteNode;
+                });
             }
         }
-
         public void GroupSelection()
         {
             var title = "New Group";
@@ -781,6 +784,7 @@ namespace UnityEditor.ShaderGraph.Drawing
             // Reflect the data down
             graph.ValidateGraph();
             editorView.colorManager.UpdateNodeViews(nodes);
+            m_InspectorUpdateDelegate?.Invoke();
 
             // Update the views
             foreach (MaterialNodeView selectedNode in nodes)
@@ -1106,7 +1110,8 @@ namespace UnityEditor.ShaderGraph.Drawing
         internal void RestorePersistentSelectionAfterUndoRedo()
         {
             wasUndoRedoPerformed = true;
-            m_UndoRedoPerformedMethodInfo?.Invoke(this, new object[] { });
+            UndoRedoInfo info = new UndoRedoInfo();
+            m_UndoRedoPerformedMethodInfo?.Invoke(this, new object[] {info});
         }
 
         #region Drag and drop
@@ -1485,7 +1490,12 @@ namespace UnityEditor.ShaderGraph.Drawing
                 {
                     var nodeList = copyGraph.GetNodes<AbstractMaterialNode>();
 
-                    ClampNodesWithinView(graphView, new List<IRectInterface>().Union(nodeList).Union(copyGraph.stickyNotes));
+                    ClampNodesWithinView(graphView,
+                        new List<IRectInterface>()
+                            .Union(nodeList)
+                            .Union(copyGraph.stickyNotes)
+                            .Union(copyGraph.groups)
+                    );
 
                     graphView.graph.PasteGraph(copyGraph, remappedNodes, remappedEdges);
 

@@ -66,7 +66,8 @@ public class PlaymodeTest
         job.Schedule().Complete();
 
         // UNITY_BURST_DEBUG enables additional logging which messes with our check.
-        if (null == System.Environment.GetEnvironmentVariable("UNITY_BURST_DEBUG"))
+        var debuggingStr = Environment.GetEnvironmentVariable("UNITY_BURST_DEBUG");
+        if (debuggingStr == null || !int.TryParse(debuggingStr, out var debugLevel) || debugLevel == 0)
         {
             LogAssert.NoUnexpectedReceived();
         }

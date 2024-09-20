@@ -90,6 +90,10 @@ namespace Unity.PlasticSCM.Editor.Views.IncomingChanges.Developer
 
         bool IIncomingChangesTab.IsVisible{ get; set; }
 
+        void IIncomingChangesTab.OnEnable()
+        {
+        }
+
         void IIncomingChangesTab.OnDisable()
         {
             TreeHeaderSettings.Save(
@@ -210,7 +214,7 @@ namespace Unity.PlasticSCM.Editor.Views.IncomingChanges.Developer
                     if (workingBranch == null)
                         return;
 
-                    mMergeController.UpdateMergeObjectInfoIfNeeded(workingBranch);
+                    mMergeController.UpdateMergeObjectInfoAndCleanStateIfNeeded(workingBranch);
                     mMergeViewLogic.AutoRefresh();
                 });
         }
@@ -238,7 +242,7 @@ namespace Unity.PlasticSCM.Editor.Views.IncomingChanges.Developer
                     if (workingBranch == null)
                         return;
 
-                    mMergeController.UpdateMergeObjectInfoIfNeeded(workingBranch);
+                    mMergeController.UpdateMergeObjectInfoAndCleanStateIfNeeded(workingBranch);
                     mMergeViewLogic.Refresh();
                 });
         }

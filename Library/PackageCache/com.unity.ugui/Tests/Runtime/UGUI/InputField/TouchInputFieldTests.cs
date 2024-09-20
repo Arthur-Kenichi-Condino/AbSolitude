@@ -194,6 +194,7 @@ namespace InputfieldTests
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS })] // UUM-71764 (tvOS)
         public IEnumerator SendsEndEditEventOnDeselect()
         {
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
@@ -240,6 +241,7 @@ namespace InputfieldTests
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS })] // UUM-71764 (tvOS)
         public IEnumerator FocusOpensTouchScreenKeyboard()
         {
             var isInPlaceEditingDisabled = typeof(TouchScreenKeyboard).GetProperty("disableInPlaceEditing",

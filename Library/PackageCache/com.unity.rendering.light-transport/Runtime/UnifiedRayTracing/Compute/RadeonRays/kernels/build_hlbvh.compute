@@ -15,9 +15,7 @@ subject to the following restrictions:
 
 // WebGPU has extremely strict uniformity requirements that are incompatible with the current implementation of this shader.
 #pragma exclude_renderers webgpu
-
-#pragma multi_compile __ TOP_LEVEL
-#pragma multi_compile __ NO_REDUCTION
+#pragma multi_compile __ TOP_LEVEL UINT16_INDICES
 
 #if defined(SHADER_API_PSSL) || defined(SHADER_API_METAL) || defined(SHADER_API_WEBGPU)
 #define globallycoherent
@@ -32,31 +30,24 @@ uint g_constants_triangle_count;
 uint g_aabb_offset;
 uint g_morton_codes_offset;
 uint g_primitive_refs_offset;
-uint g_bvh_offset;
-uint g_cluster_validity_offset;
-uint g_cluster_range_offset;
-uint g_neighbor_offset;
-uint g_cluster_to_node_offset;
-uint g_deltas_offset;
-uint g_internal_node_range_offset;
-
+uint g_leaf_parents_offset;
+int g_internal_node_range_offset;
 
 #if !(TOP_LEVEL)
 RWStructuredBuffer<float> g_vertices;
-RWStructuredBuffer<uint> g_indices;
+ByteAddressBuffer g_indices;
 int g_vertices_offset;
+int g_base_index;
 int g_indices_offset;
-int g_bvh_max_node_count;
+#define MESH_INDICES_BINDINGS
+#include "triangle_mesh.hlsl"
 #endif
 globallycoherent RWStructuredBuffer<uint> g_scratch_buffer;
 
-#include "triangle_mesh.hlsl"
 #include "bvh2il.hlsl"
 
-globallycoherent RWStructuredBuffer<BvhNode> g_bvh;
 #if TOP_LEVEL
-StructuredBuffer<BvhNode> g_bottom_bvhs;
-RWStructuredBuffer<InstanceInfo> g_instance_infos;
+
 #endif
 
 #define PRIMITIVES_PER_THREAD 8
@@ -199,19 +190,10 @@ void UpdateGlobalAabb(in Aabb aabb, in uint lidx)
 #endif
 }
 
-#if TOP_LEVEL
-Aabb GetInstanceAabb(int instance_index)
-{
-    uint bottom_bvh_offset = g_instance_infos[instance_index].blas_offset;
-    Transform transform = g_instance_infos[instance_index].local_to_world_transform;
-    BvhNode header_node = g_bottom_bvhs[bottom_bvh_offset + 0];
-    Aabb local_aabb = GetNodeAabb(header_node, true);
-    return TransformAabb(local_aabb, transform);
-}
-#endif
+
 
 #pragma kernel Init
-[numthreads(GROUP_SIZE, 1, 1)]
+[numthreads(1, 1, 1)]
 void Init(in uint gidx: SV_DispatchThreadID,
     in uint lidx : SV_GroupThreadID,
     in uint bidx : SV_GroupID)
@@ -245,6 +227,12 @@ void CalculateAabb(in uint gidx: SV_DispatchThreadID,
     {
         //  Calculate linear triangle index.
         uint prim_index = gidx * PRIMITIVES_PER_THREAD + i;
+
+        if (prim_index < g_constants_triangle_count - 1)
+        {
+            // clear bvh update flag
+            g_bvh[g_bvh_offset + 1 + prim_index].update = 0;
+        }
 
         // Check out of bounds for this triangle.
         if (prim_index < g_constants_triangle_count)
@@ -307,6 +295,7 @@ void CalculateMortonCodes(in uint gidx: SV_DispatchThreadID,
             GrowAabb(tri.v0, triangle_aabb);
             GrowAabb(tri.v1, triangle_aabb);
             GrowAabb(tri.v2, triangle_aabb);
+
             float3 center = 0.5f * (triangle_aabb.pmin + triangle_aabb.pmax);
 #else
             Aabb instance_aabb = GetInstanceAabb(prim_index);
@@ -327,166 +316,44 @@ uint deltaCompare(int index, int otherIndex)
     return ((uint)g_scratch_buffer[g_morton_codes_offset + index]) ^ ((uint)g_scratch_buffer[g_morton_codes_offset + otherIndex]);
 }
 
-#pragma kernel InitClusters
-[numthreads(GROUP_SIZE, 1, 1)]
-void InitClusters(
-    in uint gidx : SV_DispatchThreadID,
-    in uint lidx : SV_GroupThreadID,
-    in uint bidx : SV_GroupID)
+void InitBvhHeader(float3 fpmin, float3 fpmax, uint primCount)
 {
-    if (gidx >= g_constants_triangle_count)
-        return;
+    g_bvh[g_bvh_offset + 0].child0 = primCount - 1; // internal node count
+    g_bvh[g_bvh_offset + 0].child1 = primCount; // leaf node count
+    g_bvh[g_bvh_offset + 0].update = 0; // unused
+    g_bvh[g_bvh_offset + 0].parent = 0; // root node index (set later)
 
-    g_scratch_buffer[g_cluster_range_offset + gidx] = gidx;
-    g_scratch_buffer[g_cluster_validity_offset + gidx] = 1;
-
+    g_bvh[g_bvh_offset + 0].SetLeftAabb(fpmin, fpmax); // global aabb
+    g_bvh[g_bvh_offset + 0].SetRightAabb(0.0, 0.0); // unused
 }
 
-
-#pragma kernel FindPreferredNeighbor
-[numthreads(GROUP_SIZE, 1, 1)]
-void FindPreferredNeighbor(
-    in uint gidx : SV_DispatchThreadID,
-    in uint lidx : SV_GroupThreadID,
-    in uint bidx : SV_GroupID)
+void SetBvhHeaderRootNodeIndex(uint index)
 {
-    if (gidx >= g_constants_triangle_count || g_scratch_buffer[g_cluster_validity_offset + gidx] == 0)
-        return;
-
-    uint rangeStart = gidx;
-    uint rangeEnd = g_scratch_buffer[g_cluster_range_offset + gidx];
-
-    int nextClusterIndex = rangeEnd < g_constants_triangle_count - 1 ? rangeEnd + 1 : 0;
-    int previousClusterIndex = rangeStart > 0 ? g_scratch_buffer[g_cluster_range_offset + (rangeStart-1)] : 0;
-
-    int neighborIndex = 0;
-    if (rangeStart == 0)
-    {
-        neighborIndex = nextClusterIndex;
-    }
-    else if (rangeEnd + 1 >= g_constants_triangle_count)
-    {
-        neighborIndex = previousClusterIndex;
-    }
-    else
-    {
-        neighborIndex = deltaCompare(rangeStart - 1, rangeStart) < deltaCompare(rangeEnd, rangeEnd + 1) ? previousClusterIndex : nextClusterIndex;
-    }
-    g_scratch_buffer[g_neighbor_offset + gidx] = neighborIndex;
+    g_bvh[g_bvh_offset + 0].parent = index;
 }
-
-#pragma kernel MergeClusters
-[numthreads(GROUP_SIZE, 1, 1)]
-void MergeClusters(
-    in uint gidx : SV_DispatchThreadID,
-    in uint lidx : SV_GroupThreadID,
-    in uint bidx : SV_GroupID)
-{
-    if (gidx >= g_constants_triangle_count || g_scratch_buffer[g_cluster_validity_offset +  gidx] == 0)
-        return;
-
-    uint preferred_neighbor = g_scratch_buffer[g_neighbor_offset + gidx];
-    uint neighbor_preferred_neighbor = g_scratch_buffer[g_neighbor_offset + preferred_neighbor];
-    if (gidx == neighbor_preferred_neighbor && preferred_neighbor > gidx)
-    {
-        uint newRangeEnd = g_scratch_buffer[g_cluster_range_offset + preferred_neighbor];
-        g_scratch_buffer[g_cluster_range_offset +  gidx] = newRangeEnd;
-
-        g_scratch_buffer[g_cluster_validity_offset + preferred_neighbor] = 0;
-        g_scratch_buffer[g_cluster_range_offset + newRangeEnd] = gidx;
-    }
-}
-
-void InitNode(int index)
-{
-    g_bvh[g_bvh_offset + index].child0 = 0;
-    g_bvh[g_bvh_offset + index].child1 = 0;
-    g_bvh[g_bvh_offset + index].parent = 0;
-    g_bvh[g_bvh_offset + index].update = 0;
-    for (int i = 0; i < 12; ++i)
-        g_bvh[g_bvh_offset + index].data[i] = 0;
-}
-
-
-#pragma kernel WriteLeafNodes
-[numthreads(GROUP_SIZE, 1, 1)]
-void WriteLeafNodes(
-    in uint gidx : SV_DispatchThreadID,
-    in uint lidx : SV_GroupThreadID,
-    in uint bidx : SV_GroupID)
-{
-    uint N = g_scratch_buffer[g_cluster_to_node_offset + g_constants_triangle_count - 1] + g_scratch_buffer[g_cluster_validity_offset + g_constants_triangle_count - 1];
-
-    if (gidx == 0)
-    {
-        g_bvh[g_bvh_offset + 0].child0 = 2*N - 1;
-        g_bvh[g_bvh_offset + 0].child1 = N;
-#if TOP_LEVEL
-        g_bvh[g_bvh_offset + 0].update = 1;
-#else
-        bool enoughMemory = ((2 * N - 1) <= uint(g_bvh_max_node_count));
-        g_bvh[g_bvh_offset + 0].update = enoughMemory;
-        if (!enoughMemory)
-        {
-            g_bvh[g_bvh_offset + 0].parent = 0;
-            InitNode(1);
-        }
-#endif
-    }
 
 #if !TOP_LEVEL
-    if (2 * int(N) - 1 > g_bvh_max_node_count)
-        return;
-#endif
-
-    if (gidx < N - 1)
-    {
-        g_bvh[g_bvh_offset+1 + INTERNAL_NODE_INDEX(gidx, N)].update = 0;
-    }
-
-    if (gidx >= g_constants_triangle_count || g_scratch_buffer[g_cluster_validity_offset + gidx] == 0)
-        return;
-
-    uint index = g_scratch_buffer[g_cluster_to_node_offset + gidx];
-    int rangeStart = gidx;
-    int rangeEnd = g_scratch_buffer[g_cluster_range_offset + gidx];
-    uint triangleCount = rangeEnd - rangeStart + 1;
-
-    g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(index, N)].child0 = INVALID_IDX;
-    g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(index, N)].child1 = rangeStart;
-    g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(index, N)].data[0] = triangleCount;
-
-    if (rangeEnd < int(g_constants_triangle_count - 1))
-        g_scratch_buffer[g_deltas_offset + index] = uint(deltaCompare(rangeEnd, rangeEnd + 1));
-
-}
-
-#pragma kernel ClearUpdateFlags
-[numthreads(GROUP_SIZE, 1, 1)]
-void ClearUpdateFlags(
-    in uint gidx : SV_DispatchThreadID,
-    in uint lidx : SV_GroupThreadID,
-    in uint bidx : SV_GroupID)
+void SetLeafNode(int leafNodeIndex, uint3 triangleIndices, uint primIndex)
 {
-    const uint N = g_constants_triangle_count;
-    for (int i = 0; i < PRIMITIVES_PER_THREAD; ++i)
-    {
-        //  Calculate linear primitive index.
-        uint prim_index = gidx * PRIMITIVES_PER_THREAD + i;
-        if (prim_index >= N)
-            return;
-
-        g_bvh[g_bvh_offset + 1 + INTERNAL_NODE_INDEX(prim_index, N)].update = 0;
-    }
+#if USE_ATOMICS
+    uint old_value;
+    InterlockedExchange(g_bvh_leaves[g_bvh_leaves_offset + leafNodeIndex].x, triangleIndices.x, old_value);
+    InterlockedExchange(g_bvh_leaves[g_bvh_leaves_offset + leafNodeIndex].y, triangleIndices.y, old_value);
+    InterlockedExchange(g_bvh_leaves[g_bvh_leaves_offset + leafNodeIndex].z, triangleIndices.z, old_value);
+    InterlockedExchange(g_bvh_leaves[g_bvh_leaves_offset + leafNodeIndex].w, primIndex, old_value);
+#else
+    g_bvh_leaves[g_bvh_leaves_offset + leafNodeIndex] = uint4(triangleIndices, primIndex);
+#endif
 }
+#endif
 
 void SetNodeLeftRange(int nodeIndex, uint rangeLeft)
 {
 #if USE_ATOMICS
     uint old_value;
-    InterlockedExchange(g_scratch_buffer[g_internal_node_range_offset + 2*nodeIndex], rangeLeft, old_value);
+    InterlockedExchange(g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex], rangeLeft, old_value);
 #else
-    g_scratch_buffer[g_internal_node_range_offset + 2*nodeIndex] = rangeLeft;
+    g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex] = rangeLeft;
 #endif
 }
 
@@ -494,9 +361,9 @@ void SetNodeRightRange(int nodeIndex, uint rangeRight)
 {
 #if USE_ATOMICS
     uint old_value;
-    InterlockedExchange(g_scratch_buffer[g_internal_node_range_offset + 2*nodeIndex+1], rangeRight, old_value);
+    InterlockedExchange(g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex + 1], rangeRight, old_value);
 #else
-    g_scratch_buffer[g_internal_node_range_offset + 2*nodeIndex+1] = rangeRight;
+    g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex + 1] = rangeRight;
 #endif
 }
 
@@ -505,42 +372,50 @@ uint2 GetNodeRange(int nodeIndex)
     int rangeLeft = 0;
     int rangeRight = 0;
 #if USE_ATOMICS
-    InterlockedAdd(g_scratch_buffer[g_internal_node_range_offset +  2 * nodeIndex], 0, rangeLeft);
-    InterlockedAdd(g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex+1], 0, rangeRight);
+    InterlockedAdd(g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex], 0, rangeLeft);
+    InterlockedAdd(g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex + 1], 0, rangeRight);
 #else
     rangeLeft = g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex];
-    rangeRight = g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex+1];
+    rangeRight = g_scratch_buffer[g_internal_node_range_offset + 2 * nodeIndex + 1];
 #endif
 
     return uint2(rangeLeft, rangeRight);
 }
 
-uint ChooseNodeParent(uint index, uint rangeLeft, uint rangeRight, uint N)
+uint ChooseNodeParent(uint index, uint rangeLeft, uint rangeRight, uint N, bool isLeafNode)
 {
     if (rangeRight - rangeLeft == N - 1)
     {
         g_bvh[g_bvh_offset+1 + index].parent = INVALID_IDX;
-        g_bvh[g_bvh_offset + 0].parent = index;
+        SetBvhHeaderRootNodeIndex(index);
         return INVALID_IDX;
     }
     else // not necessary but unity compiler reports a warning otherwise
     {
-#if NO_REDUCTION
         if (rangeLeft == 0 || (rangeRight != N-1 && deltaCompare(rangeRight, rangeRight + 1) < deltaCompare(rangeLeft - 1, rangeLeft)))
-#else
-        if (rangeLeft == 0 || (rangeRight != N-1 && g_scratch_buffer[g_deltas_offset + rangeRight] < g_scratch_buffer[g_deltas_offset + rangeLeft - 1]))
-#endif
         {
-            uint parent = INTERNAL_NODE_INDEX(rangeRight, N);
-            g_bvh[g_bvh_offset+1 + index].parent = parent;
+            uint parent = rangeRight;
+            if (!isLeafNode)
+                g_bvh[g_bvh_offset+1 + index].parent = parent;
+            #if !TOP_LEVEL
+            else
+                g_scratch_buffer[g_leaf_parents_offset + GET_LEAF_NODE_FIRST_PRIM(index)] = parent;
+            #endif
+
             g_bvh[g_bvh_offset+1 + parent].child0 = index;
             SetNodeLeftRange(parent, rangeLeft);
             return parent;
         }
         else
         {
-            uint parent = INTERNAL_NODE_INDEX(rangeLeft - 1, N);
-            g_bvh[g_bvh_offset+1 + index].parent = parent;
+            uint parent = rangeLeft - 1;
+            if (!isLeafNode)
+                g_bvh[g_bvh_offset+1 + index].parent = parent;
+            #if !TOP_LEVEL
+            else
+                g_scratch_buffer[g_leaf_parents_offset + GET_LEAF_NODE_FIRST_PRIM(index)] = parent;
+            #endif
+
             g_bvh[g_bvh_offset+1 + parent].child1 = index;
             SetNodeRightRange(parent, rangeRight);
             return parent;
@@ -555,20 +430,7 @@ void BuildTreeBottomUp(
     in uint lidx : SV_GroupThreadID,
     in uint bidx : SV_GroupID)
 {
-#if NO_REDUCTION
     const uint N = g_constants_triangle_count;
-    if (gidx == 0)
-    {
-        g_bvh[g_bvh_offset + 0].child0 = 2*N - 1;
-        g_bvh[g_bvh_offset + 0].child1 = N;
-        g_bvh[g_bvh_offset + 0].update = 1;
-    }
-#else
-    const uint N = g_bvh[g_bvh_offset + 0].child1;
-    if (!g_bvh[g_bvh_offset + 0].update)
-        return;
-#endif
-
     if (gidx == 0)
     {
         uint3 pmin;
@@ -584,42 +446,47 @@ void BuildTreeBottomUp(
         float3 fpmin = Uint3ToFloat3(pmin);
         float3 fpmax = Uint3ToFloat3(pmax);
 
-        g_bvh[g_bvh_offset + 0].SetLeftAabb(fpmin, fpmax);
-        g_bvh[g_bvh_offset + 0].SetRightAabb(fpmin, fpmax);
+        // first bvh node is used as header
+        InitBvhHeader(fpmin, fpmax, N);
+
+        if (N == 1)
+        {
+            uint prim_index = 0;
+            SetBvhHeaderRootNodeIndex(LEAF_NODE_INDEX(prim_index));
+            #if TOP_LEVEL
+                g_instance_infos[prim_index].world_to_local_transform = Inverse(g_instance_infos[prim_index].local_to_world_transform);
+            #else
+                g_scratch_buffer[g_leaf_parents_offset + 0] = INVALID_IDX;
+                uint3 indices = GetFaceIndices(0);
+                g_bvh_leaves[g_bvh_leaves_offset + 0] = uint4(indices, 0);
+            #endif
+            return;
+        }
     }
 
     // Each thread handles PRIMITIVES_PER_THREAD triangles.
     for (int i = 0; i < PRIMITIVES_PER_THREAD; ++i)
     {
         //  Calculate linear primitive index.
-        uint prim_index = gidx * PRIMITIVES_PER_THREAD + i;
-        if (prim_index >= N)
+        uint leaf_index = gidx * PRIMITIVES_PER_THREAD + i;
+        if (leaf_index >= N)
         {
             return;
         }
 
-        // Leaf nodes.
-#if NO_REDUCTION
-#if TOP_LEVEL
-        uint instance_index = g_scratch_buffer[g_primitive_refs_offset + prim_index];
-        g_instance_infos[instance_index].world_to_local_transform = Inverse(g_instance_infos[instance_index].local_to_world_transform);
-        Aabb instance_aabb = GetInstanceAabb(instance_index);
-        g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(prim_index, N)].child0 = INVALID_IDX;
-        g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(prim_index, N)].child1 = instance_index;
-        g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(prim_index, N)].update = 1;
-        g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(prim_index, N)].SetLeftAabb(instance_aabb);
-        g_bvh[g_bvh_offset+1 + LEAF_NODE_INDEX(prim_index, N)].SetRightAabb(instance_aabb);
-#else
-        g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].child0 = INVALID_IDX;
-        g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].child1 = prim_index;
-        g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].update = 0;
-        g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].data[0] = 1;
-        for (int i = 1; i < 12 ; ++i)
-            g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].data[i] = 0;
-#endif
-#endif
+        #if TOP_LEVEL
+            uint prim_index = g_scratch_buffer[g_primitive_refs_offset + leaf_index];
+            g_instance_infos[prim_index].world_to_local_transform = Inverse(g_instance_infos[prim_index].local_to_world_transform);
 
-        uint index = ChooseNodeParent(LEAF_NODE_INDEX(prim_index, N), prim_index, prim_index, N);
+            uint index = ChooseNodeParent(LEAF_NODE_INDEX(prim_index), leaf_index, leaf_index, N, true);
+        #else
+            uint prim_index = g_scratch_buffer[g_primitive_refs_offset + leaf_index];
+            uint3 indices = GetFaceIndices(prim_index);
+            SetLeafNode(leaf_index, indices, prim_index);
+
+            uint index = ChooseNodeParent(LEAF_NODE_INDEX(leaf_index), leaf_index, leaf_index, N, true);
+        #endif
+
 
         [allow_uav_condition]
         while (index != INVALID_IDX)
@@ -633,22 +500,23 @@ void BuildTreeBottomUp(
                 uint child0 = g_bvh[g_bvh_offset+1 + index].child0;
                 uint child1 = g_bvh[g_bvh_offset+1 + index].child1;
 #if USE_ATOMICS
-                Aabb aabb0 = GetNodeAabbSync(g_bvh, g_bvh_offset+1 + child0, g_bvh[g_bvh_offset+1 + child0].child0 != INVALID_IDX);
-                Aabb aabb1 = GetNodeAabbSync(g_bvh, g_bvh_offset+1 + child1, g_bvh[g_bvh_offset+1 + child1].child0 != INVALID_IDX);
+                Aabb aabb0 = GetNodeAabbSync(g_bvh_offset+1, child0);
+                Aabb aabb1 = GetNodeAabbSync(g_bvh_offset+1, child1);
 				SetNodeAabbsSync(g_bvh, g_bvh_offset+1 + index, aabb0, aabb1);
 #else
-				Aabb aabb0 = GetNodeAabb(g_bvh[g_bvh_offset+1 + child0]);
-                Aabb aabb1 = GetNodeAabb(g_bvh[g_bvh_offset+1 + child1]);
+				Aabb aabb0 = GetNodeAabb(g_bvh_offset+1, child0);
+                Aabb aabb1 = GetNodeAabb(g_bvh_offset+1, child1);
+
                 g_bvh[g_bvh_offset+1 + index].SetLeftAabb(aabb0);
                 g_bvh[g_bvh_offset+1 + index].SetRightAabb(aabb1);
 #endif
 
                 uint2 nodeRange = GetNodeRange(index);
-                index = ChooseNodeParent(index, nodeRange.x, nodeRange.y, N);
+                index = ChooseNodeParent(index, nodeRange.x, nodeRange.y, N, false);
             }
             else
             {
-                // This is first thread, bail out.
+                // This is the first thread joining this node, bail out.
                 break;
             }
         }

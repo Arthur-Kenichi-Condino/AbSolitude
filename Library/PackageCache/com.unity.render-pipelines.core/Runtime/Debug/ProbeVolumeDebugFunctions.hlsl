@@ -1,20 +1,23 @@
 #ifndef PROBEVOLUMEDEBUG_FUNCTIONS_HLSL
 #define PROBEVOLUMEDEBUG_FUNCTIONS_HLSL
 
+float4 TransformPosition(float3 posOS)
+{
+    return mul(UNITY_MATRIX_M, float4(posOS, 1.0f)) + float4(_APVWorldOffset, 0.0f);
+}
+
 #ifdef PROBE_VOLUME_DEBUG_FUNCTION_MAIN
     v2f vert(appdata v)
     {
         v2f o;
+        ZERO_INITIALIZE(v2f, o);
 
         UNITY_SETUP_INSTANCE_ID(v);
         UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-        o.vertex = 0;
-        o.normal = 0;
-
         if (!ShouldCull(o))
         {
-            float3 probePosition_WS = mul(UNITY_MATRIX_M, float4(0.0f, 0.0f, 0.0f, 1.0f)).xyz;
+            float3 probePosition_WS = TransformPosition(0.0f).xyz;
             if (_AdjustmentVolumeCount > 0 && !IsInSelection(probePosition_WS))
             {
                 DoCull(o);
@@ -26,12 +29,11 @@
 
                 float3 snappedProbePosition_WS; // worldspace position of main probe (a corner of the 8 probes cube)
                 float3 samplingPositionNoAntiLeak_WS; // // worldspace sampling position after applying 'NormalBias', 'ViewBias'
-                float3 samplingPosition_WS; // worldspace sampling position after applying 'NormalBias', 'ViewBias' and 'ValidityAndNormalBased Leak Reduction'
                 float probeDistance;
                 float3 normalizedOffset; // normalized offset between sampling position and snappedProbePosition
                 float validityWeight[8];
 
-                FindSamplingData(debugPosition.xyz, debugNormal.xyz, _RenderingLayerMask, snappedProbePosition_WS, samplingPosition_WS, samplingPositionNoAntiLeak_WS, probeDistance, normalizedOffset, validityWeight);
+                FindSamplingData(debugPosition.xyz, debugNormal.xyz, _RenderingLayerMask, snappedProbePosition_WS, samplingPositionNoAntiLeak_WS, probeDistance, normalizedOffset, validityWeight);
 
                 float samplingFactor = ComputeSamplingFactor(probePosition_WS, snappedProbePosition_WS, normalizedOffset, probeDistance);
 
@@ -42,8 +44,8 @@
                     return o;
                 }
 
-                float4 wsPos = mul(UNITY_MATRIX_M, float4(0.0f, 0.0f, 0.0f, 1.0f));
-                wsPos += normalize(mul(UNITY_MATRIX_M, float4((v.vertex.xyz), 0.0f))) * _ProbeSize * 0.3f; // avoid scale from transformation matrix to be effective (otherwise some probes are bigger than others)
+                float4 wsPos = float4(probePosition_WS, 1.0);
+                wsPos += normalize(mul(UNITY_MATRIX_M, float4(v.vertex.xyz, 0.0f))) * _ProbeSize * 0.3f; // avoid scale from transformation matrix to be effective (otherwise some probes are bigger than others)
 
                 float4 pos = mul(UNITY_MATRIX_VP, wsPos);
                 float remappedDepth = Remap(-1.0f, 1.0f, 0.6f, 1.0f, pos.z); // remapped depth to draw gizmo on top of most other objects
@@ -55,14 +57,14 @@
             }
             else
             {
-                float4 wsPos = mul(UNITY_MATRIX_M, float4(v.vertex.xyz * _ProbeSize, 1.0));
+                float4 wsPos = TransformPosition(v.vertex.xyz * _ProbeSize);
                 o.vertex = mul(UNITY_MATRIX_VP, wsPos);
                 o.normal = normalize(mul(v.normal, (float3x3)UNITY_MATRIX_M));
 
                 if (_ShadingMode == DEBUGPROBESHADINGMODE_RENDERING_LAYER_MASKS)
                 {
                     o.centerCoordSS = _ScreenSize.xy * ComputeNormalizedDeviceCoordinatesWithZ(probePosition_WS, UNITY_MATRIX_VP).xy;
-                    if (_ProbeLayerCount != 1 & (asuint(UNITY_ACCESS_INSTANCED_PROP(Props, _RenderingLayer)) & _RenderingLayerMask) == 0)
+                    if (_APVLayerCount != 1 & (asuint(UNITY_ACCESS_INSTANCED_PROP(Props, _RenderingLayer)) & _RenderingLayerMask) == 0)
                         DoCull(o);
                 }
             }
@@ -76,7 +78,7 @@
         UNITY_SETUP_INSTANCE_ID(i);
 
         if (_ShadingMode >= DEBUGPROBESHADINGMODE_SH && _ShadingMode <= DEBUGPROBESHADINGMODE_SHL0L1
-            || _ShadingMode == DEBUGPROBESHADINGMODE_SKY_OCCLUSION_SH || _ShadingMode == DEBUGPROBESHADINGMODE_SKY_DIRECTION)
+            || _ShadingMode == DEBUGPROBESHADINGMODE_SKY_OCCLUSION_SH || _ShadingMode == DEBUGPROBESHADINGMODE_SKY_DIRECTION || _ShadingMode == DEBUGPROBESHADINGMODE_PROBE_OCCLUSION)
         {
             return float4(CalculateDiffuseLighting(i) * exp2(_ExposureCompensation) * GetCurrentExposureMultiplier(), 1);
         }
@@ -118,12 +120,12 @@
                 float3(204, 121, 167) / 255.0f,
             };
 
-            if (_ProbeLayerCount == 1) return _DebugEmptyProbeData; // Rendering layers are not baked
+            if (_APVLayerCount == 1) return _DebugEmptyProbeData; // Rendering layers are not baked
             uint renderingLayer = asuint(UNITY_ACCESS_INSTANCED_PROP(Props, _RenderingLayer)) & _RenderingLayerMask;
 
             uint stripeSize = 8;
             float3 result = float3(0, 0, 0);
-            uint2 positionSS = i.vertex.xy;
+            int2 positionSS = i.vertex.xy;
             uint layerId = 0, layerCount = countbits(renderingLayer);
 
             int colorIndex = 0;
@@ -134,7 +136,7 @@
             if (layerCount >= 4 && colorIndex == 0 && positionSS.x < i.centerCoordSS.x)
                 colorIndex = 3;
 
-            for (uint l = 0; (l < _ProbeLayerCount) && (layerId < layerCount); l++)
+            for (uint l = 0; (l < _APVLayerCount) && (layerId < layerCount); l++)
             {
                 [branch]
                 if (renderingLayer & (1U << l))
@@ -210,7 +212,7 @@
         o.vertex = 0;
         o.normal = 0;
 
-        float3 probePosition_WS = mul(UNITY_MATRIX_M, float4(0.0f, 0.0f, 1.0f, 1.0f)).xyz;
+        float3 probePosition_WS = TransformPosition(0.0f).xyz;
         float3 offset = UNITY_ACCESS_INSTANCED_PROP(Props, _Offset).xyz;
         float offsetLenSqr = dot(offset, offset);
         if (offsetLenSqr <= 1e-6f)
@@ -223,7 +225,7 @@
         }
         else if (!ShouldCull(o))
         {
-            float4 wsPos = mul(UNITY_MATRIX_M, float4(v.vertex.x * _OffsetSize, v.vertex.y * _OffsetSize, v.vertex.z, 1.f));
+            float4 wsPos = TransformPosition(v.vertex.xyz * float3(_OffsetSize, _OffsetSize, 1.0f));
             o.vertex = mul(UNITY_MATRIX_VP, wsPos);
             o.normal = normalize(mul(v.normal, (float3x3)UNITY_MATRIX_M));
         }
@@ -241,6 +243,7 @@
     v2f vert(appdata v)
     {
         v2f o;
+        ZERO_INITIALIZE(v2f, o);
 
         float4 debugPosition = _positionNormalBuffer[0];
         float4 debugNormal = _positionNormalBuffer[1];
@@ -250,13 +253,12 @@
 
         float3 snappedProbePosition_WS; // worldspace position of main probe (a corner of the 8 probes cube)
         float3 samplingPositionNoAntiLeak_WS; // worldspace sampling position after applying 'NormalBias', 'ViewBias'
-        float3 samplingPosition_WS; // worldspace sampling position after applying 'NormalBias', 'ViewBias' and 'ValidityAndNormalBased Leak Reduction'
         float probeDistance;
         float3 normalizedOffset; // normalized offset between sampling position and snappedProbePosition
         float validityWeights[8];
         float validityWeight = 1.0f;
 
-        FindSamplingData(debugPosition.xyz, debugNormal.xyz, _RenderingLayerMask, snappedProbePosition_WS, samplingPosition_WS, samplingPositionNoAntiLeak_WS, probeDistance, normalizedOffset, validityWeights);
+        FindSamplingData(debugPosition.xyz, debugNormal.xyz, _RenderingLayerMask, snappedProbePosition_WS, samplingPositionNoAntiLeak_WS, probeDistance, normalizedOffset, validityWeights);
 
         // QUADS to write the sampling factor of each probe
         // each QUAD has an individual ID in vertex color blue channel
@@ -315,7 +317,10 @@
                 validityWeight = validityWeights[5];
             }
 
-            samplingFactor = ComputeSamplingFactor(quadPosition, snappedProbePosition_WS, normalizedOffset, probeDistance);
+            if (_APVLeakReductionMode == APVLEAKREDUCTIONMODE_QUALITY)
+                samplingFactor = validityWeight; // this is not 100% accurate in some cases (cause we do max 3 samples)
+            else
+                samplingFactor = ComputeSamplingFactor(quadPosition, snappedProbePosition_WS, normalizedOffset, probeDistance);
 
             float4 cameraUp = mul(UNITY_MATRIX_I_V, float4(0.0f, 1.0f, 0.0f, 0.0f));
             float4 cameraRight = -mul(UNITY_MATRIX_I_V, float4(1.0f, 0.0f, 0.0f, 0.0f));

@@ -1,4 +1,4 @@
-# ProBuilder Preferences window
+# ProBuilder Preferences 
 
 To define how you interact with ProBuilder, you can customize the user interface and how the tools work.
 
@@ -51,7 +51,7 @@ Use these settings to enable and disable ProBuilder experimental features.
 
 | **Property:**                     | **Description:**                                             |
 | :-------------------------------- | :----------------------------------------------------------- |
-| __Experimental Features Enabled__ | Enable this option to access the [New Bezier Shape](bezier.md) experimental feature in the ProBuilder toolbar, and the __Store Mesh as Asset__ option. <br /><br />**Note:** This setting has no affect on access to the [Boolean (CSG) Tool](boolean.md), which is always available from the [Experimental menu](menu-experimental.md). |
+| __Experimental Features Enabled__ | Enable this option to access the [New Bezier Shape](workflow-create-bezier.md) experimental feature in the ProBuilder toolbar, and the __Store Mesh as Asset__ option. <br /><br />**Note:** This setting has no affect on access to the [Boolean (CSG) Tool](boolean.md), which is always available from the [Experimental menu](menu-experimental.md). |
 | __Meshes Are Assets__             | Enable this option to store Mesh information in the Project instead of in each separate Scene level. |
 
 > **Note**: When you toggle Experimental Features on or off, Unity has to recompile scripts because the changes add or remove functionality in Unity. This means that there is a delay before this option appears to change.
@@ -245,21 +245,6 @@ Use these properties to customize how snapping behaves with ProBuilder.
 </tbody>
 </table>
 
-
-
-<a name="toolbar"></a>
-
-## Toolbar
-
-Use these properties to set default behavior for the [ProBuilder toolbar](toolbar.md).
-
-![Toolbar section](images/prefs_toolbar.png)
-
-| **Property:** | **Description:** |
-| :--- | :--- |
-| __Shift Key Tooltips__ | Enable this option to only show tooltips when the mouse cursor is hovering over a button and you are holding down **Shift**.<br/>By default, tooltips appear when the mouse cursor hovers over a button for more than a second. |
-| <a name="icongui"></a>__Icon GUI__ | Enable this option to use toolbar buttons that [display icons only](toolbar.md#buttonmode). <br />Disable this option to use toolbar buttons that [display text only](toolbar.md#buttonmode).<br />**Note:** You can also [use the context menu](customizing.md#buttons) to switch between icons and text. |
-| <a name="toolbarloc"></a>__Toolbar Location__ | Choose the location where you want the [Edit Mode toolbar](edit-mode-toolbar.md) to appear in the Scene view. Possible locations are:<br /><br />- **Upper Center**<br />- **Upper Left**<br />- **Upper Right**<br />- **Bottom Center**<br />- **Bottom Left**<br />- **Bottom Right** |
 
 
 

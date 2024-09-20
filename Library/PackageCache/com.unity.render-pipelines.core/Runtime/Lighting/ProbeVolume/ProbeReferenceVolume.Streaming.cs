@@ -82,6 +82,7 @@ namespace UnityEngine.Rendering
             public int _L1GryOffset;
             public int _L1BrzOffset;
             public int _ValidityOffset;
+            public int _ProbeOcclusionOffset;
             public int _SkyOcclusionOffset;
             public int _SkyShadingDirectionOffset;
             public int _L2_0Offset;
@@ -95,6 +96,8 @@ namespace UnityEngine.Rendering
             public int _L1ProbeSize; // In bytes
             public int _ValiditySize;
             public int _ValidityProbeSize; // In bytes
+            public int _ProbeOcclusionSize;
+            public int _ProbeOcclusionProbeSize; // In bytes
             public int _SkyOcclusionSize;
             public int _SkyOcclusionProbeSize; // In bytes
             public int _SkyShadingDirectionSize;
@@ -181,6 +184,7 @@ namespace UnityEngine.Rendering
             public DiskStreamingRequest cellDataStreamingRequest = new DiskStreamingRequest(1);
             public DiskStreamingRequest cellOptionalDataStreamingRequest = new DiskStreamingRequest(1);
             public DiskStreamingRequest cellSharedDataStreamingRequest = new DiskStreamingRequest(1);
+            public DiskStreamingRequest cellProbeOcclusionDataStreamingRequest = new DiskStreamingRequest(1);
             public DiskStreamingRequest brickStreamingRequest = new DiskStreamingRequest(1);
             public DiskStreamingRequest supportStreamingRequest = new DiskStreamingRequest(5);
 
@@ -200,6 +204,7 @@ namespace UnityEngine.Rendering
                     cellDataStreamingRequest.Cancel();
                     cellOptionalDataStreamingRequest.Cancel();
                     cellSharedDataStreamingRequest.Cancel();
+                    cellProbeOcclusionDataStreamingRequest.Cancel();
                 }
 
                 state = State.Canceled;
@@ -214,6 +219,7 @@ namespace UnityEngine.Rendering
                     cellDataStreamingRequest.Wait();
                     cellOptionalDataStreamingRequest.Wait();
                     cellSharedDataStreamingRequest.Wait();
+                    cellProbeOcclusionDataStreamingRequest.Wait();
                 }
             }
 
@@ -237,6 +243,7 @@ namespace UnityEngine.Rendering
                     success &= UpdateRequestState(cellDataStreamingRequest, ref isComplete);
                     success &= UpdateRequestState(cellOptionalDataStreamingRequest, ref isComplete);
                     success &= UpdateRequestState(cellSharedDataStreamingRequest, ref isComplete);
+                    success &= UpdateRequestState(cellProbeOcclusionDataStreamingRequest, ref isComplete);
 
                     if (!success)
                     {
@@ -265,6 +272,7 @@ namespace UnityEngine.Rendering
                 cellDataStreamingRequest.Clear();
                 cellOptionalDataStreamingRequest.Clear();
                 cellSharedDataStreamingRequest.Clear();
+                cellProbeOcclusionDataStreamingRequest.Clear();
                 bytesWritten = 0;
             }
 
@@ -275,6 +283,7 @@ namespace UnityEngine.Rendering
                 cellDataStreamingRequest.Dispose();
                 cellOptionalDataStreamingRequest.Dispose();
                 cellSharedDataStreamingRequest.Dispose();
+                cellProbeOcclusionDataStreamingRequest.Dispose();
             }
         }
 
@@ -461,7 +470,7 @@ namespace UnityEngine.Rendering
             }
         }
 
-        void ComputeWorseLoadedCells(Vector3 cameraPosition, Vector3 cameraDirection)
+        void ComputeStreamingScoreAndWorseLoadedCells(Vector3 cameraPosition, Vector3 cameraDirection)
         {
             m_WorseLoadedCells.Clear();
             m_WorseLoadedCells.Reserve(m_LoadedCells.size); // Pre-reserve to avoid Insert allocating every time.
@@ -595,6 +604,17 @@ namespace UnityEngine.Rendering
         /// <param name="camera">The <see cref="Camera"/></param>
         public void UpdateCellStreaming(CommandBuffer cmd, Camera camera)
         {
+            UpdateCellStreaming(cmd, camera, null);
+        }
+
+        /// <summary>
+        /// Updates the cell streaming for a <see cref="Camera"/>
+        /// </summary>
+        /// <param name="cmd">The <see cref="CommandBuffer"/></param>
+        /// <param name="camera">The <see cref="Camera"/></param>
+        /// <param name="options">Options coming from the volume stack.</param>
+        public void UpdateCellStreaming(CommandBuffer cmd, Camera camera, ProbeVolumesOptions options)
+        {
             if (!isInitialized || m_CurrentBakingSet == null) return;
 
             using (new ProfilingScope(ProfilingSampler.Get(CoreProfileId.APVCellStreamingUpdate)))
@@ -607,7 +627,8 @@ namespace UnityEngine.Rendering
                 }
 
                 // Cell position in cell space is the top left corner. So we need to shift the camera position by half a cell to make things comparable.
-                var cameraPositionCellSpace = (m_FrozenCameraPosition - ProbeOffset()) / MaxBrickSize() - Vector3.one * 0.5f;
+                var offset = ProbeOffset() + (options != null ? options.worldOffset.value : Vector3.zero);
+                var cameraPositionCellSpace = (m_FrozenCameraPosition - offset) / MaxBrickSize() - Vector3.one * 0.5f;
 
                 DynamicArray<Cell> bestUnloadedCells;
                 DynamicArray<Cell> worseLoadedCells;
@@ -639,6 +660,7 @@ namespace UnityEngine.Rendering
                 int shChunkBudget = m_Pool.GetRemainingChunkCount();
                 int cellCountToLoad = Mathf.Min(numberOfCellsLoadedPerFrame, bestUnloadedCells.size);
 
+                bool didRecomputeScoresForLoadedCells = false;
                 if (m_SupportGPUStreaming)
                 {
                     if (m_IndexDefragmentationInProgress)
@@ -670,9 +692,10 @@ namespace UnityEngine.Rendering
                             }
                             else
                             {
-                                ComputeWorseLoadedCells(cameraPositionCellSpace, m_FrozenCameraDirection);
+                                ComputeStreamingScoreAndWorseLoadedCells(cameraPositionCellSpace, m_FrozenCameraDirection);
                                 worseLoadedCells = m_WorseLoadedCells;
                             }
+                            didRecomputeScoresForLoadedCells = true;
 
                             int pendingUnloadCount = 0;
                             while (m_TempCellToLoadList.size < cellCountToLoad)
@@ -734,8 +757,22 @@ namespace UnityEngine.Rendering
                     {
                         var cellInfo = m_ToBeLoadedCells[m_TempCellToLoadList.size]; // m_TempCellToLoadList.size get incremented in TryLoadCell
                         if (!TryLoadCell(cellInfo, ref shChunkBudget, ref indexChunkBudget, m_TempCellToLoadList))
+                        {
+                            if (i > 0) // Only warn once
+                            {
+                                Debug.LogWarning("Max Memory Budget for Adaptive Probe Volumes has been reached, but there is still more data to load. Consider either increasing the Memory Budget, enabling GPU Streaming, or reducing the probe count.");
+                            }
                             break;
+                        }
                     }
+                }
+
+                // If we intend to blend scenarios, compute the streaming scores for the already loaded cells.
+                // These will be used to determine which of the loaded cells to perform blending on first.
+                // We only need to do this if we didn't already do it above.
+                if (!didRecomputeScoresForLoadedCells && supportScenarioBlending)
+                {
+                    ComputeStreamingScore(cameraPositionCellSpace, m_FrozenCameraDirection, m_LoadedCells);
                 }
 
                 if (m_LoadMaxCellsPerFrame)
@@ -840,7 +877,9 @@ namespace UnityEngine.Rendering
                     var worstCellLoaded = m_LoadedBlendingCells[m_LoadedBlendingCells.size - m_TempBlendingCellToUnloadList.size - 1];
                     var bestCellToBeLoaded = m_ToBeLoadedBlendingCells[m_TempBlendingCellToLoadList.size];
 
-                    if (bestCellToBeLoaded.blendingInfo.blendingScore >= (worstNoTurnover ?? worstCellLoaded).blendingInfo.blendingScore) // We are in a "stable" state
+                    // The best cell to be loaded has WORSE score than the worst cell already loaded.
+                    // This means all cells waiting to be loaded are worse than the ones we already have - we are in a "stable" state.
+                    if (bestCellToBeLoaded.blendingInfo.blendingScore >= (worstNoTurnover ?? worstCellLoaded).blendingInfo.blendingScore)
                     {
                         if (worstNoTurnover == null) // Disable turnover
                             break;
@@ -855,13 +894,21 @@ namespace UnityEngine.Rendering
                             break;
                     }
 
+                    // If we encounter a cell that is still being streamed in (and thus hasn't had a chance to be blended yet), bail
+                    // we don't want to keep unloading cells before they get blended, or we will never get any work done.
+                    // This branch is only ever true when disk streaming is being used.
+                    if (worstCellLoaded.streamingInfo.IsBlendingStreaming())
+                        break;
+
                     UnloadBlendingCell(worstCellLoaded, m_TempBlendingCellToUnloadList);
 
                     if (probeVolumeDebug.verboseStreamingLog)
                         LogStreaming($"Unloading blending cell {worstCellLoaded.desc.index}");
 
-                    // Loading can still fail cause all cells don't have the same chunk count
-                    if (TryLoadBlendingCell(bestCellToBeLoaded, m_TempBlendingCellToLoadList) && turnoverOffset != -1)
+                    bool loadOk = TryLoadBlendingCell(bestCellToBeLoaded, m_TempBlendingCellToLoadList);
+
+                    // Handle turnover. Loading can still fail cause all cells don't have the same chunk count.
+                    if (loadOk && turnoverOffset != -1)
                     {
                         // swap to ensure loaded cells are at the start of m_ToBeLoadedBlendingCells
                         m_ToBeLoadedBlendingCells[turnoverOffset] = m_ToBeLoadedBlendingCells[m_TempBlendingCellToLoadList.size-1];
@@ -1167,6 +1214,16 @@ namespace UnityEngine.Rendering
                 request.bytesWritten += request.cellOptionalDataStreamingRequest.RunCommands(optionalDataAsset.OpenFile());
             }
 
+            if (m_CurrentBakingSet.bakedProbeOcclusion)
+            {
+                var probeOcclusionDataAsset = request.scenarioData.cellProbeOcclusionDataAsset;
+                cellStreamingDesc = probeOcclusionDataAsset.streamableCellDescs[cellIndex];
+                var probeOcclusionReadSize = m_CurrentBakingSet.ProbeOcclusionChunkSize * chunkCount;
+                request.cellProbeOcclusionDataStreamingRequest.AddReadCommand(cellStreamingDesc.offset, probeOcclusionReadSize, mappedBufferAddr);
+                mappedBufferAddr += probeOcclusionReadSize;
+                request.bytesWritten += request.cellProbeOcclusionDataStreamingRequest.RunCommands(probeOcclusionDataAsset.OpenFile());
+            }
+
             // Bricks Data
             cellData.bricks = new NativeArray<ProbeBrickIndex.Brick>(cellDesc.bricksCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
@@ -1371,12 +1428,14 @@ namespace UnityEngine.Rendering
                     {
                         scenarioData.cellDataAsset.CloseFile();
                         scenarioData.cellOptionalDataAsset.CloseFile();
+                        scenarioData.cellProbeOcclusionDataAsset.CloseFile();
                     }
 
                     if (!string.IsNullOrEmpty(otherScenario) && m_CurrentBakingSet.scenarios.TryGetValue(lightingScenario, out var otherScenarioData))
                     {
                         otherScenarioData.cellDataAsset.CloseFile();
                         otherScenarioData.cellOptionalDataAsset.CloseFile();
+                        otherScenarioData.cellProbeOcclusionDataAsset.CloseFile();
                     }
                 }
             }

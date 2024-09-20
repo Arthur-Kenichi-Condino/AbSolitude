@@ -43,8 +43,12 @@ namespace UnityEngine.EventSystems
         /// True if pointer hover events will be sent to the parent
         /// </summary>
         [SerializeField] private bool m_SendPointerHoverToParent = true;
+
         //This is needed for testing
-        internal bool sendPointerHoverToParent { get { return m_SendPointerHoverToParent; } set { m_SendPointerHoverToParent = value; } }
+        /// <summary>
+        /// True if pointer hover events will be sent to the parent
+        /// </summary>
+        protected internal bool sendPointerHoverToParent { get { return m_SendPointerHoverToParent; } set { m_SendPointerHoverToParent = value; } }
 
         private AxisEventData m_AxisEventData;
 
@@ -389,6 +393,18 @@ namespace UnityEngine.EventSystems
 #else
             return -1;
 #endif
+        }
+
+        /// <summary>
+        /// Converts PointerEventData.scrollDelta to corresponding number of ticks of the scroll wheel.
+        /// </summary>
+        /// <remarks>
+        /// Input Module implementations are free to apply a scaling factor to their PointerEventData's scrollDelta.
+        /// This method can be used when a system needs to treat scaling-independent input values.
+        /// </remarks>
+        public virtual Vector2 ConvertPointerEventScrollDeltaToTicks(Vector2 scrollDelta)
+        {
+            return scrollDelta / input.mouseScrollDeltaPerTick;
         }
     }
 }

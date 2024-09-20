@@ -18,9 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// These matrices are based on the following publication:
+//
+// S. Joe and F. Y. Kuo: "Constructing Sobol sequences with better
+// two-dimensional projections", SIAM J. Sci. Comput. 30, 2635-2654 (2008).
+//
+// The tabulated direction numbers are available here:
+// http://web.maths.unsw.edu.au/~fkuo/sobol/new-joe-kuo-6.21201
+
 namespace UnityEngine.Rendering.Sampling
 {
-    internal class SobolData
+    internal static class SobolData
     {
         public const uint SobolDims = 1024;
         public const uint SobolSize = 52;

@@ -18,8 +18,6 @@ TextMesh Pro provides better control over text formatting and layout than to Uni
 
 The TextMesh Pro package is included in the Unity Editor. You do not need to install it.
 
-You can switch to other versions of TextMesh Pro from the [Packages Window](https://docs.unity3d.com/Manual/upm-ui.html).
-
 To use TextMesh Pro, you must import the TMP Essential Resources package (see the next section).
 
 You can also import the TMP Examples & Extras package to help you learn TextMesh Pro.

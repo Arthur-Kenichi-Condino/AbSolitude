@@ -10,6 +10,7 @@ using Codice.Client.Common;
 using Codice.Client.Common.EventTracking;
 using Codice.Client.Common.Threading;
 using Codice.CM.Common;
+using Codice.CM.Common.Mount;
 using PlasticGui;
 using PlasticGui.WorkspaceWindow;
 using PlasticGui.WorkspaceWindow.BrowseRepository;
@@ -67,6 +68,12 @@ namespace Unity.PlasticSCM.Editor.Views.Diff
             FillData(mountWithPath, csetInfo);
 
             mParentWindow.Repaint();
+        }
+
+        internal void OnEnable()
+        {
+            mSearchField.downOrUpArrowKeyPressed +=
+                SearchField_OnDownOrUpArrowKeyPressed;
         }
 
         internal void OnDisable()

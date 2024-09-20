@@ -1,7 +1,0 @@
-﻿<ui:UXML xmlns:ui="UnityEngine.UIElements"
-         xmlns:uie="UnityEditor.UIElements"
-         xmlns:nv="Unity.Multiplayer.Tools.NetVis.Editor.UI"
-         editor-extension-mode="True">
-    <Style src="../Uss/NetVisGlobal.uss" />
-    <ui:VisualElement name="GradientContainer" />
-</ui:UXML>

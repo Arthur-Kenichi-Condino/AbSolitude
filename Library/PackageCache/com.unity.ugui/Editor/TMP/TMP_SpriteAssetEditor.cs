@@ -122,6 +122,7 @@ namespace TMPro.EditorUtilities
             if (GUI.Button(rect, new GUIContent("Update Sprite Asset")))
             {
                 TMP_SpriteAssetMenu.UpdateSpriteAsset(m_SpriteAsset);
+                ResetSelectionNextFrame();
             }
             EditorGUI.indentLevel = 1;
 
@@ -675,6 +676,19 @@ namespace TMPro.EditorUtilities
             if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
                 m_selectedElement = -1;
 
+        }
+
+        private void ResetSelectionNextFrame()
+        {
+            var activeObject = Selection.activeObject;
+            EditorApplication.delayCall += () =>
+            {
+                Selection.activeObject = null;
+                EditorApplication.delayCall += () =>
+                {
+                    Selection.activeObject = activeObject;
+                };
+            };
         }
 
 

@@ -9,6 +9,7 @@ using Codice.Client.Commands.CheckIn;
 using Codice.Client.Common;
 using Codice.Client.Common.Threading;
 using Codice.CM.Common;
+using Codice.CM.Common.Checkin.Partial;
 using Codice.Client.GameUI.Checkin;
 using PlasticGui;
 using PlasticGui.Help.Conditions;
@@ -36,7 +37,7 @@ namespace Unity.PlasticSCM.Editor.Views.CreateWorkspace
             /*threadOperationDelegate*/ delegate
             {
                 RepositorySpec repSpec = new SpecGenerator().
-                    GenRepositorySpec(false, repository);
+                    GenRepositorySpec(false, repository, CmConnection.Get().UnityOrgResolver);
 
                 repInfo = plasticApi.GetRepositoryInfo(repSpec);
 

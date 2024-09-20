@@ -5,9 +5,6 @@ namespace Unity.Burst.Intrinsics
 {
     public unsafe static partial class Arm
     {
-        /// <summary>
-        /// Neon intrinsics
-        /// </summary>
         public unsafe partial class Neon
         {
             /// <summary>

@@ -36,28 +36,19 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static Color BarBorder = EditorGUIUtility.isProSkin ?
                 (Color)new Color32(35, 35, 35, 255) :
                 (Color)new Color32(153, 153, 153, 255);
-#if UNITY_2019
-            internal static Color InspectorHeaderBackground = EditorGUIUtility.isProSkin ?
-                new Color(60f / 255, 60f / 255, 60f / 255) :
-                new Color(203f / 255, 203f / 255, 203f / 255);
-#else
+
             internal static Color InspectorHeaderBackground = Transparent;
-#endif
-#if UNITY_2019_1_OR_NEWER
+
             internal static Color InspectorHeaderBackgroundDisabled = EditorGUIUtility.isProSkin ?
                 new Color(58f / 255, 58f / 255, 58f / 255) :
                 new Color(199f / 255, 199f / 255, 199f / 255);
-#else
-            internal static Color InspectorHeaderBackgroundDisabled = EditorGUIUtility.isProSkin ?
-                new Color(60f / 255, 60f / 255, 60f / 255) :
-                new Color(210f / 255, 210f / 255, 210f / 255);
-#endif
+
             internal static Color TabUnderline = new Color(58f / 255, 121f / 255, 187f / 255);
             internal static Color Link = new Color(0f, 120f / 255, 218f / 255);
             internal static Color SecondaryLabel = EditorGUIUtility.isProSkin ?
                 new Color(196f / 255, 196f / 255, 196f / 255) :
                 new Color(105f / 255, 105f / 255, 105f / 255);
-            internal static Color BackgroundBar = EditorGUIUtility.isProSkin ? 
+            internal static Color BackgroundBar = EditorGUIUtility.isProSkin ?
                 new Color(35f / 255, 35f / 255, 35f / 255) :
                 new Color(160f / 255, 160f / 255, 160f / 255);
 
@@ -105,7 +96,6 @@ namespace Unity.PlasticSCM.Editor.UI
                 style.fontSize = MODAL_FONT_SIZE;
                 return style;
             });
-
 
             internal static readonly LazyStyle Toggle = new LazyStyle(() =>
             {
@@ -171,7 +161,7 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static readonly LazyStyle Label = new LazyStyle(() =>
             {
                 var style = new GUIStyle(TreeView.DefaultStyles.label);
-                style.fontSize = 11;
+                style.fontSize = UnityConstants.LABEL_FONT_SIZE;
                 style.alignment = TextAnchor.MiddleLeft;
                 return style;
             });
@@ -179,7 +169,7 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static readonly LazyStyle SecondaryLabel = new LazyStyle(() =>
             {
                 var style = new GUIStyle(TreeView.DefaultStyles.label);
-                style.fontSize = 11;
+                style.fontSize = UnityConstants.LABEL_FONT_SIZE;
                 style.alignment = TextAnchor.MiddleLeft;
 
                 style.active = new GUIStyleState() { textColor = Colors.SecondaryLabel };
@@ -226,7 +216,7 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static readonly LazyStyle BoldLabel = new LazyStyle(() =>
             {
                 var style = new GUIStyle(TreeView.DefaultStyles.boldLabel);
-                style.fontSize = 11;
+                style.fontSize = UnityConstants.LABEL_FONT_SIZE;
                 style.alignment = TextAnchor.MiddleLeft;
                 return style;
             });
@@ -234,7 +224,7 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static readonly LazyStyle LabelRightAligned = new LazyStyle(() =>
             {
                 var style = new GUIStyle(TreeView.DefaultStyles.label);
-                style.fontSize = 11;
+                style.fontSize = UnityConstants.LABEL_FONT_SIZE;
                 style.alignment = TextAnchor.MiddleRight;
                 return style;
             });
@@ -259,7 +249,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 style.alignment = TextAnchor.MiddleCenter;
                 style.fontSize = 14;
                 style.padding = new RectOffset(
-                    0, 0, 
+                    0, 0,
                     UnityConstants.TREEVIEW_STATUS_CONTENT_PADDING, UnityConstants.TREEVIEW_STATUS_CONTENT_PADDING);
                 style.stretchWidth = false;
                 return style;
@@ -390,9 +380,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 10;
                 style.fontStyle = FontStyle.Bold;
-#if UNITY_2019_1_OR_NEWER
                 style.contentOffset = new Vector2(0, 1.5f);
-#endif
                 return style;
             });
         }
@@ -420,9 +408,6 @@ namespace Unity.PlasticSCM.Editor.UI
             {
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 10;
-#if !UNITY_2019_1_OR_NEWER
-                style.margin = new RectOffset(0, 0, 0, 0);
-#endif
                 return style;
             });
 
@@ -431,9 +416,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 10;
                 style.fontStyle = FontStyle.Bold;
-#if UNITY_2019_1_OR_NEWER
                 style.contentOffset = new Vector2(0, 1.5f);
-#endif
                 return style;
             });
 
@@ -485,9 +468,6 @@ namespace Unity.PlasticSCM.Editor.UI
             {
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 11;
-#if !UNITY_2019_1_OR_NEWER
-                style.margin = new RectOffset(0, 0, 0, 0);
-#endif
                 return style;
             });
         }
@@ -499,9 +479,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 10;
                 style.fontStyle = FontStyle.Bold;
-#if UNITY_2019_1_OR_NEWER
                 style.contentOffset = new Vector2(0, 1.5f);
-#endif
                 return style;
             });
         }
@@ -513,9 +491,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 var style = new GUIStyle(EditorStyles.label);
                 style.fontSize = 10;
                 style.fontStyle = FontStyle.Bold;
-#if UNITY_2019_1_OR_NEWER
                 style.contentOffset = new Vector2(0, 1.5f);
-#endif
                 return style;
             });
         }
@@ -527,9 +503,6 @@ namespace Unity.PlasticSCM.Editor.UI
                 {
                     var style = new GUIStyle(EditorStyles.label);
                     style.alignment = TextAnchor.MiddleLeft;
-#if !UNITY_2019_1_OR_NEWER
-                    style.margin = new RectOffset(0, 0, 0, 0);
-#endif
                     return style;
                 });
         }
@@ -539,9 +512,6 @@ namespace Unity.PlasticSCM.Editor.UI
             internal static readonly LazyStyle Label = new LazyStyle(() =>
             {
                 var style = new GUIStyle(EditorStyles.label);
-#if !UNITY_2019_1_OR_NEWER
-                style.fontSize = 10;
-#endif
                 style.normal = new GUIStyleState() { textColor = Color.white };
                 return style;
             });
@@ -643,9 +613,6 @@ namespace Unity.PlasticSCM.Editor.UI
         {
             var style = new GUIStyle(EditorStyles.label);
             style.fontSize = 10;
-#if !UNITY_2019_1_OR_NEWER
-            style.margin = new RectOffset(0, 0, 0, 0);
-#endif
             return style;
         });
 
@@ -656,7 +623,7 @@ namespace Unity.PlasticSCM.Editor.UI
                 textColor = GetEditorSkin().textArea.normal.textColor,
                 background = Images.GetTreeviewBackgroundTexture()
             };
-                
+
             style.wordWrap = true;
             return style;
         });

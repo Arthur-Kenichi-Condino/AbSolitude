@@ -1,7 +1,7 @@
 
 namespace UnityEngine.Rendering.RadeonRays
 {
-    internal class Common
+    internal static class Common
     {
         public static uint CeilDivide(uint val, uint div)
         {

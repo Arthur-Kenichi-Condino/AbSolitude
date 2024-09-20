@@ -226,6 +226,22 @@ namespace UnityEngine.Experimental.Rendering
 #endif
         }
 
+
+        /// <summary>
+        /// Used by the render pipeline to retrieve the renderViewportScale value from the XR display.
+        /// One use case for retriving this value is that render pipeline can properly sync some SRP owned textures to scale accordingly
+        /// </summary>
+        /// <returns> Returns current scaleOfAllViewports value from the XRDisplaySubsystem. </returns>
+        public static float GetRenderViewportScale()
+        {
+#if ENABLE_VR && ENABLE_XR_MODULE
+
+            return s_Display.scaleOfAllViewports;
+#else
+            return 1.0f;
+#endif
+        }
+
         /// <summary>
         /// Used by the render pipeline to initiate a new rendering frame through a XR layout.
         /// </summary>
@@ -420,9 +436,6 @@ namespace UnityEngine.Experimental.Rendering
             if (renderParam0.textureArraySlice != 0 || renderParam1.textureArraySlice != 1)
                 return false;
 
-            if (renderParam0.viewport != renderParam1.viewport)
-                return false;
-
             return true;
         }
 
@@ -438,24 +451,30 @@ namespace UnityEngine.Experimental.Rendering
             // XRTODO : remove this line and use XRSettings.useOcclusionMesh instead when it's fixed
             Mesh occlusionMesh = XRGraphicsAutomatedTests.running ? null : renderParameter.occlusionMesh;
 
-            return new XRView(renderParameter.projection, renderParameter.view, viewport, occlusionMesh, renderParameter.textureArraySlice);
+            return new XRView(renderParameter.projection, renderParameter.view, renderParameter.previousView, renderParameter.isPreviousViewValid, viewport, occlusionMesh, renderParameter.textureArraySlice);
         }
 
-        static XRPassCreateInfo BuildPass(XRDisplaySubsystem.XRRenderPass xrRenderPass, ScriptableCullingParameters cullingParameters, XRLayout layout)
+        private static RenderTextureDescriptor XrRenderTextureDescToUnityRenderTextureDesc(RenderTextureDescriptor xrDesc)
         {
             // We can't use descriptor directly because y-flip is forced
             // XRTODO : fix root problem
-            RenderTextureDescriptor xrDesc = xrRenderPass.renderTargetDesc;
             RenderTextureDescriptor rtDesc = new RenderTextureDescriptor(xrDesc.width, xrDesc.height, xrDesc.colorFormat, xrDesc.depthBufferBits, xrDesc.mipCount);
-            rtDesc.dimension    = xrRenderPass.renderTargetDesc.dimension;
-            rtDesc.volumeDepth  = xrRenderPass.renderTargetDesc.volumeDepth;
-            rtDesc.vrUsage      = xrRenderPass.renderTargetDesc.vrUsage;
-            rtDesc.sRGB         = xrRenderPass.renderTargetDesc.sRGB;
-            
+            rtDesc.dimension    = xrDesc.dimension;
+            rtDesc.volumeDepth  = xrDesc.volumeDepth;
+            rtDesc.vrUsage      = xrDesc.vrUsage;
+            rtDesc.sRGB         = xrDesc.sRGB;
+            return rtDesc;
+        }
+
+        static XRPassCreateInfo BuildPass(XRDisplaySubsystem.XRRenderPass xrRenderPass, ScriptableCullingParameters cullingParameters, XRLayout layout)
+        {    
             XRPassCreateInfo passInfo = new XRPassCreateInfo
             {
                 renderTarget            = xrRenderPass.renderTarget,
-                renderTargetDesc        = rtDesc,
+                renderTargetDesc        = XrRenderTextureDescToUnityRenderTextureDesc(xrRenderPass.renderTargetDesc),
+                hasMotionVectorPass     = xrRenderPass.hasMotionVectorPass,
+                motionVectorRenderTarget = xrRenderPass.motionVectorRenderTarget,
+                motionVectorRenderTargetDesc = XrRenderTextureDescToUnityRenderTextureDesc(xrRenderPass.motionVectorRenderTargetDesc),
                 cullingParameters       = cullingParameters,
                 occlusionMeshMaterial   = s_OcclusionMeshMaterial,
                 occlusionMeshScale      = GetOcclusionMeshScale(),

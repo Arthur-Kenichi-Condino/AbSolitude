@@ -54,12 +54,22 @@ namespace UnityEngine.Rendering.RenderGraphModule
 
         public void AllowPassCulling(bool value)
         {
+            // This pass cannot be culled if it allows global state modifications
+            if (value && m_RenderPass.allowGlobalState)
+                return;
+
             m_RenderPass.AllowPassCulling(value);
         }
 
         public void AllowGlobalStateModification(bool value)
         {
             m_RenderPass.AllowGlobalState(value);
+
+            // This pass cannot be culled if it allows global state modifications
+            if (value)
+            {
+                AllowPassCulling(false);
+            }
         }
 
         /// <summary>
@@ -74,31 +84,27 @@ namespace UnityEngine.Rendering.RenderGraphModule
         public BufferHandle CreateTransientBuffer(in BufferDesc desc)
         {
             var result = m_Resources.CreateBuffer(desc, m_RenderPass.index);
-            m_RenderPass.AddTransientResource(result.handle);
+            UseResource(result.handle, AccessFlags.Write | AccessFlags.Read, isTransient: true);
             return result;
         }
 
         public BufferHandle CreateTransientBuffer(in BufferHandle computebuffer)
         {
             var desc = m_Resources.GetBufferResourceDesc(computebuffer.handle);
-            var result = m_Resources.CreateBuffer(desc, m_RenderPass.index);
-            m_RenderPass.AddTransientResource(result.handle);
-            return result;
+            return CreateTransientBuffer(desc);
         }
 
         public TextureHandle CreateTransientTexture(in TextureDesc desc)
         {
             var result = m_Resources.CreateTexture(desc, m_RenderPass.index);
-            m_RenderPass.AddTransientResource(result.handle);
+            UseResource(result.handle, AccessFlags.Write | AccessFlags.Read, isTransient: true);
             return result;
         }
 
         public TextureHandle CreateTransientTexture(in TextureHandle texture)
         {
             var desc = m_Resources.GetTextureResourceDesc(texture.handle);
-            var result = m_Resources.CreateTexture(desc, m_RenderPass.index);
-            m_RenderPass.AddTransientResource(result.handle);
-            return result;
+            return CreateTransientTexture(desc);
         }
 
         public void Dispose()
@@ -188,7 +194,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
             }
         }
 
-        private ResourceHandle UseResource(in ResourceHandle handle, AccessFlags flags)
+        private ResourceHandle UseResource(in ResourceHandle handle, AccessFlags flags, bool isTransient = false)
         {
             CheckResource(handle);
 
@@ -204,6 +210,12 @@ namespace UnityEngine.Rendering.RenderGraphModule
                 else
                 {
                     versioned = handle;
+                }
+
+                if (isTransient)
+                {
+                    m_RenderPass.AddTransientResource(versioned);
+                    return GetLatestVersionHandle(handle);
                 }
 
                 m_RenderPass.AddResourceRead(versioned);
@@ -286,7 +298,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
             }
             else
             {
-                throw new ArgumentException("Trying to read global texture property {globalPropertyID} but no previous pass in the graph assigned a value to this global.");
+                throw new ArgumentException($"Trying to read global texture property {propertyId} but no previous pass in the graph assigned a value to this global.");
             }
         }
 
@@ -365,7 +377,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
                 {
                     if (globalTex.Item1.handle.index == tex.handle.index)
                     {
-                        throw new InvalidOperationException($"Trying to SetRenderAttachment on a texture that is currently set on a global texture slot. Shaders might be using the texture using samplers. You should ensure textures are not set as globals when using them as fragment attachments.");
+                        throw new InvalidOperationException("Trying to SetRenderAttachment on a texture that is currently set on a global texture slot. Shaders might be using the texture using samplers. You should ensure textures are not set as globals when using them as fragment attachments.");
                     }
                 }
             }
@@ -475,7 +487,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
         }
 
         [Conditional("DEVELOPMENT_BUILD"), Conditional("UNITY_EDITOR")]
-        void CheckResource(in ResourceHandle res, bool dontCheckTransientReadWrite = false)
+        void CheckResource(in ResourceHandle res, bool checkTransientReadWrite = false)
         {
             if(RenderGraph.enableValidityChecks)
             {
@@ -483,14 +495,14 @@ namespace UnityEngine.Rendering.RenderGraphModule
                 {
                     int transientIndex = m_Resources.GetRenderGraphResourceTransientIndex(res);
                     // We have dontCheckTransientReadWrite here because users may want to use UseColorBuffer/UseDepthBuffer API to benefit from render target auto binding. In this case we don't want to raise the error.
-                    if (transientIndex == m_RenderPass.index && !dontCheckTransientReadWrite)
+                    if (transientIndex == m_RenderPass.index && checkTransientReadWrite)
                     {
                         Debug.LogError($"Trying to read or write a transient resource at pass {m_RenderPass.name}.Transient resource are always assumed to be both read and written.");
                     }
 
                     if (transientIndex != -1 && transientIndex != m_RenderPass.index)
                     {
-                        throw new ArgumentException($"Trying to use a transient texture (pass index {transientIndex}) in a different pass (pass index {m_RenderPass.index}).");
+                        throw new ArgumentException($"Trying to use a transient {res.type} (pass index {transientIndex}) in a different pass (pass index {m_RenderPass.index}).");
                     }
                 }
                 else

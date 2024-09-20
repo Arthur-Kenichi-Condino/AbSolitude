@@ -27,7 +27,16 @@
         "com.unity.render-pipelines.core/Samples~/Common",
         "com.unity.shadergraph/Samples~/Common"
       ]
+    },
+    {
+      "displayName": "Production Ready Shaders",
+      "description": "This sample contains a collection of Shader Graph assets that are ready to be used in production.  The collection includes shaders for rocks, decals, water, terrain details, and many more.  It also includes post-process examples, weather effects, and shaders that behave similarly to the URP and HDRP Lit shaders.",
+      "path": "Samples~/ProductionReady",
+      "dependencies": [
+        "com.unity.render-pipelines.core/Samples~/Common",
+        "com.unity.shadergraph/Samples~/Common"
+      ]
     }
   ],
-  "_fingerprint": "153546375422a91d648d1f6f108ce1fa3e374af2"
+  "_fingerprint": "2628b911ca1acaff5fadf11f2b13d17d59acaf29"
 }

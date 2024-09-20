@@ -13,16 +13,11 @@ An **Input Field** is a way to make the text of a [Text Control](script-Text.md)
 |**Property:**||**Function:** |
 |:---|:---|:---|
 |****Interactable**** ||A boolean that determines if the Input Field can be interacted with or not.|
-
 |****Transition**** ||[Transitions](script-SelectableTransition.md) are used to set how the input field transitions when ***Normal***, ***Highlighted***, ***Pressed*** or ***Disabled***. |
 |****Navigation**** || Properties that determine the sequence of controls. See [Navigation Options](script-SelectableNavigation.md).|
-
 |****TextComponent**** ||A reference to the [Text](script-Text.md) element used as the contents of the _*Input Field*_|
-
 |****Text**** ||Starting Value. The initial text placed in the field before editing begins. |
-
 |****Character Limit**** ||The value of the maximum number of characters that can be entered into the input field.|
-
 |****Content Type**** ||Define the type(s) of characters that your input field accepts|
 | |**Standard** |Any character can be entered.|
 | |**Autocorrected** |The autocorrection determines whether the input tracks unknown words and suggests a more suitable replacement candidate to the user, replacing the typed text automatically unless the user explicitly overrides the action.|
@@ -34,20 +29,14 @@ An **Input Field** is a way to make the text of a [Text Control](script-Text.md)
 | |**Password*** |Conceals the characters inputed with an asterisk. Allows symbols.|
 | |**Pin** |Conceals the characters inputed with an asterisk. Only allows only whole numbers to be entered.|
 | |**Custom** |Allows you to customise the Line Type, Input Type, Keyboard Type and Character Validation.|
-
 |****Line Type**** ||Defines how text is formatted inside the text field.|
 | |**Single Line** |Only allows text to be on a single line.|
 | |**Multi Line Submit** |Allows text to use multiple lines. Only uses a new line when needed.|
 | |**Multi Line Newline** |Allows text to use multiple lines. User can use a newline by pressing the return key.|
-
 |****Placeholder**** ||This is an optional ‘empty’ [Graphic](xref:UnityEngine.UI.Graphic) to show that  the _*Input Field*_ is empty of text. Note that this ‘empty' graphic still displays even when the _*Input Field*_ is selected (that is; when there is focus on it). eg; "Enter text...".|
-
 |****Caret Blink Rate**** ||Defines the blink rate for the mark placed on the line to indicate a proposed insertion of text.|
-
 |****Selection Color**** ||The background color of the selected portion of text.|
-
 |****Hide Mobile Input**** ||Hides the native input field attached to the onscreen keyboard on mobile devices. Note that this only works on iOS and Android devices.|
-| | | |
 
 ## Events
 

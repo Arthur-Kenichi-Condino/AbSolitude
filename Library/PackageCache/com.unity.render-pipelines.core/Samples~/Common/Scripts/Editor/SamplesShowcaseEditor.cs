@@ -10,13 +10,14 @@ using System;
 using System.Collections;
 using System.Reflection;
 using UnityEngine.Rendering;
+using UnityEditor.Inspector.GraphicsSettingsInspectors;
 
 [InitializeOnLoad]
 [CustomEditor(typeof(SamplesShowcase))]
 public class SamplesShowcaseEditor : Editor
 {
     private static readonly string UXMLPath = "SamplesSelectionUXML";
-    public static readonly string[] supportedExtensions = {".shadergraph", ".vfx", ".cs", ".hlsl", ".shader", ".asset",".mat",".fbx",".prefab"};
+    public static readonly string[] supportedExtensions = {".shadergraph", ".vfx", ".cs", ".hlsl", ".shader", ".asset",".mat",".fbx",".prefab", ".png"};
 
     SerializedProperty currentIndex;
     Color headlineColor;
@@ -174,6 +175,11 @@ public class SamplesShowcaseEditor : Editor
                     {
                         RequiredSettingBase.showSettingCallback(setting);
                     }
+                    else if (!string.IsNullOrEmpty(setting.globalSettingsType))
+					{
+                        var type = Type.GetType(setting.globalSettingsType);
+                        GraphicsSettingsInspectorUtility.OpenAndScrollTo(type);
+					}
                     else
                     {
                         SettingsService.OpenProjectSettings(setting.projectSettingsPath);

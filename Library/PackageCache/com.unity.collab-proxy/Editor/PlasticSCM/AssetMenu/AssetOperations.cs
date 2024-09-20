@@ -51,7 +51,6 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
             IAssetStatusCache assetStatusCache,
             IMergeViewLauncher mergeViewLauncher,
             IGluonViewSwitcher gluonViewSwitcher,
-            EditorWindow parentWindow,
             IAssetSelection assetSelection,
             LaunchTool.IShowDownloadPlasticExeWindow showDownloadPlasticExeWindow,
             bool isGluonMode)
@@ -69,7 +68,6 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
             mAssetSelection = assetSelection;
             mShowDownloadPlasticExeWindow = showDownloadPlasticExeWindow;
             mIsGluonMode = isGluonMode;
-            mParentWindow = parentWindow;
 
             mGuiMessage = new UnityPlasticGuiMessage();
             mProgressControls = new EditorProgressControls(mGuiMessage);
@@ -155,7 +153,6 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
                     selectedPaths,
                     mAssetStatusCache,
                     mIsGluonMode,
-                    mParentWindow,
                     mWorkspaceWindow,
                     mViewHost,
                     mWorkspaceOperationsMonitor,
@@ -242,14 +239,6 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
 
         void IAssetMenuOperations.ShowHistory()
         {
-            if (mShowDownloadPlasticExeWindow.Show(
-                   mWkInfo,
-                   mIsGluonMode,
-                   TrackFeatureUseEvent.Features.InstallPlasticCloudFromShowHistory,
-                   TrackFeatureUseEvent.Features.InstallPlasticEnterpriseFromShowHistory,
-                   TrackFeatureUseEvent.Features.CancelPlasticInstallationFromShowHistory))
-                return;
-
             Asset selectedAsset = AssetsSelection.GetSelectedAsset(
                 mWkInfo.ClientPath,
                 mAssetSelection.GetSelectedAssets());
@@ -283,7 +272,7 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
 
             FilterRulesConfirmationData filterRulesConfirmationData = 
                 FilterRulesConfirmationDialog.AskForConfirmation(
-                    rules, isAddOperation, isApplicableToAllWorkspaces, mParentWindow);
+                    rules, isAddOperation, isApplicableToAllWorkspaces, EditorWindow.focusedWindow);
 
             AddFilesFilterPatternsOperation.Run(
                 mWkInfo, mWorkspaceWindow, type, operation, filterRulesConfirmationData);
@@ -324,7 +313,6 @@ namespace Unity.PlasticSCM.Editor.AssetMenu
         readonly bool mIsGluonMode;
         readonly GuiMessage.IGuiMessage mGuiMessage;
         readonly EditorProgressControls mProgressControls;
-        readonly EditorWindow mParentWindow;
         readonly IAssetSelection mAssetSelection;
         readonly LaunchTool.IShowDownloadPlasticExeWindow mShowDownloadPlasticExeWindow;
     }

@@ -821,7 +821,6 @@ namespace Unity.Burst.Intrinsics
                 return new v256(cmp_pd(a.Lo128, b.Lo128, imm8), cmp_pd(a.Hi128, b.Hi128, imm8));
             }
 
-            /// **** VCMPPS ymm1, ymm2, ymm3/v256, imm8
             /// <summary>
             /// Compare packed single-precision (32-bit) floating-point elements in a and b based on the comparison operand specified by imm8, and store the results in dst.
             /// </summary>
@@ -965,7 +964,7 @@ namespace Unity.Burst.Intrinsics
             /// <summary>
             /// Convert packed 32-bit integers in a to packed double-precision (64-bit) floating-point elements, and store the results in dst.
             /// </summary>
-            /// <param name="a"></param>
+            /// <param name="a">Vector a</param>
             /// <remarks>
             /// **** VCVTDQ2PD ymm1, xmm2/v128
             /// Converts four packed signed doubleword integers in the source operand to

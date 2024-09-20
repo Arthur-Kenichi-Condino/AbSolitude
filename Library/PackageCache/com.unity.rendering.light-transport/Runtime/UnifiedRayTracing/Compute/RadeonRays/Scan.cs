@@ -3,11 +3,11 @@ namespace UnityEngine.Rendering.RadeonRays
 {
     internal class Scan
     {
-        private ComputeShader shaderScan;
-        private int kernelScan;
+        readonly ComputeShader shaderScan;
+        readonly int kernelScan;
 
-        private ComputeShader shaderReduce;
-        private int kernelReduce;
+        readonly ComputeShader shaderReduce;
+        readonly int kernelReduce;
 
         const uint kKeysPerThread = 4u;
         const uint kGroupSize     = 256u;
@@ -92,7 +92,7 @@ namespace UnityEngine.Rendering.RadeonRays
             cmd.SetComputeBufferParam(shader, kernelIndex, SID.g_buffer, buffer);
         }
 
-        public ulong GetScratchDataSizeInDwords(uint size)
+        static public ulong GetScratchDataSizeInDwords(uint size)
         {
             if (size <= kKeysPerGroup)
             {

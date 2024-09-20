@@ -4,5 +4,6 @@
 /[Tt]emp/FSTimeGet-*
 /[Ll]ibrary/ArtifactDB*
 /[Ll]ibrary/Artifacts/
+/[Ll]ibrary/PlayerDataCache/
 /[Ll]ogs/
 .vs/*/FileContentIndex/*.vsidx

@@ -19,7 +19,11 @@ namespace TMPro
     /// Editable text input field.
     /// </summary>
     [AddComponentMenu("UI/TextMeshPro - Input Field", 11)]
+        #if UNITY_2023_2_OR_NEWER
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/TextMeshPro/index.html")]
+    #else
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2")]
+    #endif
     public class TMP_InputField : Selectable,
         IUpdateSelectedHandler,
         IBeginDragHandler,

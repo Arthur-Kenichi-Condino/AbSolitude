@@ -32,8 +32,8 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
     internal struct GeometryPoolHandle : IEquatable<GeometryPoolHandle>
     {
         public int index;
-        public static GeometryPoolHandle Invalid = new GeometryPoolHandle() { index = -1 };
-        public bool valid => index != -1;
+        public static readonly GeometryPoolHandle Invalid = new GeometryPoolHandle() { index = -1 };
+        public readonly bool valid => index != -1;
         public bool Equals(GeometryPoolHandle other) => index == other.index;
     }
 
@@ -70,7 +70,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
     }
 
     // Geometry pool container. Contains a global set of geometry accessible from the GPU.
-    internal class GeometryPool : IDisposable
+    internal sealed class GeometryPool : IDisposable
     {
         private const int kMaxThreadGroupsPerDispatch = 65535; // Counted in groups, not threads.
         private const int kThreadGroupSize = 256; // Counted in threads
@@ -99,13 +99,10 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             public static readonly int _InputUv1BufferOffset = Shader.PropertyToID("_InputUv1BufferOffset");
             public static readonly int _InputNormalBufferStride = Shader.PropertyToID("_InputNormalBufferStride");
             public static readonly int _InputNormalBufferOffset = Shader.PropertyToID("_InputNormalBufferOffset");
-            public static readonly int _InputTangentBufferStride = Shader.PropertyToID("_InputTangentBufferStride");
-            public static readonly int _InputTangentBufferOffset = Shader.PropertyToID("_InputTangentBufferOffset");
             public static readonly int _PosBuffer = Shader.PropertyToID("_PosBuffer");
             public static readonly int _Uv0Buffer = Shader.PropertyToID("_Uv0Buffer");
             public static readonly int _Uv1Buffer = Shader.PropertyToID("_Uv1Buffer");
             public static readonly int _NormalBuffer = Shader.PropertyToID("_NormalBuffer");
-            public static readonly int _TangentBuffer = Shader.PropertyToID("_TangentBuffer");
             public static readonly int _OutputVB = Shader.PropertyToID("_OutputVB");
             public static readonly int _AttributesMask = Shader.PropertyToID("_AttributesMask");
         }
@@ -143,7 +140,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             public NativeArray<MeshChunk> meshChunks;
             public bool hasGPUData;
 
-            public static GeometrySlot Invalid = new GeometrySlot()
+            public static readonly GeometrySlot Invalid = new GeometrySlot()
             {
                 meshChunkTableAlloc = BlockAllocator.Allocation.Invalid,
                 hasGPUData = false,
@@ -157,7 +154,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             public uint refCount;
             public uint hash;
             public int geoSlotHandle;
-            public static GeoPoolEntrySlot Invalid = new GeoPoolEntrySlot()
+            public static readonly GeoPoolEntrySlot Invalid = new GeoPoolEntrySlot()
             {
                 refCount = 0u,
                 hash = 0u,
@@ -204,8 +201,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
 
         private const GraphicsBuffer.Target VertexBufferTarget = GraphicsBuffer.Target.Structured;
         private const GraphicsBuffer.Target IndexBufferTarget = GraphicsBuffer.Target.Structured;
-
-        private int m_GeoPoolEntriesCount;
         public GraphicsBuffer globalIndexBuffer { get { return m_GlobalIndexBuffer; } }
         public GraphicsBuffer globalVertexBuffer { get { return m_GlobalVertexBuffer; } }
         public int globalVertexBufferStrideBytes { get { return GetVertexByteSize(); } }
@@ -215,39 +210,39 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
         public int verticesCount => m_MaxVertCounts;
         public int meshChunkTablesEntryCount => m_MaxMeshChunkTableEntriesCount;
 
-        private GraphicsBuffer m_GlobalIndexBuffer = null;
-        private GraphicsBuffer m_GlobalVertexBuffer = null;
-        private GraphicsBuffer m_GlobalMeshChunkTableEntryBuffer = null;
-        private GraphicsBuffer m_DummyBuffer = null;
+        GraphicsBuffer m_GlobalIndexBuffer = null;
+        GraphicsBuffer m_GlobalVertexBuffer = null;
+        GraphicsBuffer m_GlobalMeshChunkTableEntryBuffer = null;
+        readonly GraphicsBuffer m_DummyBuffer = null;
 
-        private int m_MaxVertCounts;
-        private int m_MaxIndexCounts;
-        private int m_MaxMeshChunkTableEntriesCount;
+        int m_MaxVertCounts;
+        int m_MaxIndexCounts;
+        int m_MaxMeshChunkTableEntriesCount;
 
-        private BlockAllocator m_VertexAllocator;
-        private BlockAllocator m_IndexAllocator;
-        private BlockAllocator m_MeshChunkTableAllocator;
+        BlockAllocator m_VertexAllocator;
+        BlockAllocator m_IndexAllocator;
+        BlockAllocator m_MeshChunkTableAllocator;
 
-        private NativeParallelHashMap<uint, int> m_MeshHashToGeoSlot;
-        private List<GeometrySlot> m_GeoSlots;
-        private NativeList<int> m_FreeGeoSlots;
+        NativeParallelHashMap<uint, int> m_MeshHashToGeoSlot;
+        List<GeometrySlot> m_GeoSlots;
+        NativeList<int> m_FreeGeoSlots;
 
-        private NativeParallelHashMap<uint, GeometryPoolHandle> m_GeoPoolEntryHashToSlot;
-        private NativeList<GeoPoolEntrySlot> m_GeoPoolEntrySlots;
-        private NativeList<GeometryPoolHandle> m_FreeGeoPoolEntrySlots;
+        NativeParallelHashMap<uint, GeometryPoolHandle> m_GeoPoolEntryHashToSlot;
+        NativeList<GeoPoolEntrySlot> m_GeoPoolEntrySlots;
+        NativeList<GeometryPoolHandle> m_FreeGeoPoolEntrySlots;
 
-        private List<GraphicsBuffer> m_InputBufferReferences;
+        readonly List<GraphicsBuffer> m_InputBufferReferences;
 
-        private ComputeShader m_CopyShader;
+        readonly ComputeShader m_CopyShader;
 
-        private ComputeShader m_GeometryPoolKernelsCS;
-        private int m_KernelMainUpdateIndexBuffer16;
-        private int m_KernelMainUpdateIndexBuffer32;
-        private int m_KernelMainUpdateVertexBuffer;
+        ComputeShader m_GeometryPoolKernelsCS;
+        int m_KernelMainUpdateIndexBuffer16;
+        int m_KernelMainUpdateIndexBuffer32;
+        int m_KernelMainUpdateVertexBuffer;
 
-        private CommandBuffer m_CmdBuffer;
-        private bool m_MustClearCmdBuffer;
-        private int m_PendingCmds;
+        readonly CommandBuffer m_CmdBuffer;
+        bool m_MustClearCmdBuffer;
+        int m_PendingCmds;
 
         public GeometryPool(in GeometryPoolDesc desc, ComputeShader geometryPoolShader, ComputeShader copyShader)
         {
@@ -258,8 +253,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             m_InputBufferReferences = new List<GraphicsBuffer>();
             m_MustClearCmdBuffer = false;
             m_PendingCmds = 0;
-
-            m_GeoPoolEntriesCount = 0;
 
             m_MaxVertCounts = CalcVertexCount(desc.vertexPoolByteSize);
             m_MaxIndexCounts = CalcIndexCount(desc.indexPoolByteSize);
@@ -382,7 +375,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
         private bool AllocateGeo(Mesh mesh, out int allocationHandle)
         {
             uint meshHash = (uint)mesh.GetHashCode();
-            int vertexCount = mesh.vertexCount;
 
             int indexCount = 0;
             for (int submeshIndex = 0; submeshIndex < mesh.subMeshCount; ++submeshIndex)
@@ -541,7 +533,12 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             return geoSlot;
         }
 
-        private void UpdateGeoGpuState(Mesh mesh, List<GeometryPoolSubmeshData> submeshData, GeometryPoolHandle handle)
+        public int GetInstanceGeometryIndex(Mesh mesh)
+        {
+            return GetEntryGeomAllocation(GetHandle(mesh)).meshChunkTableAlloc.block.offset;
+        }
+
+        private void UpdateGeoGpuState(Mesh mesh, GeometryPoolHandle handle)
         {
             var entrySlot = m_GeoPoolEntrySlots[handle.index];
             var geoSlot = m_GeoSlots[entrySlot.geoSlotHandle];
@@ -552,20 +549,20 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             if (!geoSlot.hasGPUData)
             {
                 //Load index buffer
-                GraphicsBuffer buffer = LoadIndexBuffer(cmdBuffer, mesh);
+                GraphicsBuffer buffer = LoadIndexBuffer(mesh);
                 Assertions.Assert.IsTrue((buffer.target & GraphicsBuffer.Target.Raw) != 0);
 
                 // Load attribute buffers
-                var posAttrib = new VertexBufferAttribInfo();
+                VertexBufferAttribInfo posAttrib;
                 LoadVertexAttribInfo(mesh, VertexAttribute.Position, out posAttrib);
 
-                var uv0Attrib = new VertexBufferAttribInfo();
+                VertexBufferAttribInfo uv0Attrib;
                 LoadVertexAttribInfo(mesh, VertexAttribute.TexCoord0, out uv0Attrib);
 
-                var uv1Attrib = new VertexBufferAttribInfo();
+                VertexBufferAttribInfo uv1Attrib;
                 LoadVertexAttribInfo(mesh, VertexAttribute.TexCoord1, out uv1Attrib);
 
-                var normalAttrib = new VertexBufferAttribInfo();
+                VertexBufferAttribInfo normalAttrib;
                 LoadVertexAttribInfo(mesh, VertexAttribute.Normal, out normalAttrib);
 
                 var meshChunkAllocationTable = new NativeArray<GeoPoolMeshChunk>(geoSlot.meshChunks.Length, Allocator.Temp);
@@ -609,8 +606,9 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             return prevHash;
         }
 
-        private uint CalculateClusterHash(uint meshHash, GeometryPoolSubmeshData[] submeshData)
+        private uint CalculateClusterHash(Mesh mesh, GeometryPoolSubmeshData[] submeshData)
         {
+            uint meshHash = (uint)mesh.GetHashCode();
             uint clusterHash = meshHash;
             if (submeshData != null)
             {
@@ -623,13 +621,14 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             return clusterHash;
         }
 
-        public bool Register(Mesh mesh, out GeometryPoolHandle outHandle)
+        public GeometryPoolHandle GetHandle(Mesh mesh)
         {
-            return Register(new GeometryPoolEntryDesc()
-            {
-                mesh = mesh,
-                submeshData = null
-            }, out outHandle);
+            uint geoPoolEntryHash = CalculateClusterHash(mesh, null);
+
+            if (m_GeoPoolEntryHashToSlot.TryGetValue(geoPoolEntryHash, out GeometryPoolHandle outHandle))
+                return outHandle;
+            else
+                return GeometryPoolHandle.Invalid;
         }
 
         private static int FindSubmeshEntryInDesc(int submeshIndex, in GeometryPoolSubmeshData[] submeshData)
@@ -646,6 +645,15 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             return -1;
         }
 
+        public bool Register(Mesh mesh, out GeometryPoolHandle outHandle)
+        {
+            return Register(new GeometryPoolEntryDesc()
+            {
+                mesh = mesh,
+                submeshData = null
+            }, out outHandle);
+        }
+
         public bool Register(in GeometryPoolEntryDesc entryDesc, out GeometryPoolHandle outHandle)
         {
             outHandle = GeometryPoolHandle.Invalid;
@@ -655,9 +663,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             }
 
             Mesh mesh = entryDesc.mesh;
-            uint meshHashCode = (uint)entryDesc.mesh.GetHashCode();
-            uint clusterListHashCode = CalculateClusterHash(meshHashCode, entryDesc.submeshData);
-            uint geoPoolEntryHash = clusterListHashCode;
+            uint geoPoolEntryHash = CalculateClusterHash(entryDesc.mesh, entryDesc.submeshData);
 
             if (m_GeoPoolEntryHashToSlot.TryGetValue(geoPoolEntryHash, out outHandle))
             {
@@ -665,7 +671,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
                 Assertions.Assert.IsTrue(geoPoolEntrySlot.hash == geoPoolEntryHash);
 
                 GeometrySlot geoSlot = m_GeoSlots[geoPoolEntrySlot.geoSlotHandle];
-                Assertions.Assert.IsTrue(geoSlot.hash == meshHashCode);
+                Assertions.Assert.IsTrue(geoSlot.hash == (uint)mesh.GetHashCode());
 
                 ++geoPoolEntrySlot.refCount;
                 m_GeoPoolEntrySlots[outHandle.index] = geoPoolEntrySlot;
@@ -713,9 +719,8 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             }
 
             m_GeoPoolEntryHashToSlot.Add(newSlot.hash, outHandle);
-            UpdateGeoGpuState(mesh, validSubmeshData, outHandle);
+            UpdateGeoGpuState(mesh, outHandle);
 
-            ++m_GeoPoolEntriesCount;
             return true;
         }
 
@@ -724,7 +729,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             var slot = m_GeoPoolEntrySlots[handle.index];
             Assertions.Assert.IsTrue(slot.valid);
             DeallocateGeoPoolEntrySlot(handle);
-            --m_GeoPoolEntriesCount;
         }
 
         public void SendGpuCommands()
@@ -739,20 +743,16 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             DisposeInputBuffers();
         }
 
-        private GraphicsBuffer LoadIndexBuffer(CommandBuffer cmdBuffer, Mesh mesh)
+        private GraphicsBuffer LoadIndexBuffer(Mesh mesh)
         {
-            if ((mesh.indexBufferTarget & GraphicsBuffer.Target.Raw) == 0 && (mesh.GetIndices(0) == null || mesh.GetIndices(0).Length == 0))
-            {
-                throw new Exception("Cant use a mesh buffer that is not raw and has no CPU index information.");
-            }
-            else
-            {
-                mesh.indexBufferTarget |= GraphicsBuffer.Target.Raw;
-                mesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
-                var idxBuffer = mesh.GetIndexBuffer();
-                m_InputBufferReferences.Add(idxBuffer);
-                return idxBuffer;
-            }
+            Debug.Assert((mesh.indexBufferTarget & GraphicsBuffer.Target.Raw) != 0 || (mesh.GetIndices(0) != null && mesh.GetIndices(0).Length != 0),
+                "Cant use a mesh buffer that is not raw and has no CPU index information.");
+
+            mesh.indexBufferTarget |= GraphicsBuffer.Target.Raw;
+            mesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+            var idxBuffer = mesh.GetIndexBuffer();
+            m_InputBufferReferences.Add(idxBuffer);
+            return idxBuffer;
         }
 
         void LoadVertexAttribInfo(Mesh mesh, VertexAttribute attribute, out VertexBufferAttribInfo output)
@@ -809,12 +809,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             int kernel = inputFormat == IndexFormat.UInt16 ? m_KernelMainUpdateIndexBuffer16 : m_KernelMainUpdateIndexBuffer32;
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._InputIndexBuffer, inputBuffer);
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._OutputIndexBuffer, outputIdxBuffer);
-            for (int uvChannel = 0; uvChannel < 2; uvChannel++)
-            {
-                cmdBuffer.EnableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM2"));
-                cmdBuffer.DisableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM3"));
-                cmdBuffer.DisableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM4"));
-            }
 
             int totalGroupCount = DivUp(location.block.count, kThreadGroupSize);
             int dispatchCount = DivUp(totalGroupCount, kMaxThreadGroupsPerDispatch);
@@ -872,31 +866,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._Uv0Buffer, uv0.valid ? uv0.buffer : m_DummyBuffer);
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._Uv1Buffer, uv1.valid ? uv1.buffer : m_DummyBuffer);
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._NormalBuffer, n.valid ? n.buffer : m_DummyBuffer);
-
             cmdBuffer.SetComputeBufferParam(m_GeometryPoolKernelsCS, kernel, GeoPoolShaderIDs._OutputVB, outputVertexBuffer);
-
-
-            for (int uvChannel = 0; uvChannel < 2; uvChannel++)
-            {
-                cmdBuffer.DisableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM2"));
-                cmdBuffer.DisableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM3"));
-                cmdBuffer.DisableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM4"));
-                ref readonly VertexBufferAttribInfo uv = ref (uvChannel == 0) ? ref uv0 : ref uv1;
-                switch (uv.byteCount / 4)
-                {
-                    case 0:
-                    // if there are no UVs, we still have to enabe a UV_DIM* keyword, but because of the _AttributesMask no UVs will be processed. This way we save a shader variant.
-                    case 2:
-                        cmdBuffer.EnableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM2"));
-                        break;
-                    case 3:
-                        cmdBuffer.EnableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM3"));
-                        break;
-                    case 4:
-                        cmdBuffer.EnableKeyword(m_GeometryPoolKernelsCS, new LocalKeyword(m_GeometryPoolKernelsCS, $"UV{uvChannel}_DIM4"));
-                        break;
-                }
-            }
 
             int totalGroupCount = DivUp(vertexCount, kThreadGroupSize);
             int dispatchCount = DivUp(totalGroupCount, kMaxThreadGroupsPerDispatch);

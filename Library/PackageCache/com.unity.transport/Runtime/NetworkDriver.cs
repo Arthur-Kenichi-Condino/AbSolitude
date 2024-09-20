@@ -11,6 +11,7 @@ using Unity.Networking.Transport.Error;
 using Unity.Networking.Transport.Logging;
 using Unity.Networking.Transport.Relay;
 using Unity.Networking.Transport.Utilities;
+using BurstRuntime = Unity.Burst.BurstRuntime;
 
 namespace Unity.Networking.Transport
 {
@@ -394,6 +395,8 @@ namespace Unity.Networking.Transport
 
         [ReadOnly] internal NetworkSettings m_NetworkSettings;
 
+        private NativeHashMap<ConnectionId, ConnectionPayload> m_ConnectionPayloads;
+
         /// <summary>Current settings used by the driver.</summary>
         /// <remarks>
         /// Current settings are read-only and can't be modified except through methods like
@@ -488,6 +491,28 @@ namespace Unity.Networking.Transport
         {
             var driver = default(NetworkDriver);
 
+            // Check that network interface matches Relay configuration (if provided). We explicitly
+            // test this because if we just let if fail later on, it's very not obvious why.
+            if (settings.TryGet<RelayNetworkParameter>(out var relayParameter))
+            {
+                var wsTypeHash = BurstRuntime.GetHashCode64<WebSocketNetworkInterface>();
+                var netifTypeHash = BurstRuntime.GetHashCode64<N>();
+
+                if (relayParameter.ServerData.IsWebSocket == (byte)1 && netifTypeHash != wsTypeHash)
+                {
+                    DebugLog.LogError("Relay is configured to use WebSockets, but NetworkDriver uses UDP. " +
+                        "Make sure to pass WebSocketNetworkInterface as the first parameter when calling NetworkDriver.Create().");
+                    throw new ArgumentException("Mismatched Relay configuration and network interface.");
+                }
+
+                if (relayParameter.ServerData.IsWebSocket == (byte)0 && netifTypeHash == wsTypeHash)
+                {
+                    DebugLog.LogError("Relay is configured to use UDP, but NetworkDriver was created with WebSocketNetworkInterface." +
+                        "If usage of WebSockets is intended, the Relay allocation should be created with the \"wss\" connection type.");
+                    throw new ArgumentException("Mismatched Relay configuration and network interface.");
+                }
+            }
+
             driver.m_NetworkSettings = new NetworkSettings(settings, Allocator.Persistent);
 
             var networkParams = settings.GetNetworkConfigParameters();
@@ -532,6 +557,8 @@ namespace Unity.Networking.Transport
 
             driver.m_InternalState = new NativeReference<InternalState>(state, Allocator.Persistent);
 
+            driver.m_ConnectionPayloads = new NativeHashMap<ConnectionId, ConnectionPayload>(1, Allocator.Persistent);
+
             return driver;
         }
 
@@ -552,17 +579,14 @@ namespace Unity.Networking.Transport
                 return;
 
             m_NetworkStack.Dispose();
-
             m_DriverSender.Dispose();
             m_DriverReceiver.Dispose();
-
             m_NetworkSettings.Dispose();
-
             m_PipelineProcessor.Dispose();
-
             m_EventQueue.Dispose();
-
             m_InternalState.Dispose();
+            m_ConnectionPayloads.Dispose();
+
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
             m_PendingBeginSend.Dispose();
 #endif
@@ -598,8 +622,9 @@ namespace Unity.Networking.Transport
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
                 for (int i = 0; i < connectionList.Count; ++i)
                 {
-                    int conCount = eventQueue.GetCountForConnection(i);
-                    if (conCount != 0 && connectionList.GetConnectionState(connectionList.ConnectionAt(i)) != NetworkConnection.State.Disconnected)
+                    var conCount = eventQueue.GetCountForConnection(i);
+                    var connectionState = connectionList.GetConnectionState(connectionList.ConnectionAt(i));
+                    if (conCount != 0 && connectionState != NetworkConnection.State.Disconnected && connectionState != NetworkConnection.State.Disconnecting)
                     {
                         DebugLog.ErrorResetNotEmptyEventQueue(conCount, i, listenState);
                     }
@@ -675,7 +700,7 @@ namespace Unity.Networking.Transport
 
                 var handle = clearJob.Schedule(dependency);
                 handle = updateJob.Schedule(handle);
-                handle = m_NetworkStack.ScheduleReceive(ref m_DriverReceiver, ref connections, ref m_EventQueue, ref m_PipelineProcessor, LastUpdateTime, handle);
+                handle = m_NetworkStack.ScheduleReceive(ref m_DriverReceiver, ref connections, ref m_EventQueue, ref m_PipelineProcessor, ref m_ConnectionPayloads, LastUpdateTime, handle);
                 handle = m_NetworkStack.ScheduleSend(ref m_DriverSender, LastUpdateTime, handle);
 
                 return handle;
@@ -904,19 +929,39 @@ namespace Unity.Networking.Transport
         /// sent on them. It's also the only way to obtain the <see cref="NetworkConnection"/> value
         /// for new connections on servers.
         /// </summary>
+        /// <param name="payload">
+        /// Payload that was provided on the new connection's <see cref="Connect"/> call, if any. If
+        /// such a payload is returned, its array is allocated with <see cref="Allocator.Temp"/>.
+        /// </param>
         /// <returns>New connection if any, otherwise a default-value object.</returns>
-        public NetworkConnection Accept()
+        public unsafe NetworkConnection Accept(out NativeArray<byte> payload)
         {
+            payload = default;
+
             if (!Listening)
                 return default;
 
             var connectionId = m_NetworkStack.Connections.AcceptConnection();
+
+            if (m_ConnectionPayloads.TryGetValue(connectionId, out var connectPayload))
+            {
+                payload = new NativeArray<byte>(connectPayload.Length, Allocator.Temp);
+                UnsafeUtility.MemCpy(payload.GetUnsafePtr(), connectPayload.Data, connectPayload.Length);
+                m_ConnectionPayloads.Remove(connectionId);
+            }
+
             return new NetworkConnection(connectionId);
+        }
+
+        /// <inheritdoc cref="Accept(out NativeArray{byte})"/>
+        public NetworkConnection Accept()
+        {
+            return Accept(out _);
         }
 
         /// <summary>
         /// Establish a new connection to the given endpoint. Note that this only starts
-        /// establishing the new connection. From there it will either succeeds (a
+        /// establishing the new connection. From there it will either succeed (a
         /// <see cref="NetworkEvent.Type.Connect"/> event will pop on the connection) or fail (a
         /// <see cref="NetworkEvent.Type.Disconnect"/> event will pop on the connection) at a
         /// later time.
@@ -926,10 +971,40 @@ namespace Unity.Networking.Transport
         /// <see cref="Bind"/> method), but if that's not the case when calling this method, the
         /// driver will be implicitly bound to the appropriate wildcard address. This is a behavior
         /// similar to BSD sockets, where calling <c>connect</c> automatically binds the socket to
-        /// an ephemeral port.
+        /// an ephemeral port. For custom endpoints (endpoints where the network family is set to
+        /// <see cref="NetworkFamily.Custom"/>), the implicit bind is done on the endpoint passed to
+        /// the method. If binding to a separate endpoint is required, call <see cref="Bind"/>
+        /// before calling this method.
         /// </remarks>
         /// <param name="endpoint">Endpoint to connect to.</param>
+        /// <param name="payload">
+        /// Payload to send to the remote peer along with the connection request. This can be
+        /// recovered server-side when calling <see cref="Accept"/>. Payload must fit within a
+        /// single message. Exact maximum size will depend on the protocol in use. 1300 bytes should
+        /// be a safe value for all protocols.
+        /// </param>
         /// <returns>New connection object, or a default-valued object on failure.</returns>
+        public unsafe NetworkConnection Connect(NetworkEndpoint endpoint, NativeArray<byte> payload)
+        {
+            var connection = Connect(endpoint);
+
+            var connectRequestHeaderSize = m_NetworkStack.PacketPadding + SimpleConnectionLayer.k_HandshakeSize + sizeof(ushort);
+            var maxSize = m_DriverSender.SendQueue.PayloadCapacity - connectRequestHeaderSize;
+            if (payload.Length > maxSize)
+            {
+                DebugLog.ErrorConnectPayloadTooLarge(payload.Length, maxSize);
+            }
+            else
+            {
+                var connectPayload = new ConnectionPayload { Length = payload.Length };
+                UnsafeUtility.MemCpy(connectPayload.Data, payload.GetUnsafeReadOnlyPtr(), payload.Length);
+                m_ConnectionPayloads[connection.ConnectionId] = connectPayload;
+            }
+
+            return connection;
+        }
+
+        /// <inheritdoc cref="Connect(NetworkEndpoint, NativeArray{byte})" />
         public NetworkConnection Connect(NetworkEndpoint endpoint)
         {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
@@ -937,10 +1012,30 @@ namespace Unity.Networking.Transport
                 throw new InvalidOperationException("Driver must be constructed.");
 #endif
 
+            // Bind if not already bound. For IPv4 and IPv6 we bind to the wildcard address to get
+            // an ephemeral port (and the most appropriate IP address on the system). For custom
+            // endpoints, we bind directly to the endpoint so that the custom network interface can
+            // process it in its Bind() method.
             if (!Bound)
             {
-                var nep = endpoint.Family == NetworkFamily.Ipv6 ? NetworkEndpoint.AnyIpv6 : NetworkEndpoint.AnyIpv4;
-                if (Bind(nep) != 0)
+                var bindEndpoint = default(NetworkEndpoint);
+                switch (endpoint.Family)
+                {
+                    case NetworkFamily.Ipv4:
+                        bindEndpoint = NetworkEndpoint.AnyIpv4;
+                        break;
+                    case NetworkFamily.Ipv6:
+                        bindEndpoint = NetworkEndpoint.AnyIpv6;
+                        break;
+                    case NetworkFamily.Custom:
+                        bindEndpoint = endpoint;
+                        break;
+                    default:
+                        DebugLog.LogError("Can't connect to endpoint with invalid address family.");
+                        return default;
+                }
+
+                if (Bind(bindEndpoint) != 0)
                     return default;
             }
 

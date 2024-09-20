@@ -78,7 +78,7 @@ namespace Burst.Compiler.IL.Tests
             return cmp.x && cmp.y && cmp.z;
         }
 
-        [TestCompiler(ExpectCompilerException = true, ExpectedDiagnosticId = DiagnosticId.ERR_LoadingFromManagedNonReadonlyStaticFieldNotSupported)]
+        [TestCompiler(ExpectCompilerException = true, ExpectedDiagnosticId = DiagnosticId.ERR_LoadingFromNonReadonlyStaticFieldNotSupported)]
         public static void TestStaticStore()
         {
             a.x = 42;
@@ -234,13 +234,17 @@ namespace Burst.Compiler.IL.Tests
             return NestedArrayHolder.SomeOffsetThing[0][0].x;
         }
 
-        public static readonly int[,] SomeMultiDimensionalThing = new int[2, 4]
+        public static class MultiDimensionalValue
         {
+            public static readonly int[,] SomeMultiDimensionalThing = new int[2, 4]
+            {
             { 1, 2, 3, 4 },
             { -1, -2, -3, -4 },
-        };
+            };
+
+        }
 
         [TestCompiler(ExpectCompilerException =  true, ExpectedDiagnosticIds = new[] { DiagnosticId.ERR_ConstructorNotSupported, DiagnosticId.ERR_MultiDimensionalArrayUnsupported })]
-        public static int TestMultiDimensionalArray() => SomeMultiDimensionalThing[1, 1];
+        public static int TestMultiDimensionalArray() => MultiDimensionalValue.SomeMultiDimensionalThing[1, 1];
     }
 }

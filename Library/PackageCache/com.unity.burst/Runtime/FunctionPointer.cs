@@ -34,7 +34,7 @@ namespace Unity.Burst
         /// <summary>
         /// Creates a new instance of this function pointer with the following native pointer.
         /// </summary>
-        /// <param name="ptr"></param>
+        /// <param name="ptr">Native Pointer</param>
         public FunctionPointer(IntPtr ptr)
         {
             _ptr = ptr;

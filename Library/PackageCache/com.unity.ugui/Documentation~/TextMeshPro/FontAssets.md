@@ -59,9 +59,15 @@ To clear a FontAsset:
 This preserves the custom ligatures, kernings, and diacritical marks you added to the font asset when clearing the atlas.
 
 ## Clear Dynamic Data on Build
-The "Clear Dynamic Data on Build" performs the same function as the "Clear Dynamic Data" context menu option but performs this operation when creating a build as well as when closing the Editor.
+
+The "Clear Dynamic Data on Build" option works like the "Clear Dynamic Data" context menu option but also clears data when building the project or closing the Editor.
+
+When enabled, this option resizes the texture to 0 (empty) during the build process.
+
+For dynamic FontAssets, it resets the glyph atlas, character table, and glyph table to their initial states. This feature helps reduce build size by minimizing the FontAsset's data footprint.
 
 To update the Clear Dynamic Data on Build option:
+
 1. Select the FontAsset
 2. In the FontAsset inspector, navigate to the Generation Settings section.
 3. Select **Clear Dynamic Data on Build**. 

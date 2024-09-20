@@ -21,7 +21,11 @@ namespace TMPro
     [RequireComponent(typeof(CanvasRenderer))]
     [AddComponentMenu("UI/TextMeshPro - Text (UI)", 11)]
     [ExecuteAlways]
+    #if UNITY_2023_2_OR_NEWER
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/TextMeshPro/index.html")]
+    #else
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2")]
+    #endif
     public class TextMeshProUGUI : TMP_Text, ILayoutElement
     {
         /// <summary>
@@ -1113,6 +1117,7 @@ namespace TMPro
             }
 
             m_padding = GetPaddingForMaterial();
+            ValidateEnvMapProperty();
             m_havePropertiesChanged = true;
             SetVerticesDirty();
             //SetMaterialDirty();
@@ -1251,7 +1256,9 @@ namespace TMPro
                         m_sharedMaterial = m_fontAsset.material;
                 }
             }
-
+            
+            // Cache environment map property validation.
+            ValidateEnvMapProperty();
 
             // Find and cache Underline & Ellipsis characters.
             GetSpecialCharacters(m_fontAsset);
@@ -1289,18 +1296,36 @@ namespace TMPro
             return canvas;
         }
 
+        /// <summary>
+        /// Method to check if the environment map property is valid.
+        /// </summary>
+        void ValidateEnvMapProperty()
+        {
+            if (m_sharedMaterial != null)
+                m_hasEnvMapProperty = m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) && m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) != null;
+            else
+                m_hasEnvMapProperty = false;
+        }
 
         /// <summary>
         /// Method used when animating the Env Map on the material.
         /// </summary>
         void UpdateEnvMapMatrix()
         {
-            if (!m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) || m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) == null)
+            if (!m_hasEnvMapProperty)
                 return;
 
             //Debug.Log("Updating Env Matrix...");
             Vector3 rotation = m_sharedMaterial.GetVector(ShaderUtilities.ID_EnvMatrixRotation);
-            m_EnvMapMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(rotation), Vector3.one);
+            #if !UNITY_EDITOR
+            // The matrix property is reverted on editor save because m_sharedMaterial will be replaced with a new material instance.
+            // Disable rotation change check if editor to handle this material change.
+            if (m_currentEnvMapRotation == rotation)
+                return;
+            #endif
+            
+            m_currentEnvMapRotation = rotation;
+            m_EnvMapMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(m_currentEnvMapRotation), Vector3.one);
 
             m_sharedMaterial.SetMatrix(ShaderUtilities.ID_EnvMatrix, m_EnvMapMatrix);
         }
@@ -2390,6 +2415,9 @@ namespace TMPro
                 m_havePropertiesChanged = true;
                 OnPreRenderCanvas();
             }
+
+            // Update Environment Matrix property to support changing the rotation via a script.
+            UpdateEnvMapMatrix();
         }
 
 
@@ -4103,8 +4131,17 @@ namespace TMPro
                 if (charCode == 9)
                 {
                     float tabSize = m_currentFontAsset.m_FaceInfo.tabWidth * m_currentFontAsset.tabSize * currentElementScale;
-                    float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
-                    m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    // Adjust horizontal tab depending on RTL
+                    if (m_isRightToLeft)
+                    {
+                        float tabs = Mathf.Floor(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs < m_xAdvance ? tabs : m_xAdvance - tabSize;
+                    }
+                    else
+                    {
+                        float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    }
                 }
                 else if (m_monoSpacing != 0)
                 {

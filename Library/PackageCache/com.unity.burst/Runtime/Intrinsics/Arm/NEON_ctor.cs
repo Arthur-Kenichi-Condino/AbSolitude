@@ -5,9 +5,6 @@ namespace Unity.Burst.Intrinsics
 {
     public unsafe static partial class Arm
     {
-        /// <summary>
-        /// Neon intrinsics
-        /// </summary>
         public unsafe partial class Neon
         {
             /// <summary>Insert vector element from another vector element. This instruction copies the vector element of the source SIMD&amp;FP register to the specified vector element of the destination SIMD&amp;FP register.This instruction can insert data into individual elements within a SIMD&amp;FP register without clearing the remaining bits to zero.Depending on the settings in the CPACR_EL1, CPTR_EL2, and CPTR_EL3 registers, and the current Security state and Exception level, an attempt to execute the instruction might be trapped.

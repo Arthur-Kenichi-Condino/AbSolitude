@@ -54,6 +54,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             internal partial void NetClientSideOnDestroyingCore();
             internal partial void NetClientSideDispose();
+            internal partial void NetClientSideManualUpdate();
         }
         void Awake(){
          netObj=GetComponent<NetworkObject>();
@@ -135,11 +136,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    }
      //   }
      //[NonSerialized]internal NetworkObject netObj;
-     // internal NetworkList<bool>netTerrainChunkArrayHasChanges=new NetworkList<bool>(
-     //  new bool[chunkVoxelArraySplits],
-     //  NetworkVariableReadPermission.Everyone,
-     //  NetworkVariableWritePermission.Server
-     // );
      //   public override void OnNetworkDespawn(){
      //    if(this!=null&&clientSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
      //     StopCoroutine(clientSideSendVoxelTerrainChunkEditDataFileCoroutine);

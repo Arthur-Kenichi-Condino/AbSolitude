@@ -1,7 +1,4 @@
-﻿== AddNotAllowedPathIsFreeByTransformerRule ==
-El ítem '{0}' no se puede añadir. La ruta '{0}' ya está en uso en el servidor, pero está libre en el cliente debido a la regla de transformación '{1}'.
-
-== AddedItemCannotBeLocked ==
+﻿== AddedItemCannotBeLocked ==
 El ítem '{0}' no se puede bloquear porque es un añadido. (Nota: si el ítem no le aparece como añadido entonces el espacio de trabajo podría estar corrupto. Por favor, contacte con soporte)
 
 == AdminReadonlyNotSupported ==
@@ -89,6 +86,9 @@ No puede deshacerse el movido desde {0} a {1} porque {2} ha sido borrado
 
 == CannotUpdateWithPendingChanges ==
 No se puede actualizar el espacio de trabajo porque hay cambios pendientes. Por favor, revise dichos cambios e intente de nuevo la operación.
+
+== CannotUpdateWorkspaceContainsChanges ==
+No hay nuevos changesets en tu configuración actual a los que actualizarse. Tienes cambios pendientes en tu workspace. Si estás intentando obetner los últimos cambios, intenta deshacer estos cambios en lugar de hacer un update.
 
 == CantArchiveAnAlreadyArchivedRevision ==
 No se puede archivar una revisión que ya está archivada. {0}
@@ -215,9 +215,6 @@ El comentario
 == CompMethodError ==
 {0} no es un método de comparación válido
 
-== ContentMustBeUndoCheckedout ==
-Para deshacer la desprotección sobre '{0}' en su contenido debe ser deshecha también.
-
 == CorruptConfigurationFile ==
 El fichero de configuración '{0}' no se puede leer, porque su contenido no es válido o está corrupto.
 
@@ -229,9 +226,6 @@ hace {0} días
 
 == OneDayAgo ==
 hace 1 día
-
-== DeleteNotAllowedTransfomerRuleInside ==
-El ítem '{0}' no se puede borrar porque contiene la regla de transformación '{1}'.
 
 == DestinationField ==
 La ruta de destino
@@ -343,11 +337,8 @@ Windows no permite puntos al final de los nombres.
 == ExpansionRulesHeader ==
 Reglas de expansión de ramas:
 
-== FastChgRepNotAllowedOnTransWk ==
-El fast update no se puede usar para cambiar de repositorio cuando se están usando reglas de trasformación. Por favor, use el standard update.
-
-== FastNotAllowedRuleRestricion ==
-El fast update no está permitido porque el cambio del servidor '{0}' no se puede aplicar en el espacio de trabajo con la regla '{1}'. Por favor, utilice el standard update y actualice las reglas de transformación en caso necesario.
+== FailConnectionServer ==
+No se pudo establecer conexión con el servidor {0}
 
 == FastUpdCloakedError ==
 El fast update no se puede usar con reglas de cloaked. Por favor, use el standard update.
@@ -367,6 +358,9 @@ No se puede ejecutar la actualización rápida en el espacio de trabajo: '{0}'. 
 == FieldTooLong ==
  {0} es demasiado grande, tiene {1} caracteres y el tamaño máximo es de {2}
 
+== FieldEmpty ==
+{0} no puede estar vacío.
+
 == FileTypesFileNotFound ==
 No se pudo encontrar el fichero de tipos {0}
 
@@ -375,9 +369,6 @@ Fuera de un espacio de trabajo es necesario especificar los repositorios en la c
 
 == FormatterError ==
 El campo {0} no es válido para el tipo de objeto especificado
-
-== GameUiCiHeadOutOfDateError ==
-La operación de checkin no puede ser completada porque se han hecho nuevos cambios en repositorio '{0}' desde que empezó la operación. Por favor, vuelva a intentar la operación de checkin para que los nuevos cambios del servidor sean tenidos en cuenta.
 
 == GameuiCiInsideUnresolvedXlinkNotAllowed ==
 El xlink '{0}' no pudo resolverse. Los cambios debajo de un xlink no resuelto no pueden protegerse.
@@ -390,6 +381,9 @@ No se pueden hacer cambios dentro del xlink '{0}' porque no puede resolverse aho
 
 == GenericError ==
 Se ha producido un error en el servidor {0}
+
+== GetRevisionDirectoryNotSupported ==
+GetRevision no está soportado para directorios. Para obetner los contenidos de un directorio, añádelo a tus reglas de workspace.
 
 == GluonPartialUpdateToDifferentBranch ==
 La operación de update no puede continuar. El changeset destino debe estar en la rama actual del espacio de trabajo: {0}.
@@ -414,9 +408,6 @@ El servidor {0} no soporta la operación de Incoming Changes. Por favor, actuali
 
 == IncomingChangesReadonlyXlinksNotSupported ==
 Los Xlinks read-only no están soportados actualmente por la Incoming Changes. Por favor, haga un merge normal para traerse los últimos cambios de la rama.
-
-== IncomingTansformerRulesNotSupported ==
-El espacio de trabajo contiene reglas de transformación. Las reglas de transformación no se soportan actualmente por la Incoming Changes. Por favor actualice su espacio de trabajo deshaciendo previamente cualquier cambio pendiente. Si tiene algún cambio pendiente que desee conservar, puede hacer un shelve antes de deshacerlos y aplicarlo de nuevo tras actualizar.
 
 == IncomingWxlinkBackwardEditionNotSupported ==
 El Xlink de escritura '{0}' se editó para apuntar a un changeset anterior (uno más antiguo). Esta edición de un Xlink de escritura no se soporta actualmente por la Incoming Changes. Por favor actualice su espacio de trabajo deshaciendo previamente cualquier cambio pendiente. Si tiene algún cambio pendiente que desee conservar, puede hacer un shelve antes de deshacerlos y aplicarlo de nuevo tras actualizar.
@@ -527,9 +518,6 @@ No se puede encontrar el ítem '{0}' (ItemId:{1}) en el repositorio '{2}'. Proba
 == ItemLockOutOfDateOnMergeFromHead ==
 '{0}' no puede bloquearse. No es la última revisión, y los bloqueos solo pueden realizarse sobre la última versión. Para continuar, deshaz los cambios y actualiza de nuevo. Para evitar este error en el futuro, recuerda hacer checkout de los ficheros que requieren bloqueo antes de realizar cambios.
 
-== ItemMustBeUndoCheckedout ==
-No se puede deshacer '{0}' porque depende de '{1}'. Añada '{1}' a los argumentos y pruebe de nuevo.
-
 == ItemNameField ==
 El nombre del ítem
 
@@ -557,32 +545,8 @@ Las ramas de primer nivel no están permitidas en esta edición, solamente puede
 == Merge ==
 Merge
 
-== MergeAddNotAllowedPathFreeByRule ==
-El ítem '{0}' no se puede añadir. La ruta '{0}' ya está en uso en el servidor, pero está libre en el cliente debido a la regla de transformación '{1}'. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeDeleteNotAllowedRuleInside ==
-El ítem '{0}' no se puede borrar porque contiene la regla de transformación '{1}'. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeMoveNotAllowedPathFreeByRule ==
-El ítem '{0}' no se puede mover a '{1}'. La ruta '{1}' ya está en uso en el servidor, pero está libre en el cliente debido a la regla de transformación '{2}'. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeMoveNotAllowedTransformedItem ==
-El ítem '{0}' no puede moverse porque ha sido transformado por la regla '{1}'. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
 == MergeNeeded ==
 Se necesitan combinar los cambios del changeset cs:{0}@rep:{2}@repserver:{3}(mount:{4}) con los cambios realizados sobre el changeset cs:{1}@rep:{2}@repserver:{3}(mount:{4}) (changeset cargado en su workspace) antes de continuar. Por favor ejecute 'cm merge "cs:{0}@rep:{2}@repserver:{3}"  --merge' en '{5}' para resolver los conflictos. Después de eso, reintente la operación de checkin.
-
-== MergeRestorerDeletedPathInUse ==
-El path borrado por la regla de transformación {0}  ha sido reutilizado por la regla de transformación {1}, por lo que el contenido del borrado no se puede restaurar. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeRestorerRmRuleCannotBeLoaded ==
-El contenido de la regla de transformación '{0}' no se puede cargar. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeRestorerRmRuleMountMissing ==
-No se puede encontrar el punto de montaje de la regla de transformación '{0}'. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
-
-== MergeRestorerRmRuleParentMissing ==
-El contenido de la regla de transformación '{0}' no se puede restaurar porque su padre '{1}' no está cargado en el espacio de trabajo. El merge no puede completarse con las reglas de transformación actuales. Por favor, borre de la regla de transformación involucrada (o use un espacio de trabajo sin transformar) e intente el merge de nuevo.
 
 == MergeToPendingDirectoryConflicts ==
 Hay conflictos de directorio pendientes que deben ser resueltos antes de procesar el merge-to.
@@ -605,6 +569,9 @@ hace 1 minuto
 == MissingUserOrPassword ==
 Necesita especificar un usuario (--username) y una contraseña (--password) para el modo de trabajo '{0}'.
 
+== MissingUserOrPasswordOrToken ==
+Necesita especificar un usuario (--username) y o bien una contraseña (--password) o un token (--token) para el modo de trabajo '{0}'.
+
 == MissingUserOrToken ==
 Necesita especificar un usuario (--username) y un token (--token) para el modo de trabajo '{0}'.
 
@@ -622,12 +589,6 @@ hace {0} meses
 
 == OneMonthAgo ==
 hace 1 mes
-
-== MoveNotAllowedForTransformedItem ==
-El ítem '{0}' no puede moverse porque ha sido transformado por la regla '{1}'.
-
-== MoveNotAllowedPathIsFreeByTransformerRule ==
-El ítem '{0}' no se puede mover a '{1}'. La ruta '{1}' ya está en uso en el servidor, pero está libre en el cliente debido a la regla de transformación '{2}'.
 
 == MultipleWorkspaceNotAllowed ==
 La operación de {0} no puede ejecutarse con ítems de varios workspaces. Por favor, repita la operación por separado con los ítems de cada workspace.
@@ -658,9 +619,6 @@ No se puede obtener un punto de montaje para un consulta de múltiples repositor
 
 == NoPathBetweenCsets ==
 No hay un camino entre '{0}' y '{1}'.
-
-== NoPendingMerges ==
-There are not merges in progress on workspace '{0}'.
 
 == NoSuchCodeReview ==
 No se pudo encontrar la revisión de código especificada '{0}'.
@@ -781,27 +739,6 @@ La rama {0} tiene más de un head. Por favor, unifíquela para continuar sincron
 
 == SyncBranchesWithMultipleHeads ==
 Las ramas {0} tienen más de un head. Por favor, unifíquelas para continuar sincronizando.
-
-== TransformedItemAlreadyApplied ==
-La regla '{0}' no se puede aplicar porque ya se ha aplicado una regla anteriormente sobre el mismo ítem.
-
-== TransformerMvRuleDstInUseError ==
-La regla '{0}' no se puede aplicar porque la ruta de destino está en uso.
-
-== TransformerMvRuleDstInsideSrcError ==
-La regla '{0}' no se puede aplicar porque no se puede mover un ítem dentro de si mismo.
-
-== TransformerMvRuleModifiesAppliedRule ==
-La regla '{0}' no se puede aplicar porque modifica una regla que ya ha sido aplicada ('{1}').
-
-== TransformerRmRuleMvInsideError ==
-La regla '{0}' no se puede aplicar porque contiene regla de movido ('{1}').
-
-== TransformerRuleDeleteRootError ==
-La regla '{0}' no se puede aplicar porque no se puede borrar el directorio raíz.
-
-== TransformerRuleMissingPathError ==
-La regla '{0}' no se puede aplicar porque no se encuentra la ruta '{1}'.
 
 == TriggerNameField ==
 El nombre del trigger
@@ -935,14 +872,23 @@ No se ha podido montar el espacio de trabajo dinámico {0} después de {1} segun
 == WkDynamicMultipleNotMountedYet ==
 Los siguientes espacios de trabajo dinámicos todavía no están montados después de {0} segundos: {1}.
 
-== GameUiCheckinConflictsError ==
-La operación de checkin/shelve no puede ser completada porque algunos cambios locales no se pueden aplicar en la versión actual del servidor. Por favor, compruebe los conflictos entre sus cambios locales y la versión actual del servidor.
-
 == IsNotWk ==
 {0} no está en un espacio de trabajo.
 
 == CmdPatchFileNotFound ==
 El fichero que contiene el patch no ha sido encontrado.
+
+== Key_AttrNotExist ==
+ATTR_NOT_EXIST
+
+== Key_AttrTypeWrong ==
+ATTR_TYPE_WRONG
+
+== Key_AttrTypeWrongValue ==
+ATTR_TYPE_WRONG_VALUE
+
+== Key_Unrecognized ==
+UNRECOGNIZED
 
 == Seconds ==
 segundos

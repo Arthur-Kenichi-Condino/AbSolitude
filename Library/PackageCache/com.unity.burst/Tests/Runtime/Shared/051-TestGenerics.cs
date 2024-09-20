@@ -1274,6 +1274,35 @@ namespace Burst.Compiler.IL.Tests
             return (x.X << 16) | ret;
         }
 
+        // Ensure that a default interface method with a loop is copied correctly
+        private interface ILoopFreely
+        {
+            public int poorMul(int a, int b)
+            {
+                for (int c=0; c < a; c++)
+                {
+                    b += a;
+                }
+                return b;
+            }
+        }
+        private struct LoopFreelyDefault : ILoopFreely
+        {
+        }
+
+        private static int LoopHelper<T>(T value)
+            where T : ILoopFreely
+        {
+            return value.poorMul(3, 4);
+        }
+
+        [TestCompiler]
+        public static int TestLoopingDefaultInterface()
+        {
+            return LoopHelper(new LoopFreelyDefault());
+        }
+
+
 #endif
     }
 }

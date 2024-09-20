@@ -449,6 +449,16 @@ namespace TMPro
 
 
         /// <summary>
+        /// The rotation for the environment map lighting.
+        /// </summary>
+        protected Vector3 m_currentEnvMapRotation;
+        /// <summary>
+        /// Determine if the environment map property is valid.
+        /// </summary>
+        protected bool m_hasEnvMapProperty;
+
+
+        /// <summary>
         /// The point size of the font.
         /// </summary>
         public float fontSize

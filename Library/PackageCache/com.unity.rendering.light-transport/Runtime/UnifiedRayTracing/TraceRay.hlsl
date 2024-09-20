@@ -1,5 +1,5 @@
-#ifndef UNIFIEDRAYTRACING_TRACERAY_HLSL
-#define UNIFIEDRAYTRACING_TRACERAY_HLSL
+#ifndef _UNIFIEDRAYTRACING_TRACERAY_HLSL_
+#define _UNIFIEDRAYTRACING_TRACERAY_HLSL_
 
 #include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Bindings.hlsl"
 
@@ -9,7 +9,7 @@ static const uint kRayFlagNone = 0x0;
 static const uint kRayFlagCullBackFacingTriangles = 0x10;
 static const uint kRayFlagCullFrontFacingTriangles = 0x20;
 
-#if defined(RAYTRACING_BACKEND_HARDWARE)
+#if defined(UNIFIED_RT_BACKEND_HARDWARE)
 
 Hit TraceRayClosestHit(DispatchInfo dispatchInfo, RayTracingAccelStruct accelStruct, uint instanceMask, Ray ray, uint rayFlags)
 {
@@ -39,7 +39,7 @@ bool TraceRayAnyHit(DispatchInfo dispatchInfo, RayTracingAccelStruct accelStruct
     return payLoadShadow.IsValid();
 }
 
-#elif defined(RAYTRACING_BACKEND_COMPUTE)
+#elif defined(UNIFIED_RT_BACKEND_COMPUTE)
 
 int GetCullMode(uint rayFlags)
 {
@@ -59,22 +59,20 @@ Hit TraceRayClosestHit(DispatchInfo dispatchInfo, RayTracingAccelStruct accelStr
     TraceParams traceParams;
     traceParams.bvh = accelStruct.bvh;
     traceParams.bottom_bvhs = accelStruct.bottom_bvhs;
+    traceParams.bottom_bvh_leaves = accelStruct.bottom_bvh_leaves;
     traceParams.stack = g_stack;
     traceParams.instance_infos = accelStruct.instance_infos;
     traceParams.globalThreadIndex = dispatchInfo.globalThreadIndex;
     traceParams.localThreadIndex = dispatchInfo.localThreadIndex;
-
-    VertexPoolDesc vertex_pool_desc;
-    vertex_pool_desc.index_buffer = g_globalIndexBuffer;
-    vertex_pool_desc.vertex_buffer = g_globalVertexBuffer;
-    vertex_pool_desc.vertex_stride = g_globalVertexBufferStride;
+    traceParams.bottom_bvhs_vertices = accelStruct.vertexBuffer;
+    traceParams.bottom_bvhs_vertex_stride = accelStruct.vertexStride;
 
     int cull_mode = GetCullMode(rayFlags);
 
-    TraceHitResult hitData = TraceRay(traceParams, vertex_pool_desc, ray.origin, ray.tMin, ray.direction, ray.tMax, instanceMask, cull_mode, true);
+    TraceHitResult hitData = TraceRaySoftware(traceParams, ray.origin, ray.tMin, ray.direction, ray.tMax, instanceMask, cull_mode, true);
 
     Hit res;
-    res.instanceIndex = hitData.inst_id != -1 ? GetUserInstanceID(traceParams, hitData.inst_id) : -1;
+    res.instanceID = hitData.inst_id != -1 ? GetUserInstanceID(traceParams, hitData.inst_id) : -1;
     res.primitiveIndex = hitData.prim_id;
     res.uvBarycentrics = hitData.uv;
     res.hitDistance = hitData.hit_distance;
@@ -88,19 +86,17 @@ bool TraceRayAnyHit(DispatchInfo dispatchInfo, RayTracingAccelStruct accelStruct
     TraceParams traceParams;
     traceParams.bvh = accelStruct.bvh;
     traceParams.bottom_bvhs = accelStruct.bottom_bvhs;
+    traceParams.bottom_bvh_leaves = accelStruct.bottom_bvh_leaves;
     traceParams.stack = g_stack;
     traceParams.instance_infos = accelStruct.instance_infos;
     traceParams.globalThreadIndex = dispatchInfo.globalThreadIndex;
     traceParams.localThreadIndex = dispatchInfo.localThreadIndex;
-
-    VertexPoolDesc vertex_pool_desc;
-    vertex_pool_desc.index_buffer = g_globalIndexBuffer;
-    vertex_pool_desc.vertex_buffer = g_globalVertexBuffer;
-    vertex_pool_desc.vertex_stride = g_globalVertexBufferStride;
+    traceParams.bottom_bvhs_vertices = accelStruct.vertexBuffer;
+    traceParams.bottom_bvhs_vertex_stride = accelStruct.vertexStride;
 
     int cull_mode = GetCullMode(rayFlags);
 
-    TraceHitResult hit = TraceRay(traceParams, vertex_pool_desc, ray.origin, ray.tMin, ray.direction, ray.tMax, instanceMask, cull_mode, false);
+    TraceHitResult hit = TraceRaySoftware(traceParams, ray.origin, ray.tMin, ray.direction, ray.tMax, instanceMask, cull_mode, false);
 
     return hit.inst_id != INVALID_NODE;
 }

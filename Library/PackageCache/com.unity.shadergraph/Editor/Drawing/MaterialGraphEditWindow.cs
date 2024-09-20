@@ -124,6 +124,9 @@ namespace UnityEditor.ShaderGraph.Drawing
             get { return titleContent.text; }
         }
 
+        [field: NonSerialized]
+        internal bool isVisible { get; private set; }
+
         bool AssetFileExists()
         {
             var assetPath = AssetDatabase.GUIDToAssetPath(selectedGuid);
@@ -988,7 +991,7 @@ namespace UnityEditor.ShaderGraph.Drawing
                         : fromSlot.concreteValueType.ToString();
                     prop.SetDisplayNameAndSanitizeForGraph(subGraph, propName);
 
-                    if (fromProperty.useCustomSlotLabel)
+                    if (fromProperty?.useCustomSlotLabel ?? false)
                     {
                         prop.useCustomSlotLabel = true;
                         prop.customSlotLabel = fromProperty.customSlotLabel;
@@ -1341,6 +1344,16 @@ namespace UnityEditor.ShaderGraph.Drawing
             if (m_FrameAllAfterLayout)
                 graphEditorView.graphView.FrameAll();
             m_FrameAllAfterLayout = false;
+        }
+
+        private void OnBecameVisible()
+        {
+            isVisible = true;
+        }
+
+        private void OnBecameInvisible()
+        {
+            isVisible = false;
         }
     }
 }

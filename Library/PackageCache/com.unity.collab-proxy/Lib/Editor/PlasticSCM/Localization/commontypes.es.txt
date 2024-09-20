@@ -1,8 +1,8 @@
+== AccessTokensNotEnabled ==
+Los tókenes de acceso no están habilitados en este servidor. Si cree que es un error, por favor, contacte con el administrador del servidor de repositorios.
+
 == AclNotFound ==
 Está trabajando con objetos desactualizados. Puede que su cliente o su espacio de trabajo este desactualizado, por favor actualicelo.
-
-== AclidNotFound ==
-No se ha encontrado un ACLID para un repositorio o un espacio de trabajo.
 
 == ActivateUserNotInLicenseList ==
 El usuario {0} no se puede activar. Para activar un usuario con este comando debe haber sido desactivado previamente. Para activar un usuario debe iniciar una sesión en Plastic SCM con las credenciales de este usuario.
@@ -94,7 +94,28 @@ No puede crearse el xlink porque ya hay un ítem en la ruta especificada: {0}
 El dato {0} está cifrado. Se necesita la información de cifrado para poder leerlo.
 
 == CannotDeleteChangesetItemsLocked ==
-El changeset cs:{0} no se puede borrar hasta que se liberen los siguientes checkouts exclusivos: {1}
+No se puede borrar el changeset cs:{0} hasta que se liberen los siguientes checkouts exclusivos: {1}
+
+== CannotDeleteChangesetShelvesetDependsOnIt ==
+No se puede borrar el changeset cs:{0} porque sh:{1} depende de él. Deberá borrar sh:{1} primero.
+
+== CannotDeleteChangesetChangesetDependsOnIt ==
+No se puede borrar el changeset cs:{0} porque cs:{1} depende de él. Deberá borrar cs:{1} primero.
+
+== CannotDeleteChangesetEmptyBranchDependsOnIt ==
+No se puede borrar el changeset cs:{0} porque la rama vacía '{1}' depende de él.
+
+== CannotDeleteChangesetLabelPointsToIt ==
+No se puede borrar el changeset cs:{0} porque la etiqueta '{1}' apunta a él. Deberá borrar la etiqueta primero.
+
+== CannotDeleteChangesetIsMergeSource ==
+No se puede borrar el changeset cs:{0} porque es el origen de un merge. Deberá borrar el destino del merge (cs:{1}) primero.
+
+== CannotDeleteChangesetIsIntervalMergeSource ==
+No se puede borrar el changeset cs:{0} porque es parte de un merge de intervalo.
+
+== CannotDeleteChangesetIsChangesetZero ==
+No se puede borrar el changeset cs:0. Es un punto fijo en la historia del repositorio.
 
 == CannotDiffDstCsetNotComplete ==
 No se pueden mostrar diferencias entre el changeset {0} y el changeset {1}. El changeset destino {1} no ha sido replicado en este repositorio. Asegúrese de que también ha replicado la rama que contiene este changeset.
@@ -129,8 +150,8 @@ No se puede obtener el contenido de la revisión {0} en el repositorio {1} porqu
 == CannotSaveDataNotCo ==
 Los datos sólo puede ser guardados en revisiones desprotegidas.
 
-== CannotUpdateWorkspaceContainsChanges ==
-No existen changesets más nuevos en su configuración actual a los que se pueda apuntar. Tiene cambios pendientes en su workspace, si está tratando obtener los últimos cambios, hágalo realizando la operación 'deshacer cambios' en vez de actualizar su workspace.
+== CannotUpdateAssigneeWithMultipleReviewers ==
+No se puede actualizar el assignee porque la review tiene más de un revisor.
 
 == CannotUpdateWorkspaceOutOfDate ==
 No se puede actualizar parcialmente el workspace porque hay nuevos cambios en el repositorio.
@@ -262,11 +283,17 @@ No se puede usar una etiqueta convencional como punto de partida de una smart br
 == ChangeDeleteConflict ==
 Conflicto de cambiado y borrado
 
+== ChangeMustBeSelected ==
+Para seleccionar el cambio '{0}' el cambio '{1}' debe ser seleccionado también.
+
 == ChangepasswordCommandNotAvailable ==
 Este comando solamente está disponible en modo de configuración de usuarios por usuario/contraseña.
 
 == ChangepasswordCommandNotAvailableOnServer ==
 Este comando solamente está disponible en modo de configuración de usuarios por usuario/contraseña y el servidor Plastic SCM no está configurado para utilizar el modo de usuarios por usuario/contraseña.
+
+== ChangesetAlreadyExists ==
+El changeset {0} especificado ya existe.
 
 == ChangesetDoesntexist ==
 El changeset {0} especificado no existe.
@@ -328,7 +355,7 @@ No se puede mover el ítem. {0} es un directorio privado.
 No se ha podido conectar al servidor {0}.
 
 == CmdErrorItemInCi ==
-No se pudo deshacer los cambios para el elemento {0}, se encuenta en CI. 
+No se pudo deshacer los cambios para el elemento {0}, se encuenta en CI.
 
 == CmdErrorPrivateItem ==
 No se puede realizar la operación porque el item {0} es privado.
@@ -375,6 +402,9 @@ Configurando el modo de seguridad/usuarios. Éstos son los modos disponibles.
 == ConflictCannotBeApplied ==
 La resolución del conflicto no puede aplicarse porque depende de la resolución de otros conflictos. Por favor, intente resolver los conflictos en otro orden. La resolución del conflicto devolvió el siguiente error: {0}
 
+== ContentMustBeUndoCheckedout ==
+Para deshacer la desprotección sobre '{0}' en su contenido debe ser deshecha también.
+
 == ControlInManager ==
 El control {0} ya se encuentra en el gestor gráfico.
 
@@ -416,6 +446,9 @@ No se puede mover el ítem. El elemento destino {0} ya existe. No se pueden sobr
 
 == DestinationDirectoryMustBeCheckedoutToMove ==
 Para mover {0} el directorio destino debe estar desprotegido.
+
+== DestinationMustBeCheckedin ==
+El origen del movido '{0}' no puede ser protegido sin proteger también el destino '{1}'.
 
 == DirIdentical ==
 Los dos directorios son idénticos.
@@ -540,6 +573,15 @@ El servidor '{0}' requiere cifrado, pero no está permitido para servidores que 
 == FormatAndXmlModifiersIncompatible ==
 Los modificadores --xml y --format no son compatibles y no se pueden usar juntos.
 
+== GameUiCheckinConflictsError ==
+La operación de checkin/shelve no puede ser completada porque algunos cambios locales no se pueden aplicar en la versión actual del servidor. Por favor, compruebe los conflictos entre sus cambios locales y la versión actual del servidor.
+
+== GameUiCiHeadOutOfDateError ==
+La operación de checkin no puede ser completada porque se han hecho nuevos cambios en repositorio '{0}' desde que empezó la operación. Por favor, vuelva a intentar la operación de checkin para que los nuevos cambios del servidor sean tenidos en cuenta.
+
+== GameuiCiInsideUnresolvedXlinkNotAllowed ==
+El xlink '{0}' no pudo resolverse. Los cambios debajo de un xlink no resuelto no pueden protegerse.
+
 == GetClientContext ==
 No se pudieron cargar datos del usuario y la máquina clientes.
 
@@ -573,7 +615,7 @@ La etiqueta especificada no es válida: {0}.
 == IncorrectRepClientSpec ==
 El repositorio especificado no es válido: {0}.
 
-== IncorrectSpecNoArgument ==
+== IncorrectSpec ==
 La especificación de objeto no es válida.
 
 == InvalidChildrenitemchangetype ==
@@ -619,7 +661,7 @@ Tipo de servidor LDAP no válido: {0}.
 Nombre de módulo inválido {0}. No puede ser vacío ni contener /
 
 == InvalidOption ==
-Opción no válida. 
+Opción no válida.
 
 == InvalidOs ==
 El Sistema Operativo no está soportado en esta edición.
@@ -646,7 +688,7 @@ El valor de server name no es válido.
 Parámetros de usuario/contraseña incorrectos en el fichero de configuración del cliente.
 
 == InvalidValue ==
-Valor no válido. 
+Valor no válido.
 
 == InvalidWorkingMode ==
 El modo de trabajo (seguridad y usuarios) no es válido. Revise el fichero de configuración.
@@ -689,6 +731,9 @@ El item {0} se carga 2 veces en las rutas '{1}' y '{2}'. Por favor, elimine una 
 
 == ItemLockOutOfDate ==
 No se pudo hacer checkout de '{0}' porque no tienes la última version. Necesitas deshacer tus cambios para poder actualizarte a los últimos contenidos y aplicar el checkout exclusivo. Si realmente necesitas conservar tus cambios, sálvalos manualmente en otra ubicación. Recuerda bloquear este fichero en el futuro antes de realizar cambios en él.
+
+== ItemMustBeUndoCheckedout ==
+No se puede deshacer '{0}' porque depende de '{1}'. Añada '{1}' a los argumentos y pruebe de nuevo.
 
 == ItemNotFound ==
 No se ha encontrado el ítem {0}.
@@ -771,7 +816,7 @@ No se puede encontrar un enlace de tipo {0}.
 == LoadSpec ==
 No se ha podido cargar la especificación.
 
-== LoadeTwiceConflict ==
+== LoadedTwiceConflict ==
 Conflicto de ítem cargado múltiples veces
 
 == MergeBrNecessary ==
@@ -834,7 +879,7 @@ No se ha proporcionado ninguna organización. Es necesario trabajar contra una o
 La etiqueta {0} ya existe.
 
 == MsgError ==
-Error: 
+Error:
 
 == MsgNoSelector ==
 No hay ningún selector para este espacio de trabajo. {0}
@@ -889,6 +934,9 @@ No se ha encontrado el usuario: {0}.
 
 == NoWorkspaceSelected ==
 No hay ningún espacio de trabajo seleccionado.
+
+== NotChangedInCurrentWorkspace ==
+El ítem '{0}' no está cambiado en el workspace actual.
 
 == NotEmptyIostatsFolder ==
 Error: el directorio para las pruebas de disco no está vacío. Ruta: {0}
@@ -1061,7 +1109,7 @@ La ruta segura no puede ser creada. La ruta está debajo de un xlink. Usa el di�
 
 == PathSpecMultipleMatches ==
 La especificación del ruta segura:{0} coincide con múltiples instancias. Por favor, escriba una especificación completa ( 'path#tag' o bien 'path' con el argumento: '--branches=list_of_branches' )
-   
+
 
 == ProblemLoadingExtension ==
 Ocurrió un problema al cargar una extensión.
@@ -1251,16 +1299,25 @@ El ítem raíz debe de ser único en el repositorio. Se han encontrado {0} eleme
 Es necesario guardarlo antes de poder añadirlo a Unity VCS.
 
 == ScriptVersionNotValid ==
-La versión de {0} del servidor de {1} es la {2}. Por favor, actualicelo a la versión {3}. 
+La versión de {0} del servidor de {1} es la {2}. Por favor, actualicelo a la versión {3}.
 
 == SecuredPathMovedCollission ==
 El movido desde '{0}' a '{1}' no se puede realizar porque los permisos del usuario en la ruta origen y en la ruta destino son diferentes.
+
+== SecurityAccessTokenDoesNotExist ==
+El token de acceso '{0}' no existe o no le pertenece.
+
+== SecurityAccessTokenExpired ==
+El token de acceso '{0}' expiró.
 
 == SecurityCantActivateUser ==
 No tiene permisos para activar el usuario {0}. Para poder activar usuarios debe ser administrador del servidor de repositorios.
 
 == SecurityCantArchive ==
 No tiene permisos para archivar revisiones. Para poder archivar revisiones debe ser administrador del servidor de repositorios.
+
+== SecurityCantCreateAccessToken ==
+No tiene permisos para crear tókenes de acceso. Si cree que es un error por favor contacte con el administrador del servidor de repositorios.
 
 == SecurityCantDeactivateUser ==
 No tiene permisos para desactivar el usuario {0}. Para poder desactivar usuarios debe ser administrador del servidor de repositorios.
@@ -1273,6 +1330,9 @@ No tiene permisos para realizar el merge. No tiene permiso de lectura para algun
 
 == SecurityCantUpdateReviewStatus ==
 No tiene permisos para actualizar el estado de la review. Sólo un revisor o el administrador del servidor de repositorios puede actualizar el estado.
+
+== SecurityCantRevealAccessToken ==
+No tiene permisos para revelar tókenes de acceso. Si cree que es un error por favor contacte con el administrador del servidor de repositorios.
 
 == SecurityCantRunExecquery ==
 Sólo los administradores pueden ejecutar 'execquery'. No es un administrador y por tanto no puede ejecutar 'execquery'.
@@ -1418,6 +1478,12 @@ Se ha producido un error no esperado "{0}". Para más información consulta el l
 == UnlicensedTubeFeature ==
 La licencia del servidor Plastic SCM no soporta Plastic Tube.
 
+== UnityOrgProjectRepOperationNotAllowed ==
+La gestión de Proyectos en Organizaciones Unity debe hacerse en el Cloud Dashboard. Por favor, abra https://cloud.unity.com/home/organizations/{0}/projects/default/devops/overview en su navegador para continuar.
+
+== UnityOrgSecurityOperationNotAllowed ==
+Esta operación de seguridad no está permitida en Organizaciones Unity para el objeto seleccionado. Para gestionar el control de acceso en su organización, abra https://cloud.unity.com/home/organizations/{0}/projects/default/devops/overview en su navegador.
+
 == UpCantAddGroupToItself ==
 Un grupo no puede ser miembro de sí mismo.
 
@@ -1502,6 +1568,9 @@ No se han podido obtener los usaurios del sistema.
 == UsersExceeded ==
 Se ha excedido el número máximo de usuarios con licencia.
 
+== VcsRepositoryInUnityOrgMustBeUnderProject ==
+Los repositories deben crearse bajo un proyecto en organizaciones Unity.
+
 == ViewUnknown ==
 Tipo de vista desconocido: {0}
 
@@ -1541,11 +1610,20 @@ El nombre del espacio de trabajo '{0}' ya está en uso.
 == WorkspaceRepAlreadyShared ==
 El espacio de trabajo '{0}' ya está compartido.
 
+== WorkspaceRepAlreadyLocked ==
+El espacio de trabajo '{0}' ya está bloqueado por otra operación concurrente.
+
+== WorkspaceShareNotFound ==
+El espacio de trabajo '{0}' no está compartido con el usuario '{1}'.
+
 == WorkspaceUvcsConnectionAlreadyExists ==
 La conexión UVCS '{0}' ya existe.
 
 == WorkspaceUvcsConnectionDoesntExist ==
 La conexión UVCS '{0}' no existe.
+
+== WorkspaceUvcsConnectionMetadataOutOfDate ==
+No se pueden actualizar los metadatos de la conexión UVCS '{0}' porque hay nuevos cambios en el servidor (local id:{1}, server id:{2}).
 
 == WriteBlobError ==
 No se pueden escribir los datos de la revisión {0} (segmento {1}) en el repositorio {2}.
@@ -1571,7 +1649,7 @@ El valor '{0}' no es válido para el campo '{1}' en la consulta "{2}". El campo 
 == FindAttrTypeWrongValue ==
 El valor '{0}' no es válido para el campo '{1}' en la consulta "{2}". El campo '{1}' admite un valor de los siguientes: {3}
 
-== IncorrectSpec ==
+== Incorrectspec ==
 Especificación de objeto incorrecta: {0}
 
 == NotValidCmPath ==
@@ -1615,6 +1693,9 @@ checkout
 
 == CopyOperationName ==
 copiar
+
+== DeleteOperationName ==
+eliminar
 
 == IncomingChangesOperationName ==
 cambios entrantes
@@ -1685,6 +1766,9 @@ No se puede borrar un changeset en un repositorio sincronizado con Git.
 == MoveChangesetNotAllowedOnGitSyncRep ==
 No se puede mover un changeset en un repositorio sincronizado con Git.
 
+== DeleteBranchAndChangesetsNotSupported ==
+El servidor {0} no soporta borrar una rama y sus changesets simultáneamente. Por favor, actualice el servidor o borre los changesets uno a uno antes de borrar la rama.
+
 == P4ExecutableDoesNotExist ==
 No se pudo encontrar el ejecutable de Perforce CLI. Asegúrate de que está disponible en tu variable de entorno PATH.
 
@@ -1702,3 +1786,9 @@ No se pudo replicar el repositorio, porque se borró algún changeset mientras s
 
 == FetchBrDeletedRevisionsError ==
 No se pudo replicar la rama '{0}', porque se borró alguno de sus changesets mientras replicaba. Por favor inténtelo de nuevo.
+
+== CantResolveOrganization ==
+No se puede resolver la organización {0}
+
+== MoveChangesetZeroNotAllowed ==
+No se puede mover changeset zero.

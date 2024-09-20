@@ -2,8 +2,6 @@
 
 The Distance Field and Distance Field Overlay shaders are two nearly-identical variants of the TextMesh Pro signed distance field (SDF)shader. The difference between the two is that the Distance Field Overlay variant always renders the TextMesh Pro object on top of everything else in the Scene, while the Distance Field variant renders the Scene normally—objects in front of the TextMesh Pro object are rendered on top of the text.
 
-![Example image](../images/IMAGE.png)
-
 Both of these variants are unlit, meaning they do not interact with Scene lighting. Instead, they can simulate local directional lighting effects.
 
 ## Properties
@@ -139,7 +137,7 @@ These settings control simulated local directional lighting. They work in combin
 <a name="BumpMap"></a>
 #### Bump Map
 
-You can use a normal map as a bump map to add bumpiness to the text. The bump map affects both  the text face and outline, but you can control how strongly it affects each one individually. If your text has both a bevel and a bump map, the two mix together.
+You can use a normal map as a bump map to add bumpiness to the text. The bump map affects both the text face and outline, but you can control how strongly it affects each one individually. If your text has both a bevel and a bump map, the two mix together.
 
 ![Example image](../images/TMP_Shader_DF_LightingBump.png)
 
@@ -201,6 +199,6 @@ The debug section exposes some of the shader’s internal properties. They can b
 |                                  | Mask Hard |             |
 |                                  | Mask Soft |             |
 | **Mask Bounds**                  |           |             |
-| **Softness X/Softness Y**        |           | When **Mask** is set to **Soft**, set these to adjust the softness of the edge of the text. |
+| |**Softness X/Softness Y**                | When **Mask** is set to **Soft**, set these to adjust the softness of the edge of the text. |
 | **Match Bounds Renderer**        |           |             |
-| **Clip Rect**                    |           | Clip Rect defines the Left (**L**), Bottom (**B**), Right (**R**) and Top (**T**) world space coordinates of the masking rectangle.<br/><br/> This is normally set automatically by the **2D RectMask**. However when using a normal **TextMeshPro** component, this allows you to set / control the masking region. |
+| |**Clip Rect**                            | Clip Rect defines the Left (**L**), Bottom (**B**), Right (**R**) and Top (**T**) world space coordinates of the masking rectangle.<br/><br/> This is normally set automatically by the **2D RectMask**. However when using a normal **TextMeshPro** component, this allows you to set / control the masking region. |

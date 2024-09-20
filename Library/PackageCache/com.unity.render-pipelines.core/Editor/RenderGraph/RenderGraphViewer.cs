@@ -1706,12 +1706,7 @@ namespace UnityEditor.Rendering
             foreach (var graph in registeredGraph)
                 m_RegisteredGraphs.Add(graph, new HashSet<string>());
 
-            RenderGraph.isRenderGraphViewerActive = true;
-            RenderGraph.onGraphRegistered += OnGraphRegistered;
-            RenderGraph.onGraphUnregistered += OnGraphUnregistered;
-            RenderGraph.onExecutionRegistered += OnExecutionRegistered;
-            RenderGraph.onExecutionUnregistered += OnExecutionUnregistered;
-            RenderGraph.onDebugDataCaptured += OnDebugDataCaptured;
+            SubscribeToRenderGraphEvents();
 
             if (EditorPrefs.HasKey(kPassFilterLegacyEditorPrefsKey))
                 m_PassFilterLegacy = (PassFilterLegacy)EditorPrefs.GetInt(kPassFilterLegacyEditorPrefsKey);
@@ -1720,7 +1715,7 @@ namespace UnityEditor.Rendering
             if (EditorPrefs.HasKey(kResourceFilterEditorPrefsKey))
                 m_ResourceFilter = (ResourceFilter)EditorPrefs.GetInt(kResourceFilterEditorPrefsKey);
 
-            RenderGraphViewerLifetimeAnalytic.WindowOpened();
+            GraphicsToolLifetimeAnalytic.WindowOpened<RenderGraphViewer>();
         }
 
         void CreateGUI()
@@ -1738,14 +1733,40 @@ namespace UnityEditor.Rendering
 
         void OnDisable()
         {
+            UnsubscribeToRenderGraphEvents();
+            GraphicsToolLifetimeAnalytic.WindowClosed<RenderGraphViewer>();
+        }
+
+        void SubscribeToRenderGraphEvents()
+        {
+            if (RenderGraph.isRenderGraphViewerActive)
+                return;
+
+            RenderGraph.isRenderGraphViewerActive = true;
+            RenderGraph.onGraphRegistered += OnGraphRegistered;
+            RenderGraph.onGraphUnregistered += OnGraphUnregistered;
+            RenderGraph.onExecutionRegistered += OnExecutionRegistered;
+            RenderGraph.onExecutionUnregistered += OnExecutionUnregistered;
+            RenderGraph.onDebugDataCaptured += OnDebugDataCaptured;
+        }
+
+        void UnsubscribeToRenderGraphEvents()
+        {
+            if (!RenderGraph.isRenderGraphViewerActive)
+                return;
+
             RenderGraph.isRenderGraphViewerActive = false;
             RenderGraph.onGraphRegistered -= OnGraphRegistered;
             RenderGraph.onGraphUnregistered -= OnGraphUnregistered;
             RenderGraph.onExecutionRegistered -= OnExecutionRegistered;
             RenderGraph.onExecutionUnregistered -= OnExecutionUnregistered;
             RenderGraph.onDebugDataCaptured -= OnDebugDataCaptured;
+        }
 
-            RenderGraphViewerLifetimeAnalytic.WindowClosed();
+        void Update()
+        {
+            // UUM-70378: In case the OnDisable Unsubscribes to Render Graph events when coming back from a Maximized state
+            SubscribeToRenderGraphEvents();
         }
     }
 

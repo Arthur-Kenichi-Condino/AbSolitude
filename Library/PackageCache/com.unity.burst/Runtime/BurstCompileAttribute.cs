@@ -66,10 +66,10 @@ namespace Unity.Burst
         Deterministic = 2,
 
         /// <summary>
-        /// Allows algebraically equivalent optimizations (which can alter the results of calculations), it implies :
-        /// <para/> optimizations can assume results and arguments contain no NaNs or +/- Infinity and treat sign of zero as insignificant.
-        /// <para/> optimizations can use reciprocals - 1/x * y  , instead of  y/x.
-        /// <para/> optimizations can use fused instructions, e.g. madd.
+        /// <para>Allows algebraically equivalent optimizations (which can alter the results of calculations), it implies :</para>
+        /// <para>optimizations can assume results and arguments contain no NaNs or +/- Infinity and treat sign of zero as insignificant.</para>
+        /// <para>optimizations can use reciprocals - 1/x * y  , instead of  y/x.</para>
+        /// <para>optimizations can use fused instructions, e.g. madd.</para>
         /// </summary>
         Fast = 3,
     }

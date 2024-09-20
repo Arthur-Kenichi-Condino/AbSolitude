@@ -3,13 +3,13 @@ namespace UnityEngine.Rendering.RadeonRays
 {
     internal class RadixSort
     {
-        private ComputeShader shaderBitHistogram;
-        private int kernelBitHistogram;
+        readonly ComputeShader shaderBitHistogram;
+        readonly int kernelBitHistogram;
 
-        private ComputeShader shaderScatter;
-        private int kernelScatter;
+        readonly ComputeShader shaderScatter;
+        readonly int kernelScatter;
 
-        private Scan scan;
+        readonly Scan scan;
 
         const uint kKeysPerThread  = 4u;
         const uint kGroupSize      = 256u;
@@ -86,7 +86,7 @@ namespace UnityEngine.Rendering.RadeonRays
                 (ov, iv) = (iv, ov);
             }
         }
-        public ulong GetScratchDataSizeInDwords(uint size)
+        static public ulong GetScratchDataSizeInDwords(uint size)
         {
             uint num_histogram_values = (1 << kNumBitsPerPass) * Common.CeilDivide(size, kKeysPerGroup);
 
@@ -98,7 +98,7 @@ namespace UnityEngine.Rendering.RadeonRays
             // even if no actual out of bounds access happening
             scratch_size += 2 * size + 1024;
             // Scan scratch size
-            scratch_size += scan.GetScratchDataSizeInDwords(num_histogram_values);
+            scratch_size += Scan.GetScratchDataSizeInDwords(num_histogram_values);
 
             return scratch_size;
         }

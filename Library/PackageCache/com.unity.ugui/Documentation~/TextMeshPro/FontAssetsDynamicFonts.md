@@ -8,10 +8,9 @@ This makes dynamic fonts assets more flexible, but that flexibility comes at a c
 
 * Dynamic fonts require more computational resources than static fonts.
 
-* Dynamic font assets maintain a link to the original font file used to created them. That means:
+* Dynamic font assets maintain a link to the original font file used to create them. That means:
 
     * During development, you must keep the font file in the project. You cannot delete it as you can the source fonts of static font assets.
-
     * Source fonts of any dynamic font assets in your game are included in builds, which can increase build size.
 
 
@@ -19,11 +18,9 @@ This has several uses, for example:
 
 * Use dynamic fonts during development to capture characters you forgot to include in your baked font assets.
 
-* At runtime, use  
+* Use dynamic fonts in runtime when you don't know in advance which characters the user will enter in a text field.
 
-## Working with dynamic font assets
-
-### Creating a dynamic font Asset
+## Creating a dynamic font Asset
 
 Empty font assets are dynamic by default. To create one:
 
@@ -35,9 +32,7 @@ To make an existing font Asset dynamic:
 
 1. Set the **Generation Settings > Atlas Population Mode** property to **Dynamic**.
 
-### Modifying dynamic font Asset settings
-
-### Resetting a dynamic font Asset
+## Resetting a dynamic font Asset
 
 You reset TextMesh Pro dynamic font assets, the same way you reset other components: by choosing **Reset** from the gear icon menu or context menu in the Inspector.
 
@@ -54,9 +49,4 @@ These are reset to include only the characters/glyphs used by TextMesh Pro text 
 
 If the Asset is currently unused, TextMesh Pro resizes the atlas texture to 0 x 0 pixels.
 
-**NOTE:** Resetting a static font Asset leaves the atlas texture as-is, but empties the character-, glyph-, and glyph adjustment tables.  
-
-
-### Updating/Baking a dynamic font Asset
-
-
+**NOTE:** Resetting a static font Asset leaves the atlas texture as-is, but empties the character-, glyph-, and glyph adjustment tables. 

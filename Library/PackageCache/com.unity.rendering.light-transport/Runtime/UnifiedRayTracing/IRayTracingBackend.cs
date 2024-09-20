@@ -6,11 +6,13 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
     {
         IRayTracingShader CreateRayTracingShader(
             Object shader,
-            string kernelName);
+            string kernelName,
+            GraphicsBuffer dispatchBuffer);
 
         IRayTracingAccelStruct CreateAccelerationStructure(
             AccelerationStructureOptions options,
-            GeometryPool geometryPool,
             ReferenceCounter counter);
+
+        ulong GetRequiredTraceScratchBufferSizeInBytes(uint width, uint height, uint depth);
     }
 }

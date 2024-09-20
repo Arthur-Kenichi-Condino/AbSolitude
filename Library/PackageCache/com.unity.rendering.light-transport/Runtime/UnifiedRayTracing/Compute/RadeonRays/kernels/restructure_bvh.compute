@@ -42,9 +42,7 @@ THE SOFTWARE.
 
 #if !(TOP_LEVEL)
 RWStructuredBuffer<float> g_vertices;
-RWStructuredBuffer<uint> g_indices;
 int g_vertices_offset;
-int g_indices_offset;
 uint g_constants_vertex_stride;
 #endif
 
@@ -62,12 +60,11 @@ uint g_constants_triangle_count;
 uint g_treelet_count_offset;
 uint g_treelet_roots_offset;
 uint g_primitive_counts_offset;
-uint g_bvh_offset;
 uint g_remainder_treelets;
+uint g_leaf_parents_offset;
 
 globallycoherent RWStructuredBuffer<uint> g_scratch_buffer;
 RWStructuredBuffer<uint> g_treelet_dispatch_buffer;
-globallycoherent RWStructuredBuffer<BvhNode> g_bvh;
 
 #define MAX_THREADGROUP_DIM 65535
 #define PRIMITIVES_PER_THREAD 8
@@ -94,9 +91,6 @@ void InitPrimitiveCounts(in uint gidx: SV_DispatchThreadID)
         g_scratch_buffer[g_treelet_count_offset] = 0;
     }
 
-    if (!g_bvh[g_bvh_offset + 0].update)
-        return;
-
     uint leafCount = g_bvh[g_bvh_offset + 0].child1;
     uint internalNodesCount = leafCount - 1;
 
@@ -114,12 +108,6 @@ void InitPrimitiveCounts(in uint gidx: SV_DispatchThreadID)
         {
             g_scratch_buffer[g_primitive_counts_offset + index] = 0;
         }
-
-        // Leafs.
-        if (index < leafCount)
-        {
-            g_scratch_buffer[g_primitive_counts_offset + internalNodesCount + index] = g_bvh[g_bvh_offset + 1 + internalNodesCount + index].child1;
-        }
     }
 }
 
@@ -130,9 +118,6 @@ void InitPrimitiveCounts(in uint gidx: SV_DispatchThreadID)
 [numthreads(GROUP_SIZE, 1, 1)]
 void FindTreeletRoots(in uint gidx: SV_DispatchThreadID)
 {
-    if (!g_bvh[g_bvh_offset + 0].update)
-        return;
-
     const uint N = g_bvh[g_bvh_offset + 0].child1;
 
     for (int i = 0; i < PRIMITIVES_PER_THREAD; ++i)
@@ -144,7 +129,7 @@ void FindTreeletRoots(in uint gidx: SV_DispatchThreadID)
         }
 
         uint prim_count = 1;
-        uint index = g_bvh[g_bvh_offset + 1 + LEAF_NODE_INDEX(prim_index, N)].parent;
+        uint index = g_scratch_buffer[g_leaf_parents_offset + prim_index];
 
         [allow_uav_condition]
         while (index != INVALID_IDX)
@@ -499,8 +484,8 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
     GroupMemoryBarrierWithGroupSync();
 
     [allow_uav_condition]
-    //while (true) // TODO(RadeonRays)
-    for (uint i = 0; i < 2147483647u; ++i)
+    //while (true) // FXC generates incorrect code with a while true here, we write it as a for loop instead as a workaround
+    for (uint i = 0; i < 4294967295u; ++i)
     {
         // Form a treelet
         if (lidx == 0)
@@ -512,8 +497,8 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
 
             float surface_areas[MAX_TREELET_SIZE];
 
-            surface_areas[0] = GetAabbSurfaceArea(GetNodeAabb(g_bvh[g_bvh_offset+1 + lds_nodes_to_reorder[0]]));
-            surface_areas[1] = GetAabbSurfaceArea(GetNodeAabb(g_bvh[g_bvh_offset+1 + lds_nodes_to_reorder[1]]));
+            surface_areas[0] = GetAabbSurfaceArea(GetNodeAabb(g_bvh_offset+1, lds_nodes_to_reorder[0]));
+            surface_areas[1] = GetAabbSurfaceArea(GetNodeAabb(g_bvh_offset+1, lds_nodes_to_reorder[1]));
 
             uint treelet_size = 2;
             while (treelet_size < MAX_TREELET_SIZE)
@@ -525,7 +510,7 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
                 {
                     uint treelet_node_index = lds_nodes_to_reorder[i];
                     // Leaf nodes can't be split so skip these
-                    if (IS_INTERNAL_NODE(treelet_node_index, N))
+                    if (IS_INTERNAL_NODE(treelet_node_index))
                     {
                         float surface_area = surface_areas[i];
 
@@ -546,8 +531,8 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
                 lds_nodes_to_reorder[index_of_node_index_to_traverse] = node_to_traverse.child0;
                 lds_nodes_to_reorder[treelet_size] = node_to_traverse.child1;
 
-                surface_areas[index_of_node_index_to_traverse] = GetAabbSurfaceArea(GetNodeAabb(g_bvh[g_bvh_offset+1 + node_to_traverse.child0]));
-                surface_areas[treelet_size] = GetAabbSurfaceArea(GetNodeAabb(g_bvh[g_bvh_offset+1 + node_to_traverse.child1]));
+                surface_areas[index_of_node_index_to_traverse] = GetAabbSurfaceArea(GetNodeAabb(g_bvh_offset+1, node_to_traverse.child0));
+                surface_areas[treelet_size] = GetAabbSurfaceArea(GetNodeAabb(g_bvh_offset+1, node_to_traverse.child1));
 
                 treelet_size++;
             }
@@ -568,7 +553,7 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
             {
                 if (BIT(i) & treelet_bitmask)
                 {
-                    GrowAabb(GetNodeAabb(g_bvh[g_bvh_offset+1 + lds_nodes_to_reorder[i]]), aabb);
+                    GrowAabb(GetNodeAabb(g_bvh_offset+1, lds_nodes_to_reorder[i]), aabb);
                 }
             }
 
@@ -625,8 +610,16 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
 
                 g_bvh[g_bvh_offset+1 + partition.node_index].child0 = left_entry.node_index;
                 g_bvh[g_bvh_offset+1 + partition.node_index].child1 = right_entry.node_index;
-                g_bvh[g_bvh_offset+1 + left_entry.node_index].parent = partition.node_index;
-                g_bvh[g_bvh_offset+1 + right_entry.node_index].parent = partition.node_index;
+
+                if (IS_LEAF_NODE(left_entry.node_index))
+                    g_scratch_buffer[g_leaf_parents_offset + GET_LEAF_NODE_FIRST_PRIM(left_entry.node_index)] = partition.node_index;
+                else
+                    g_bvh[g_bvh_offset+1 + left_entry.node_index].parent = partition.node_index;
+
+                if (IS_LEAF_NODE(right_entry.node_index))
+                    g_scratch_buffer[g_leaf_parents_offset + GET_LEAF_NODE_FIRST_PRIM(right_entry.node_index)] = partition.node_index;
+                else
+                    g_bvh[g_bvh_offset+1 + right_entry.node_index].parent = partition.node_index;
             }
 
             ////recalc AABB for each internal node since they change topology
@@ -636,8 +629,8 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
             for (int j = MAX_TREELET_INTERNAL_NODES - 1; j >= 0; j--)
             {
                 uint internal_node_index = lds_internal_nodes[j];
-                Aabb left_aabb = GetNodeAabb(g_bvh[g_bvh_offset+1 + g_bvh[g_bvh_offset+1 + internal_node_index].child0]);
-                Aabb right_aabb = GetNodeAabb(g_bvh[g_bvh_offset+1 + g_bvh[g_bvh_offset+1 + internal_node_index].child1]);
+                Aabb left_aabb = GetNodeAabb(g_bvh_offset+1, g_bvh[g_bvh_offset+1 + internal_node_index].child0);
+                Aabb right_aabb = GetNodeAabb(g_bvh_offset+1, g_bvh[g_bvh_offset+1 + internal_node_index].child1);
 
                 g_bvh[g_bvh_offset+1 + internal_node_index].SetLeftAabb(left_aabb);
                 g_bvh[g_bvh_offset+1 + internal_node_index].SetRightAabb(right_aabb);
@@ -646,7 +639,7 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
 
         if (lidx == 0)
         {
-            lds_node_index = g_bvh[g_bvh_offset+1 + lds_node_index].parent;
+            lds_node_index = IS_LEAF_NODE(lds_node_index) ? g_scratch_buffer[g_leaf_parents_offset + GET_LEAF_NODE_FIRST_PRIM(lds_node_index)] : g_bvh[g_bvh_offset+1 + lds_node_index].parent;
 
             if (lds_node_index == INVALID_IDX)
             {
@@ -659,8 +652,8 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
                 InterlockedAdd(g_scratch_buffer[g_primitive_counts_offset + lds_node_index], 1, old);
                 if (old != 0)
                 {
-                    Aabb left_aabb = GetNodeAabb(g_bvh[g_bvh_offset+1 + g_bvh[g_bvh_offset+1 + lds_node_index].child0]);
-                    Aabb right_aabb = GetNodeAabb(g_bvh[g_bvh_offset+1 + g_bvh[g_bvh_offset+1 + lds_node_index].child1]);
+                    Aabb left_aabb = GetNodeAabb(g_bvh_offset+1, g_bvh[g_bvh_offset+1 + lds_node_index].child0);
+                    Aabb right_aabb = GetNodeAabb(g_bvh_offset+1, g_bvh[g_bvh_offset+1 + lds_node_index].child1);
 
                     g_bvh[g_bvh_offset+1 + lds_node_index].SetLeftAabb(left_aabb);
                     g_bvh[g_bvh_offset+1 + lds_node_index].SetRightAabb(right_aabb);

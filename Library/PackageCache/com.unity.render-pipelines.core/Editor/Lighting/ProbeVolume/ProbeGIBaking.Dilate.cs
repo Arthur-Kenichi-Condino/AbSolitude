@@ -44,6 +44,8 @@ namespace UnityEngine.Rendering
             public Vector4 SO_L0L1;
             public Vector3 SO_Direction;
 
+            public Vector4 ProbeOcclusion;
+
             void ToSphericalHarmonicsL2(ref SphericalHarmonicsL2 sh)
             {
                 SphericalHarmonicsL2Utils.SetCoefficient(ref sh, 0, L0);
@@ -87,9 +89,12 @@ namespace UnityEngine.Rendering
                 if (cellChunkData.skyShadingDirectionIndices.Length != 0)
                 {
                     int id = cellChunkData.skyShadingDirectionIndices[index];
-                    var directions = DynamicSkyPrecomputedDirections.GetPrecomputedDirections();
+                    var directions = ProbeVolumeConstantRuntimeResources.GetSkySamplingDirections();
                     SO_Direction = id == 255 ? Vector3.zero : directions[id];
                 }
+
+                if (cellChunkData.probeOcclusion.Length != 0)
+                    ReadFromShaderCoeffsProbeOcclusion(ref ProbeOcclusion, cellChunkData.probeOcclusion, index);
             }
 
             internal void ToSphericalHarmonicsShaderConstants(ProbeReferenceVolume.Cell cell, int probeIdx)
@@ -108,6 +113,9 @@ namespace UnityEngine.Rendering
                     WriteToShaderSkyOcclusion(SO_L0L1, cellChunkData.skyOcclusionDataL0L1, index * 4);
                 if (cellChunkData.skyShadingDirectionIndices.Length != 0)
                     cellChunkData.skyShadingDirectionIndices[index] = (byte)SkyOcclusionBaker.EncodeSkyShadingDirection(SO_Direction);
+
+                if (cellChunkData.probeOcclusion.Length != 0)
+                    WriteToShaderProbeOcclusion(ProbeOcclusion, cellChunkData.probeOcclusion, index * 4);
             }
         }
 
@@ -171,8 +179,19 @@ namespace UnityEngine.Rendering
         static readonly int _ProbePositionsBuffer = Shader.PropertyToID("_ProbePositionsBuffer");
         static readonly int _NeedDilating = Shader.PropertyToID("_NeedDilating");
         static readonly int _DilationParameters = Shader.PropertyToID("_DilationParameters");
-        static readonly int _DilationParameters2 = Shader.PropertyToID("_DilationParameters2");
         static readonly int _OutputProbes = Shader.PropertyToID("_OutputProbes");
+        
+        // We need to keep the original list of cells that were actually baked to feed it to the dilation process.
+        // This is because during partial bake we only want to dilate those cells.
+        static Dictionary<int, BakingCell> m_CellsToDilate = new Dictionary<int, BakingCell>();
+        static Dictionary<Vector3Int, int> m_CellPosToIndex = new Dictionary<Vector3Int, int>();
+
+        // Free up dilation related data
+        static internal void FinalizeDilation()
+        {
+            m_CellPosToIndex.Clear();
+            m_CellsToDilate.Clear();
+        }
 
         // Can definitively be optimized later on.
         // Also note that all the bookkeeping of all the reference volumes will likely need to change when we move to
@@ -296,8 +315,7 @@ namespace UnityEngine.Rendering
             // There's an upper limit on the number of bricks supported inside a single cell
             int probeCount = Mathf.Min(cell.data.probePositions.Length, ushort.MaxValue * ProbeBrickPool.kBrickProbeCountTotal);
 
-            cmd.SetComputeVectorParam(dilationShader, _DilationParameters, new Vector4(probeCount, settings.dilationValidityThreshold, settings.dilationDistance, ProbeReferenceVolume.instance.MinBrickSize()));
-            cmd.SetComputeVectorParam(dilationShader, _DilationParameters2, new Vector4(settings.squaredDistWeighting ? 1 : 0, bakingSet.skyOcclusion ? 1 : 0, bakingSet.skyOcclusionShadingDirection ? 1 : 0, 0));
+            cmd.SetComputeVectorParam(dilationShader, _DilationParameters, new Vector4(probeCount, settings.dilationValidityThreshold, settings.dilationDistance, settings.squaredDistWeighting ? 1 : 0));
 
             var refVolume = ProbeReferenceVolume.instance;
             ProbeReferenceVolume.RuntimeResources rr = refVolume.GetRuntimeResources();
@@ -318,6 +336,8 @@ namespace UnityEngine.Rendering
                 cmd.SetGlobalTexture(ProbeReferenceVolume.ShaderIDs._APVResL2_2, rr.L2_2);
                 cmd.SetGlobalTexture(ProbeReferenceVolume.ShaderIDs._APVResL2_3, rr.L2_3);
 
+                cmd.SetGlobalTexture(ProbeReferenceVolume.ShaderIDs._APVProbeOcclusion, rr.ProbeOcclusion ?? (RenderTargetIdentifier)CoreUtils.whiteVolumeTexture);
+
                 cmd.SetComputeTextureParam(dilationShader, dilationKernel, ProbeReferenceVolume.ShaderIDs._SkyOcclusionTexL0L1, rr.SkyOcclusionL0L1 ?? (RenderTargetIdentifier)CoreUtils.blackVolumeTexture);
                 cmd.SetComputeTextureParam(dilationShader, dilationKernel, ProbeReferenceVolume.ShaderIDs._SkyShadingDirectionIndicesTex, rr.SkyShadingDirectionIndices ?? (RenderTargetIdentifier)CoreUtils.blackVolumeTexture);
                 cmd.SetComputeBufferParam(dilationShader, dilationKernel, ProbeReferenceVolume.ShaderIDs._SkyPrecomputedDirections, rr.SkyPrecomputedDirections);
@@ -330,14 +350,14 @@ namespace UnityEngine.Rendering
             parameters.samplingNoise = 0;
             parameters.weight = 1f;
             parameters.leakReductionMode = APVLeakReductionMode.None;
-            parameters.minValidNormalWeight = 0.0f;
             parameters.frameIndexForNoise = 0;
             parameters.reflNormalizationLowerClamp = 0.1f;
             parameters.reflNormalizationUpperClamp = 1.0f;
-            parameters.skyOcclusionIntensity = 0.0f;
-            parameters.skyOcclusionShadingDirection = false;
+            parameters.skyOcclusionIntensity = bakingSet.skyOcclusion ? 1 : 0;
+            parameters.skyOcclusionShadingDirection = bakingSet.skyOcclusionShadingDirection ? true : false;
             parameters.regionCount = 1;
             parameters.regionLayerMasks = 1;
+            parameters.worldOffset = Vector3.zero;
             ProbeReferenceVolume.instance.UpdateConstantBuffer(cmd, parameters);
 
 

@@ -49,7 +49,7 @@ namespace Unity.Burst.Intrinsics
 			/// <param name="a">Vector a</param>
 			/// <param name="b">Vector b</param>
 			/// <param name="c">Vector c</param>
-			/// <returns>Vector</returns>>
+			/// <returns>Vector</returns>
             [DebuggerStepThrough]
             public static v128 fmadd_pd(v128 a, v128 b, v128 c)
             {

@@ -27,14 +27,13 @@ THE SOFTWARE.
 
 #define BVH_NODE_SIZE 64
 #define BVH_NODE_STRIDE_SHIFT 6
-#define BVH_NODE_COUNT(N) (2 * (N)-1)
 #define BVH_NODE_BYTE_OFFSET(i) ((i) << BVH_NODE_STRIDE_SHIFT)
 
-#define LEAF_NODE_INDEX(i, n) ((n - 1) + i)
-#define INTERNAL_NODE_INDEX(i, n) (i)
-#define IS_INTERNAL_NODE(i, n) ((i < n - 1) ? true : false)
-#define IS_LEAF_NODE(i, n) (!IS_INTERNAL_NODE(i, n))
-
+#define LEAF_NODE_INDEX(i) (i | (1 << 31))
+#define IS_LEAF_NODE(i) (i & (1 << 31))
+#define IS_INTERNAL_NODE(i) (!IS_LEAF_NODE(i))
+#define GET_LEAF_NODE_FIRST_PRIM(i) (i & ~0xE0000000)
+#define GET_LEAF_NODE_PRIM_COUNT(i) (((i & 0x60000000) >> 29) + 1)
 //< BVH2 node.
 struct BvhNode
 {
@@ -100,124 +99,177 @@ struct InstanceInfo
     int padding2;
     Transform world_to_local_transform;
     Transform local_to_world_transform;
-
 };
 
+globallycoherent RWStructuredBuffer<BvhNode> g_bvh;
+uint g_bvh_offset;
+#if !TOP_LEVEL
+globallycoherent RWStructuredBuffer<uint4> g_bvh_leaves;
+uint g_bvh_leaves_offset;
+#endif
 
 #if TOP_LEVEL
+StructuredBuffer<BvhNode> g_bottom_bvhs;
+RWStructuredBuffer<InstanceInfo> g_instance_infos;
+
+Aabb GetInstanceAabb(int instance_index)
+{
+    uint bottom_bvh_offset = g_instance_infos[instance_index].blas_offset;
+    Transform transform = g_instance_infos[instance_index].local_to_world_transform;
+    BvhNode header_node = g_bottom_bvhs[bottom_bvh_offset + 0];
+    Aabb local_aabb = CreateEmptyAabb();
+    GrowAabb(header_node.LeftAabbMin(), local_aabb);
+    GrowAabb(header_node.LeftAabbMax(), local_aabb);
+
+    return TransformAabb(local_aabb, transform);
+}
+
 //< Calculate BVH2 node bounding box.
-Aabb GetNodeAabb(in BvhNode node, bool internal)
+Aabb GetNodeAabb(uint offset, uint node_index)
 {
     Aabb aabb = CreateEmptyAabb();
 
-    if (internal)
+    if (IS_LEAF_NODE(node_index))
     {
-        // 3 vertices or 3 points for both internal and leafs.
+        aabb = GetInstanceAabb(GET_LEAF_NODE_FIRST_PRIM(node_index));
+    }
+    else
+    {
+        BvhNode node = g_bvh[offset + node_index];
         GrowAabb(node.LeftAabbMin(), aabb);
         GrowAabb(node.LeftAabbMax(), aabb);
         GrowAabb(node.RightAabbMin(), aabb);
         GrowAabb(node.RightAabbMax(), aabb);
     }
-    else
-    {
-        aabb.pmin = node.LeftAabbMin();
-        aabb.pmax = node.LeftAabbMax();
-    }
 
     return aabb;
 }
-#else
 
-//< Calculate BVH2 node bounding box.
-Aabb GetNodeAabb(in BvhNode node, bool internal)
+Aabb GetNodeAabbSync(uint offset, int node_index)
 {
     Aabb aabb = CreateEmptyAabb();
-
-    if (internal)
+    if (IS_LEAF_NODE(node_index))
     {
-        GrowAabb(node.LeftAabbMin(), aabb);
-        GrowAabb(node.LeftAabbMax(), aabb);
-        GrowAabb(node.RightAabbMin(), aabb);
-        GrowAabb(node.RightAabbMax(), aabb);
+        aabb = GetInstanceAabb(GET_LEAF_NODE_FIRST_PRIM(node_index));
     }
     else
-    {
-        int firstTriangle = node.child1;
-        int triangleCount = node.data[0];
-        for (int i = 0; i < triangleCount; ++i)
-        {
-            uint3 indices = GetFaceIndices(firstTriangle+i);
-            TriangleData tri = FetchTriangle(indices);
-
-            GrowAabb(tri.v0, aabb);
-            GrowAabb(tri.v1, aabb);
-            GrowAabb(tri.v2, aabb);
-        }
-    }
-
-    return aabb;
-}
-#endif
-
-Aabb GetNodeAabb(in BvhNode node)
-{
-    return GetNodeAabb(node, node.child0 != INVALID_IDX);
-}
-
-Aabb GetNodeAabbSync(globallycoherent RWStructuredBuffer<BvhNode> g_bvh, int index, bool internal)
-{
-    Aabb aabb = CreateEmptyAabb();
-#if !TOP_LEVEL
-    if (internal)
-#endif
     {
         uint3 aabb0_min;
         uint3 aabb0_max;
         uint3 aabb1_min;
         uint3 aabb1_max;
 
-        InterlockedAdd(g_bvh[index].data[0], 0, aabb0_min.x);
-        InterlockedAdd(g_bvh[index].data[1], 0, aabb0_min.y);
-        InterlockedAdd(g_bvh[index].data[2], 0, aabb0_min.z);
+        InterlockedAdd(g_bvh[offset + node_index].data[0], 0, aabb0_min.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[1], 0, aabb0_min.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[2], 0, aabb0_min.z);
 
-        InterlockedAdd(g_bvh[index].data[3], 0, aabb0_max.x);
-        InterlockedAdd(g_bvh[index].data[4], 0, aabb0_max.y);
-        InterlockedAdd(g_bvh[index].data[5], 0, aabb0_max.z);
+        InterlockedAdd(g_bvh[offset + node_index].data[3], 0, aabb0_max.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[4], 0, aabb0_max.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[5], 0, aabb0_max.z);
 
-        InterlockedAdd(g_bvh[index].data[6], 0, aabb1_min.x);
-        InterlockedAdd(g_bvh[index].data[7], 0, aabb1_min.y);
-        InterlockedAdd(g_bvh[index].data[8], 0, aabb1_min.z);
+        InterlockedAdd(g_bvh[offset + node_index].data[6], 0, aabb1_min.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[7], 0, aabb1_min.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[8], 0, aabb1_min.z);
 
-        InterlockedAdd(g_bvh[index].data[9], 0, aabb1_max.x);
-        InterlockedAdd(g_bvh[index].data[10], 0, aabb1_max.y);
-        InterlockedAdd(g_bvh[index].data[11], 0, aabb1_max.z);
+        InterlockedAdd(g_bvh[offset + node_index].data[9], 0, aabb1_max.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[10], 0, aabb1_max.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[11], 0, aabb1_max.z);
 
         GrowAabb(asfloat(aabb0_min), aabb);
         GrowAabb(asfloat(aabb0_max), aabb);
         GrowAabb(asfloat(aabb1_min), aabb);
         GrowAabb(asfloat(aabb1_max), aabb);
     }
-#if !TOP_LEVEL
-    else
-    {
 
-        BvhNode node = g_bvh[index];
-        int firstTriangle = node.child1;
-        int triangleCount = node.data[0];
+    return aabb;
+}
+
+#else
+
+//< Calculate BVH2 node bounding box.
+Aabb GetNodeAabb(uint offset, uint node_index)
+{
+    Aabb aabb = CreateEmptyAabb();
+
+    if (IS_LEAF_NODE(node_index))
+    {
+        int firstTriangle = GET_LEAF_NODE_FIRST_PRIM(node_index);
+        int triangleCount = GET_LEAF_NODE_PRIM_COUNT(node_index);
         for (int i = 0; i < triangleCount; ++i)
         {
-            uint3 indices = GetFaceIndices(firstTriangle+i);
+            uint3 indices = g_bvh_leaves[g_bvh_leaves_offset + firstTriangle + i].xyz;
             TriangleData tri = FetchTriangle(indices);
 
             GrowAabb(tri.v0, aabb);
             GrowAabb(tri.v1, aabb);
             GrowAabb(tri.v2, aabb);
         }
-
     }
-#endif
+    else
+    {
+        BvhNode node = g_bvh[offset+node_index];
+        GrowAabb(node.LeftAabbMin(), aabb);
+        GrowAabb(node.LeftAabbMax(), aabb);
+        GrowAabb(node.RightAabbMin(), aabb);
+        GrowAabb(node.RightAabbMax(), aabb);
+    }
+
     return aabb;
 }
+
+Aabb GetNodeAabbSync(uint offset, int node_index)
+{
+    Aabb aabb = CreateEmptyAabb();
+    if (IS_LEAF_NODE(node_index))
+    {
+        int firstTriangle = GET_LEAF_NODE_FIRST_PRIM(node_index);
+        int triangleCount = GET_LEAF_NODE_PRIM_COUNT(node_index);
+        for (int i = 0; i < triangleCount; ++i)
+        {
+            uint3 indices = 0;
+            InterlockedAdd(g_bvh_leaves[g_bvh_leaves_offset + firstTriangle + i].x, 0, indices.x);
+            InterlockedAdd(g_bvh_leaves[g_bvh_leaves_offset + firstTriangle + i].y, 0, indices.y);
+            InterlockedAdd(g_bvh_leaves[g_bvh_leaves_offset + firstTriangle + i].z, 0, indices.z);
+            TriangleData tri = FetchTriangle(indices);
+
+            GrowAabb(tri.v0, aabb);
+            GrowAabb(tri.v1, aabb);
+            GrowAabb(tri.v2, aabb);
+        }
+    }
+    else
+    {
+        uint3 aabb0_min;
+        uint3 aabb0_max;
+        uint3 aabb1_min;
+        uint3 aabb1_max;
+
+        InterlockedAdd(g_bvh[offset + node_index].data[0], 0, aabb0_min.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[1], 0, aabb0_min.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[2], 0, aabb0_min.z);
+
+        InterlockedAdd(g_bvh[offset + node_index].data[3], 0, aabb0_max.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[4], 0, aabb0_max.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[5], 0, aabb0_max.z);
+
+        InterlockedAdd(g_bvh[offset + node_index].data[6], 0, aabb1_min.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[7], 0, aabb1_min.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[8], 0, aabb1_min.z);
+
+        InterlockedAdd(g_bvh[offset + node_index].data[9], 0, aabb1_max.x);
+        InterlockedAdd(g_bvh[offset + node_index].data[10], 0, aabb1_max.y);
+        InterlockedAdd(g_bvh[offset + node_index].data[11], 0, aabb1_max.z);
+
+        GrowAabb(asfloat(aabb0_min), aabb);
+        GrowAabb(asfloat(aabb0_max), aabb);
+        GrowAabb(asfloat(aabb1_min), aabb);
+        GrowAabb(asfloat(aabb1_max), aabb);
+    }
+
+    return aabb;
+}
+
+#endif
 
 void SetNodeAabbsSync(globallycoherent RWStructuredBuffer<BvhNode> bvh, int index, Aabb aabb0, Aabb aabb1)
 {

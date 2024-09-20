@@ -100,30 +100,7 @@ namespace Unity.PlasticSCM.Editor.WebApi
                     return null;
                 }
             }
-
-            internal static CredentialsResponse GetCredentials(string unityToken)
-            {
-                Uri endpoint = mWebApiUris.GetFullUri(
-                    WebApiEndpoints.Authentication.Credentials,
-                    unityToken);
-
-                try
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
-                    request.Method = "GET";
-                    request.ContentType = "application/json";
-
-                    return GetResponse<CredentialsResponse>(request);
-                }
-                catch (Exception ex)
-                {
-                    return new CredentialsResponse
-                    {
-                        Error = BuildLoggedErrorFields(ex, endpoint)
-                    };
-                }
-            }
-
+            
             internal static CurrentUserAdminCheckResponse IsUserAdmin(
                 string organizationName,
                 string authToken)
@@ -329,6 +306,6 @@ namespace Unity.PlasticSCM.Editor.WebApi
                 Environment.NewLine, ex.StackTrace);
         }
 
-        static readonly ILog mLog = LogManager.GetLogger("WebRestApiClient");
+        static readonly ILog mLog = PlasticApp.GetLogger("WebRestApiClient");
     }
 }

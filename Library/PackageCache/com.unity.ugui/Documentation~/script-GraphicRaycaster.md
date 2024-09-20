@@ -9,5 +9,5 @@ The Graphic Raycaster can be configured to ignore backfacing Graphics as well as
 |**_Property:_** |**_Function:_** |
 |:---|:---|
 |__Ignore Reversed Graphics__ | Should graphics facing away from the raycaster be considered? |
-|__Blocked Objects__ | Type of objects that will block graphic raycasts. |
-|__Blocking Mask__ | Type of objects that will block graphic raycasts. |
+|__Blocking Objects__ | Type of objects that are checked to determine if they block graphic raycasts. |
+|__Blocking Mask__ | Type of objects specified through LayerMask that are checked to determine if they block graphic raycasts. |

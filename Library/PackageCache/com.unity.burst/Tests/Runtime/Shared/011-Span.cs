@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 
 namespace Burst.Compiler.IL.Tests
@@ -221,6 +222,14 @@ namespace Burst.Compiler.IL.Tests
                     return ptr[41];
                 }
             }
+        }
+
+        [TestCompiler]
+        public static int TestMemoryMarshalGetReference()
+        {
+            Span<int> span = stackalloc int[42];
+            ref int x = ref MemoryMarshal.GetReference(span);
+            return x;
         }
     }
 #endif

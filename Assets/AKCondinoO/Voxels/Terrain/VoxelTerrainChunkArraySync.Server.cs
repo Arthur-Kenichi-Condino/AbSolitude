@@ -39,7 +39,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                id.Value.cnkRgn,
                id.Value.cnkIdx
               );
-              hasReadyEditData=false;
               pendingGetFileEditData=true;
              }
             }
@@ -55,13 +54,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal partial void NetServerSideManualUpdate(){
                 if(cnkArraySync!=null&&cnkArraySync.netObj.IsSpawned){
                  if(waitingGetFileEditData){
-         //            //Log.DebugMessage("waitingGetFileEditData");
-         //            if(OnGotFileEditData()){
-         //                waitingGetFileEditData=false;
-         //                if(!pendingGetFileEditData){
-         //                 hasReadyEditData=true;
-         //                }
-         //            }
+                     //Log.DebugMessage("waitingGetFileEditData");
+                     if(OnGotFileEditData()){
+                         waitingGetFileEditData=false;
+                         hasReadyEditData=true;
+                     }
                  }else{
                      if(pendingGetFileEditData){
                          //Log.DebugMessage("pendingGetFileEditData");
@@ -70,11 +67,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                              waitingGetFileEditData=true;
                          }
                      }else{
-         //                if(hasReadyEditData){
+                         if(hasReadyEditData){
          //                    //  TO DO: try send
-         //                    TrySendFileEditData();
-         //                }else{
-         //                }
+                             TrySendFileEditData();
+                         }else{
+                         }
                      }
                  }
                 }
@@ -91,33 +88,31 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              }
              return false;
             }
+            bool OnGotFileEditData(){
+             if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+              Log.DebugMessage("OnGotFileEditData");
+              for(int i=0;i<cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
+               cnkArraySync.netChunkHasChanges[i]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i];
+              }
+              return true;
+             }
+             return false;
+            }
+            void TrySendFileEditData(){
+             if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+              if(clientIdsRequestingData.Count>0){
+               Log.DebugMessage("'got clients requesting chunk data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
+         //      //sending=terrainGetFileEditDataToNetSyncBG.changes.Any(c=>{return c;});
+         //      //sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
+         //      //clientIdsToSendData.AddRange(clientIdsRequestingData);
+         //      //clientIdsRequestingData.Clear();
+         //      //Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
+              }else{
+               Log.DebugMessage("'no clients requesting data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
+              }
+             }
+            }
         }
-     //   internal void NetServerSideManualUpdate(){
-     //   }
-     //   bool OnGotFileEditData(){
-     //    if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
-     //     Log.DebugMessage("OnGotFileEditData");
-     //     for(int i=0;i<terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
-     //      cnkMsgr.netTerrainChunkArrayHasChanges[i]=terrainGetFileEditDataToNetSyncBG.changes[i];
-     //     }
-     //     return true;
-     //    }
-     //    return false;
-     //   }
-     //   void TrySendFileEditData(){
-     //    if(!sending&&terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
-     //     if(clientIdsRequestingData.Count>0){
-     //      Log.DebugMessage("'got clients requesting chunk data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
-     //      //sending=terrainGetFileEditDataToNetSyncBG.changes.Any(c=>{return c;});
-     //      //sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
-     //      //clientIdsToSendData.AddRange(clientIdsRequestingData);
-     //      //clientIdsRequestingData.Clear();
-     //      //Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
-     //     }else{
-     //      Log.DebugMessage("'no clients requesting data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
-     //     }
-     //    }
-     //   }
      // [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      //[NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
      // [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;

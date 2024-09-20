@@ -457,7 +457,7 @@ namespace TMPro.EditorUtilities
         {
             // Lazy creation that supports domain reload
             if (m_ResourceImporter == null)
-                m_ResourceImporter = new TMP_PackageResourceImporter();
+                m_ResourceImporter = new TMP_PackageResourceImporter(logErrors: false);
 
             m_ResourceImporter.OnGUI();
         }
@@ -480,12 +480,23 @@ namespace TMPro.EditorUtilities
 
             if (GetTMPSettings() != null)
             {
-                var provider = new AssetSettingsProvider("Project/TextMesh Pro/Settings", GetTMPSettings);
+                var provider = new TMP_SettingsAssetSettingsProvider("Project/TextMesh Pro/Settings", GetTMPSettings);
                 provider.PopulateSearchKeywordsFromGUIContentProperties<TMP_SettingsEditor.Styles>();
                 providers.Add(provider);
             }
 
             return providers.ToArray();
+        }
+
+        private class TMP_SettingsAssetSettingsProvider : AssetSettingsProvider
+        {
+            public TMP_SettingsAssetSettingsProvider(string settingsWindowPath, System.Func<UnityEngine.Object> settingsGetter)
+                : base(settingsWindowPath, settingsGetter) { }
+
+            public override void OnTitleBarGUI()
+            {
+                // Do nothing, avoids adding a button for help that doesn't exist (UUM-74086).
+            }
         }
     }
 }

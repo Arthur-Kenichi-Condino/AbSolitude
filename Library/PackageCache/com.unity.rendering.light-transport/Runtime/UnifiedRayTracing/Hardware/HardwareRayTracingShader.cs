@@ -1,16 +1,22 @@
+using Unity.Mathematics;
 using UnityEngine.Assertions;
 
 namespace UnityEngine.Rendering.UnifiedRayTracing
 {
     internal class HardwareRayTracingShader : IRayTracingShader
     {
-        RayTracingShader m_Shader;
-        string m_ShaderDispatchFuncName;
+        readonly RayTracingShader m_Shader;
+        readonly string m_ShaderDispatchFuncName;
 
-        internal HardwareRayTracingShader(RayTracingShader shader, string dispatchFuncName)
+        internal HardwareRayTracingShader(RayTracingShader shader, string dispatchFuncName, GraphicsBuffer unused)
         {
             m_Shader = shader;
             m_ShaderDispatchFuncName = dispatchFuncName;
+        }
+
+        public uint3 GetThreadGroupSizes()
+        {
+            return new uint3(1, 1, 1);
         }
 
         public void SetAccelerationStructure(CommandBuffer cmd, string name, IRayTracingAccelStruct accelStruct)
@@ -19,8 +25,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
 
             var hwAccelStruct = accelStruct as HardwareRayTracingAccelStruct;
             Assert.IsNotNull(hwAccelStruct);
-            hwAccelStruct.BindGeometryBuffers(cmd, name, this);
-
             cmd.SetRayTracingAccelerationStructure(m_Shader, Shader.PropertyToID(name+"accelStruct"), hwAccelStruct.accelStruct);
         }
 
@@ -64,10 +68,18 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             cmd.DispatchRays(m_Shader, m_ShaderDispatchFuncName, width, height, depth, null);
         }
 
+        public void Dispatch(CommandBuffer cmd, GraphicsBuffer scratchBuffer, GraphicsBuffer argsBuffer)
+        {
+            Assert.IsTrue((argsBuffer.target & GraphicsBuffer.Target.IndirectArguments) != 0);
+            Assert.IsTrue((argsBuffer.target & GraphicsBuffer.Target.Structured) != 0);
+            Assert.IsTrue(argsBuffer.count * argsBuffer.stride == 24);
+            cmd.DispatchRays(m_Shader, m_ShaderDispatchFuncName, argsBuffer, RayTracingHelper.k_DimensionByteOffset);
+        }
         public ulong GetTraceScratchBufferRequiredSizeInBytes(uint width, uint height, uint depth)
         {
             return 0;
         }
+
     }
 }
 

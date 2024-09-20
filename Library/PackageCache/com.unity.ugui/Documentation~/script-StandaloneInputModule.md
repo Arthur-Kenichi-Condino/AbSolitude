@@ -38,7 +38,7 @@ The flow for the module is as follows
         - Send BeginDrag event to the drag handler
         - Set the 'Pressed' object as Selected in the event system
     - If this is a continuing press
-        - Process movment
+        - Process movement
         - Send DragEvent to the cached drag handler
         - Handle PointerEnter and PointerExit events if touch moves between objects
     - If this is a release

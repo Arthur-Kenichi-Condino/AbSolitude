@@ -96,17 +96,17 @@ namespace Unity.Networking.Transport
             get
             {
                 var socket = m_InternalState.Value.Socket;
+                var address = default(Binding.Baselib_NetworkAddress);
                 var error = default(ErrorState);
-                var endpoint = default(NetworkEndpoint);
 
-                Binding.Baselib_RegisteredNetwork_Socket_UDP_GetNetworkAddress(socket, &endpoint.BaselibAddress, &error);
+                Binding.Baselib_RegisteredNetwork_Socket_UDP_GetNetworkAddress(socket, &address, &error);
                 if (error.code != ErrorCode.Success)
                 {
                     // Bind endpoint is better than nothing if we can't get the effective one.
                     return m_InternalState.Value.BindEndpoint;
                 }
 
-                return endpoint;
+                return new NetworkEndpoint(address);
             }
         }
 
@@ -123,9 +123,16 @@ namespace Unity.Networking.Transport
 
             m_InternalState = new NativeReference<InternalState>(state, Allocator.Persistent);
 
-            var bufferSize = networkConfiguration.maxMessageSize + UnsafeUtility.SizeOf<PacketMetadata>() + (int)Binding.Baselib_RegisteredNetwork_Endpoint_MaxSize;
+            var bufferSize = networkConfiguration.maxMessageSize + UnsafeUtility.SizeOf<PacketMetadata>() + UnsafeUtility.SizeOf<NetworkEndpoint>();
 
-            m_ReceiveBuffers = new UnsafeBaselibNetworkArray(state.ReceiveQueueCapacity, bufferSize);
+            // Baselib doesn't differientiate between receiving a packet that fits exactly in the
+            // receive buffer, and receiving a packet that is larger. In the latter case, it just
+            // silently truncates the packet. Thus, we ensure there's more data in the buffer than
+            // required for a maximally-sized packet so that if we receive a packet larger than our
+            // MTU, we'll be able to detect it.
+            var receiveBufferSize = bufferSize + 1;
+
+            m_ReceiveBuffers = new UnsafeBaselibNetworkArray(state.ReceiveQueueCapacity, receiveBufferSize);
             m_SendBuffers = new UnsafeBaselibNetworkArray(state.SendQueueCapacity, bufferSize);
 
             return 0;
@@ -430,14 +437,6 @@ namespace Unity.Networking.Transport
                             return;
                         }
 
-                        // TODO: These lines are not burst compatible due to baselib api.
-                        // // The receivied endpoint is in RegisteredNetwork format, we need to parse it to generic.
-                        // var endpointSlice = ReceiveBuffers.AtIndexAsSlice(bufferIndex);
-                        // endpointSlice.offset = PacketBufferLayout.EndpointOffset;
-                        // endpointSlice.data = new IntPtr((byte*)endpointSlice.data + PacketBufferLayout.EndpointOffset);
-                        // if (!ConvertEndpointBufferToGeneric(endpointSlice))
-                        //     receivedBytes = 0;
-
                         packetProcessor.SetUnsafeMetadata(receivedBytes);
                     }
 
@@ -553,7 +552,7 @@ namespace Unity.Networking.Transport
         {
             var error = default(ErrorState);
             socket = Binding.Baselib_RegisteredNetwork_Socket_UDP_Create(
-                &endpoint.BaselibAddress,
+                endpoint.BaselibAddressPtr,
                 Binding.Baselib_NetworkAddress_AddressReuse.DoNotAllow,
                 checked((uint)sendQueueCapacity),
                 checked((uint)receiveQueueCapacity),
@@ -630,23 +629,18 @@ namespace Unity.Networking.Transport
 
         private static unsafe bool ConvertEndpointBufferToGeneric(Binding.Baselib_RegisteredNetwork_BufferSlice endpointSlice)
         {
-            var endpoint = default(NetworkEndpoint);
+            var baselibAddress = default(Binding.Baselib_NetworkAddress);
+            var registeredEndpoint = new RegisteredNetworkEndpoint { slice = endpointSlice };
             var error = default(ErrorState);
 
-
-            Binding.Baselib_RegisteredNetwork_Endpoint_GetNetworkAddress(
-                new RegisteredNetworkEndpoint { slice = endpointSlice },
-                &endpoint.BaselibAddress,
-                &error
-            );
-
+            Binding.Baselib_RegisteredNetwork_Endpoint_GetNetworkAddress(registeredEndpoint, &baselibAddress, &error);
             if (error.code != (int)ErrorCode.Success)
             {
                 DebugLog.ErrorBaselib("Create Registered Endpoint", error);
                 return false;
             }
 
-            *(NetworkEndpoint*)endpointSlice.data = endpoint;
+            *(NetworkEndpoint*)endpointSlice.data = new NetworkEndpoint(baselibAddress);
             return true;
         }
 
@@ -666,6 +660,7 @@ namespace Unity.Networking.Transport
 
             request.payload.offset = bufferLayout.PayloadOffset;
             request.payload.data = new IntPtr((byte*)request.payload.data + bufferLayout.PayloadOffset);
+            request.payload.size -= bufferLayout.PayloadOffset;
 
             request.remoteEndpoint.slice.offset = bufferLayout.EndpointOffset;
             request.remoteEndpoint.slice.data = new IntPtr((byte*)request.remoteEndpoint.slice.data + bufferLayout.EndpointOffset);

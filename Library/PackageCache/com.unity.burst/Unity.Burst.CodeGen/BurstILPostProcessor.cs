@@ -66,14 +66,12 @@ namespace zzzUnity.Burst.CodeGen
         {
             // This can be setup to get more diagnostics
             var debuggingStr = Environment.GetEnvironmentVariable("UNITY_BURST_DEBUG");
-            IsDebugging = debuggingStr != null;
+            var debugLevel = 0;
+            IsDebugging = debuggingStr != null && int.TryParse(debuggingStr, out debugLevel) && debugLevel > 0;
             if (IsDebugging)
             {
                 Log("[com.unity.burst] Extra debugging is turned on.");
-                int debuggingLevel;
-                int.TryParse(debuggingStr, out debuggingLevel);
-                if (debuggingLevel <= 0) debuggingLevel = 1;
-                DebuggingLevel = debuggingLevel;
+                DebuggingLevel = debugLevel;
             }
         }
 

@@ -1,33 +1,43 @@
 
+using System.Collections.Generic;
+
 namespace UnityEngine.Rendering.UnifiedRayTracing
 {
-    internal class HardwareRayTracingAccelStruct : IRayTracingAccelStruct
+    internal sealed class HardwareRayTracingAccelStruct : IRayTracingAccelStruct
     {
         public RayTracingAccelerationStructure accelStruct { get; }
 
-        internal AccelStructInstances instances { get { return m_Instances; } }
-
-        Shader m_HWMaterialShader;
+        readonly Shader m_HWMaterialShader;
         Material m_RayTracingMaterial;
-        AccelStructInstances m_Instances;
+        readonly RayTracingAccelerationStructureBuildFlags m_BuildFlags;
+        // keep a reference to Meshes because RayTracingAccelerationStructure impl is to automatically
+        // remove instances when the mesh is disposed
+        readonly Dictionary<int, Mesh> m_Meshes = new();
+        readonly ReferenceCounter m_Counter;
 
-        internal HardwareRayTracingAccelStruct(GeometryPool geometryPool, Shader hwMaterialShader, ReferenceCounter counter)
+        internal HardwareRayTracingAccelStruct(AccelerationStructureOptions options, Shader hwMaterialShader, ReferenceCounter counter, bool enableCompaction)
         {
             m_HWMaterialShader = hwMaterialShader;
             LoadRayTracingMaterial();
+            m_BuildFlags = (RayTracingAccelerationStructureBuildFlags)options.buildFlags;
 
             RayTracingAccelerationStructure.Settings settings = new RayTracingAccelerationStructure.Settings();
             settings.rayTracingModeMask = RayTracingAccelerationStructure.RayTracingModeMask.Everything;
             settings.managementMode = RayTracingAccelerationStructure.ManagementMode.Manual;
+            settings.enableCompaction = enableCompaction;
             settings.layerMask = 255;
+            settings.buildFlagsStaticGeometries = m_BuildFlags;
 
             accelStruct = new RayTracingAccelerationStructure(settings);
-            m_Instances = new AccelStructInstances(geometryPool, counter);
+
+            m_Counter = counter;
+            m_Counter.Inc();
         }
 
         public void Dispose()
         {
-            m_Instances.Dispose();
+            m_Counter.Dec();
+
             accelStruct?.Dispose();
 
             if (m_RayTracingMaterial != null)
@@ -38,60 +48,50 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
         {
             LoadRayTracingMaterial();
 
-            AccelStructInstances.InstanceEntry addedEntry;
-            m_Instances.AddInstance(meshInstance, out addedEntry);
-
-            int instanceIndex = addedEntry.indexInInstanceBuffer.block.offset;
-
-            var instanceDesc = new RayTracingMeshInstanceConfig(addedEntry.mesh, (uint)meshInstance.subMeshIndex, m_RayTracingMaterial);
+            var instanceDesc = new RayTracingMeshInstanceConfig(meshInstance.mesh, (uint)meshInstance.subMeshIndex, m_RayTracingMaterial);
             instanceDesc.mask = meshInstance.mask;
             instanceDesc.enableTriangleCulling = meshInstance.enableTriangleCulling;
             instanceDesc.frontTriangleCounterClockwise = meshInstance.frontTriangleCounterClockwise;
-            addedEntry.accelStructID = accelStruct.AddInstance(instanceDesc, meshInstance.localToWorldMatrix, null, (uint)instanceIndex);
-
-            return instanceIndex;
+            int instanceHandle = accelStruct.AddInstance(instanceDesc, meshInstance.localToWorldMatrix, null, meshInstance.instanceID);
+            m_Meshes.Add(instanceHandle, meshInstance.mesh);
+            return instanceHandle;
         }
 
         public void RemoveInstance(int instanceHandle)
         {
-            AccelStructInstances.InstanceEntry removedEntry;
-            m_Instances.RemoveInstance(instanceHandle, out removedEntry);
-            accelStruct.RemoveInstance(removedEntry.accelStructID);
+            m_Meshes.Remove(instanceHandle);
+            accelStruct.RemoveInstance(instanceHandle);
         }
 
         public void ClearInstances()
         {
-            m_Instances.ClearInstances();
+            m_Meshes.Clear();
             accelStruct.ClearInstances();
         }
 
         public void UpdateInstanceTransform(int instanceHandle, Matrix4x4 localToWorldMatrix)
         {
-            AccelStructInstances.InstanceEntry entry;
-            m_Instances.UpdateInstanceTransform(instanceHandle, localToWorldMatrix, out entry);
-            accelStruct.UpdateInstanceTransform(entry.accelStructID, localToWorldMatrix);
-        }
-
-        public void UpdateInstanceMaterialID(int instanceHandle, uint materialID)
-        {
-            m_Instances.UpdateInstanceMaterialID(instanceHandle, materialID);
+            accelStruct.UpdateInstanceTransform(instanceHandle, localToWorldMatrix);
         }
 
         public void UpdateInstanceID(int instanceHandle, uint instanceID)
         {
-            m_Instances.UpdateInstanceID(instanceHandle, instanceID);
+            accelStruct.UpdateInstanceID(instanceHandle, instanceID);
         }
 
         public void UpdateInstanceMask(int instanceHandle, uint mask)
         {
-            AccelStructInstances.InstanceEntry instanceEntry;
-            m_Instances.UpdateInstanceMask(instanceHandle, mask, out instanceEntry);
-            accelStruct.UpdateInstanceMask(instanceEntry.accelStructID, mask);
+            accelStruct.UpdateInstanceMask(instanceHandle, mask);
         }
 
         public void Build(CommandBuffer cmd, GraphicsBuffer scratchBuffer)
         {
-            cmd.BuildRayTracingAccelerationStructure(accelStruct);
+            var buildSettings = new RayTracingAccelerationStructure.BuildSettings()
+            {
+                buildFlags = m_BuildFlags,
+                relativeOrigin = Vector3.zero
+            };
+            cmd.BuildRayTracingAccelerationStructure(accelStruct, buildSettings);
         }
 
         public ulong GetBuildScratchBufferRequiredSizeInBytes()
@@ -99,16 +99,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             // Unity's Hardware impl (RayTracingAccelerationStructure) does not require any scratchbuffers.
             // They are directly handled internally by the GfxDevice.
             return 0;
-        }
-
-        public void NextFrame()
-        {
-            m_Instances.NextFrame();
-        }
-
-        public void BindGeometryBuffers(CommandBuffer cmd, string name, IRayTracingShader shader)
-        {
-            m_Instances.BindGeometryBuffers(cmd, name, shader);
         }
 
         private void LoadRayTracingMaterial()

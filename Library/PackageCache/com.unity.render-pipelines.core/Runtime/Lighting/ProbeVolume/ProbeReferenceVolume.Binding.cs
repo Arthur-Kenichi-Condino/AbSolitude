@@ -19,15 +19,16 @@ namespace UnityEngine.Rendering
             public static readonly int _APVResL2_2 = Shader.PropertyToID("_APVResL2_2");
             public static readonly int _APVResL2_3 = Shader.PropertyToID("_APVResL2_3");
 
+            public static readonly int _APVProbeOcclusion = Shader.PropertyToID("_APVProbeOcclusion");
+
             public static readonly int _APVResValidity = Shader.PropertyToID("_APVResValidity");
             public static readonly int _SkyOcclusionTexL0L1 = Shader.PropertyToID("_SkyOcclusionTexL0L1");
             public static readonly int _SkyShadingDirectionIndicesTex = Shader.PropertyToID("_SkyShadingDirectionIndicesTex");
             public static readonly int _SkyPrecomputedDirections = Shader.PropertyToID("_SkyPrecomputedDirections");
+            public static readonly int _AntiLeakData = Shader.PropertyToID("_AntiLeakData");
         }
 
-
         ComputeBuffer m_EmptyIndexBuffer = null;
-        ComputeBuffer m_EmptyDirectionsBuffer = null;
 
         /// <summary>
         /// Bind the global APV resources
@@ -60,6 +61,7 @@ namespace UnityEngine.Rendering
                     cmdBuffer.SetGlobalTexture(ShaderIDs._SkyOcclusionTexL0L1, rr.SkyOcclusionL0L1 ?? (RenderTargetIdentifier)CoreUtils.blackVolumeTexture);
                     cmdBuffer.SetGlobalTexture(ShaderIDs._SkyShadingDirectionIndicesTex, rr.SkyShadingDirectionIndices ?? (RenderTargetIdentifier)CoreUtils.blackVolumeTexture);
                     cmdBuffer.SetGlobalBuffer(ShaderIDs._SkyPrecomputedDirections, rr.SkyPrecomputedDirections);
+                    cmdBuffer.SetGlobalBuffer(ShaderIDs._AntiLeakData, rr.QualityLeakReductionData);
 
                     if (refVolume.shBands == ProbeVolumeSHBands.SphericalHarmonicsL2)
                     {
@@ -68,6 +70,8 @@ namespace UnityEngine.Rendering
                         cmdBuffer.SetGlobalTexture(ShaderIDs._APVResL2_2, rr.L2_2);
                         cmdBuffer.SetGlobalTexture(ShaderIDs._APVResL2_3, rr.L2_3);
                     }
+
+                    cmdBuffer.SetGlobalTexture(ShaderIDs._APVProbeOcclusion, rr.ProbeOcclusion ?? (RenderTargetIdentifier)CoreUtils.whiteVolumeTexture);
 
                     needToBindNeutral = false;
                 }
@@ -80,11 +84,6 @@ namespace UnityEngine.Rendering
                 if (m_EmptyIndexBuffer == null)
                     m_EmptyIndexBuffer = new ComputeBuffer(1, sizeof(uint) * 3, ComputeBufferType.Structured);
 
-                if(m_EmptyDirectionsBuffer == null)
-                {
-                    m_EmptyDirectionsBuffer = new ComputeBuffer(1, 3 * sizeof(float), ComputeBufferType.Structured);
-                }
-
                 cmdBuffer.SetGlobalBuffer(ShaderIDs._APVResIndex, m_EmptyIndexBuffer);
                 cmdBuffer.SetGlobalBuffer(ShaderIDs._APVResCellIndices, m_EmptyIndexBuffer);
 
@@ -96,7 +95,8 @@ namespace UnityEngine.Rendering
 
                 cmdBuffer.SetGlobalTexture(ShaderIDs._SkyOcclusionTexL0L1, CoreUtils.blackVolumeTexture);
                 cmdBuffer.SetGlobalTexture(ShaderIDs._SkyShadingDirectionIndicesTex, CoreUtils.blackVolumeTexture);
-                cmdBuffer.SetGlobalBuffer(ShaderIDs._SkyPrecomputedDirections, m_EmptyDirectionsBuffer);
+                cmdBuffer.SetGlobalBuffer(ShaderIDs._SkyPrecomputedDirections, m_EmptyIndexBuffer);
+                cmdBuffer.SetGlobalBuffer(ShaderIDs._AntiLeakData, m_EmptyIndexBuffer);
 
                 if (refVolume.shBands == ProbeVolumeSHBands.SphericalHarmonicsL2)
                 {
@@ -105,6 +105,8 @@ namespace UnityEngine.Rendering
                     cmdBuffer.SetGlobalTexture(ShaderIDs._APVResL2_2, CoreUtils.blackVolumeTexture);
                     cmdBuffer.SetGlobalTexture(ShaderIDs._APVResL2_3, CoreUtils.blackVolumeTexture);
                 }
+
+                cmdBuffer.SetGlobalTexture(ShaderIDs._APVProbeOcclusion, CoreUtils.whiteVolumeTexture);
             }
         }
 
@@ -133,11 +135,11 @@ namespace UnityEngine.Rendering
                 parameters.reflNormalizationLowerClamp = 0.005f;
                 parameters.reflNormalizationUpperClamp = probeVolumeOptions.occlusionOnlyReflectionNormalization.value ? 1.0f : 7.0f;
 
-                parameters.minValidNormalWeight = probeVolumeOptions.minValidDotProductValue.value;
                 parameters.skyOcclusionIntensity = skyOcclusion ? probeVolumeOptions.skyOcclusionIntensityMultiplier.value : 0.0f;
                 parameters.skyOcclusionShadingDirection = skyOcclusion && skyOcclusionShadingDirection;
                 parameters.regionCount = m_CurrentBakingSet.bakedMaskCount;
                 parameters.regionLayerMasks = supportRenderingLayers ? m_CurrentBakingSet.bakedLayerMasks : 0xFFFFFFFF;
+                parameters.worldOffset = probeVolumeOptions.worldOffset.value;
                 UpdateConstantBuffer(cmd, parameters);
             }
 

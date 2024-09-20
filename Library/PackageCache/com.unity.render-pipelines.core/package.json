@@ -8,11 +8,11 @@
     "com.unity.burst": "1.8.14",
     "com.unity.mathematics": "1.3.2",
     "com.unity.ugui": "2.0.0",
-    "com.unity.collections": "2.4.1",
+    "com.unity.collections": "2.4.3",
     "com.unity.modules.physics": "1.0.0",
     "com.unity.modules.terrain": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
-    "com.unity.rendering.light-transport": "1.0.0"
+    "com.unity.rendering.light-transport": "1.0.1"
   },
-  "_fingerprint": "ff08c65278ed60c675675088f2fce8c5633e5ad2"
+  "_fingerprint": "241f3c7febcff1083610bae21ce9427711884311"
 }

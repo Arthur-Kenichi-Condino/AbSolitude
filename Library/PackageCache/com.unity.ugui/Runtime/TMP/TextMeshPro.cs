@@ -17,7 +17,11 @@ namespace TMPro
     [RequireComponent(typeof(MeshRenderer))]
     [AddComponentMenu("Mesh/TextMeshPro - Text")]
     [ExecuteAlways]
+        #if UNITY_2023_2_OR_NEWER
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/TextMeshPro/index.html")]
+    #else
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2")]
+    #endif
     public class TextMeshPro : TMP_Text, ILayoutElement
     {
         // Public Properties and Serializable Properties
@@ -832,7 +836,7 @@ namespace TMPro
             //m_sharedMaterialHashCode = TMP_TextUtilities.GetSimpleHashCode(m_sharedMaterial.name);
 
             UpdateMask();
-            UpdateEnvMapMatrix();
+            ValidateEnvMapProperty();
             m_havePropertiesChanged = true;
 
             SetVerticesDirty();
@@ -972,6 +976,9 @@ namespace TMPro
                 }
             }
 
+            // Cache environment map property validation.
+            ValidateEnvMapProperty();
+            
             m_padding = GetPaddingForMaterial();
             m_isMaskingEnabled = ShaderUtilities.IsMaskingEnabled(m_sharedMaterial);
 
@@ -981,14 +988,32 @@ namespace TMPro
             SetMaterialDirty();
         }
 
-
+        /// <summary>
+        /// Method to check if the environment map property is valid.
+        /// </summary>
+        void ValidateEnvMapProperty()
+        {
+            if (m_sharedMaterial != null)
+                m_hasEnvMapProperty = m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) && m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) != null;
+            else
+                m_hasEnvMapProperty = false;
+        }
+        
         void UpdateEnvMapMatrix()
         {
-            if (!m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) || m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) == null)
+            if (!m_hasEnvMapProperty)
                 return;
 
             //Debug.Log("Updating Env Matrix...");
             Vector3 rotation = m_sharedMaterial.GetVector(ShaderUtilities.ID_EnvMatrixRotation);
+            #if !UNITY_EDITOR
+            // The matrix property is reverted on editor save because m_sharedMaterial will be replaced with a new material instance.
+            // Disable rotation change check if editor to handle this material change.
+            if (m_currentEnvMapRotation == rotation)
+                return;
+            #endif
+            
+            m_currentEnvMapRotation = rotation;
             m_EnvMapMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(rotation), Vector3.one);
 
             m_sharedMaterial.SetMatrix(ShaderUtilities.ID_EnvMatrix, m_EnvMapMatrix);
@@ -2033,6 +2058,9 @@ namespace TMPro
                 m_havePropertiesChanged = true;
                 OnPreRenderObject();
             }
+
+            // Update Environment Matrix property to support changing the rotation via a script.
+            UpdateEnvMapMatrix();
         }
 
 
@@ -3752,8 +3780,17 @@ namespace TMPro
                 if (charCode == 9)
                 {
                     float tabSize = m_currentFontAsset.m_FaceInfo.tabWidth * m_currentFontAsset.tabSize * currentElementScale;
-                    float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
-                    m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    // Adjust horizontal tab depending on RTL
+                    if (m_isRightToLeft)
+                    {
+                        float tabs = Mathf.Floor(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs < m_xAdvance ? tabs : m_xAdvance - tabSize;
+                    }
+                    else
+                    {
+                        float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    }
                 }
                 else if (m_monoSpacing != 0)
                 {

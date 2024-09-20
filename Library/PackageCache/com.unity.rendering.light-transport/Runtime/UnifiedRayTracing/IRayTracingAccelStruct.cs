@@ -9,7 +9,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
         public Matrix4x4 localToWorldMatrix;
         public uint mask;
         public uint instanceID;
-        public uint materialID;
         public bool enableTriangleCulling;
         public bool frontTriangleCounterClockwise;
 
@@ -19,8 +18,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             this.subMeshIndex = subMeshIndex;
             localToWorldMatrix = Matrix4x4.identity;
             mask = 0xFFFFFFFF;
-            instanceID = 0;
-            materialID = 0;
+            instanceID = 0xFFFFFFFF;
             enableTriangleCulling = true;
             frontTriangleCounterClockwise = false;
         }
@@ -32,12 +30,10 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
         void RemoveInstance(int instanceHandle);
         void ClearInstances();
         void UpdateInstanceTransform(int instanceHandle, Matrix4x4 localToWorldMatrix);
-        void UpdateInstanceMaterialID(int instanceHandle, uint materialID);
         void UpdateInstanceID(int instanceHandle, uint instanceID);
         void UpdateInstanceMask(int instanceHandle, uint mask);
         void Build(CommandBuffer cmd, GraphicsBuffer scratchBuffer);
         ulong GetBuildScratchBufferRequiredSizeInBytes();
-        void NextFrame();
     }
 }
 

@@ -129,8 +129,10 @@ namespace Unity.Burst.Editor
 #endif
     {
         public int callbackOrder => 0;
+        private Assembly[] playerBuildAssemblies = null;
 
 #if ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API
+
         public IGenerateNativePluginsForAssemblies.PrepareResult PrepareOnMainThread(IGenerateNativePluginsForAssemblies.PrepareArgs args)
         {
             if (ForceDisableBurstCompilation)
@@ -171,14 +173,19 @@ namespace Unity.Burst.Editor
                 return new ();
             if (Directory.Exists(BurstAotCompiler.OutputBaseFolder))
                 Directory.Delete(BurstAotCompiler.OutputBaseFolder, true);
-            var assemblies = args.assemblyFiles.Select(path => new Assembly(
-                Path.GetFileNameWithoutExtension(path),
-                path,
-                Array.Empty<string>(),
-                Array.Empty<string>(),
-                Array.Empty<Assembly>(),
-                Array.Empty<string>(),
-                UnityEditor.Compilation.AssemblyFlags.None))
+            var assemblies = args.assemblyFiles.Select(path =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(path);
+                    return new Assembly(
+                        name,
+                        path,
+                        Array.Empty<string>(),
+                        // Try to look up any defines for this assembly from the player build report
+                        playerBuildAssemblies.FirstOrDefault(asm => asm.name == name)?.defines ?? Array.Empty<string>(),
+                        Array.Empty<Assembly>(),
+                        Array.Empty<string>(),
+                        UnityEditor.Compilation.AssemblyFlags.None);
+                })
                 // We don't run Burst on UnityEngine assemblies, so we skip them to save time
                 .Where(a => !a.name.StartsWith("UnityEngine."))
                 .ToArray();
@@ -197,7 +204,7 @@ namespace Unity.Burst.Editor
             {
                 DoSetup(report);
 
-                DoGenerate(BurstAotCompiler.GetPlayerAssemblies(report))
+                DoGenerate(playerBuildAssemblies)
                     .ToList(); // Force enumeration
             }
             finally
@@ -301,6 +308,20 @@ namespace Unity.Burst.Editor
                     settings.extraOptions.Add(GetOption(OptionPlatformConfiguration, GetQNXTargetOsVersion()));
                 }
 #endif
+                playerBuildAssemblies = BurstAotCompiler.GetPlayerAssemblies(report);
+
+                Hash128 definesHash = default;
+                foreach (var assembly in playerBuildAssemblies.OrderBy(x => x.name))
+                {
+                    definesHash.Append(assembly.name);
+                    definesHash.Append(assembly.defines.Length);
+                    foreach (var symbol in assembly.defines.OrderBy(x => x))
+                    {
+                        definesHash.Append(symbol);
+                    }
+                }
+
+                settings.symbolDefinesHash = definesHash;
 
                 settings.Save();
             }
@@ -418,6 +439,7 @@ namespace Unity.Burst.Editor
             public string productName;
             public bool isSupported;
             public List<string> extraOptions;
+            public Hash128 symbolDefinesHash;
 
             // Hash any fields that might have an effect on whether Bursted code needs to be recompiled
             // Note that the BurstPlatformAotSettings are saved and used separately, so they don't need to
@@ -455,6 +477,9 @@ namespace Unity.Burst.Editor
                         hc.Append(opt);
                     }
                 }
+
+                hc.Append(symbolDefinesHash.u64_0);
+                hc.Append(symbolDefinesHash.u64_1);
 
                 hc.Append((int)scriptingBackend);
                 hc.Append(productName);
@@ -870,7 +895,8 @@ namespace Unity.Burst.Editor
                         BclRunner.RunManagedProgram(
                             BurstLoader.BclConfiguration.ExecutablePath,
                             $"{burstcSwitch} {BclRunner.EscapeForShell("@" + responseFile)}",
-                            new BclOutputErrorParser());
+                            new BclOutputErrorParser(),
+                            combination.EnvironmentVariables);
                     }
 
                     // Additionally copy the pdb to the root of the player build so run in editor also locates the symbols
@@ -1157,6 +1183,7 @@ extern ""C""
                 // TODO: would be better to query AndroidNdkRoot (but thats not exposed from unity)
                 string ndkRoot = null;
                 var targetAPILevel = PlayerSettings.Android.GetMinTargetAPILevel();
+                var environment = new Dictionary<string, string>();
 #if UNITY_ANDROID
                 ndkRoot = UnityEditor.Android.AndroidExternalToolsSettings.ndkRootPath;
 #else
@@ -1189,10 +1216,10 @@ extern ""C""
                 // Always set the ANDROID_NDK_ROOT (if we got a valid result from above), so BCL knows where to find the Android toolchain and its the one the user expects
                 if (!string.IsNullOrEmpty(ndkRoot))
                 {
-                    Environment.SetEnvironmentVariable("ANDROID_NDK_ROOT", ndkRoot);
+                    environment["ANDROID_NDK_ROOT"] = ndkRoot;
                 }
 
-                Environment.SetEnvironmentVariable("BURST_ANDROID_MIN_API_LEVEL", $"{targetAPILevel}");
+                environment["BURST_ANDROID_MIN_API_LEVEL"] = $"{targetAPILevel}";
 
                 // Setting tempburstlibs/ as the interim target directory
                 // Don't target libs/ directly because incremental build pipeline doesn't expect the so's at that path
@@ -1200,22 +1227,22 @@ extern ""C""
                 var androidTargetArch = PlayerSettings.Android.targetArchitectures;
                 if ((androidTargetArch & AndroidArchitecture.ARMv7) != 0)
                 {
-                    combinations.Add(new BurstOutputCombination("tempburstlibs/armeabi-v7a", new TargetCpus(BurstTargetCpu.ARMV7A_NEON32), collateDirectory: true));
+                    combinations.Add(new BurstOutputCombination("tempburstlibs/armeabi-v7a", new TargetCpus(BurstTargetCpu.ARMV7A_NEON32), collateDirectory: true, environment: environment));
                 }
 
                 if ((androidTargetArch & AndroidArchitecture.ARM64) != 0)
                 {
                     var aotSettingsForTarget = BurstPlatformAotSettings.GetOrCreateSettings(summary.platform);
-                    combinations.Add(new BurstOutputCombination("tempburstlibs/arm64-v8a", aotSettingsForTarget.GetAndroidCpuArm64(), collateDirectory: true));
+                    combinations.Add(new BurstOutputCombination("tempburstlibs/arm64-v8a", aotSettingsForTarget.GetAndroidCpuArm64(), collateDirectory: true, environment: environment));
                 }
 #if UNITY_2019_4_OR_NEWER
                 if (AndroidHasX86(androidTargetArch))
                 {
-                    combinations.Add(new BurstOutputCombination("tempburstlibs/x86", new TargetCpus(BurstTargetCpu.X86_SSE4), collateDirectory: true));
+                    combinations.Add(new BurstOutputCombination("tempburstlibs/x86", new TargetCpus(BurstTargetCpu.X86_SSE4), collateDirectory: true, environment: environment));
                 }
                 if (AndroidHasX86_64(androidTargetArch))
                 {
-                    combinations.Add(new BurstOutputCombination("tempburstlibs/x86_64", new TargetCpus(BurstTargetCpu.X64_SSE4), collateDirectory: true));
+                    combinations.Add(new BurstOutputCombination("tempburstlibs/x86_64", new TargetCpus(BurstTargetCpu.X64_SSE4), collateDirectory: true, environment: environment));
                 }
 #endif
             }
@@ -1738,14 +1765,16 @@ extern ""C""
             public readonly string LibraryName;
             public readonly bool CollateDirectory;
             public readonly bool WorkaroundFullDebugInfo;
+            public readonly Dictionary<string, string> EnvironmentVariables;
 
-            public BurstOutputCombination(string outputPath, TargetCpus targetCpus, string libraryName = DefaultLibraryName, bool collateDirectory = false, bool workaroundBrokenDebug=false)
+            public BurstOutputCombination(string outputPath, TargetCpus targetCpus, string libraryName = DefaultLibraryName, bool collateDirectory = false, bool workaroundBrokenDebug=false, Dictionary<string, string> environment = null)
             {
                 TargetCpus = targetCpus.Clone();
                 OutputPath = outputPath;
                 LibraryName = libraryName;
                 CollateDirectory = collateDirectory;
                 WorkaroundFullDebugInfo = workaroundBrokenDebug;
+                EnvironmentVariables = environment;
             }
 
             public void HashInto(ref Hash128 hc)
@@ -1772,16 +1801,17 @@ extern ""C""
         {
             private static readonly Regex MatchVersion = new Regex(@"com.unity.burst@(\d+.*?)[\\/]");
 
-            public static void RunManagedProgram(string exe, string args, CompilerOutputParserBase parser)
+            public static void RunManagedProgram(string exe, string args, CompilerOutputParserBase parser, IReadOnlyDictionary<string, string> environment = null)
             {
-                RunManagedProgram(exe, args, Application.dataPath + "/..", parser);
+                RunManagedProgram(exe, args, Application.dataPath + "/..", parser, environment);
             }
 
             private static void RunManagedProgram(
               string exe,
               string args,
               string workingDirectory,
-              CompilerOutputParserBase parser)
+              CompilerOutputParserBase parser,
+              IReadOnlyDictionary<string, string> environment = null)
             {
                 Program p;
                 bool unreliableExitCode = false;
@@ -1792,7 +1822,9 @@ extern ""C""
                         // For Windows on Arm 64, we need to be explicit and specify the architecture we want our
                         //managed process to run with - unfortunately, doing this means the exit code of the process
                         //no longer reflects if compilation was successful, so unreliableExitCode works around this
-                        args = "/c start /machine arm64 /b /WAIT " + exe + " " + args;
+                        //Note, the exe path must be quoted, but START thinks if it sees a " where the command is,
+                        //that its the title of the window, so we put a dummy empty string first.
+                        args = "/c start /machine arm64 /b /WAIT \"\" \"" + exe + "\" " + args;
                         exe = "cmd";
                         unreliableExitCode = true;
                     }
@@ -1802,14 +1834,26 @@ extern ""C""
                         CreateNoWindow = true,
                         FileName = exe,
                     };
+                    SetEnvironmentVariables(si);
                     p = new Program(si);
                 }
                 else
                 {
-                    p = (Program) new ManagedProgram(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), (string) null, exe, args, false, null);
+                    p = (Program) new ManagedProgram(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), (string) null, exe, args, false, SetEnvironmentVariables);
                 }
 
                 RunProgram(p, exe, args, workingDirectory, parser, unreliableExitCode);
+
+                return;
+
+                void SetEnvironmentVariables(ProcessStartInfo psi)
+                {
+                    if (environment == null) return;
+                    foreach (var kvp in environment)
+                    {
+                        psi.Environment[kvp.Key] = kvp.Value;
+                    }
+                }
             }
 
             public static void RunNativeProgram(string exe, string args, CompilerOutputParserBase parser)

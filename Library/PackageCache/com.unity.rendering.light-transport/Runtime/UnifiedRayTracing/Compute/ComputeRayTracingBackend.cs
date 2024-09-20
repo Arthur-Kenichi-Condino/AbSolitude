@@ -7,17 +7,23 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             m_Resources = resources;
         }
 
-        public IRayTracingShader CreateRayTracingShader(Object shader, string dispatchFuncName)
+        public IRayTracingShader CreateRayTracingShader(Object shader, string kernelName, GraphicsBuffer dispatchBuffer)
         {
             Debug.Assert(shader is ComputeShader);
-            return new ComputeRayTracingShader((ComputeShader)shader, dispatchFuncName);
+            return new ComputeRayTracingShader((ComputeShader)shader, kernelName, dispatchBuffer);
         }
 
-        public IRayTracingAccelStruct CreateAccelerationStructure(AccelerationStructureOptions options, GeometryPool geometryPool, ReferenceCounter counter)
+        public IRayTracingAccelStruct CreateAccelerationStructure(AccelerationStructureOptions options, ReferenceCounter counter)
         {
-            return new ComputeRayTracingAccelStruct(options, geometryPool, m_Resources, counter);
+            return new ComputeRayTracingAccelStruct(options, m_Resources, counter);
         }
 
-        RayTracingResources m_Resources;
+        public ulong GetRequiredTraceScratchBufferSizeInBytes(uint width, uint height, uint depth)
+        {
+            uint rayCount = width * height * depth;
+            return (RadeonRays.RadeonRaysAPI.GetTraceMemoryRequirements(rayCount) * RayTracingContext.GetScratchBufferStrideInBytes());
+        }
+
+        readonly RayTracingResources m_Resources;
     }
 }

@@ -6,7 +6,7 @@ using Unity.Mathematics;
 
 namespace UnityEngine.Rendering.UnifiedRayTracing
 {
-    internal class TerrainToMesh
+    internal static class TerrainToMesh
     {
         static private AsyncTerrainToMeshRequest MakeAsyncTerrainToMeshRequest(int width, int height, Vector3 heightmapScale, float[,] heightmap, bool[,] holes)
         {
@@ -44,13 +44,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             return MakeAsyncTerrainToMeshRequest(width, height, terrainData.heightmapScale, heightmap, holes);
         }
 
-        static public Mesh Convert(Terrain terrain)
-        {
-            var request = ConvertAsync(terrain);
-            request.WaitForCompletion();
-            return request.GetMesh();
-        }
-
         static public AsyncTerrainToMeshRequest ConvertAsync(int heightmapWidth, int heightmapHeight, short[] heightmapData, Vector3 heightmapScale, int holeWidth, int holeHeight, byte[] holedata)
         {
             float[,] heightmap = new float[heightmapWidth,heightmapHeight];
@@ -72,6 +65,12 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
                         holes[x, y] = true;
             }
             return MakeAsyncTerrainToMeshRequest(heightmapWidth, heightmapHeight, heightmapScale, heightmap, holes);
+        }
+        static public Mesh Convert(Terrain terrain)
+        {
+            var request = ConvertAsync(terrain);
+            request.WaitForCompletion();
+            return request.GetMesh();
         }
 
         static public Mesh Convert(int heightmapWidth, int heightmapHeight, short[] heightmapData, Vector3 heightmapScale, int holeWidth, int holeHeight, byte[] holedata)
@@ -174,11 +173,11 @@ namespace UnityEngine.Rendering.UnifiedRayTracing
             indices.Dispose();
         }
 
-        public void Execute(int i)
+        public void Execute(int index)
         {
-            int vertexIndex = i;
-            int x = i % width;
-            int y = i / height;
+            int vertexIndex = index;
+            int x = vertexIndex % width;
+            int y = vertexIndex / height;
 
             float3 v = new float3(x, heightmap[y*width +x], y);
 

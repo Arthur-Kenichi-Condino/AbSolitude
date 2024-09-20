@@ -8,7 +8,7 @@ Shader "RayTracing/StandardMaterial"
 
             HLSLPROGRAM
 
-            #define RAYTRACING_BACKEND_HARDWARE
+            #define UNIFIED_RT_BACKEND_HARDWARE
             #include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Bindings.hlsl"
 
             #pragma raytracing test
@@ -21,7 +21,7 @@ Shader "RayTracing/StandardMaterial"
             [shader("closesthit")]
             void ClosestHitMain(inout UnifiedRT::Hit payload : SV_RayPayload, AttributeData attribs : SV_IntersectionAttributes)
             {
-                payload.instanceIndex = InstanceID();
+                payload.instanceID = InstanceID();
                 payload.primitiveIndex = PrimitiveIndex();
                 payload.uvBarycentrics = attribs.barycentrics;
                 payload.hitDistance = RayTCurrent();

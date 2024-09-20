@@ -15,17 +15,17 @@ using PlasticGui.WorkspaceWindow;
 using PlasticGui.WorkspaceWindow.Diff;
 using PlasticGui.WorkspaceWindow.History;
 using PlasticGui.WorkspaceWindow.Open;
-
-using GluonRevertOperation = GluonGui.WorkspaceWindow.Views.Details.History.RevertOperation;
-using HistoryDescriptor = GluonGui.WorkspaceWindow.Views.Details.History.HistoryDescriptor;
-using OpenRevisionOperation = PlasticGui.WorkspaceWindow.History.OpenRevisionOperation;
-
+using PlasticGui.WorkspaceWindow.Configuration;
 using Unity.PlasticSCM.Editor.AssetUtils;
 using Unity.PlasticSCM.Editor.Tool;
 using Unity.PlasticSCM.Editor.UI;
 using Unity.PlasticSCM.Editor.UI.Progress;
 using Unity.PlasticSCM.Editor.UI.Tree;
 using Unity.PlasticSCM.Editor.Views.Changesets;
+
+using GluonRevertOperation = GluonGui.WorkspaceWindow.Views.Details.History.RevertOperation;
+using HistoryDescriptor = GluonGui.WorkspaceWindow.Views.Details.History.HistoryDescriptor;
+using OpenRevisionOperation = PlasticGui.WorkspaceWindow.History.OpenRevisionOperation;
 
 namespace Unity.PlasticSCM.Editor.Views.History
 {
@@ -79,6 +79,22 @@ namespace Unity.PlasticSCM.Editor.Views.History
             ((IRefreshableView)this).Refresh();
         }
 
+        internal void OnEnable()
+        {
+            mSearchField.downOrUpArrowKeyPressed +=
+                SearchField_OnDownOrUpArrowKeyPressed;
+        }
+
+        internal void OnDisable()
+        {
+            mSearchField.downOrUpArrowKeyPressed -=
+                SearchField_OnDownOrUpArrowKeyPressed;
+
+            TreeHeaderSettings.Save(
+                mHistoryListView.multiColumnHeader.state,
+                UnityConstants.HISTORY_TABLE_SETTINGS_NAME);
+        }
+
         internal void Update()
         {
             mProgressControls.UpdateProgress(mParentWindow);
@@ -87,10 +103,7 @@ namespace Unity.PlasticSCM.Editor.Views.History
         internal void OnGUI()
         {
             DoActionsToolbar(
-                this,
                 mProgressControls,
-                mSearchField,
-                mHistoryListView,
                 GetViewTitle(mPath));
 
             DoHistoryArea(
@@ -104,16 +117,6 @@ namespace Unity.PlasticSCM.Editor.Views.History
                 mSearchField,
                 mHistoryListView,
                 UnityConstants.SEARCH_FIELD_WIDTH);
-        }
-
-        internal void OnDisable()
-        {
-            mSearchField.downOrUpArrowKeyPressed -=
-                SearchField_OnDownOrUpArrowKeyPressed;
-
-            TreeHeaderSettings.Save(
-                mHistoryListView.multiColumnHeader.state,
-                UnityConstants.HISTORY_TABLE_SETTINGS_NAME);
         }
 
         internal void SetLaunchToolForTesting(
@@ -142,10 +145,13 @@ namespace Unity.PlasticSCM.Editor.Views.History
         }
 
         void HistoryViewLogic.IHistoryView.UpdateData(
+            List<ResolvedUser> resolvedUsers,
+            ResolvedUser currentUser,
             Dictionary<BranchInfo, ChangesetInfo> branchesAndChangesets,
             BranchInfo workingBranch,
             HistoryRevisionList list,
-            long loadedRevisionId)
+            long loadedRevisionId,
+            WorkspaceUIConfiguration config)
         {
             mHistoryListView.BuildModel(list, loadedRevisionId);
 
@@ -353,10 +359,7 @@ namespace Unity.PlasticSCM.Editor.Views.History
         }
 
         static void DoActionsToolbar(
-            IRefreshableView refreshableView,
             ProgressControlsForViews progressControls,
-            SearchField searchField,
-            HistoryListView listView,
             string viewTitle)
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);

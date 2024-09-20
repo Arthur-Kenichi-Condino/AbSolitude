@@ -29,6 +29,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
+      internal NetworkList<bool>netChunkHasChanges=new NetworkList<bool>(
+       new bool[chunkVoxelArraySplits],
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{
@@ -51,6 +56,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             internal partial void NetClientSideOnDestroyingCore();
             internal partial void NetClientSideDispose();
+            internal partial void NetClientSideManualUpdate();
         }
         void Awake(){
          netObj=GetComponent<NetworkObject>();
@@ -68,15 +74,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          if(Core.singleton.isClient){
           asClient.OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
           netChunkId.OnValueChanged+=asClient.OnClientSideNetChunkIdValueChanged;
-     //     OnClientSideNetTerrainChunkArrayHasChangesValueChanged(default);
-     //     netTerrainChunkArrayHasChanges.OnListChanged+=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+          asClient.OnClientSideNetChunkHasChangesValueChanged(default);
+          netChunkHasChanges.OnListChanged+=asClient.OnClientSideNetChunkHasChangesValueChanged;
      //     clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
         }
         public override void OnNetworkDespawn(){
          if(Core.singleton.isClient){
           netChunkId.OnValueChanged-=asClient.OnClientSideNetChunkIdValueChanged;
-     //     netTerrainChunkArrayHasChanges.OnListChanged-=OnClientSideNetTerrainChunkArrayHasChangesValueChanged;
+          netChunkHasChanges.OnListChanged-=asClient.OnClientSideNetChunkHasChangesValueChanged;
          }
          base.OnNetworkDespawn();
         }

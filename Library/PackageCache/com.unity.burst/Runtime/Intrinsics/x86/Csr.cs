@@ -39,8 +39,9 @@ namespace Unity.Burst.Intrinsics
             /// <summary>
             /// Mask for rounding control bits.
             /// </summary>
-            ///
+            /// <remarks>
             /// The rounding modes have no effect on comparison operations, operations that produce exact results, or operations that produce NaN results.
+            /// </remarks>
             RoundingControlMask = (1 << 14) | (1 << 13),
 
             /// <summary>
@@ -84,7 +85,7 @@ namespace Unity.Burst.Intrinsics
             /// <summary>
             /// Bit 6 (DAZ) of the MXCSR register enables the denormals-are-zeros mode, which controls the processor’s response to a SIMD floating-point denormal operand condition.
             /// </summary>
-            ///
+            /// <remarks>
             /// When the denormals-are-zeros flag is set, the processor converts all denormal source operands to a zero with the sign of the original operand before performing any computations on them.
             /// The processor does not set the denormal-operand exception flag (DE), regardless of the setting of the denormal-operand exception mask bit (DM); and it does not generate a denormal-operand
             /// exception if the exception is unmasked.The denormals-are-zeros mode is not compatible with IEEE Standard 754.
@@ -95,6 +96,7 @@ namespace Unity.Burst.Intrinsics
             /// The denormals-are-zeros mode was introduced in the Pentium 4 and Intel Xeon processor with the SSE2 extensions; however, it is fully compatible with the SSE SIMD floating-point instructions
             /// (that is, the denormals-are-zeros flag affects the operation of the SSE SIMD floating-point instructions). In earlier IA-32 processors and in some models of the Pentium 4 processor, this flag
             /// (bit 6) is reserved. Attempting to set bit 6 of the MXCSR register on processors that do not support the DAZ flag will cause a general-protection exception (#GP).
+            /// </remarks>
             DenormalsAreZeroes = 1 << 6,
 
             /// <summary>Bits 0 through 5 of the MXCSR register indicate whether a SIMD floating-point exception has been detected. They are "sticky" flags. That is, after a flag is set, it remains set until explicitly cleared. To clear these flags, use the LDMXCSR or the FXRSTOR instruction to write zeroes to them.</summary>

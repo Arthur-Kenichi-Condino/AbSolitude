@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Runtime.InteropServices;
 using Unity.Mathematics;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.Rendering.RadeonRays;
 
 namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
 {
@@ -88,36 +89,8 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
         }
     }
 
-    public class ComputeRayTracingAccelStructTests
+    internal class ComputeRayTracingAccelStructTests
     {
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct BvhNode
-        {
-            public uint child0;
-            public uint child1;
-            public uint parent;
-            public uint update;
-
-            public float3 aabb0_min;
-            public float3 aabb0_max;
-            public float3 aabb1_min;
-            public float3 aabb1_max;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct BvhHeader
-        {
-            public uint totalNodeCount;
-            public uint leafNodeCount;
-            public uint root;
-            public uint unused;
-
-            public float3 aabb_min;
-            public float3 aabb_max;
-            public uint3 unused1;
-            public uint3 unused2;
-        }
-
         static private void AssertFloat3sAreEqual(float3 expected, float3 actual, float tolerance)
         {
             Assert.AreEqual(expected.x, actual.x, tolerance);
@@ -137,18 +110,9 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
             var resources = new RayTracingResources();
             resources.Load();
 
-            var MB = 1024 * 1024;
-            var geoPoolDesc = new GeometryPoolDesc()
-            {
-                vertexPoolByteSize = MB,
-                indexPoolByteSize = MB,
-                meshChunkTablesByteSize = MB
-            };
-            using var geoPool = new GeometryPool(geoPoolDesc, resources.geometryPoolKernels, resources.copyBuffer);
-
             using var accelStruct = new ComputeRayTracingAccelStruct(
                 new AccelerationStructureOptions() { buildFlags = BuildFlags.PreferFastBuild },
-                geoPool, resources,
+                resources,
                 new ReferenceCounter());
 
             uint instanceCount = 2;
@@ -178,44 +142,39 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
                 accelStruct.bottomLevelBvhBuffer.GetData(bottomLevelNodes);
 
                 var header = UnsafeUtility.As<BvhNode, BvhHeader>(ref bottomLevelNodes[0]);
-                Assert.AreEqual(expectedTotalNodeCount, header.totalNodeCount);
+                Assert.AreEqual(expectedTotalNodeCount, header.internalNodeCount + header.leafNodeCount);
                 Assert.AreEqual(1, header.leafNodeCount);
-                Assert.AreEqual(expectedTotalNodeCount, header.totalNodeCount);
-                AssertAABBsAreEqual(new float3(0.0f, 0.0f, 0.0f), new float3(1.0f, 1.0f, 0.0f), header.aabb_min, header.aabb_max, tolerance);
+                Assert.AreEqual(expectedTotalNodeCount, header.internalNodeCount + header.leafNodeCount);
+                AssertAABBsAreEqual(new float3(0.0f, 0.0f, 0.0f), new float3(1.0f, 1.0f, 0.0f), header.globalAabbMin, header.globalAabbMax, tolerance);
             }
 
             {
                 // Verify top level BVH.
-                uint expectedTotalNodeCount = 2 * instanceCount - 1;
-                var topLevelNodes = new BvhNode[(int)expectedTotalNodeCount + 1]; // plus one for header
+                uint expectedInternalNodeCount = instanceCount - 1;
+                uint expectedLeafNodeCount = instanceCount;
+                var topLevelNodes = new BvhNode[(int)expectedInternalNodeCount + 1]; // plus one for header
                 accelStruct.topLevelBvhBuffer.GetData(topLevelNodes);
 
                 var header = UnsafeUtility.As<BvhNode, BvhHeader>(ref topLevelNodes[0]);
-                Assert.AreEqual(expectedTotalNodeCount, header.totalNodeCount);
-                Assert.AreEqual(instanceCount, header.leafNodeCount);
-                Assert.AreEqual(expectedTotalNodeCount, header.totalNodeCount);
-                AssertAABBsAreEqual(new float3(1.0f, 1.0f, 0.0f), new float3(4.0f, 2.0f, 0.0f), header.aabb_min, header.aabb_max, tolerance);
+                Assert.AreEqual(expectedInternalNodeCount, header.internalNodeCount);
+                Assert.AreEqual(expectedLeafNodeCount, header.leafNodeCount);
+
+                AssertAABBsAreEqual(new float3(1.0f, 1.0f, 0.0f), new float3(4.0f, 2.0f, 0.0f), header.globalAabbMin, header.globalAabbMax, tolerance);
 
                 var instanceBvhRoot = topLevelNodes[1];
-                Assert.AreEqual(1, instanceBvhRoot.child0);
-                Assert.AreEqual(2, instanceBvhRoot.child1);
+                Assert.AreEqual(0u | (1u << 31), instanceBvhRoot.child0 ); // MSB is set for leaf node indices
+                Assert.AreEqual(1u | (1u << 31), instanceBvhRoot.child1 );
                 AssertAABBsAreEqual(new float3(1.0f, 1.0f, 0.0f), new float3(2.0f, 2.0f, 0.0f), instanceBvhRoot.aabb0_min, instanceBvhRoot.aabb0_max, tolerance);
                 AssertAABBsAreEqual(new float3(3.0f, 1.0f, 0.0f), new float3(4.0f, 2.0f, 0.0f), instanceBvhRoot.aabb1_min, instanceBvhRoot.aabb1_max, tolerance);
-
-                var leftChild = topLevelNodes[2];
-                Assert.AreEqual(0, leftChild.parent);
-
-                var rightChild = topLevelNodes[3];
-                Assert.AreEqual(0, leftChild.parent);
             }
         }
     }
 
     [TestFixture("Compute")]
     [TestFixture("Hardware")]
-    public class AccelStructTests
+    internal class AccelStructTests
     {
-        RayTracingBackend m_Backend;
+        readonly RayTracingBackend m_Backend;
         RayTracingContext m_Context;
         RayTracingResources m_Resources;
         IRayTracingAccelStruct m_AccelStruct;
@@ -265,8 +224,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
 
             Mesh mesh = MeshUtil.CreateQuadMesh();
 
-            var instanceDesc = new MeshInstanceDesc();
-            instanceDesc = new MeshInstanceDesc(mesh);
+            var instanceDesc = new MeshInstanceDesc(mesh);
             instanceDesc.localToWorldMatrix = Matrix4x4.identity;
             instanceDesc.localToWorldMatrix.SetTRS(new Vector3(0.5f, 0.5f, 0.0f), Quaternion.identity, new Vector3(1.0f, 1.0f, 1.0f));
             instanceDesc.enableTriangleCulling = false;
@@ -406,132 +364,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
             }
         }
 
-        enum UVDimension
-        {
-            Dim2,
-            Dim3,
-            Dim4
-        }
-
-        void RayTraceAndCheckUVs(Mesh mesh, Vector4 expected, int uvChannel, float tolerance = 0.0001f)
-        {
-            int uvDimension = mesh.GetVertexAttributeDimension(uvChannel == 1 ? VertexAttribute.TexCoord1 : VertexAttribute.TexCoord0);
-            UVDimension dim = UVDimension.Dim2;
-            switch (uvDimension)
-            {
-                case 2:
-                    dim = UVDimension.Dim2;
-                    break;
-                case 3:
-                    dim = UVDimension.Dim3;
-                    break;
-                case 4:
-                    dim = UVDimension.Dim4;
-                    break;
-                default:
-                    Assert.Fail("Unexpected UV dimension.");
-                    break;
-            };
-
-            const int instanceCount = 4;
-            CreateMatchingRaysAndInstanceDescs(instanceCount, mesh, out RayWithFlags[] rays, out MeshInstanceDesc[] instanceDescs);
-
-            for (int i = 0; i < instanceCount; ++i)
-            {
-                m_AccelStruct.AddInstance(instanceDescs[i]);
-            }
-
-            HitGeomAttributes[] hitAttributes = null;
-            var hits = TraceRays(rays, out hitAttributes);
-            for (int i = 0; i < rays.Length; ++i)
-            {
-                Assert.IsTrue(hits[i].Valid(), "Expected ray to hit the mesh.");
-                float4 uv = uvChannel == 1 ? hitAttributes[i].uv1 : hitAttributes[i].uv0;
-                Assert.AreEqual(expected.x, uv.x, tolerance, $"Expected x (from uv{uvChannel}) to be fetched correctly in the ray tracing shader.");
-                Assert.AreEqual(expected.y, uv.y, tolerance, $"Expected y (from uv{uvChannel}) to be fetched correctly in the ray tracing shader.");
-                if (dim == UVDimension.Dim3 || dim == UVDimension.Dim4)
-                    Assert.AreEqual(expected.z, uv.z, tolerance, $"Expected z (from uv{uvChannel}) to be fetched correctly in the ray tracing shader.");
-                if (dim == UVDimension.Dim4)
-                    Assert.AreEqual(expected.w, uv.w, tolerance, $"Expected w (from uv{uvChannel}) to be fetched correctly in the ray tracing shader.");
-            }
-        }
-
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void GeometryPool_MeshWithTwoWideUVs_UVsAreFetchedCorrectly(int uvChannel)
-        {
-            Mesh mesh = MeshUtil.CreateSingleTriangleMesh(new float2(1.5f, 1.5f), new float3(-0.5f, -0.5f, 0.0f));
-            float x = 100.2f;
-            float y = -9.3f;
-            var uvs = new Vector2[] { new Vector2(x, y), new Vector2(x, y), new Vector2(x, y) };
-            // Here we use the Vector2 version for setting the UVs on the mesh
-            mesh.SetUVs(uvChannel, uvs);
-            RayTraceAndCheckUVs(mesh, new Vector4(x, y, 0.0f, 0.0f), uvChannel);
-        }
-
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void GeometryPool_MeshWithThreeWideUVs_UVsAreFetchedCorrectly(int uvChannel)
-        {
-            Mesh mesh = MeshUtil.CreateSingleTriangleMesh(new float2(1.5f, 1.5f), new float3(-0.5f, -0.5f, 0.0f));
-            float x = 100.2f;
-            float y = -9.3f;
-            float z = 32.4f;
-            var uvs = new Vector3[] { new Vector3(x, y, z), new Vector3(x, y, z), new Vector3(x, y, z) };
-            // Here we use the Vector3 version for setting the UVs on the mesh
-            mesh.SetUVs(uvChannel, uvs);
-            RayTraceAndCheckUVs(mesh, new Vector4(x, y, z, 0.0f), uvChannel);
-        }
-
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void GeometryPool_MeshWithFourWideUVs_UVsAreFetchedCorrectly(int uvChannel)
-        {
-            Mesh mesh = MeshUtil.CreateSingleTriangleMesh(new float2(1.5f, 1.5f), new float3(-0.5f, -0.5f, 0.0f));
-            float x = 100.2f;
-            float y = -9.3f;
-            float z = 32.4f;
-            float w = -12.5f;
-            var uvs = new Vector4[] { new Vector4(x, y, z, w), new Vector4(x, y, z, w), new Vector4(x, y, z, w) };
-            // Here we use the Vector4 version for setting the UVs on the mesh
-            mesh.SetUVs(uvChannel, uvs);
-            RayTraceAndCheckUVs(mesh, new Vector4(x, y, z, w), uvChannel);
-        }
-
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void GeometryPool_MeshWithLargeUVValues_UVsAreFetchedCorrectly(int uvChannel)
-        {
-            Mesh mesh = MeshUtil.CreateSingleTriangleMesh(new float2(1.5f, 1.5f), new float3(-0.5f, -0.5f, 0.0f));
-            float x = 100000.2f;
-            float y = -900000.3f;
-            float z = 32000.4f;
-            float w = -1200000.5f;
-            var uvs = new Vector4[] { new Vector4(x, y, z, w), new Vector4(x, y, z, w), new Vector4(x, y, z, w) };
-            // Here we use the Vector4 version for setting the UVs on the mesh
-            mesh.SetUVs(uvChannel, uvs);
-            RayTraceAndCheckUVs(mesh, new Vector4(x, y, z, w), uvChannel, 0.2f);
-        }
-
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void GeometryPool_MeshWithDifferentVertexUVs_UVsAreInterpolatedCorrectly(int uvChannel)
-        {
-            Mesh mesh = MeshUtil.CreateSingleTriangleMesh(new float2(1.5f, 1.5f), new float3(-0.5f, -0.5f, 0.0f));
-            float x = 1.0f;
-            float y = 5.0f;
-            float z = 7.0f;
-            var uvs = new Vector4[] { new Vector4(x, x, x, x), new Vector4(y, y, y, y), new Vector4(z, z, z, z) };
-            // Here we use the Vector4 version for setting the UVs on the mesh
-            mesh.SetUVs(uvChannel, uvs);
-            RayTraceAndCheckUVs(mesh, new Vector4(4.333f, 4.333f, 4.333f, 4.333f), uvChannel, 0.001f);
-        }
-
         [Test]
         public void AddAndRemoveInstances()
         {
@@ -642,7 +474,6 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
             m_Shader.SetAccelerationStructure(cmd, "_AccelStruct", m_AccelStruct);
             m_Shader.SetBufferParam(cmd, Shader.PropertyToID("_Rays"), raysBuffer);
             m_Shader.SetBufferParam(cmd, Shader.PropertyToID("_Hits"), hitsBuffer);
-            m_Shader.SetBufferParam(cmd, Shader.PropertyToID("_HitAttributes"), attributesBuffer);
             m_Shader.Dispatch(cmd, scratchBuffer, (uint)rayCount, 1, 1);
             Graphics.ExecuteCommandBuffer(cmd);
 
@@ -662,11 +493,7 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
 
             m_Context = new RayTracingContext(m_Backend, m_Resources);
             m_AccelStruct = m_Context.CreateAccelerationStructure(new AccelerationStructureOptions());
-
-            Type type = BackendHelpers.GetTypeOfShader(m_Backend);
-            string filename = BackendHelpers.GetFileNameOfShader(m_Backend, $"Tests/Editor/UnifiedRayTracing/TraceRays");
-            Object shader = AssetDatabase.LoadAssetAtPath($"Packages/com.unity.rendering.light-transport/{filename}", type);
-            m_Shader = m_Context.CreateRayTracingShader(shader);
+            m_Shader = m_Context.LoadRayTracingShader("Packages/com.unity.rendering.light-transport/Tests/Editor/UnifiedRayTracing/TraceRays.urtshader");
         }
 
         void DisposeRayTracingResources()
@@ -706,13 +533,13 @@ namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
         [StructLayout(LayoutKind.Sequential)]
         public struct Hit
         {
-            public uint instanceIndex;
+            public uint instanceID;
             public uint primitiveIndex;
             public float2 uvBarycentrics;
             public float hitDistance;
             public uint isFrontFace;
 
-            public bool Valid() { return instanceIndex != 0xFFFFFFFF; }
+            public bool Valid() { return instanceID != 0xFFFFFFFF; }
         }
 
         [StructLayout(LayoutKind.Sequential)]

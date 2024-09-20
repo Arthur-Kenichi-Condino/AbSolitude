@@ -26,11 +26,27 @@ struct TriangleData
     float3 v2;
 };
 
+#ifdef MESH_INDICES_BINDINGS
+
+uint LoadIndex16(uint offset)
+{
+    uint val = g_indices.Load(((g_indices_offset + offset) / 2u) << 2);
+    val = (g_indices_offset + offset) % 2u == 0 ? (val & 0x0000ffff) : (val >> 16);
+    return val;
+}
+
 #if !(TOP_LEVEL)
 uint3 GetFaceIndices(uint tri_idx)
 {
-    return uint3(g_indices[g_indices_offset + 3 * tri_idx], g_indices[g_indices_offset + 3 * tri_idx + 1], g_indices[g_indices_offset + 3 * tri_idx + 2]);
+    #if UINT16_INDICES
+    return g_base_index + uint3(LoadIndex16(3*tri_idx), LoadIndex16(3 * tri_idx + 1), LoadIndex16(3 * tri_idx + 2));
+    #else
+    return g_base_index + uint3(g_indices.Load((g_indices_offset + 3 * tri_idx)<<2), g_indices.Load((g_indices_offset + 3 * tri_idx + 1)<<2), g_indices.Load((g_indices_offset + 3 * tri_idx + 2)<<2));
+    #endif
 }
+#endif
+
+#endif // MESH_INDICES_BINDINGS
 
 float3 FetchVertex(uint idx)
 {
@@ -47,6 +63,6 @@ TriangleData FetchTriangle(uint3 idx)
     tri.v2 = FetchVertex(idx.z);
     return tri;
 }
-#endif
+
 
 #endif // TRIANGLE_MESH_HLSL

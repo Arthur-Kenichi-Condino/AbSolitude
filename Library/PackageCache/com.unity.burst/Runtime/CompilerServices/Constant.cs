@@ -8,7 +8,7 @@ namespace Unity.Burst.CompilerServices
         /// <summary>
         /// Performs a compile-time check on whether the provided argument is known to be constant by Burst.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Type</typeparam>
         /// <param name="t">The value to check whether it is constant.</param>
         /// <returns>True if Burst knows at compile-time that it is a constant, false otherwise.</returns>
         public static bool IsConstantExpression<T>(T t) where T : unmanaged => false;

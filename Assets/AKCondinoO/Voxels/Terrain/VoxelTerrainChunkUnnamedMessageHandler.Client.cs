@@ -48,30 +48,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               }
              }
             }
+            internal partial void NetClientSideManualUpdate(){
+            }
         }
-     //internal enum ChangeRequestsState:byte{
-     // Reset=0,
-     // Pending=1,
-     // Waiting=2,
-     // Synchronized=3,
-     //}
-     //[NonSerialized]readonly ChangeRequestsState[]clientSideTerrainChunkArrayChangeRequestsState=new ChangeRequestsState[chunkVoxelArraySplits];
-     //   private void OnClientSideNetTerrainChunkArrayHasChangesValueChanged(NetworkListEvent<bool>change){
-     //    if(Core.singleton.isClient){
-     //     if(!IsOwner){
-     //      if(change.Type==NetworkListEvent<bool>.EventType.Value||change.Type==NetworkListEvent<bool>.EventType.Full){
-     //       if(change.Value&&change.Value!=change.PreviousValue){
-     //        if(change.Index<clientSideTerrainChunkArrayChangeRequestsState.Length){
-     //         clientSideTerrainChunkArrayChangeRequestsState[change.Index]=ChangeRequestsState.Pending;
-     //         hasPendingSync=true;
-     //        }else{
-     //         Log.Error("'change.Index>=clientSideTerrainChunkArrayChangeRequestsState.Length'");
-     //        }
-     //       }
-     //      }
-     //     }
-     //    }
-     //   }
      //[SerializeField]bool DEBUG_FORCE_SEND_WHOLE_CHUNK_DATA=false;
      //[NonSerialized]bool waitingWriteEditData;
      //[NonSerialized]bool pendingWriteEditData;

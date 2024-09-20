@@ -1,12 +1,13 @@
 
 namespace UnityEngine.Rendering.RadeonRays
 {
-    internal class SID
+    internal static class SID
     {
         public static readonly int g_vertices = Shader.PropertyToID("g_vertices");
         public static readonly int g_indices = Shader.PropertyToID("g_indices");
         public static readonly int g_scratch_buffer = Shader.PropertyToID("g_scratch_buffer");
         public static readonly int g_bvh = Shader.PropertyToID("g_bvh");
+        public static readonly int g_bvh_leaves = Shader.PropertyToID("g_bvh_leaves");
         public static readonly int g_buffer = Shader.PropertyToID("g_buffer");
         public static readonly int g_primitive_refs_offset = Shader.PropertyToID("g_primitive_refs_offset");
         public static readonly int g_morton_codes_offset = Shader.PropertyToID("g_morton_codes_offset");
@@ -37,12 +38,13 @@ namespace UnityEngine.Rendering.RadeonRays
         public static readonly int g_treelet_offset = Shader.PropertyToID("g_treelet_offset");
         public static readonly int g_remainder_treelets = Shader.PropertyToID("g_remainder_treelets");
         public static readonly int g_bvh_offset = Shader.PropertyToID("g_bvh_offset");
+        public static readonly int g_bvh_leaves_offset = Shader.PropertyToID("g_bvh_leaves_offset");
         public static readonly int g_instance_infos = Shader.PropertyToID("g_instance_infos");
         public static readonly int g_bottom_bvhs = Shader.PropertyToID("g_bottom_bvhs");
         public static readonly int g_indices_offset = Shader.PropertyToID("g_indices_offset");
+        public static readonly int g_base_index = Shader.PropertyToID("g_base_index");
         public static readonly int g_vertices_offset = Shader.PropertyToID("g_vertices_offset");
         public static readonly int g_bvh_node_count = Shader.PropertyToID("g_bvh_node_count");
-        public static readonly int g_bvh_max_node_count = Shader.PropertyToID("g_bvh_max_node_count");
         public static readonly int g_trace_index_buffer = Shader.PropertyToID("g_trace_index_buffer");
         public static readonly int g_trace_vertex_buffer = Shader.PropertyToID("g_trace_vertex_buffer");
         public static readonly int g_trace_vertex_stride = Shader.PropertyToID("g_trace_vertex_stride");
@@ -54,5 +56,8 @@ namespace UnityEngine.Rendering.RadeonRays
         public static readonly int g_neighbor_offset = Shader.PropertyToID("g_neighbor_offset");
         public static readonly int g_cluster_to_node_offset = Shader.PropertyToID("g_cluster_to_node_offset");
         public static readonly int g_deltas_offset = Shader.PropertyToID("g_deltas_offset");
+        public static readonly int g_dispatch_dimensions = Shader.PropertyToID("g_Dimensions");
+        public static readonly int g_dispatch_dims_in_workgroups = Shader.PropertyToID("g_dispatch_dims_in_workgroups");
+        public static readonly int g_leaf_parents_offset = Shader.PropertyToID("g_leaf_parents_offset");
     }
 }

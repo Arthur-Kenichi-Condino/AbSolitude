@@ -23,14 +23,13 @@ namespace UnityEngine.Rendering.RadeonRays
 
     internal class HlbvhTopLevelBuilder
     {
-        private ComputeShader shaderBuildHlbvh;
-        private int kernelInit;
-        private int kernelCalculateAabb;
-        private int kernelCalculateMortonCodes;
-        private int kernelBuildTreeBottomUp;
-        private int kernelClearUpdateFlags;
+        readonly ComputeShader shaderBuildHlbvh;
+        readonly int kernelInit;
+        readonly int kernelCalculateAabb;
+        readonly int kernelCalculateMortonCodes;
+        readonly int kernelBuildTreeBottomUp;
 
-        private RadixSort radixSort;
+        readonly RadixSort radixSort;
 
         const uint kTrianglesPerThread = 8u;
         const uint kGroupSize = 256u;
@@ -43,20 +42,19 @@ namespace UnityEngine.Rendering.RadeonRays
             kernelCalculateAabb = shaderBuildHlbvh.FindKernel("CalculateAabb");
             kernelCalculateMortonCodes = shaderBuildHlbvh.FindKernel("CalculateMortonCodes");
             kernelBuildTreeBottomUp = shaderBuildHlbvh.FindKernel("BuildTreeBottomUp");
-            kernelClearUpdateFlags = shaderBuildHlbvh.FindKernel("ClearUpdateFlags");
 
             radixSort = new RadixSort(shaders);
         }
 
         public ulong GetScratchDataSizeInDwords(uint instanceCount)
         {
-            var scratchLayout = GetScratchBufferLayout(instanceCount);
+            var scratchLayout = ScratchBufferLayout.Create(instanceCount);
             return scratchLayout.TotalSize;
         }
 
         public static uint GetBvhNodeCount(uint leafCount)
         {
-            return 2 * leafCount - 1;
+            return leafCount - 1;
         }
 
         public void AllocateResultBuffers(uint instanceCount, ref TopLevelAccelStruct accelStruct)
@@ -71,7 +69,7 @@ namespace UnityEngine.Rendering.RadeonRays
         public void CreateEmpty(ref TopLevelAccelStruct accelStruct)
         {
             accelStruct.Dispose();
-            accelStruct.topLevelBvh = new GraphicsBuffer(TopLevelAccelStruct.topLevelBvhTarget, (int)2, Marshal.SizeOf<BvhNode>());
+            accelStruct.topLevelBvh = new GraphicsBuffer(TopLevelAccelStruct.topLevelBvhTarget, 2, Marshal.SizeOf<BvhNode>());
             accelStruct.instanceInfos = accelStruct.topLevelBvh;
             accelStruct.bottomLevelBvhs = accelStruct.topLevelBvh;
             accelStruct.instanceCount = 0;
@@ -85,37 +83,26 @@ namespace UnityEngine.Rendering.RadeonRays
             top[1].child1 = 0;
             top[1].parent = 0xFFFFFFFF;
             top[1].update = 0;
-            top[1].aabb0_min = math.asuint(new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity));
-            top[1].aabb0_max = math.asuint(new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity));
-            top[1].aabb1_min = math.asuint(new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity));
-            top[1].aabb1_max = math.asuint(new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity));
+            top[1].aabb0_min = new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
+            top[1].aabb0_max = new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
+            top[1].aabb1_min = new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
+            top[1].aabb1_max = new float3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
 
             accelStruct.topLevelBvh.SetData(top);
-        }
-
-        struct ScratchBufferOffsets
-        {
-            public uint Aabb;
-            public uint MortonCodes;
-            public uint PrimitiveRefs;
-            public uint SortedMortonCodes;
-            public uint SortedPrimitiveRefs;
-            public uint SortMemory;
-            public uint InternalNodeRange;
-            public uint TotalSize;
         }
 
         public void Execute(CommandBuffer cmd, GraphicsBuffer scratch, ref TopLevelAccelStruct accelStruct)
         {
             Common.EnableKeyword(cmd, shaderBuildHlbvh, "TOP_LEVEL", true);
-            Common.EnableKeyword(cmd, shaderBuildHlbvh, "NO_REDUCTION", true);
+            Common.EnableKeyword(cmd, shaderBuildHlbvh, "UINT16_INDICES", false);
             uint instanceCount = accelStruct.instanceCount;
-            var scratchLayout = GetScratchBufferLayout(instanceCount);
+            var scratchLayout = ScratchBufferLayout.Create(instanceCount);
 
-            cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_constants_vertex_stride, (int)0);
+            cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_constants_vertex_stride, 0);
             cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_constants_triangle_count, (int)instanceCount);
             cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_bvh_offset, 0);
             cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_internal_node_range_offset, (int)scratchLayout.InternalNodeRange);
+            cmd.SetComputeIntParam(shaderBuildHlbvh, SID.g_aabb_offset, (int)scratchLayout.Aabb);
 
             BindKernelArguments(cmd, kernelInit, scratch, scratchLayout, accelStruct, false);
             cmd.DispatchCompute(shaderBuildHlbvh, kernelInit, 1, 1, 1);
@@ -131,55 +118,50 @@ namespace UnityEngine.Rendering.RadeonRays
                 scratchLayout.PrimitiveRefs, scratchLayout.SortedPrimitiveRefs,
                 scratchLayout.SortMemory, instanceCount);
 
-            BindKernelArguments(cmd, kernelClearUpdateFlags, scratch, scratchLayout, accelStruct, true);
-            cmd.DispatchCompute(shaderBuildHlbvh, kernelClearUpdateFlags, (int)Common.CeilDivide(instanceCount, kTrianglesPerGroup), 1, 1);
-
             BindKernelArguments(cmd, kernelBuildTreeBottomUp, scratch, scratchLayout, accelStruct, true);
             cmd.DispatchCompute(shaderBuildHlbvh, kernelBuildTreeBottomUp, (int)Common.CeilDivide(instanceCount, kTrianglesPerGroup), 1, 1);
         }
 
-        private ScratchBufferOffsets cachedScratchOffsets;
-        private uint cachedInstanceCount = 0;
-
-        ScratchBufferOffsets GetScratchBufferLayout(uint instanceCount)
+        struct ScratchBufferLayout
         {
-            if (cachedInstanceCount == instanceCount)
+            public uint Aabb;
+            public uint MortonCodes;
+            public uint PrimitiveRefs;
+            public uint SortedMortonCodes;
+            public uint SortedPrimitiveRefs;
+            public uint SortMemory;
+            public uint InternalNodeRange;
+            public uint TotalSize;
+
+            public static ScratchBufferLayout Create(uint instanceCount)
             {
-                return cachedScratchOffsets;
+                var result = new ScratchBufferLayout();
+                result.Aabb = result.Reserve(6);
+                result.MortonCodes = result.Reserve(instanceCount);
+                result.PrimitiveRefs = result.Reserve(instanceCount);
+                result.SortedMortonCodes = result.Reserve(instanceCount);
+                result.SortedPrimitiveRefs = result.Reserve(instanceCount);
+                result.SortMemory = result.Reserve((uint)RadixSort.GetScratchDataSizeInDwords(instanceCount));
+
+                // overlaps with MortonCodes and PrimitiveRefs
+                result.InternalNodeRange = result.MortonCodes;
+
+                return result;
             }
 
-            var result = new ScratchBufferOffsets();
-
-            uint offset = 0;
-            result.Aabb = offset;
-            offset += 6;
-            result.MortonCodes = offset;
-            offset += instanceCount;
-            result.PrimitiveRefs = offset;
-            offset += instanceCount;
-            result.SortedMortonCodes = offset;
-            offset += instanceCount;
-            result.SortedPrimitiveRefs = offset;
-            offset += instanceCount;
-            result.SortMemory = offset;
-            offset += (uint)radixSort.GetScratchDataSizeInDwords(instanceCount);
-            result.TotalSize = offset;
-
-            // overlaps with MortonCodes and PrimitiveRefs
-            result.InternalNodeRange = result.MortonCodes;
-
-
-            cachedScratchOffsets = result;
-            cachedInstanceCount = instanceCount;
-
-            return result;
+            uint Reserve(uint size)
+            {
+                var temp = TotalSize;
+                TotalSize += size;
+                return temp;
+            }
         }
 
         private void BindKernelArguments(
             CommandBuffer cmd,
             int kernel,
             GraphicsBuffer scratch,
-            ScratchBufferOffsets scratchLayout,
+            ScratchBufferLayout scratchLayout,
             TopLevelAccelStruct accelStruct,
             bool setSortedCodes)
         {

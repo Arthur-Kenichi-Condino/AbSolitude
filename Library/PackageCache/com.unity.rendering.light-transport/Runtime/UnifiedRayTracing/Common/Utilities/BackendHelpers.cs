@@ -2,7 +2,7 @@ using System;
 
 namespace UnityEngine.Rendering.UnifiedRayTracing
 {
-    public static class BackendHelpers
+    internal static class BackendHelpers
     {
         internal static string GetFileNameOfShader(RayTracingBackend backend, string fileName)
         {
