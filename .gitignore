@@ -1,9 +1,10 @@
-/[Mm]emoryCaptures/
-/[Dd]iscordBots/*/.env
+/[Mm]emoryCaptures/**
+/[Dd]iscordBots/**/.env
 /[Tt]emp/UnityLockfile
 /[Tt]emp/FSTimeGet-*
 /[Ll]ibrary/ArtifactDB*
-/[Ll]ibrary/Artifacts/
-/[Ll]ibrary/PlayerDataCache/
-/[Ll]ogs/
-.vs/*/FileContentIndex/*.vsidx
+/[Ll]ibrary/[Aa]rtifacts/**
+/[Ll]ibrary/Bee/[Aa]rtifacts/**
+/[Ll]ibrary/PlayerDataCache/**
+/[Ll]ogs/**
+.vs/**/FileContentIndex/*.vsidx

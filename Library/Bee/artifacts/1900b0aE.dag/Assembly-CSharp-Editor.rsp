@@ -486,6 +486,7 @@
 -analyzer:"C:/Unity/Hub/Editor/6000.0.20f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/6000.0.20f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport/Analyzers/Unity.Transport.Analyzers.dll"
+"Assets/AKCondinoO/Util/Editor/Boof/NetworkHashFinder.cs"
 "Assets/CatlikeCoding/Scripts/Editor/CatlikeCodingBaseShaderGUI.cs"
 "Assets/Editor/AnimTools/BlendTreeCopyPaste.cs"
 "Assets/Editor/CatlikeCoding/AKCondinoO/Voxels/Terrain/CatlikeCodingVoxelTerrainLightingShaderGUI.cs"

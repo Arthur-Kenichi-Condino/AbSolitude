@@ -23,13 +23,18 @@ namespace AKCondinoO.UI{
      readonly Dictionary<Type,PooledPrefabInstanceHandler>prefabInstanceHandlers=new Dictionary<Type,PooledPrefabInstanceHandler>();
      [SerializeField]GameObject[]manuallyAddedPrefabs;
       readonly List<NetworkPrefab>toRemove=new List<NetworkPrefab>();
+      readonly List<NetworkPrefab>duplicateDefaultToRemove=new List<NetworkPrefab>();
         void Update(){
          GameObject netManagerGameObject;
          if(netManager==null&&((netManagerGameObject=GameObject.Find("NetworkManager"))==null||
           (netManager=netManagerGameObject.GetComponent<NetworkManager>())==null)
          ){
           Log.Warning("NetworkManager not found");
+          netManagerInitialized=false;
          }else{
+          if(!netManager.IsServer&&!netManager.IsHost&&!netManager.IsClient){
+           netManagerInitialized=false;
+          }
           foreach(var prefabInstanceHandler in prefabInstanceHandlers){
            prefabInstanceHandler.Value.pool.Clear();
           }
@@ -42,11 +47,11 @@ namespace AKCondinoO.UI{
            }
            toRemove.Clear();
            foreach(var gO in manuallyAddedPrefabs){
-            if(!defaultPrefabList.Contains(gO)){
+            if(!netManager.NetworkConfig.Prefabs.Contains(gO)){
              netManager.AddNetworkPrefab(gO);
              Log.DebugMessage("'manuallyAddedPrefabs':'netManager.AddNetworkPrefab':"+gO);
             }else{
-             Log.DebugMessage("'manuallyAddedPrefabs':'defaultPrefabList.Contains(gO)':"+gO);
+             Log.DebugMessage("'manuallyAddedPrefabs':'netManager.NetworkConfig.Prefabs.Contains(gO)':"+gO);
             }
            }
            foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/",typeof(GameObject))){
@@ -58,20 +63,31 @@ namespace AKCondinoO.UI{
              continue;
             }
             Type t=simObject.GetType();
-            if(!defaultPrefabList.Contains(simObject.gameObject)){
+            if(!netManager.NetworkConfig.Prefabs.Contains(simObject.gameObject)){
              netManager.AddNetworkPrefab(simObject.gameObject);
              Log.DebugMessage("'netManager.AddNetworkPrefab':"+simObject.gameObject);
             }else{
-             Log.DebugMessage("'defaultPrefabList.Contains(simObject.gameObject)':"+simObject.gameObject);
+             Log.DebugMessage("'netManager.NetworkConfig.Prefabs.Contains(simObject.gameObject)':"+simObject.gameObject);
             }
             PooledPrefabInstanceHandler prefabInstanceHandler=new PooledPrefabInstanceHandler(simObject.gameObject);
             netManager.PrefabHandler.AddHandler(simObject.gameObject,prefabInstanceHandler);
             Log.DebugMessage("'prefabInstanceHandlers.Add':"+t);
             prefabInstanceHandlers.Add(t,prefabInstanceHandler);
            }
+           duplicateDefaultToRemove.AddRange(defaultPrefabList.PrefabList);
+           foreach(NetworkPrefab defaultPrefab in duplicateDefaultToRemove){
+            if(netManager.NetworkConfig.Prefabs.Contains(defaultPrefab)){
+             Log.DebugMessage("'defaultPrefabList.Remove(defaultPrefab)':"+defaultPrefab.Prefab+":"+defaultPrefab);
+             defaultPrefabList.Remove(defaultPrefab);
+            }
+           }
+           duplicateDefaultToRemove.Clear();
           }
           netManagerInitialized=true;
           if(!netManager.IsServer&&!netManager.IsHost&&!netManager.IsClient){
+           foreach(NetworkPrefab netPrefab in netManager.NetworkConfig.Prefabs.Prefabs){
+            Log.DebugMessage("netPrefab:"+netPrefab.Prefab);
+           }
            if(Application.isEditor){
             if(editorNetAsClient){
              if(NetworkManager.Singleton.StartClient()){

@@ -44,7 +44,6 @@
 	</assembly>
 	<assembly fullname="Unity.Netcode.Runtime">
 		<type fullname="Unity.Netcode.NetworkConfig" preserve="nothing" serialized="true"/>
-		<type fullname="Unity.Netcode.NetworkPrefab" preserve="nothing" serialized="true"/>
 		<type fullname="Unity.Netcode.NetworkPrefabs" preserve="nothing" serialized="true"/>
 		<type fullname="Unity.Netcode.Transports.UTP.UnityTransport/ConnectionAddressData" preserve="nothing" serialized="true"/>
 		<type fullname="Unity.Netcode.Transports.UTP.UnityTransport/SimulatorParameters" preserve="nothing" serialized="true"/>

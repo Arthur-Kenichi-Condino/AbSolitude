@@ -893,8 +893,7 @@
             "fullManagedTypeName": "UnityEditor.Animations.AnimatorController",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -971,8 +970,7 @@
             "fullManagedTypeName": "UnityEngine.AI.NavMeshAgent",
             "moduleName": "AI",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -981,8 +979,7 @@
             "fullManagedTypeName": "UnityEngine.AI.NavMeshObstacle",
             "moduleName": "AI",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -991,8 +988,7 @@
             "fullManagedTypeName": "UnityEngine.AnimationClip",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1001,8 +997,7 @@
             "fullManagedTypeName": "UnityEngine.Animations.ParentConstraint",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1011,8 +1006,7 @@
             "fullManagedTypeName": "UnityEngine.Animator",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1022,7 +1016,6 @@
             "moduleName": "Audio",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1033,7 +1026,6 @@
             "moduleName": "Audio",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1055,7 +1047,6 @@
             "moduleName": "Audio",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1077,7 +1068,6 @@
             "moduleName": "Audio",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1099,8 +1089,7 @@
             "fullManagedTypeName": "UnityEngine.Behaviour",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1109,8 +1098,7 @@
             "fullManagedTypeName": "UnityEngine.BoxCollider",
             "moduleName": "Physics",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1151,8 +1139,7 @@
             "fullManagedTypeName": "UnityEngine.CapsuleCollider",
             "moduleName": "Physics",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1161,8 +1148,7 @@
             "fullManagedTypeName": "UnityEngine.CharacterController",
             "moduleName": "Physics",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1172,7 +1158,6 @@
             "moduleName": "Physics",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1312,7 +1297,6 @@
             "usedInScenes": [
                 "Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity",
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1323,7 +1307,6 @@
             "moduleName": "Physics",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1335,7 +1318,6 @@
             "usedInScenes": [
                 "Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity",
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1347,7 +1329,6 @@
             "usedInScenes": [
                 "Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity",
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1369,8 +1350,7 @@
             "fullManagedTypeName": "UnityEngine.Motion",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1392,7 +1372,6 @@
             "moduleName": "ParticleSystem",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1403,7 +1382,6 @@
             "moduleName": "ParticleSystem",
             "usedInScenes": [
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1432,7 +1410,6 @@
             "usedInScenes": [
                 "Assets/AKCondinoO/SimObjectToSpriteTool/SimObjectToSpriteTool.unity",
                 "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity",
                 "Assets/Scenes/MainScene.unity"
             ]
         },
@@ -1790,8 +1767,7 @@
             "fullManagedTypeName": "UnityEngine.RuntimeAnimatorController",
             "moduleName": "Animation",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1888,8 +1864,7 @@
             "fullManagedTypeName": "UnityEngine.Tree",
             "moduleName": "Terrain",
             "usedInScenes": [
-                "Assets/Scenes/EntryScene.unity",
-                "Assets/Scenes/MainMenuScene.unity"
+                "Assets/Scenes/EntryScene.unity"
             ]
         },
         {
@@ -1994,27 +1969,6 @@
             "managedAssemblyName": "UnityEngine.UI.dll",
             "nativeClass": "",
             "fullManagedTypeName": "UnityEngine.UI.VerticalLayoutGroup",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.PanelSettings",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.StyleSheet",
-            "moduleName": "",
-            "usedInScenes": []
-        },
-        {
-            "managedAssemblyName": "UnityEngine.UIElementsModule.dll",
-            "nativeClass": "",
-            "fullManagedTypeName": "UnityEngine.UIElements.ThemeStyleSheet",
             "moduleName": "",
             "usedInScenes": []
         },

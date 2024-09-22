@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\CatlikeCoding\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainLightingShaderGUI.cs" />
+    <Compile Include="Assets\AKCondinoO\Util\Editor\Boof\NetworkHashFinder.cs" />
     <Compile Include="Assets\Editor\AnimTools\BlendTreeCopyPaste.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\Editor\CatlikeCodingBaseShaderGUI.cs" />
   </ItemGroup>

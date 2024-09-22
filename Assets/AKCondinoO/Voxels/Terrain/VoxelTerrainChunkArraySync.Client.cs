@@ -76,6 +76,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                }
               }
              }
+             Log.DebugMessage("hasPendingSync:"+hasPendingSync);
             }
          [NonSerialized]bool hasPendingSync;
             internal partial void NetClientSideManualUpdate(){
