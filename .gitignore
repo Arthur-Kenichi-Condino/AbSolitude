@@ -8,3 +8,4 @@
 /[Ll]ibrary/PlayerDataCache/**
 /[Ll]ogs/**
 .vs/**/FileContentIndex/*.vsidx
+.vs/**/v17/.suo
