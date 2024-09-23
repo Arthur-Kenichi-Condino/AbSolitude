@@ -79,17 +79,40 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              Log.DebugMessage("hasPendingSync:"+hasPendingSync);
             }
          [NonSerialized]bool hasPendingSync;
+         [NonSerialized]float hasPendingSyncMsgCooldown=1f;
+          [NonSerialized]float hasPendingSyncMsgTimer;
             internal partial void NetClientSideManualUpdate(){
                 if(cnkArraySync!=null&&cnkArraySync.netObj.IsSpawned){
                  if(clientSideId!=null){
                   if(hasPendingSync){
-                   Log.DebugMessage("hasPendingSync");
-                   /*
-                     add sizeof(int) for the message type
-                     add sizeof(int) for the cnkIdx
-                     add sizeof(int) for the segment
-                   */
-                   //FastBufferWriter writer=new FastBufferWriter(sizeof(int)*3,Allocator.Persistent);
+                   if(hasPendingSyncMsgTimer>0f){
+                    hasPendingSyncMsgTimer-=Time.deltaTime;
+                   }
+                   if(hasPendingSyncMsgTimer<=0f){
+                    hasPendingSyncMsgTimer=hasPendingSyncMsgCooldown;
+                    Log.DebugMessage("hasPendingSync");
+                    /*
+                      add sizeof(int) for the message type
+                      add sizeof(int) for the cnkIdx
+                      add (sizeof(int)*clientSideChunkChangeRequestsState.Length) for the segments
+                    */
+                    FastBufferWriter writer=new FastBufferWriter(sizeof(int)*2,Allocator.Persistent,sizeof(int)*2+sizeof(int)*clientSideChunkChangeRequestsState.Length);
+                    if(writer.TryBeginWrite(sizeof(int)*2)){
+                     writer.WriteValue((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest);
+                     writer.WriteValue((int)clientSideId.Value.cnkIdx);
+                     for(int i=0;i<clientSideChunkChangeRequestsState.Length;++i){
+                      if(clientSideChunkChangeRequestsState[i]==ChangeRequestsState.Pending
+                      ){
+                       clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Waiting;
+                       if(writer.TryBeginWrite(sizeof(int))){
+                        writer.WriteValue((int)i);
+                       }
+                      }
+                     }
+                    }
+                    if(VoxelSystem.singleton.asClient.clientSideChunkEditDataRequestsToSend.TryGetValue(clientSideId.Value.cnkIdx,out FastBufferWriter oldRequest)){oldRequest.Dispose();}
+                    VoxelSystem.singleton.asClient.clientSideChunkEditDataRequestsToSend[clientSideId.Value.cnkIdx]=writer;
+                   }
                   }
                  }
                 }

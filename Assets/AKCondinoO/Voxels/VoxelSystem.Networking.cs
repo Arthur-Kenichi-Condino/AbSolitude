@@ -82,6 +82,7 @@ namespace AKCondinoO.Voxels{
             internal partial void NetServerSideNetUpdate();
         }
         [Serializable]internal partial class ClientData{
+         [NonSerialized]internal readonly Dictionary<int,FastBufferWriter>clientSideChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
           [NonSerialized]internal readonly          List<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlers=new List<VoxelTerrainChunkUnnamedMessageHandler>();
           [NonSerialized]internal readonly          List<VoxelTerrainChunkArraySync>terrainArraySyncs=new List<VoxelTerrainChunkArraySync>();
             internal partial void NetClientSideInit();

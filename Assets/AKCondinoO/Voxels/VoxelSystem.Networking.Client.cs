@@ -36,7 +36,15 @@ namespace AKCondinoO.Voxels{
              }
              terrainMessageHandlers.Clear();
              terrainArraySyncs     .Clear();
+             foreach(var clientSideRequestToSend in clientSideChunkEditDataRequestsToSend){
+              FastBufferWriter request=clientSideRequestToSend.Value;
+              request.Dispose();
+             }
+             clientSideChunkEditDataRequestsToSend.Clear();
+             Log.DebugMessage("everything at client has been disposed");
             }
+         [NonSerialized]float clientSendMessageDelay=0.05f;
+          [NonSerialized]float clientSendMessageTimer=5f;
             internal partial void NetClientSideNetUpdate(){
              for(int i=0;i<terrainMessageHandlers.Count;++i){
               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
@@ -46,11 +54,10 @@ namespace AKCondinoO.Voxels{
               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
               cnkArraySync.asClient.NetClientSideManualUpdate();
              }
+     //    if(clientSendMessageTimer<=0f){
+     //       clientSendMessageTimer=clientSendMessageDelay;
             }
         }
-     //[NonSerialized]float clientSendMessageDelay=0.05f;
-     // [NonSerialized]float clientSendMessageTimer=10f;
-     // [NonSerialized]internal readonly Dictionary<int,FastBufferWriter>clientVoxelTerrainChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
      //[NonSerialized]internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=8;
      // [NonSerialized]internal int clientVoxelTerrainChunkEditDataRequestsSent;
      //  [NonSerialized]readonly List<int>clientVoxelTerrainChunkEditDataRequestsSentToRemove=new List<int>();
@@ -64,12 +71,6 @@ namespace AKCondinoO.Voxels{
      //    }
      //   }
      //   internal void NetClientSideOnDestroyingCoreNetworkDispose(){
-     //    foreach(var clientSideRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
-     //     FastBufferWriter request=clientSideRequestToSend.Value;
-     //     request.Dispose();
-     //    }
-     //    clientVoxelTerrainChunkEditDataRequestsToSend.Clear();
-     //    //  everything at client has been disposed
      //   }
      //   internal void NetClientSideNetUpdate(){
      //    for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
