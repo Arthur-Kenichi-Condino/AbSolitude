@@ -14,12 +14,45 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
 namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
         internal partial class ServerData{
          [NonSerialized]internal static readonly ConcurrentQueue<Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>serverVoxelTerrainChunkEditDataSegmentsDictionaryPool=new ConcurrentQueue<Dictionary<int,(int,FastBufferReader)>>();
           [NonSerialized]internal readonly Dictionary<int,Dictionary<int,(int totalSegments,FastBufferReader segmentData)>>serverVoxelTerrainChunkEditDataSegmentsReceivedFromClient=new Dictionary<int,Dictionary<int,(int,FastBufferReader)>>();
             private void OnServerReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){
+             var messageType=(int)UnnamedMessageTypes.Undefined;
+             if(reader.TryBeginRead(sizeof(int))){
+              reader.ReadValue(out messageType);
+             }
+             //Log.DebugMessage("messageType:"+messageType);
+             if(messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest){
+              //Log.DebugMessage("'messageType==(int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataRequest'");
+              if(Core.singleton.isServer){
+               OnServerSideReceivedVoxelTerrainChunkEditDataRequest(clientId,reader);
+              }
+             }
+            }
+            void OnServerSideReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,FastBufferReader reader){
+             //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId);
+             if(reader.TryBeginRead(sizeof(int))){
+              int cnkIdx;
+              reader.ReadValue(out cnkIdx);
+              //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:cnkIdx:"+cnkIdx);
+              for(int i=0;i<chunkVoxelArraySplits;++i){
+               int segment;
+               if(reader.TryBeginRead(sizeof(int))){
+                reader.ReadValue(out segment);
+                //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
+               }else{
+                //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
+                break;
+               }
+              }
+          //    if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
+          //     cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
+          //    }
+             }
             }
         }
      //   private void OnServerReceivedUnnamedMessage(ulong clientId,FastBufferReader reader){

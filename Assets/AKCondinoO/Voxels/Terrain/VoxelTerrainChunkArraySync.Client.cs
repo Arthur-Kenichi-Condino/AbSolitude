@@ -28,7 +28,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                if(clientSideNetChunkId==null||current!=clientSideNetChunkId.Value){
                 clientSideNetChunkId=current;
                 clientSideId=(current.cCoord,current.cnkRgn,current.cnkIdx);
-                Log.DebugMessage("'ask server for chunk data'");
+                //Log.DebugMessage("'ask server for chunk data'");
                 for(int i=0;i<clientSideChunkChangeRequestsState.Length;++i){
                  if(clientSideChunkChangeRequestsState[i]==ChangeRequestsState.Synchronized||
                     clientSideChunkChangeRequestsState[i]==ChangeRequestsState.Empty
@@ -76,7 +76,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                }
               }
              }
-             Log.DebugMessage("hasPendingSync:"+hasPendingSync);
+             //Log.DebugMessage("hasPendingSync:"+hasPendingSync);
             }
          [NonSerialized]bool hasPendingSync;
          [NonSerialized]float hasPendingSyncMsgCooldown=1f;
@@ -90,7 +90,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                    }
                    if(hasPendingSyncMsgTimer<=0f){
                     hasPendingSyncMsgTimer=hasPendingSyncMsgCooldown;
-                    Log.DebugMessage("hasPendingSync");
+                    //Log.DebugMessage("hasPendingSync");
                     /*
                       add sizeof(int) for the message type
                       add sizeof(int) for the cnkIdx
@@ -106,6 +106,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                        clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Waiting;
                        if(writer.TryBeginWrite(sizeof(int))){
                         writer.WriteValue((int)i);
+                        //Log.DebugMessage("'as client, request segment':"+i);
                        }
                       }
                      }

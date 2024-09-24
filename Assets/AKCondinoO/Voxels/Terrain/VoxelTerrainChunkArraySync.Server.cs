@@ -112,6 +112,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               }
              }
             }
+            internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
+                WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
+                Loop:{
+                 yield return waitUntilGetFileData;
+                 //
+                 sending=false;
+                }
+                goto Loop;
+            }
         }
      // [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
      //[NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;

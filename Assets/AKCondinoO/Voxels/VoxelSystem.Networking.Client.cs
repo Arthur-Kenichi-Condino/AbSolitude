@@ -43,8 +43,11 @@ namespace AKCondinoO.Voxels{
              clientSideChunkEditDataRequestsToSend.Clear();
              Log.DebugMessage("everything at client has been disposed");
             }
-         [NonSerialized]float clientSendMessageDelay=0.05f;
-          [NonSerialized]float clientSendMessageTimer=5f;
+         [NonSerialized]float clientSideSendMessageDelay=1f;
+          [NonSerialized]float clientSideSendMessageTimer=5f;
+         [NonSerialized]internal int clientSideMaxChunkEditDataRequestsPerFrame=8;
+          [NonSerialized]internal int clientSideChunkEditDataRequestsSent;
+           [NonSerialized]readonly List<int>clientSideChunkEditDataRequestsSentToRemove=new List<int>();
             internal partial void NetClientSideNetUpdate(){
              for(int i=0;i<terrainMessageHandlers.Count;++i){
               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
@@ -54,17 +57,33 @@ namespace AKCondinoO.Voxels{
               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
               cnkArraySync.asClient.NetClientSideManualUpdate();
              }
-             if(clientSendMessageTimer>0f){
-                clientSendMessageTimer-=Time.deltaTime;
+             if(clientSideSendMessageTimer>0f){
+                clientSideSendMessageTimer-=Time.deltaTime;
              }
-             if(clientSendMessageTimer<=0f){
-                clientSendMessageTimer=clientSendMessageDelay;
+             if(clientSideSendMessageTimer<=0f){
+                clientSideSendMessageTimer=clientSideSendMessageDelay;
+              clientSideChunkEditDataRequestsSent=0;
+              foreach(var clientSideRequestToSend in clientSideChunkEditDataRequestsToSend){
+               FastBufferWriter request=clientSideRequestToSend.Value;
+               if(Core.singleton.isClient){
+                if(Core.singleton.netManager.IsConnectedClient){
+                 Core.singleton.netManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,request,NetworkDelivery.ReliableSequenced);
+                }
+               }
+               request.Dispose();
+               clientSideChunkEditDataRequestsSentToRemove.Add(clientSideRequestToSend.Key);
+               clientSideChunkEditDataRequestsSent++;
+               if(clientSideChunkEditDataRequestsSent>=clientSideMaxChunkEditDataRequestsPerFrame){
+                break;
+               }
+              }
+              foreach(int toRemove in clientSideChunkEditDataRequestsSentToRemove){
+               clientSideChunkEditDataRequestsToSend.Remove(toRemove);
+              }
+              clientSideChunkEditDataRequestsSentToRemove.Clear();
              }
             }
         }
-     //[NonSerialized]internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=8;
-     // [NonSerialized]internal int clientVoxelTerrainChunkEditDataRequestsSent;
-     //  [NonSerialized]readonly List<int>clientVoxelTerrainChunkEditDataRequestsSentToRemove=new List<int>();
      //   internal void NetClientSideInit(){
      //    Log.DebugMessage("NetClientSideInit");
      //    Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;

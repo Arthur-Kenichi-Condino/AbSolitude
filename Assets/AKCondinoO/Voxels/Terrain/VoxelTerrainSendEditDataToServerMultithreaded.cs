@@ -84,7 +84,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           if(writtenDataCount<=0){
            writer=new FastBufferWriter(1100,Allocator.Persistent,container.segmentSize);
            container.dataToSendToServer.Add(segment,writer);
-           writer.WriteValueSafe((int)UnnamedMessageTypes.VoxelTerrainChunkEditDataSegment);//message type
+           writer.WriteValueSafe((int)UnnamedMessageTypes.FromClientVoxelTerrainChunkEditDataSegment);//message type
            writer.WriteValueSafe(container.cnkIdx);//cnkIdx
            writer.WriteValueSafe((int)segment);//current segment
            writer.WriteValueSafe((int)totalSegments);//total segments (segment count)

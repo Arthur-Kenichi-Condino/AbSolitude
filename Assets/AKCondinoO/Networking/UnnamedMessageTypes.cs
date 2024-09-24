@@ -6,6 +6,6 @@ namespace AKCondinoO.Networking{
      Undefined=0,
      FromClientVoxelTerrainChunkEditDataRequest=100,
      FromClientVoxelTerrainChunkEditDataReceived=101,
-     VoxelTerrainChunkEditDataSegment=102,
+     FromClientVoxelTerrainChunkEditDataSegment=102,
     }
 }
