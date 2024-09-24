@@ -54,8 +54,12 @@ namespace AKCondinoO.Voxels{
               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
               cnkArraySync.asClient.NetClientSideManualUpdate();
              }
-     //    if(clientSendMessageTimer<=0f){
-     //       clientSendMessageTimer=clientSendMessageDelay;
+             if(clientSendMessageTimer>0f){
+                clientSendMessageTimer-=Time.deltaTime;
+             }
+             if(clientSendMessageTimer<=0f){
+                clientSendMessageTimer=clientSendMessageDelay;
+             }
             }
         }
      //[NonSerialized]internal int clientMaxVoxelTerrainChunkEditDataRequestsPerFrame=8;

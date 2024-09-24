@@ -3,3 +3,4 @@
 *.blend filter=lfs diff=lfs merge=lfs -text
 *.blend1 filter=lfs diff=lfs merge=lfs -text
 *.dylib filter=lfs diff=lfs merge=lfs -text
+.vs/AbSolitude/v*/.suo filter=lfs diff=lfs merge=lfs -text

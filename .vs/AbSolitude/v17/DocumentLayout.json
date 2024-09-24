@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\voxelsystem.networking.client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\voxels\\voxelsystem.networking.client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\voxelsystem.networking.client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -31,7 +31,7 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainchunkunnamedmessagehandler.server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo\\voxels\\voxelsystem.networking.server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\voxelsystem.networking.server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\voxelsystem.networking.server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -615,8 +615,7 @@
               "ViewState": "AgIAAIAAAAAAAAAAAAD4v4kAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-18T23:09:38.129Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -759,8 +758,7 @@
               "ViewState": "AgIAAG8AAAAAAAAAAAAqwCEAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-10T01:16:33.949Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1124,8 +1122,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-08T19:34:23.72Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1138,8 +1135,7 @@
               "ViewState": "AgIAAEoAAAAAAAAAAAAqwEwAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-10T09:17:28.445Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1152,8 +1148,7 @@
               "ViewState": "AgIAAA8AAAAAAAAAAAArwBUAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-08T20:03:16.981Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1166,8 +1161,7 @@
               "ViewState": "AgIAAFIAAAAAAAAAAAAvwFoAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-09T18:55:18.599Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1177,7 +1171,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunkArraySync.Client.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunkArraySync.Client.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunkArraySync.Client.cs",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAvwHEAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAvwHAAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-11T04:46:56.903Z",
               "IsPinned": true,
@@ -1220,8 +1214,7 @@
               "ViewState": "AgIAAGgAAAAAAAAAAAAAwGwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-12T21:04:36.64Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1247,8 +1240,7 @@
               "ViewState": "AgIAAA8AAAAAAAAAAAAAABQAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-14T09:03:21.243Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1261,8 +1253,7 @@
               "ViewState": "AgIAAFAAAAAAAAAAAAAjwFQAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-10T01:59:25.528Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1275,8 +1266,7 @@
               "ViewState": "AgIAADQAAAAAAAAAAAAnwFUAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-14T09:02:58.26Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1286,7 +1276,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.Networking.Client.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.Networking.Client.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.Networking.Client.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAvwC4AAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAADQAAAAAAAAAAADgvzkAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-14T09:02:53.578Z",
               "IsPinned": true,
@@ -1303,8 +1293,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-15T12:43:20.168Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1317,8 +1306,7 @@
               "ViewState": "AgIAACoAAAAAAAAAAAAcwFAAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-15T15:23:44.65Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -1331,8 +1319,7 @@
               "ViewState": "AgIAAE4AAAAAAAAAAIBJwFkAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T05:43:03.808Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Bookmark",
@@ -1348,8 +1335,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\NetworkVariable\\NetworkVariableBase.cs",
               "ViewState": "AgIAAMgAAAAAAAAAAAAvwM8AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-22T01:13:10.641Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-22T01:13:10.641Z"
             },
             {
               "$type": "Document",
@@ -1361,8 +1347,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\Core\\NetworkManager.cs",
               "ViewState": "AgIAAOcCAAAAAAAAAAArwO0CAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T23:46:37.822Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T23:46:37.822Z"
             },
             {
               "$type": "Document",
@@ -1410,8 +1395,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\NetworkVariable\\NetworkVariable.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAvwBYAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-09T06:12:02.557Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-09T06:12:02.557Z"
             },
             {
               "$type": "Document",
@@ -1423,8 +1407,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\Spawning\\NetworkSpawnManager.cs",
               "ViewState": "AgIAAAMBAAAAAAAAAAAvwAoBAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-16T01:52:21.18Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-16T01:52:21.18Z"
             },
             {
               "$type": "Document",
@@ -1436,8 +1419,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\Configuration\\NetworkPrefabs.cs",
               "ViewState": "AgIAAP8AAAAAAAAAAAAvwO4AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-15T18:43:04.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-15T18:43:04.397Z"
             },
             {
               "$type": "Document",
@@ -1449,8 +1431,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\Logging\\NetworkLog.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAvwBsAAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-15T17:50:23.484Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-15T17:50:23.484Z"
             },
             {
               "$type": "Document",
@@ -1462,8 +1443,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects\\Runtime\\Messaging\\Messages\\ConnectionRequestMessage.cs",
               "ViewState": "AgIAAG8AAAAAAAAAAAAvwHkAAACTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-15T17:48:50.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-15T17:48:50.974Z"
             },
             {
               "$type": "Document",
@@ -1499,8 +1479,7 @@
               "RelativeToolTip": "Assets\\UMA\\Core\\StandardAssets\\UMA\\Scripts\\UMAGeneratorBuiltin.cs",
               "ViewState": "AgIAANMBAAAAAAAAAAAIwNsBAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-26T19:03:46.835Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-26T19:03:46.835Z"
             },
             {
               "$type": "Document",
@@ -1512,8 +1491,7 @@
               "RelativeToolTip": "Assets\\UMA\\Editor\\AddressableUtility.cs",
               "ViewState": "AgIAADwAAAAAAAAAAIBJwEYAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T16:24:19.726Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T16:24:19.726Z"
             },
             {
               "$type": "Document",
