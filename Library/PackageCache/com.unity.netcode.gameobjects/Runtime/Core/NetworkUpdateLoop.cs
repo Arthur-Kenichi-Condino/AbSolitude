@@ -61,7 +61,6 @@ namespace Unity.Netcode
         PostScriptLateUpdate = 8,
         /// <summary>
         /// Updated after the Monobehaviour.LateUpdate for all components is invoked
-        /// and all rendering is complete
         /// </summary>
         PostLateUpdate = 7
     }

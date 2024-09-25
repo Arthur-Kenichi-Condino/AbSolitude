@@ -436,7 +436,6 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.NetworkSimulator.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.NetworkSimulator.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Tools.NetworkSolutionInterface.ref.dll"
--r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Netcode.Components.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Netcode.Editor.PackageChecker.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Netcode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Netcode.Runtime.ref.dll"

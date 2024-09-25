@@ -344,7 +344,6 @@
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Multiplayer.Tools.NetworkProfiler.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Multiplayer.Tools.NetworkSimulator.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Multiplayer.Tools.NetworkSolutionInterface.ref.dll"
--r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Netcode.Components.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Netcode.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Networking.Transport.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aP.dag/Unity.Postprocessing.Runtime.ref.dll"

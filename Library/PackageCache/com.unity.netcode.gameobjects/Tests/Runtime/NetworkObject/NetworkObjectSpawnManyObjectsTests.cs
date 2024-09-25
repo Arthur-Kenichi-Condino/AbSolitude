@@ -6,7 +6,10 @@ using UnityEngine.TestTools;
 
 namespace Unity.Netcode.RuntimeTests
 {
-    public class NetworkObjectSpawnManyObjectsTests : NetcodeIntegrationTest
+
+    [TestFixture(NetworkTopologyTypes.ClientServer)]
+    [TestFixture(NetworkTopologyTypes.DistributedAuthority)]
+    internal class NetworkObjectSpawnManyObjectsTests : NetcodeIntegrationTest
     {
         protected override int NumberOfClients => 1;
         // "many" in this case means enough to exceed a ushort_max message size written in the header
@@ -15,8 +18,9 @@ namespace Unity.Netcode.RuntimeTests
 
         private NetworkPrefab m_PrefabToSpawn;
 
+        public NetworkObjectSpawnManyObjectsTests(NetworkTopologyTypes networkTopologyType) : base(networkTopologyType) { }
         // Using this component assures we will know precisely how many prefabs were spawned on the client
-        public class SpawnObjecTrackingComponent : NetworkBehaviour
+        internal class SpawnObjecTrackingComponent : NetworkBehaviour
         {
             public static int SpawnedObjects;
             public override void OnNetworkSpawn()
@@ -35,6 +39,7 @@ namespace Unity.Netcode.RuntimeTests
             var gameObject = new GameObject("TestObject");
             var networkObject = gameObject.AddComponent<NetworkObject>();
             NetcodeIntegrationTestHelpers.MakeNetworkObjectTestPrefab(networkObject);
+            networkObject.IsSceneObject = false;
             gameObject.AddComponent<SpawnObjecTrackingComponent>();
 
             m_PrefabToSpawn = new NetworkPrefab() { Prefab = gameObject };

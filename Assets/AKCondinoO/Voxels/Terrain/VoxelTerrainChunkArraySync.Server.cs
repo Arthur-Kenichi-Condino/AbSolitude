@@ -91,8 +91,19 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             bool OnGotFileEditData(){
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
               Log.DebugMessage("OnGotFileEditData");
+              bool send=false;
               for(int i=0;i<cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
-               cnkArraySync.netChunkHasChanges[i]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i];
+               if(cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i]||(cnkArraySync.netChunkHasChanges[i]!=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i])){
+                send=true;
+                cnkArraySync.netChunkHasChanges[i]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i];
+               }
+              }
+              if(send){
+               cnkArraySync.netChunkHasChanges.SetDirty(true);
+               Log.DebugMessage("'cnkArraySync.netChunkHasChanges.SetDirty(true)'");
+              }else{
+               cnkArraySync.netChunkHasChanges.ResetDirty();
+               Log.DebugMessage("'cnkArraySync.netChunkHasChanges.ResetDirty()'");
               }
               return true;
              }
@@ -108,7 +119,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          //      //clientIdsRequestingData.Clear();
          //      //Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
               }else{
-               Log.DebugMessage("'no clients requesting data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
+               //Log.DebugMessage("'no clients requesting data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
               }
              }
             }

@@ -3,7 +3,7 @@
     {
       "type": "il2cppData",
       "msg": {
-        "build_event_id": "ad07074af4f4fd544a252c6ad5ed8ae6",
+        "build_event_id": "98dcb63e5e51a3443a099ec7ad232eef",
         "node_executed": true,
         "attribute_total_count_eager_static_constructor": 82,
         "attribute_total_count_set_option": 0,
@@ -42,28 +42,57 @@
     {
       "type": "playerBuildTimingData",
       "msg": {
-        "build_event_id": "ad07074af4f4fd544a252c6ad5ed8ae6",
-        "build_player": 60466,
-        "preprocess_player": 482,
-        "produce_player_script_assemblies": 14735,
-        "build_scripts_dlls": 72,
-        "postprocess_built_player": 43611,
+        "build_event_id": "98dcb63e5e51a3443a099ec7ad232eef",
+        "build_player": 200379,
+        "preprocess_player": 344,
+        "produce_player_script_assemblies": 17826,
+        "build_scripts_dlls": 56,
+        "writing_asset_files": 10139,
+        "postprocess_built_player": 121395,
         "node_summary_table": [
           {
             "name": "Csc",
-            "duration": 708
+            "duration": 493
           },
           {
             "name": "Csc",
-            "duration": 1319
+            "duration": 271
+          },
+          {
+            "name": "Csc",
+            "duration": 518
+          },
+          {
+            "name": "Csc",
+            "duration": 236
+          },
+          {
+            "name": "Csc",
+            "duration": 275
+          },
+          {
+            "name": "Csc",
+            "duration": 263
+          },
+          {
+            "name": "Csc",
+            "duration": 194
+          },
+          {
+            "name": "Csc",
+            "duration": 561
+          },
+          {
+            "name": "Csc",
+            "duration": 172
           },
           {
             "name": "il2cpp.exe",
-            "duration": 10334
+            "duration": 8611
           },
           {
             "name": "UnityLinker.exe",
-            "duration": 9980
+            "duration": 7023
           }
         ]
       },
@@ -72,13 +101,13 @@
     {
       "type": "unityLinkerData",
       "msg": {
-        "build_event_id": "ad07074af4f4fd544a252c6ad5ed8ae6",
+        "build_event_id": "98dcb63e5e51a3443a099ec7ad232eef",
         "node_executed": true,
         "attribute_marked_count_always_link_assembly": 0,
         "attribute_swept_count_always_link_assembly": 0,
         "attribute_total_count_always_link_assembly": 0,
-        "attribute_marked_count_preserve": 106,
-        "attribute_total_count_preserve": 75,
+        "attribute_marked_count_preserve": 105,
+        "attribute_total_count_preserve": 74,
         "attribute_total_count_preserve_body": 0,
         "attribute_marked_count_required_member": 252,
         "attribute_swept_count_required_member": 25,
@@ -95,19 +124,19 @@
         "attribute_total_count_dynamic_dependency": 0,
         "attribute_marked_count_dynamic_dependency": 85,
         "attribute_swept_count_dynamic_dependency": -85,
-        "assembly_counts_total_in": 124,
+        "assembly_counts_total_in": 123,
         "assembly_counts_link": 50,
-        "assembly_counts_copy": 29,
+        "assembly_counts_copy": 28,
         "assembly_counts_delete": 45,
-        "assembly_counts_total_out": 79,
+        "assembly_counts_total_out": 78,
         "unresolved_stubbing_total_count": 0,
         "unresolved_stubbing_missing_interface_method_count": 0,
         "unresolved_stubbing_missing_abstract_class_method_count": 0,
         "unresolved_stubbing_missing_type_count": 0,
         "unresolved_stubbing_missing_method_count": 0,
-        "unrecognized_reflection_access_total_count": 577,
+        "unrecognized_reflection_access_total_count": 578,
         "unrecognized_reflection_access_core_count": 229,
-        "unrecognized_reflection_access_unity_count": 301,
+        "unrecognized_reflection_access_unity_count": 302,
         "unrecognized_reflection_access_user_count": 47,
         "recognized_reflection_access_total_count": 78,
         "recognized_reflection_access_core_count": 50,

@@ -33,6 +33,32 @@ namespace Unity.Netcode
         /// </summary>
         private protected NetworkBehaviour m_NetworkBehaviour;
 
+        private NetworkManager m_InternalNetworkManager;
+
+        internal virtual NetworkVariableType Type => NetworkVariableType.Unknown;
+
+        internal string GetWritePermissionError()
+        {
+            return $"|Client-{m_NetworkManager.LocalClientId}|{m_NetworkBehaviour.name}|{Name}| Write permissions ({WritePerm}) for this client instance is not allowed!";
+        }
+
+        internal void LogWritePermissionError()
+        {
+            Debug.LogError(GetWritePermissionError());
+        }
+
+        private protected NetworkManager m_NetworkManager
+        {
+            get
+            {
+                if (m_InternalNetworkManager == null && m_NetworkBehaviour && m_NetworkBehaviour.NetworkObject?.NetworkManager)
+                {
+                    m_InternalNetworkManager = m_NetworkBehaviour.NetworkObject?.NetworkManager;
+                }
+                return m_InternalNetworkManager;
+            }
+        }
+
         public NetworkBehaviour GetBehaviour()
         {
             return m_NetworkBehaviour;
@@ -44,9 +70,14 @@ namespace Unity.Netcode
         /// <param name="networkBehaviour">The NetworkBehaviour the NetworkVariable belongs to</param>
         public void Initialize(NetworkBehaviour networkBehaviour)
         {
+            m_InternalNetworkManager = null;
             m_NetworkBehaviour = networkBehaviour;
-            if (m_NetworkBehaviour.NetworkManager)
+            if (m_NetworkBehaviour && m_NetworkBehaviour.NetworkObject?.NetworkManager)
             {
+                m_InternalNetworkManager = m_NetworkBehaviour.NetworkObject?.NetworkManager;
+                // When in distributed authority mode, there is no such thing as server write permissions
+                InternalWritePerm = m_InternalNetworkManager.DistributedAuthorityMode ? NetworkVariableWritePermission.Owner : InternalWritePerm;
+
                 if (m_NetworkBehaviour.NetworkManager.NetworkTimeSystem != null)
                 {
                     UpdateLastSentTime();
@@ -105,7 +136,7 @@ namespace Unity.Netcode
             NetworkVariableWritePermission writePerm = DefaultWritePerm)
         {
             ReadPerm = readPerm;
-            WritePerm = writePerm;
+            InternalWritePerm = writePerm;
         }
 
         /// <summary>
@@ -128,7 +159,17 @@ namespace Unity.Netcode
         /// <summary>
         /// The write permission for this var
         /// </summary>
-        public readonly NetworkVariableWritePermission WritePerm;
+        public NetworkVariableWritePermission WritePerm
+        {
+            get
+            {
+                return InternalWritePerm;
+            }
+        }
+
+        // We had to change the Write Permission in distributed authority.
+        // (It is too bad we initially declared it as readonly)
+        internal NetworkVariableWritePermission InternalWritePerm;
 
         /// <summary>
         /// Sets whether or not the variable needs to be delta synced
@@ -146,7 +187,9 @@ namespace Unity.Netcode
 
         internal bool CanSend()
         {
-            var timeSinceLastUpdate = m_NetworkBehaviour.NetworkManager.NetworkTimeSystem.LocalTime - LastUpdateSent;
+            // When connected to a service or not the server, always use the synchronized server time as opposed to the local time
+            var time = m_InternalNetworkManager.CMBServiceConnection || !m_InternalNetworkManager.IsServer ? m_NetworkBehaviour.NetworkManager.ServerTime.Time : m_NetworkBehaviour.NetworkManager.NetworkTimeSystem.LocalTime;
+            var timeSinceLastUpdate = time - LastUpdateSent;
             return
                 (
                     UpdateTraits.MaxSecondsBetweenUpdates > 0 &&
@@ -160,15 +203,21 @@ namespace Unity.Netcode
 
         internal void UpdateLastSentTime()
         {
-            LastUpdateSent = m_NetworkBehaviour.NetworkManager.NetworkTimeSystem.LocalTime;
+            // When connected to a service or not the server, always use the synchronized server time as opposed to the local time
+            LastUpdateSent = m_InternalNetworkManager.CMBServiceConnection || !m_InternalNetworkManager.IsServer ? m_NetworkBehaviour.NetworkManager.ServerTime.Time : m_NetworkBehaviour.NetworkManager.NetworkTimeSystem.LocalTime;
         }
+
+        internal static bool IgnoreInitializeWarning;
 
         protected void MarkNetworkBehaviourDirty()
         {
             if (m_NetworkBehaviour == null)
             {
-                Debug.LogWarning($"NetworkVariable is written to, but doesn't know its NetworkBehaviour yet. " +
-                                 "Are you modifying a NetworkVariable before the NetworkObject is spawned?");
+                if (!IgnoreInitializeWarning)
+                {
+                    Debug.LogWarning($"NetworkVariable is written to, but doesn't know its NetworkBehaviour yet. " +
+                                     "Are you modifying a NetworkVariable before the NetworkObject is spawned?");
+                }
                 return;
             }
             if (m_NetworkBehaviour.NetworkManager.ShutdownInProgress)
@@ -190,7 +239,8 @@ namespace Unity.Netcode
                 }
                 return;
             }
-            m_NetworkBehaviour.NetworkManager.BehaviourUpdater.AddForUpdate(m_NetworkBehaviour.NetworkObject);
+
+            m_NetworkBehaviour.NetworkManager.BehaviourUpdater?.AddForUpdate(m_NetworkBehaviour.NetworkObject);
         }
 
         /// <summary>
@@ -217,6 +267,16 @@ namespace Unity.Netcode
         /// <returns>Whether or not the client has permission to read</returns>
         public bool CanClientRead(ulong clientId)
         {
+            if (!m_NetworkBehaviour)
+            {
+                return false;
+            }
+
+            // When in distributed authority mode, everyone can read (but only the owner can write)
+            if (m_NetworkManager != null && m_NetworkManager.DistributedAuthorityMode)
+            {
+                return true;
+            }
             switch (ReadPerm)
             {
                 default:
@@ -234,6 +294,11 @@ namespace Unity.Netcode
         /// <returns>Whether or not the client has permission to write</returns>
         public bool CanClientWrite(ulong clientId)
         {
+            if (!m_NetworkBehaviour)
+            {
+                return false;
+            }
+
             switch (WritePerm)
             {
                 default:
@@ -269,7 +334,6 @@ namespace Unity.Netcode
         /// </summary>
         /// <param name="reader">The stream to read the state from</param>
         public abstract void ReadField(FastBufferReader reader);
-
         /// <summary>
         /// Reads delta from the reader and applies them to the internal value
         /// </summary>
@@ -282,6 +346,7 @@ namespace Unity.Netcode
         /// </summary>
         public virtual void Dispose()
         {
+            m_InternalNetworkManager = null;
         }
     }
 }

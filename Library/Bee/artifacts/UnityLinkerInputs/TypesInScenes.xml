@@ -256,4 +256,9 @@
 		<type fullname="UnityEngine.UI.Toggle" preserve="nothing"/>
 		<type fullname="UnityEngine.UI.VerticalLayoutGroup" preserve="nothing"/>
 	</assembly>
+	<assembly fullname="UnityEngine.UIElementsModule">
+		<type fullname="UnityEngine.UIElements.PanelSettings" preserve="nothing"/>
+		<type fullname="UnityEngine.UIElements.StyleSheet" preserve="nothing"/>
+		<type fullname="UnityEngine.UIElements.ThemeStyleSheet" preserve="nothing"/>
+	</assembly>
 </linker>

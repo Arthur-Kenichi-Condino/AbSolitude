@@ -43,9 +43,9 @@ namespace AKCondinoO.Voxels{
                int segment;
                if(reader.TryBeginRead(sizeof(int))){
                 reader.ReadValue(out segment);
-                //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
+                Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
                }else{
-                //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
+                Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
                 break;
                }
               }

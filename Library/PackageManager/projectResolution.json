@@ -88,12 +88,12 @@
       "version": "2.1.0",
       "source": "registry"
     },
-    "com.unity.netcode.gameobjects@1.10.0": {
+    "com.unity.netcode.gameobjects@2.0.0": {
       "name": "com.unity.netcode.gameobjects",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.netcode.gameobjects",
-      "fingerprint": "ee7bebd1b67cf2a651a3a0865717ecc5ce5b3306",
-      "editorCompatibility": "2021.3.0a1",
-      "version": "1.10.0",
+      "fingerprint": "bd5b7db87b589d1ad43f658b2068879a90edef0e",
+      "editorCompatibility": "6000.0.0a1",
+      "version": "2.0.0",
       "source": "registry"
     },
     "com.unity.postprocessing@3.4.0": {

@@ -62,11 +62,12 @@
     <Analyzer Include="C:\Unity\Hub\Editor\6000.0.20f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetworkRigidbodyBaseEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\AssemblyInfo.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetworkManagerRelayIntegration.cs" />
+    <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetcodeEditorBase.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetworkManagerEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetworkBehaviourEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\AnticipatedNetworkTransformEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\NetworkTransformEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\Configuration\NetcodeSettingsProvider.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects\Editor\Configuration\NetworkPrefabsEditor.cs" />
@@ -1114,10 +1115,6 @@
     <ProjectReference Include="Unity.Netcode.Runtime.csproj">
       <Project>{DC6D0008-5279-D172-9033-143C9C6B2519}</Project>
       <Name>Unity.Netcode.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Netcode.Components.csproj">
-      <Project>{67E6C7B2-0D71-6D5F-A0B6-E79A19F45B61}</Project>
-      <Name>Unity.Netcode.Components</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Networking.Transport.csproj">
       <Project>{98E45CA9-4200-01C2-8029-EAAC23524FC7}</Project>

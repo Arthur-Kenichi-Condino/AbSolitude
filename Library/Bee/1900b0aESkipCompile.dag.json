@@ -29,7 +29,7 @@
       "DisplayName": "Writing 6097564273297756792.rsp",
       "ActionType": "WriteFile",
       "PayloadOffset": 83,
-      "PayloadLength": 9021,
+      "PayloadLength": 8802,
       "PayloadDebugContentSnippet": "-a=\"C:\\Users\\arthu\\Documentos\\",
       "Inputs": [],
       "InputFlags": [],
@@ -61,7 +61,6 @@
         "Library/ScriptAssemblies/Unity.Mathematics.dll",
         "Library/ScriptAssemblies/Unity.MemoryProfiler.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.dll",
-        "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.Ngo1.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.Ngo1WithUtp2.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.Utp2.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Common.dll",
@@ -78,7 +77,6 @@
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.NetworkProfiler.Runtime.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.NetworkSimulator.Runtime.dll",
         "Library/ScriptAssemblies/Unity.Multiplayer.Tools.NetworkSolutionInterface.dll",
-        "Library/ScriptAssemblies/Unity.Netcode.Components.dll",
         "Library/ScriptAssemblies/Unity.Netcode.Runtime.dll",
         "Library/ScriptAssemblies/Unity.Networking.Transport.dll",
         "Library/ScriptAssemblies/Unity.PerformanceTesting.dll",
@@ -120,8 +118,6 @@
         "Library/Bee/artifacts/rsp/6097564273297756792.rsp"
       ],
       "InputFlags": [
-        0,
-        0,
         0,
         0,
         0,
@@ -419,9 +415,6 @@
       "File": "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.dll"
     },
     {
-      "File": "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.Ngo1.dll"
-    },
-    {
       "File": "Library/ScriptAssemblies/Unity.Multiplayer.Tools.Adapters.Ngo1WithUtp2.dll"
     },
     {
@@ -468,9 +461,6 @@
     },
     {
       "File": "Library/ScriptAssemblies/Unity.Multiplayer.Tools.NetworkSolutionInterface.dll"
-    },
-    {
-      "File": "Library/ScriptAssemblies/Unity.Netcode.Components.dll"
     },
     {
       "File": "Library/ScriptAssemblies/Unity.Netcode.Runtime.dll"

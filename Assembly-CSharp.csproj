@@ -1732,10 +1732,6 @@
       <Project>{3DCF9C98-F5D0-1536-BE7D-681D097FB7CE}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Netcode.Components.csproj">
-      <Project>{67E6C7B2-0D71-6D5F-A0B6-E79A19F45B61}</Project>
-      <Name>Unity.Netcode.Components</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
       <Project>{C45A9821-13BD-FAEF-DCCD-1085E6BC49EA}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>

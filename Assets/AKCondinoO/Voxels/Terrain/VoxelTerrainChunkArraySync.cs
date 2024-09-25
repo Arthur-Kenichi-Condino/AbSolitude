@@ -69,8 +69,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           VoxelSystem.singleton.asClient.terrainArraySyncs.Add(this);
          }
         }
+     internal bool spawnInitialization;
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
+         spawnInitialization=true;
          if(Core.singleton.isClient){
           asClient.OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
           netChunkId.OnValueChanged+=asClient.OnClientSideNetChunkIdValueChanged;
@@ -78,6 +80,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           netChunkHasChanges.OnListChanged+=asClient.OnClientSideNetChunkHasChangesValueChanged;
      //     clientSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ClientSideSendVoxelTerrainChunkEditDataFileCoroutine());
          }
+         spawnInitialization=false;
         }
         public override void OnNetworkDespawn(){
          if(Core.singleton.isClient){
