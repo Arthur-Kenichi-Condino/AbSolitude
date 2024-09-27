@@ -67,30 +67,17 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 }
                }else{
                 Log.DebugMessage("change.Type:"+change.Type);
-                if(change.Type==NetworkListEvent<bool>.EventType.Full){
-                 Log.DebugMessage("'change.Type==NetworkListEvent<bool>.EventType.Full'");
-                 if(cnkArraySync.netChunkHasChanges.Count==clientSideChunkChangeRequestsState.Length){
-                  for(int i=0;i<cnkArraySync.netChunkHasChanges.Count;++i){
-                   if(cnkArraySync.netChunkHasChanges[i]&&(clientSideChunkChangeRequestsState[i]!=ChangeRequestsState.Pending)){
-                    clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Pending;
-                    hasPendingSync=true;
-                   }else{
-                    clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Empty;
-                   }
-                  }
-                 }else{
-                  Log.Error("'cnkArraySync.netChunkHasChanges.Count!=clientSideChunkChangeRequestsState.Length'");
-                 }
-                }else if(change.Type==NetworkListEvent<bool>.EventType.Value){
-                 Log.DebugMessage("'change.Type==NetworkListEvent<bool>.EventType.Value'");
-                 if(change.Index<clientSideChunkChangeRequestsState.Length){
-                  if(change.Value&&change.Value!=change.PreviousValue){
-                   clientSideChunkChangeRequestsState[change.Index]=ChangeRequestsState.Pending;
+                if(cnkArraySync.netChunkHasChanges.Count==clientSideChunkChangeRequestsState.Length){
+                 for(int i=0;i<cnkArraySync.netChunkHasChanges.Count;++i){
+                  if(cnkArraySync.netChunkHasChanges[i]&&(clientSideChunkChangeRequestsState[i]!=ChangeRequestsState.Pending)){
+                   clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Pending;
                    hasPendingSync=true;
+                  }else{
+                   clientSideChunkChangeRequestsState[i]=ChangeRequestsState.Empty;
                   }
-                 }else{
-                  Log.Error("'change.Index>=clientSideTerrainChunkArrayChangeRequestsState.Length'");
                  }
+                }else{
+                 Log.Error("'cnkArraySync.netChunkHasChanges.Count!=clientSideChunkChangeRequestsState.Length'");
                 }
                }
               }

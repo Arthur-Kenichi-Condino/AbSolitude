@@ -71,8 +71,8 @@
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\LegacyProfiler\LegacyProfilerModules.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\ViewModels\NetworkVariableEventViewModel.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\ExtensibilityProfiler\NetworkDetailsViewController.cs" />
-    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\Formatting\RowDataSorting.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\TreeModel\TreeModel.cs" />
+    <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\Formatting\RowDataSorting.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\ViewModels\GameObjectViewModel.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\NetworkProfilerDetailsView.cs" />
     <Compile Include="Library\PackageCache\com.unity.multiplayer.tools\NetworkProfiler\Editor\Windows\ViewModels\RpcEventViewModel.cs" />

@@ -1732,6 +1732,10 @@
       <Project>{3DCF9C98-F5D0-1536-BE7D-681D097FB7CE}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Multiplayer.Tools.MetricEvents.csproj">
+      <Project>{5135F4E0-93DF-CD3E-8CEF-74786CFB9A80}</Project>
+      <Name>Unity.Multiplayer.Tools.MetricEvents</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
       <Project>{C45A9821-13BD-FAEF-DCCD-1085E6BC49EA}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>
@@ -1739,10 +1743,6 @@
     <ProjectReference Include="Unity.Rendering.LightTransport.Runtime.csproj">
       <Project>{FF508846-D324-AF02-EB3F-F54AE8C96F0B}</Project>
       <Name>Unity.Rendering.LightTransport.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Multiplayer.Tools.MetricEvents.csproj">
-      <Project>{5135F4E0-93DF-CD3E-8CEF-74786CFB9A80}</Project>
-      <Name>Unity.Multiplayer.Tools.MetricEvents</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

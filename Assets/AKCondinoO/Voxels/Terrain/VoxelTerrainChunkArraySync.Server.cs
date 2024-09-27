@@ -49,30 +49,38 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
          [NonSerialized]bool sending;
          [NonSerialized]bool hasReadyEditData;
+         [NonSerialized]bool synchronizing;
          [NonSerialized]bool waitingGetFileEditData;
          [NonSerialized]bool pendingGetFileEditData;
             internal partial void NetServerSideManualUpdate(){
                 if(cnkArraySync!=null&&cnkArraySync.netObj.IsSpawned){
-                 if(waitingGetFileEditData){
-                     //Log.DebugMessage("waitingGetFileEditData");
-                     if(OnGotFileEditData()){
-                         waitingGetFileEditData=false;
-                         hasReadyEditData=true;
-                     }
+                 if(synchronizing){
+                      if(OnSynchronized()){
+                          synchronizing=false;
+                          hasReadyEditData=true;
+                      }
                  }else{
-                     if(pendingGetFileEditData){
-                         //Log.DebugMessage("pendingGetFileEditData");
-                         if(CanGetFileEditData()){
-                             pendingGetFileEditData=false;
-                             waitingGetFileEditData=true;
-                         }
-                     }else{
-                         if(hasReadyEditData){
-         //                    //  TO DO: try send
-                             TrySendFileEditData();
-                         }else{
-                         }
-                     }
+                  if(waitingGetFileEditData){
+                      //Log.DebugMessage("waitingGetFileEditData");
+                      if(OnGotFileEditData()){
+                          waitingGetFileEditData=false;
+                          synchronizing=true;
+                      }
+                  }else{
+                      if(pendingGetFileEditData){
+                          //Log.DebugMessage("pendingGetFileEditData");
+                          if(CanGetFileEditData()){
+                              pendingGetFileEditData=false;
+                              waitingGetFileEditData=true;
+                          }
+                      }else{
+                          if(hasReadyEditData){
+                              //  TO DO: try send
+                              TrySendFileEditData();
+                          }else{
+                          }
+                      }
+                  }
                  }
                 }
             }
@@ -91,21 +99,31 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             bool OnGotFileEditData(){
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
               Log.DebugMessage("OnGotFileEditData");
-              bool send=false;
+              bool sync=false;
               for(int i=0;i<cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
                if(cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i]||(cnkArraySync.netChunkHasChanges[i]!=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i])){
-                send=true;
+                sync=true;
                 cnkArraySync.netChunkHasChanges[i]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i];
                }
               }
-              if(send){
+              if(sync){
+               Log.DebugMessage("'send==true'");
                cnkArraySync.netChunkHasChanges.SetDirty(true);
-               Log.DebugMessage("'cnkArraySync.netChunkHasChanges.SetDirty(true)'");
               }else{
+               Log.DebugMessage("'send==false'");
                cnkArraySync.netChunkHasChanges.ResetDirty();
-               Log.DebugMessage("'cnkArraySync.netChunkHasChanges.ResetDirty()'");
               }
               return true;
+             }
+             return false;
+            }
+            bool OnSynchronized(){
+             if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
+              if(!cnkArraySync.netChunkHasChanges.IsDirty()){
+               Log.DebugMessage("'!cnkArraySync.netChunkHasChanges.IsDirty()'");
+               cnkArraySync.netChunkHasChanges[0]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[0];
+               return true;
+              }
              }
              return false;
             }

@@ -1113,10 +1113,6 @@
       <Project>{98E45CA9-4200-01C2-8029-EAAC23524FC7}</Project>
       <Name>Unity.Networking.Transport</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Netcode.Components.csproj">
-      <Project>{67E6C7B2-0D71-6D5F-A0B6-E79A19F45B61}</Project>
-      <Name>Unity.Netcode.Components</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{6118397E-BB10-2F93-229C-EABA67351BC0}</Project>
       <Name>UnityEditor.UI</Name>
