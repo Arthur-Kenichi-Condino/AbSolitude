@@ -34,10 +34,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
-      internal readonly NetworkVariable<bool>netChunkHasReadyEditData=new NetworkVariable<bool>(default,
-       NetworkVariableReadPermission.Everyone,
-       NetworkVariableWritePermission.Server
-      );
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{

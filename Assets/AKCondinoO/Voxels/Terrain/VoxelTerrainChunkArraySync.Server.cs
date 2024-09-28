@@ -54,33 +54,33 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          [NonSerialized]bool pendingGetFileEditData;
             internal partial void NetServerSideManualUpdate(){
                 if(cnkArraySync!=null&&cnkArraySync.netObj.IsSpawned){
-                 if(synchronizing){
-                      if(OnSynchronized()){
-                          synchronizing=false;
-                          hasReadyEditData=true;
-                      }
+                 if(pendingGetFileEditData){
+                     //Log.DebugMessage("pendingGetFileEditData");
+                     if(CanGetFileEditData()){
+                         pendingGetFileEditData=false;
+                         waitingGetFileEditData=true;
+                     }
                  }else{
-                  if(waitingGetFileEditData){
-                      //Log.DebugMessage("waitingGetFileEditData");
-                      if(OnGotFileEditData()){
-                          waitingGetFileEditData=false;
-                          synchronizing=true;
-                      }
-                  }else{
-                      if(pendingGetFileEditData){
-                          //Log.DebugMessage("pendingGetFileEditData");
-                          if(CanGetFileEditData()){
-                              pendingGetFileEditData=false;
-                              waitingGetFileEditData=true;
-                          }
-                      }else{
-                          if(hasReadyEditData){
-                              //  TO DO: try send
-                              TrySendFileEditData();
-                          }else{
-                          }
-                      }
-                  }
+                     if(waitingGetFileEditData){
+                         //Log.DebugMessage("waitingGetFileEditData");
+                         if(OnGotFileEditData()){
+                             waitingGetFileEditData=false;
+                             synchronizing=true;
+                         }
+                     }else{
+                         if(synchronizing){
+                             if(OnSynchronized()){
+                                 synchronizing=false;
+                                 hasReadyEditData=true;
+                             }
+                         }else{
+                             if(hasReadyEditData){
+                                 //  TO DO: try send
+                                 TrySendFileEditData();
+                             }else{
+                             }
+                         }
+                     }
                  }
                 }
             }
@@ -120,7 +120,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             bool OnSynchronized(){
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
               if(!cnkArraySync.netChunkHasChanges.IsDirty()){
-               Log.DebugMessage("'!cnkArraySync.netChunkHasChanges.IsDirty()'");
+               Log.DebugMessage("OnSynchronized");
                cnkArraySync.netChunkHasChanges[0]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[0];
                return true;
               }
