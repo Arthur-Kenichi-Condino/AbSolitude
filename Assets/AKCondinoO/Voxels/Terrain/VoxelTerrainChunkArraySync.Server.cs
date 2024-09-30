@@ -42,12 +42,18 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               pendingGetFileEditData=true;
              }
             }
-         [NonSerialized]readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
-            internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId){
-             Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx);
-             clientIdsRequestingData.Add(clientId);
+         [NonSerialized]readonly Dictionary<ulong,HashSet<int>>clientIdsRequestingData=new Dictionary<ulong,HashSet<int>>();
+          [NonSerialized]readonly Queue<HashSet<int>>clientIdsRequestingDataSegmentListPool=new Queue<HashSet<int>>();
+            internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,int segment){
+             Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx+":segment:"+segment);
+             if(!clientIdsRequestingData.TryGetValue(clientId,out HashSet<int>segmentList)){
+              if(!clientIdsRequestingDataSegmentListPool.TryDequeue(out segmentList)){
+               segmentList=new HashSet<int>();
+              }
+              clientIdsRequestingData.Add(clientId,segmentList);
+             }
+             segmentList.Add(segment);
             }
-         [NonSerialized]bool sending;
          [NonSerialized]bool hasReadyEditData;
          [NonSerialized]bool synchronizing;
          [NonSerialized]bool waitingGetFileEditData;
@@ -131,16 +137,22 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
               if(clientIdsRequestingData.Count>0){
                Log.DebugMessage("'got clients requesting chunk data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
-         //      //sending=terrainGetFileEditDataToNetSyncBG.changes.Any(c=>{return c;});
-         //      //sendingcnkIdx=terrainGetFileEditDataToNetSyncBG.cnkIdx;
-         //      //clientIdsToSendData.AddRange(clientIdsRequestingData);
-         //      //clientIdsRequestingData.Clear();
-         //      //Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
+               sending=true;
+               sendingcnkIdx=cnkArraySync.terrainGetFileEditDataToNetSyncBG.cnkIdx;
+               foreach(var clientIdSegmentListPair in clientIdsRequestingData){
+                clientIdsToSendData.Add(clientIdSegmentListPair.Key,clientIdSegmentListPair.Value);
+               }
+               clientIdsRequestingData.Clear();
+               Log.DebugMessage("clientIdsToSendData.Count:"+clientIdsToSendData.Count);
               }else{
                //Log.DebugMessage("'no clients requesting data':clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
               }
              }
             }
+         [NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
+          [NonSerialized]bool sending;
+           [NonSerialized]int sendingcnkIdx;
+           [NonSerialized]readonly Dictionary<ulong,HashSet<int>>clientIdsToSendData=new Dictionary<ulong,HashSet<int>>();
             internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
                 WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
                 Loop:{
@@ -151,8 +163,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 goto Loop;
             }
         }
-     // [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
-     //[NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
      // [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;
      //  [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
      // [NonSerialized]bool sending;

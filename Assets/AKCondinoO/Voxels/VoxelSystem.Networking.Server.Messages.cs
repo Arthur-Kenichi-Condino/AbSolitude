@@ -44,14 +44,14 @@ namespace AKCondinoO.Voxels{
                if(reader.TryBeginRead(sizeof(int))){
                 reader.ReadValue(out segment);
                 Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
+                if(terrainArraySyncsAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkArraySync cnkArraySync)){
+                 cnkArraySync.asServer.OnReceivedVoxelTerrainChunkEditDataRequest(clientId,segment);
+                }
                }else{
                 Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
                 break;
                }
               }
-          //    if(terrainMessageHandlersAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkUnnamedMessageHandler cnkMsgr)){
-          //     cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(clientId);
-          //    }
              }
             }
         }
