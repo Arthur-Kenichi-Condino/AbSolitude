@@ -55,6 +55,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               currentSegmentList.UnionWith(segmentList);
               segmentList.Clear();
               clientIdsRequestingDataSegmentListPool.Enqueue(segmentList);
+              segmentList=null;
              }
             }
          [NonSerialized]bool hasReadyEditData;
