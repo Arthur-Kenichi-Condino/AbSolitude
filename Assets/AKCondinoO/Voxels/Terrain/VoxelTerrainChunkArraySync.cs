@@ -45,6 +45,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          [NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
          [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
             internal partial void OnInstantiated();
+            internal partial void OnSpawn();
             internal partial void NetServerSideOnDestroyingCore();
             internal partial void NetServerSideDispose();
             internal partial void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall);
@@ -74,6 +75,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          spawnInitialization=true;
+         if(Core.singleton.isServer){
+          asServer.OnSpawn();
+         }
          if(Core.singleton.isClient){
           asClient.OnClientSideNetChunkIdValueChanged(netChunkId.Value,netChunkId.Value);//  update on spawn
           netChunkId.OnValueChanged+=asClient.OnClientSideNetChunkIdValueChanged;

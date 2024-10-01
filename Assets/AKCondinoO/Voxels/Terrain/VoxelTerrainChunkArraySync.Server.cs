@@ -20,11 +20,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         internal partial class ServerData{
             internal partial void OnInstantiated(){
             }
+            internal partial void OnSpawn(){
+             serverSideSendVoxelTerrainChunkEditDataFileCoroutine=VoxelSystem.singleton.StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
+            }
             internal partial void NetServerSideOnDestroyingCore(){
              Log.DebugMessage("NetServerSideOnDestroyingCore");
-         //    if(this!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
-         //     StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
-         //    }
+             if(VoxelSystem.singleton!=null&&serverSideSendVoxelTerrainChunkEditDataFileCoroutine!=null){
+              VoxelSystem.singleton.StopCoroutine(serverSideSendVoxelTerrainChunkEditDataFileCoroutine);
+             }
              cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning,-1);
             }
             internal partial void NetServerSideDispose(){
@@ -43,16 +46,16 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              }
             }
          [NonSerialized]readonly Dictionary<ulong,HashSet<int>>clientIdsRequestingData=new Dictionary<ulong,HashSet<int>>();
-          [NonSerialized]readonly Queue<HashSet<int>>clientIdsRequestingDataSegmentListPool=new Queue<HashSet<int>>();
-            internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,int segment){
-             Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx+":segment:"+segment);
-             if(!clientIdsRequestingData.TryGetValue(clientId,out HashSet<int>segmentList)){
-              if(!clientIdsRequestingDataSegmentListPool.TryDequeue(out segmentList)){
-               segmentList=new HashSet<int>();
-              }
-              clientIdsRequestingData.Add(clientId,segmentList);
+          [NonSerialized]internal static readonly Queue<HashSet<int>>clientIdsRequestingDataSegmentListPool=new Queue<HashSet<int>>();
+            internal void OnReceivedVoxelTerrainChunkEditDataRequest(ulong clientId,HashSet<int>segmentList){
+             Log.DebugMessage("OnReceivedVoxelTerrainChunkEditDataRequest:clientId:"+clientId+":'cnkIdx':"+id.Value.cnkIdx+":segmentList.Count:"+segmentList.Count);
+             if(!clientIdsRequestingData.TryGetValue(clientId,out HashSet<int>currentSegmentList)){
+              clientIdsRequestingData.Add(clientId,currentSegmentList=segmentList);
+             }else{
+              currentSegmentList.UnionWith(segmentList);
+              segmentList.Clear();
+              clientIdsRequestingDataSegmentListPool.Enqueue(segmentList);
              }
-             segmentList.Add(segment);
             }
          [NonSerialized]bool hasReadyEditData;
          [NonSerialized]bool synchronizing;
@@ -157,7 +160,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
                 Loop:{
                  yield return waitUntilGetFileData;
+         //        stopwatch.Restart();
+                 Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
                  //
+                 foreach(var clientIdSegmentListPair in clientIdsToSendData){
+                  HashSet<int>segmentList=clientIdSegmentListPair.Value;
+                  segmentList.Clear();
+                  clientIdsRequestingDataSegmentListPool.Enqueue(segmentList);
+                 }
+                 clientIdsToSendData.Clear();
                  sending=false;
                 }
                 goto Loop;

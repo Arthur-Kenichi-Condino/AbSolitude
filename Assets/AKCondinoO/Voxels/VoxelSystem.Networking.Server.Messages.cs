@@ -39,17 +39,26 @@ namespace AKCondinoO.Voxels{
               int cnkIdx;
               reader.ReadValue(out cnkIdx);
               //Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:cnkIdx:"+cnkIdx);
-              for(int i=0;i<chunkVoxelArraySplits;++i){
-               int segment;
-               if(reader.TryBeginRead(sizeof(int))){
-                reader.ReadValue(out segment);
-                Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
-                if(terrainArraySyncsAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkArraySync cnkArraySync)){
-                 cnkArraySync.asServer.OnReceivedVoxelTerrainChunkEditDataRequest(clientId,segment);
+              if(terrainArraySyncsAssigned.TryGetValue(cnkIdx,out VoxelTerrainChunkArraySync cnkArraySync)){
+               HashSet<int>segmentList;
+               if(!VoxelTerrainChunkArraySync.ServerData.clientIdsRequestingDataSegmentListPool.TryDequeue(out segmentList)){
+                segmentList=new HashSet<int>();
+               }
+               for(int i=0;i<chunkVoxelArraySplits;++i){
+                int segment;
+                if(reader.TryBeginRead(sizeof(int))){
+                 reader.ReadValue(out segment);
+                 Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:segment:"+segment);
+                 segmentList.Add(segment);
+                }else{
+                 Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
+                 break;
                 }
+               }
+               if(segmentList.Count>0){
+                cnkArraySync.asServer.OnReceivedVoxelTerrainChunkEditDataRequest(clientId,segmentList);
                }else{
-                Log.DebugMessage("OnServerSideReceivedVoxelTerrainChunkEditDataRequest:'no more segments'");
-                break;
+                VoxelTerrainChunkArraySync.ServerData.clientIdsRequestingDataSegmentListPool.Enqueue(segmentList);
                }
               }
              }
