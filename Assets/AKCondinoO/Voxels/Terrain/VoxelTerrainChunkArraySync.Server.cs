@@ -144,6 +144,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                sending=true;
                sendingcnkIdx=cnkArraySync.terrainGetFileEditDataToNetSyncBG.cnkIdx;
                foreach(var clientIdSegmentListPair in clientIdsRequestingData){
+                clientsSegmentsMissing.UnionWith(clientIdSegmentListPair.Value);
                 clientIdsToSendData.Add(clientIdSegmentListPair.Key,clientIdSegmentListPair.Value);
                }
                clientIdsRequestingData.Clear();
@@ -157,12 +158,22 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           [NonSerialized]bool sending;
            [NonSerialized]int sendingcnkIdx;
            [NonSerialized]readonly Dictionary<ulong,HashSet<int>>clientIdsToSendData=new Dictionary<ulong,HashSet<int>>();
+            [NonSerialized]readonly HashSet<int>clientsSegmentsMissing=new HashSet<int>();
             internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
                 WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
+                System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
                 Loop:{
                  yield return waitUntilGetFileData;
-         //        stopwatch.Restart();
+                 stopwatch.Restart();
                  Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
+                 foreach(int segment in clientsSegmentsMissing){
+                  bool changed=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[segment];
+                  if(changed){
+                   if(!netVoxelArrays.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
+                    _Dequeue:{}
+                   }
+                  }
+                 }
                  //
                  foreach(var clientIdSegmentListPair in clientIdsToSendData){
                   HashSet<int>segmentList=clientIdSegmentListPair.Value;
@@ -170,6 +181,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                   clientIdsRequestingDataSegmentListPool.Enqueue(segmentList);
                  }
                  clientIdsToSendData.Clear();
+                 clientsSegmentsMissing.Clear();
                  sending=false;
                 }
                 goto Loop;
