@@ -171,6 +171,17 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                   if(changed){
                    if(!netVoxelArrays.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
                     _Dequeue:{}
+                    if(!VoxelSystem.singleton.asServer.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
+                     if(VoxelSystem.singleton.asServer.netVoxelArraysCount>=VoxelSystem.singleton.asServer.netVoxelArraysMaxCount){
+                      Log.DebugMessage("'netVoxelArraysCount>=netVoxelArraysMaxCount'");
+                      yield return null;
+                      goto _Dequeue;
+                     }
+                     VoxelSystem.singleton.asServer.netVoxelArraysCount++;
+                     //netVoxelArray=Instantiate(cnkArraySync._VoxelArraySyncPrefab);
+     //        //    netVoxelArray.name=nameof(VoxelArraySync)+VoxelSystem.singleton.netVoxelArraysCount;
+     //        //    netVoxelArray.OnInstantiated();
+                    }
                    }
                   }
                  }
