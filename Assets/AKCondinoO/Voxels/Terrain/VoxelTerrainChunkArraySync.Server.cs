@@ -178,9 +178,9 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                       goto _Dequeue;
                      }
                      VoxelSystem.singleton.asServer.netVoxelArraysCount++;
-                     //netVoxelArray=Instantiate(cnkArraySync._VoxelArraySyncPrefab);
-     //        //    netVoxelArray.name=nameof(VoxelArraySync)+VoxelSystem.singleton.netVoxelArraysCount;
-     //        //    netVoxelArray.OnInstantiated();
+                     netVoxelArray=Instantiate(cnkArraySync._VoxelArraySyncPrefab);
+                     netVoxelArray.name=nameof(VoxelArraySync)+VoxelSystem.singleton.asServer.netVoxelArraysCount;
+                     netVoxelArray.asServer.OnInstantiated();
                     }
                    }
                   }

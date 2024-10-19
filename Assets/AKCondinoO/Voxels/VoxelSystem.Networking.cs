@@ -74,6 +74,7 @@ namespace AKCondinoO.Voxels{
            [NonSerialized]internal readonly   Queue<VoxelArraySync>netVoxelArraysPool  =new   Queue<VoxelArraySync>();
            [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArraysActive=new HashSet<VoxelArraySync>();
             [NonSerialized]readonly         HashSet<VoxelArraySync>netVoxelArraysToPool=new HashSet<VoxelArraySync>();
+           [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArrays      =new HashSet<VoxelArraySync>();
              [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingNetVoxelArray            =new HashSet<ulong>();
               [NonSerialized]readonly         HashSet<ulong>clientIdsRequestingNetVoxelArrayDisconnected=new HashSet<ulong>();
             internal partial void NetServerSideInit();
@@ -85,6 +86,7 @@ namespace AKCondinoO.Voxels{
          [NonSerialized]internal readonly Dictionary<int,FastBufferWriter>clientSideChunkEditDataRequestsToSend=new Dictionary<int,FastBufferWriter>();
           [NonSerialized]internal readonly          List<VoxelTerrainChunkUnnamedMessageHandler>terrainMessageHandlers=new List<VoxelTerrainChunkUnnamedMessageHandler>();
           [NonSerialized]internal readonly          List<VoxelTerrainChunkArraySync>terrainArraySyncs=new List<VoxelTerrainChunkArraySync>();
+           [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArrays      =new HashSet<VoxelArraySync>();
             internal partial void NetClientSideInit();
             internal partial void NetClientSideOnDestroyingCoreNetworkDestroy();
             internal partial void NetClientSideOnDestroyingCoreNetworkDispose();

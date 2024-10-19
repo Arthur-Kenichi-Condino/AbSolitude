@@ -36,6 +36,7 @@ namespace AKCondinoO.Voxels{
              }
              terrainMessageHandlers.Clear();
              terrainArraySyncs     .Clear();
+             netVoxelArrays        .Clear();
              foreach(var clientSideRequestToSend in clientSideChunkEditDataRequestsToSend){
               FastBufferWriter request=clientSideRequestToSend.Value;
               request.Dispose();

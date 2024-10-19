@@ -117,6 +117,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.OnSkillUsed.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Sanity.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayerManagement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticle.cs" />
     <Compile Include="Assets\AKCondinoO\Log.cs" />
+    <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindTrails.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\InContainerTransformData.cs" />

@@ -14,9 +14,35 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Terrain.Networking.VoxelTerrainGetFileEditDataToNetSyncContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
-    internal class VoxelArraySync:NetworkBehaviour{
+    internal partial class VoxelArraySync:NetworkBehaviour{
+     [NonSerialized]internal NetworkObject netObj;
+     [NonSerialized]internal ServerData asServer;
+     [NonSerialized]internal ClientData asClient;
+        [Serializable]internal partial class ServerData{
+         [NonSerialized]internal VoxelArraySync netVoxelArray;
+            internal ServerData(VoxelArraySync netVoxelArray){
+             this.netVoxelArray=netVoxelArray;
+            }
+            internal partial void OnInstantiated();
+        }
+        [Serializable]internal partial class ClientData{
+         [NonSerialized]internal VoxelArraySync netVoxelArray;
+            internal ClientData(VoxelArraySync netVoxelArray){
+             this.netVoxelArray=netVoxelArray;
+            }
+        }
+        void Awake(){
+         netObj=GetComponent<NetworkObject>();
+         if(Core.singleton.isServer){
+          asServer=new ServerData(this);
+          VoxelSystem.singleton.asServer.netVoxelArrays.Add(this);
+         }
+         if(Core.singleton.isClient){
+          asClient=new ClientData(this);
+          VoxelSystem.singleton.asClient.netVoxelArrays.Add(this);
+         }
+        }
      //   void Awake(){
-     //    netObj=GetComponent<NetworkObject>();
      //    NetworkVariableUpdateTraits updateTraits=new NetworkVariableUpdateTraits();
      //    int poolSize=
      //     (VoxelSystem.expropriationDistance.x*2+1)*
@@ -25,10 +51,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      //    updateTraits.MaxSecondsBetweenUpdates=poolSize*updateTraits.MinSecondsBetweenUpdates;
      //    voxels.SetUpdateTraits(updateTraits);
      //   }
-     //   internal void OnInstantiated(){
-     //    Log.DebugMessage("OnInstantiated");
-     //   }
-     //[NonSerialized]internal NetworkObject netObj;
      //   public override void OnNetworkSpawn(){
      //    base.OnNetworkSpawn();
      //    Log.DebugMessage("NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual:"+NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual);

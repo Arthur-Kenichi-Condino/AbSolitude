@@ -54,6 +54,7 @@ namespace AKCondinoO.Voxels{
              }
              terrainMessageHandlers.Clear();
              terrainArraySyncs     .Clear();
+             netVoxelArrays        .Clear();
      //    foreach(var kvp1 in serverVoxelTerrainChunkEditDataSegmentsReceivedFromClient){
      //     foreach(var kvp2 in kvp1.Value){
      //      kvp2.Value.segmentData.Dispose();
