@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 namespace AKCondinoO.Voxels.Terrain.Networking{
@@ -9,9 +10,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
          [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
          [NonSerialized]internal int arraySyncSegment;
-            internal void OnDequeueAt(VoxelTerrainChunkArraySync cnkArraySync,int arraySyncSegment){
+         [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
+            internal void OnDequeueAt(VoxelTerrainChunkArraySync cnkArraySync,int arraySyncSegment,int sendingcnkIdx){
              this.cnkArraySync=cnkArraySync;
              this.arraySyncSegment=arraySyncSegment;
+             if(netVoxelArray.voxels.Value!=null){
+              netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
+              netVoxelArray.voxels.Value.segment=arraySyncSegment;
+              Array.Copy(cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment],0,netVoxelArray.voxels.Value.voxelArray,0,cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment].Length);
+             }
              cnkArraySync.asServer.netVoxelArraysActive.Add(arraySyncSegment,netVoxelArray);
             }
             internal void OnPool(){

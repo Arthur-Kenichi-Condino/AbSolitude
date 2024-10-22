@@ -188,7 +188,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                      }
                      netVoxelArray.netObj.DontDestroyWithOwner=true;
                     }
-                    netVoxelArray.asServer.OnDequeueAt(cnkArraySync,segment);
+                    netVoxelArray.asServer.OnDequeueAt(cnkArraySync,segment,sendingcnkIdx);
+                    foreach(var clientIdSegmentListPair in clientIdsToSendData){
+                     HashSet<int>segmentList=clientIdSegmentListPair.Value;
+                     if(segmentList.Contains(segment)){
+                      netVoxelArray.asServer.clientIdsRequestingData.Add(clientIdSegmentListPair.Key);
+                      //VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsToSendData);
+                     }
+                    }
                    }
                   }
                  }

@@ -71,7 +71,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          base.OnNetworkDespawn();
         }
-     //[NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
      //[NonSerialized]float timeToIgnoreClientIdsRequestingDataToPool=5f;
      //[NonSerialized]float timerToIgnoreClientIdsRequestingDataToPool;
      //   internal void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
