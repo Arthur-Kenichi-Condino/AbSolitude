@@ -16,6 +16,11 @@ using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.Networking{
     internal partial class VoxelArraySync:NetworkBehaviour{
      [NonSerialized]internal NetworkObject netObj;
+      internal readonly NetworkVariable<NetVoxelArrayContainer>voxels=new NetworkVariable<NetVoxelArrayContainer>(
+       new NetVoxelArrayContainer(),
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server
+      );
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{
@@ -41,57 +46,31 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
           asClient=new ClientData(this);
           VoxelSystem.singleton.asClient.netVoxelArrays.Add(this);
          }
+         NetworkVariableUpdateTraits updateTraits=new NetworkVariableUpdateTraits();
+         int poolSize=
+          (VoxelSystem.expropriationDistance.x*2+1)*
+          (VoxelSystem.expropriationDistance.y*2+1);
+         //updateTraits.MinSecondsBetweenUpdates=voxels.Value.voxelArray.Length*VoxelTerrainChunkArraySync.segmentSizeToTimeInSecondsDelayRatio;
+         //updateTraits.MaxSecondsBetweenUpdates=poolSize*updateTraits.MinSecondsBetweenUpdates;
+         voxels.SetUpdateTraits(updateTraits);
         }
-     //   void Awake(){
-     //    NetworkVariableUpdateTraits updateTraits=new NetworkVariableUpdateTraits();
-     //    int poolSize=
-     //     (VoxelSystem.expropriationDistance.x*2+1)*
-     //     (VoxelSystem.expropriationDistance.y*2+1);
-     //    updateTraits.MinSecondsBetweenUpdates=voxels.Value.voxelArray.Length*VoxelTerrainChunkArraySync.segmentSizeToTimeInSecondsDelayRatio;
-     //    updateTraits.MaxSecondsBetweenUpdates=poolSize*updateTraits.MinSecondsBetweenUpdates;
-     //    voxels.SetUpdateTraits(updateTraits);
-     //   }
-     //   public override void OnNetworkSpawn(){
-     //    base.OnNetworkSpawn();
-     //    Log.DebugMessage("NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual:"+NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual);
-     //    if(Core.singleton.isClient){
-     //     OnClientSideVoxelsValueChanged(null,null);
-     //     voxels.OnValueChanged+=OnClientSideVoxelsValueChanged;
-     //    }
-     //   }
-     //   public override void OnNetworkDespawn(){
-     //    if(Core.singleton.isClient){
-     //     voxels.OnValueChanged-=OnClientSideVoxelsValueChanged;
-     //    }
-     //    base.OnNetworkDespawn();
-     //   }
-     // internal readonly NetworkVariable<NetVoxelArrayContainer>voxels=new NetworkVariable<NetVoxelArrayContainer>(
-     //  new NetVoxelArrayContainer(),
-     //  NetworkVariableReadPermission.Everyone,
-     //  NetworkVariableWritePermission.Server
-     // );
-     //  [NonSerialized]internal bool clientSideVoxelsChangesReceived;
-     //     private void OnClientSideVoxelsValueChanged(NetVoxelArrayContainer previous,NetVoxelArrayContainer current){
-     //      if(Core.singleton.isClient){
-     //       if(current!=null){
-     //        //Log.DebugMessage("'clientSideVoxelsChangesReceived'",this);
-     //        clientSideVoxelsChangesReceived=true;
-     //        Log.DebugMessage("OnClientSideVoxelsValueChanged:current.cnkIdx:"+current.cnkIdx+";current.segment:"+current.segment);
-     //       }
-     //      }
-     //     }
-     //[NonSerialized]internal VoxelTerrainChunkArraySync arraySync;
-     // [NonSerialized]internal int arraySyncSegment;
-     //   internal void OnPool(){
-     //    Log.DebugMessage("OnPool");
-     //    if(arraySync!=null){
-     //     arraySync.netVoxelArrays.Remove(arraySyncSegment);
-     //     arraySync=null;
-     //    }
-     //    if(VoxelSystem.singleton.netVoxelArraysActive.Remove(this)){
-     //     VoxelSystem.singleton.netVoxelArraysPool.Enqueue(this);
-     //    }
-     //   }
+     internal bool spawnInitialization;
+        public override void OnNetworkSpawn(){
+         base.OnNetworkSpawn();
+         spawnInitialization=true;
+         Log.DebugMessage("NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual:"+NetworkVariableSerialization<NetVoxelArrayContainer>.AreEqual);
+         if(Core.singleton.isClient){
+          asClient.OnClientSideVoxelsValueChanged(null,null);
+          voxels.OnValueChanged+=asClient.OnClientSideVoxelsValueChanged;
+         }
+         spawnInitialization=false;
+        }
+        public override void OnNetworkDespawn(){
+         if(Core.singleton.isClient){
+          voxels.OnValueChanged-=asClient.OnClientSideVoxelsValueChanged;
+         }
+         base.OnNetworkDespawn();
+        }
      //[NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
      //[NonSerialized]float timeToIgnoreClientIdsRequestingDataToPool=5f;
      //[NonSerialized]float timerToIgnoreClientIdsRequestingDataToPool;

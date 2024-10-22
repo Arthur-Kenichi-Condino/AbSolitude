@@ -41,7 +41,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal ServerData(VoxelTerrainChunkArraySync cnkArraySync){
              this.cnkArraySync=cnkArraySync;
             }
-         [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArrays=new Dictionary<int,VoxelArraySync>();
+         [NonSerialized]internal readonly Dictionary<int,VoxelArraySync>netVoxelArraysActive=new Dictionary<int,VoxelArraySync>();
          [NonSerialized]internal LinkedListNode<VoxelTerrainChunkArraySync>expropriated;
          [NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
             internal partial void OnInstantiated();

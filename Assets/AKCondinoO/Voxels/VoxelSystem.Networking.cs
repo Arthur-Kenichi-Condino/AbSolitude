@@ -72,7 +72,6 @@ namespace AKCondinoO.Voxels{
            [NonSerialized]internal                             int netVoxelArraysMaxCount;
            [NonSerialized]internal                             int netVoxelArraysCount;
            [NonSerialized]internal readonly   Queue<VoxelArraySync>netVoxelArraysPool  =new   Queue<VoxelArraySync>();
-           [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArraysActive=new HashSet<VoxelArraySync>();
             [NonSerialized]readonly         HashSet<VoxelArraySync>netVoxelArraysToPool=new HashSet<VoxelArraySync>();
            [NonSerialized]internal readonly HashSet<VoxelArraySync>netVoxelArrays      =new HashSet<VoxelArraySync>();
              [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingNetVoxelArray            =new HashSet<ulong>();

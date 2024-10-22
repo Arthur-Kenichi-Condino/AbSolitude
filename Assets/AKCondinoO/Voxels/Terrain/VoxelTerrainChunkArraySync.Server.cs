@@ -169,7 +169,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  foreach(int segment in clientsSegmentsMissing){
                   bool changed=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[segment];
                   if(changed){
-                   if(!netVoxelArrays.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
+                   if(!netVoxelArraysActive.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
                     _Dequeue:{}
                     if(!VoxelSystem.singleton.asServer.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
                      if(VoxelSystem.singleton.asServer.netVoxelArraysCount>=VoxelSystem.singleton.asServer.netVoxelArraysMaxCount){
@@ -181,7 +181,14 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                      netVoxelArray=Instantiate(cnkArraySync._VoxelArraySyncPrefab);
                      netVoxelArray.name=nameof(VoxelArraySync)+VoxelSystem.singleton.asServer.netVoxelArraysCount;
                      netVoxelArray.asServer.OnInstantiated();
+                     try{
+                      netVoxelArray.netObj.Spawn(destroyWithScene:false);
+                     }catch(Exception e){
+                      Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+                     }
+                     netVoxelArray.netObj.DontDestroyWithOwner=true;
                     }
+                    netVoxelArray.asServer.OnDequeueAt(cnkArraySync,segment);
                    }
                   }
                  }
