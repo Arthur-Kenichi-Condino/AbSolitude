@@ -188,15 +188,24 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                      }
                      netVoxelArray.netObj.DontDestroyWithOwner=true;
                     }
-                    netVoxelArray.asServer.OnDequeueAt(cnkArraySync,segment,sendingcnkIdx);
-                    foreach(var clientIdSegmentListPair in clientIdsToSendData){
-                     HashSet<int>segmentList=clientIdSegmentListPair.Value;
-                     if(segmentList.Contains(segment)){
-                      netVoxelArray.asServer.clientIdsRequestingData.Add(clientIdSegmentListPair.Key);
-                      //VoxelSystem.singleton.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsToSendData);
-                     }
+                    netVoxelArray.asServer.OnDequeue(cnkArraySync,segment);
+                   }
+                   netVoxelArray.asServer.OnSetChanges(sendingcnkIdx);
+                   foreach(var clientIdSegmentListPair in clientIdsToSendData){
+                    HashSet<int>segmentList=clientIdSegmentListPair.Value;
+                    if(segmentList.Contains(segment)){
+                     netVoxelArray.asServer.clientIdsRequestingData.Add(clientIdSegmentListPair.Key);
+                     VoxelSystem.singleton.asServer.clientIdsRequestingNetVoxelArray.Add(clientIdSegmentListPair.Key);
                     }
                    }
+     //        //  //netVoxelArray.voxels.SetDirty(true);
+     //        //  //Log.DebugMessage("'netVoxelArray.voxels.SetDirty(true)'",netVoxelArray);
+                   //totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
+     //        //  delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
+     //        //  if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
+     //        //   //Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
+     //        //   yield return waitForDelayToSendNewMessages;
+     //        //  }
                   }
                  }
                  //

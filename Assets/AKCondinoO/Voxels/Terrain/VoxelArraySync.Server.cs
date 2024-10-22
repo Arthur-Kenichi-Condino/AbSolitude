@@ -11,15 +11,17 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          [NonSerialized]internal VoxelTerrainChunkArraySync cnkArraySync;
          [NonSerialized]internal int arraySyncSegment;
          [NonSerialized]internal readonly HashSet<ulong>clientIdsRequestingData=new HashSet<ulong>();
-            internal void OnDequeueAt(VoxelTerrainChunkArraySync cnkArraySync,int arraySyncSegment,int sendingcnkIdx){
+            internal void OnDequeue(VoxelTerrainChunkArraySync cnkArraySync,int arraySyncSegment){
              this.cnkArraySync=cnkArraySync;
              this.arraySyncSegment=arraySyncSegment;
+             this.cnkArraySync.asServer.netVoxelArraysActive.Add(arraySyncSegment,netVoxelArray);
+            }
+            internal void OnSetChanges(int sendingcnkIdx){
              if(netVoxelArray.voxels.Value!=null){
               netVoxelArray.voxels.Value.cnkIdx=sendingcnkIdx;
               netVoxelArray.voxels.Value.segment=arraySyncSegment;
               Array.Copy(cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment],0,netVoxelArray.voxels.Value.voxelArray,0,cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment].Length);
              }
-             cnkArraySync.asServer.netVoxelArraysActive.Add(arraySyncSegment,netVoxelArray);
             }
             internal void OnPool(){
              Log.DebugMessage("OnPool");
