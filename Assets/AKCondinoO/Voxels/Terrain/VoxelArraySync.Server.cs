@@ -14,7 +14,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal void OnDequeue(VoxelTerrainChunkArraySync cnkArraySync,int arraySyncSegment){
              this.cnkArraySync=cnkArraySync;
              this.arraySyncSegment=arraySyncSegment;
-             this.cnkArraySync.asServer.netVoxelArraysActive.Add(arraySyncSegment,netVoxelArray);
+             this.cnkArraySync.asServer.netVoxelArraysActive.Add(this.arraySyncSegment,netVoxelArray);
+             VoxelSystem.singleton.asServer.netVoxelArraysActive.Add(netVoxelArray);
             }
             internal void OnSetChanges(int sendingcnkIdx){
              if(netVoxelArray.voxels.Value!=null){
@@ -25,13 +26,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             internal void OnPool(){
              Log.DebugMessage("OnPool");
-     //    if(arraySync!=null){
-     //     arraySync.netVoxelArrays.Remove(arraySyncSegment);
-     //     arraySync=null;
-     //    }
-     //    if(VoxelSystem.singleton.netVoxelArraysActive.Remove(this)){
-     //     VoxelSystem.singleton.netVoxelArraysPool.Enqueue(this);
-     //    }
+             VoxelSystem.singleton.asServer.netVoxelArraysActive.Remove(netVoxelArray);
+             if(cnkArraySync!=null){
+              cnkArraySync.asServer.netVoxelArraysActive.Remove(arraySyncSegment);
+              cnkArraySync=null;
+              VoxelSystem.singleton.asServer.netVoxelArraysPool.Enqueue(netVoxelArray);
+             }
+            }
+            internal partial void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
+             toPool=false;
             }
         }
     }

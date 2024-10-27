@@ -86,16 +86,16 @@ namespace AKCondinoO.Voxels{
              foreach(var cnkArraySync in terrainArraySyncsAssigned     ){
               cnkArraySync.Value.asServer.NetServerSideManualUpdate();
              }
-     //    #region netVoxelArrays
-     //        foreach(var netVoxelArray in netVoxelArraysActive){
-     //         netVoxelArray.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
-     //         if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
-     //        }
-     //        foreach(var netVoxelArray in netVoxelArraysToPool){
-     //         netVoxelArray.OnPool();
-     //        }
-     //        netVoxelArraysToPool.Clear();
-     //    #endregion
+             #region netVoxelArrays
+             foreach(var netVoxelArray in netVoxelArraysActive){
+              netVoxelArray.asServer.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
+              if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
+             }
+             foreach(var netVoxelArray in netVoxelArraysToPool){
+              netVoxelArray.asServer.OnPool();
+             }
+             netVoxelArraysToPool.Clear();
+             #endregion
      //    clientIdsRequestingNetVoxelArrayDisconnected.Clear();
             }
          [NonSerialized]Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;

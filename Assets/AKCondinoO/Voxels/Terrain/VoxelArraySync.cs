@@ -29,6 +29,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              this.netVoxelArray=netVoxelArray;
             }
             internal partial void OnInstantiated();
+            internal partial void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool);
         }
         [Serializable]internal partial class ClientData{
          [NonSerialized]internal VoxelArraySync netVoxelArray;

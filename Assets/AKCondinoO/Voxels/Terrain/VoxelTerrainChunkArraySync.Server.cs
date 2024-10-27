@@ -155,13 +155,31 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
              }
             }
          [NonSerialized]Coroutine serverSideSendVoxelTerrainChunkEditDataFileCoroutine;
+          [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;
+           [NonSerialized]internal float delayToSendNewMessages;//  length * segmentSizeToTimeInSecondsDelayRatio
           [NonSerialized]bool sending;
            [NonSerialized]int sendingcnkIdx;
            [NonSerialized]readonly Dictionary<ulong,HashSet<int>>clientIdsToSendData=new Dictionary<ulong,HashSet<int>>();
             [NonSerialized]readonly HashSet<int>clientsSegmentsMissing=new HashSet<int>();
             internal IEnumerator ServerSideSendVoxelTerrainChunkEditDataFileCoroutine(){
+                yield return null;
                 WaitUntil waitUntilGetFileData=new WaitUntil(()=>{return sending;});
+                WaitUntil waitForDelayToSendNewMessages=new WaitUntil(()=>{if(delayToSendNewMessages>0f){delayToSendNewMessages-=Time.deltaTime;}return delayToSendNewMessages<=0f;});//  delay with WaitUntil / a cooldown
+                bool LimitMessagesSentPerFrame(){
+                 if(messagesSent>=maxMessagesPerFrame){
+                  return true;
+                 }
+                 messagesSent++;
+                 return false;
+                }
                 System.Diagnostics.Stopwatch stopwatch=new System.Diagnostics.Stopwatch();
+                bool LimitExecutionTime(){
+                 sendingExecutionTime+=stopwatch.Elapsed.TotalMilliseconds;
+                 if(sendingExecutionTime>=sendingMaxExecutionTime){
+                  return true;
+                 }
+                 return false;
+                }
                 Loop:{
                  yield return waitUntilGetFileData;
                  stopwatch.Restart();
@@ -169,6 +187,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  foreach(int segment in clientsSegmentsMissing){
                   bool changed=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[segment];
                   if(changed){
+                   while(LimitExecutionTime()){
+                    yield return null;
+                    stopwatch.Restart();
+                   }
+                   while(LimitMessagesSentPerFrame()){
+                    yield return null;
+                   }
                    if(!netVoxelArraysActive.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
                     _Dequeue:{}
                     if(!VoxelSystem.singleton.asServer.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
@@ -198,14 +223,13 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                      VoxelSystem.singleton.asServer.clientIdsRequestingNetVoxelArray.Add(clientIdSegmentListPair.Key);
                     }
                    }
-     //        //  //netVoxelArray.voxels.SetDirty(true);
-     //        //  //Log.DebugMessage("'netVoxelArray.voxels.SetDirty(true)'",netVoxelArray);
-                   //totalLengthOfDataSent+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length;
-     //        //  delayToSendNewMessages+=terrainGetFileEditDataToNetSyncBG.voxels[i].Length*segmentSizeToTimeInSecondsDelayRatio;
-     //        //  if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
-     //        //   //Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
-     //        //   yield return waitForDelayToSendNewMessages;
-     //        //  }
+                   //netVoxelArray.voxels.SetDirty(true);
+                   totalLengthOfDataSent+=cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[segment].Length;
+                   delayToSendNewMessages+=cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[segment].Length*segmentSizeToTimeInSecondsDelayRatio;
+                   if(delayToSendNewMessages>minTimeInSecondsToStartDelayToSendNewMessages){
+                    Log.DebugMessage("'waitForDelayToSendNewMessages':"+delayToSendNewMessages+" seconds");
+                    yield return waitForDelayToSendNewMessages;
+                   }
                   }
                  }
                  //
@@ -221,8 +245,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                 goto Loop;
             }
         }
-     // [NonSerialized]internal float minTimeInSecondsToStartDelayToSendNewMessages=1.25f/32f;
-     //  [NonSerialized]internal float delayToSendNewMessages;//  writer.Length * segmentSizeToTimeInSecondsDelayRatio
      // [NonSerialized]bool sending;
      //  [NonSerialized]int sendingcnkIdx;
      //  [NonSerialized]readonly List<ulong>clientIdsToSendData=new List<ulong>();
