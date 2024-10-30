@@ -75,11 +75,6 @@ namespace AKCondinoO.Voxels{
                 VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
              }
              assigningExecutionTime=0;
-     //    foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
-     //     if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
-     //      clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
-     //     }
-     //    }
              foreach(var cnkMsgr      in terrainMessageHandlersAssigned){
               cnkMsgr     .Value.asServer.NetServerSideManualUpdate();
              }
@@ -87,16 +82,21 @@ namespace AKCondinoO.Voxels{
               cnkArraySync.Value.asServer.NetServerSideManualUpdate();
              }
              #region netVoxelArrays
-             foreach(var netVoxelArray in netVoxelArraysActive){
-              netVoxelArray.asServer.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
-              if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
-             }
-             foreach(var netVoxelArray in netVoxelArraysToPool){
-              netVoxelArray.asServer.OnPool();
-             }
-             netVoxelArraysToPool.Clear();
+              foreach(ulong clientIdRequestingNetVoxelArray in clientIdsRequestingNetVoxelArray){
+               if(!NetworkManager.Singleton.ConnectedClientsIds.Contains(clientIdRequestingNetVoxelArray)){
+                clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
+               }
+              }
+              foreach(var netVoxelArray in netVoxelArraysActive){
+               netVoxelArray.asServer.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
+               if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}
+              }
+              foreach(var netVoxelArray in netVoxelArraysToPool){
+               netVoxelArray.asServer.OnPool();
+              }
+              netVoxelArraysToPool.Clear();
+              clientIdsRequestingNetVoxelArrayDisconnected.Clear();
              #endregion
-     //    clientIdsRequestingNetVoxelArrayDisconnected.Clear();
             }
          [NonSerialized]Coroutine serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine;
           [NonSerialized]double assigningMaxExecutionTime=1.0;

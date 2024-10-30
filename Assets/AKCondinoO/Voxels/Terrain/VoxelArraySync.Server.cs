@@ -35,6 +35,33 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             internal partial void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
              toPool=false;
+             if(cnkArraySync!=null){
+              if(clientIdsDisconnectedToRemove.Count>0){
+               clientIdsRequestingData.ExceptWith(clientIdsDisconnectedToRemove);
+              }
+              if(netVoxelArray.voxels.IsDirty()){
+               Log.DebugMessage("'netVoxelArray.voxels.IsDirty()':'data wasn't sent yet'",netVoxelArray);
+              }else{
+               Log.DebugMessage("clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
+     //     if(clientIdsRequestingData.Count<=0){
+     //      toPool=true;
+     //     }
+              }
+     //    if(!toPool){
+     //     if(timerToIgnoreClientIdsRequestingDataToPool<timeToIgnoreClientIdsRequestingDataToPool){
+     //      timerToIgnoreClientIdsRequestingDataToPool+=Time.deltaTime;
+     //      if(timerToIgnoreClientIdsRequestingDataToPool>=timeToIgnoreClientIdsRequestingDataToPool){
+     //       toPool=true;
+     //      }
+     //     }
+     //    }
+     //    if(toPool){
+     //     timerToIgnoreClientIdsRequestingDataToPool=0f;
+     //     clientIdsRequestingData.Clear();
+     //     //Log.DebugMessage("'toPool'",this);
+     //    }
+              VoxelSystem.singleton.asServer.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsRequestingData);
+             }
             }
         }
     }
