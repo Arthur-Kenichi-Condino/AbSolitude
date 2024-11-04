@@ -24,7 +24,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               Array.Copy(cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment],0,netVoxelArray.voxels.Value.voxelArray,0,cnkArraySync.terrainGetFileEditDataToNetSyncBG.voxels[arraySyncSegment].Length);
              }
             }
-            internal void OnPool(){
+            internal void OnPool(bool isDestroying=false){
              Log.DebugMessage("OnPool");
              VoxelSystem.singleton.asServer.netVoxelArraysActive.Remove(netVoxelArray);
              if(cnkArraySync!=null){
@@ -33,6 +33,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
               VoxelSystem.singleton.asServer.netVoxelArraysPool.Enqueue(netVoxelArray);
              }
             }
+         [NonSerialized]float timeToIgnoreClientIdsRequestingDataToPool=5f;
+          [NonSerialized]float timerToIgnoreClientIdsRequestingDataToPool;
             internal partial void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
              toPool=false;
              if(cnkArraySync!=null){
@@ -43,23 +45,23 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                Log.DebugMessage("'netVoxelArray.voxels.IsDirty()':'data wasn't sent yet'",netVoxelArray);
               }else{
                Log.DebugMessage("clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
-     //     if(clientIdsRequestingData.Count<=0){
-     //      toPool=true;
-     //     }
+               if(clientIdsRequestingData.Count<=0){
+                toPool=true;
+               }
               }
-     //    if(!toPool){
-     //     if(timerToIgnoreClientIdsRequestingDataToPool<timeToIgnoreClientIdsRequestingDataToPool){
-     //      timerToIgnoreClientIdsRequestingDataToPool+=Time.deltaTime;
-     //      if(timerToIgnoreClientIdsRequestingDataToPool>=timeToIgnoreClientIdsRequestingDataToPool){
-     //       toPool=true;
-     //      }
-     //     }
-     //    }
-     //    if(toPool){
-     //     timerToIgnoreClientIdsRequestingDataToPool=0f;
-     //     clientIdsRequestingData.Clear();
-     //     //Log.DebugMessage("'toPool'",this);
-     //    }
+              if(!toPool){
+               if(timerToIgnoreClientIdsRequestingDataToPool<timeToIgnoreClientIdsRequestingDataToPool){
+                timerToIgnoreClientIdsRequestingDataToPool+=Time.deltaTime;
+                if(timerToIgnoreClientIdsRequestingDataToPool>=timeToIgnoreClientIdsRequestingDataToPool){
+                 toPool=true;
+                }
+               }
+              }
+              if(toPool){
+               timerToIgnoreClientIdsRequestingDataToPool=0f;
+               clientIdsRequestingData.Clear();
+               Log.DebugMessage("'toPool'",netVoxelArray);
+              }
               VoxelSystem.singleton.asServer.clientIdsRequestingNetVoxelArray.UnionWith(clientIdsRequestingData);
              }
             }

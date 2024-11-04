@@ -42,6 +42,15 @@ namespace AKCondinoO.Voxels{
               VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
               cnkArraySync.asServer.NetServerSideOnDestroyingCore();
              }
+             foreach(var netVoxelArray in netVoxelArraysActive){
+              netVoxelArraysToPool.Add(netVoxelArray);
+             }
+             foreach(var netVoxelArray in netVoxelArraysToPool){
+              netVoxelArray.asServer.OnPool(true);
+             }
+             netVoxelArraysToPool.Clear();
+             netVoxelArraysPool  .Clear();
+             netVoxelArraysCount=0;
             }
             internal partial void NetServerSideOnDestroyingCoreNetworkDispose(){
              for(int i=0;i<terrainMessageHandlers.Count;++i){
@@ -87,6 +96,7 @@ namespace AKCondinoO.Voxels{
                 clientIdsRequestingNetVoxelArrayDisconnected.Add(clientIdRequestingNetVoxelArray);
                }
               }
+              clientIdsRequestingNetVoxelArray.Clear();
               foreach(var netVoxelArray in netVoxelArraysActive){
                netVoxelArray.asServer.NetServerSideManualUpdate(clientIdsRequestingNetVoxelArrayDisconnected,out bool toPool);
                if(toPool){netVoxelArraysToPool.Add(netVoxelArray);}

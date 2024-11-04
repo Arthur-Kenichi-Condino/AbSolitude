@@ -94,43 +94,25 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          base.OnNetworkDespawn();
         }
-     [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=(1.25f/16f)/(VoxelsPerChunk);//  turns segment Length into seconds to wait
-      [NonSerialized]internal static int totalLengthOfDataSent;
-     [NonSerialized]internal static int maxMessagesPerFrame=chunkVoxelArraySplits/8;
-      [NonSerialized]internal static int messagesSent;
-     [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
-      [NonSerialized]internal static double sendingExecutionTime;
+     [NonSerialized]internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent * segmentSizeToTimeInSecondsDelayRatio
+      [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=(1.25f/16f)/(VoxelsPerChunk);//  turns segment Length into seconds to wait
+       [NonSerialized]internal static int totalLengthOfDataSent;
+      [NonSerialized]internal static int maxMessagesPerFrame=chunkVoxelArraySplits/8;
+       [NonSerialized]internal static int messagesSent;
+      [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
+       [NonSerialized]internal static double sendingExecutionTime;
         internal static void StaticUpdate(){
+         if(globalCooldownToSendNewMessages>0f){
+          globalCooldownToSendNewMessages-=Time.deltaTime;
+          if(globalCooldownToSendNewMessages<=0f){
+           messagesSent=0;
+          }
+         }else if(messagesSent>0){
+          globalCooldownToSendNewMessages=totalLengthOfDataSent*segmentSizeToTimeInSecondsDelayRatio;
+          totalLengthOfDataSent=0;
+          Log.DebugMessage("StaticUpdate:globalCooldownToSendNewMessages:"+globalCooldownToSendNewMessages);
+         }
+         sendingExecutionTime=0d;
         }
-     //[NonSerialized]internal(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)?id=null;
-     //   void Awake(){
-     //    if(Core.singleton.isServer){
-     //     serverSideSendVoxelTerrainChunkEditDataFileCoroutine=StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
-     //    }
-     //    if(Core.singleton.isClient){
-     //     VoxelSystem.singleton.terrainArraySyncs.Add(this);
-     //    }
-     //   }
-     //   internal void OnInstantiated(){
-     //   }
-     //   internal void OnDestroyingCore(){
-     //   }
-     //   internal void Dispose(){
-     //    terrainGetFileEditDataToNetSyncBG.Dispose();
-     //   }
-     //[NonSerialized]internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent * segmentSizeToTimeInSecondsDelayRatio
-     //   internal static void StaticUpdate(){
-     //    if(globalCooldownToSendNewMessages>0f){
-     //     globalCooldownToSendNewMessages-=Time.deltaTime;
-     //     if(globalCooldownToSendNewMessages<=0f){
-     //      messagesSent=0;
-     //     }
-     //    }else if(messagesSent>0){
-     //     globalCooldownToSendNewMessages=totalLengthOfDataSent*segmentSizeToTimeInSecondsDelayRatio;
-     //     totalLengthOfDataSent=0;
-     //     Log.DebugMessage("StaticUpdate:globalCooldownToSendNewMessages:"+globalCooldownToSendNewMessages);
-     //    }
-     //    sendingExecutionTime=0d;
-     //   }
     }
 }
