@@ -1,3 +1,10 @@
+#if DEVELOPMENT_BUILD
+    #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
+#endif
 using System;
 using Unity.Netcode;
 using UnityEngine;

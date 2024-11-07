@@ -31,7 +31,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
      [NonSerialized]internal FileStream editsFileStream;
      [NonSerialized]internal StreamReader editsFileStreamReader;
      [NonSerialized]internal readonly NetVoxel[][]voxels=new NetVoxel[chunkVoxelArraySplits][];
-     [NonSerialized]internal readonly bool[]changes=new bool[chunkVoxelArraySplits];
+     [NonSerialized]internal readonly bool[]changes   =new bool[chunkVoxelArraySplits];
+     [NonSerialized]internal readonly bool[]changesSet=new bool[chunkVoxelArraySplits];
         internal VoxelTerrainGetFileEditDataToNetSyncContainer(){
          for(int i=0;i<voxels.Length;++i){
           voxels[i]=new NetVoxel[VoxelsInSegment(i)];
@@ -53,6 +54,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
         }
         protected override void Execute(){
          //Log.DebugMessage("VoxelTerrainGetFileEditDataToNetSyncMultithreaded:Execute:container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA:"+container.DEBUG_FORCE_SEND_ALL_VOXEL_DATA);
+         Array.Clear(container.changes   ,0,container.changes   .Length);
+         Array.Clear(container.changesSet,0,container.changesSet.Length);
          for(int i=0;i<container.voxels.Length;++i){
           Array.Clear(container.voxels[i],0,container.voxels[i].Length);
          }

@@ -29,11 +29,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server
       );
-      internal NetworkList<bool>netChunkHasChanges=new NetworkList<bool>(
-       new bool[chunkVoxelArraySplits],
-       NetworkVariableReadPermission.Everyone,
-       NetworkVariableWritePermission.Server
-      );
+      internal NetworkList<bool>netChunkHasChanges;//  NetworkList must be instantiated on Awake otherwise it has a memory leak
      [NonSerialized]internal ServerData asServer;
      [NonSerialized]internal ClientData asClient;
         [Serializable]internal partial class ServerData{
@@ -61,6 +57,11 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal partial void NetClientSideManualUpdate();
         }
         void Awake(){
+         netChunkHasChanges=new NetworkList<bool>(
+          new bool[chunkVoxelArraySplits],
+          NetworkVariableReadPermission.Everyone,
+          NetworkVariableWritePermission.Server
+         );
          netObj=GetComponent<NetworkObject>();
          if(Core.singleton.isServer){
           asServer=new ServerData(this);
@@ -94,12 +95,15 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          base.OnNetworkDespawn();
         }
+        public override void OnDestroy(){
+         base.OnDestroy();
+        }
      [NonSerialized]internal static float globalCooldownToSendNewMessages;//  totalLengthOfDataSent * segmentSizeToTimeInSecondsDelayRatio
       [NonSerialized]internal static float segmentSizeToTimeInSecondsDelayRatio=(1.25f/16f)/(VoxelsPerChunk);//  turns segment Length into seconds to wait
        [NonSerialized]internal static int totalLengthOfDataSent;
       [NonSerialized]internal static int maxMessagesPerFrame=chunkVoxelArraySplits/8;
        [NonSerialized]internal static int messagesSent;
-      [NonSerialized]internal static double sendingMaxExecutionTime=0.05;
+      [NonSerialized]internal static double sendingMaxExecutionTime=0.05d;
        [NonSerialized]internal static double sendingExecutionTime;
         internal static void StaticUpdate(){
          if(globalCooldownToSendNewMessages>0f){

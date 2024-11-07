@@ -185,16 +185,19 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  stopwatch.Restart();
                  Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
                  foreach(int segment in clientsSegmentsMissing){
-                  bool changed=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[segment];
-                  if(changed){
-                   while(LimitExecutionTime()){
-                    yield return null;
-                    stopwatch.Restart();
-                   }
-                   while(LimitMessagesSentPerFrame()){
-                    yield return null;
-                   }
+                  bool changed   =cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes   [segment];
+                  bool changesSet=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changesSet[segment];
+                  if(changed&&!changesSet){
                    if(!netVoxelArraysActive.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
+                    while(LimitExecutionTime()){
+                     Log.DebugMessage("'while LimitExecutionTime':"+sendingExecutionTime);
+                     yield return null;
+                     stopwatch.Restart();
+                    }
+                    while(LimitMessagesSentPerFrame()){
+                     Log.DebugMessage("'while LimitMessagesSentPerFrame'");
+                     yield return null;
+                    }
                     _Dequeue:{}
                     if(!VoxelSystem.singleton.asServer.netVoxelArraysPool.TryDequeue(out netVoxelArray)){
                      if(VoxelSystem.singleton.asServer.netVoxelArraysCount>=VoxelSystem.singleton.asServer.netVoxelArraysMaxCount){
@@ -216,6 +219,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                     netVoxelArray.asServer.OnDequeue(cnkArraySync,segment);
                    }
                    netVoxelArray.asServer.OnSetChanges(sendingcnkIdx);
+                   cnkArraySync.terrainGetFileEditDataToNetSyncBG.changesSet[segment]=true;
                    foreach(var clientIdSegmentListPair in clientIdsToSendData){
                     HashSet<int>segmentList=clientIdSegmentListPair.Value;
                     if(segmentList.Contains(segment)){

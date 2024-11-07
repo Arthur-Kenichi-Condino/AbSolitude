@@ -72,35 +72,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
          }
          base.OnNetworkDespawn();
         }
-     //[NonSerialized]float timeToIgnoreClientIdsRequestingDataToPool=5f;
-     //[NonSerialized]float timerToIgnoreClientIdsRequestingDataToPool;
-     //   internal void NetServerSideManualUpdate(HashSet<ulong>clientIdsDisconnectedToRemove,out bool toPool){
-     //    toPool=false;
-     //    if(voxels.IsDirty()){
-     //     //Log.DebugMessage("'voxels.IsDirty()':'data wasn't sent yet'",this);
-     //    }else{
-     //     //Log.DebugMessage("clientIdsRequestingData.Count:"+clientIdsRequestingData.Count);
-     //     if(clientIdsDisconnectedToRemove.Count>0){
-     //      clientIdsRequestingData.ExceptWith(clientIdsDisconnectedToRemove);
-     //     }
-     //     if(clientIdsRequestingData.Count<=0){
-     //      toPool=true;
-     //     }
-     //    }
-     //    if(!toPool){
-     //     if(timerToIgnoreClientIdsRequestingDataToPool<timeToIgnoreClientIdsRequestingDataToPool){
-     //      timerToIgnoreClientIdsRequestingDataToPool+=Time.deltaTime;
-     //      if(timerToIgnoreClientIdsRequestingDataToPool>=timeToIgnoreClientIdsRequestingDataToPool){
-     //       toPool=true;
-     //      }
-     //     }
-     //    }
-     //    if(toPool){
-     //     timerToIgnoreClientIdsRequestingDataToPool=0f;
-     //     clientIdsRequestingData.Clear();
-     //     //Log.DebugMessage("'toPool'",this);
-     //    }
-     //   }
     }
     public class NetVoxelArrayContainer:IEquatable<NetVoxelArrayContainer>,INetworkSerializable{
      public int cnkIdx;

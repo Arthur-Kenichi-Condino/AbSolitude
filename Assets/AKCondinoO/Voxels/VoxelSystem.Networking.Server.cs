@@ -77,10 +77,19 @@ namespace AKCondinoO.Voxels{
             internal partial void NetServerSideNetUpdate(){
              if(VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT!=0uL){
               Log.DebugMessage("DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT:"+VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-         //     foreach(var kvp in terrainMessageHandlersAssigned){
-         //      VoxelTerrainChunkUnnamedMessageHandler cnkMsgr=kvp.Value;
-         //      cnkMsgr.OnReceivedVoxelTerrainChunkEditDataRequest(DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT);
-         //     }
+              foreach(var kvp in terrainArraySyncsAssigned){
+               VoxelTerrainChunkArraySync cnkArraySync=kvp.Value;
+               HashSet<int>segmentList;
+               if(!VoxelTerrainChunkArraySync.ServerData.clientIdsRequestingDataSegmentListPool.TryDequeue(out segmentList)){
+                segmentList=new HashSet<int>();
+               }
+               for(int i=0;i<VoxelTerrainGetFileEditDataToNetSyncContainer.chunkVoxelArraySplits;++i){
+                segmentList.Add(i);
+               }
+               cnkArraySync.asServer.OnReceivedVoxelTerrainChunkEditDataRequest(VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT,
+                segmentList
+               );
+              }
                 VoxelSystem.singleton.DEBUG_SEND_VOXEL_TERRAIN_CHUNK_EDIT_DATA_TO_CLIENT=0uL;
              }
              assigningExecutionTime=0;
