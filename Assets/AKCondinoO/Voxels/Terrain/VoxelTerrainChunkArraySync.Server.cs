@@ -185,9 +185,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                  stopwatch.Restart();
                  Log.DebugMessage("ServerSideSendVoxelTerrainChunkEditDataFileCoroutine");
                  foreach(int segment in clientsSegmentsMissing){
-                  bool changed   =cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes   [segment];
-                  bool changesSet=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changesSet[segment];
-                  if(changed&&!changesSet){
+                  bool changed=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[segment];
+                  if(changed){
                    if(!netVoxelArraysActive.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
                     while(LimitExecutionTime()){
                      Log.DebugMessage("'while LimitExecutionTime':"+sendingExecutionTime);
@@ -219,7 +218,6 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                     netVoxelArray.asServer.OnDequeue(cnkArraySync,segment);
                    }
                    netVoxelArray.asServer.OnSetChanges(sendingcnkIdx);
-                   cnkArraySync.terrainGetFileEditDataToNetSyncBG.changesSet[segment]=true;
                    foreach(var clientIdSegmentListPair in clientIdsToSendData){
                     HashSet<int>segmentList=clientIdSegmentListPair.Value;
                     if(segmentList.Contains(segment)){
