@@ -27,7 +27,7 @@ namespace AKCondinoO{
           last=current,
          };
          current=newGameMode;
-         Log.DebugMessage("GameModesEnum current:"+current);
+         //Log.DebugMessage("GameModesEnum current:"+current);
          EventHandler handler=OnGameModeChangeEvent;
          handler?.Invoke(this,args);
         }

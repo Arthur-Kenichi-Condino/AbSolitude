@@ -107,7 +107,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
      internal Vector3 size;
         protected virtual void OnTriggerEnter(Collider other){
-         Log.DebugMessage("SkillAoE:OnTriggerEnter:other:"+other);
+         Log.DebugMessage("SkillAoE:OnTriggerEnter:other:"+other,other);
         }
     }
 }

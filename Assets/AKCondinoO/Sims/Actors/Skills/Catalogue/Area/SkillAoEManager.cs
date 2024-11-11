@@ -16,18 +16,18 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal readonly Dictionary<Type,GameObject>skillAoEPrefabs=new Dictionary<Type,GameObject>();
         public void Init(){
          foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Skills/SkillAoE/",typeof(GameObject))){
-          Log.DebugMessage("loading GameObject: o.name:"+o.name);
+          //Log.DebugMessage("loading GameObject: o.name:"+o.name);
           GameObject gameObject=(GameObject)o;
           SkillAoE skillAoE=gameObject.GetComponent<SkillAoE>();
           if(skillAoE==null)continue;
-          Log.DebugMessage("GameObject is SkillAoE["+o.name);
+          //Log.DebugMessage("GameObject is SkillAoE:"+o.name);
           Type t=skillAoE.GetType();
           skillAoEPrefabs.Add(t,gameObject);
           pool.Add(t,new LinkedList<SkillAoE>());
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SkillAoEManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SkillAoEManager:OnDestroyingCoreEvent");
         }
         internal(GameObject skillAoEGameObject,SkillAoE skillAoE)SpawnSkillAoEGameObject(Type skillAoEType,Skill skill){
          GameObject skillAoEGameObject;

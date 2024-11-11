@@ -55,7 +55,7 @@ namespace AKCondinoO{
           }else{
            GarbageCollector.CollectIncremental();
           }
-          Log.DebugMessage("post GC mem:"+mem);
+          Log.DebugMessage("post GC call mem:"+mem);
           lastManualGarbageCollectionTime=time;
           nextCollectAt=mem+kCollectAfterAllocating;
          }

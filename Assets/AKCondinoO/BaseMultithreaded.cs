@@ -60,7 +60,7 @@ namespace AKCondinoO{
         }
      static readonly List<BaseMultithreaded<T>>allThreadsStarted=new List<BaseMultithreaded<T>>();
         internal static void Start(BaseMultithreaded<T>[]threads,ConstructorInfo ctorInfo,object[]ctorParams){
-         Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:threads.Length:"+threads.Length);
+         //Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:threads.Length:"+threads.Length);
          if(Stopped){
           Stopped=false;
          }
@@ -71,7 +71,7 @@ namespace AKCondinoO{
          }
         }
         internal static BaseMultithreaded<T>Start(ConstructorInfo ctorInfo,object[]ctorParams){
-         Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:start thread");
+         //Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:start thread");
          if(Stopped){
           Stopped=false;
          }

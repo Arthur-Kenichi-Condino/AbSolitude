@@ -20,7 +20,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("AStarPathfinding:OnDestroyingCoreEvent");
+         //Log.DebugMessage("AStarPathfinding:OnDestroyingCoreEvent");
          foreach(var container in aStarPathfindingContainers){
           container.aStar.IsCompleted(aStarPathfindingBGThreads[0].IsRunning,-1);
           container.aStar.getGroundRaycastCommandJobHandle.Complete();

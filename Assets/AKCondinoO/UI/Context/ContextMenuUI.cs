@@ -36,7 +36,7 @@ namespace AKCondinoO.UI.Context{
          panel.gameObject.SetActive(false);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("ContextMenuUI:OnDestroyingCoreEvent");
+         //Log.DebugMessage("ContextMenuUI:OnDestroyingCoreEvent");
         }
      internal SimObject selectedSimObject=null;
      bool selectButtonPressed;

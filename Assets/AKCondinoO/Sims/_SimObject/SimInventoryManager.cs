@@ -115,7 +115,7 @@ namespace AKCondinoO.Sims.Inventory{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
          if(Core.singleton.isServer){
          }
         }

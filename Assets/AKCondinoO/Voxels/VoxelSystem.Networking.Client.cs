@@ -14,8 +14,13 @@ namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
         internal partial class ClientData{
             internal partial void NetClientSideInit(){
+             Log.DebugMessage("NetClientSideInit");
+             Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;
             }
             internal partial void NetClientSideOnDestroyingCoreNetworkDestroy(){
+             if(Core.singleton.netManager.CustomMessagingManager!=null){
+                Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage-=OnClientReceivedUnnamedMessage;
+             }
              for(int i=0;i<terrainMessageHandlers.Count;++i){
               VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
               cnkMsgr     .asClient.NetClientSideOnDestroyingCore();
@@ -85,52 +90,5 @@ namespace AKCondinoO.Voxels{
              }
             }
         }
-     //   internal void NetClientSideInit(){
-     //    Log.DebugMessage("NetClientSideInit");
-     //    Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnClientReceivedUnnamedMessage;
-     //   }
-     //   internal void NetClientSideOnDestroyingCoreNetworkDestroy(){
-     //    if(Core.singleton.netManager.CustomMessagingManager!=null){
-     //       Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage-=OnClientReceivedUnnamedMessage;
-     //    }
-     //   }
-     //   internal void NetClientSideOnDestroyingCoreNetworkDispose(){
-     //   }
-     //   internal void NetClientSideNetUpdate(){
-     //    for(int i=0;i<Mathf.Max(terrainMessageHandlers.Count,terrainArraySyncs.Count);++i){
-     //     if(i<terrainMessageHandlers.Count){
-     //      VoxelTerrainChunkUnnamedMessageHandler cnkMsgr     =terrainMessageHandlers[i];
-     //      cnkMsgr     .NetClientSideManualUpdate();
-     //     }
-     //     if(i<terrainArraySyncs     .Count){
-     //      VoxelTerrainChunkArraySync             cnkArraySync=terrainArraySyncs     [i];
-     //      cnkArraySync.NetClientSideManualUpdate();
-     //     }
-     //    }
-     //    if(clientSendMessageTimer<=0f){
-     //       clientSendMessageTimer=clientSendMessageDelay;
-     //     clientVoxelTerrainChunkEditDataRequestsSentToRemove.Clear();
-     //     clientVoxelTerrainChunkEditDataRequestsSent=0;
-     //     foreach(var clientSideRequestToSend in clientVoxelTerrainChunkEditDataRequestsToSend){
-     //      FastBufferWriter request=clientSideRequestToSend.Value;
-     //      if(Core.singleton.isClient){
-     //       if(Core.singleton.netManager.IsConnectedClient){
-     //        Core.singleton.netManager.CustomMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId,request,NetworkDelivery.ReliableSequenced);
-     //       }
-     //      }
-     //      request.Dispose();
-     //      clientVoxelTerrainChunkEditDataRequestsSentToRemove.Add(clientSideRequestToSend.Key);
-     //      clientVoxelTerrainChunkEditDataRequestsSent++;
-     //      if(clientVoxelTerrainChunkEditDataRequestsSent>=clientMaxVoxelTerrainChunkEditDataRequestsPerFrame){
-     //       break;
-     //      }
-     //     }
-     //     foreach(int toRemove in clientVoxelTerrainChunkEditDataRequestsSentToRemove){
-     //      clientVoxelTerrainChunkEditDataRequestsToSend.Remove(toRemove);
-     //     }
-     //    }else{
-     //     clientSendMessageTimer-=Time.deltaTime;
-     //    }
-     //   }
     }
 }

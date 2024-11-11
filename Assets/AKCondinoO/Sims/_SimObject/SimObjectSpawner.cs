@@ -136,13 +136,13 @@ namespace AKCondinoO.Sims{
           }
           SimObjectManager.singleton.pool.Add(simObjectType,new LinkedList<SimObject>());
          }
-         Log.DebugMessage("load thumbnails");
+         //Log.DebugMessage("load thumbnails");
          foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(Texture))){
-          Log.DebugMessage("load Texture, o.name:"+o.name);
+          //Log.DebugMessage("load Texture, o.name:"+o.name);
           string typeName=o.name.Substring(0,o.name.IndexOf("."));
-          Log.DebugMessage("load Texture, typeName:"+typeName);
+          //Log.DebugMessage("load Texture, typeName:"+typeName);
           Type t=ReflectionUtil.GetTypeByName(typeName,typeof(SimObject));
-          Log.DebugMessage("load Texture, t:"+t);
+          //Log.DebugMessage("load Texture, t:"+t);
           if(t!=null){
            Log.DebugMessage("register Texture for SimObject of Type t:"+t);
           }
@@ -153,7 +153,7 @@ namespace AKCondinoO.Sims{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
          if(this!=null&&spawnCoroutine!=null){
           StopCoroutine(spawnCoroutine);
          }

@@ -189,12 +189,12 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                   if(changed){
                    if(!netVoxelArraysActive.TryGetValue(segment,out VoxelArraySync netVoxelArray)){
                     while(LimitExecutionTime()){
-                     Log.DebugMessage("'while LimitExecutionTime':"+sendingExecutionTime);
+                     //Log.DebugMessage("'while LimitExecutionTime':"+sendingExecutionTime);
                      yield return null;
                      stopwatch.Restart();
                     }
                     while(LimitMessagesSentPerFrame()){
-                     Log.DebugMessage("'while LimitMessagesSentPerFrame'");
+                     //Log.DebugMessage("'while LimitMessagesSentPerFrame'");
                      yield return null;
                     }
                     _Dequeue:{}

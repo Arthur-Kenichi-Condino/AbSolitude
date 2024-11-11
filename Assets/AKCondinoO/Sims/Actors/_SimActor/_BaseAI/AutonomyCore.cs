@@ -15,7 +15,7 @@ namespace AKCondinoO.Sims{
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("AutonomyCore:OnDestroyingCoreEvent");
+         //Log.DebugMessage("AutonomyCore:OnDestroyingCoreEvent");
         }
         void Update(){
         }

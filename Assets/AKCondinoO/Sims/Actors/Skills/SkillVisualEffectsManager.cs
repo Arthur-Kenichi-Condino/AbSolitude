@@ -15,18 +15,18 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      internal readonly Dictionary<Type,GameObject>skillVisualEffectPrefabs=new Dictionary<Type,GameObject>();
         public void Init(){
          foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Skills/SkillVisualEffects/",typeof(GameObject))){
-          Log.DebugMessage("loading GameObject: o.name:"+o.name);
+          //Log.DebugMessage("loading GameObject: o.name:"+o.name);
           GameObject gameObject=(GameObject)o;
           SkillVisualEffect skillVisualEffect=gameObject.GetComponent<SkillVisualEffect>();
           if(skillVisualEffect==null)continue;
-          Log.DebugMessage("GameObject is SkillVisualEffect["+o.name);
+          //Log.DebugMessage("GameObject is SkillVisualEffect["+o.name);
           Type t=skillVisualEffect.GetType();
           skillVisualEffectPrefabs.Add(t,gameObject);
           pool.Add(t,new LinkedList<SkillVisualEffect>());
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SkillVisualEffectsManager:OnDestroyingCoreEvent");
         }
         internal(GameObject skillVisualEffectGameObject,SkillVisualEffect skillVisualEffect)SpawnSkillVisualEffectGameObject(Type skillVisualEffectType,Skill skill,SkillAoE skillAoE=null){
          GameObject skillVisualEffectGameObject;

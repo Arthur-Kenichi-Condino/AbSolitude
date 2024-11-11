@@ -15,7 +15,7 @@ namespace AKCondinoO.Sims.Inventory{
         internal SimInventoryItemsInContainerSettings(){
         }
         internal void Set(){
-         Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
+         //Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemInContainerData inContainerData=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemInContainerData>();
           if(inContainerData!=null){
@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Inventory{
              }
             }
            }
-           Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
+           //Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
            allSettings.Add(simObjectType,
             new InContainerSettings(
              inContainerData
@@ -63,7 +63,7 @@ namespace AKCondinoO.Sims.Inventory{
               SimObjectAsInventoryItemInContainerData.InContainerData data=inContainerData.dataArrays[i];
               Type simInventoryType=ReflectionUtil.GetTypeByName(data.simInventoryType,typeof(SimInventory));
               if(simInventoryType!=null){
-               Log.DebugMessage("simInventoryType:"+simInventoryType);
+               //Log.DebugMessage("simInventoryType:"+simInventoryType);
                int spaces=data.simInventorySpacesUsage;
                spacesUsage.Add(simInventoryType,spaces);
                var transformSettingsDictionary=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer),

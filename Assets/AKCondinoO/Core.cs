@@ -61,11 +61,11 @@ namespace AKCondinoO{
          simObjectToSpriteToolLoadSceneParameters.localPhysicsMode=LocalPhysicsMode.Physics3D;
          SceneManager.LoadScene("SimObjectToSpriteTool",simObjectToSpriteToolLoadSceneParameters);
          int procCt=Environment.ProcessorCount;
-         Log.DebugMessage("Environment.ProcessorCount:"+procCt);
+         //Log.DebugMessage("Environment.ProcessorCount:"+procCt);
          ThreadPool.GetMinThreads(out int minWorkerThreads,out int minIOCThreads);
-         Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
+         //Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
          ThreadPool.GetMaxThreads(out int maxWorkerThreads,out int maxIOCThreads);
-         Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
+         //Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
          Thread.CurrentThread.Priority=System.Threading.ThreadPriority.Normal;
          #if !UNITY_EDITOR
           GarbageCollector.GCMode=GarbageCollector.Mode.Manual;
@@ -80,7 +80,7 @@ namespace AKCondinoO{
          AStarPathfindingHelper.SetAStarPathfindingSettings();
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
-         Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
+         //Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
          #if UNITY_STANDALONE_WIN
           if(Screen.currentResolution.refreshRateRatio.value>=144){
            QualitySettings.vSyncCount=2;
@@ -140,11 +140,11 @@ namespace AKCondinoO{
           {o++,ContextMenuUI            .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
-          Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
+          //Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
           singletonOrdered.Value.Init();
          }
          foreach(var singletonOrderedInReverse in singletonInitReversedOrder=singletonInitOrder.Reverse()){
-          Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+          //Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
          if(Gameplayer.main!=null){
@@ -210,7 +210,7 @@ namespace AKCondinoO{
          currentRenderingTargetCameraChanged=false;
          if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
           currentRenderingTargetCameraChanged=true;
-          Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
+          //Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
          }
          if(currentRenderingTargetCamera==null){
           if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){

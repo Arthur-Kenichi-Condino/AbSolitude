@@ -76,7 +76,7 @@ namespace AKCondinoO.Sims{
         }
      readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
          #region PersistentDataLoadingMultithreaded
           persistentDataLoadingBG.IsCompleted(persistentDataLoadingBGThread.IsRunning,-1);
            #region SimInventoryManager

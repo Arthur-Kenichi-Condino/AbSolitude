@@ -21,7 +21,7 @@ namespace AKCondinoO.Voxels.Water.Editing{
          Directory.CreateDirectory(waterEditingPath);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("VoxelWaterEditing:OnDestroyingCoreEvent");
+         //Log.DebugMessage("VoxelWaterEditing:OnDestroyingCoreEvent");
          waterEditingBG.IsCompleted(VoxelSystem.singleton.waterEditingBGThread.IsRunning,-1);
         }
         internal struct WaterEditRequest{

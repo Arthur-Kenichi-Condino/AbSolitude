@@ -18,14 +18,14 @@ namespace AKCondinoO.Sims.Actors.Skills{
           GameObject gameObject=(GameObject)o;
           Skill skill=gameObject.GetComponent<Skill>();
           if(skill==null)continue;
-          Log.DebugMessage("skill prefab:"+skill.name);
+          //Log.DebugMessage("skill prefab:"+skill.name);
           Type t=skill.GetType();
           skillPrefabs.Add(t,gameObject);
           pool.Add(t,new LinkedList<Skill>());
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
         }
         internal(GameObject skillGameObject,Skill skill)SpawnSkillGameObject(Type skillType,int level,BaseAI actor){
          GameObject skillGameObject;

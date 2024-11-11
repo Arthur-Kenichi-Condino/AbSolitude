@@ -18,7 +18,7 @@ namespace AKCondinoO.UI{
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("Placeholder:OnDestroyingCoreEvent");
+         //Log.DebugMessage("Placeholder:OnDestroyingCoreEvent");
         }
         internal PlaceholderObject GetPlaceholderFor(Type t){
          SimObject simObjectPrefab=SimObjectSpawner.singleton.simObjectPrefabs[t].GetComponent<SimObject>();

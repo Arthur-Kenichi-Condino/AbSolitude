@@ -37,22 +37,22 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
          foreach(var typeNameSimObjectPair in tableSimObjectPrefabs){
           string typeName=typeNameSimObjectPair.Key;
           SimObject simObject=typeNameSimObjectPair.Value;
-          Log.DebugMessage("OnCreateTable:"+typeName+"..."+simObject);
+          //Log.DebugMessage("OnCreateTable:"+typeName+"..."+simObject);
           Vector3 pos=new Vector3(
            simObjectButtonPrefabRectTransform.position.x+x*(simObjectButtonPrefabRectTransform.sizeDelta.x+10),
            simObjectButtonPrefabRectTransform.position.y-y*(simObjectButtonPrefabRectTransform.sizeDelta.y+10),
            0
           );
           GameObject simObjectButton=Instantiate(FixedUI.singleton.buildBuyEditModeUIContent.tableButtonPrefab,tableScrollViewContent.transform);
-          Log.DebugMessage("simObjectButton pos:"+pos);
+          //Log.DebugMessage("simObjectButton pos:"+pos);
           simObjectButton.transform.localPosition=pos;
           Button simObjectButtonComponent=simObjectButton.GetComponent<Button>();
-          Log.DebugMessage("simObjectButtonComponent:"+simObjectButtonComponent,simObjectButtonComponent);
+          //Log.DebugMessage("simObjectButtonComponent:"+simObjectButtonComponent,simObjectButtonComponent);
           if(tableFloors!=null){
            simObjectButtonComponent.onClick.RemoveAllListeners();
            UnityAction call=delegate{tableFloors.OnPlaceSimFloorButtonPress(typeName);};
            simObjectButtonComponent.onClick.AddListener(call);
-           Log.DebugMessage("added listener:"+call,this);
+           //Log.DebugMessage("added listener:"+call,this);
           }
           x++;
           if(x>1){
