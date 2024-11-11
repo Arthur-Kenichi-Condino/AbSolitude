@@ -57,7 +57,11 @@ namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor
                 (element as Label).text = m_MultiColumnTreeView.GetItemDataForIndex<IRowData>(index).Bytes.Sent.ToString();
             m_MultiColumnTreeView.columns["BytesReceivedColumn"].bindCell = (VisualElement element, int index) =>
                 (element as Label).text = m_MultiColumnTreeView.GetItemDataForIndex<IRowData>(index).Bytes.Received.ToString();
+#if UNITY_2023_2_OR_NEWER
+            m_MultiColumnTreeView.sortingMode = ColumnSortingMode.Default;
+#else
             m_MultiColumnTreeView.sortingEnabled = true;
+#endif
             m_MultiColumnTreeView.CollapseAll();
             m_MultiColumnTreeView.columnSortingChanged += OnColumnSortingChanged;
             m_MultiColumnTreeView.itemsChosen += OnItemsChosen;

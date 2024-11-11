@@ -88,7 +88,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
             BandwidthConfigurationView.SetInclude(metric == NetVisMetric.Bandwidth);
             OwnershipConfigurationView.SetInclude(metric == NetVisMetric.Ownership);
         }
-
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<PanelOverlayView, UxmlTraits> { }
+#endif
     }
 }

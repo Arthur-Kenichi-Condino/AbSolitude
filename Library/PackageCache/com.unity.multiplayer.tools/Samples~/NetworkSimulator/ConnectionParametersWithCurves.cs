@@ -1,20 +1,24 @@
 ﻿using System;
 using Unity.Multiplayer.Tools.NetworkSimulator.Runtime;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
 {
     [Serializable]
     public class ConnectionParametersWithCurves : NetworkScenarioBehaviour
     {
+        [FormerlySerializedAs("m_LoopDurationMilliseconds")]
         [SerializeField]
-        float m_LoopDurationMilliseconds = 10f;
+        float m_LoopDurationMs = 10f;
 
+        [FormerlySerializedAs("m_PacketDelayMilliseconds")]
         [SerializeField]
-        AnimationCurve m_PacketDelayMilliseconds = new(default, new(.5f, 100f), new(1f, 0f));
+        AnimationCurve m_PacketDelayMs = new(default, new(.5f, 100f), new(1f, 0f));
 
+        [FormerlySerializedAs("m_PacketJitterMilliseconds")]
         [SerializeField]
-        AnimationCurve m_PacketJitterMilliseconds = new(default, new(.5f, 50f), new(1f, 0f));
+        AnimationCurve m_PacketJitterMs = new(default, new(.5f, 50f), new(1f, 0f));
 
         [SerializeField]
         AnimationCurve m_PacketLossInterval = AnimationCurve.Constant(0f, 1f, 0f);
@@ -24,7 +28,7 @@ namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
 
         INetworkEventsApi m_NetworkEventsApi;
         INetworkSimulatorPreset m_CustomPreset;
-        INetworkSimulatorPreset m_DefaultPreset;
+        INetworkSimulatorPreset m_PreviousPreset;
         float m_ElapsedTime;
 
         public override void Start(INetworkEventsApi networkEventsApi)
@@ -33,7 +37,7 @@ namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
             m_NetworkEventsApi = networkEventsApi;
 
             // Store the current preset so then we can revert once the scenario finishes.
-            m_DefaultPreset = m_NetworkEventsApi.CurrentPreset;
+            m_PreviousPreset = m_NetworkEventsApi.CurrentPreset;
 
             // Create a custom preset so then we can change the parameters.
             m_CustomPreset = NetworkSimulatorPreset.Create(nameof(ConnectionParametersWithCurves));
@@ -47,9 +51,9 @@ namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
             m_ElapsedTime += deltaTime;
 
             // Once the elapsed time passes the duration, resets it keeping track of any extra milliseconds.
-            if (m_ElapsedTime >= m_LoopDurationMilliseconds)
+            if (m_ElapsedTime >= m_LoopDurationMs)
             {
-                m_ElapsedTime -= m_LoopDurationMilliseconds;
+                m_ElapsedTime -= m_LoopDurationMs;
             }
 
             UpdateParameters();
@@ -58,11 +62,11 @@ namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
         void UpdateParameters()
         {
             // Calculates the progress of the current loop based on the time elapsed.
-            var progress = m_ElapsedTime / m_LoopDurationMilliseconds;
+            var progress = m_ElapsedTime / m_LoopDurationMs;
 
             // Update all curves based on the loop progress.
-            m_CustomPreset.PacketDelayMs = (int)m_PacketDelayMilliseconds.Evaluate(progress);
-            m_CustomPreset.PacketJitterMs = (int)m_PacketJitterMilliseconds.Evaluate(progress);
+            m_CustomPreset.PacketDelayMs = (int)m_PacketDelayMs.Evaluate(progress);
+            m_CustomPreset.PacketJitterMs = (int)m_PacketJitterMs.Evaluate(progress);
             m_CustomPreset.PacketLossInterval = (int)m_PacketLossInterval.Evaluate(progress);
             m_CustomPreset.PacketLossPercent = (int)m_PacketLossPercent.Evaluate(progress);
 
@@ -72,8 +76,8 @@ namespace Unity.Multiplayer.Tools.Samples.NetworkScenario
 
         public override void Dispose()
         {
-            // After finishing the current scenario, reset preset to the previous value if there were one.
-            m_NetworkEventsApi.ChangeConnectionPreset(m_DefaultPreset);
+            // If the scenario was started at least once, reset the preset to the previous value
+            m_NetworkEventsApi?.ChangeConnectionPreset(m_PreviousPreset);
         }
     }
 }

@@ -30,9 +30,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
         {
             Selected?.Invoke(this);
         }
-
-        public new class UxmlFactory : UxmlFactory<MeshShadingFillGradientField, UxmlTraits>
-        {
-        }
+#if !UNITY_2023_3_OR_NEWER
+        public new class UxmlFactory : UxmlFactory<MeshShadingFillGradientField, UxmlTraits>{}
+#endif
     }
 }

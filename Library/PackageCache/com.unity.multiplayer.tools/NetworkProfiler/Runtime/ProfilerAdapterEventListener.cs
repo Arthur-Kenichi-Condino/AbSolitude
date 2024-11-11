@@ -3,7 +3,9 @@ using Unity.Multiplayer.Tools.Adapters;
 using Unity.Multiplayer.Tools.NetStats;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.Scripting;
 
+[assembly: AlwaysLinkAssembly]
 namespace Unity.Multiplayer.Tools.NetworkProfiler.Runtime
 {
     static class ProfilerAdapterEventListener

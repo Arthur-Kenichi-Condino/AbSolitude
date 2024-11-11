@@ -9,8 +9,11 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
 {
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
     [LoadUxmlView(NetVisEditorPaths.k_UxmlRoot)]
-    class BandwidthConfigurationView : InjectedVisualElement<BandwidthConfigurationView>
+    partial class BandwidthConfigurationView : InjectedVisualElement<BandwidthConfigurationView>
     {
         static readonly BandwidthTypes[] k_BandwidthTypeChoices =
         {
@@ -123,7 +126,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
         }
         
         void ShowNoDataWarning(bool show) => BandwidthWarning.IncludeInLayout(show); 
-
+#if !UNITY_2023_2_OR_NEWER
         public new class UxmlFactory : UxmlFactory<BandwidthConfigurationView, UxmlTraits> { }
+#endif
     }
 }

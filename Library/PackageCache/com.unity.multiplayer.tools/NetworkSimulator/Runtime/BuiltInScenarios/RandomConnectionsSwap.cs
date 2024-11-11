@@ -16,7 +16,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime.BuiltInScenarios
     {
         /// <summary>
         /// Specifies a <see cref="PresetConfiguration.ConnectionPreset"/> that can be selected.
-        /// <seealso cref="PresetConfiguration"/>
+        /// <see cref="PresetConfiguration"/>
         /// </summary>
         [Serializable]
         public sealed class Configuration : PresetConfiguration
@@ -37,7 +37,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime.BuiltInScenarios
 
         /// <summary>
         /// Defines the available <see cref="PresetConfiguration.ConnectionPreset"/> list.
-        /// <seealso cref="Configuration"/>
+        /// <see cref="Configuration"/>
         /// </summary>
         public ICollection<Configuration> Configurations => m_Configurations;
 

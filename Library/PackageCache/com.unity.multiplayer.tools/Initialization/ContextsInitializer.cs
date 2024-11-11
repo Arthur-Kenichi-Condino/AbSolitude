@@ -7,7 +7,9 @@
 
 using Unity.Multiplayer.Tools.Common;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[assembly: AlwaysLinkAssembly]
 namespace Unity.Multiplayer.Tools.Context
 {
     /// <summary>

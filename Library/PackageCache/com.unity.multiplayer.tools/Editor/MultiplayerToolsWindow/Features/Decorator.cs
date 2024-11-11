@@ -14,7 +14,7 @@ namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
 #if UNITY_NETCODE_GAMEOBJECTS_1_1_ABOVE
         public bool IsAvailable => true;
         
-        public string AvailabilityMessage => "Available (experimental)";
+        public string AvailabilityMessage => "Available";
 
         public string ButtonText => HierarchyWindowDecorator.Enabled ? "Disable" : "Enable";
         

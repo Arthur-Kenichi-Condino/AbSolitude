@@ -155,7 +155,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
         /// Only called when the scenario is not paused, so there is no need to manually check it in
         /// the implementation.
         /// </summary>
-        /// /// <param name="deltaTime">The time elapsed since last frame.</param>
+        /// <param name="deltaTime">The time elapsed since last frame.</param>
         protected abstract void Update(float deltaTime);
     }
 

@@ -35,7 +35,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
         {
             PopupWindow.Show(worldBound, new NetVisPopupWindowContent<BandwidthConfigurationView>(320, 300));
         }
-
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<BandwidthToolbarDropdownToggle, UxmlTraits> { }
+#endif
     }
 }

@@ -4,11 +4,20 @@ using UnityEngine;
 
 namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI.PropertyDrawers
 {
+    /// <summary>
+    /// A MinMax PropertyDrawer
+    /// </summary>
     [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
     public class MinMaxDrawer : PropertyDrawer
     {
         const float k_HorizontalSpace = 5f;
 
+        /// <summary>
+        /// OnGUI override for the PropertyDrawer
+        /// </summary>
+        /// <param name="position">The Position</param>
+        /// <param name="property">The SerializedProperty</param>
+        /// <param name="label">The Label</param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var xProperty = property.FindPropertyRelative(nameof(Vector2.x));

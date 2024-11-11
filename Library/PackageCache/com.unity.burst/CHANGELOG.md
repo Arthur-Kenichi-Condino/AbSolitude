@@ -1,6 +1,25 @@
 # Changelog
 
-## [1.8.17] - 2024-07-01
+## [1.8.18] - 2024-09-04
+
+
+### Added
+- Added the `UNITY_BURST_DISABLE_COMPILATION` environment variable as an alternative to the `--burst-disable-compilation` command-line argument
+
+### Removed
+
+### Changed
+
+### Fixed
+- Static fields used in static constructors were sometimes incorrectly set to read only, despite being written.
+- Fixed a case of the editor getting stuck loading during a domain reload if Burst was set to synchronous compilation
+- Fixed hashing bug that could occur when method signatures differed only by generic parameter count
+- Branches within if (cpufeaturesupported) blocks could cause the transform pass to miss identify which blocks are supporting which features, leading to errors at compile time about intrinsics not being in matching blocks.
+- Fixed 'cannot open input file ucrt.lib' error when building for Universal Windows Platform and targeting SDK 10.0.26100.0
+
+### Known Issues
+
+## [1.8.17] - 2024-07-22
 
 
 ### Added
@@ -10,6 +29,7 @@
 ### Changed
 - Improved performance of Burst-compiled code in the Windows x64 Editor by only emitting context-saving code when the code being compiled contains a `throw`
 - Improved error message for pointer-like types in non-`readonly` `static` fields
+- ARM 32-bit is no longer built for Universal Windows Platform when targeting SDK 10.0.26100.0 or newer
 
 ### Fixed
 - Fixed another compiler crash caused by faulty alias analysis
@@ -19,6 +39,7 @@
 - Fixed that `Mathf.Approximately` would return the wrong result approximately all of the time
 - Fixed an issue with default interface methods which would result in compiler errors due to IL corruption.
 - Creating a project with a space in the path would cause burst to fail on windows arm64.
+- Fixed 'Failed to find Windows SDK' error when targeting the latest installed Windows SDK version for Universal Windows Platform builds
 
 ### Known Issues
 

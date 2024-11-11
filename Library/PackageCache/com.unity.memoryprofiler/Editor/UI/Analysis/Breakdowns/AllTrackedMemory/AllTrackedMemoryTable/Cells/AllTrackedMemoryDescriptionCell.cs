@@ -3,7 +3,10 @@ using UnityEngine.UIElements;
 
 namespace Unity.MemoryProfiler.Editor.UI
 {
-    class AllTrackedMemoryDescriptionCell : VisualElement
+#if UNITY_6000_0_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class AllTrackedMemoryDescriptionCell : VisualElement
     {
         const string k_UxmlAssetGuid = "d3870303fc2b9fe44955a75502a2acbe";
         const string k_UxmlIdentifier_Label = "all-tracked-memory-description-cell__label";
@@ -43,7 +46,9 @@ namespace Unity.MemoryProfiler.Editor.UI
             m_SecondaryLabel.text = _text;
         }
 
+#if !UNITY_6000_0_OR_NEWER
         public new class UxmlFactory : UxmlFactory<AllTrackedMemoryDescriptionCell> {}
+#endif
     }
 }
 #endif

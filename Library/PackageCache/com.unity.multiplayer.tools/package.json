@@ -1,17 +1,17 @@
 {
   "name": "com.unity.multiplayer.tools",
   "displayName": "Multiplayer Tools",
-  "version": "2.1.0",
-  "unity": "2023.3",
+  "version": "2.2.1",
+  "unity": "6000.0",
   "description": "Adds a suite of tools that improve workflows for multiplayer development",
   "dependencies": {
-    "com.unity.profiling.core": "1.0.0-pre.1",
-    "com.unity.nuget.newtonsoft-json": "2.0.0",
-    "com.unity.nuget.mono-cecil": "1.10.1",
-    "com.unity.collections": "1.1.0",
+    "com.unity.profiling.core": "1.0.2",
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.unity.nuget.mono-cecil": "1.11.4",
+    "com.unity.collections": "2.4.0",
     "com.unity.modules.uielements": "1.0.0",
-    "com.unity.burst": "1.6.6",
-    "com.unity.mathematics": "1.2.6"
+    "com.unity.burst": "1.8.17",
+    "com.unity.mathematics": "1.3.1"
   },
   "keywords": [
     "Multiplayer",
@@ -19,7 +19,6 @@
     "GameObjects",
     "Tools"
   ],
-  "type": "tool",
   "samples": [
     {
       "displayName": "Network Scenario Samples",
@@ -28,18 +27,19 @@
     }
   ],
   "relatedPackages": {
-    "com.unity.multiplayer.tools.tests": "2.1.0"
+    "com.unity.multiplayer.tools.tests": "2.2.1"
   },
   "_upm": {
-    "changelog": "### *General*\n- Increased minimum version to 2023.3+\n\n### *Network Simulator*\n- Fixed an issue with execution order dependend initialization of NetworkAdapters.\n\n### *Network Scene Visualization*\n- Improved usability when pausing the editor."
+    "changelog": "### *Network Scene Visualization*\n- Fixed a bug which showed the wrong number of clients in the SceneView overlay\n- Fixed a bug which caused null reference exception when entering Play Mode without Domain Reload\n- Fixed a bug which showed wrong ownership visuals with Distributed Authority when reconnecting\n\n### *Runtime Network Stats Monitor*\n- Fixed a bug where RNSM showed no metrics in builds with code stripping enabled\n- Fixed a bug where RNSM stopped working with NGO 2.0.0 or above"
   },
   "upmCi": {
-    "footprint": "8641f7caa9ed1d413a8e97b33ea2da9f3cad4fdb"
+    "footprint": "fd028d23bcee4990c43f09e565ce0afbf6d45717"
   },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.multiplayer.tools@2.2/manual/index.html",
   "repository": {
     "url": "https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git",
     "type": "git",
-    "revision": "d39910e6f89deb4d735562fa620e4d4d298c3976"
+    "revision": "a769d0b44c5f5e6308dc848d2a4b49d3e30b7a9e"
   },
-  "_fingerprint": "0dcebea94ca9b890dab09a768fa02e3b9f28c908"
+  "_fingerprint": "212d83b66f830476aafd30cff2797a3a0ae2ea64"
 }

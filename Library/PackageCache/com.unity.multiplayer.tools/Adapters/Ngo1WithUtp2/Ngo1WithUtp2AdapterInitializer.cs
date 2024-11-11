@@ -3,7 +3,9 @@ using Unity.Multiplayer.Tools.Adapters.Utp2;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[assembly: AlwaysLinkAssembly]
 namespace Unity.Multiplayer.Tools.Adapters.Ngo1WithUtp2
 {
     static class Ngo1WithUtp2AdapterInitializer

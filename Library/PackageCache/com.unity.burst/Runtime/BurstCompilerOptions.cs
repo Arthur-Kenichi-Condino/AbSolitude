@@ -739,6 +739,12 @@ namespace Unity.Burst
                 IsSecondaryUnityProcess = true;
             }
 
+            var disableCompilation = Environment.GetEnvironmentVariable("UNITY_BURST_DISABLE_COMPILATION");
+            if (!string.IsNullOrEmpty(disableCompilation) && disableCompilation != "0")
+            {
+                ForceDisableBurstCompilation = true;
+            }
+
 #if UNITY_EDITOR && ENABLE_CORECLR
             ForceDisableBurstCompilation = true;
 #endif

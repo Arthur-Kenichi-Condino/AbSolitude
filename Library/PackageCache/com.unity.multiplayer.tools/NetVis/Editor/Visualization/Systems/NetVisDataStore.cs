@@ -13,6 +13,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
     /// </summary>
     class NetVisDataStore : IGetConnectedClients
     {
+        internal bool IsConnectedServerOrClient { get; private set; }
+        
         const float k_InvalidBandwidth = -1f;
 
         NetVisConfiguration m_Configuration;
@@ -23,6 +25,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
         // Adapters:
         IGetBandwidth m_GetBandwidth;
         IGetConnectedClients m_GetConnectedClients;
+        IGetConnectionStatus m_GetConnectionStatus;
         IGetObjectIds m_GetObjectIds;
         IGetGameObject m_GetGameObject;
         IGetOwnership m_GetOwnership;
@@ -104,6 +107,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
         {
             m_GetBandwidth ??= adapter.GetComponent<IGetBandwidth>();
             m_GetConnectedClients ??= adapter.GetComponent<IGetConnectedClients>();
+            m_GetConnectionStatus ??= adapter.GetComponent<IGetConnectionStatus>();
             m_GetObjectIds ??= adapter.GetComponent<IGetObjectIds>();
             m_GetGameObject ??= adapter.GetComponent<IGetGameObject>();
             m_GetOwnership ??= adapter.GetComponent<IGetOwnership>();
@@ -117,7 +121,28 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
                 m_GetConnectedClients.ClientDisconnectionEvent += OnClientDisconnected;
             }
 
+            if (m_GetConnectionStatus is not null)
+            {
+                m_GetConnectionStatus.ServerOrClientStarted -= OnServerOrClientStarted;
+                m_GetConnectionStatus.ServerOrClientStarted += OnServerOrClientStarted;
+                
+                m_GetConnectionStatus.ServerOrClientStopped -= OnServerOrClientStopped;
+                m_GetConnectionStatus.ServerOrClientStopped += OnServerOrClientStopped;
+
+                OnServerOrClientStarted();
+            }
+
             UpdateBandwidthBackend();
+        }
+
+        void OnServerOrClientStopped()
+        {
+            IsConnectedServerOrClient = false;
+        }
+
+        void OnServerOrClientStarted()
+        {
+            IsConnectedServerOrClient = true;
         }
 
         void UnsubscribeFromAdapter(INetworkAdapter adapter)

@@ -62,7 +62,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
             m_DataStore.OnPauseStateChanged(pauseState);
         }
 
-        public void DuringSceneGui(SceneView sceneView)
+        void DuringSceneGui(SceneView sceneView)
         {
             m_MeshShading?.UpdateObjectColors();
             m_TextOverlay?.DuringSceneGui(sceneView);

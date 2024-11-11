@@ -4,11 +4,14 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI
 {
-    class NetworkScenarioSettings : VisualElement
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class NetworkScenarioSettings : VisualElement
     {
-        // Expose class to UXML:
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<NetworkScenarioSettings, UxmlTraits> { }
-
+#endif
         readonly IMGUIContainer m_ScenarioSettings;
 
         Runtime.NetworkSimulator m_NetworkSimulator;

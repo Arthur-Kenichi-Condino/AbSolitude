@@ -29,7 +29,10 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
                 Configuration.NotifySettingsChanged();
             });
         }
+#if !UNITY_2023_3_OR_NEWER
+        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
         public new class UxmlFactory : UxmlFactory<CommonSettingsView, UxmlTraits> { }
+#endif
     }
 }

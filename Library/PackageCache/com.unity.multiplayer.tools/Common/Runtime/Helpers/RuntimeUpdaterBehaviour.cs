@@ -5,13 +5,34 @@ using Object = UnityEngine.Object;
 
 namespace Unity.Multiplayer.Tools.Common
 {
+    /// <summary>
+    /// Interface specifying callbacks for all relevant Unity events
+    /// </summary>
     public interface IRuntimeUpdater
     {
+        /// <summary>
+        /// Callback for OnStart
+        /// </summary>
         event Action OnStart;
+        /// <summary>
+        /// Callback for OnAwake
+        /// </summary>
         event Action OnAwake;
+        /// <summary>
+        /// Callback for OnUpdate
+        /// </summary>
         event Action OnUpdate;
+        /// <summary>
+        /// Callback for OnFixedUpdate
+        /// </summary>
         event Action OnFixedUpdate;
+        /// <summary>
+        /// Callback for OnLateUpdate
+        /// </summary>
         event Action OnLateUpdate;
+        /// <summary>
+        /// Callback for OnDestroyed
+        /// </summary>
         event Action OnDestroyed;
     }
 

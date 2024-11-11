@@ -71,7 +71,9 @@ namespace Unity.Multiplayer.Tools.Adapters.MockNgo
         [field:SerializeField]
         public int RotationUpdateByteCount { get; set; } = Constants.k_DefaultRotationChangeByteCount;
 
+        /// <summary>
         /// The number of bytes of network traffic incurred when an object's scale changes.
+        /// </summary>
         [field:Min(0)]
         [field:SerializeField]
         public int ScaleUpdateByteCount { get; set; } = Constants.k_DefaultScaleChangeByteCount;

@@ -423,7 +423,7 @@ namespace UnityEngine.Rendering
                     rt.width,
                     rt.height,
                     rt.volumeDepth,
-                    rt.graphicsFormat,
+                    (rt.depthStencilFormat!=GraphicsFormat.None)? rt.depthStencilFormat : rt.graphicsFormat,
                     rt.dimension,
                     rth.m_Name,
                     mips: rt.useMipMap,
@@ -505,7 +505,10 @@ namespace UnityEngine.Rendering
                 renderTexture.height = Mathf.Max(scaledSize.y, 1);
 
                 // Regenerate the name
-                renderTexture.name = CoreUtils.GetRenderTargetAutoName(renderTexture.width, renderTexture.height, renderTexture.volumeDepth, renderTexture.graphicsFormat, renderTexture.dimension, rth.m_Name, mips: renderTexture.useMipMap, enableMSAA: rth.m_EnableMSAA, msaaSamples: (MSAASamples)renderTexture.antiAliasing, dynamicRes: renderTexture.useDynamicScale, dynamicResExplicit: renderTexture.useDynamicScaleExplicit);
+                renderTexture.name = CoreUtils.GetRenderTargetAutoName(renderTexture.width, renderTexture.height, renderTexture.volumeDepth
+                    , (renderTexture.depthStencilFormat != GraphicsFormat.None) ? renderTexture.depthStencilFormat : renderTexture.graphicsFormat
+                    , renderTexture.dimension, rth.m_Name, mips: renderTexture.useMipMap, enableMSAA: rth.m_EnableMSAA
+                    , msaaSamples: (MSAASamples)renderTexture.antiAliasing, dynamicRes: renderTexture.useDynamicScale, dynamicResExplicit: renderTexture.useDynamicScaleExplicit);
 
                 // Create the render texture
                 renderTexture.Create();
@@ -561,7 +564,60 @@ namespace UnityEngine.Rendering
             string name = ""
         )
         {
-            return Alloc(width, height, wrapMode, wrapMode, wrapMode, slices, depthBufferBits, colorFormat, filterMode, dimension, enableRandomWrite, useMipMap,
+            var format = (depthBufferBits != DepthBits.None) ? GraphicsFormatUtility.GetDepthStencilFormat((int)depthBufferBits) : colorFormat;
+
+            return Alloc(width, height, format, wrapMode, wrapMode, wrapMode, slices, filterMode, dimension, enableRandomWrite, useMipMap,
+                autoGenerateMips, isShadowMap, anisoLevel, mipMapBias, msaaSamples, bindTextureMS, useDynamicScale, useDynamicScaleExplicit, memoryless, vrUsage, name);
+        }
+
+        /// <summary>
+        /// Allocate a new fixed sized RTHandle.
+        /// </summary>
+        /// <param name="width">With of the RTHandle.</param>
+        /// <param name="height">Heigh of the RTHandle.</param>
+        /// <param name="format">GraphicsFormat of a color or depth stencil buffer.</param>
+        /// <param name="slices">Number of slices of the RTHandle.</param>
+        /// <param name="filterMode">Filtering mode of the RTHandle.</param>
+        /// <param name="wrapMode">Addressing mode of the RTHandle.</param>
+        /// <param name="dimension">Texture dimension of the RTHandle.</param>
+        /// <param name="enableRandomWrite">Set to true to enable UAV random read writes on the texture.</param>
+        /// <param name="useMipMap">Set to true if the texture should have mipmaps.</param>
+        /// <param name="autoGenerateMips">Set to true to automatically generate mipmaps.</param>
+        /// <param name="isShadowMap">Set to true if the depth buffer should be used as a shadow map.</param>
+        /// <param name="anisoLevel">Anisotropic filtering level.</param>
+        /// <param name="mipMapBias">Bias applied to mipmaps during filtering.</param>
+        /// <param name="msaaSamples">Number of MSAA samples for the RTHandle.</param>
+        /// <param name="bindTextureMS">Set to true if the texture needs to be bound as a multisampled texture in the shader.</param>
+        /// <param name="useDynamicScale">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="useDynamicScaleExplicit">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="memoryless">Use this property to set the render texture memoryless modes.</param>
+        /// <param name="vrUsage">Special treatment of the VR eye texture used in stereoscopic rendering.</param>
+        /// <param name="name">Name of the RTHandle.</param>
+        /// <returns>A new RTHandle.</returns>
+        public RTHandle Alloc(
+            int width,
+            int height,
+            GraphicsFormat format,
+            int slices = 1,            
+            FilterMode filterMode = FilterMode.Point,
+            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
+            TextureDimension dimension = TextureDimension.Tex2D,
+            bool enableRandomWrite = false,
+            bool useMipMap = false,
+            bool autoGenerateMips = true,
+            bool isShadowMap = false,
+            int anisoLevel = 1,
+            float mipMapBias = 0f,
+            MSAASamples msaaSamples = MSAASamples.None,
+            bool bindTextureMS = false,
+            bool useDynamicScale = false,
+            bool useDynamicScaleExplicit = false,
+            RenderTextureMemoryless memoryless = RenderTextureMemoryless.None,
+            VRTextureUsage vrUsage = VRTextureUsage.None,
+            string name = ""
+        )
+        {
+            return Alloc(width, height, format, wrapMode, wrapMode, wrapMode, slices, filterMode, dimension, enableRandomWrite, useMipMap,
                 autoGenerateMips, isShadowMap, anisoLevel, mipMapBias, msaaSamples, bindTextureMS, useDynamicScale, useDynamicScaleExplicit, memoryless, vrUsage, name);
         }
 
@@ -618,83 +674,212 @@ namespace UnityEngine.Rendering
             string name = ""
         )
         {
-            bool enableMSAA = msaaSamples != MSAASamples.None;
-            if (!enableMSAA && bindTextureMS == true)
-            {
-                Debug.LogWarning("RTHandle allocated without MSAA but with bindMS set to true, forcing bindMS to false.");
-                bindTextureMS = false;
-            }
+            var format = (depthBufferBits != DepthBits.None) ? GraphicsFormatUtility.GetDepthStencilFormat((int)depthBufferBits) : colorFormat;
 
-            // We need to handle this in an explicit way since GraphicsFormat does not expose depth formats. TODO: Get rid of this branch once GraphicsFormat'll expose depth related formats
-            RenderTexture rt;
-            if (isShadowMap || depthBufferBits != DepthBits.None)
-            {
-                RenderTextureFormat format = isShadowMap ? RenderTextureFormat.Shadowmap : RenderTextureFormat.Depth;
-                GraphicsFormat stencilFormat = !isShadowMap && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UInt, GraphicsFormatUsage.StencilSampling) ? GraphicsFormat.R8_UInt : GraphicsFormat.None;
+            return Alloc(
+                 width,
+                 height,
+                 format,
+                 wrapModeU,
+                 wrapModeV,
+                 wrapModeW,
+                 slices,            
+                 filterMode,
+                 dimension,
+                 enableRandomWrite,
+                 useMipMap,
+                 autoGenerateMips ,
+                 isShadowMap,
+                 anisoLevel,
+                 mipMapBias,
+                 msaaSamples,
+                 bindTextureMS,
+                 useDynamicScale,
+                 useDynamicScaleExplicit,
+                 memoryless,
+                 vrUsage,
+                 name
+             );
+        }
 
-                rt = new RenderTexture(width, height, (int)depthBufferBits, format, RenderTextureReadWrite.Linear)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    volumeDepth = slices,
-                    filterMode = filterMode,
-                    wrapModeU = wrapModeU,
-                    wrapModeV = wrapModeV,
-                    wrapModeW = wrapModeW,
-                    dimension = dimension,
-                    enableRandomWrite = enableRandomWrite,
-                    useMipMap = useMipMap,
-                    autoGenerateMips = autoGenerateMips,
-                    anisoLevel = anisoLevel,
-                    mipMapBias = mipMapBias,
-                    stencilFormat = stencilFormat,
-                    antiAliasing = (int)msaaSamples,
-                    bindTextureMS = bindTextureMS,
-                    useDynamicScale = m_HardwareDynamicResRequested && useDynamicScale,
-                    useDynamicScaleExplicit = m_HardwareDynamicResRequested && useDynamicScaleExplicit,
-                    memorylessMode = memoryless,
-                    vrUsage = vrUsage,
-                    name = CoreUtils.GetRenderTargetAutoName(width, height, slices, format, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples)
-                };
-            }
-            else
-            {
-                rt = new RenderTexture(width, height, (int)depthBufferBits, colorFormat)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    volumeDepth = slices,
-                    filterMode = filterMode,
-                    wrapModeU = wrapModeU,
-                    wrapModeV = wrapModeV,
-                    wrapModeW = wrapModeW,
-                    dimension = dimension,
-                    enableRandomWrite = enableRandomWrite,
-                    useMipMap = useMipMap,
-                    autoGenerateMips = autoGenerateMips,
-                    anisoLevel = anisoLevel,
-                    mipMapBias = mipMapBias,
-                    antiAliasing = (int)msaaSamples,
-                    bindTextureMS = bindTextureMS,
-                    useDynamicScale = m_HardwareDynamicResRequested && useDynamicScale,
-                    useDynamicScaleExplicit = m_HardwareDynamicResRequested && useDynamicScaleExplicit,
-                    memorylessMode = memoryless,
-                    vrUsage = vrUsage,
-                    name = CoreUtils.GetRenderTargetAutoName(width, height, slices, colorFormat, dimension, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples, dynamicRes: useDynamicScale, dynamicResExplicit: useDynamicScaleExplicit)
-                };
-            }
-
-            rt.Create();
+        /// <summary>
+        /// Allocate a new fixed sized RTHandle.
+        /// </summary>
+        /// <param name="width">With of the RTHandle.</param>
+        /// <param name="height">Heigh of the RTHandle.</param>
+        /// <param name="format">GraphicsFormat of the color or a depth stencil buffer.</param>
+        /// <param name="wrapModeU">U coordinate wrapping mode of the RTHandle.</param>
+        /// <param name="wrapModeV">V coordinate wrapping mode of the RTHandle.</param>
+        /// <param name="wrapModeW">W coordinate wrapping mode of the RTHandle.</param>
+        /// <param name="slices">Number of slices of the RTHandle.</param>
+        /// <param name="filterMode">Filtering mode of the RTHandle.</param>
+        /// <param name="dimension">Texture dimension of the RTHandle.</param>
+        /// <param name="enableRandomWrite">Set to true to enable UAV random read writes on the texture.</param>
+        /// <param name="useMipMap">Set to true if the texture should have mipmaps.</param>
+        /// <param name="autoGenerateMips">Set to true to automatically generate mipmaps.</param>
+        /// <param name="isShadowMap">Set to true if the depth buffer should be used as a shadow map.</param>
+        /// <param name="anisoLevel">Anisotropic filtering level.</param>
+        /// <param name="mipMapBias">Bias applied to mipmaps during filtering.</param>
+        /// <param name="msaaSamples">Number of MSAA samples for the RTHandle.</param>
+        /// <param name="bindTextureMS">Set to true if the texture needs to be bound as a multisampled texture in the shader.</param>
+        /// <param name="useDynamicScale">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="useDynamicScaleExplicit">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="memoryless">Use this property to set the render texture memoryless modes.</param>
+        /// <param name="vrUsage">Special treatment of the VR eye texture used in stereoscopic rendering.</param>
+        /// <param name="name">Name of the RTHandle.</param>
+        /// <returns>A new RTHandle.</returns>
+        public RTHandle Alloc(
+            int width,
+            int height,
+            GraphicsFormat format,
+            TextureWrapMode wrapModeU,
+            TextureWrapMode wrapModeV,
+            TextureWrapMode wrapModeW = TextureWrapMode.Repeat,
+            int slices = 1,            
+            FilterMode filterMode = FilterMode.Point,
+            TextureDimension dimension = TextureDimension.Tex2D,
+            bool enableRandomWrite = false,
+            bool useMipMap = false,
+            bool autoGenerateMips = true,
+            bool isShadowMap = false,
+            int anisoLevel = 1,
+            float mipMapBias = 0f,
+            MSAASamples msaaSamples = MSAASamples.None,
+            bool bindTextureMS = false,
+            bool useDynamicScale = false,
+            bool useDynamicScaleExplicit = false,
+            RenderTextureMemoryless memoryless = RenderTextureMemoryless.None,
+            VRTextureUsage vrUsage = VRTextureUsage.None,
+            string name = ""
+        )
+        {
+            var rt = CreateRenderTexture(
+                width, height, format, slices, filterMode, wrapModeU, wrapModeV, wrapModeW, dimension, enableRandomWrite, useMipMap
+                , autoGenerateMips, isShadowMap, anisoLevel, mipMapBias, msaaSamples, bindTextureMS
+                , useDynamicScale, useDynamicScaleExplicit, memoryless, vrUsage, name);
 
             var newRT = new RTHandle(this);
             newRT.SetRenderTexture(rt);
             newRT.useScaling = false;
             newRT.m_EnableRandomWrite = enableRandomWrite;
-            newRT.m_EnableMSAA = enableMSAA;
+            newRT.m_EnableMSAA = msaaSamples != MSAASamples.None;
             newRT.m_EnableHWDynamicScale = useDynamicScale;
             newRT.m_Name = name;
 
             newRT.referenceSize = new Vector2Int(width, height);
 
             return newRT;
+        }
+
+        private RenderTexture CreateRenderTexture(
+            int width,
+            int height,
+            GraphicsFormat format,
+            int slices,
+            FilterMode filterMode,
+            TextureWrapMode wrapModeU,
+            TextureWrapMode wrapModeV,
+            TextureWrapMode wrapModeW,
+            TextureDimension dimension,
+            bool enableRandomWrite,
+            bool useMipMap,
+            bool autoGenerateMips,
+            bool isShadowMap,
+            int anisoLevel,
+            float mipMapBias,
+            MSAASamples msaaSamples,
+            bool bindTextureMS,
+            bool useDynamicScale,
+            bool useDynamicScaleExplicit,
+            RenderTextureMemoryless memoryless,
+            VRTextureUsage vrUsage,
+            string name)
+        {
+            bool enableMSAA = msaaSamples != MSAASamples.None;
+            // Here user made a mistake in setting up msaa/bindMS, hence the warning
+            if (!enableMSAA && bindTextureMS == true)
+            {
+                Debug.LogWarning("RTHandle allocated without MSAA but with bindMS set to true, forcing bindMS to false.");
+                bindTextureMS = false;
+            }
+
+            // MSAA Does not support random read/write.
+            if (enableMSAA && (enableRandomWrite == true))
+            {
+                Debug.LogWarning("RTHandle that is MSAA-enabled cannot allocate MSAA RT with 'enableRandomWrite = true'.");
+                enableRandomWrite = false;
+            }
+
+            bool isDepthStencilFormat = GraphicsFormatUtility.IsDepthStencilFormat(format);
+            string fullName;
+            GraphicsFormat colorFormat, depthStencilFormat, stencilFormat;
+            ShadowSamplingMode shadowSamplingMode = ShadowSamplingMode.None;
+
+            if (isShadowMap)
+            {
+                //This is the same "magic" behavior like setting the desc.colorFormat = RenderTextureFormat.Shadowmap
+                //We elevate the magic to here to only use the explict properties (graphicsFormat, depthStencilFormat, ShadowSamplingMode) from now.
+                int depthBits = GraphicsFormatUtility.GetDepthBits(format);
+                if (depthBits < 16) depthBits = 16;
+
+                depthStencilFormat = GraphicsFormatUtility.GetDepthStencilFormat(depthBits, 0);                
+                colorFormat = GraphicsFormat.None;
+                stencilFormat = GraphicsFormat.None;
+                shadowSamplingMode = ShadowSamplingMode.CompareDepths;
+
+                fullName = CoreUtils.GetRenderTargetAutoName(width, height, slices, RenderTextureFormat.Shadowmap, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples);
+            }
+            else if (isDepthStencilFormat)
+            {
+                //depth stencil texture
+                colorFormat = GraphicsFormat.None;
+                depthStencilFormat = format;
+                stencilFormat = GetStencilFormat(format);
+
+                fullName = CoreUtils.GetRenderTargetAutoName(width, height, slices, format, dimension, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples, dynamicRes: useDynamicScale, dynamicResExplicit: useDynamicScaleExplicit);
+            }
+            else
+            {
+                // color texture
+                colorFormat = format;
+                depthStencilFormat = GraphicsFormat.None;
+                stencilFormat = GraphicsFormat.None;
+
+                fullName = CoreUtils.GetRenderTargetAutoName(width, height, slices, format, dimension, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples, dynamicRes: useDynamicScale, dynamicResExplicit: useDynamicScaleExplicit);
+            }
+
+            var desc = new RenderTextureDescriptor(width, height, colorFormat, depthStencilFormat)
+            {
+                msaaSamples = (int)msaaSamples,
+                volumeDepth = slices,
+                stencilFormat = stencilFormat,
+                dimension = dimension,
+                shadowSamplingMode = shadowSamplingMode,
+                vrUsage = vrUsage,
+                memoryless = memoryless,
+                useMipMap = useMipMap,
+                autoGenerateMips = autoGenerateMips,
+                enableRandomWrite = enableRandomWrite,                 
+                bindMS = bindTextureMS,
+                useDynamicScale = m_HardwareDynamicResRequested && useDynamicScale,
+                useDynamicScaleExplicit = m_HardwareDynamicResRequested && useDynamicScaleExplicit
+            };
+
+            var rt = new RenderTexture(desc);
+
+            rt.name = fullName;
+
+            rt.anisoLevel = anisoLevel;
+            rt.mipMapBias = mipMapBias;
+            rt.hideFlags = HideFlags.HideAndDontSave;
+            rt.filterMode = filterMode;
+
+            rt.wrapModeU = wrapModeU;
+            rt.wrapModeV = wrapModeV;
+            rt.wrapModeW = wrapModeW;            
+
+            rt.Create();
+            return rt;
         }
 
         /// <summary>
@@ -706,52 +891,19 @@ namespace UnityEngine.Rendering
         /// <returns>A new RTHandle.</returns>
         public RTHandle Alloc(int width, int height, RTHandleAllocInfo info)
         {
-            bool enableMSAA = info.msaaSamples != MSAASamples.None;
-            if (!enableMSAA && info.bindTextureMS == true)
-            {
-                Debug.LogWarning("RTHandle allocated without MSAA but with bindMS set to true, forcing bindMS to false.");
-                info.bindTextureMS = false;
-            }
+            bool isShadowMap = false;
+            bool useDynamicScaleExplicit = false;
 
-            // We need to handle this in an explicit way since GraphicsFormat does not expose depth formats. TODO: Get rid of this branch once GraphicsFormat'll expose depth related formats
-            RenderTexture rt;
-            var colorFormat = GraphicsFormatUtility.IsDepthFormat(info.format) ? GraphicsFormat.None : info.format;
-            var depthStencilFormat = (colorFormat == GraphicsFormat.None) ? info.format : GraphicsFormat.None;
-
-            var stencilFormat = GraphicsFormat.None;
-            if (GraphicsFormatUtility.IsStencilFormat(info.format) && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UInt, GraphicsFormatUsage.StencilSampling))
-                stencilFormat = GraphicsFormat.R8_UInt;
-
-            rt = new RenderTexture(width, height, colorFormat, depthStencilFormat)
-            {
-                hideFlags = HideFlags.HideAndDontSave,
-                volumeDepth = info.slices,
-                filterMode = info.filterMode,
-                wrapModeU = info.wrapModeU,
-                wrapModeV = info.wrapModeV,
-                wrapModeW = info.wrapModeW,
-                dimension = info.dimension,
-                enableRandomWrite = info.enableRandomWrite,
-                useMipMap = info.useMipMap,
-                autoGenerateMips = info.autoGenerateMips,
-                anisoLevel = info.anisoLevel,
-                mipMapBias = info.mipMapBias,
-                antiAliasing = (int)info.msaaSamples,
-                bindTextureMS = info.bindTextureMS,
-                useDynamicScale = m_HardwareDynamicResRequested && info.useDynamicScale,
-                memorylessMode = info.memoryless,
-                stencilFormat = stencilFormat,
-                vrUsage = info.vrUsage,
-                name = CoreUtils.GetRenderTargetAutoName(width, height, info.slices, info.format, info.dimension, info.name, mips: info.useMipMap, enableMSAA: enableMSAA, msaaSamples: info.msaaSamples, dynamicRes: info.useDynamicScale)
-            };
-
-            rt.Create();
+            var rt = CreateRenderTexture(
+                 width, height, info.format, info.slices, info.filterMode, info.wrapModeU, info.wrapModeV, info.wrapModeW, info.dimension, info.enableRandomWrite, info.useMipMap
+                 , info.autoGenerateMips, isShadowMap, info.anisoLevel, info.mipMapBias, info.msaaSamples, info.bindTextureMS
+                 , info.useDynamicScale, useDynamicScaleExplicit, info.memoryless, info.vrUsage, info.name);
 
             var newRT = new RTHandle(this);
             newRT.SetRenderTexture(rt);
             newRT.useScaling = false;
             newRT.m_EnableRandomWrite = info.enableRandomWrite;
-            newRT.m_EnableMSAA = enableMSAA;
+            newRT.m_EnableMSAA = info.msaaSamples != MSAASamples.None;
             newRT.m_EnableHWDynamicScale = info.useDynamicScale;
             newRT.m_Name = info.name;
 
@@ -776,6 +928,81 @@ namespace UnityEngine.Rendering
                 Mathf.Max(Mathf.RoundToInt(scaleFactor.x * GetMaxWidth()), 1),
                 Mathf.Max(Mathf.RoundToInt(scaleFactor.y * GetMaxHeight()), 1)
             );
+        }
+
+        /// <summary>
+        /// Allocate a new automatically sized RTHandle.
+        /// </summary>
+        /// <param name="scaleFactor">Constant scale for the RTHandle size computation.</param>
+        /// <param name="format">GraphicsFormat of a color or depth stencil buffer.</param>
+        /// <param name="slices">Number of slices of the RTHandle.</param>
+        /// <param name="filterMode">Filtering mode of the RTHandle.</param>
+        /// <param name="wrapMode">Addressing mode of the RTHandle.</param>
+        /// <param name="dimension">Texture dimension of the RTHandle.</param>
+        /// <param name="enableRandomWrite">Set to true to enable UAV random read writes on the texture.</param>
+        /// <param name="useMipMap">Set to true if the texture should have mipmaps.</param>
+        /// <param name="autoGenerateMips">Set to true to automatically generate mipmaps.</param>
+        /// <param name="isShadowMap">Set to true if the depth buffer should be used as a shadow map.</param>
+        /// <param name="anisoLevel">Anisotropic filtering level.</param>
+        /// <param name="mipMapBias">Bias applied to mipmaps during filtering.</param>
+        /// <param name="msaaSamples">Number of MSAA samples.</param>
+        /// <param name="bindTextureMS">Set to true if the texture needs to be bound as a multisampled texture in the shader.</param>
+        /// <param name="useDynamicScale">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="useDynamicScaleExplicit">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="memoryless">Use this property to set the render texture memoryless modes.</param>
+        /// <param name="vrUsage">Special treatment of the VR eye texture used in stereoscopic rendering.</param>
+        /// <param name="name">Name of the RTHandle.</param>
+        /// <returns>A new RTHandle.</returns>
+        public RTHandle Alloc(
+            Vector2 scaleFactor,
+            GraphicsFormat format,
+            int slices = 1,            
+            FilterMode filterMode = FilterMode.Point,
+            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
+            TextureDimension dimension = TextureDimension.Tex2D,
+            bool enableRandomWrite = false,
+            bool useMipMap = false,
+            bool autoGenerateMips = true,
+            bool isShadowMap = false,
+            int anisoLevel = 1,
+            float mipMapBias = 0f,
+            MSAASamples msaaSamples = MSAASamples.None,
+            bool bindTextureMS = false,
+            bool useDynamicScale = false,
+            bool useDynamicScaleExplicit = false,
+            RenderTextureMemoryless memoryless = RenderTextureMemoryless.None,
+            VRTextureUsage vrUsage = VRTextureUsage.None,
+            string name = ""
+        )
+        {
+            var actualDimensions = CalculateDimensions(scaleFactor);
+
+            var rth = AllocAutoSizedRenderTexture(actualDimensions.x,
+                actualDimensions.y,
+                slices,
+                format,
+                filterMode,
+                wrapMode,
+                dimension,
+                enableRandomWrite,
+                useMipMap,
+                autoGenerateMips,
+                isShadowMap,
+                anisoLevel,
+                mipMapBias,
+                msaaSamples,
+                bindTextureMS,
+                useDynamicScale,
+                useDynamicScaleExplicit,
+                memoryless,
+                vrUsage,
+                name
+            );
+
+            rth.referenceSize = actualDimensions;
+
+            rth.scaleFactor = scaleFactor;
+            return rth;
         }
 
         /// <summary>
@@ -825,13 +1052,11 @@ namespace UnityEngine.Rendering
             string name = ""
         )
         {
-            var actualDimensions = CalculateDimensions(scaleFactor);
+            var format = (depthBufferBits != DepthBits.None) ? GraphicsFormatUtility.GetDepthStencilFormat((int)depthBufferBits) : colorFormat;
 
-            var rth = AllocAutoSizedRenderTexture(actualDimensions.x,
-                actualDimensions.y,
+            return Alloc(scaleFactor,
+                format,
                 slices,
-                depthBufferBits,
-                colorFormat,
                 filterMode,
                 wrapMode,
                 dimension,
@@ -849,11 +1074,6 @@ namespace UnityEngine.Rendering
                 vrUsage,
                 name
             );
-
-            rth.referenceSize = actualDimensions;
-
-            rth.scaleFactor = scaleFactor;
-            return rth;
         }
 
         /// <summary>
@@ -946,13 +1166,81 @@ namespace UnityEngine.Rendering
             string name = ""
         )
         {
+            var format = (depthBufferBits != DepthBits.None) ? GraphicsFormatUtility.GetDepthStencilFormat((int)depthBufferBits) : colorFormat;
+
+            return Alloc(scaleFunc,
+                format,
+                slices,
+                filterMode,
+                wrapMode,
+                dimension,
+                enableRandomWrite,
+                useMipMap,
+                autoGenerateMips,
+                isShadowMap,
+                anisoLevel,
+                mipMapBias,
+                msaaSamples,
+                bindTextureMS,
+                useDynamicScale,
+                useDynamicScaleExplicit,
+                memoryless,
+                vrUsage,
+                name
+            );
+        }
+
+        /// <summary>
+        /// Allocate a new automatically sized RTHandle.
+        /// </summary>
+        /// <param name="scaleFunc">Function used for the RTHandle size computation.</param>
+        /// <param name="format">GraphicsFormat of a color or depth stencil buffer.</param>
+        /// <param name="slices">Number of slices of the RTHandle.</param>     
+        /// <param name="filterMode">Filtering mode of the RTHandle.</param>
+        /// <param name="wrapMode">Addressing mode of the RTHandle.</param>
+        /// <param name="dimension">Texture dimension of the RTHandle.</param>
+        /// <param name="enableRandomWrite">Set to true to enable UAV random read writes on the texture.</param>
+        /// <param name="useMipMap">Set to true if the texture should have mipmaps.</param>
+        /// <param name="autoGenerateMips">Set to true to automatically generate mipmaps.</param>
+        /// <param name="isShadowMap">Set to true if the depth buffer should be used as a shadow map.</param>
+        /// <param name="anisoLevel">Anisotropic filtering level.</param>
+        /// <param name="mipMapBias">Bias applied to mipmaps during filtering.</param>
+        /// <param name="msaaSamples">Number of MSAA samples.</param>
+        /// <param name="bindTextureMS">Set to true if the texture needs to be bound as a multisampled texture in the shader.</param>
+        /// <param name="useDynamicScale">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="useDynamicScaleExplicit">[See Dynamic Resolution documentation](https://docs.unity3d.com/Manual/DynamicResolution.html)</param>
+        /// <param name="memoryless">Use this property to set the render texture memoryless modes.</param>
+        /// <param name="vrUsage">Special treatment of the VR eye texture used in stereoscopic rendering.</param>
+        /// <param name="name">Name of the RTHandle.</param>
+        /// <returns>A new RTHandle.</returns>
+        public RTHandle Alloc(
+            ScaleFunc scaleFunc,
+            GraphicsFormat format,
+            int slices = 1,            
+            FilterMode filterMode = FilterMode.Point,
+            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
+            TextureDimension dimension = TextureDimension.Tex2D,
+            bool enableRandomWrite = false,
+            bool useMipMap = false,
+            bool autoGenerateMips = true,
+            bool isShadowMap = false,
+            int anisoLevel = 1,
+            float mipMapBias = 0f,
+            MSAASamples msaaSamples = MSAASamples.None,
+            bool bindTextureMS = false,
+            bool useDynamicScale = false,
+            bool useDynamicScaleExplicit = false,
+            RenderTextureMemoryless memoryless = RenderTextureMemoryless.None,
+            VRTextureUsage vrUsage = VRTextureUsage.None,
+            string name = ""
+        )
+        {
             var actualDimensions = CalculateDimensions(scaleFunc);
 
             var rth = AllocAutoSizedRenderTexture(actualDimensions.x,
                 actualDimensions.y,
-                slices,
-                depthBufferBits,
-                colorFormat,
+                slices,                
+                format,
                 filterMode,
                 wrapMode,
                 dimension,
@@ -1000,9 +1288,8 @@ namespace UnityEngine.Rendering
         RTHandle AllocAutoSizedRenderTexture(
             int width,
             int height,
-            int slices,
-            DepthBits depthBufferBits,
-            GraphicsFormat colorFormat,
+            int slices,            
+            GraphicsFormat format,
             FilterMode filterMode,
             TextureWrapMode wrapMode,
             TextureDimension dimension,
@@ -1021,78 +1308,14 @@ namespace UnityEngine.Rendering
             string name
         )
         {
-            bool enableMSAA = msaaSamples != MSAASamples.None;
-            // Here user made a mistake in setting up msaa/bindMS, hence the warning
-            if (!enableMSAA && bindTextureMS == true)
-            {
-                Debug.LogWarning("RTHandle allocated without MSAA but with bindMS set to true, forcing bindMS to false.");
-                bindTextureMS = false;
-            }
-
-            // MSAA Does not support random read/write.
-            if (enableMSAA && (enableRandomWrite == true))
-            {
-                Debug.LogWarning("RTHandle that is MSAA-enabled cannot allocate MSAA RT with 'enableRandomWrite = true'.");
-                enableRandomWrite = false;
-            }
-
-            // We need to handle this in an explicit way since GraphicsFormat does not expose depth formats. TODO: Get rid of this branch once GraphicsFormat'll expose depth related formats
-            RenderTexture rt;
-            if (isShadowMap || depthBufferBits != DepthBits.None)
-            {
-                RenderTextureFormat format = isShadowMap ? RenderTextureFormat.Shadowmap : RenderTextureFormat.Depth;
-                GraphicsFormat stencilFormat = !isShadowMap && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UInt, GraphicsFormatUsage.StencilSampling) ? GraphicsFormat.R8_UInt : GraphicsFormat.None;
-                rt = new RenderTexture(width, height, (int)depthBufferBits, format, RenderTextureReadWrite.Linear)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    volumeDepth = slices,
-                    filterMode = filterMode,
-                    wrapMode = wrapMode,
-                    dimension = dimension,
-                    enableRandomWrite = enableRandomWrite,
-                    useMipMap = useMipMap,
-                    autoGenerateMips = autoGenerateMips,
-                    anisoLevel = anisoLevel,
-                    mipMapBias = mipMapBias,
-                    antiAliasing = (int)msaaSamples,
-                    bindTextureMS = bindTextureMS,
-                    useDynamicScale = m_HardwareDynamicResRequested && useDynamicScale,
-                    useDynamicScaleExplicit = m_HardwareDynamicResRequested && useDynamicScaleExplicit,
-                    memorylessMode = memoryless,
-                    stencilFormat = stencilFormat,
-                    vrUsage = vrUsage,
-                    name = CoreUtils.GetRenderTargetAutoName(width, height, slices, colorFormat, dimension, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples, dynamicRes: useDynamicScale, dynamicResExplicit: useDynamicScaleExplicit)
-                };
-            }
-            else
-            {
-                rt = new RenderTexture(width, height, (int)depthBufferBits, colorFormat)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    volumeDepth = slices,
-                    filterMode = filterMode,
-                    wrapMode = wrapMode,
-                    dimension = dimension,
-                    enableRandomWrite = enableRandomWrite,
-                    useMipMap = useMipMap,
-                    autoGenerateMips = autoGenerateMips,
-                    anisoLevel = anisoLevel,
-                    mipMapBias = mipMapBias,
-                    antiAliasing = (int)msaaSamples,
-                    bindTextureMS = bindTextureMS,
-                    useDynamicScale = m_HardwareDynamicResRequested && useDynamicScale,
-                    useDynamicScaleExplicit = m_HardwareDynamicResRequested && useDynamicScaleExplicit,
-                    memorylessMode = memoryless,
-                    vrUsage = vrUsage,
-                    name = CoreUtils.GetRenderTargetAutoName(width, height, slices, colorFormat, dimension, name, mips: useMipMap, enableMSAA: enableMSAA, msaaSamples: msaaSamples, dynamicRes: useDynamicScale, dynamicResExplicit: useDynamicScaleExplicit)
-                };
-            }
-
-            rt.Create();
+            var rt = CreateRenderTexture(
+                width, height, format, slices, filterMode, wrapMode, wrapMode, wrapMode, dimension, enableRandomWrite, useMipMap
+                , autoGenerateMips, isShadowMap, anisoLevel, mipMapBias, msaaSamples, bindTextureMS
+                , useDynamicScale, useDynamicScaleExplicit, memoryless, vrUsage, name);
 
             var rth = new RTHandle(this);
             rth.SetRenderTexture(rt);
-            rth.m_EnableMSAA = enableMSAA;
+            rth.m_EnableMSAA = msaaSamples != MSAASamples.None;
             rth.m_EnableRandomWrite = enableRandomWrite;
             rth.useScaling = true;
             rth.m_EnableHWDynamicScale = useDynamicScale;
@@ -1103,57 +1326,17 @@ namespace UnityEngine.Rendering
 
         RTHandle AllocAutoSizedRenderTexture(int width, int height, RTHandleAllocInfo info)
         {
-            bool enableMSAA = info.msaaSamples != MSAASamples.None;
-            // Here user made a mistake in setting up msaa/bindMS, hence the warning
-            if (!enableMSAA && info.bindTextureMS == true)
-            {
-                Debug.LogWarning("RTHandle allocated without MSAA but with bindMS set to true, forcing bindMS to false.");
-                info.bindTextureMS = false;
-            }
+            bool isShadowMap = false;
+            bool useDynamicScaleExplicit = false;
 
-            // MSAA Does not support random read/write.
-            if (enableMSAA && (info.enableRandomWrite == true))
-            {
-                Debug.LogWarning("RTHandle that is MSAA-enabled cannot allocate MSAA RT with 'enableRandomWrite = true'.");
-                info.enableRandomWrite = false;
-            }
-
-            RenderTexture rt;
-            {
-                var colorFormat = GraphicsFormatUtility.IsDepthFormat(info.format) ? GraphicsFormat.None : info.format;
-                var depthStencilFormat = (colorFormat == GraphicsFormat.None) ? info.format : GraphicsFormat.None;
-
-                var stencilFormat = GraphicsFormat.None;
-                if (GraphicsFormatUtility.IsStencilFormat(info.format) && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UInt, GraphicsFormatUsage.StencilSampling))
-                    stencilFormat = GraphicsFormat.R8_UInt;
-
-                rt = new RenderTexture(width, height, colorFormat, depthStencilFormat)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    volumeDepth = info.slices,
-                    filterMode = info.filterMode,
-                    wrapMode = info.wrapModeU,
-                    dimension = info.dimension,
-                    enableRandomWrite = info.enableRandomWrite,
-                    useMipMap = info.useMipMap,
-                    autoGenerateMips = info.autoGenerateMips,
-                    anisoLevel = info.anisoLevel,
-                    mipMapBias = info.mipMapBias,
-                    antiAliasing = (int)info.msaaSamples,
-                    bindTextureMS = info.bindTextureMS,
-                    useDynamicScale = m_HardwareDynamicResRequested && info.useDynamicScale,
-                    memorylessMode = info.memoryless,
-                    stencilFormat = stencilFormat,
-                    vrUsage = info.vrUsage,
-                    name = CoreUtils.GetRenderTargetAutoName(width, height, info.slices, info.format, info.dimension, info.name, mips: info.useMipMap, enableMSAA: enableMSAA, msaaSamples: info.msaaSamples, dynamicRes: info.useDynamicScale)
-                };
-            }
-
-            rt.Create();
+            var rt = CreateRenderTexture(
+                width, height, info.format, info.slices, info.filterMode, info.wrapModeU, info.wrapModeV, info.wrapModeW, info.dimension, info.enableRandomWrite, info.useMipMap
+                , info.autoGenerateMips, isShadowMap, info.anisoLevel, info.mipMapBias, info.msaaSamples, info.bindTextureMS
+                , info.useDynamicScale, useDynamicScaleExplicit, info.memoryless, info.vrUsage, info.name);
 
             var rth = new RTHandle(this);
             rth.SetRenderTexture(rt);
-            rth.m_EnableMSAA = enableMSAA;
+            rth.m_EnableMSAA = info.msaaSamples != MSAASamples.None;
             rth.m_EnableRandomWrite = info.enableRandomWrite;
             rth.useScaling = true;
             rth.m_EnableHWDynamicScale = info.useDynamicScale;
@@ -1247,6 +1430,12 @@ namespace UnityEngine.Rendering
             }
 
             return result;
+        }
+
+        private GraphicsFormat GetStencilFormat(GraphicsFormat depthStencilFormat)
+        {
+            return (GraphicsFormatUtility.IsStencilFormat(depthStencilFormat) && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UInt, GraphicsFormatUsage.StencilSampling)) ?
+                GraphicsFormat.R8_UInt : GraphicsFormat.None;
         }
     }
 }

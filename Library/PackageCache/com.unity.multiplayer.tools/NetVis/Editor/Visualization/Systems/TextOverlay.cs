@@ -38,13 +38,16 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
 
         public void DuringSceneGui(SceneView sceneView)
         {
+            if (!m_NetVisDataStore.IsConnectedServerOrClient)
+                return;
+            
             InitializeTextLabelStyle();
 
             var sceneViewCamera = sceneView.camera;
             var sceneViewCameraPosition = sceneViewCamera.transform.position;
             var screenRect = new Rect(0, 0, Screen.width, Screen.height);
 
-            var bandwithAvailable = !m_NetVisDataStore.IsBandwidthCacheEmpty;
+            var bandwidthAvailable = !m_NetVisDataStore.IsBandwidthCacheEmpty;
             
             foreach (var id in m_NetVisDataStore.GetObjectIds())
             {
@@ -74,7 +77,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
                 
                 var content = m_Configuration.Metric switch
                 {
-                    NetVisMetric.Bandwidth => bandwithAvailable? m_NetVisDataStore.GetBandwidth(id).ToString("N0"):"No data",
+                    NetVisMetric.Bandwidth => bandwidthAvailable? m_NetVisDataStore.GetBandwidth(id).ToString("N0"):"No data",
                     NetVisMetric.Ownership => m_NetVisDataStore.GetOwner(id).ToString(),
                     _ => string.Empty,
                 };

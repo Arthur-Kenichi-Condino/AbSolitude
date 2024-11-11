@@ -105,7 +105,7 @@ namespace Unity.Burst.Editor
             {
                 if (!BurstCompilerOptions.IsSecondaryUnityProcess)
                 {
-                    UnityEngine.Debug.LogWarning("[com.unity.burst] Burst is disabled entirely from the command line");
+                    UnityEngine.Debug.LogWarning("[com.unity.burst] Burst is disabled entirely from the command line or environment variable");
                 }
                 return;
             }

@@ -241,13 +241,15 @@ namespace Unity.MemoryProfiler.Editor.UI
                 ProcessUnityObjectItemSelected);
             var sortComparison = BuildSortComparisonFromTreeView();
             m_BuildModelWorker = new AsyncWorker<UnityObjectsModel>();
-            m_BuildModelWorker.Execute(() =>
+            m_BuildModelWorker.Execute((token) =>
             {
                 try
                 {
                     // Build the data model.
                     var modelBuilder = new UnityObjectsModelBuilder();
                     var model = modelBuilder.Build(snapshot, args);
+
+                    token.ThrowIfCancellationRequested();
                     // Sort it according to the current sort descriptors.
                     model.Sort(sortComparison);
 
@@ -258,9 +260,9 @@ namespace Unity.MemoryProfiler.Editor.UI
                 {
                     return null;
                 }
-                catch (System.Threading.ThreadAbortException)
+                catch (OperationCanceledException)
                 {
-                    // We expect a ThreadAbortException to be thrown when cancelling an in-progress builder. Do not log an error to the console.
+                    // We expect a TaskCanceledException to be thrown when cancelling an in-progress builder. Do not log an error to the console.
                     return null;
                 }
                 catch (Exception _e)

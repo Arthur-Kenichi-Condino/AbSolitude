@@ -15,7 +15,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime.BuiltInScenarios
     {
         /// <summary>
         /// Specifies the <see cref="PresetConfiguration.ConnectionPreset"/> and the <see cref="ChangeIntervalMilliseconds"/> configuration.
-        /// <seealso cref="PresetConfiguration"/>
+        /// <see cref="PresetConfiguration"/>
         /// </summary>
         [Serializable]
         public sealed class Configuration : PresetConfiguration
@@ -37,7 +37,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime.BuiltInScenarios
 
         /// <summary>
         /// The list of configuration used to define <see cref="PresetConfiguration.ConnectionPreset"/> and the <see cref="Configuration.ChangeIntervalMilliseconds"/>.
-        /// <seealso cref="Configuration"/>
+        /// <see cref="Configuration"/>
         /// </summary>
         public ICollection<Configuration> Configurations => m_Configurations;
 

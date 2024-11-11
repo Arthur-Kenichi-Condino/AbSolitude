@@ -1,6 +1,7 @@
 #if UNITY_2022_1_OR_NEWER
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.MemoryProfiler.Editor.Extensions;
 using UnityEngine.UIElements;
 using static Unity.MemoryProfiler.Editor.CachedSnapshot;
@@ -86,10 +87,32 @@ namespace Unity.MemoryProfiler.Editor.UI
                 var nativeTypeName = nativeTypeGroup.Key.GetName(snapshot);
                 var managedTypeToObjectMap = new MapOfManagedTypeOrObjectName2Objects();
                 managedTypeToObjectMap.MapOfManagedTypeNames = new Dictionary<string, Dictionary<string, DictionaryOrList>>();
-
+                var typeNameClashes = new Dictionary<string,string>();
                 foreach (var managedTypeGroup in IterateAndBuildTypeGroups(nativeTypeGroup.Value, snapshot))
                 {
-                    managedTypeToObjectMap.MapOfManagedTypeNames.Add(managedTypeGroup.Item1, managedTypeGroup.Item2);
+                    if(!managedTypeToObjectMap.MapOfManagedTypeNames.TryAdd(managedTypeGroup.Item1, managedTypeGroup.Item2))
+                    {
+                        if (!typeNameClashes.ContainsKey(managedTypeGroup.Item1))
+                        {
+                            var firstExistingElementDictOrList = managedTypeToObjectMap.MapOfManagedTypeNames[managedTypeGroup.Item1].First().Value;
+                            var firstExistingElement = firstExistingElementDictOrList.ListOfObjects?.First()
+                                ?? firstExistingElementDictOrList.MapOfObjects.First().Value.First();
+                            var existingElementTypeIndex = snapshot.CrawledData.ManagedObjects[firstExistingElement.data.Source.Index].ITypeDescription;
+                            var existingElementAssemblyName = snapshot.TypeDescriptions.Assembly[existingElementTypeIndex];
+                            typeNameClashes.Add(managedTypeGroup.Item1, existingElementAssemblyName);
+                        }
+                        var firstNewElementDictOrList = managedTypeGroup.Item2.First().Value;
+                        var firstNewElement = firstNewElementDictOrList.ListOfObjects?.First()
+                            ?? firstNewElementDictOrList.MapOfObjects.First().Value.First();
+                        var newElementTypeIndex = snapshot.CrawledData.ManagedObjects[firstNewElement.data.Source.Index].ITypeDescription;
+                        var newElementAssemblyName = snapshot.TypeDescriptions.Assembly[newElementTypeIndex];
+                        managedTypeToObjectMap.MapOfManagedTypeNames.Add($"{managedTypeGroup.Item1}{UnityObjectsComparisonModel.AssemblyNameDisambiguationSeparator}{newElementAssemblyName})", managedTypeGroup.Item2);
+                    }
+                }
+                foreach (var clashedTypeName in typeNameClashes)
+                {
+                    managedTypeToObjectMap.MapOfManagedTypeNames.Add($"{clashedTypeName.Key}{UnityObjectsComparisonModel.AssemblyNameDisambiguationSeparator}{clashedTypeName.Value})", managedTypeToObjectMap.MapOfManagedTypeNames[clashedTypeName.Key]);
+                    managedTypeToObjectMap.MapOfManagedTypeNames.Remove(clashedTypeName.Key);
                 }
                 nativeTypeNameToManagedTypeToObjectNameMapOrAndObjectsMap.Add(nativeTypeName, managedTypeToObjectMap);
             }

@@ -52,7 +52,7 @@ namespace Unity.Multiplayer.Tools.NetStats
         /// </summary>
         /// <param name="value">Enum value for the metric.</param>
         /// <typeparam name="T">An enum with the <see cref="MetricTypeEnumAttribute"/></typeparam>
-        /// <returns></returns>
+        /// <returns>The <see cref="MetricId"/></returns>
         public static MetricId Create<T>(T value)
             where T : unmanaged, Enum
         {

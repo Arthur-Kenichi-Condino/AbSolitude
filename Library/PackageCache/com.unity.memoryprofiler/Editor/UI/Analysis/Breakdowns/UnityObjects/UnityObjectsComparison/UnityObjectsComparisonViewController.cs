@@ -238,14 +238,14 @@ namespace Unity.MemoryProfiler.Editor.UI
                 OnUnityObjectTypeComparisonSelected);
             var sortComparison = BuildSortComparisonFromTreeView();
             m_BuildModelWorker = new AsyncWorker<UnityObjectsComparisonModel>();
-            m_BuildModelWorker.Execute(() =>
+            m_BuildModelWorker.Execute((token) =>
             {
                 try
                 {
                     // Build the data model.
                     var modelBuilder = new UnityObjectsComparisonModelBuilder();
                     var model = modelBuilder.Build(snapshotA, snapshotB, args);
-
+                    token.ThrowIfCancellationRequested();
                     // Sort it according to the current sort descriptors.
                     model.Sort(sortComparison);
 
@@ -255,9 +255,9 @@ namespace Unity.MemoryProfiler.Editor.UI
                 {
                     return null;
                 }
-                catch (System.Threading.ThreadAbortException)
+                catch (OperationCanceledException)
                 {
-                    // We expect a ThreadAbortException to be thrown when cancelling an in-progress builder. Do not log an error to the console.
+                    // We expect a TaskCanceledException to be thrown when cancelling an in-progress builder. Do not log an error to the console.
                     return null;
                 }
                 catch (Exception _e)
@@ -460,7 +460,7 @@ namespace Unity.MemoryProfiler.Editor.UI
             var objectNameFilter = MatchesTextFilter.Create(objectName);
             IInstancIdFilter sourceIndexFilter = null;
             if(!string.IsNullOrEmpty(instancId)
-                && int.TryParse(instancId.Substring(NativeObjectTools.NativeObjectIdFormatStringPrefix.Length), out var instanceID))
+                && instancId.Substring(NativeObjectTools.NativeObjectIdFormatStringPrefix.Length).TryConvertToInstanceID(out var instanceIdValue))
             {
                 var snapshot = snapshotType switch
                 {
@@ -469,9 +469,14 @@ namespace Unity.MemoryProfiler.Editor.UI
                     UnityObjectsComparisonModelBuilder.SnapshotType.Undefined => null,
                     _ => null
                 };
-                sourceIndexFilter =
-                    MatchesInstanceIdFilter.Create(instanceID, snapshot);
+
+                sourceIndexFilter = MatchesInstanceIdFilter.Create(instanceIdValue, snapshot);
             }
+            var potentialAssemblyNameStart = typeName.IndexOf(UnityObjectsComparisonModel.AssemblyNameDisambiguationSeparator);
+            if (potentialAssemblyNameStart != -1)
+                typeName = typeName.Substring(0, potentialAssemblyNameStart);
+            // TODO: This is a hack due for a pending refactor on a different branch that does away with the need to string filter the bottom tables.
+            // Right now it will show objects with the same name, type, and instance ID, but potentially different assemblies.
             var typeNameFilter = MatchesTextFilter.Create(typeName);
             m_BaseTableViewController.SetFilters(
                 unityObjectNameFilter: objectNameFilter,

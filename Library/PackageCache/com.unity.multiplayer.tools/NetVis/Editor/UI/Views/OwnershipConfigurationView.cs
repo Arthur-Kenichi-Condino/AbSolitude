@@ -6,8 +6,11 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
 {
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
     [LoadUxmlView(NetVisEditorPaths.k_UxmlRoot)]
-    class OwnershipConfigurationView : InjectedVisualElement<OwnershipConfigurationView>
+    partial class OwnershipConfigurationView : InjectedVisualElement<OwnershipConfigurationView>
     {
         [UxmlQuery] OwnershipServerClientConfigurationView OwnershipServerClientConfigurationView;
         [UxmlQuery] Toggle MeshShadingEnabled;
@@ -34,7 +37,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
                     Configuration.NotifySettingsChanged();
                 });
         }
-
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<OwnershipConfigurationView, UxmlTraits> { }
+#endif
     }
 }

@@ -3,7 +3,10 @@ using UnityEngine.UIElements;
 
 namespace Unity.MemoryProfiler.Editor.UI
 {
-    class UnityObjectsDescriptionCell : VisualElement
+#if UNITY_6000_0_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class UnityObjectsDescriptionCell : VisualElement
     {
         const string k_UxmlAssetGuid = "1fec5c07542077c4d81d5cb90b89c7b3";
         const string k_UxmlIdentifier_Icon = "unity-objects-description-cell__icon";
@@ -59,7 +62,9 @@ namespace Unity.MemoryProfiler.Editor.UI
             return $"{typeName} Icon";
         }
 
+#if !UNITY_6000_0_OR_NEWER
         public new class UxmlFactory : UxmlFactory<UnityObjectsDescriptionCell> {}
+#endif
     }
 }
 #endif

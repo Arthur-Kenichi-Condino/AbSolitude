@@ -3,11 +3,17 @@ using UnityEngine;
 
 namespace Unity.Multiplayer.Tools.Adapters.MockNgo
 {
+    /// <summary>
+    /// A mock network object
+    /// </summary>
     [AddComponentMenu("MP Tools Dev/" + nameof(MockNetworkObject), 1000)]
     public class MockNetworkObject : MonoBehaviour
     {
         // Public properties
         // --------------------------------------------------------------------
+        /// <summary>
+        /// The Owner client id
+        /// </summary>
         [field:SerializeField]
         public int OwnerClientId { get; set; }
 
@@ -17,6 +23,9 @@ namespace Unity.Multiplayer.Tools.Adapters.MockNgo
             set => OwnerClientId = (int)value;
         }
 
+        /// <summary>
+        /// The Object id
+        /// </summary>
         public int ObjectId { get; private set; } = -1;
 
         // Cached references
@@ -38,11 +47,19 @@ namespace Unity.Multiplayer.Tools.Adapters.MockNgo
 
         // Methods to record network traffic
         // --------------------------------------------------------------------
+        /// <summary>
+        /// Record bytes from a RPC call
+        /// </summary>
+        /// <param name="byteCount">The number of bytes to record</param>
         public void RecordRpcCall(int byteCount)
         {
             Adapter.RecordRpcCall((ObjectId)ObjectId, byteCount);
         }
 
+        /// <summary>
+        /// Record bytes from a NetworkVariable update
+        /// </summary>
+        /// <param name="byteCount">The number of bytes to record</param>
         public void RecordNetworkVariableUpdate(int byteCount)
         {
             Adapter.RecordNetworkVariableUpdate((ObjectId)ObjectId, byteCount);

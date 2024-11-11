@@ -17,9 +17,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime.BuiltInScenarios
 
         internal bool IsClassPreset => m_ClassPreset != null && !string.IsNullOrEmpty(m_ClassPreset.Name);
 
-        /// <summary>
         /// <inheritdoc cref="NetworkSimulator.ConnectionPreset"/>
-        /// </summary>
         public INetworkSimulatorPreset ConnectionPreset
         {
             get => (INetworkSimulatorPreset)m_ScriptableObjectPreset ?? m_ClassPreset;

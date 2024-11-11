@@ -6,13 +6,19 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
 {
+    /// <summary>
+    /// The Multiplayer Tools Editor Window provides quick access to the different Tools in this package.
+    /// </summary>
     public class MultiplayerToolsWindow : EditorWindow
     {
         const string k_PathInPackage = "Packages/com.unity.multiplayer.tools/Editor/MultiplayerToolsWindow";
         const string k_MainUxmlPath = k_PathInPackage + "/UI/MultiplayerToolsWindow.uxml";
         const string k_SectionUxmlPath = k_PathInPackage + "/UI/MultiplayerToolsWindowSection.uxml";
 
-        [MenuItem("Window/Multiplayer Tools")]
+        /// <summary>
+        /// The menu item hook to show the Multiplayer Tools Editor Window
+        /// </summary>
+        [MenuItem("Window/Multiplayer/Multiplayer Tools")]
         public static void Open()
         {
             GetWindow<MultiplayerToolsWindow>("Multiplayer Tools");
@@ -31,8 +37,7 @@ namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
             sectionRoot.Add(InstantiateSection(sectionTree, new Rnsm()));
             sectionRoot.Add(InstantiateSection(sectionTree, new NetworkSimulatorFeature()));
             sectionRoot.Add(InstantiateSection(sectionTree, new NetworkProfiler()));
-            if(EditorPrefs.GetBool("DeveloperMode"))
-                sectionRoot.Add(InstantiateSection(sectionTree, new Decorator()));
+            sectionRoot.Add(InstantiateSection(sectionTree, new Decorator()));
             AddPackageVersions(root.Q("PackageRoot"));
             root.Q<Button>("OpenPackageManagerButton").clickable.clicked += OpenPackageManager;
             rootVisualElement.Add(root);

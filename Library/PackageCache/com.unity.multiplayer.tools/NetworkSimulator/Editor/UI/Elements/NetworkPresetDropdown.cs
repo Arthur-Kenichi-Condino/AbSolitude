@@ -5,9 +5,15 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI
 {
-    sealed class NetworkPresetDropdown : DropdownField
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class NetworkPresetDropdown : DropdownField
     {
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<NetworkPresetDropdown, UxmlTraits> { }
+#endif
+
         public const string Custom = nameof(Custom);
 
         public NetworkPresetDropdown()

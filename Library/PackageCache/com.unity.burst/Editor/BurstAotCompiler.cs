@@ -1250,6 +1250,12 @@ extern ""C""
             {
                 var aotSettingsForTarget = BurstPlatformAotSettings.GetOrCreateSettings(summary.platform);
 
+                var windowsSdkVersion = EditorUserBuildSettings.wsaUWPSDK;
+                if (string.IsNullOrEmpty(windowsSdkVersion) || windowsSdkVersion.StartsWith("Latest", StringComparison.OrdinalIgnoreCase))
+                {
+                    windowsSdkVersion = UnityEditor.Scripting.Compilers.UWPReferences.GetInstalledSDKs().Last().Version.ToString();
+                }
+
                 if (EditorUserBuildSettings.wsaUWPBuildType == WSAUWPBuildType.ExecutableOnly)
                 {
                     combinations.Add(new BurstOutputCombination($"Plugins/{GetUWPTargetArchitecture()}", targetCpus, collateDirectory: true));
@@ -1258,7 +1264,12 @@ extern ""C""
                 {
                     combinations.Add(new BurstOutputCombination("Plugins/x64", aotSettingsForTarget.GetDesktopCpu64Bit(), collateDirectory: true));
                     combinations.Add(new BurstOutputCombination("Plugins/x86", aotSettingsForTarget.GetDesktopCpu32Bit(), collateDirectory: true));
-                    combinations.Add(new BurstOutputCombination("Plugins/ARM", new TargetCpus(BurstTargetCpu.THUMB2_NEON32), collateDirectory: true));
+
+                    // Newer Windows SDKs do not support 32 bit ARM.
+                    if (windowsSdkVersion.CompareTo("10.0.26100.0") < 0)
+                    {
+                        combinations.Add(new BurstOutputCombination("Plugins/ARM", new TargetCpus(BurstTargetCpu.THUMB2_NEON32), collateDirectory: true));
+                    }
                     combinations.Add(new BurstOutputCombination("Plugins/ARM64", new TargetCpus(BurstTargetCpu.ARMV8A_AARCH64), collateDirectory: true));
                 }
             }

@@ -7,8 +7,11 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
 {
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
     [LoadUxmlView(NetVisEditorPaths.k_UxmlRoot)]
-    class BandwidthShadingConfigurationView : InjectedVisualElement<BandwidthShadingConfigurationView>
+    partial class BandwidthShadingConfigurationView : InjectedVisualElement<BandwidthShadingConfigurationView>
     {
         [UxmlQuery(Name = nameof(BandwidthSettings.MeshShadingFill))] MeshShadingFillDropdown MeshShadingFillField;
         [UxmlQuery] Toggle AutoScale;
@@ -108,7 +111,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
                     : $"Max bandwidth must be larger than min bandwidth. A value of {min + 1} will be used";
             }
         }
-
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<BandwidthShadingConfigurationView, UxmlTraits> { }
+#endif
     }
 }

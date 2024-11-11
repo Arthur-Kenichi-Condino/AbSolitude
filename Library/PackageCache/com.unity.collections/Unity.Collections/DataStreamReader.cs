@@ -139,9 +139,7 @@ namespace Unity.Collections
                 return;
             }
             // Restore the full bytes moved to the bit buffer but no consumed
-            m_Context.m_ReadByteIndex -= (m_Context.m_BitIndex >> 3);
-            m_Context.m_BitIndex = 0;
-            m_Context.m_BitBuffer = 0;
+            Flush();
             UnsafeUtility.MemCpy(data, m_BufferPtr + m_Context.m_ReadByteIndex, length);
             m_Context.m_ReadByteIndex += length;
         }
@@ -286,6 +284,17 @@ namespace Unity.Collections
             ulong data;
             ReadBytesInternal((byte*)&data, sizeof(ulong));
             return data;
+        }
+
+        /// <summary>
+        /// Aligns the read pointer to the next byte-aligned position. Does nothing if already aligned.
+        /// </summary>
+        /// <remarks>If you call <see cref="DataStreamWriter.Flush"/>, call this to bit-align the reader.</remarks>
+        public void Flush()
+        {
+            m_Context.m_ReadByteIndex -= (m_Context.m_BitIndex >> 3);
+            m_Context.m_BitIndex = 0;
+            m_Context.m_BitBuffer = 0;
         }
 
         /// <summary>
@@ -800,10 +809,10 @@ namespace Unity.Collections
         }
 
         [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS"), Conditional("UNITY_DOTS_DEBUG")]
-        static void CheckBits(int numbits)
+        static void CheckBits(int numBits)
         {
-            if (numbits < 0 || numbits > 32)
-                throw new ArgumentOutOfRangeException("Invalid number of bits");
+            if (numBits < 0 || numBits > 32)
+                throw new ArgumentOutOfRangeException($"Invalid number of bits specified: {numBits}! Valid range is (0, 32) inclusive.");
         }
     }
 }

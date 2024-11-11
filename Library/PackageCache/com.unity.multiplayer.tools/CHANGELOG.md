@@ -4,6 +4,32 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2024-09-27
+
+### *Network Scene Visualization*
+- Fixed a bug which showed the wrong number of clients in the SceneView overlay
+- Fixed a bug which caused null reference exception when entering Play Mode without Domain Reload
+- Fixed a bug which showed wrong ownership visuals with Distributed Authority when reconnecting
+
+### *Runtime Network Stats Monitor*
+- Fixed a bug where RNSM showed no metrics in builds with code stripping enabled
+- Fixed a bug where RNSM stopped working with NGO 2.0.0 or above
+
+## [2.2.0] - 2024-07-24
+
+### *General*
+- Changed Window Menu location to Window/Multiplayer
+- Activated the Hierarchy Network Debug View (Hierarchy overlay indicating NetworkObjects and ownership)
+
+### *Network Scene Visualization*
+- Fixed an issue where the console was spammed with errors when disconnecting from NGO.
+
+### *Network Simulator*
+- Fixed NullRef in Sample Scenario ConnectionParametersWithCurves
+
+### *Runtime Net Stats Monitor*
+- Fixed an issue throwing UI Layout errors when changing RNSM position
+
 ## [2.1.0] - 2023-11-21
 
 ### *General*

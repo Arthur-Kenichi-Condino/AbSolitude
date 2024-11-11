@@ -24,7 +24,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
 
         public void Disconnect()
         {
-            if (m_NetworkSimulator.enabled == false)
+            if (m_NetworkSimulator == null || m_NetworkSimulator.enabled == false)
             {
                 return;
             }
@@ -34,7 +34,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
 
         public void Reconnect()
         {
-            if (m_NetworkSimulator.enabled == false)
+            if (m_NetworkSimulator == null || m_NetworkSimulator.enabled == false)
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
 
         public void TriggerLagSpike(TimeSpan duration)
         {
-            if (m_NetworkSimulator.enabled == false)
+            if (m_NetworkSimulator == null || m_NetworkSimulator.enabled == false)
             {
                 return;
             }
@@ -54,7 +54,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
 
         public Task TriggerLagSpikeAsync(TimeSpan duration)
         {
-            if (m_NetworkSimulator.enabled == false)
+            if (m_NetworkSimulator == null || m_NetworkSimulator.enabled == false)
             {
                 return Task.CompletedTask;
             }
@@ -64,7 +64,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Runtime
 
         public void ChangeConnectionPreset(INetworkSimulatorPreset newNetworkSimulatorPreset)
         {
-            if (m_NetworkSimulator.enabled == false)
+            if (m_NetworkSimulator == null || m_NetworkSimulator.enabled == false)
             {
                 return;
             }

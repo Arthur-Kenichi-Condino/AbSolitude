@@ -75,6 +75,7 @@ namespace InputfieldTests
         }
 
         [Test]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.Switch })] //   PLAT-11124 (Switch)
         [TestCase("*Azé09", "*Azé09", InputField.CharacterValidation.None)]
         [TestCase("*Azé09?.", "Az09", InputField.CharacterValidation.Alphanumeric)]
         [TestCase("Abc10x", "10", InputField.CharacterValidation.Integer)]
@@ -105,6 +106,7 @@ namespace InputfieldTests
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.Switch })] //   PLAT-11127 (Switch)
         [TestCase("*Azé09", "*Azé09", InputField.CharacterValidation.None, ExpectedResult = null)]
         [TestCase("*Azé09?.", "Az09", InputField.CharacterValidation.Alphanumeric, ExpectedResult = null)]
         [TestCase("Abc10x", "10", InputField.CharacterValidation.Integer, ExpectedResult = null)]
@@ -194,7 +196,7 @@ namespace InputfieldTests
         }
 
         [UnityTest]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS })] // UUM-71764 (tvOS)
+        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS, RuntimePlatform.Switch })] // UUM-71764 (tvOS)  PLAT-11128 (Switch)
         public IEnumerator SendsEndEditEventOnDeselect()
         {
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
@@ -241,7 +243,7 @@ namespace InputfieldTests
         }
 
         [UnityTest]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS })] // UUM-71764 (tvOS)
+        [UnityPlatform(exclude = new[] { RuntimePlatform.tvOS, RuntimePlatform.Switch })] // UUM-71764 (tvOS) PLAT-11119 (Switch)
         public IEnumerator FocusOpensTouchScreenKeyboard()
         {
             var isInPlaceEditingDisabled = typeof(TouchScreenKeyboard).GetProperty("disableInPlaceEditing",

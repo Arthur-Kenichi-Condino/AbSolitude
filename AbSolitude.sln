@@ -201,6 +201,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Netcode.Editor.Packag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Core.Runtime.Shared", "Unity.RenderPipelines.Core.Runtime.Shared.csproj", "{953BE026-F822-5098-61A5-FD1B24638F63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Multiplayer.Tools.Adapters.Ngo1", "Unity.Multiplayer.Tools.Adapters.Ngo1.csproj", "{C926C359-422C-9B75-3B18-2FFECCE38A85}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.ProBuilder.Stl", "Unity.ProBuilder.Stl.csproj", "{7211D65C-1DFE-0917-23DC-1F5AD221BD89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Multiplayer.Tools.NetStatsReporting", "Unity.Multiplayer.Tools.NetStatsReporting.csproj", "{B7C9CF6A-D3D3-81BE-523E-D0EF700EBE7B}"
@@ -631,6 +633,10 @@ Global
 		{953BE026-F822-5098-61A5-FD1B24638F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{953BE026-F822-5098-61A5-FD1B24638F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{953BE026-F822-5098-61A5-FD1B24638F63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C926C359-422C-9B75-3B18-2FFECCE38A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C926C359-422C-9B75-3B18-2FFECCE38A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C926C359-422C-9B75-3B18-2FFECCE38A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C926C359-422C-9B75-3B18-2FFECCE38A85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7211D65C-1DFE-0917-23DC-1F5AD221BD89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7211D65C-1DFE-0917-23DC-1F5AD221BD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7211D65C-1DFE-0917-23DC-1F5AD221BD89}.Release|Any CPU.ActiveCfg = Release|Any CPU

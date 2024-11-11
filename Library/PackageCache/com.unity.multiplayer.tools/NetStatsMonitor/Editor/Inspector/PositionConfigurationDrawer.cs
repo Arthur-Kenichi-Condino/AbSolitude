@@ -9,11 +9,6 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Editor
     [CustomPropertyDrawer(typeof(PositionConfiguration))]
     class PositionConfigurationDrawer : PropertyDrawer
     {
-        public override bool CanCacheInspectorGUI(SerializedProperty property)
-        {
-            return true;
-        }
-
         public override VisualElement CreatePropertyGUI(SerializedProperty configurationProp)
         {
             return new PositionConfigurationInspector(configurationProp);

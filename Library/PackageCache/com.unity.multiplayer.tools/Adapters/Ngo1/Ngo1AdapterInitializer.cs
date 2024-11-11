@@ -2,7 +2,9 @@ using System.Threading.Tasks;
 using Unity.Multiplayer.Tools.Common;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[assembly: AlwaysLinkAssembly]
 namespace Unity.Multiplayer.Tools.Adapters.Ngo1
 {
     static class Ngo1AdapterInitializer

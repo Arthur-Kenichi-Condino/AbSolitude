@@ -16,8 +16,10 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI
         IEnumerable<string> labels { get; set; }
         Type enumType { get; set; }
     }
-
-    class ToggleButtonStrip : BaseField<string>, IToggleButtonStrip
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class ToggleButtonStrip : BaseField<string>, IToggleButtonStrip
     {
         static readonly string s_UssPath = "Packages/com.unity.multiplayer.tools/NetworkSimulator/Editor/UI/ToggleButtonStrip/ToggleButtonStrip.uss";
         static readonly string s_UssClassName = "unity-toggle-button-strip";
@@ -29,9 +31,10 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI
         int m_PseudoStatesCheckedValue = k_InvalidEnumValue;
         int m_PseudoStatesFocusValue = k_InvalidEnumValue;
         int m_VersionChangeTypeStylesValue = k_InvalidEnumValue;
-
+#if !UNITY_2023_3_OR_NEWER
         new class UxmlFactory : UxmlFactory<ToggleButtonStrip, UxmlTraits> {}
-        new class UxmlTraits : BaseField<string>.UxmlTraits
+
+        new class UxmlTraits : VisualElement.UxmlTraits
         {
             public UxmlTraits()
             {
@@ -41,6 +44,7 @@ namespace Unity.Multiplayer.Tools.NetworkSimulator.Editor.UI
                 base.Init(ve, bag, cc);
             }
         }
+#endif
         public IEnumerable<string> choices
         {
             get { return m_ButtonStrip.choices; }

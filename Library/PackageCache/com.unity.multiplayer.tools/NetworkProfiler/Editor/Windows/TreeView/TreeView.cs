@@ -7,7 +7,10 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor
 {
-    class TreeView : VisualElement
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
+    partial class TreeView : VisualElement
     {
         const string k_ListViewName = "unity-tree-view__list-view";
         const string k_ItemName = "unity-tree-view__item";
@@ -16,6 +19,7 @@ namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor
         const string k_ItemIndentName = "unity-tree-view__item-indent";
         const string k_ItemContentContainerName = "unity-tree-view__item-content";
 
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<TreeView, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
@@ -47,6 +51,7 @@ namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor
                 treeView.showAlternatingRowBackgrounds = m_ShowAlternatingRowBackgrounds.GetValueFromBag(bag, creationContext);
             }
         }
+#endif
 
         Func<VisualElement> m_MakeItem;
 

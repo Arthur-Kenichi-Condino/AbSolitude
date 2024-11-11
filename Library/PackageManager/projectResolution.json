@@ -1,7 +1,7 @@
 {
   "context": {
     "projectPath": "C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages",
-    "unityVersion": "6000.0.20f1"
+    "unityVersion": "6000.0.26f1"
   },
   "inputs": [
     "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Packages\\manifest.json",
@@ -40,20 +40,20 @@
       "version": "2.0.4",
       "source": "registry"
     },
-    "com.unity.collab-proxy@2.5.1": {
+    "com.unity.collab-proxy@2.5.2": {
       "name": "com.unity.collab-proxy",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.collab-proxy",
-      "fingerprint": "c810163b1645af64e676552b0e8d0b3c575991e6",
+      "fingerprint": "da7e55b87e08569f31766e7cabc37bc033c9c7f9",
       "editorCompatibility": "2020.3.48f1",
-      "version": "2.5.1",
+      "version": "2.5.2",
       "source": "registry"
     },
-    "com.unity.collections@2.4.3": {
+    "com.unity.collections@2.5.1": {
       "name": "com.unity.collections",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.collections",
-      "fingerprint": "eba9b2ae55c09c3548eaeac72a96dda87b0640cf",
+      "fingerprint": "56bff8827a7ef6d44fcee4f36e558a74da89c1a0",
       "editorCompatibility": "2022.3.11f1",
-      "version": "2.4.3",
+      "version": "2.5.1",
       "source": "registry"
     },
     "com.unity.ide.rider@3.0.31": {
@@ -72,20 +72,20 @@
       "version": "2.0.22",
       "source": "registry"
     },
-    "com.unity.memoryprofiler@1.1.0": {
+    "com.unity.memoryprofiler@1.1.1": {
       "name": "com.unity.memoryprofiler",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.memoryprofiler",
-      "fingerprint": "6c5b50ddc4851bd4c22071ec973401e3d65a995e",
+      "fingerprint": "7555aee67a0298b971104e73b4939a2b7dfb5af0",
       "editorCompatibility": "2022.3.0a1",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "source": "registry"
     },
-    "com.unity.multiplayer.tools@2.1.0": {
+    "com.unity.multiplayer.tools@2.2.1": {
       "name": "com.unity.multiplayer.tools",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.multiplayer.tools",
-      "fingerprint": "0dcebea94ca9b890dab09a768fa02e3b9f28c908",
-      "editorCompatibility": "2023.3.0a1",
-      "version": "2.1.0",
+      "fingerprint": "212d83b66f830476aafd30cff2797a3a0ae2ea64",
+      "editorCompatibility": "6000.0.0a1",
+      "version": "2.2.1",
       "source": "registry"
     },
     "com.unity.netcode.gameobjects@2.0.0": {
@@ -104,12 +104,12 @@
       "version": "3.4.0",
       "source": "registry"
     },
-    "com.unity.probuilder@6.0.3": {
+    "com.unity.probuilder@6.0.4": {
       "name": "com.unity.probuilder",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.probuilder",
-      "fingerprint": "86d18759ac1277ec80ed437d418dbdd96350e808",
+      "fingerprint": "a2827f523e21ea251861dac290125410ba4e560b",
       "editorCompatibility": "6000.0.0a1",
-      "version": "6.0.3",
+      "version": "6.0.4",
       "source": "registry"
     },
     "com.unity.test-framework@1.4.5": {
@@ -139,7 +139,7 @@
     "com.unity.ugui@2.0.0": {
       "name": "com.unity.ugui",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.ugui",
-      "fingerprint": "b0e0b1c828561e8a0d130fa0e71078e9684ef47f",
+      "fingerprint": "12b988ed4f6aa6c2fcb678e1904d5cd4d5ef471c",
       "editorCompatibility": "2019.2.0a1",
       "version": "2.0.0",
       "source": "builtin"
@@ -356,12 +356,12 @@
       "version": "1.0.0",
       "source": "builtin"
     },
-    "com.unity.burst@1.8.17": {
+    "com.unity.burst@1.8.18": {
       "name": "com.unity.burst",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.burst",
-      "fingerprint": "3aba14bc08eea56d416846e80adc0dc70d40a448",
+      "fingerprint": "616862665d8c8ffe643d505aebb5de2ee73b0ab0",
       "editorCompatibility": "2020.3.0a1",
-      "version": "1.8.17",
+      "version": "1.8.18",
       "source": "registry"
     },
     "com.unity.mathematics@1.3.2": {
@@ -380,10 +380,10 @@
       "version": "2.0.5",
       "source": "registry"
     },
-    "com.unity.shadergraph@17.0.3": {
+    "com.unity.shadergraph@17.0.2": {
       "name": "com.unity.shadergraph",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.shadergraph",
-      "fingerprint": "2628b911ca1acaff5fadf11f2b13d17d59acaf29",
+      "fingerprint": "e6e0df3c9e43d268733e3882298a59923bdf76d3",
       "editorCompatibility": "6000.0.0a1",
       "version": "17.0.3",
       "source": "builtin"
@@ -447,7 +447,7 @@
     "com.unity.render-pipelines.core@17.0.3": {
       "name": "com.unity.render-pipelines.core",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.render-pipelines.core",
-      "fingerprint": "241f3c7febcff1083610bae21ce9427711884311",
+      "fingerprint": "9e172bcfb19a7723de6866f47995a4d01e058347",
       "editorCompatibility": "6000.0.0a1",
       "version": "17.0.3",
       "source": "builtin"
@@ -463,7 +463,7 @@
     "com.unity.rendering.light-transport@1.0.1": {
       "name": "com.unity.rendering.light-transport",
       "resolvedPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Library\\PackageCache\\com.unity.rendering.light-transport",
-      "fingerprint": "8e780c06f5c1408ffa25004f2c90b6802481bbd8",
+      "fingerprint": "307bc27a498fc9cd409bbd426c85d8dc7f140bc1",
       "editorCompatibility": "2023.3.0b1",
       "version": "1.0.1",
       "source": "builtin"

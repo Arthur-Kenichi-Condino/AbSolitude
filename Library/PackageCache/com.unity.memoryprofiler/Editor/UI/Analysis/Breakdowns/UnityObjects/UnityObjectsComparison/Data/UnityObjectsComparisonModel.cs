@@ -8,6 +8,8 @@ namespace Unity.MemoryProfiler.Editor.UI
     // Data model representing the 'Unity Objects' comparison breakdown.
     class UnityObjectsComparisonModel : TreeModel<UnityObjectsComparisonModel.ItemData>
     {
+        public const string AssemblyNameDisambiguationSeparator = " (";
+
         public UnityObjectsComparisonModel(
             List<TreeViewItemData<ItemData>> treeRootNodes,
             MemorySize totalSnapshotAMemorySize,

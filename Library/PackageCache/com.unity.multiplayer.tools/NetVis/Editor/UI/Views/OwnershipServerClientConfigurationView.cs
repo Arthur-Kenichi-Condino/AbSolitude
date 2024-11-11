@@ -13,19 +13,28 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
 {
+#if UNITY_2023_3_OR_NEWER
+    [UxmlElement]
+#endif
     [LoadUxmlView(NetVisEditorPaths.k_UxmlRoot)]
-    class OwnershipServerClientConfigurationView : InjectedVisualElement<OwnershipServerClientConfigurationView>
+    partial class OwnershipServerClientConfigurationView : InjectedVisualElement<OwnershipServerClientConfigurationView>
     {
         const bool k_ClientColorShowAlpha = false;
         const bool k_ClientColorShowEyeDropper = false;
 
-        [UxmlQuery] Label ServerHost;
-        [UxmlQuery] ColorField ServerHostColor;
-        [UxmlQuery] Label NoClientsConnectedText;
-        [UxmlQuery] VisualElement ClientsContainer;
+        [UxmlQuery]
+        Label ServerHost;
+        [UxmlQuery]
+        ColorField ServerHostColor;
+        [UxmlQuery]
+        Label NoClientsConnectedText;
+        [UxmlQuery]
+        VisualElement ClientsContainer;
 
-        [Inject] NetVisConfigurationWithEvents Configuration;
-        [Inject] IGetConnectedClients ConnectedClientsRepository;
+        [Inject]
+        NetVisConfigurationWithEvents Configuration;
+        [Inject]
+        IGetConnectedClients ConnectedClientsRepository;
         OwnershipSettings OwnershipSettings => Configuration.Configuration.Settings.Ownership;
 
         readonly List<(ClientId ClientId, ColorField Color)> m_ConnectedClients = new();
@@ -41,6 +50,11 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
                 ResetColorToDefault(ServerHostColor, OwnershipSettings.ServerHostColor));
             DisableWithoutChangingColor(ServerHostColor);
 
+            UpdateClientList();
+        }
+
+        void UpdateClientList()
+        {
             foreach (var client in ConnectedClientsRepository.ConnectedClients)
             {
                 AddClient(client);
@@ -49,6 +63,9 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
 
         void OnAttach(AttachToPanelEvent _)
         {
+            // There could have been client changes while we were detached
+            UpdateClientList();
+            
             ConnectedClientsRepository.ClientConnectionEvent += AddClient;
             ConnectedClientsRepository.ClientDisconnectionEvent += RemoveClient;
         }
@@ -79,7 +96,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
                 showEyeDropper = k_ClientColorShowEyeDropper
             };
 
-            var clientColor = CategoricalColorPalette.GetColor((int)clientId);
+            var clientColor = CategoricalColorPalette.GetColor((int) clientId);
             colorField.Bind(clientColor, ResetColorToDefault(colorField, clientColor));
 
             m_ConnectedClients.Add((clientId, colorField));
@@ -110,6 +127,7 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
             {
                 field.SetValueWithoutNotify(defaultColor);
             }
+
             return OnValueChanged;
         }
 
@@ -123,6 +141,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
             colorField.RemoveFromClassList(disabledUssClassName);
         }
 
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<OwnershipServerClientConfigurationView, UxmlTraits> { }
+#endif
     }
 }

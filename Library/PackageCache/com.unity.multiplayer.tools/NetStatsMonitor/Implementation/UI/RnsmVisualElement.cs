@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Multiplayer.Tools.Common;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
@@ -12,6 +13,10 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
         readonly List<CounterVisualElement> m_Counters = new();
         readonly List<GraphVisualElement> m_Graphs = new();
         readonly NoDataReceivedVisualElement m_NoDataReceivedMessage = new();
+
+        EventCallback<GeometryChangedEvent> m_OnGeoChange;
+        int m_LastUpdateFrame;
+        const float k_EpsilonPixels = 0.5f;
 
         internal RnsmVisualElement()
         {
@@ -89,7 +94,6 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
             }
         }
 
-
         /// Update the display data with new network data.
         public void UpdateDisplayData(MultiStatHistory stats, EnumMap<SampleRate, bool> newDataAvailable, double time)
         {
@@ -122,8 +126,6 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
             m_NoDataReceivedMessage.Update(secondsSinceDataReceived);
         }
 
-        EventCallback<GeometryChangedEvent> m_OnGeoChange;
-
         public void ApplyPosition(PositionConfiguration positionConfiguration)
         {
             if (m_OnGeoChange != null)
@@ -132,29 +134,21 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
                 UnregisterCallback(m_OnGeoChange);
                 m_OnGeoChange = null;
             }
+            
             if (positionConfiguration.OverridePosition)
             {
-                Action onSizeChange = () =>
-                {
-                    var parentWidth = parent.contentRect.width;
-                    var parentHeight = parent.contentRect.height;
+                // Using the forced flag to ensure user input is applied.
+                ChangePosition(positionConfiguration, true);
 
-                    var left = positionConfiguration.PositionLeftToRight * (parentWidth - contentRect.width);
-                    var top  = positionConfiguration.PositionTopToBottom * (parentHeight - contentRect.height);
-
-                    style.left = new Length(left, LengthUnit.Pixel);
-                    style.top = new Length(top, LengthUnit.Pixel);
-                };
-                onSizeChange();
                 m_OnGeoChange = evt =>
                 {
-                    const float k_EpsilonPixels = 0.5f;
-                    if ((MathF.Abs(evt.newRect.width - evt.oldRect.width) > k_EpsilonPixels) ||
-                        (MathF.Abs(evt.newRect.height - evt.oldRect.height) > k_EpsilonPixels))
+                    if (MathF.Abs(evt.newRect.width - evt.oldRect.width) > k_EpsilonPixels ||
+                        MathF.Abs(evt.newRect.height - evt.oldRect.height) > k_EpsilonPixels)
                     {
-                        onSizeChange();
+                        ChangePosition(positionConfiguration);
                     }
                 };
+
                 parent.RegisterCallback(m_OnGeoChange);
                 RegisterCallback(m_OnGeoChange);
             }
@@ -163,6 +157,26 @@ namespace Unity.Multiplayer.Tools.NetStatsMonitor.Implementation
                 style.left = StyleKeyword.Null;
                 style.top = StyleKeyword.Null;
             }
+        }
+
+        void ChangePosition(PositionConfiguration positionConfiguration, bool forced = false)
+        {
+            // For performance reasons avoid multiple updates per frame but always allow forced updates.
+            if (Time.frameCount == m_LastUpdateFrame && !forced)
+            {
+                return;
+            }
+
+            m_LastUpdateFrame = Time.frameCount;
+
+            var parentWidth = parent.contentRect.width;
+            var parentHeight = parent.contentRect.height;
+
+            var left = positionConfiguration.PositionLeftToRight * (parentWidth - contentRect.width);
+            var top = positionConfiguration.PositionTopToBottom * (parentHeight - contentRect.height);
+
+            style.left = new Length(left, LengthUnit.Pixel);
+            style.top = new Length(top, LengthUnit.Pixel);
         }
     }
 }

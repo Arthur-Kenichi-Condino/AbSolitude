@@ -4,10 +4,16 @@ using UnityEngine.UIElements;
 
 namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor.NoDataView
 {
+    /// <summary>
+    /// A VisualElement for Profiler frames without data
+    /// </summary>
     public class ProfilerNoData : VisualElement
     {
         const string k_NoInfoString = "No data for this frame. Select another one in the frame chart.";
 
+        /// <summary>
+        /// The constructor
+        /// </summary>
         public ProfilerNoData()
         {
             this.style.flexGrow = 1.0f;

@@ -57,6 +57,12 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
 
         public void UpdateObjectColors()
         {
+            if (!NetVisDataStore.IsConnectedServerOrClient)
+            {
+                ClearColors();
+                return;
+            }
+            
             var currentSceneViewCamera = SceneViewCamera;
             if (m_NetVisRenderer?.Camera != SceneViewCamera)
             {
@@ -77,11 +83,16 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.Visualization
 
             m_NetVisRenderer.SetColorMapping(m_InstanceIdToColor);
         }
-
-        void ComputeNetworkedObjectColors(IReadOnlyList<ObjectId> objectIds)
+        
+        void ClearColors()
         {
             m_InstanceIdToColor.Clear();
             m_ObjectColoring.UpdateForNewFrame(m_Configuration);
+        }
+
+        void ComputeNetworkedObjectColors(IReadOnlyList<ObjectId> objectIds)
+        {
+            ClearColors();
             
             if (m_Configuration.Metric == NetVisMetric.Bandwidth && NetVisDataStore.IsBandwidthCacheEmpty)
             {

@@ -28,7 +28,8 @@ namespace Unity.Multiplayer.Tools.NetVis.Editor.UI
         {
             PopupWindow.Show(s_Instance.worldBound, new NetVisPopupWindowContent<CommonSettingsView>(320, 200));
         }
-
+#if !UNITY_2023_3_OR_NEWER
         public new class UxmlFactory : UxmlFactory<SettingsToolbarButton, UxmlTraits> { }
+#endif
     }
 }

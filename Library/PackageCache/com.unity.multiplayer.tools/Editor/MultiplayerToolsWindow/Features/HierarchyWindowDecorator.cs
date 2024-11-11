@@ -15,6 +15,19 @@ namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
     [InitializeOnLoad]
     static class HierarchyWindowDecorator
     {
+        const string k_EditorPrefsKey = "MptWindow.HierarchyWindowDecorator.Enabled";
+        const string k_IconsPath = "Packages/com.unity.multiplayer.tools/Editor/MultiplayerToolsWindow/UI/Icons/";
+        const string k_NonOwnerLightIconPath = k_IconsPath + "Network@2x.png";
+        const string k_NonOwnerDarkIconPath = k_IconsPath + "d_Network@2x.png";
+        const string k_OwnerLightIconPath = k_IconsPath + "OwnedNetwork@2x.png";
+        const string k_OwnerDarkIconPath = k_IconsPath + "d_OwnedNetwork@2x.png";
+
+        static bool s_Enabled = false;
+
+        static GUIStyle s_TextStyle;
+        static Texture2D s_OwnershipActiveIcon;
+        static Texture2D s_OwnershipInActiveIcon;
+
         public static bool Enabled
         {
             get => s_Enabled;
@@ -27,20 +40,22 @@ namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
 
         static HierarchyWindowDecorator()
         {
-            s_Enabled = EditorPrefs.GetBool(k_EditorPrefsKey, false) && EditorPrefs.GetBool("DeveloperMode");
+            s_Enabled = EditorPrefs.GetBool(k_EditorPrefsKey, false);
             EditorApplication.hierarchyWindowItemOnGUI -= DecoratorHandler;
             EditorApplication.hierarchyWindowItemOnGUI += DecoratorHandler;
+
+            // Load icons based on dark/light theme
+            if (EditorGUIUtility.isProSkin)
+            {
+                s_OwnershipActiveIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(k_OwnerDarkIconPath);
+                s_OwnershipInActiveIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(k_NonOwnerDarkIconPath);
+            }
+            else
+            {
+                s_OwnershipActiveIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(k_OwnerLightIconPath);
+                s_OwnershipInActiveIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(k_NonOwnerLightIconPath);
+            }
         }
-
-        const string k_EditorPrefsKey = "MptWindow.HierarchyWindowDecorator.Enabled";
-
-        static bool s_Enabled = false;
-
-        static GUIStyle s_TextStyle;
-
-        static Texture2D s_Icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.unity.multiplayer.tools/Editor/MultiplayerToolsWindow/UI/Icons/CrownIcon.png");
-
-        static readonly Color k_NetworkObjectColor = new Color(132f / 255, 53f / 255, 175f / 255);
 
         static void DecoratorHandler(int instanceID, Rect rect)
         {
@@ -62,10 +77,8 @@ namespace Unity.Multiplayer.Tools.Editor.MultiplayerToolsWindow
             iconRect.x += rect.width - 20;
             iconRect.height = rect.height;
             iconRect.width = iconRect.height;
-            EditorGUI.DrawRect(iconRect, k_NetworkObjectColor);
 
-            if (no.IsOwner)
-                GUI.DrawTexture(iconRect, s_Icon);
+            GUI.DrawTexture(iconRect, no.IsOwner ? s_OwnershipActiveIcon : s_OwnershipInActiveIcon);
 
             var textRect = rect;
             textRect.x += rect.width - iconRect.width - 30;

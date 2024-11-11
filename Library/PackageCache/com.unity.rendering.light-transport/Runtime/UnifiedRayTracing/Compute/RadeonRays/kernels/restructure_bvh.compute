@@ -485,7 +485,7 @@ void Restructure(in uint gidx : SV_DispatchThreadID,
 
     [allow_uav_condition]
     //while (true) // FXC generates incorrect code with a while true here, we write it as a for loop instead as a workaround
-    for (uint i = 0; i < 4294967295u; ++i)
+    for (uint i = 0; i < 2147483647u; ++i)
     {
         // Form a treelet
         if (lidx == 0)

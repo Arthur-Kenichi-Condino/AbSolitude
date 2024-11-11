@@ -5,22 +5,22 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638628462485461777
-    m_Hash: 1796476489
+      ticks: 638669115750235548
+    m_Hash: 1721182467
   m_LockFileStatus:
     m_FilePath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638628462485506891
-    m_Hash: 2762212696
+      ticks: 638669116964615146
+    m_Hash: 238396928
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
 m_ProjectPath: C:/Users/arthu/Documentos/GitHub/AbSolitude/Packages
-m_EditorVersion: 6000.0.20f1 (05208a74e9aa)
+m_EditorVersion: 6000.0.26f1 (ccb7c73d2c02)
 m_ResolvedPackages:
 - packageId: com.community.netcode.transport.steamnetworkingsockets@https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworkingsockets
   testable: 0
@@ -295,14 +295,19 @@ m_ResolvedPackages:
     - 1.21.20
     - 1.21.21
     - 1.22.2
+    - 1.22.3
     - 2.0.3
     - 2.0.4
     - 2.0.6
     - 2.0.8
     - 2.1.0
     - 2.2.2
+    - 2.3.0
+    - 2.3.1
     compatible:
     - 2.2.2
+    - 2.3.0
+    - 2.3.1
     recommended: 2.2.2
     deprecated: []
   dependencies:
@@ -500,10 +505,10 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 2.0.4
     minimumUnityVersion: 2023.2.0a18
-- packageId: com.unity.collab-proxy@2.5.1
+- packageId: com.unity.collab-proxy@2.5.2
   testable: 0
   isDirectDependency: 1
-  version: 2.5.1
+  version: 2.5.2
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collab-proxy
   assetPath: Packages/com.unity.collab-proxy
@@ -595,9 +600,10 @@ m_ResolvedPackages:
     - 2.4.3
     - 2.4.4
     - 2.5.1
+    - 2.5.2
     compatible:
-    - 2.5.1
-    recommended: 2.5.1
+    - 2.5.2
+    recommended: 2.5.2
     deprecated: []
   dependencies: []
   resolvedDependencies: []
@@ -628,16 +634,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638612183804560000
+  datePublishedTicks: 638630364536670000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.5/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.cloud.collaborate.git
-    revision: 470a7a1321fe499cf5055d6b1d64da3a08c8dcbc
+    revision: c402e6396d3ea20ecb2d59eac908e7e0a30cd7e6
     path: 
   unityLifecycle:
-    version: 2.5.1
+    version: 2.5.2
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -647,30 +653,19 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"### Added\n\n- Allow deletion of non-empty branches
-    that have not been merged anywhere\n- New setting to control if new files must
-    be automatically added to source control\n\n### Changed\n\n- Improve the dialog
-    to install Unity Version Control from the Editor\n\n### Fixed\n\n- Fixed ''an
-    existing xxx operation has locked the workspace'' error on finding changes operation\n-
-    Fixed a case of a hang happening on Editor quit\n- Fixed the login that could
-    fail for Enterprise installation\n- Fixed undo operation that didn''t capture
-    changes in packages\n- Fixed history that was not shown when there was no desktop
-    client installed\n- Fixed unity 6 Editor going into the background after a dialog
-    was closed\n- Fixed wrong font size when changing to changesets view\n- Fixed
-    the \"Upgrade plan\" button in Unity plugin that used a obsolete redirection
-    link\n- Fixed Logs that were configured too late in the initialization\n- Fixed
-    the minimum supported version (2020.3.48f1 LTS) in the README"}'
+  upmReserved: '{"changelog":"### Fixed\n\n- Fix token renewal issue: Can''t obtain
+    a new token (Message: Invalid Refresh Token., Code: 132.104)"}'
   assetStore:
     productId: 
-  fingerprint: c810163b1645af64e676552b0e8d0b3c575991e6
+  fingerprint: da7e55b87e08569f31766e7cabc37bc033c9c7f9
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 2.5.1
+    minimumPackageVersion: 2.5.2
     minimumUnityVersion: 2020.3.48f1
-- packageId: com.unity.collections@2.4.3
+- packageId: com.unity.collections@2.5.1
   testable: 0
   isDirectDependency: 1
-  version: 2.4.3
+  version: 2.5.1
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.collections
   assetPath: Packages/com.unity.collections
@@ -681,7 +676,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: asset
+  type: 
   description: A C# collections library providing data structures that can be used
     in jobs, and optimized by Burst compiler.
   errors: []
@@ -758,24 +753,21 @@ m_ResolvedPackages:
     - 2.5.0-pre.2
     - 2.5.1
     compatible:
-    - 2.4.3
-    - 2.5.0-exp.1
-    - 2.5.0-pre.2
     - 2.5.1
-    recommended: 2.4.3
+    recommended: 2.5.1
     deprecated: []
   dependencies:
   - name: com.unity.burst
-    version: 1.8.13
+    version: 1.8.17
   - name: com.unity.test-framework
-    version: 1.4.3
+    version: 1.4.5
   - name: com.unity.nuget.mono-cecil
     version: 1.11.4
   - name: com.unity.test-framework.performance
     version: 3.0.3
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
@@ -806,16 +798,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638593176350000000
-  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collections@2.4/manual/index.html
+  datePublishedTicks: 638621282722800000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.collections@2.5/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/dots.git
-    revision: 3229c084d74b90980f151fe926f426ae38a63b44
+    revision: 5b0dea6b455f5df005c19fa984ddfa237d6cd707
     path: 
   unityLifecycle:
-    version: 2.4.3
+    version: 2.5.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -825,13 +817,16 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"* Update entities package dependencies"}'
+  upmReserved: '{"changelog":"### Changed\n* Updated Burst dependency to version
+    1.8.17\n* Updated Unity Test Framework dependency to version 1.4.5\n* Updated
+    entities packages dependencies\n\n### Fixed\n* Certain cases would cause an ILPostProcessor
+    to fail, blocking compilation, but no more."}'
   assetStore:
     productId: 
-  fingerprint: eba9b2ae55c09c3548eaeac72a96dda87b0640cf
+  fingerprint: 56bff8827a7ef6d44fcee4f36e558a74da89c1a0
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 2.4.3
+    minimumPackageVersion: 2.5.1
     minimumUnityVersion: 2022.3.11f1
 - packageId: com.unity.ide.rider@3.0.31
   testable: 0
@@ -897,9 +892,11 @@ m_ResolvedPackages:
     - 3.0.27
     - 3.0.28
     - 3.0.31
+    - 3.0.34
     compatible:
     - 3.0.31
-    recommended: 3.0.31
+    - 3.0.34
+    recommended: 3.0.34
     deprecated: []
   dependencies:
   - name: com.unity.ext.nunit
@@ -1056,10 +1053,10 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 2.0.22
     minimumUnityVersion: 2019.4.25f1
-- packageId: com.unity.memoryprofiler@1.1.0
+- packageId: com.unity.memoryprofiler@1.1.1
   testable: 0
   isDirectDependency: 1
-  version: 1.1.0
+  version: 1.1.1
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.memoryprofiler
   assetPath: Packages/com.unity.memoryprofiler
@@ -1070,7 +1067,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: assets
+  type: 
   description: The Memory Profiler offers a unified solution allowing you to profile
     both small projects on mobile devices and big AAA projects on high end machines.
     It provides actionable information about allocations in the engine to allow developers
@@ -1124,10 +1121,13 @@ m_ResolvedPackages:
     - 1.1.0-pre.3
     - 1.1.0
     - 1.1.1
+    - 1.1.2
+    - 1.1.3
     compatible:
-    - 1.1.0
     - 1.1.1
-    recommended: 1.1.1
+    - 1.1.2
+    - 1.1.3
+    recommended: 1.1.3
     deprecated: []
   dependencies:
   - name: com.unity.editorcoroutines
@@ -1154,16 +1154,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638334775400000000
+  datePublishedTicks: 638615775184860000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.memoryprofiler@1.1/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.memoryprofiler.git
-    revision: 2297acd0384cc2f42d24e670a5990104bedc19c5
+    revision: 9dd462014d02e2a36426b27a5fe4aff8187c7aa4
     path: 
   unityLifecycle:
-    version: 1.1.0
+    version: 1.1.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1173,18 +1173,43 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"- Bump version to 1.1.0 from 1.1.0-pre.3."}'
+  upmReserved: '{"changelog":"### Added\n- Added the name of the assembly to the
+    Type details when selecting a Managed Type group.\n\n### Fixed\n- Fixed navigating
+    with arrow keys not updating reference list in All of Memory view ([PROFB-153](https://issuetracker.unity3d.com/product/unity/issues/guid/PROFB-153)).\n-
+    Fixed retention of Snapshot list expansion and scroll state so that it does not
+    expand all items unexpectedly but remembers which sessions were collapsed and
+    which extended ([PROFB-196](https://issuetracker.unity3d.com/product/unity/issues/guid/PROFB-196)).\n-
+    Fixed dropdown text being clipped when \"Allocated and Resident Memory on Device\"
+    was selected.\n- Fixed an issue whereby graphics allocations not associated with
+    a native object would display under a \"No Name\" category in the All of Memory
+    table.\n- Fixed issues with selecting array objects, or objects that had managed
+    fields with arrays, when the arrays where multidimensional with one or more dimensions
+    of size 0.\n- Fixed exception when opening the Unity Objects table in Comparison
+    mode when there are multiple MonoBehaviour or ScriptableObject types with the
+    same name but from different assemblies.\n- Fixed exception when opening the
+    All Of Memory table in Comparison mode when either of the snapshots is from a
+    pre 2022.2 runtime and the untracked amount is negative.\n- Fixed an ArgumentOutOfRangeException
+    when inspecting some Managed Objects ([PROFB-223](https://issuetracker.unity3d.com/product/unity/issues/guid/PROFB-223)).\n-
+    Fixed longer string values not being displayed in the Managed Fields Inspector.\n-
+    Fixed an issue that caused IL2CPP VM memory to not be calculated correctly in
+    the Summary and All Of Memory table.\n- Remove deprecated UxmlFactory/UxmlTraits
+    API usage on Unity 6.\n- Add divider on \"Capture\" toolbar button dropdown.\n-
+    Reattributed IL2CPP VM memory from Native to Managed in the All Of Memory table.\n\n###
+    Changed\n- Allowed Snapshots to reside in Subfolders within the configured memory
+    snapshot path.\n- Improved Snapshots folder monitoring: Changes to the folder
+    are now reflected in the Editor without it requiring to acquire focus first.\n-
+    Improved display of managed arrays in the Selected Item Details and Managed Fields."}'
   assetStore:
     productId: 
-  fingerprint: 6c5b50ddc4851bd4c22071ec973401e3d65a995e
+  fingerprint: 7555aee67a0298b971104e73b4939a2b7dfb5af0
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 1.1.0
+    minimumPackageVersion: 1.1.1
     minimumUnityVersion: 2022.3.0a1
-- packageId: com.unity.multiplayer.tools@2.1.0
+- packageId: com.unity.multiplayer.tools@2.2.1
   testable: 0
   isDirectDependency: 1
-  version: 2.1.0
+  version: 2.2.1
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.multiplayer.tools
   assetPath: Packages/com.unity.multiplayer.tools
@@ -1195,7 +1220,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: tool
+  type: 
   description: Adds a suite of tools that improve workflows for multiplayer development
   errors: []
   versions:
@@ -1212,35 +1237,35 @@ m_ResolvedPackages:
     - 2.0.0-pre.5
     - 2.1.0
     - 2.2.0
+    - 2.2.1
     compatible:
-    - 2.1.0
-    - 2.2.0
-    recommended: 2.2.0
+    - 2.2.1
+    recommended: 2.2.1
     deprecated: []
   dependencies:
   - name: com.unity.burst
-    version: 1.6.6
+    version: 1.8.17
   - name: com.unity.collections
-    version: 1.1.0
+    version: 2.4.0
   - name: com.unity.mathematics
-    version: 1.2.6
+    version: 1.3.1
   - name: com.unity.profiling.core
-    version: 1.0.0-pre.1
+    version: 1.0.2
   - name: com.unity.nuget.mono-cecil
-    version: 1.10.1
+    version: 1.11.4
   - name: com.unity.modules.uielements
     version: 1.0.0
   - name: com.unity.nuget.newtonsoft-json
-    version: 2.0.0
+    version: 3.2.1
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -1278,16 +1303,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638364166510000000
-  documentationUrl: 
+  datePublishedTicks: 638629866042190000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.multiplayer.tools@2.2/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git
-    revision: d39910e6f89deb4d735562fa620e4d4d298c3976
+    revision: a769d0b44c5f5e6308dc848d2a4b49d3e30b7a9e
     path: 
   unityLifecycle:
-    version: 2.1.0
+    version: 2.2.1
     nextVersion: 
     recommendedVersion: 2.2.0
     isDeprecated: 0
@@ -1297,17 +1322,20 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"### *General*\n- Increased minimum version to 2023.3+\n\n###
-    *Network Simulator*\n- Fixed an issue with execution order dependend initialization
-    of NetworkAdapters.\n\n### *Network Scene Visualization*\n- Improved usability
-    when pausing the editor."}'
+  upmReserved: '{"changelog":"### *Network Scene Visualization*\n- Fixed a bug which
+    showed the wrong number of clients in the SceneView overlay\n- Fixed a bug which
+    caused null reference exception when entering Play Mode without Domain Reload\n-
+    Fixed a bug which showed wrong ownership visuals with Distributed Authority when
+    reconnecting\n\n### *Runtime Network Stats Monitor*\n- Fixed a bug where RNSM
+    showed no metrics in builds with code stripping enabled\n- Fixed a bug where
+    RNSM stopped working with NGO 2.0.0 or above"}'
   assetStore:
     productId: 
-  fingerprint: 0dcebea94ca9b890dab09a768fa02e3b9f28c908
+  fingerprint: 212d83b66f830476aafd30cff2797a3a0ae2ea64
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 2.1.0
-    minimumUnityVersion: 2023.3.0a1
+    minimumPackageVersion: 2.2.1
+    minimumUnityVersion: 6000.0.0a1
 - packageId: com.unity.netcode.gameobjects@2.0.0
   testable: 0
   isDirectDependency: 1
@@ -1363,6 +1391,7 @@ m_ResolvedPackages:
     - 2.0.0-pre.3
     - 2.0.0-pre.4
     - 2.0.0
+    - 2.1.1
     compatible:
     - 1.10.0
     - 1.11.0
@@ -1374,6 +1403,7 @@ m_ResolvedPackages:
     - 2.0.0-pre.3
     - 2.0.0-pre.4
     - 2.0.0
+    - 2.1.1
     recommended: 2.0.0
     deprecated: []
   dependencies:
@@ -1385,13 +1415,13 @@ m_ResolvedPackages:
   - name: com.unity.transport
     version: 2.3.0
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -1425,7 +1455,7 @@ m_ResolvedPackages:
     path: 
   unityLifecycle:
     version: 1.10.0
-    nextVersion: 2.0.0-pre.4
+    nextVersion: 
     recommendedVersion: 2.0.0
     isDeprecated: 0
     deprecationMessage: 
@@ -1600,10 +1630,10 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 3.4.0
     minimumUnityVersion: 2019.4.19f1
-- packageId: com.unity.probuilder@6.0.3
+- packageId: com.unity.probuilder@6.0.4
   testable: 0
   isDirectDependency: 1
-  version: 6.0.3
+  version: 6.0.4
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.probuilder
   assetPath: Packages/com.unity.probuilder
@@ -1614,7 +1644,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: asset
+  type: 
   description: 'Build, edit, and texture custom geometry in Unity. Use ProBuilder
     for in-scene level design, prototyping, collision meshes, all with on-the-fly
     play-testing.
@@ -1677,7 +1707,6 @@ m_ResolvedPackages:
     - 6.0.3
     - 6.0.4
     compatible:
-    - 6.0.3
     - 6.0.4
     recommended: 6.0.4
     deprecated: []
@@ -1696,7 +1725,7 @@ m_ResolvedPackages:
   - name: com.unity.render-pipelines.core
     version: 17.0.3
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
@@ -1708,7 +1737,7 @@ m_ResolvedPackages:
   - name: com.unity.modules.imgui
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -1760,16 +1789,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638599250800000000
+  datePublishedTicks: 638621037625580000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.probuilder@6.0/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.com/Unity-Technologies/com.unity.probuilder.git
-    revision: b0a2e1226e0c1f11020f70346db6849f6cc78233
+    revision: ec91db85925cba22a53ee72999806d964005e7df
     path: 
   unityLifecycle:
-    version: 6.0.3
+    version: 6.0.4
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -1779,26 +1808,16 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"### Fixed\n\n- [PBLD-159] Fixed an issue where a ProBuilder
-    menu item shortcut would conflict with Editor''s built-in shortcut.\n- [PBLD-158]
-    Fixed a bug where ProBuilder would prevent classes inheriting from `UnityEditor.Editor`
-    to compile.\n- [PBLD-151] Fixed a bug where the Action Settings overlay would
-    not be displayed when used the first time.\n- [PBLD-141] Fixed a bug where the
-    selection would be incorrect when entering PrefabStage.\n- [PBLD-142] Fixed a
-    bug where it was possible to trigger the probuilderize action twice on the same
-    object.\n- [PBLD-150] Fixed a bug where the orientation handles would not be
-    useful when manipulating a cube shape.\n- [PBLD-149] Fixed a bug where the ProBuilder
-    edit modes toggle could be disabled.\n- [PBLD-145] Fixed a bug where using the
-    preview shape with HDRP would crash the editor.\n- Fixed a bug where moving the
-    preview shape was not ignoring the preview shape to compute the correct placement.\n\n###
-    Added\n\n- [PBLD-152] Added some relevant Unity selection actions in the ProBuilder
-    contextual menu."}'
+  upmReserved: '{"changelog":"### Changes\n\n- [PBLD-169] \"Edit Vertices/Edges/Faces\"
+    shortcuts now automatically enter the ProBuilder context.\n- [PBLD-167] Removed
+    \"Toggle ProBuilder Context\" shortcut - the built-in \"Cycle Tool Modes\" shortcut
+    should be used instead."}'
   assetStore:
     productId: 
-  fingerprint: 86d18759ac1277ec80ed437d418dbdd96350e808
+  fingerprint: a2827f523e21ea251861dac290125410ba4e560b
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 6.0.3
+    minimumPackageVersion: 6.0.4
     minimumUnityVersion: 6000.0.0a1
 - packageId: com.unity.test-framework@1.4.5
   testable: 0
@@ -2217,8 +2236,10 @@ m_ResolvedPackages:
     - 2.1.0
     - 2.2.1
     - 2.3.0
+    - 2.4.0
     compatible:
     - 2.3.0
+    - 2.4.0
     recommended: 2.3.0
     deprecated: []
   dependencies:
@@ -2230,13 +2251,13 @@ m_ResolvedPackages:
     version: 1.3.1
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -2388,7 +2409,7 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-  fingerprint: b0e0b1c828561e8a0d130fa0e71078e9684ef47f
+  fingerprint: 12b988ed4f6aa6c2fcb678e1904d5cd4d5ef471c
   editorCompatibility:
     compatibilityLevel: 0
     minimumPackageVersion: 2.0.0
@@ -2444,9 +2465,11 @@ m_ResolvedPackages:
     - 1.9.1
     - 1.9.2
     - 1.9.4
+    - 1.9.5
     compatible:
     - 1.9.4
-    recommended: 1.9.4
+    - 1.9.5
+    recommended: 1.9.5
     deprecated:
     - 1.8.0-pre.1
   dependencies:
@@ -3968,8 +3991,7 @@ m_ResolvedPackages:
     url: 
   category: 
   type: module
-  description: 'The UnityAnalytics module implements APIs required to use Unity Analytics.
-    Scripting API: https://docs.unity3d.com/ScriptReference/UnityEngine.UnityAnalyticsModule.html'
+  description: 
   errors: []
   versions:
     all:
@@ -4926,10 +4948,10 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 1.0.0
     minimumUnityVersion: 
-- packageId: com.unity.burst@1.8.17
+- packageId: com.unity.burst@1.8.18
   testable: 0
   isDirectDependency: 0
-  version: 1.8.17
+  version: 1.8.18
   source: 1
   resolvedPath: C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.burst
   assetPath: Packages/com.unity.burst
@@ -4940,7 +4962,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: 
-  type: assets
+  type: 
   description: Burst is a compiler that translates from IL/.NET bytecode to highly
     optimized native code using LLVM.
   errors: []
@@ -5080,7 +5102,6 @@ m_ResolvedPackages:
     - 1.8.17
     - 1.8.18
     compatible:
-    - 1.8.17
     - 1.8.18
     recommended: 1.8.18
     deprecated: []
@@ -5107,16 +5128,16 @@ m_ResolvedPackages:
   entitlements:
     licensingModel: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638573293750000000
+  datePublishedTicks: 638622972693870000
   documentationUrl: https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/burst.git
-    revision: 234303811291ae524719609ac4e9ca24be4b58dd
+    revision: 594a8d8794083be96fa510b2deea0954f971ecc9
     path: 
   unityLifecycle:
-    version: 1.8.17
+    version: 1.8.18
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -5126,25 +5147,24 @@ m_ResolvedPackages:
   git:
     hash: 
     revision: 
-  upmReserved: '{"changelog":"### Added\n\n### Removed\n\n### Changed\n- Improved
-    performance of Burst-compiled code in the Windows x64 Editor by only emitting
-    context-saving code when the code being compiled contains a `throw`\n- Improved
-    error message for pointer-like types in non-`readonly` `static` fields\n\n###
-    Fixed\n- Fixed another compiler crash caused by faulty alias analysis\n- BurstAotSettings
-    files are no longer written to disk unless default settings are changed\n- Fixed
-    the `BurstDebugInformation_DoNotShip` folder not being saved outside the player
-    build folder for Embedded Linux and QNX platforms\n- Fixed direct negation of
-    enums was not correctly promoting the underlying type, causing wrong results.\n-
-    Fixed that `Mathf.Approximately` would return the wrong result approximately
-    all of the time\n- Fixed an issue with default interface methods which would
-    result in compiler errors due to IL corruption.\n- Creating a project with a
-    space in the path would cause burst to fail on windows arm64.\n\n### Known Issues"}'
+  upmReserved: '{"changelog":"### Added\n- Added the `UNITY_BURST_DISABLE_COMPILATION`
+    environment variable as an alternative to the `--burst-disable-compilation` command-line
+    argument\n\n### Removed\n\n### Changed\n\n### Fixed\n- Static fields used in
+    static constructors were sometimes incorrectly set to read only, despite being
+    written.\n- Fixed a case of the editor getting stuck loading during a domain
+    reload if Burst was set to synchronous compilation\n- Fixed hashing bug that
+    could occur when method signatures differed only by generic parameter count\n-
+    Branches within if (cpufeaturesupported) blocks could cause the transform pass
+    to miss identify which blocks are supporting which features, leading to errors
+    at compile time about intrinsics not being in matching blocks.\n- Fixed ''cannot
+    open input file ucrt.lib'' error when building for Universal Windows Platform
+    and targeting SDK 10.0.26100.0\n\n### Known Issues"}'
   assetStore:
     productId: 
-  fingerprint: 3aba14bc08eea56d416846e80adc0dc70d40a448
+  fingerprint: 616862665d8c8ffe643d505aebb5de2ee73b0ab0
   editorCompatibility:
     compatibilityLevel: 0
-    minimumPackageVersion: 1.8.17
+    minimumPackageVersion: 1.8.18
     minimumUnityVersion: 2020.3.0a1
 - packageId: com.unity.mathematics@1.3.2
   testable: 0
@@ -5314,7 +5334,7 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 2.0.5
     minimumUnityVersion: 2019.4.0a1
-- packageId: com.unity.shadergraph@17.0.3
+- packageId: com.unity.shadergraph@17.0.2
   testable: 0
   isDirectDependency: 0
   version: 17.0.3
@@ -5448,7 +5468,7 @@ m_ResolvedPackages:
   - name: com.unity.render-pipelines.core
     version: 17.0.3
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
@@ -5460,7 +5480,7 @@ m_ResolvedPackages:
   - name: com.unity.modules.imgui
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -5512,7 +5532,7 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-  fingerprint: 2628b911ca1acaff5fadf11f2b13d17d59acaf29
+  fingerprint: e6e0df3c9e43d268733e3882298a59923bdf76d3
   editorCompatibility:
     compatibilityLevel: 0
     minimumPackageVersion: 17.0.3
@@ -6135,15 +6155,18 @@ m_ResolvedPackages:
     - 1.21.22
     - 1.21.23
     - 1.21.24
+    - 1.21.25
     - 2.0.1
     - 2.0.2
     - 2.1.0
     - 2.1.2
     - 2.1.3
     - 2.1.4
+    - 2.1.5
     compatible:
     - 2.1.4
-    recommended: 2.1.4
+    - 2.1.5
+    recommended: 2.1.5
     deprecated: []
   dependencies: []
   resolvedDependencies: []
@@ -6341,7 +6364,7 @@ m_ResolvedPackages:
     version: 1.0.1
   resolvedDependencies:
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
@@ -6353,7 +6376,7 @@ m_ResolvedPackages:
   - name: com.unity.modules.imgui
     version: 1.0.0
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.test-framework
     version: 1.4.5
   - name: com.unity.ext.nunit
@@ -6403,7 +6426,7 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-  fingerprint: 241f3c7febcff1083610bae21ce9427711884311
+  fingerprint: 9e172bcfb19a7723de6866f47995a4d01e058347
   editorCompatibility:
     compatibilityLevel: 0
     minimumPackageVersion: 17.0.3
@@ -6526,9 +6549,9 @@ m_ResolvedPackages:
     version: 1.0.0
   resolvedDependencies:
   - name: com.unity.collections
-    version: 2.4.3
+    version: 2.5.1
   - name: com.unity.burst
-    version: 1.8.17
+    version: 1.8.18
   - name: com.unity.mathematics
     version: 1.3.2
   - name: com.unity.modules.jsonserialize
@@ -6583,9 +6606,9 @@ m_ResolvedPackages:
   upmReserved: 
   assetStore:
     productId: 
-  fingerprint: 8e780c06f5c1408ffa25004f2c90b6802481bbd8
+  fingerprint: 307bc27a498fc9cd409bbd426c85d8dc7f140bc1
   editorCompatibility:
     compatibilityLevel: 0
     minimumPackageVersion: 1.0.1
     minimumUnityVersion: 2023.3.0b1
-m_BuiltInPackagesHash: dd7b6cd0b6f0c5d734983a9e11a2587665e1c4a6
+m_BuiltInPackagesHash: 6a36fcc23a6e38d7959839a7c75376e317d64099
