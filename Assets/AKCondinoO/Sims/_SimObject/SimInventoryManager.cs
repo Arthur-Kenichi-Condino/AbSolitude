@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Inventory{
           //Log.DebugMessage("SimInventoryType already registered:"+simInventoryType);
           return;
          }
-         Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
+         //Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
          if(!ids.TryGetValue(simInventoryType,out _)){
           ids.Add(simInventoryType,0uL);
          }
@@ -102,7 +102,7 @@ namespace AKCondinoO.Sims.Inventory{
            string simInventoryTypeString=line.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
            Type simInventoryType=Type.GetType(simInventoryTypeString);
            if(simInventoryType==null){continue;}
-           Log.DebugMessage("t:"+simInventoryType);
+           //Log.DebugMessage("t:"+simInventoryType);
            int nextSimInventoryIdNumberStringStart=line.IndexOf("nextId=",simInventoryTypeStringEnd)+7;
            int nextSimInventoryIdNumberStringEnd  =line.IndexOf(" } , endOfLine",nextSimInventoryIdNumberStringStart);
            string nextSimInventoryIdNumberString=line.Substring(nextSimInventoryIdNumberStringStart,nextSimInventoryIdNumberStringEnd-nextSimInventoryIdNumberStringStart);

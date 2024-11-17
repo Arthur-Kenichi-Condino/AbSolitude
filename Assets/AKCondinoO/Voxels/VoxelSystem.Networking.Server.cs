@@ -17,7 +17,7 @@ namespace AKCondinoO.Voxels{
     internal partial class VoxelSystem{
         internal partial class ServerData{
             internal partial void NetServerSideInit(){
-             Log.DebugMessage("NetServerSideInit");
+             //Log.DebugMessage("NetServerSideInit");
              Core.singleton.netManager.CustomMessagingManager.OnUnnamedMessage+=OnServerReceivedUnnamedMessage;
              int poolSize=(
               (expropriationDistance.x*2+1)*

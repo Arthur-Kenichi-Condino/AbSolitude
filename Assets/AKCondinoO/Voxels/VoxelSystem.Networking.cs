@@ -33,7 +33,7 @@ namespace AKCondinoO.Voxels{
          }
         }
         internal void OnDestroyingCoreNetworkDestroy(){
-         Log.DebugMessage("OnDestroyingCoreNetworkDestroy");
+         //Log.DebugMessage("OnDestroyingCoreNetworkDestroy");
          if(Core.singleton.isServer){
           asServer.NetServerSideOnDestroyingCoreNetworkDestroy();
          }
@@ -42,7 +42,7 @@ namespace AKCondinoO.Voxels{
          }
         }
         internal void OnDestroyingCoreNetworkDispose(){
-         Log.DebugMessage("OnDestroyingCoreNetworkDispose");
+         //Log.DebugMessage("OnDestroyingCoreNetworkDispose");
          if(Core.singleton.isServer){
           asServer.NetServerSideOnDestroyingCoreNetworkDispose();
          }

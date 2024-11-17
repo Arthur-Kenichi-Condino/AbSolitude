@@ -62,7 +62,7 @@ namespace AKCondinoO.Sims.Actors{
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
            animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
-           Log.DebugMessage("add SimActorAnimatorIKController");
+           //Log.DebugMessage("add SimActorAnimatorIKController");
            #region init SimAnimatorIKController
                animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
                animatorIKController.animatorController=this;
@@ -102,11 +102,11 @@ namespace AKCondinoO.Sims.Actors{
                    }
                    foreach(WeaponLayer weaponLayerName in weaponLayerNames){
                        weaponLayer[   weaponLayerName.weaponType]=GetLayer(   weaponLayerName.layerName);
-                    Log.DebugMessage(   "weaponLayer["+   weaponLayerName.weaponType+"]="+   weaponLayerName.layerName);
+                    //Log.DebugMessage(   "weaponLayer["+   weaponLayerName.weaponType+"]="+   weaponLayerName.layerName);
                    }
                    foreach(WeaponAimLayer weaponAimLayerName in weaponAimLayerNames){
                     weaponAimLayer[weaponAimLayerName.weaponType]=GetLayer(weaponAimLayerName.layerName);
-                    Log.DebugMessage("weaponAimLayer["+weaponAimLayerName.weaponType+"]="+weaponAimLayerName.layerName);
+                    //Log.DebugMessage("weaponAimLayer["+weaponAimLayerName.weaponType+"]="+weaponAimLayerName.layerName);
                    }
                    layerTransitionCoroutine=StartCoroutine(LayerTransition());
                #endregion

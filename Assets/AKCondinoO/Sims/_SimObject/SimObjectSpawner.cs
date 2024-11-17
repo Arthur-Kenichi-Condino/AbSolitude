@@ -303,7 +303,7 @@ namespace AKCondinoO.Sims{
                 simObject.id=id;
                 simObject.OnSpawned();
                 if(masterId!=null){
-                 Log.DebugMessage("simObject has master");
+                 //Log.DebugMessage("simObject has master");
                  simObject.masterId=masterId;
                 }else{
                  //Log.DebugMessage("simObject has no master");
@@ -311,7 +311,7 @@ namespace AKCondinoO.Sims{
                 }
                 if(simObject is SimActor simActor){
                  if(persistentSimActorData!=null){
-                  Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
+                  //Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
                   simActor.persistentSimActorData=persistentSimActorData.Value;
                  }else{
                   //Log.DebugMessage("clear simActor.persistentSimActorData");

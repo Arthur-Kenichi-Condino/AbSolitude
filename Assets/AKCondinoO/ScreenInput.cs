@@ -28,7 +28,7 @@ namespace AKCondinoO{
          pointerEventData=new PointerEventData(EventSystem.current);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("ScreenInput:OnDestroyingCoreEvent");
+         //Log.DebugMessage("ScreenInput:OnDestroyingCoreEvent");
         }
      internal Vector3 mouse{get;private set;}
         void Update(){

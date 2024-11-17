@@ -39,10 +39,10 @@ namespace AKCondinoO.UI{
            prefabInstanceHandler.Value.pool.Clear();
           }
           if(!netManagerInitialized){
-           Log.DebugMessage("initialize netManager");
+           //Log.DebugMessage("initialize netManager");
            toRemove.AddRange(netManager.NetworkConfig.Prefabs.Prefabs);
            foreach(NetworkPrefab networkPrefab in toRemove){
-            Log.DebugMessage("'netManager.NetworkConfig.Prefabs.Remove':"+networkPrefab.Prefab+":"+networkPrefab);
+            //Log.DebugMessage("'netManager.NetworkConfig.Prefabs.Remove':"+networkPrefab.Prefab+":"+networkPrefab);
             netManager.NetworkConfig.Prefabs.Remove(networkPrefab);
            }
            toRemove.Clear();

@@ -15,12 +15,12 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      ParticleSystem highestDurationParticleSystem;
      internal SkillAoE aoe;
         void Awake(){
-         Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
+         //Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
          particleSystemParent=GetComponent<ParticleSystem>();
          particleSystem=GetComponentsInChildren<ParticleSystem>();
          float maxDuration=0f;
          foreach(ParticleSystem particleSys in particleSystem){
-          Log.DebugMessage("particleSys:"+particleSys.name);
+          //Log.DebugMessage("particleSys:"+particleSys.name);
           var main=particleSys.main;
           totalDuration.Add(particleSys,(main.duration,main.startLifetime.constantMin,main.startLifetime.constant,main.startLifetime.constantMax));
           main.loop=false;

@@ -30,7 +30,7 @@ namespace AKCondinoO.Sims{
          Type simType=simActor.id.Value.simObjectType;
          if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
           spawned.Add(simActor.id.Value);
-          Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
+          //Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
          }
          actors.Add(simActor.id.Value,simActor);//  remember to remove in both types of despawn
          if(simActor is BaseAI baseAI){

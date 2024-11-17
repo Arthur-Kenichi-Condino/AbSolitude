@@ -47,7 +47,7 @@ namespace AKCondinoO.Sims.Actors{
          if(aiSensor){
           aiSensor.actor=this;
           aiSensor.Deactivate();
-          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+          //Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
          }
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
@@ -64,7 +64,7 @@ namespace AKCondinoO.Sims.Actors{
           height=heightCrouching;
          }
          aiRotTurnTo.tgtRot=aiRotTurnTo.tgtRot_Last=transform.rotation;
-         Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
+         //Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
          aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingWidth,aStarPathfindingDepth,aStarPathfindingHeight);

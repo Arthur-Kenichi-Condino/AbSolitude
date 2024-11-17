@@ -23,7 +23,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          Directory.CreateDirectory(terrainEditingPath);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
+         //Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
          terrainEditingBG.IsCompleted(VoxelSystem.singleton.terrainEditingBGThread.IsRunning,-1);
         }
         internal enum EditMode{

@@ -58,7 +58,7 @@ namespace AKCondinoO{
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimTime:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimTime:OnDestroyingCoreEvent");
         }
         internal enum DayTransitions{
          Day,

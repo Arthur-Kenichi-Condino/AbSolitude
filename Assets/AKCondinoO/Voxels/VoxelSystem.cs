@@ -87,7 +87,7 @@ namespace AKCondinoO.Voxels{
             }
         #endregion
         static VoxelSystem(){
-         Log.DebugMessage("static VoxelSystem()");
+         //Log.DebugMessage("static VoxelSystem()");
          var GetvCoordArray=new Vector3Int[VoxelsPerChunk];
          Vector3Int vCoord1;
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
@@ -200,7 +200,7 @@ namespace AKCondinoO.Voxels{
          NetInit();
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
+         //Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
          if(this!=null&&proceduralGenerationCoroutine!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }
@@ -373,7 +373,7 @@ namespace AKCondinoO.Voxels{
          sourcesCollected=sources;
          if(navMeshSourcesCollectionChanged){
             navMeshSourcesCollectionChanged=false;
-          Log.DebugMessage("CollectNavMeshSources");
+          //Log.DebugMessage("CollectNavMeshSources");
           sources.Clear();
           markups.Clear();
           sources.AddRange(navMeshSources.Values);

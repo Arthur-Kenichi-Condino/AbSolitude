@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal class SpiritualHealingSkillBuff:SkillBuff{
         internal SpiritualHealingSkillBuff():base(){
-         Log.DebugMessage("SpiritualHealingEffect ctor");
+         //Log.DebugMessage("SpiritualHealingEffect ctor");
          spiritualHealingEffect=new SpiritualHealingEffect(this);
         }
      internal SpiritualHealingEffect spiritualHealingEffect{

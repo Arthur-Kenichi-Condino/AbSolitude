@@ -40,7 +40,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
            SimObject target=this;//  TO DO: set best my skill target
            if(chaoticBlessingSkill.IsAvailable(target,chaoticBlessingSkill.level)){
             ai.MySkill=chaoticBlessingSkill;
-            Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use:"+skill.GetType());
+            //Log.DebugMessage("check skillsToUse.Count:"+skillsToUse.Count+";should use:"+skill.GetType());
            }
            skillsToUse.Remove(skill);
           }

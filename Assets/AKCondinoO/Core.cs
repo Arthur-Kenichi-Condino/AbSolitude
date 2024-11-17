@@ -174,12 +174,12 @@ namespace AKCondinoO{
                }
               }
               foreach(var singletonOrderedInReverse in singletonInitReversedOrder){
-               Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+               //Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
                Type singletonType=singletonOrderedInReverse.Value.GetType();
                PropertyInfo singletonPropertyInfo=singletonType.GetProperty("singleton",BindingFlags.Static|BindingFlags.NonPublic);
-               Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
+               //Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
                singletonPropertyInfo.SetValue(null,null);
-               Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
+               //Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
               }
               Gameplayer.main=null;//  also unset current player prefab that is no more active
               //  game was deinitialized

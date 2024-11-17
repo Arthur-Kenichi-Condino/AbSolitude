@@ -30,7 +30,7 @@ namespace AKCondinoO.Sims.Actors{
          if(simUMAPrefab!=null){
           simUMAPosOffset=simUMAPrefab.transform.localPosition;
           simUMA=Instantiate(simUMAPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
-          Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
+          //Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
           simUMA.CharacterUpdated.AddAction(OnUMACharacterUpdated);
           goToSimUMA=simUMA.gameObject;
          }
@@ -66,11 +66,11 @@ namespace AKCondinoO.Sims.Actors{
          base.OnDeactivated();
         }
         protected override void EnableInteractions(){
-         Log.DebugMessage("implementation incomplete");
+         Log.Warning("implementation incomplete");
          interactionsEnabled=true;
         }
         protected override void DisableInteractions(){
-         Log.DebugMessage("implementation incomplete");
+         Log.Warning("implementation incomplete");
          interactionsEnabled=false;
         }
     }

@@ -81,7 +81,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(!IsAvailable(target,useLevel)){
           return false;
          }
-         Log.DebugMessage("DoSkill:"+this);
+         //Log.DebugMessage("DoSkill:"+this);
          this.useLevel=useLevel;
          this.target=target;
          invoked=false;
@@ -149,7 +149,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
         }
         protected virtual void OnInvoked(){
-         Log.DebugMessage("skill "+this+" was cast gracefully");
+         //Log.DebugMessage("skill "+this+" was cast gracefully");
          done=true;
          doing=false;
         }

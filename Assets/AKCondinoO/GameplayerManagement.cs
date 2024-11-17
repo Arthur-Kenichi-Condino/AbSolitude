@@ -34,7 +34,7 @@ namespace AKCondinoO.Gameplaying{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("GameplayerManagement:OnDestroyingCoreEvent");
+         //Log.DebugMessage("GameplayerManagement:OnDestroyingCoreEvent");
          if(Core.singleton.isServer){
           Core.singleton.netManager.OnClientConnectedCallback -=OnServerSideClientConnected;
           Core.singleton.netManager.OnClientDisconnectCallback-=OnServerSideClientDisconnect;

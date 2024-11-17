@@ -262,7 +262,7 @@ namespace AKCondinoO.Sims{
           OnUnplaceRequest();
          }
          if(masterId!=null&&(masterSimObject==null||masterSimObject.id==null||masterSimObject.id.Value!=masterId.Value)){
-          Log.DebugMessage("'master sim (id:"+masterId+") validation failed: renew masterObject with GetMaster()':'my id':id:"+id);
+          //Log.DebugMessage("'master sim (id:"+masterId+") validation failed: renew masterObject with GetMaster()':'my id':id:"+id);
           masterSimObject=GetMaster();
           SetAsSlaveOf(masterSimObject);
          }

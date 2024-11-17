@@ -64,7 +64,7 @@ namespace AKCondinoO{
          activityDetectionInputState.Add(Enabled.LEFT    );
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
+         //Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
         }
         bool InvokeDelegate(KeyValuePair<string,CommandState>command,Type inputType,GetterReturnMode returnMode){
          if(inputType==typeof(KeyCode))return((Func<Func<KeyCode,bool>,KeyCode,bool>)delegates[inputType]).Invoke((Func<KeyCode,bool>)getters[inputType][(int)returnMode],(KeyCode)command.Value.input);else

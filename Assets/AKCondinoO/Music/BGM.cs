@@ -23,7 +23,7 @@ namespace AKCondinoO.Music{
          BGMusicCoroutine=StartCoroutine(PlayBGMusic());
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("BGM:OnDestroyingCoreEvent");
+         //Log.DebugMessage("BGM:OnDestroyingCoreEvent");
          if(this!=null){
           StopCoroutine(BGMusicCoroutine);
          }

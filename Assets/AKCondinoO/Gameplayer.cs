@@ -58,7 +58,7 @@ namespace AKCondinoO{
             Log.Error(s);
            }
           }else{
-           Log.DebugMessage("navMeshValidation:success!");
+           //Log.DebugMessage("navMeshValidation:success!");
           }
           if(this==Gameplayer.main){
            navMeshData[agentType]=new NavMeshData(NavMeshHelper.navMeshBuildSettings[agentType].agentTypeID){
@@ -185,7 +185,7 @@ namespace AKCondinoO{
          }
          if(navMeshDataAsyncUpdateTimer<=0.0f){
             navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;
-          Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
+          //Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
           VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected,navMeshSourcesDirty);
           sources.Clear();
           for(int i=0;i<sourcesCollected.Count;++i){
@@ -205,7 +205,7 @@ namespace AKCondinoO{
         }
         bool OnNavMeshDataAsyncOperationEnd(){
          if(navMeshAsyncOperation.All(o=>o==null||o.isDone)){
-          Log.DebugMessage("OnNavMeshDataAsyncOperationEnd");
+          //Log.DebugMessage("OnNavMeshDataAsyncOperationEnd");
           return true;
          }
          return false;

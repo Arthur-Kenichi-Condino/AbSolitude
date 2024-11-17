@@ -47,7 +47,7 @@ namespace AKCondinoO{
          posLerp.tgtPos=posLerp.tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
+         //Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
          GameplayerManagement.singleton.persistentDataSavingBG.IsCompleted(GameplayerManagement.singleton.persistentDataSavingBGThread.IsRunning,-1);
          GameplayerManagement.singleton.persistentDataSavingBG.mainCameraPersistentData=persistentData;
         }

@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
          base.OnUMACharacterUpdated(simUMAData);
         }
         internal override void OnActivated(){
-         Log.DebugMessage("VanilmirthAI:OnActivated():masterId:"+masterId);
+         //Log.DebugMessage("VanilmirthAI:OnActivated():masterId:"+masterId);
          requiredSkills.Clear();
          requiredSkills.Add(typeof(ChaoticBlessing),new SkillData(){skill=typeof(ChaoticBlessing),level=10,});
          base.OnActivated();

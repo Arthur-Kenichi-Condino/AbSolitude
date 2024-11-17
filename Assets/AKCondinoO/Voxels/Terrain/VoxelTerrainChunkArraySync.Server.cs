@@ -108,7 +108,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             }
             bool OnGotFileEditData(){
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
-              Log.DebugMessage("OnGotFileEditData");
+              //Log.DebugMessage("OnGotFileEditData");
               bool sync=false;
               for(int i=0;i<cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes.Length;++i){
                if(cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i]||(cnkArraySync.netChunkHasChanges[i]!=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[i])){
@@ -117,10 +117,10 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
                }
               }
               if(sync){
-               Log.DebugMessage("'send==true'");
+               //Log.DebugMessage("'sync==true'");
                cnkArraySync.netChunkHasChanges.SetDirty(true);
               }else{
-               Log.DebugMessage("'send==false'");
+               //Log.DebugMessage("'sync==false'");
                cnkArraySync.netChunkHasChanges.ResetDirty();
               }
               return true;
@@ -130,7 +130,7 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             bool OnSynchronized(){
              if(!sending&&cnkArraySync.terrainGetFileEditDataToNetSyncBG.IsCompleted(VoxelSystem.singleton.terrainGetFileEditDataToNetSyncBGThreads[0].IsRunning)){
               if(!cnkArraySync.netChunkHasChanges.IsDirty()){
-               Log.DebugMessage("OnSynchronized");
+               //Log.DebugMessage("OnSynchronized");
                cnkArraySync.netChunkHasChanges[0]=cnkArraySync.terrainGetFileEditDataToNetSyncBG.changes[0];
                return true;
               }

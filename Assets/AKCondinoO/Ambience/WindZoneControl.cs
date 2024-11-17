@@ -20,7 +20,7 @@ namespace AKCondinoO{
          startDirectionChangesRoutine=StartCoroutine(StartDirectionChangesRoutine());
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("WindZoneControl:OnDestroyingCoreEvent");
+         //Log.DebugMessage("WindZoneControl:OnDestroyingCoreEvent");
          if(this!=null){
           if(startDirectionChangesRoutine!=null){
            StopCoroutine(startDirectionChangesRoutine);
