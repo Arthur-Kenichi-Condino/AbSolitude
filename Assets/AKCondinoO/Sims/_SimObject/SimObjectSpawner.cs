@@ -166,13 +166,13 @@ namespace AKCondinoO.Sims{
         }
      readonly Dictionary<(Type simObjectType,ulong idNumber),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
         internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null){
-         Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
-         //  TO DO: move to destination if already spawned because it won't be spawned again
+         //Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
+         Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
          specificSpawnRequests[id]=(position,eulerAngles,localScale,asInventoryItemOwnerId);
         }
         internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
-         Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
-         //  TO DO: move to destination if already spawned because it won't be spawned again
+         //Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
+         Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
          spawnQueue.Enqueue(spawnData);
         }
      Coroutine spawnCoroutine;

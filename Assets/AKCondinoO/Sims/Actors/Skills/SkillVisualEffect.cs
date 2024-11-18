@@ -75,7 +75,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          float duration=(this.duration-timer);
          float maxDuration=totalDuration[highestDurationParticleSystem].duration;
          float durationProportion=duration/maxDuration;
-         Log.DebugMessage("SkillVisualEffect:SetParticleSysDuration:duration:"+duration+";maxDuration:"+maxDuration+";durationProportion:"+durationProportion,this);
+         //Log.DebugMessage("SkillVisualEffect:SetParticleSysDuration:duration:"+duration+";maxDuration:"+maxDuration+";durationProportion:"+durationProportion,this);
          foreach(ParticleSystem particleSys in particleSystem){
           var main=particleSys.main;
           if(duration>0f){
@@ -187,7 +187,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           playSFX=false;
           stopSFX=false;
           playingSFX=true;
-          Log.DebugMessage("PlaySkillSFX:playingSFX");
+          //Log.DebugMessage("PlaySkillSFX:playingSFX");
           foreach(AudioSource audioSource in audioSources){
            audioSource.volume=1f;
            audioSource.Play();

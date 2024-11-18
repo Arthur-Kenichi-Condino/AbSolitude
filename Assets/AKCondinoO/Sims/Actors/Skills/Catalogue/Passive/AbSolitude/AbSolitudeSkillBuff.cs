@@ -9,7 +9,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
     internal class AbSolitudeSkillBuff:SkillBuff{
      internal float applyNewSkillCooldown=8f;
         internal AbSolitudeSkillBuff():base(){
-         Log.DebugMessage("AbSolitudeSkillBuff ctor");
+         //Log.DebugMessage("AbSolitudeSkillBuff ctor");
          abSolitudeEffect=new AbSolitudeEffect(this);
         }
      internal AbSolitudeEffect abSolitudeEffect{

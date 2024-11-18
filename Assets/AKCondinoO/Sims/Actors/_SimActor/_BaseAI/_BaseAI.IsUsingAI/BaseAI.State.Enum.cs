@@ -79,7 +79,7 @@ namespace AKCondinoO.Sims.Actors{
                 float disToMaster=me.GetDistance(me,me.masterSimObject);
                 if(disToMaster>=0f){
                  if(disToMaster>8f){
-                  Log.DebugMessage("I should follow my master:"+me.masterSimObject+";me:"+me);
+                  //Log.DebugMessage("I should follow my master:"+me.masterSimObject+";me:"+me);
                   SetMyState(State.FOLLOW_ST);
                   goto _MyStateSet;
                  }

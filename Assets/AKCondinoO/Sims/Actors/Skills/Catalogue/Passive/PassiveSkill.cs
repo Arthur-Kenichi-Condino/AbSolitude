@@ -33,7 +33,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(!IsAvailable(target,useLevel)){
           return false;
          }
-         Log.DebugMessage("DoSkill:"+this);
+         //Log.DebugMessage("DoSkill:"+this);
          this.useLevel=useLevel;
          this.target=target;
          doing=true;
