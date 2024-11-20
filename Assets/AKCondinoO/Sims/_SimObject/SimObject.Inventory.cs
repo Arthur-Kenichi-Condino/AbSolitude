@@ -18,18 +18,18 @@ namespace AKCondinoO.Sims{
      [NonSerialized]internal readonly HashSet<SimInventoryItem>inventoryItemsToSpawn=new HashSet<SimInventoryItem>();
      [NonSerialized]internal SpawnData inventoryItemsSpawnData;
         internal bool AddToInventory(SimObject simObject,bool addingList=false){
-         Log.DebugMessage("SimObject:AddToInventory");
+         //Log.DebugMessage("SimObject:AddToInventory");
          if(InventoryContains(simObject,out(SimInventory simInventory,SimInventoryItem asInventoryItem)?containerData)){
           Log.DebugMessage("SimObject:AddToInventory:'InventoryContains returned true'");
-          Log.Warning("'TO DO: 'materialize' asInventoryItem if needed'");
+          Log.Warning("'TO DO: 'materialize and remove' (add to simInventoryItemPool) asInventoryItem SimObject on fail to add, if needed, or refresh settings and set properly as inventory item, or replace the item with another one to be added'");
          }else{
-          Log.DebugMessage("SimObject:AddToInventory:'InventoryContains returned false'");
+          //Log.DebugMessage("SimObject:AddToInventory:'InventoryContains returned false'");
           if(inventory.TryGetValue(typeof(SimHands),out Dictionary<ulong,SimInventory>simHandsInventories)){
            foreach(var simInventory in simHandsInventories){
             if(simInventory.Value is SimHands simHandsInventory){
-             Log.DebugMessage("'simHandsInventory: try to add simObject'");
+             //Log.DebugMessage("'simHandsInventory: try to add simObject'");
              if(simHandsInventory.Add(simObject,out SimInventoryItemsInContainerSettings.InContainerSettings settings,!addingList)){
-              Log.DebugMessage("'simObject added to simHandsInventory: mark simObject to be saved as an inventory item'");
+              //Log.DebugMessage("'simObject added to simHandsInventory: mark simObject to be saved as an inventory item'");
               OnAddedToInventory(simHandsInventory,settings);//  change simObject to act as an inventory item
               return true;
              }
@@ -44,9 +44,9 @@ namespace AKCondinoO.Sims{
          }
         }
         protected virtual void OnInventoryItemAdded(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings,SimObject simObjectAdded){
-         Log.DebugMessage(this+":OnInventoryItemAdded:simInventory:"+simInventory);
+         //Log.DebugMessage(this+":OnInventoryItemAdded:simInventory:"+simInventory);
          if(simInventory is SimHands simHands){
-          Log.DebugMessage(this+":OnInventoryItemAdded:simObjectAdded:"+simObjectAdded);
+          //Log.DebugMessage(this+":OnInventoryItemAdded:simObjectAdded:"+simObjectAdded);
           if(simObjectAdded is SimWeapon simWeapon){
            if(settings.handsUsage==BaseAI.HandsUsage.TwoHanded){
             SetCurrentToolsOrWeapons(simWeapon,simWeapon);
@@ -88,7 +88,7 @@ namespace AKCondinoO.Sims{
          Log.Warning("'TO DO: put in toolbar slots (only if available); and only equip one item pair, selected by its toolbar slot'");
          itemsInToolbar.Add((forAction1,forAction2));
          itemsEquipped=(forAction1,forAction2);
-         Log.DebugMessage(this+":itemsEquipped:"+itemsEquipped);
+         //Log.DebugMessage(this+":itemsEquipped:"+itemsEquipped);
         }
         protected virtual void RemoveFromCurrentToolsOrWeapons(SimObject simObject){
          itemsInToolbar.RemoveWhere(

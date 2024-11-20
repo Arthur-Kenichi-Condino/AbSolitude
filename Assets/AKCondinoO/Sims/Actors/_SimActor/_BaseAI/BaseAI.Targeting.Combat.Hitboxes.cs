@@ -35,7 +35,7 @@ namespace AKCondinoO.Sims.Actors{
          if(hitboxesPrefabs!=null&&hitboxesPrefabs.prefabs.Length>0){
           foreach(Hitboxes hitboxPrefab in hitboxesPrefabs.prefabs){
            if(nameToBodyPart.TryGetValue(hitboxPrefab.name,out Transform bodyPart)){
-            Log.DebugMessage("create Hitbox from hitboxPrefab.name:"+hitboxPrefab.name);
+            //Log.DebugMessage("create Hitbox from hitboxPrefab.name:"+hitboxPrefab.name);
             Vector3 offset=hitboxPrefab.transform.localPosition;
             Quaternion rotation=hitboxPrefab.transform.localRotation;
             Hitboxes hitbox=Instantiate(hitboxPrefab);

@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims{
      [NonSerialized]internal SimInventoryItem asInventoryItem=null;
      [NonSerialized]internal bool actingAsInventoryItem=false;
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings){
-         Log.DebugMessage("SimObject:ChangeInteractionsToActAsInventoryItem:id:"+id);
+         //Log.DebugMessage("SimObject:ChangeInteractionsToActAsInventoryItem:id:"+id);
          Log.Warning("'TO DO: disable some types of collisions and enable triggers or special collisions'");
          actingAsInventoryItem=true;
          OnActAsInventoryItem();

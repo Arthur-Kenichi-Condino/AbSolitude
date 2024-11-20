@@ -57,7 +57,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
           ){
            SkillBuff buff=SkillBuff.Dequeue(buffType);
            if(buff!=null){
-            Log.DebugMessage("skill "+this+":add buff of type:"+buffType);
+            //Log.DebugMessage("skill "+this+":add buff of type:"+buffType);
             buff.duration=passiveAddBuffCooldown*2f;
             buff.delay=0f;
             OnBuffDequeued(buff);
@@ -106,7 +106,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          }
         }
         protected override void OnInvoked(){
-         Log.DebugMessage("skill "+this+" was cast gracefully");
+         //Log.DebugMessage("skill "+this+" was cast gracefully");
         }
     }
 }

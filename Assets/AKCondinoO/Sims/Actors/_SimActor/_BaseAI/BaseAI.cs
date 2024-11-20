@@ -79,7 +79,7 @@ namespace AKCondinoO.Sims.Actors{
         protected override void OnUMACharacterUpdated(UMAData simUMAData){
          if(aiSensor){
           if(head||leftEye||rightEye){
-           Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
+           //Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
            canSense=true;
           }
          }

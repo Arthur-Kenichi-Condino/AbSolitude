@@ -30,7 +30,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
          };
           internal readonly List<Skill>possibleSkills=new List<Skill>();
             internal override void Apply(SimObject.Stats stats){
-             Log.DebugMessage("AbSolitudeEffect:Apply");
+             //Log.DebugMessage("AbSolitudeEffect:Apply");
              if(this.buff.applyingEffectsOn!=null&&this.buff.applyingEffectsOn.targetSimObject!=null){
               this.target=this.buff.applyingEffectsOn.targetSimObject;
              }
@@ -58,7 +58,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
              }
              if(applyNewSkillTimer<=0f){
               if(skillsForRandomUse.Count>0){
-               Log.DebugMessage("AbSolitudeEffect:apply new skill");
+               //Log.DebugMessage("AbSolitudeEffect:apply new skill");
                Skill skillToBeUsed=skillsForRandomUse[dice.Next(0,skillsForRandomUse.Count)];
                skillsInEffect.Add(skillToBeUsed);
                skillsForRandomUse.Remove(skillToBeUsed);
@@ -70,7 +70,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillBuffs{
                 skillsInEffect.RemoveAt(i);
                 continue;
                }
-               Log.DebugMessage("AbSolitudeEffect:do skill");
+               //Log.DebugMessage("AbSolitudeEffect:do skill");
                skill.DoSkill(this.target,this.buff.level);
               }
              }

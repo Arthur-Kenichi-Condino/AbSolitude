@@ -321,9 +321,9 @@ namespace AKCondinoO.Sims{
                  SimsMachine.singleton.OnActorSpawn(simActor);
                 }
                 if(asInventoryItemOwner!=null){
-                 Log.DebugMessage("add simObject asInventoryItem to Owner");
+                 //Log.DebugMessage("add simObject asInventoryItem to Owner");
                  if(!asInventoryItemOwner.AddToInventory(simObject)){
-                  Log.DebugMessage("couldn't add to inventory, set simObject as a released world object");
+                  Log.Warning("TO DO: couldn't add to inventory, set simObject as a released world object");
                  }
                 }
                 if(persistentStats!=null){

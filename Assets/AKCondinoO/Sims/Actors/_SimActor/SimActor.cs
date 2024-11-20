@@ -54,7 +54,7 @@ namespace AKCondinoO.Sims.Actors{
            nameToBodyPart.Remove(name);
           }
          }
-         Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
+         //Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
