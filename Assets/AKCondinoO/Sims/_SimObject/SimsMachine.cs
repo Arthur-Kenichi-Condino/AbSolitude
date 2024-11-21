@@ -43,7 +43,7 @@ namespace AKCondinoO.Sims{
          Type simType=simActor.id.Value.simObjectType;
          if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
           spawned.Remove(simActor.id.Value);
-          Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
+          //Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
          }
          actors.Remove(simActor.id.Value);
          selectableActorsList.Remove(simActor);

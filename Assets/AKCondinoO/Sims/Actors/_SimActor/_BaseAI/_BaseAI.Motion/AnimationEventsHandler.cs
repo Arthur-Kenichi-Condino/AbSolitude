@@ -17,7 +17,7 @@ namespace AKCondinoO.Sims.Actors{
         internal delegate void OnAnimatorReloadEvent(SimObject simAiming);
         internal OnAnimatorReloadEvent onAnimatorReload;
         internal void OnReloadEvent(string weaponMotionName){
-         Log.DebugMessage("OnReloadEvent:"+weaponMotionName);
+         //Log.DebugMessage("OnReloadEvent:"+weaponMotionName);
          onAnimatorReload?.Invoke(actor);
         }
         internal void CancelReloadEvent(){

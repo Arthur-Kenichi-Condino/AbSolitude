@@ -223,7 +223,7 @@ namespace AKCondinoO.Sims.Actors{
            }
            Log.DebugMessage("motionFlagForReloadingAnimation=false");
           }
-          Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+          //Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
          }else{
           if(motionFlagForShootingAnimation){
            if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?motion)&&motion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_FIRING){

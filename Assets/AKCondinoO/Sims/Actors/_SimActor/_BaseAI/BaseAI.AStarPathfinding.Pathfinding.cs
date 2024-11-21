@@ -27,7 +27,7 @@ namespace AKCondinoO.Sims.Actors{
          //Log.DebugMessage("ManualUpdateAStarPathfinding");
          if(buildingHeap){
              if(OnBuiltHeap()){
-              Log.DebugMessage("aStarPathfindingBG.IsCompleted");
+              //Log.DebugMessage("aStarPathfindingBG.IsCompleted");
               buildingHeap=false;
              }
          }else{
@@ -48,10 +48,10 @@ namespace AKCondinoO.Sims.Actors{
                  }else{
                      if(settingGetGroundRays){
                          if(OnSetGetGroundRays()){
-                          Log.DebugMessage("aStarPathfindingBG.IsCompleted");
+                          //Log.DebugMessage("aStarPathfindingBG.IsCompleted");
                           settingGetGroundRays=false;
                           if(aStarPathfindingBG.GetGroundRays.Length>0){
-                           Log.DebugMessage("aStarPathfindingBG.GetGroundRays.Length>0");
+                           //Log.DebugMessage("aStarPathfindingBG.GetGroundRays.Length>0");
                            ScheduleGetGroundRaycastCommandJob();
                           }
                           doingGetGroundRaycasts=true;
@@ -86,7 +86,7 @@ namespace AKCondinoO.Sims.Actors{
           switch(runNativeToManagedCoroutineMode){
            case(0):{
             if(aStarPathfindingBG.GetGroundHits.Length>0){
-             Log.DebugMessage("aStarPathfindingBG.GetGroundHits.Length>0");
+             Log.Warning("TO DO: aStarPathfindingBG.GetGroundHits.Length>0");
             }
             Vector3Int nCoord1=new Vector3Int(0,0,0);
             int c=0;
@@ -102,7 +102,7 @@ namespace AKCondinoO.Sims.Actors{
           runNativeToManagedCoroutineMode=-1;
          }
          sw.Stop();
-         Log.DebugMessage("NativeToManagedCoroutine sw elapsed time:"+sw.ElapsedMilliseconds+" ms");
+         //Log.DebugMessage("NativeToManagedCoroutine sw elapsed time:"+sw.ElapsedMilliseconds+" ms");
          goto _Loop;
         }
         bool OnSetGetGroundRays(){
@@ -135,7 +135,7 @@ namespace AKCondinoO.Sims.Actors{
          ){
           aStarPathfindingBG.getGroundRaycastCommandJobHandle.Complete();
           aStarPathfindingBG.    getObstaclesCommandJobHandle.Complete();
-          Log.DebugMessage("aStarPathfindingBG.getGroundRaycastCommandJobHandle.IsCompleted");
+          //Log.DebugMessage("aStarPathfindingBG.getGroundRaycastCommandJobHandle.IsCompleted");
           return true;
          }
          return false;

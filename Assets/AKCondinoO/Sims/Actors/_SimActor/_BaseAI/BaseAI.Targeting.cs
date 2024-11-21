@@ -164,6 +164,11 @@ namespace AKCondinoO.Sims.Actors{
            return;
           }
          }
+         if(target.masterId==masterId){
+          if(target is BaseAI targetAI&&(targetAI.enemy!=this||NoHitIfNotUsingAI(targetAI))){
+           return;
+          }
+         }
          if(slaves.Contains(target.id.Value)){
           if(target is BaseAI targetAI&&(targetAI.enemy!=this||NoHitIfNotUsingAI(targetAI))){
            return;

@@ -40,7 +40,7 @@ namespace AKCondinoO.Sims.Actors{
          if(hurtboxesPrefabs!=null&&hurtboxesPrefabs.prefabs.Length>0){
           foreach(Hurtboxes hurtboxPrefab in hurtboxesPrefabs.prefabs){
            if(nameToBodyPart.TryGetValue(hurtboxPrefab.name,out Transform bodyPart)){
-            Log.DebugMessage("create Hurtbox from hurtboxPrefab.name:"+hurtboxPrefab.name);
+            //Log.DebugMessage("create Hurtbox from hurtboxPrefab.name:"+hurtboxPrefab.name);
             Vector3 offset=hurtboxPrefab.transform.localPosition;
             Quaternion rotation=hurtboxPrefab.transform.localRotation;
             Hurtboxes hurtbox=Instantiate(hurtboxPrefab);

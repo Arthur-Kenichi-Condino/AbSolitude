@@ -10,7 +10,7 @@ using static AKCondinoO.Sims.Actors.SimActor.PersistentSimActorData;
 namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
     internal partial class VanilmirthAI:HomunculusAI{   
         protected override void OnUMACharacterUpdated(UMAData simUMAData){
-         Log.DebugMessage("OnUMACharacterUpdated");
+         //Log.DebugMessage("OnUMACharacterUpdated");
          SetBodyPart( "leftEye","leye",out  leftEye);
          SetBodyPart("rightEye","reye",out rightEye);
          SetBodyPart("body","bodyBase",out _);

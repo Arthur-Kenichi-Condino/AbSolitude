@@ -41,7 +41,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
      internal float duration;
      internal bool active;
         internal virtual void ActivateAt(Vector3 targetPos,SimObject target,float delay,int loops,float duration=0f){
-         Log.DebugMessage("SkillAoE:ActivateAt",this);
+         //Log.DebugMessage("SkillAoE:ActivateAt",this);
          this.targetPos=targetPos;
          this.target=target;
          this.delay=delay;
@@ -107,7 +107,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
      internal Vector3 size;
         protected virtual void OnTriggerEnter(Collider other){
-         Log.DebugMessage("SkillAoE:OnTriggerEnter:other:"+other,other);
+         //Log.DebugMessage("SkillAoE:OnTriggerEnter:other:"+other,other);
         }
     }
 }

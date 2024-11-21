@@ -75,7 +75,7 @@ namespace AKCondinoO.Sims.Actors{
                    Log.DebugMessage("'traveledForTooLong':'ai.MyPathfinding==PathfindingResult.UNREACHABLE':'try to evade'");
                    Log.Warning("'TO DO: set to evade state for a time'");
                   }else if(ai.damageSources.ContainsKey(MyEnemy)){
-                   Log.DebugMessage("'ai.damageSources.ContainsKey(MyEnemy)':'I can reach my enemy but the pathfinding isn't fast enough':'prepare for teleport to enemy'");
+                   //Log.DebugMessage("'ai.damageSources.ContainsKey(MyEnemy)':'I can reach my enemy but the pathfinding isn't fast enough':'prepare for teleport to enemy'");
                    consideringTeleport=true;
                   }
                  }
@@ -86,7 +86,7 @@ namespace AKCondinoO.Sims.Actors{
                   if(consideringTeleportTimerToTeleport>0f){
                    consideringTeleportTimerToTeleport-=Time.deltaTime;
                    if(consideringTeleportTimerToTeleport<=0f){
-                    Log.DebugMessage("'consideringTeleportTimerToTeleport<=0f':'teleport to enemy!'");
+                    //Log.DebugMessage("'consideringTeleportTimerToTeleport<=0f':'teleport to enemy!'");
                     consideringTeleport=false;
                     Log.Warning("'TO DO: teleport to enemy on chase'");
                    }
@@ -103,6 +103,20 @@ namespace AKCondinoO.Sims.Actors{
                   myEnemyIsMoving=myEnemyBaseAI.IsMoving();
                   myEnemyMoved|=myEnemyIsMoving;
                   shouldPredictMyEnemyDest|=myEnemyIsMoving;
+                 }
+                 if(shouldPredictMyEnemyDest){
+                  //Log.Warning("TO DO: do not predict dest on chase if already in front of enemy");
+                  if(myEnemyBaseAI==null||myEnemyBaseAI.characterController==null){
+                   shouldPredictMyEnemyDest=false;
+                  }else{
+                   Vector3 myEnemyForward=myEnemyBaseAI.characterController.transform.forward;
+                   myEnemyForward.y=0f;
+                   Vector3 dirFromMyEnemyToMe=(ai.me.transform.position-ai.MyEnemy.transform.position).normalized;
+                   dirFromMyEnemyToMe.y=0f;
+                   if(Vector3.Angle(myEnemyForward,dirFromMyEnemyToMe)<90f){
+                    shouldPredictMyEnemyDest=false;
+                   }
+                  }
                  }
                  float myMoveSpeed=Mathf.Max(
                   me.moveMaxVelocity.x,
@@ -163,9 +177,7 @@ namespace AKCondinoO.Sims.Actors{
                   }
                   ai.MyDest=ai.MyEnemy.transform.position;
                   if(predictMyEnemyDest){
-                   if(myEnemyBaseAI!=null&&myEnemyBaseAI.characterController!=null){
-                    ai.MyDest=ai.MyEnemy.transform.position+myEnemyBaseAI.characterController.transform.forward*predictMyEnemyDestDis;
-                   }
+                   ai.MyDest=ai.MyEnemy.transform.position+myEnemyBaseAI.characterController.transform.forward*predictMyEnemyDestDis;
                   }else{
                    if(me.characterController!=null){
                     if(inTheWayColliderHitsCount>0){

@@ -82,7 +82,7 @@ namespace AKCondinoO.Sims.Actors{
                   ratio=dis1/dis2;
                  }
                  retreatDis=ratio*dis1;
-                 Log.DebugMessage("retreatDis:"+retreatDis);
+                 //Log.DebugMessage("retreatDis:"+retreatDis);
                  ai.DoSkill();
                  if(reloading){
                   if(!me.IsReloading()){
@@ -119,12 +119,12 @@ namespace AKCondinoO.Sims.Actors{
                   if(
                    !me.IsTraversingPath()
                   ){
-                   Log.DebugMessage("not me.IsTraversingPath:moving=false");
+                   //Log.DebugMessage("'not me.IsTraversingPath':moving=false");
                    alternateRetreatShoot=true;
                    moving=false;
                   }
                  }
-                 Log.DebugMessage("ai.MyPathfinding:"+ai.MyPathfinding);
+                 //Log.DebugMessage("ai.MyPathfinding:"+ai.MyPathfinding);
                  if(!reloading&&
                     !shooting&&
                     !moving
@@ -139,7 +139,7 @@ namespace AKCondinoO.Sims.Actors{
                   }
                   if(tryingShooting){
                    me.MoveStop();
-                   Log.DebugMessage("tryingShooting");
+                   //Log.DebugMessage("tryingShooting");
                    if(me.TryShoot(MyEnemy,out bool r,out bool s)){
                     if(s){
                      shooting=true;
@@ -160,7 +160,7 @@ namespace AKCondinoO.Sims.Actors{
                     }
                    }
                   }else{
-                   Log.DebugMessage("!tryingShooting");
+                   //Log.DebugMessage("!tryingShooting");
                    if(Vector3.Distance(me.transform.position,MyEnemy.transform.position)<=retreatDis){
                     if(movingDestSet==null){
                      Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;

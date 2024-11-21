@@ -179,7 +179,7 @@ namespace AKCondinoO.Sims.Actors{
          if(aiSensor){
           aiSensor.Deactivate();
          }
-         Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
+         //Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
          foreach(var skill in skills){
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }

@@ -46,7 +46,7 @@ namespace AKCondinoO.Sims.Weapons{
          if(ammoToLoad>0f){
           ammoToLoad=Math.Min(ammoToLoad,ammo);
           if(ammoToLoad>0f){
-           Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
+           //Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
            return true;
           }
          }

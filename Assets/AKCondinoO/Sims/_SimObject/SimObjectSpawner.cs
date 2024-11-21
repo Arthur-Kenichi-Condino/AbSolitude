@@ -347,7 +347,7 @@ namespace AKCondinoO.Sims{
                      }
                  }else{
                      if(savingPersistentData){
-                         Log.DebugMessage("savingPersistentData");
+                         //Log.DebugMessage("savingPersistentData");
                          if(OnPersistentDataSaved()){
                              savingPersistentData=false;
                          }
@@ -366,7 +366,7 @@ namespace AKCondinoO.Sims{
                                  }
                              }else{
                                  if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
-                                     Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
+                                     //Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
                                      if(OnPersistentDataPushToFile()){
                                          OnPersistentDataPushedToFile();
                                      }

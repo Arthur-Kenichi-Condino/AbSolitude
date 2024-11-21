@@ -49,7 +49,7 @@ namespace AKCondinoO{
          );
          Loop:{
           yield return waitForTimeInterval;
-          Log.DebugMessage("StartDirectionChangesRoutine Loop");
+          //Log.DebugMessage("StartDirectionChangesRoutine Loop");
           initRotation=transform.rotation;
           Vector3 goalDirection=UnityEngine.Random.insideUnitSphere;
           goalDirection.y=0f;
@@ -73,7 +73,7 @@ namespace AKCondinoO{
          );
          Loop:{
           yield return waitForStartChangesFlag;
-          Log.DebugMessage("DirectionChangesRoutine Loop");
+          //Log.DebugMessage("DirectionChangesRoutine Loop");
           while(transform.rotation!=goalRotation){
            transform.rotation=Quaternion.RotateTowards(transform.rotation,goalRotation,directionChangeSpeed*Time.deltaTime);
            yield return null;

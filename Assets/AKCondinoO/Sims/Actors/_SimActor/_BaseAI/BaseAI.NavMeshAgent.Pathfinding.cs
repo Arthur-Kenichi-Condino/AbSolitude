@@ -66,7 +66,7 @@ namespace AKCondinoO.Sims.Actors{
           navMeshAgent.remainingDistance==float.NaN     ||
           navMeshAgent.remainingDistance<0
          ){
-          Log.DebugMessage("navMeshAgent.remainingDistance invalid:"+navMeshAgent.remainingDistance);
+          //Log.DebugMessage("navMeshAgent.remainingDistance invalid:"+navMeshAgent.remainingDistance);
           if(movePaused){
            return PathfindingResult.PAUSED;
           }

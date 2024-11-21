@@ -31,10 +31,15 @@ namespace AKCondinoO.Sims.Actors.Skills{
          GameObject skillGameObject;
          var pool=this.pool[skillType];
          Skill skill;
+         _Spawn:{}
          if(pool.Count>0){
           skill=pool.First.Value;
           pool.RemoveFirst();
           skill.pooled=null;
+          if(skill==null||skill.gameObject==null){
+           Log.Warning("trying to use destroyed game object skill from pool");
+           goto _Spawn;
+          }
           skillGameObject=skill.gameObject;
          }else{
           skillGameObject=Instantiate(skillPrefabs[skillType]);
@@ -48,6 +53,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
         internal void Pool(Type skillType,Skill skill){
          skill.OnPool();
          skill.actor=null;
+         if(skill==null||skill.gameObject==null){
+          Log.Warning("trying to pool destroyed game object skill");
+          return;
+         }
          skill.pooled=pool[skillType].AddLast(skill);
         }
     }

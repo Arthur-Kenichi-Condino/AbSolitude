@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
         protected override void Execute(){
          switch(container.execution){
           case(AStarPathfindingBackgroundContainer.Execution.GetGround):{
-           Log.DebugMessage("Execution.GetGround");
+           //Log.DebugMessage("Execution.GetGround");
            container.GetGroundRays.Clear();
            container.GetGroundHits.Clear();
            container.GetObstaclesCommands.Clear();
@@ -97,7 +97,7 @@ namespace AKCondinoO.Sims.Actors.Pathfinding{
            break;
           }
           case(AStarPathfindingBackgroundContainer.Execution.BuildHeap):{
-           Log.DebugMessage("Execution.BuildHeap");
+           Log.Warning("TO DO: Execution.BuildHeap");
            Vector3Int nCoord1=new Vector3Int(0,0,0);
            int c=0;
            for(nCoord1.x=0             ;nCoord1.x<container.width;nCoord1.x++){

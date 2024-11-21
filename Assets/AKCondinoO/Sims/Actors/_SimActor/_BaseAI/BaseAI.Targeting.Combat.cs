@@ -50,7 +50,7 @@ namespace AKCondinoO.Sims.Actors{
          if(isAiming){
           if(animatorController.animator!=null){
            if(animatorController.animationEventsHandler!=null){
-            Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon():simWeapon:"+simWeapon,simWeapon);
+            //Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon():simWeapon:"+simWeapon,simWeapon);
             animatorController.animationEventsHandler.onAnimatorReload+=simWeapon.OnReload;
             motionFlagForReloadingAnimation=true;
             return true;

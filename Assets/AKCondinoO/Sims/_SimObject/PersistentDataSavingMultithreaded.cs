@@ -190,7 +190,7 @@ namespace AKCondinoO.Sims{
          foreach(var simActorTypePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
           Type simActorType=simActorTypePersistentSimActorDataToSavePair.Key;
           var persistentSimActorDataToSave=simActorTypePersistentSimActorDataToSavePair.Value;
-          Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
+          //Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
           if(!simActorFileStream.ContainsKey(simActorType)){
            goto _Skip;
           }
