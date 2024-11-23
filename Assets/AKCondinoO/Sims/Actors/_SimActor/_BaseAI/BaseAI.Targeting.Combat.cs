@@ -149,16 +149,16 @@ namespace AKCondinoO.Sims.Actors{
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
          }
          ApplyAggressionModeForThenAddTarget(hitbox.actor);
-         SetTargetToBeRemoved(hitbox.actor,5f);
+         SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
          foreach(var slaveId in slaves){
           if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)&&slaveSimObject is BaseAI slaveAI){
            slaveAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-           slaveAI.SetTargetToBeRemoved(hitbox.actor,5f);
+           slaveAI.SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
           }
          }
          if(masterSimObject is BaseAI masterAI){
           masterAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-          masterAI.SetTargetToBeRemoved(hitbox.actor,5f);
+          masterAI.SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
