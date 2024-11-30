@@ -587,6 +587,7 @@
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.NavMeshAgent.Pathfinding.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.OnSkillUsed.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.OnTeleportTo.cs"
+"Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Targeting.Allies.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Targeting.Combat.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Targeting.Combat.Hitboxes.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/BaseAI.Targeting.Combat.Hurtboxes.cs"

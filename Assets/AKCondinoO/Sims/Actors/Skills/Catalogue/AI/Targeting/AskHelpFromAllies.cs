@@ -26,6 +26,23 @@ namespace AKCondinoO.Sims.Actors.Skills{
         }
         protected override void Invoke(){
          //  do more skill initialization here / or use this as main call of the skill
+         Log.DebugMessage("AskHelpFromAllies:Invoke");
+         if(actor!=null){
+          if(actor.masterId!=null&&SimObjectManager.singleton.active.TryGetValue(actor.masterId.Value,out SimObject masterSimObject)){
+           if(masterSimObject is BaseAI masterAI){
+            masterAI.OnAllyAskingForHelp(actor,actor.enemy);
+           }
+          }
+          if(actor.slaves.Count>0){
+           foreach(var slaveId in actor.slaves){
+            if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)){
+             if(slaveSimObject is BaseAI slaveAI){
+              slaveAI.OnAllyAskingForHelp(actor,actor.enemy);
+             }
+            }
+           }
+          }
+         }
          base.Invoke();//  the invoked flag is set here
         }
         protected override void OnInvokeSetCooldown(){

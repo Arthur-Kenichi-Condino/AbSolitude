@@ -159,7 +159,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
-        internal virtual void SetTargetToBeRemoved(SimObject target,float afterSeconds=30f,float cooldown=0f){
+        internal virtual void SetTargetToBeRemoved(SimObject target,float afterSeconds=30f,float cooldown=1f){
          if(target.id==null){
           return;
          }
