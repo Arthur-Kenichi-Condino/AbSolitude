@@ -531,6 +531,8 @@
 "Assets/AKCondinoO/Sims/Actors/Humanoid/HumanoidAnimatorControllerMotionUpdater.cs"
 "Assets/AKCondinoO/Sims/Actors/Pathfinding/AStar/AStarPathfinding.cs"
 "Assets/AKCondinoO/Sims/Actors/Pathfinding/AStar/AStarPathfindingMultithreaded.cs"
+"Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/AI/AICommandSkill.cs"
+"Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/AI/Targeting/AskHelpFromAllies.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/AreaSkill.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/Quagmire/Quagmire.cs"
 "Assets/AKCondinoO/Sims/Actors/Skills/Catalogue/Area/Quagmire/QuagmireSkillAoE.cs"

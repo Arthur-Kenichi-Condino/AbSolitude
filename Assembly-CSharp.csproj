@@ -137,6 +137,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HurtboxesPrefabsList.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\AI\Targeting\AskHelpFromAllies.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RenderingUtil.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Enabled.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.HandsUsage.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindTrails.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\AI\AICommandSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\InContainerTransformData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
