@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors{
           ApplyAggressionModeForThenAddTarget(target,ally,false);
           SetTargetToBeRemoved(target);
          }else{
-          Log.Warning("TO DO: move to ally and search for a target");
+          alliesInTrouble[ally]=alliesTroubleForgetTime;
          }
         }
     }

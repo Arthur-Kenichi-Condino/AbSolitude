@@ -59,21 +59,34 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly Dictionary<(Type simType,ulong number),float>targetDis      =new Dictionary<(Type,ulong),float>();
        internal readonly HashSet<(Type simType,ulong number)>targetsToRemove=new HashSet<(Type,ulong)>();
      internal readonly Dictionary<(Type simType,ulong number),float                                      >targetsOnCooldown=new Dictionary<(Type,ulong),float                        >();
-      internal readonly Dictionary<(Type simType,ulong number),float>targetsCooldownUpdate=new Dictionary<(Type,ulong),float>();
+      internal readonly List<(Type simType,ulong number)>targetsOnCooldownIterator=new();
+     [NonSerialized]internal readonly Dictionary<SimObject,float>alliesInTrouble=new();
+      [NonSerialized]internal readonly List<SimObject>alliesInTroubleIterator=new();
+       [NonSerialized]internal float alliesTroubleForgetTime=30f;
      [SerializeField]protected float renewEnemyInterval=3f;
       protected float renewEnemyTimer=3f;
         internal virtual void RenewTargets(){
-         foreach(var idCooldownPair in targetsOnCooldown){
-          targetsCooldownUpdate[idCooldownPair.Key]=idCooldownPair.Value-Time.deltaTime;
-         }
-         foreach(var idCooldownPair in targetsCooldownUpdate){
-          if(idCooldownPair.Value<=0f){
-           targetsOnCooldown.Remove(idCooldownPair.Key);
+         targetsOnCooldownIterator.AddRange(targetsOnCooldown.Keys);
+         foreach(var id in targetsOnCooldownIterator){
+          var cooldown=targetsOnCooldown[id]-Time.deltaTime;
+          if(cooldown<=0f){
+           targetsOnCooldown.Remove(id);
           }else{
-           targetsOnCooldown[idCooldownPair.Key]=idCooldownPair.Value;
+           targetsOnCooldown[id]=cooldown;
           }
          }
-         targetsCooldownUpdate.Clear();
+         targetsOnCooldownIterator.Clear();
+         alliesInTroubleIterator.AddRange(alliesInTrouble.Keys);
+         foreach(var id in alliesInTroubleIterator){
+          var timeout=alliesInTrouble[id]-Time.deltaTime;
+          if(timeout<=0f){
+           alliesInTrouble.Remove(id);
+          }else{
+           alliesInTrouble[id]=timeout;
+           Log.Warning("TO DO: move to ally and search for a target");
+          }
+         }
+         alliesInTroubleIterator.Clear();
          if(ai.MyEnemy!=null){
           if(ai.MyEnemy.id==null||(targetTimeouts.TryGetValue(ai.MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)){
            ai.MyEnemy=null;
