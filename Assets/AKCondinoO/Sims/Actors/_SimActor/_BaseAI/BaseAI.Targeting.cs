@@ -62,7 +62,7 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly List<(Type simType,ulong number)>targetsOnCooldownIterator=new();
      [NonSerialized]internal readonly Dictionary<SimObject,float>alliesInTrouble=new();
       [NonSerialized]internal readonly List<SimObject>alliesInTroubleIterator=new();
-       [NonSerialized]internal float alliesTroubleForgetTime=30f;
+       [NonSerialized]internal float alliesTroubleForgetTimeout=30f;
      [SerializeField]protected float renewEnemyInterval=3f;
       protected float renewEnemyTimer=3f;
         internal virtual void RenewTargets(){
@@ -194,20 +194,34 @@ namespace AKCondinoO.Sims.Actors{
           return true;
          }
          if(target.id==null){
+          Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.id==null'");
           return;
          }
          if(target.id==id){
+          Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.id==id'");
           return;
          }
          if(target.id==masterId){
           if(masterSimObject is BaseAI masterAI&&(masterAI.enemy!=this||NoHitIfNotUsingAI(masterAI))){
+           Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.id is owner'");
            return;
           }
          }
-         if(target.masterId==masterId){
+         if(target.masterId!=null&&target.masterId==masterId){
           if(target is BaseAI targetAI&&(targetAI.enemy!=this||NoHitIfNotUsingAI(targetAI))){
+           Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.masterId is owner:we are siblings'");
            return;
           }
+         }
+         if(slaves.Contains(target.id.Value)){
+          if(target is BaseAI targetAI&&(targetAI.enemy!=this||NoHitIfNotUsingAI(targetAI))){
+           Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'slaves.Contains(target.id.Value):it's my slave'");
+           return;
+          }
+         }
+         if(target.IsDead()){
+          Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.IsDead()'");
+          return;
          }
          if(MyAggressionMode!=AggressionMode.AggressiveToAll){
           if(target is BaseAI targetAI&&targetAI.aggression!=AggressionMode.AggressiveToAll){
@@ -215,14 +229,6 @@ namespace AKCondinoO.Sims.Actors{
            // set a cooldown to be enemy again, with value higher than timeout: 5f, so maybe 7f
            setCooldown=targetCooldownAfterFastTimeout;
           }
-         }
-         if(slaves.Contains(target.id.Value)){
-          if(target is BaseAI targetAI&&(targetAI.enemy!=this||NoHitIfNotUsingAI(targetAI))){
-           return;
-          }
-         }
-         if(target.IsDead()){
-          return;
          }
          void IfUsingAISetTimeout(){
           if(target is BaseAI targetAI&&targetAI.isUsingAI&&(!targetTimeouts.TryGetValue(target.id.Value,out float timeout)||timeout-Time.deltaTime<=0f)){
@@ -236,6 +242,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }else if(targetOfTarget!=null){
           if(targetOfTarget.id==null){
+           Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'targetOfTarget.id==null'");
            return;
           }
           if(masterId==targetOfTarget.id){
@@ -254,13 +261,15 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void ApplyEnemyPriorityForThenAddTarget(SimObject target,GotTargetMode gotTargetMode){
          if(target.id==null){
+          Log.DebugMessage("ApplyEnemyPriorityForThenAddTarget:'target.id==null'");
           return;
          }
          if(targetsOnCooldown.TryGetValue(target.id.Value,out _)){
+          Log.DebugMessage("ApplyEnemyPriorityForThenAddTarget:'on cooldown'");
           return;
          }
          EnemyPriority enemyPriority=EnemyPriority.Low;
-         //Log.DebugMessage("target to add:"+target.id.Value);
+         Log.DebugMessage("target to add:"+target.id.Value);
          OnAddTarget(target,gotTargetMode,enemyPriority);
         }
     }

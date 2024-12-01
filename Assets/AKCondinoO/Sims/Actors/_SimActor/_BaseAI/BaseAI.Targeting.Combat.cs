@@ -163,7 +163,7 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,fromSimObject:simObject);
-         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         //Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
           OnDeath();

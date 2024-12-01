@@ -9,13 +9,14 @@ using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
         internal virtual void OnAllyAskingForHelp(SimObject ally,SimObject target){
-         if(target!=null){
-          Log.DebugMessage("OnAllyAskingForHelp:target:"+target);
+         if(target!=null&&target.id!=null){
+          Log.DebugMessage("OnAllyAskingForHelp:target:"+target,this);
           ApplyAggressionModeForThenAddTarget(target,ally,false);
           SetTargetToBeRemoved(target);
+          Log.DebugMessage("OnAllyAskingForHelp:'targetsByPriority.ContainsKey(target.id.Value)':"+targetsByPriority.ContainsKey(target.id.Value),this);
          }else{
-          alliesInTrouble[ally]=alliesTroubleForgetTime;
          }
+         alliesInTrouble[ally]=alliesTroubleForgetTimeout;
         }
     }
 }
