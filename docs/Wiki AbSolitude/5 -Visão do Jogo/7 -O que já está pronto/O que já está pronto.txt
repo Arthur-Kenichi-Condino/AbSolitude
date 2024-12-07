@@ -1,0 +1,12 @@
+	**O que já está disponível?**
+
+	“Homunculus System”: a ideia vem do jogo Ragnarök Online’s 
+sistema homúnculo. Mas acredito que não foi totalmente explorado aí e o jogo 
+removeu muitas mecânicas e habilidades de jogo com o passar do tempo; deles 
+system é um esqueleto a partir do qual quero usar como base para criar um novo. Deles 
+o sistema homúnculo na verdade se tornou um “sistema de estimação” no final.
+
+	Mundo editável gerado aleatoriamente: há muitos jogos editáveis 
+terreno já, mas geralmente eles usam um terreno de mapa de altura que não permite 
+criando cavernas. Este projeto utiliza um sistema voxel com terreno suavizado para que qualquer 
+“buracos” podem ser criados ao mesmo tempo que permite o volume do terreno colocado em cima deles.

@@ -1,0 +1,33 @@
+	**O patrocinador**
+
+	Eu, Arthur, estou criando esse jogo do zero; Eu comecei no XNA da Microsoft
+framework, mas depois migrou para o Unity porque o XNA não seria mais atualizado.
+Estou codificando há muito tempo e ele passou por muitas versões. Meu principal
+A conquista do desenvolvimento por enquanto é fazer um sistema que usa multithreading como
+com a maior segurança possível, eliminando condições de corrida e impasses.
+	
+	**Por que escolhi Unity (e não Unreal)**
+	   
+		1) O Unity é mais rápido de aprender e possui sistemas menos complexos para manipulação
+		   objetos e colocá-los em cena prontos para usar seu roteiro;
+		2) Unity usa C#, minha linguagem principal;
+		3) Unreal usa C++ e seu sistema de gerenciamento de ativos não é tão flexível:
+		   por exemplo, se você nomear algo errado, será difícil
+		   mudando-o para um novo nome.
+		4) C++ não é tão flexível quanto C# na minha opinião (pois requer uma ordem correta 
+		   para as funções e todo arquivo precisa de seu cabeçalho, e os cabeçalhos devem ser 
+		   solicitado na ordem correta para outros arquivos)
+
+	**A equipe**
+
+	Como este projeto pode gerar receitas posteriormente, mas não tem data definida para 
+finalizado o protótipo ou a versão de lançamento, a equipe está sendo recrutada como se 
+fazendo um “projeto hobby”: trabalhamos nisso em nosso tempo livre, sem necessidade de 
+dedicar tempo integral a isso.
+	Se for gerada receita, os valores serão divididos com base em quanto você 
+ajudou e quanto você adicionou ao projeto quanto ao número ou complexidade do 
+ativos adicionados.
+	A equipe pode ser pequena no início, com no máximo 4 pessoas para cada 
+assunto (arte, som, codificação, etc.). Se passarmos a ser uma equipe maior, poderemos precisar de mais 
+pessoas para ajudar a gerenciar as funções e os objetivos de cada um; então não podemos ter isso também 
+grande por enquanto.

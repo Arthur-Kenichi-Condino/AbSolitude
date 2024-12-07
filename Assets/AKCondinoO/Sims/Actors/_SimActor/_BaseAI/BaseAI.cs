@@ -36,6 +36,7 @@ namespace AKCondinoO.Sims.Actors{
        internal float heightCrouching;
      internal SimAnimatorController animatorController;
      internal AISensor aiSensor;
+     internal AISignal aiSignal;
      protected AI ai;
         protected override void Awake(){
          if(ai==null){
@@ -48,6 +49,12 @@ namespace AKCondinoO.Sims.Actors{
           aiSensor.actor=this;
           aiSensor.Deactivate();
           //Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+         }
+         aiSignal=GetComponentInChildren<AISignal>();
+         if(aiSignal){
+          Log.DebugMessage("aiSignal found");
+          aiSignal.actor=this;
+          aiSignal.Deactivate();
          }
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
@@ -291,6 +298,11 @@ namespace AKCondinoO.Sims.Actors{
                 aiSensor.transform.rotation=Quaternion.Euler(0f,head.transform.eulerAngles.y,0f);
                }
               }
+             }
+             if(!aiSignal.isActiveAndEnabled){
+              aiSignal.Activate();
+             }
+             if(aiSignal.isActiveAndEnabled){
              }
             }
            }

@@ -22,10 +22,15 @@ namespace AKCondinoO{
        "Construction",
        "Hurtbox",
       };
+     internal static int simActorLayer;
+      internal static readonly string[]simActorLayerNames=new string[]{
+       "Default",
+      };
         internal static void SetUtil(){
          SetLayer(ref considerGroundLayer,considerGroundLayerNames);
-         SetLayer(ref physObstaclesLayer,physObstaclesLayerNames);
-         SetLayer(ref shootingHitsLayer,shootingHitsLayerNames);
+         SetLayer(ref  physObstaclesLayer, physObstaclesLayerNames);
+         SetLayer(ref   shootingHitsLayer,  shootingHitsLayerNames);
+         SetLayer(ref       simActorLayer,      simActorLayerNames);
         }
         static void SetLayer(ref int layer,string[]layerNames){
          for(int i=0;i<layerNames.Length;++i){

@@ -1,0 +1,34 @@
+	O jogo consiste em: 
+		1) Criar ou selecionar seu personagem que pode ser usado em vários jogos 
+		   mundos (você pode exportar ou importar personagens criados em cada jogo
+		   mundo);
+		2) Configurando o Voxel Terrain Generator para esta jogabilidade;
+		3) [Quando o modo multijogador é adicionado:] definir as configurações do servidor ou host;
+		4) O terreno é gerado! Agora existem três modos de jogo principais:
+			A) _Modo Interagir_: interaja com objetos colocados no mundo e dê 
+			   comandos para atores de simulação.
+			B) _Modo de edição de compra de construção_: mova ou coloque objetos no mundo: pisos, 
+			   paredes, portas, mesas, cadeiras ou edifícios inteiros “tocas de coelho”, planeje 
+			   um edifício para que personagens do mundo possam adicionar o necessário 
+			   material e terminar a construção.	
+			C) _Câmera de terceira pessoa_: selecione um personagem com o botão direito do mouse 
+			   e selecione no menu de contexto para defini-lo como o objeto ativo, 
+			   em seguida, pressione o comando do teclado e controle o personagem
+			   de uma câmera de terceira pessoa.
+
+	**Modo de interação**
+
+	Este modo permite ao jogador dar comandos às criaturas que seleciona com 
+o ponteiro do mouse.
+
+ 	**Modo de edição de construção e compra**
+
+	Neste modo, o jogador pode mover objetos no mundo e editar o terreno.
+
+	**Câmera de terceira pessoa**
+
+	O jogador pode entrar neste modo a partir do Modo Interagir e voltar ao normal 
+Modo de interação mais tarde. É chamada de Câmera de Terceira Pessoa porque dá controle total para 
+o jogador sobre um personagem (mover, pular, etc.) diretamente com a câmera seguindo-o.
+
+	Aplicar zoom na câmera pode alterná-la para mudar para o modo de primeira pessoa.

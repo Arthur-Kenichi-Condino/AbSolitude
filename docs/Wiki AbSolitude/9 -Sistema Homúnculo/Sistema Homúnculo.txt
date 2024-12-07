@@ -1,0 +1,114 @@
+	Homúnculos são uma das principais características do jogo. São criaturas que 
+siga seu criador e ajude-os e proteja-os. Eles são controlados pelo próprio jogo 
+usando uma IA, e pelo jogador, para que ele entre em combate automaticamente ou use habilidades
+quando eles são necessários.
+
+	“Homunculus” está presente em desenhos animados e em alguns jogos hoje em dia, mas é 
+na verdade, um termo encontrado na “alquimia”, no pré-formacionismo e também no folclore. É uma ficção 
+ser humano em miniatura.
+
+	A definição de homúnculo pode variar e encontrei algumas abaixo, mas no 
+No contexto ficcional do jogo, eles são apenas “clones humanóides” de “DNA humano” com 
+“modificações”, e esses clones modificados resultaram na geração desses diversos
+criaturas com diferentes aparências e conjunto de atributos e habilidades: os homúnculos.
+
+	É um “homem feito pelo homem [que] é formado alquimicamente – em um tubo de ensaio – a partir de 
+esperma humano, aquecido por esterco de cavalo durante as quarenta semanas de vida humana normal 
+gravidez, e 'desses homens Artificiais, quando atingem a idade do Homem, são feitos 
+Pigmeus, gigantes e outros homens grandes e monstruosos, que são instrumentos de 	
+grandes assuntos’ [...]”, de
+https://arcade.stanford.edu/rofl/artificial-men-alchemy-transubstantiation-and-homunculus:
+neste artigo, existem algumas definições de homúnculo, alquimia e algumas de 
+suas implicações na história.
+
+	A definição para a palavra “homúnculo” é de “homenzinho”. “Um uso precoce de 
+a palavra estava no trabalho de 1572 de Paracelso sobre incursões na alquimia, De 
+Natura Rerum, na qual deu instruções sobre como criar um bebê humano 
+sem fertilização ou gestação no útero. Na história da embriologia, o 
+homunculus fazia parte da teoria da geração da era do Iluminismo chamada 
+pré-formacionismo. O homúnculo era o indivíduo totalmente formado que existia dentro 
+a célula germinativa de um de seus pais antes da fertilização e cresceria em tamanho durante 
+gestação até estar pronto para nascer.”, de https://embryo.asu.edu/pages/homunculus.
+	[To do: research more info to describe the character origins better]
+
+	No jogo, os homúnculos terão uma abordagem mais “amigável”, como é comum 
+personagem que pode ser convocado e na verdade pode parecer e agir como um animal de estimação para o 
+jogador.
+
+	Os principais homúnculos serão:
+
+	1) Vanilmirth
+	   Conceito Vanilmirth
+
+	   O tipo de homúnculo Vanilmirth é baseado no homúnculo do mesmo 		
+nome presente no jogo Ragnarök Online.
+
+	{imagem: 1}
+Vanilmirth original em Ragnarök Online, artista desconhecido
+
+	{imagem: 2}
+	   Sprites de Vanilmirth vistos no jogo Ragnarök Online, artista desconhecido, de
+		   https://browiki.org/wiki/Vanilmirth
+
+	Nosso remake do Vanilmirth ainda será amigável, mas mais conectado ao 
+ideia de um homúnculo “fracassado”. Assim como o original, o remake permanecerá um tanto desajeitado 
+homúnculo que pode usar aleatoriamente a habilidade errada no momento, colocando seu dono 
+numa situação ruim durante um combate; mas também, com a mesma abordagem, pode transformar o 
+marés para que o proprietário possa se encontrar em um cenário totalmente novo e melhor. Esse 
+homunculus tem tudo a ver com ser “aleatório”.
+
+	Habilidades-chave do homúnculo (nenhuma habilidade é limitada pelo tipo de homúnculo ou 
+classe de personagem, mas as habilidades originalmente definidas para este homúnculo e que serão 
+sempre presentes nele estão):
+	**Cáprico**
+
+	Ícone de referência de habilidade do Ragnarök Online: {img: 3}
+
+	O homúnculo usará uma habilidade aleatória, de todo o jogo, em qualquer nível, 
+limitado apenas pelo nível do próprio capricho. 
+
+	A habilidade pode ter como alvo qualquer personagem ativo no jogo, incluindo o jogador 
+personagem, o próprio homúnculo ou inimigos, então é muito poderoso, mas também muito 
+habilidade perigosa. É uma habilidade que aposta na sorte do jogador.
+
+	Para a implementação técnica desta habilidade: atualmente, as habilidades são
+GameObjects no Unity que estão sendo instanciados com o personagem que o possui, então 
+é um clone da habilidade Prefab: talvez não seja possível instanciar todas as habilidades para 
+cada Vanilmirth, ou um pool pode ser usado porque instanciar e destruir coisas em 
+A unidade é muito cara em termos de memória.
+
+	**Mudança de Planos**
+
+	Mudança de planos é uma habilidade passiva que permite ao homúnculo ganhar algum 
+atribuir pontos. Sempre que a habilidade aumenta de nível, o homúnculo ganhará um 
+gama de atributos (pontos de resistência, pontos de foco, pontos de defesa de combate, ataque 
+pontos, etc.), selecionados aleatoriamente e salvos com os dados do homúnculo.
+
+	Da mesma forma, o homúnculo perderá alguns pontos de atributos, espelhados em 
+aqueles que ganha: por exemplo, se ganhar Ataque, pode perder Defesa.
+
+	**Bênção Caótica**
+
+	Ícone de referência de habilidade do Ragnarök Online:{img: 4}
+
+	Quando a habilidade é ativada, o homúnculo Vanilmirth adiciona temporariamente e 
+também remove atributos aleatórios de si mesmo, de um inimigo aleatório e do proprietário. O
+homúnculo também curará o proprietário, um inimigo aleatório e a si mesmo em uma quantidade aleatória de 
+Pontos de resistência para cada um. Quando o tempo limite da habilidade expirar, os atributos voltarão para 
+normal.
+
+	Quem é considerado um “inimigo aleatório”: quando em combate, um dos personagens que 
+pode estar atacando o dono ou o homúnculo; quando fora de combate: qualquer ataque agressivo 
+possível alvo para o sistema de combate atualmente ativo no mundo.
+
+	**Arte conceitual de Vanilmirth**
+
+	Estes são os primeiros arquivos de arte conceitual, criados por Daniel Lucas:
+	{img: 5}
+  Homunculus Vanilmirth refaz visualizações para modelagem 3D, por Daniel Lucas
+	{img: 6}
+	{img: 7}
+	{img: 8}
+	{img: 9}
+	{img: 10}
+	{img: 11}

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims.Actors.Skills{
     internal class AskHelpFromAllies:AICommandSkill{
         internal override bool IsAvailable(SimObject target,int useLevel){
@@ -24,6 +25,8 @@ namespace AKCondinoO.Sims.Actors.Skills{
          //  the skill cannot be used!
          return false;
         }
+     [NonSerialized]readonly Collider[]findAlliesColliders=new Collider[8];
+      QueryTriggerInteraction findAlliesQueryTrigger=QueryTriggerInteraction.Ignore;
         protected override void Invoke(){
          //  do more skill initialization here / or use this as main call of the skill
          Log.DebugMessage("AskHelpFromAllies:Invoke");
@@ -42,6 +45,21 @@ namespace AKCondinoO.Sims.Actors.Skills{
             }
            }
           }
+          int mask=PhysUtil.simActorLayer;
+          //int collidersCount=Physics.OverlapSphereNonAlloc(actor.transform.position,96,findAlliesColliders,mask,findAlliesQueryTrigger);
+          //for(int i=0;i<collidersCount;++i){
+          // Collider col=findAlliesColliders[i];
+          // SimActor sim=col.transform.root.GetComponentInChildren<SimActor>();
+          // if(sim is BaseAI ai){
+          //  if(ai.aggression!=AggressionMode.AggressiveToAll){
+          //   if(ai.id!=null&&actor.id!=null){
+          //    if(ai.id.Value.simObjectType==actor.id.Value.simObjectType){
+          //     ai.OnAllyAskingForHelp(actor,actor.enemy);
+          //    }
+          //   }
+          //  }
+          // }
+          //}
          }
          base.Invoke();//  the invoked flag is set here
         }

@@ -1,0 +1,30 @@
+	**Por que estamos criando este jogo?**
+
+	Os objetivos deste projeto são:
+		A) criar um “motor de jogo” que possa ser usado principalmente para criar este jogo 
+		   e depois ser usado em outros jogos; as principais funções do motor são:
+		B) criar um mundo virtual gerado automaticamente no qual os jogadores possam 
+		   editar, construir e interagir e assim jogar o jogo à sua maneira. Esse 
+		   também pode ser chamada de “sandbox”;
+		C) criar um sistema de combate que possa funcionar em primeira pessoa, terceira pessoa ou 
+		   das interações de movimento livre da câmera;
+		D) criar um “Sistema Homúnculo”;
+		E) criar NPCs controlados por IA que interajam com o personagem do jogador 
+		   e edifícios;
+		F) criar personagens NPC pré-fabricados especiais que interajam com o jogador 
+		   neste mundo virtual, que possuem personalidades fortes específicas;
+		G) criar um sistema dinâmico de missões vinculado a esses NPCs;
+		H) criar histórias nessas missões nas quais o jogador tenha que lidar 
+		   dilemas éticos e descobrir maneiras de lidar com eles.
+	
+	Pelo que está escrito acima e pelas informações que podem ser encontradas no Jogo 
+Documento de Design, os objetivos de finalizar este projeto de jogo são completar o 
+jogo principal que é continuamente atualizado e vendido com DLCs disponíveis e
+microtransações para que possamos ganhar alguma receita para continuar adicionando mais conteúdo e para 
+ter um “motor de jogo” a partir do qual outros jogos podem ser criados e que podem ser vendidos 
+como um ativo na Unity Store.
+
+	O objetivo deste jogo também é ter seu código aberto para que possa ser usado em 
+atividades educacionais: eu, Arthur, acredito que é importante sempre compartilhar tecnologia para 
+ajudar todos a terem acesso a ele: para poder aprender e criar seu próprio conteúdo 
+mais rápido e mais facilmente.
