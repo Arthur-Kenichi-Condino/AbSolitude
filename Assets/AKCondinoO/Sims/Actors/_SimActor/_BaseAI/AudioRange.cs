@@ -11,6 +11,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
         }
         internal void OnDeactivate(){
          //  OnTriggerExit will not be called
+         aiSignal.actor.inAudioRange.Clear();
          simObjectCollidersInRange.Clear();
          foreach(var kvp in gotInRangeOf){
           SimObject simObjectGotInRangeOf=kvp.Key;
@@ -24,8 +25,45 @@ namespace AKCondinoO.Sims.Actors.Combat{
      internal readonly HashSet<Collider>simObjectCollidersInRange=new HashSet<Collider>();
         void OnTriggerEnter(Collider other){
          //Log.DebugMessage("OnTriggerEnter:other:"+other,other);
+         if(!Core.singleton.isServer){
+          return;
+         }
+         if(other.transform.root==this.transform.root){
+          return;
+         }
+         if(IsValidForHearing(other,out SimObject otherSimObject,out BaseAI otherSimActor)){
+          simObjectCollidersInRange.Add(other);
+          if(!otherSimActor.aiSignal.audioRange.gotInRangeOf.ContainsKey(aiSignal.actor)){
+           otherSimActor.aiSignal.audioRange.gotInRangeOf.Add(aiSignal.actor,0);
+          }else{
+           otherSimActor.aiSignal.audioRange.gotInRangeOf[aiSignal.actor]++;
+          }
+          aiSignal.actor.OnSimObjectIsInAudioRange(otherSimObject,otherSimActor);
+         }
         }
         void OnTriggerExit(Collider other){
+         if(!Core.singleton.isServer){
+          return;
+         }
+         simObjectCollidersInRange.Remove(other);
+         if(IsValidForHearing(other,out SimObject otherSimObject,out BaseAI otherSimActor)){
+          aiSignal.actor.OnSimObjectIsOutOfAudioRange(otherSimObject,otherSimActor);
+          if(otherSimActor.aiSignal.audioRange.gotInRangeOf.ContainsKey(aiSignal.actor)){
+           otherSimActor.aiSignal.audioRange.gotInRangeOf[aiSignal.actor]--;
+           if(otherSimActor.aiSignal.audioRange.gotInRangeOf[aiSignal.actor]<0){
+            otherSimActor.aiSignal.audioRange.gotInRangeOf.Remove(aiSignal.actor);
+           }
+          }
+         }
+        }
+        internal bool IsValidForHearing(Collider other,out SimObject otherSimObject,out BaseAI otherSimActor){
+         otherSimActor=null;
+         if(other.CompareTag("SimObjectVolume")&&!other.isTrigger&&(otherSimObject=other.GetComponentInParent<SimObject>())!=null&&otherSimObject is BaseAI otherIsSimActor&&otherIsSimActor.aiSignal!=null&&otherIsSimActor.aiSignal.audioRange!=null){
+          otherSimActor=otherIsSimActor;
+          return true;
+         }
+         otherSimObject=null;
+         return false;
         }
     }
 }

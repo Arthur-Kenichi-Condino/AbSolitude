@@ -20,5 +20,13 @@ namespace AKCondinoO.Sims.Actors{
         internal virtual void OnSimObjectIsOutOfSight(SimObject simObject){
          SetTargetToBeRemoved(simObject);
         }
+     [NonSerialized]internal readonly Dictionary<SimObject,BaseAI>inAudioRange=new();
+        internal virtual void OnSimObjectIsInAudioRange(SimObject simObject,BaseAI ai){
+         Log.DebugMessage("OnSimObjectIsInAudioRange:ai:"+ai);
+         inAudioRange[simObject]=ai;
+        }
+        internal virtual void OnSimObjectIsOutOfAudioRange(SimObject simObject,BaseAI ai){
+         inAudioRange.Remove(simObject);
+        }
     }
 }

@@ -12,6 +12,7 @@ using AKCondinoO.Sims.Inventory;
 using AKCondinoO.UI;
 using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
+using AKCondinoO.UI.WorldSpace;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Water.Editing;
@@ -138,6 +139,7 @@ namespace AKCondinoO{
           {o++,Placeholder              .singleton},
           {o++,FixedUI                  .singleton},
           {o++,ContextMenuUI            .singleton},
+          {o++,WorldSpaceUI             .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
           //Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);

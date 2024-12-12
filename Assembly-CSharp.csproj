@@ -152,6 +152,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\DeepQuagmire.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\WorldSpace\WorldSpaceUI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\WorldSpace\SimObjectInfo\SimObjectInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\UnnamedMessageTypes.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.ProcessCommand.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
