@@ -18,6 +18,7 @@ namespace AKCondinoO.Sims{
             internal void OnRefresh(SimObject statsSim=null){
              if(pendingRefresh){
               OnRefresh_IsTranscendent(statsSim);
+               OnRefresh_Experience(statsSim);
                OnRefresh_SimLevel(statsSim);
                OnRefresh_AgeLevel(statsSim);
                  OnRefresh_Luck(statsSim);//  Luck must be applied at the start and then at the end so it adds random attributes
@@ -32,6 +33,7 @@ namespace AKCondinoO.Sims{
                      OnRefresh_PhysicalPowerFlatValue  (statsSim);
                      OnRefresh_PhysicalDefenseFlatValue(statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
+               updatedExperience    =false;refreshedExperience    =false;
                updatedSimLevel      =false;refreshedSimLevel      =false;
                updatedAgeLevel      =false;refreshedAgeLevel      =false;
                 updatedBodily_kinesthetic  =false;
