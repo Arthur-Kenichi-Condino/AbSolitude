@@ -114,9 +114,9 @@ namespace AKCondinoO.Sims{
              float result=(!transcendent?expPointsForLevel100NonTransc:expPointsForLevel100Transc);
              if(currentLevel>99){
               if(!transcendent){
-               result=expPointsForLevel100NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150NonTransc/expPointsForLevel100NonTransc),1f/51f),Math.Min(currentLevel,150));
+               result=expPointsForLevel100NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150NonTransc/expPointsForLevel100NonTransc),1f/50f),Math.Min(currentLevel-100,150-100));
               }else{
-               result=expPointsForLevel100Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150Transc   /expPointsForLevel100Transc   ),1f/51f),Math.Min(currentLevel,150));
+               result=expPointsForLevel100Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150Transc   /expPointsForLevel100Transc   ),1f/50f),Math.Min(currentLevel-100,150-100));
               }
              }
              lock(totalExpPointsForNextLevel){
