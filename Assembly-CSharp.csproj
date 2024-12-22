@@ -217,6 +217,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AudioRange.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.Wasteland.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAnimatorControllerMotionUpdater.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Assets\AKCondinoO\Util\ReflectionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DebugGizmos.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
@@ -290,6 +292,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Buff\BuffSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectManager.cs" />

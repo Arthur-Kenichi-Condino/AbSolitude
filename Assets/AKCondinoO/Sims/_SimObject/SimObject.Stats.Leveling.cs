@@ -13,15 +13,10 @@ namespace AKCondinoO.Sims{
              if(
               reset||
               simLevel_value<=0||
-              ageLevel_value<=0||
-              (!isTranscendent_value&&simLevel_value>99)
+              ageLevel_value<=0
              ){
               IsTranscendentSet(math_random.CoinFlip(),statsSim,false);
-              if(isTranscendent_value){
-               SimLevelSet(math_random.Next(1,201),statsSim,false);
-              }else{
-               SimLevelSet(math_random.Next(1,100),statsSim,false);
-              }
+              SimLevelSet(math_random.Next(1,201),statsSim,false);
               AgeLevelSet(math_random.Next(1,970),statsSim,false);
              }
              //Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value);
@@ -109,7 +104,10 @@ namespace AKCondinoO.Sims{
               }
              }
              if(currentLevel<99){
-              return GetExpPointsForNextLevelFrom1To99(currentLevel,transcendent);
+              return GetExpPointsForNextLevelFrom1To99   (currentLevel,transcendent);
+             }
+             if(currentLevel>=150){
+              return GetExpPointsForNextLevelFrom151To200(currentLevel,transcendent);
              }
              float result=(!transcendent?expPointsForLevel100NonTransc:expPointsForLevel100Transc);
              if(currentLevel>99){
@@ -117,6 +115,32 @@ namespace AKCondinoO.Sims{
                result=expPointsForLevel100NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150NonTransc/expPointsForLevel100NonTransc),1f/50f),Math.Min(currentLevel-100,150-100));
               }else{
                result=expPointsForLevel100Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150Transc   /expPointsForLevel100Transc   ),1f/50f),Math.Min(currentLevel-100,150-100));
+              }
+             }
+             lock(totalExpPointsForNextLevel){
+              totalExpPointsForNextLevel[(currentLevel,transcendent)]=result;
+             }
+             return result;
+            }
+         [NonSerialized]const float expPointsForLevel151NonTransc=1272747f;
+          [NonSerialized]const float totalExpPointsFrom151To200NonTransc=596863680f;
+         [NonSerialized]const float expPointsForLevel151Transc=1528225f;
+          [NonSerialized]const float totalExpPointsFrom151To200Transc=981363532f;
+            internal static float GetExpPointsForNextLevelFrom151To200(int currentLevel,bool transcendent){
+             lock(totalExpPointsForNextLevel){
+              if(totalExpPointsForNextLevel.TryGetValue((currentLevel,transcendent),out float cached)){
+               return cached;
+              }
+             }
+             if(currentLevel<150){
+              return GetExpPointsForNextLevelFrom100To150(currentLevel,transcendent);
+             }
+             float result=(!transcendent?expPointsForLevel151NonTransc:expPointsForLevel151Transc);
+             if(currentLevel>150){
+              if(!transcendent){
+               result=expPointsForLevel151NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom151To200NonTransc/expPointsForLevel151NonTransc),1f/50f),Math.Min(currentLevel-150,200-150));
+              }else{
+               result=expPointsForLevel151Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom151To200Transc   /expPointsForLevel151Transc   ),1f/50f),Math.Min(currentLevel-150,200-150));
               }
              }
              lock(totalExpPointsForNextLevel){
@@ -166,7 +190,10 @@ namespace AKCondinoO.Sims{
               statPoints=48;
              }
              for(int level=2;level<=Math.Min(currentLevel,99);level++){
-              statPoints+=Mathf.FloorToInt((level-1)/5f)+3;
+              statPoints+=Mathf.FloorToInt(
+               (transcendent?((float)expPointsForFirstLevelTransc/(float)expPointsForFirstLevelNonTransc):1)*
+               (((level-1)/5f)+3)
+              );
               lock(totalStatPointsAtLevel){
                totalStatPointsAtLevel[(level,transcendent)]=statPoints;
               }
@@ -181,7 +208,10 @@ namespace AKCondinoO.Sims{
              }
              int statPoints=AddStatPointsFrom1To99(currentLevel,transcendent);
              for(int level=100;level<=Math.Min(currentLevel,150);level++){
-              statPoints+=Mathf.FloorToInt((level-1)/10f)+13;
+              statPoints+=Mathf.FloorToInt(
+               (transcendent?((float)expPointsForFirstLevelTransc/(float)expPointsForFirstLevelNonTransc):1)*
+               (Mathf.FloorToInt((level-1)/10f)+13)
+              );
               lock(totalStatPointsAtLevel){
                totalStatPointsAtLevel[(level,transcendent)]=statPoints;
               }
@@ -196,7 +226,10 @@ namespace AKCondinoO.Sims{
              }
              int statPoints=AddStatPointsFrom100To150(currentLevel,transcendent);
              for(int level=151;level<=Math.Min(currentLevel,200);level++){
-              statPoints+=Mathf.FloorToInt(((level-1)-150)/7f)+28;
+              statPoints+=Mathf.FloorToInt(
+               (transcendent?((float)expPointsForFirstLevelTransc/(float)expPointsForFirstLevelNonTransc):1)*
+               (Mathf.FloorToInt(((level-1)-150)/7f)+28)
+              );
               lock(totalStatPointsAtLevel){
                totalStatPointsAtLevel[(level,transcendent)]=statPoints;
               }
