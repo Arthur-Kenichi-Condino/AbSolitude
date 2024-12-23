@@ -101,12 +101,12 @@ namespace AKCondinoO.Sims{
               //Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
               //Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):'wrong cached value'");
              }
-             int totalStatPoints=AddStatPointsFrom1To99(99,false);
-             //Log.DebugMessage("static Stats():AddStatPointsFrom1To99(99,false):"+totalStatPoints);
-             //Debug.Assert(AddStatPointsFrom1To99(99,false)==totalStatPoints,"static Stats():AddStatPointsFrom1To99(99,false):'wrong cached value'");
-             totalStatPoints=AddStatPointsFrom151To200(200,true);
-             //Log.DebugMessage("static Stats():AddStatPointsFrom151To200(200,true):"+totalStatPoints);
-             //Debug.Assert(AddStatPointsFrom151To200(200,true)==totalStatPoints,"static Stats():AddStatPointsFrom151To200(200,true):'wrong cached value'");
+             int totalStatPoints=AddStatPointsFrom201To250(250,false);
+             Log.DebugMessage("static Stats():AddStatPointsFrom201To250(250,false):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom201To250(250,false)==totalStatPoints,"static Stats():AddStatPointsFrom201To250(250,false):'wrong cached value'");
+             totalStatPoints=AddStatPointsFrom201To250(250,true);
+             Log.DebugMessage("static Stats():AddStatPointsFrom201To250(250,true):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom201To250(250,true)==totalStatPoints,"static Stats():AddStatPointsFrom201To250(250,true):'wrong cached value'");
             }
          [NonSerialized]internal static System.Random seedGenerator;
          [NonSerialized]internal readonly System.Random math_random;

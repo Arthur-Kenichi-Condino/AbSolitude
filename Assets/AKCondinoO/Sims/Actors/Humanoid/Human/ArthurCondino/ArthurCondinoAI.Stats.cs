@@ -26,6 +26,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
              SimLevelSet(200,statsSim,false);
              AgeLevelSet(30,statsSim,false);
              OnRefresh(statsSim);
+             Log.DebugMessage("total stat points:"+totalStatPoints_value);
                Bodily_kinestheticSet(88f ,statsSim,false);//Log.DebugMessage(  "Bodily_kinestheticSet to:"+  bodily_kinesthetic_value+";remaining stat points:"+(totalStatPoints_value-statPointsSpent_value));
                     InterpersonalSet(51f ,statsSim,false);//Log.DebugMessage(       "InterpersonalSet to:"+       interpersonal_value+";remaining stat points:"+(totalStatPoints_value-statPointsSpent_value));
                     IntrapersonalSet(130f,statsSim,false);//Log.DebugMessage(       "IntrapersonalSet to:"+       intrapersonal_value+";remaining stat points:"+(totalStatPoints_value-statPointsSpent_value));
