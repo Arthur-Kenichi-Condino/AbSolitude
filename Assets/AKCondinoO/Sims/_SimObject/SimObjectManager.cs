@@ -25,6 +25,8 @@ namespace AKCondinoO.Sims{
      internal static string simObjectDataSavePath;
      internal static string simActorSavePath;
      internal static string simActorDataSavePath;
+     internal static string simStatsSavePath;
+     internal static string simStatsDataSavePath;
      internal static string idsFile;
      internal static string releasedIdsFile;
      internal readonly Dictionary<Type,ulong>ids=new Dictionary<Type,ulong>();
@@ -64,12 +66,16 @@ namespace AKCondinoO.Sims{
           Directory.CreateDirectory(simObjectSavePath);
           simObjectDataSavePath=string.Format("{0}{1}",simObjectSavePath,"Data/");
           Directory.CreateDirectory(simObjectDataSavePath);
+                  idsFile=string.Format("{0}{1}",simObjectSavePath,        "ids.txt");
+          releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
           simActorSavePath=string.Format("{0}{1}",Core.savePath,"SimActor/");
           Directory.CreateDirectory(simActorSavePath);
           simActorDataSavePath=string.Format("{0}{1}",simActorSavePath,"Data/");
           Directory.CreateDirectory(simActorDataSavePath);
-                  idsFile=string.Format("{0}{1}",simObjectSavePath,        "ids.txt");
-          releasedIdsFile=string.Format("{0}{1}",simObjectSavePath,"releasedIds.txt");
+          simStatsSavePath=string.Format("{0}{1}",Core.savePath,"SimStats/");
+          Directory.CreateDirectory(simStatsSavePath);
+          simStatsDataSavePath=string.Format("{0}{1}",simStatsSavePath,"Data/");
+          Directory.CreateDirectory(simStatsDataSavePath);
          }
          BaseAI.animatorClipNameToActorMotion.Clear();
          BaseAI.animatorClipNameToActorWeaponLayerMotion.Clear();

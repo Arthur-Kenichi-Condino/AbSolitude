@@ -20,6 +20,7 @@ namespace AKCondinoO.Sims{
           internal Dictionary<Type,List<ulong>>simInventoryReleasedSimObjectsIdsToRelease;
          internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
           internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
+           internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentStats>>simStatsDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentStats>>();
          internal readonly Dictionary<Type,HashSet<ulong>>persistentReleasedIds=new Dictionary<Type,HashSet<ulong>>();
           internal readonly Dictionary<Type,HashSet<ulong>>idsToRelease=new Dictionary<Type,HashSet<ulong>>();
          internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();

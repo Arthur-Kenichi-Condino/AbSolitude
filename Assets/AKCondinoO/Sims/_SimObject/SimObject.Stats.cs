@@ -16,7 +16,20 @@ namespace AKCondinoO.Sims{
             public struct StatsFloatData{
              public Type simStatsType;public string fieldName;public float fieldValue;
             }
-         [NonSerialized]static readonly Dictionary<Type,Dictionary<Type,FieldInfo[]>>statsFloatFields=new Dictionary<Type,Dictionary<Type,FieldInfo[]>>();
+         [NonSerialized]public ListWrapper<StatsIntData  >statsInts  ;
+            public struct StatsIntData  {
+             public Type simStatsType;public string fieldName;public int   fieldValue;
+            }
+         [NonSerialized]public ListWrapper<StatsBoolData >statsBools ;
+            public struct StatsBoolData {
+             public Type simStatsType;public string fieldName;public bool  fieldValue;
+            }
+         [NonSerialized]static readonly object fieldsSync=new object();
+          [NonSerialized]static readonly Type[]fieldTypesToScan=new Type[]{typeof(float),typeof(int),typeof(bool),};
+           [NonSerialized]static readonly HashSet<Type>fieldTypesMissing=new HashSet<Type>();
+            [NonSerialized]static readonly Dictionary<Type,Dictionary<Type,FieldInfo[]>>fieldTypesFound=new();
+          [NonSerialized]static readonly Dictionary<Type,List<FieldInfo>>statsFieldsGotten=new();
+          [NonSerialized]static readonly Dictionary<Type,Dictionary<Type,Dictionary<Type,FieldInfo[]>>>statsFields=new();
             internal void UpdateData(SimObject simObject){
              //Log.DebugMessage("PersistentStats:UpdateData");
              if(simObject==null){
@@ -24,30 +37,62 @@ namespace AKCondinoO.Sims{
              }
              simObject.stats.OnRefresh(simObject);
              Type statsType=simObject.stats.GetType();
-             Dictionary<Type,FieldInfo[]>floatFields;
-             lock(statsFloatFields){
-              if(!statsFloatFields.TryGetValue(statsType,out floatFields)){
-               floatFields=new Dictionary<Type,FieldInfo[]>();
+             Dictionary<Type,FieldInfo[]>floats;
+             Dictionary<Type,FieldInfo[]>ints  ;
+             Dictionary<Type,FieldInfo[]>bools ;
+             lock(fieldsSync){
+              if(statsFieldsGotten.Count<=0){
+               foreach(Type typeToScan in fieldTypesToScan){
+                statsFieldsGotten.Add(typeToScan,new());
+               }
+              }
+              if(!statsFields.TryGetValue(statsType,out var fieldsByType)){
+               statsFields.Add(statsType,fieldsByType=new());
+               fieldTypesMissing.UnionWith(fieldTypesToScan);
+              }else{
+               foreach(Type typeToScan in fieldTypesToScan){
+                if(!fieldsByType.TryGetValue(typeToScan,out var fields)){
+                 fieldTypesMissing.Add(typeToScan);
+                }else{
+                 fieldTypesFound.Add(typeToScan,fields);
+                }
+               }
+              }
+              if(fieldTypesMissing.Count>0){
                Type derived=statsType;
                do{
-                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public).Where(
-                 field=>{
-                  if(field.FieldType==typeof(float)&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){
+                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
+                foreach(FieldInfo field in fieldsGotten){
+                 foreach(Type fieldTypeMissing in fieldTypesMissing){
+                  if(field.FieldType==fieldTypeMissing&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){
                    String.Intern(field.Name);
-                   //Log.DebugMessage(derived+":'found stats field':field.Name:"+field.Name);
-                   return true;
+                   //Log.DebugMessage("fieldTypeMissing:"+fieldTypeMissing+"..."+derived+":'found stats field':field.Name:"+field.Name);
+                   statsFieldsGotten[fieldTypeMissing].Add(field);
                   }
-                  return false;
                  }
-                ).ToArray();
-                floatFields.Add(derived,fieldsGotten);
+                }
+                foreach(var fieldsTypeStatsFieldsToAddPair in statsFieldsGotten){
+                 Type fieldsType=fieldsTypeStatsFieldsToAddPair.Key;
+                 var fieldsToAdd=fieldsTypeStatsFieldsToAddPair.Value;
+                 if(!fieldsByType.TryGetValue(fieldsType,out var fieldsOfType)){
+                  fieldsByType.Add(fieldsType,fieldsOfType=new());
+                 }
+                 if(fieldTypesMissing.Contains(fieldsType)){
+                  fieldsOfType.Add(derived,fieldsToAdd.ToArray());
+                 }
+                 fieldsToAdd.Clear();
+                }
                 derived=derived.BaseType;
                }while(derived!=null&&derived!=typeof(object));
-               statsFloatFields.Add(statsType,floatFields);
               }
+              fieldTypesMissing.Clear();
+               fieldTypesFound.Clear();
+              statsFields[statsType].TryGetValue(typeof(float),out floats);
+              statsFields[statsType].TryGetValue(typeof(int  ),out ints  );
+              statsFields[statsType].TryGetValue(typeof(bool ),out bools );
              }
              statsFloats=new ListWrapper<StatsFloatData>(
-              floatFields.SelectMany(
+              floats.SelectMany(
                kvp=>{
                 return kvp.Value.Select(
                  field=>{
@@ -56,6 +101,38 @@ namespace AKCondinoO.Sims{
                    simStatsType=kvp.Key,
                    fieldName=field.Name,
                    fieldValue=(float)field.GetValue(simObject.stats),
+                  };
+                 }
+                );
+               }
+              ).ToList()
+             );
+             statsInts  =new ListWrapper<StatsIntData  >(
+              ints  .SelectMany(
+               kvp=>{
+                return kvp.Value.Select(
+                 field=>{
+                  //Log.DebugMessage("simStatsType:"+kvp.Key+":field.Name:"+field.Name+":'field value':"+((int  )field.GetValue(simObject.stats)));
+                  return new StatsIntData  {
+                   simStatsType=kvp.Key,
+                   fieldName=field.Name,
+                   fieldValue=(int  )field.GetValue(simObject.stats),
+                  };
+                 }
+                );
+               }
+              ).ToList()
+             );
+             statsBools =new ListWrapper<StatsBoolData >(
+              bools .SelectMany(
+               kvp=>{
+                return kvp.Value.Select(
+                 field=>{
+                  //Log.DebugMessage("simStatsType:"+kvp.Key+":field.Name:"+field.Name+":'field value':"+((bool )field.GetValue(simObject.stats)));
+                  return new StatsBoolData {
+                   simStatsType=kvp.Key,
+                   fieldName=field.Name,
+                   fieldValue=(bool )field.GetValue(simObject.stats),
                   };
                  }
                 );
