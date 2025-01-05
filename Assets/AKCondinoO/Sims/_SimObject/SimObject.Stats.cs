@@ -4,9 +4,11 @@
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
@@ -139,6 +141,16 @@ namespace AKCondinoO.Sims{
                }
               ).ToList()
              );
+            }
+         private static readonly ConcurrentQueue<StringBuilder>stringBuilderPool=new ConcurrentQueue<StringBuilder>();
+            public override string ToString(){
+             if(!stringBuilderPool.TryDequeue(out StringBuilder stringBuilder)){
+              stringBuilder=new StringBuilder();
+             }
+             stringBuilder.Clear();
+             string result=string.Format(CultureInfoUtil.en_US,"persistentStats={{ {0}, }}",stringBuilder.ToString());
+             stringBuilderPool.Enqueue(stringBuilder);
+             return result;
             }
         }
      [NonSerialized]internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();

@@ -195,6 +195,8 @@ namespace AKCondinoO.Sims{
              persistentDataSavingBGThread.simActorFileStreamWriter[simObjectType].Dispose();
              persistentDataSavingBGThread.simActorFileStreamReader[simObjectType].Dispose();
             }
+            persistentDataSavingBGThread.simStatsFileStreamWriter[simObjectType].Dispose();
+            persistentDataSavingBGThread.simStatsFileStreamReader[simObjectType].Dispose();
              #region SimInventoryManager
                  SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamWriter[simObjectType].Dispose();
                  SimInventoryManager.singleton.persistentSimInventoryDataSavingBGThread.simInventoryFileStreamReader[simObjectType].Dispose();

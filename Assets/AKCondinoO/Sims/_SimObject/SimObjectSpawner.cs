@@ -97,6 +97,15 @@ namespace AKCondinoO.Sims{
            }
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(simObjectType,new Dictionary<ulong,SimActor.PersistentSimActorData>());
           }
+          string simStatsSaveFile=null;
+          if(Core.singleton.isServer){
+           simStatsSaveFile=string.Format("{0}{1}{2}",SimObjectManager.simStatsDataSavePath,simObjectType,".txt");
+           FileStream simStatsFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStream[simObjectType]=simStatsFileStream=new FileStream(simStatsSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStreamWriter[simObjectType]=new StreamWriter(simStatsFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStreamReader[simObjectType]=new StreamReader(simStatsFileStream);
+          }
+          SimObjectManager.singleton.persistentDataSavingBG.simStatsDataToSerializeToFile.Add(simObjectType,new Dictionary<ulong,SimObject.PersistentStats>());
           string simInventorySaveFile=null;
           if(Core.singleton.isServer){
            simInventorySaveFile=string.Format("{0}{1}{2}",SimInventoryManager.simInventoryDataSavePath,simObjectType,".txt");
@@ -419,10 +428,11 @@ namespace AKCondinoO.Sims{
           if(exitSave){
            simObject.OnExitSaveDataCollection();
           }
-          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData        );
           if(simObject is SimActor simActor){
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simActor .persistentSimActorData);
           }
+          SimObjectManager.singleton.persistentDataSavingBG. simStatsDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentStats       );
           if(!PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataBySimInventoryTypeDictionaryPool.TryDequeue(out var simInventoryDataBySimInventoryTypeDictionary)){
            simInventoryDataBySimInventoryTypeDictionary=new Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
           }
