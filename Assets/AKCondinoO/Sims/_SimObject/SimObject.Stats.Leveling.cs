@@ -63,7 +63,7 @@ namespace AKCondinoO.Sims{
                 int curLevel=simLevel_value;
                 int nextLevel=curLevel+1;
                 float expForNextLevel=GetExpPointsForNextLevelFrom201To250(curLevel,isTranscendent);
-                Log.DebugMessage("curLevel:"+curLevel+";expForNextLevel:"+expForNextLevel);
+                //Log.DebugMessage("curLevel:"+curLevel+";expForNextLevel:"+expForNextLevel);
                 refreshedExperience=true;
                }
               }

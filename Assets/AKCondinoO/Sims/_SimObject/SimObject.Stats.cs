@@ -17,14 +17,32 @@ namespace AKCondinoO.Sims{
          [NonSerialized]public ListWrapper<StatsFloatData>statsFloats;
             public struct StatsFloatData{
              public Type simStatsType;public string fieldName;public float fieldValue;
+                public override string ToString(){
+                 if(fieldValue==default){
+                  return"";
+                 }
+                 return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
+                }
             }
          [NonSerialized]public ListWrapper<StatsIntData  >statsInts  ;
             public struct StatsIntData  {
              public Type simStatsType;public string fieldName;public int   fieldValue;
+                public override string ToString(){
+                 if(fieldValue==default){
+                  return"";
+                 }
+                 return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
+                }
             }
          [NonSerialized]public ListWrapper<StatsBoolData >statsBools ;
             public struct StatsBoolData {
              public Type simStatsType;public string fieldName;public bool  fieldValue;
+                public override string ToString(){
+                 if(fieldValue==default){
+                  return"";
+                 }
+                 return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
+                }
             }
          [NonSerialized]static readonly object fieldsSync=new object();
           [NonSerialized]static readonly Type[]fieldTypesToScan=new Type[]{typeof(float),typeof(int),typeof(bool),};
@@ -63,7 +81,7 @@ namespace AKCondinoO.Sims{
               if(fieldTypesMissing.Count>0){
                Type derived=statsType;
                do{
-                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
+                FieldInfo[]fieldsGotten=derived.GetFields(BindingFlags.DeclaredOnly|BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
                 foreach(FieldInfo field in fieldsGotten){
                  foreach(Type fieldTypeMissing in fieldTypesMissing){
                   if(field.FieldType==fieldTypeMissing&&(field.Name.EndsWith("_value")||field.Name.EndsWith("_stats"))){
@@ -89,9 +107,9 @@ namespace AKCondinoO.Sims{
               }
               fieldTypesMissing.Clear();
                fieldTypesFound.Clear();
-              statsFields[statsType].TryGetValue(typeof(float),out floats);
-              statsFields[statsType].TryGetValue(typeof(int  ),out ints  );
-              statsFields[statsType].TryGetValue(typeof(bool ),out bools );
+              statsFields[statsType].TryGetValue(typeof(float),out floats);//Log.DebugMessage("floats.Count:"+floats.Count);
+              statsFields[statsType].TryGetValue(typeof(int  ),out ints  );//Log.DebugMessage(  "ints.Count:"+  ints.Count);
+              statsFields[statsType].TryGetValue(typeof(bool ),out bools );//Log.DebugMessage( "bools.Count:"+ bools.Count);
              }
              statsFloats=new ListWrapper<StatsFloatData>(
               floats.SelectMany(
@@ -148,7 +166,40 @@ namespace AKCondinoO.Sims{
               stringBuilder=new StringBuilder();
              }
              stringBuilder.Clear();
-             string result=string.Format(CultureInfoUtil.en_US,"persistentStats={{ {0}, }}",stringBuilder.ToString());
+             bool stringBuilderHasData=false;
+             stringBuilderHasData|=buildStringStatsOfType(statsFloats,nameof(statsFloats));
+             stringBuilderHasData|=buildStringStatsOfType(statsInts  ,nameof(statsInts  ));
+             stringBuilderHasData|=buildStringStatsOfType(statsBools ,nameof(statsBools ));
+             bool buildStringStatsOfType<T>(ListWrapper<T>statsList,string statsListName)where T:struct{
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,statsListName+"={{ ");
+              statsList.Reset();
+              bool appendedStatString=false;
+              while(statsList.MoveNext()){
+               T stat=statsList.Current;
+               string s=stat.ToString();
+               //Log.DebugMessage("stat string:"+s);
+               if(string.IsNullOrEmpty(s)){
+                //Log.DebugMessage("'string.IsNullOrEmpty(s)'");
+                continue;
+               }
+               appendedStatString=true;
+               stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}, ",s);
+              }
+              stringBuilder.AppendFormat(CultureInfoUtil.en_US,"}} , ");
+              if(!appendedStatString){
+               int lengthToRemove=statsListName.Length+7;
+               //Log.DebugMessage("stringBuilder.Length:"+stringBuilder.Length+";lengthToRemove:"+lengthToRemove);
+               stringBuilder.Remove(stringBuilder.Length-lengthToRemove,lengthToRemove);
+               return false;
+              }
+              return true;
+             }
+             string result;
+             if(!stringBuilderHasData){
+              result="";
+             }else{
+              result=string.Format(CultureInfoUtil.en_US,"persistentStats={{ {0}, }}",stringBuilder.ToString());
+             }
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
             }

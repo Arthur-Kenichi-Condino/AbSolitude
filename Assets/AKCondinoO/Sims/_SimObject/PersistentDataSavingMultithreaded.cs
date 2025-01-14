@@ -217,7 +217,10 @@ namespace AKCondinoO.Sims{
           foreach(var simObjectIdNumberPersistentStatsPair in persistentStatsToSave){
            ulong simObjectIdNumber=simObjectIdNumberPersistentStatsPair.Key;
            SimObject.PersistentStats persistentStats=simObjectIdNumberPersistentStatsPair.Value;
-           stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",simObjectIdNumber,persistentStats.ToString(),Environment.NewLine);
+           string s=persistentStats.ToString();
+           if(!string.IsNullOrEmpty(s)){
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",simObjectIdNumber,s,Environment.NewLine);
+           }
           }
           fileStream.SetLength(0L);
           fileStreamWriter.Write(stringBuilder.ToString());
