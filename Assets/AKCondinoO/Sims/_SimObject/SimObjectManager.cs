@@ -109,6 +109,8 @@ namespace AKCondinoO.Sims{
              persistentDataLoadingBGThread.simActorFileStream      [simObjectType].Dispose();
              persistentDataLoadingBGThread.simActorFileStreamReader[simObjectType].Dispose();
             }
+            persistentDataLoadingBGThread.simStatsFileStream       [simObjectType].Dispose();
+            persistentDataLoadingBGThread.simStatsFileStreamReader [simObjectType].Dispose();
            }
           }
            #region SimInventoryManager

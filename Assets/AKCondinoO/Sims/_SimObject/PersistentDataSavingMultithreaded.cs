@@ -209,7 +209,7 @@ namespace AKCondinoO.Sims{
            int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
            int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
            ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
-           Log.DebugMessage("simObjectIdNumber:"+simObjectIdNumber);
+           //Log.DebugMessage("simObjectIdNumber:"+simObjectIdNumber);
            if(!persistentStatsToSave.ContainsKey(simObjectIdNumber)){
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
            }

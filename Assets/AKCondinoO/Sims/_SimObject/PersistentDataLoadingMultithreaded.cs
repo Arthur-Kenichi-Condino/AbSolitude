@@ -21,16 +21,26 @@ namespace AKCondinoO.Sims{
       internal readonly Dictionary<Type,StreamReader>simObjectFileStreamReader=new Dictionary<Type,StreamReader>();
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
-       readonly Dictionary<Type,Dictionary<ulong,int>>simActorSpawnAtIndexByType=new Dictionary<Type,Dictionary<ulong,int>>();
+         internal readonly Dictionary<Type,FileStream>simStatsFileStream=new Dictionary<Type,FileStream>();
+          internal readonly Dictionary<Type,StreamReader>simStatsFileStreamReader=new Dictionary<Type,StreamReader>();
+       readonly Dictionary<Type,Dictionary<ulong,int>>simObjectSpawnAtIndexByType=new Dictionary<Type,Dictionary<ulong,int>>();
+        readonly Dictionary<Type,Dictionary<ulong,int>>simActorSpawnAtIndexByType=new Dictionary<Type,Dictionary<ulong,int>>();
         protected override void Cleanup(){
          foreach(var typeSimActorSpawnAtIndexPair in simActorSpawnAtIndexByType){
           typeSimActorSpawnAtIndexPair.Value.Clear();
+         }
+         foreach(var typeSimObjectSpawnAtIndexPair in simObjectSpawnAtIndexByType){
+          typeSimObjectSpawnAtIndexPair.Value.Clear();
          }
         }
         protected override void Execute(){
          container.spawnDataFromFiles.dequeued=false;
          foreach(var simObjectTypeFileStreamPair in this.simObjectFileStream){
           Type simObjectType=simObjectTypeFileStreamPair.Key;
+          Dictionary<ulong,int>simObjectSpawnAtIndex=null;
+          if(!simObjectSpawnAtIndexByType.TryGetValue(simObjectType,out simObjectSpawnAtIndex)){
+           simObjectSpawnAtIndexByType.Add(simObjectType,simObjectSpawnAtIndex=new Dictionary<ulong,int>());
+          }
           Dictionary<ulong,int>simActorSpawnAtIndex=null;
           if(SimObjectUtil.IsSimActor(simObjectType)){
            if(!simActorSpawnAtIndexByType.TryGetValue(simObjectType,out simActorSpawnAtIndex)){
@@ -78,12 +88,34 @@ namespace AKCondinoO.Sims{
               }
              }
              container.spawnDataFromFiles.at.Add((persistentData.position,persistentData.rotation.eulerAngles,persistentData.localScale,simObjectId.simObjectType,simObjectId.idNumber,persistentData));
+             //  now add id to be searched for persistent stats
+             simObjectSpawnAtIndex.Add(simObjectId.idNumber,container.spawnDataFromFiles.at.Count-1);
              if(simActorSpawnAtIndex!=null){
               simActorSpawnAtIndex.Add(simObjectId.idNumber,container.spawnDataFromFiles.at.Count-1);
              }
              _Skip:{}
              simObjectStringStart=simObjectStringEnd;
             }
+           }
+          }
+          //  TO DO: sim stats
+          fileStream      =this.simStatsFileStream      [simObjectType];
+          fileStreamReader=this.simStatsFileStreamReader[simObjectType];
+          fileStream.Position=0L;
+          fileStreamReader.DiscardBufferedData();
+          line=null;
+          while((line=fileStreamReader.ReadLine())!=null){
+           if(string.IsNullOrEmpty(line)){continue;}
+           int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
+           int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
+           ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           if(simObjectSpawnAtIndex.TryGetValue(simObjectIdNumber,out int index)){
+            Log.DebugMessage("sim object stats data has to be loaded for id:"+simObjectIdNumber);
+            int persistentStatsStringStart=line.IndexOf("persistentStats=",simObjectIdNumberStringEnd+3);
+            int persistentStatsStringEnd  =line.IndexOf(" , }",persistentStatsStringStart)+4;
+            string persistentStatsString=line.Substring(persistentStatsStringStart,persistentStatsStringEnd-persistentStatsStringStart);
+            SimObject.PersistentStats persistentStats=SimObject.PersistentStats.Parse(persistentStatsString);
+            container.spawnDataFromFiles.statsData.Add(index,persistentStats);
            }
           }
           if(SimObjectUtil.IsSimActor(simObjectType)){

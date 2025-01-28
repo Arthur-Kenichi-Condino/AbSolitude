@@ -316,6 +316,12 @@ namespace AKCondinoO.Sims.Actors{
            }
            UpdateHitboxesGracePeriod();
            UpdateWeaponsGracePeriod();
+           if(!IsDead()){
+            if(stats.IntegrityGet(this)<=0f){
+             Log.DebugMessage("I have no integrity points:set motion dead");
+             OnDeath();
+            }
+           }
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){

@@ -127,6 +127,9 @@ namespace AKCondinoO.Sims{
            FileStream loaderSimObjectFileStream;
            SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStream[simObjectType]=loaderSimObjectFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStreamReader[simObjectType]=new StreamReader(loaderSimObjectFileStream);
+           FileStream loaderSimStatsFileStream;
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStream[simObjectType]=loaderSimStatsFileStream=new FileStream(simStatsSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStreamReader[simObjectType]=new StreamReader(loaderSimStatsFileStream);
           }
           if(SimObjectUtil.IsSimActor(simObjectType)){
            if(Core.singleton.isServer){
@@ -228,6 +231,9 @@ namespace AKCondinoO.Sims{
               int index=0;
               foreach(var at in toSpawn.at){
                SimObject.PersistentStats?persistentStats=null;
+               if(toSpawn.statsData.TryGetValue(index,out var persistentStatsValue)){
+                persistentStats=persistentStatsValue;
+               }
                SimActor.PersistentSimActorData?persistentSimActorData=null;
                if(SimObjectUtil.IsSimActor(at.simObjectType)){
                 //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");

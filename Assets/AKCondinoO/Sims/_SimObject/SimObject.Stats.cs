@@ -6,10 +6,13 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
+using static AKCondinoO.Sims.SimObject.PersistentStats;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
      [NonSerialized]internal PersistentStats persistentStats;
@@ -23,6 +26,20 @@ namespace AKCondinoO.Sims{
                  }
                  return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
                 }
+                internal static StatsFloatData Parse(string s){
+                 StatsFloatData floatData=new StatsFloatData();
+                 //Log.DebugMessage("s:"+s);
+                 string[]dataString=s.Split(',');
+                 Type simStatsType=ReflectionUtil.GetTypeByName(dataString[0],typeof(Stats));
+                 //Log.DebugMessage("simStatsType:"+simStatsType);
+                 string fieldName=dataString[1];
+                 float fieldValue=float.Parse(dataString[2],NumberStyles.Any,CultureInfoUtil.en_US);
+                 //Log.DebugMessage("field:"+fieldName+":"+fieldValue);
+                 floatData.simStatsType=simStatsType;
+                 floatData.fieldName=fieldName;
+                 floatData.fieldValue=fieldValue;
+                 return floatData;
+                }
             }
          [NonSerialized]public ListWrapper<StatsIntData  >statsInts  ;
             public struct StatsIntData  {
@@ -33,6 +50,20 @@ namespace AKCondinoO.Sims{
                  }
                  return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
                 }
+                internal static StatsIntData Parse(string s){
+                 StatsIntData intData=new StatsIntData();
+                 //Log.DebugMessage("s:"+s);
+                 string[]dataString=s.Split(',');
+                 Type simStatsType=ReflectionUtil.GetTypeByName(dataString[0],typeof(Stats));
+                 //Log.DebugMessage("simStatsType:"+simStatsType);
+                 string fieldName=dataString[1];
+                 int fieldValue=int.Parse(dataString[2],NumberStyles.Any,CultureInfoUtil.en_US);
+                 //Log.DebugMessage("field:"+fieldName+":"+fieldValue);
+                 intData.simStatsType=simStatsType;
+                 intData.fieldName=fieldName;
+                 intData.fieldValue=fieldValue;
+                 return intData;
+                }
             }
          [NonSerialized]public ListWrapper<StatsBoolData >statsBools ;
             public struct StatsBoolData {
@@ -42,6 +73,20 @@ namespace AKCondinoO.Sims{
                   return"";
                  }
                  return string.Format(CultureInfoUtil.en_US,"[{0},{1},{2}]",simStatsType.Name,fieldName,fieldValue);
+                }
+                internal static StatsBoolData Parse(string s){
+                 StatsBoolData boolData=new StatsBoolData();
+                 //Log.DebugMessage("s:"+s);
+                 string[]dataString=s.Split(',');
+                 Type simStatsType=ReflectionUtil.GetTypeByName(dataString[0],typeof(Stats));
+                 //Log.DebugMessage("simStatsType:"+simStatsType);
+                 string fieldName=dataString[1];
+                 bool fieldValue=bool.Parse(dataString[2]);
+                 //Log.DebugMessage("field:"+fieldName+":"+fieldValue);
+                 boolData.simStatsType=simStatsType;
+                 boolData.fieldName=fieldName;
+                 boolData.fieldValue=fieldValue;
+                 return boolData;
                 }
             }
          [NonSerialized]static readonly object fieldsSync=new object();
@@ -120,7 +165,7 @@ namespace AKCondinoO.Sims{
                   return new StatsFloatData{
                    simStatsType=kvp.Key,
                    fieldName=field.Name,
-                   fieldValue=(float)field.GetValue(simObject.stats),
+                   fieldValue=(float)field.GetValueOptimized(simObject.stats),
                   };
                  }
                 );
@@ -136,7 +181,7 @@ namespace AKCondinoO.Sims{
                   return new StatsIntData  {
                    simStatsType=kvp.Key,
                    fieldName=field.Name,
-                   fieldValue=(int  )field.GetValue(simObject.stats),
+                   fieldValue=(int  )field.GetValueOptimized(simObject.stats),
                   };
                  }
                 );
@@ -152,7 +197,7 @@ namespace AKCondinoO.Sims{
                   return new StatsBoolData {
                    simStatsType=kvp.Key,
                    fieldName=field.Name,
-                   fieldValue=(bool )field.GetValue(simObject.stats),
+                   fieldValue=(bool )field.GetValueOptimized(simObject.stats),
                   };
                  }
                 );
@@ -202,6 +247,85 @@ namespace AKCondinoO.Sims{
              }
              stringBuilderPool.Enqueue(stringBuilder);
              return result;
+            }
+         private static readonly ConcurrentQueue<List<StatsFloatData>>parsingStatsFloatsListPool=new();
+         private static readonly ConcurrentQueue<List<StatsIntData  >>parsingStatsIntsListPool  =new();
+         private static readonly ConcurrentQueue<List<StatsBoolData >>parsingStatsBoolsListPool =new();
+            internal static PersistentStats Parse(string s){
+             PersistentStats persistentStats=new PersistentStats();
+             if(!parsingStatsFloatsListPool.TryDequeue(out List<StatsFloatData>statsFloatsList)){
+              statsFloatsList=new List<StatsFloatData>();
+             }
+             statsFloatsList.Clear();
+             if(!parsingStatsIntsListPool  .TryDequeue(out List<StatsIntData  >statsIntsList  )){
+              statsIntsList  =new List<StatsIntData  >();
+             }
+             statsIntsList  .Clear();
+             if(!parsingStatsBoolsListPool .TryDequeue(out List<StatsBoolData >statsBoolsList )){
+              statsBoolsList =new List<StatsBoolData >();
+             }
+             statsBoolsList .Clear();
+             int statsFloatsStringStart=s.IndexOf("statsFloats={");
+             if(statsFloatsStringStart>=0){
+              Log.DebugMessage("statsFloatsStringStart:"+statsFloatsStringStart);
+                statsFloatsStringStart+=13;
+              int statsFloatsStringEnd=s.IndexOf("} , ",statsFloatsStringStart);
+              Log.DebugMessage("statsFloatsStringEnd:"+statsFloatsStringEnd);
+              string statsFloatsString=s.Substring(statsFloatsStringStart,statsFloatsStringEnd-statsFloatsStringStart);
+              int statsFloatStringStart=0;
+              while((statsFloatStringStart=statsFloatsString.IndexOf("[",statsFloatStringStart))>=0){
+               //Log.DebugMessage("statsFloatStringStart:"+statsFloatStringStart);
+               int floatDataStringStart=statsFloatStringStart+1;
+               int floatDataStringEnd  =statsFloatsString.IndexOf("],",floatDataStringStart);
+               //Log.DebugMessage("floatDataStringEnd:"+floatDataStringEnd);
+               statsFloatStringStart=floatDataStringEnd+2;
+               StatsFloatData floatData=StatsFloatData.Parse(statsFloatsString.Substring(floatDataStringStart,floatDataStringEnd-floatDataStringStart));
+               statsFloatsList.Add(floatData);
+              }
+             }
+             int statsIntsStringStart=s.IndexOf("statsInts={");
+             if(statsIntsStringStart>=0){
+              Log.DebugMessage("statsIntsStringStart:"+statsIntsStringStart);
+                statsIntsStringStart+=11;
+              int statsIntsStringEnd=s.IndexOf("} , ",statsIntsStringStart);
+              Log.DebugMessage("statsIntsStringEnd:"+statsIntsStringEnd);
+              string statsIntsString=s.Substring(statsIntsStringStart,statsIntsStringEnd-statsIntsStringStart);
+              int statsIntStringStart=0;
+              while((statsIntStringStart=statsIntsString.IndexOf("[",statsIntStringStart))>=0){
+               //Log.DebugMessage("statsIntStringStart:"+statsIntStringStart);
+               int intDataStringStart=statsIntStringStart+1;
+               int intDataStringEnd  =statsIntsString.IndexOf("],",intDataStringStart);
+               //Log.DebugMessage("intDataStringEnd:"+intDataStringEnd);
+               statsIntStringStart=intDataStringEnd+2;
+               StatsIntData intData=StatsIntData.Parse(statsIntsString.Substring(intDataStringStart,intDataStringEnd-intDataStringStart));
+               statsIntsList.Add(intData);
+              }
+             }
+             int statsBoolsStringStart=s.IndexOf("statsBools={");
+             if(statsBoolsStringStart>=0){
+              Log.DebugMessage("statsBoolsStringStart:"+statsBoolsStringStart);
+                statsBoolsStringStart+=12;
+              int statsBoolsStringEnd=s.IndexOf("} , ",statsBoolsStringStart);
+              Log.DebugMessage("statsBoolsStringEnd:"+statsBoolsStringEnd);
+              string statsBoolsString=s.Substring(statsBoolsStringStart,statsBoolsStringEnd-statsBoolsStringStart);
+              int statsBoolStringStart=0;
+              while((statsBoolStringStart=statsBoolsString.IndexOf("[",statsBoolStringStart))>=0){
+               //Log.DebugMessage("statsBoolStringStart:"+statsBoolStringStart);
+               int boolDataStringStart=statsBoolStringStart+1;
+               int boolDataStringEnd  =statsBoolsString.IndexOf("],",boolDataStringStart);
+               //Log.DebugMessage("boolDataStringEnd:"+boolDataStringEnd);
+               statsBoolStringStart=boolDataStringEnd+2;
+               StatsBoolData boolData=StatsBoolData.Parse(statsBoolsString.Substring(boolDataStringStart,boolDataStringEnd-boolDataStringStart));
+               statsBoolsList.Add(boolData);
+              }
+             }
+             persistentStats.statsFloats=new ListWrapper<StatsFloatData>(statsFloatsList);
+             persistentStats.statsInts  =new ListWrapper<StatsIntData  >(statsIntsList  );
+             persistentStats.statsBools =new ListWrapper<StatsBoolData >(statsBoolsList );
+             parsingStatsFloatsListPool.Enqueue(statsFloatsList);
+             parsingStatsIntsListPool  .Enqueue(statsIntsList  );
+             parsingStatsBoolsListPool .Enqueue(statsBoolsList );
+             return persistentStats;
             }
         }
      [NonSerialized]internal static readonly Dictionary<Type,Queue<Stats>>statsPool=new Dictionary<Type,Queue<Stats>>();
@@ -255,6 +379,40 @@ namespace AKCondinoO.Sims{
             }
             internal virtual void InitFrom(PersistentStats persistentStats,SimObject statsSim=null){
              //Log.DebugMessage("Stats:InitFrom");
+             Type thisType=this.GetType();
+             persistentStats.statsFloats.Reset();
+             while(persistentStats.statsFloats.MoveNext()){
+              StatsFloatData statsFloat=persistentStats.statsFloats.Current;
+              Type simStatsType=statsFloat.simStatsType;
+              if(ReflectionUtil.IsTypeDerivedFrom(thisType,simStatsType)){
+               FieldInfo fieldInfo=thisType.GetField(statsFloat.fieldName,BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
+               if(fieldInfo!=null){
+                fieldInfo.SetValueOptimized(this,statsFloat.fieldValue);
+               }
+              }
+             }
+             persistentStats.statsInts.Reset();
+             while(persistentStats.statsInts.MoveNext()){
+              StatsIntData statsInt=persistentStats.statsInts.Current;
+              Type simStatsType=statsInt.simStatsType;
+              if(ReflectionUtil.IsTypeDerivedFrom(thisType,simStatsType)){
+               FieldInfo fieldInfo=thisType.GetField(statsInt.fieldName,BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
+               if(fieldInfo!=null){
+                fieldInfo.SetValueOptimized(this,statsInt.fieldValue);
+               }
+              }
+             }
+             persistentStats.statsBools.Reset();
+             while(persistentStats.statsBools.MoveNext()){
+              StatsBoolData statsBool=persistentStats.statsBools.Current;
+              Type simStatsType=statsBool.simStatsType;
+              if(ReflectionUtil.IsTypeDerivedFrom(thisType,simStatsType)){
+               FieldInfo fieldInfo=thisType.GetField(statsBool.fieldName,BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public);
+               if(fieldInfo!=null){
+                fieldInfo.SetValueOptimized(this,statsBool.fieldValue);
+               }
+              }
+             }
             }
             internal virtual void Generate(SimObject statsSim=null,bool reset=true){
              //Log.DebugMessage("Stats:Generate");
