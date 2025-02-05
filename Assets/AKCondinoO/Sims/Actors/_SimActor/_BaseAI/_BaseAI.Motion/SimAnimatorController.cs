@@ -70,6 +70,14 @@ namespace AKCondinoO.Sims.Actors{
            #endregion
            #region init animator values tracking
                layerCount=animator.layerCount;
+               animatorHasMotionTime=new Dictionary<int,bool>(layerCount);
+               animatorHasMotionSpeedMultiplier=new Dictionary<int,bool>(layerCount);
+               for(int i=0;i<layerCount;++i){
+                animatorHasMotionTime[i]=AnimatorUtil.HasParameter(String.Intern("MotionTime_Layer"+i),animator);
+                animatorHasMotionSpeedMultiplier[i]=AnimatorUtil.HasParameter(String.Intern("MotionSpeedMultiplier_Layer"+i),animator);
+               }
+               motionTime=new Dictionary<int,float>(layerCount);
+               motionSpeedMultiplier=new Dictionary<int,float>(layerCount);
                weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
                 weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
                animationTime=new Dictionary<int,float>(layerCount);

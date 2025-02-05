@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1104393332
+  GlobalObjectIdHash: 1369732706
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -88,7 +88,7 @@ MonoBehaviour:
   aStarPathfindingHeight: 16
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 0
   DEBUG_TOGGLE_CROUCHING: 0
-  DEBUG_TOGGLE_HOLSTER_WEAPON: 1
+  DEBUG_TOGGLE_HOLSTER_WEAPON: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
   AFKTimeToUseAI: 5
   moveVelocityFlattenedLerp:

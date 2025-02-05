@@ -51,7 +51,7 @@ AnimatorState:
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: MotionTime_Layer0
 --- !u!1101 &-4630742820852896315
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -142,6 +142,18 @@ AnimatorController:
   m_Name: DisfiguringHomunculusAnimatorController
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: MotionTime_Layer0
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: MotionSpeedMultiplier_Layer0
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: MOTION_STAND
     m_Type: 4
     m_DefaultFloat: 0

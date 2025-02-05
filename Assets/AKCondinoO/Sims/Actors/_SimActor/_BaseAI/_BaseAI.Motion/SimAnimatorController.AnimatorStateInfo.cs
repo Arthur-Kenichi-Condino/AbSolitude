@@ -7,6 +7,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController{
+     Dictionary<int,bool>animatorHasMotionTime;
+     Dictionary<int,bool>animatorHasMotionSpeedMultiplier;
+     Dictionary<int,float>motionTime;
+     Dictionary<int,float>motionSpeedMultiplier;
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
      Dictionary<int,float>normalizedTime;
@@ -31,13 +35,17 @@ namespace AKCondinoO.Sims.Actors{
             OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
+            motionTime[layerIndex]=0f;
            }
            lastLoopCount[layerIndex]=loopCount[layerIndex];
            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
             //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
             OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
+            motionTime[layerIndex]=0f;
            }
+           float timeDeltaNormalized=Time.deltaTime/clipList[0].clip.length;
+           motionTime[layerIndex]+=timeDeltaNormalized;
            normalizedTime[layerIndex]=animatorState.normalizedTime;
             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
            //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);

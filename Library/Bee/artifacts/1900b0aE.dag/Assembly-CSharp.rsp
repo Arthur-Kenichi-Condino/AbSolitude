@@ -698,6 +698,7 @@
 "Assets/AKCondinoO/UI/PlaceholderObject.cs"
 "Assets/AKCondinoO/UI/WorldSpace/SimObjectInfo/SimObjectInfo.cs"
 "Assets/AKCondinoO/UI/WorldSpace/WorldSpaceUI.cs"
+"Assets/AKCondinoO/Util/AnimatorUtil.cs"
 "Assets/AKCondinoO/Util/ArrayHelper.cs"
 "Assets/AKCondinoO/Util/CultureInfoUtil.cs"
 "Assets/AKCondinoO/Util/DebugGizmos.cs"

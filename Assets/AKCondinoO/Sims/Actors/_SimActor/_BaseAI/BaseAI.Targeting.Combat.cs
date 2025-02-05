@@ -249,9 +249,13 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      protected bool motionFlagForDeathAnimation=false;
-        protected override void OnDeath(){
+      protected bool motionFlagForDeathInstantAnimationJumpToEnd=false;
+        protected override void OnDeath(bool instant=false){
          Log.DebugMessage("OnDeath()");
          motionFlagForDeathAnimation=true;
+         if(!IsDead()){
+          motionFlagForDeathInstantAnimationJumpToEnd|=instant;
+         }
         }
         internal override bool IsDead(){
          if(MyMotion==ActorMotion.MOTION_DEAD||

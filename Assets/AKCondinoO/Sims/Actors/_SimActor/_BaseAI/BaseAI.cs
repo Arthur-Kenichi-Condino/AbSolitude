@@ -319,7 +319,7 @@ namespace AKCondinoO.Sims.Actors{
            if(!IsDead()){
             if(stats.IntegrityGet(this)<=0f){
              Log.DebugMessage("I have no integrity points:set motion dead");
-             OnDeath();
+             OnDeath(true);
             }
            }
            if(isUsingAI){

@@ -262,6 +262,11 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
+         if(motionFlagForDeathAnimation){
+          if(motionFlagForDeathInstantAnimationJumpToEnd){
+           //animatorController.animator.Play
+          }
+         }
         }
         protected virtual void OnMotionAttackSet(){
          OnMotionShouldStopMovement(true);
