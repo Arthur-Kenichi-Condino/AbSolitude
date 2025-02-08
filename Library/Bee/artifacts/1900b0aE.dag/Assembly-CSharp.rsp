@@ -628,6 +628,7 @@
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.Motion/SimAnimatorController.Layers.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.Motion/SimAnimatorController.MotionUpdater.cs"
 "Assets/AKCondinoO/Sims/Actors/_SimActor/_BaseAI/_BaseAI.Motion/SimAnimatorIKController.cs"
+"Assets/AKCondinoO/Sims/AnimationManager.cs"
 "Assets/AKCondinoO/Sims/Constructions/Floors/Floor10x10x10/Floor10x10x10.cs"
 "Assets/AKCondinoO/Sims/Constructions/Floors/_SimFloor/SimFloor.cs"
 "Assets/AKCondinoO/Sims/Constructions/_SimConstruction/SimConstruction.cs"

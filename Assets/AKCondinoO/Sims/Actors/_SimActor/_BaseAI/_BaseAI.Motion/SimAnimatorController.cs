@@ -69,6 +69,11 @@ namespace AKCondinoO.Sims.Actors{
                animatorIKController.ResetHeadLookAtPositionLerpSpeed();
            #endregion
            #region init animator values tracking
+               foreach(var animationClip in animator.runtimeAnimatorController.animationClips){
+                //Log.DebugMessage("animationClip.wrapMode:"+animationClip.wrapMode);
+                Log.DebugMessage("animationClip.name:"+animationClip.name);
+                Log.DebugMessage("animationClip.isLooping:"+animationClip.isLooping);
+               }
                layerCount=animator.layerCount;
                animatorHasMotionTime=new Dictionary<int,bool>(layerCount);
                animatorHasMotionSpeedMultiplier=new Dictionary<int,bool>(layerCount);

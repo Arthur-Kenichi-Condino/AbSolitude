@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -30,6 +31,7 @@ namespace AKCondinoO.Sims.Actors{
           AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(layerIndex);
                                           animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
           if(clipList.Count>0){
+           //Log.DebugMessage("clipList[0].clip.wrapMode:"+clipList[0].clip.wrapMode);
            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
             //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
             OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
@@ -42,10 +44,18 @@ namespace AKCondinoO.Sims.Actors{
             //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
             OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
-            motionTime[layerIndex]=0f;
+            //if(clipList[0].clip.wrapMode!=WrapMode.Loop){
+             motionTime[layerIndex]=1f;
+            //}
            }
-           float timeDeltaNormalized=Time.deltaTime/clipList[0].clip.length;
-           motionTime[layerIndex]+=timeDeltaNormalized;
+           //if(clipList[0].clip.wrapMode==WrapMode.Loop||motionTime[layerIndex]<1f){
+            float timeDeltaNormalized=Time.deltaTime/clipList[0].clip.length;
+            motionTime[layerIndex]+=timeDeltaNormalized;
+           //}
+           if(animatorHasMotionTime[layerIndex]){
+            //Log.DebugMessage("animatorHasMotionTime[layerIndex]");
+            animator.SetFloat(String.Intern("MotionTime_Layer"+layerIndex),motionTime[layerIndex]);
+           }
            normalizedTime[layerIndex]=animatorState.normalizedTime;
             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
            //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);

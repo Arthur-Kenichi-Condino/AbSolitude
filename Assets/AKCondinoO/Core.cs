@@ -127,6 +127,7 @@ namespace AKCondinoO{
           {o++,VoxelSystem              .singleton},
           {o++,VoxelTerrainEditing      .singleton},
           {o++,VoxelWaterEditing        .singleton},
+          {o++,AnimationManager         .singleton},
           {o++,AStarPathfinding         .singleton},
           {o++,SimInventoryManager      .singleton},
           {o++,SimObjectManager         .singleton},

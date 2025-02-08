@@ -238,6 +238,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\AnimationManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriodSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs" />
