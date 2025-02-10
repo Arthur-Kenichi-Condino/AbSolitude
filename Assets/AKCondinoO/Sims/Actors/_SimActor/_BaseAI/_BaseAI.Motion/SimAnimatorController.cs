@@ -71,8 +71,8 @@ namespace AKCondinoO.Sims.Actors{
            #region init animator values tracking
                foreach(var animationClip in animator.runtimeAnimatorController.animationClips){
                 //Log.DebugMessage("animationClip.wrapMode:"+animationClip.wrapMode);
-                Log.DebugMessage("animationClip.name:"+animationClip.name);
-                Log.DebugMessage("animationClip.isLooping:"+animationClip.isLooping);
+                //Log.DebugMessage("animationClip.name:"+animationClip.name);
+                //Log.DebugMessage("animationClip.isLooping:"+animationClip.isLooping);
                }
                layerCount=animator.layerCount;
                animatorHasMotionTime=new Dictionary<int,bool>(layerCount);
@@ -82,6 +82,7 @@ namespace AKCondinoO.Sims.Actors{
                 animatorHasMotionSpeedMultiplier[i]=AnimatorUtil.HasParameter(String.Intern("MotionSpeedMultiplier_Layer"+i),animator);
                }
                motionTime=new Dictionary<int,float>(layerCount);
+                animationStarted=new Dictionary<int,bool>(layerCount);
                motionSpeedMultiplier=new Dictionary<int,float>(layerCount);
                weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
                 weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
@@ -96,6 +97,9 @@ namespace AKCondinoO.Sims.Actors{
                currentClipInstanceID=new Dictionary<int,int>(layerCount);
                 currentClipName=new Dictionary<int,string>(layerCount);
                for(int i=0;i<layerCount;++i){
+                motionTime[i]=0f;
+                 animationStarted[i]=false;
+                motionSpeedMultiplier[i]=1f;
                 animationTime[i]=0f;
                  animationTimeInCurrentLoop[i]=0f;
                 normalizedTime[i]=0f;

@@ -11,6 +11,7 @@ namespace AKCondinoO.Sims.Actors{
      Dictionary<int,bool>animatorHasMotionTime;
      Dictionary<int,bool>animatorHasMotionSpeedMultiplier;
      Dictionary<int,float>motionTime;
+      Dictionary<int,bool>animationStarted;
      Dictionary<int,float>motionSpeedMultiplier;
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
@@ -37,21 +38,27 @@ namespace AKCondinoO.Sims.Actors{
             OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
-            motionTime[layerIndex]=0f;
+            motionTime[layerIndex]=Mathf.Repeat(motionTime[layerIndex],1.0f);
+            animationStarted[layerIndex]=(currentClipInstanceID[layerIndex]!=0);
            }
            lastLoopCount[layerIndex]=loopCount[layerIndex];
            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
             //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
             OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
-            //if(clipList[0].clip.wrapMode!=WrapMode.Loop){
+            if(!clipList[0].clip.isLooping){
              motionTime[layerIndex]=1f;
-            //}
+            }
            }
-           //if(clipList[0].clip.wrapMode==WrapMode.Loop||motionTime[layerIndex]<1f){
+           if(animationStarted[layerIndex]&&(clipList[0].clip.isLooping||motionTime[layerIndex]<1f)){
             float timeDeltaNormalized=Time.deltaTime/clipList[0].clip.length;
             motionTime[layerIndex]+=timeDeltaNormalized;
-           //}
+            if(!clipList[0].clip.isLooping){
+             if(motionTime[layerIndex]>=1f){
+              motionTime[layerIndex]=1f;
+             }
+            }
+           }
            if(animatorHasMotionTime[layerIndex]){
             //Log.DebugMessage("animatorHasMotionTime[layerIndex]");
             animator.SetFloat(String.Intern("MotionTime_Layer"+layerIndex),motionTime[layerIndex]);
