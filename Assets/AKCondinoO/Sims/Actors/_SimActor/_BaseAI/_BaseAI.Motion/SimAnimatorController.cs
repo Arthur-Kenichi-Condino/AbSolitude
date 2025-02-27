@@ -83,6 +83,7 @@ namespace AKCondinoO.Sims.Actors{
                }
                motionTime=new Dictionary<int,float>(layerCount);
                 animationStarted=new Dictionary<int,bool>(layerCount);
+                 motionTimeOnAnimationChange=new Dictionary<int,float>(layerCount);
                motionSpeedMultiplier=new Dictionary<int,float>(layerCount);
                weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
                 weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);

@@ -38,7 +38,11 @@ namespace AKCondinoO.Sims.Actors{
             OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
-            motionTime[layerIndex]=Mathf.Repeat(motionTime[layerIndex],1.0f);
+            if(motionTimeOnAnimationChange.Remove(layerIndex,out float motionTimeOnAnimationChangeValue)){
+             motionTime[layerIndex]=motionTimeOnAnimationChangeValue;
+            }else{
+             motionTime[layerIndex]=Mathf.Repeat(motionTime[layerIndex],1.0f);
+            }
             animationStarted[layerIndex]=(currentClipInstanceID[layerIndex]!=0);
            }
            lastLoopCount[layerIndex]=loopCount[layerIndex];
@@ -59,10 +63,6 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
            }
-           if(animatorHasMotionTime[layerIndex]){
-            //Log.DebugMessage("animatorHasMotionTime[layerIndex]");
-            animator.SetFloat(String.Intern("MotionTime_Layer"+layerIndex),motionTime[layerIndex]);
-           }
            normalizedTime[layerIndex]=animatorState.normalizedTime;
             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
            //Log.DebugMessage("current clipList[0].clip.name:"+clipList[0].clip.name);
@@ -70,7 +70,26 @@ namespace AKCondinoO.Sims.Actors{
             animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
            //Log.DebugMessage("current animationTime:"+animationTime[layerIndex]);
            OnAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
+           if(animatorHasMotionTime[layerIndex]){
+            //Log.DebugMessage("animatorHasMotionTime[layerIndex]");
+            animator.SetFloat(String.Intern("MotionTime_Layer"+layerIndex),motionTime[layerIndex]);
+           }
           }
+         }
+        }
+     Dictionary<int,float>motionTimeOnAnimationChange;
+        internal void SetMotionTime(float value,bool onAnimationChanged=false){
+         Log.DebugMessage("SetMotionTime:"+value);
+         if(onAnimationChanged){
+          foreach(var layer in animatorClip){
+           int layerIndex=layer.Key;
+           motionTimeOnAnimationChange[layerIndex]=value;
+          }
+          return;
+         }
+         foreach(var layer in animatorClip){
+          int layerIndex=layer.Key;
+          motionTime[layerIndex]=value;
          }
         }
         protected void OnAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){

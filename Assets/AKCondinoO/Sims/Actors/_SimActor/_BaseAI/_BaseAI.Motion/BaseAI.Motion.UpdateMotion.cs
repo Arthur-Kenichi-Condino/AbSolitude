@@ -237,6 +237,7 @@ namespace AKCondinoO.Sims.Actors{
             Log.DebugMessage("motionFlagForShootingAnimation=false");
            }
            Log.DebugMessage("MapAnimatorClipNameToActorWeaponLayerMotion:"+motion);
+          }else{
           }
          }
         }
@@ -246,25 +247,34 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("onHitResetMotion=="+onHitResetMotion);
           if(motionFlagForHitResetAnimation){
            if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_HIT){
-            string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
-            Log.DebugMessage("fullPath:"+fullPath);
+            //string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
+            //Log.DebugMessage("fullPath:"+fullPath);
             //animatorController.animator.Play(fullPath,layerIndex,0f);
             animatorController.animator.SetTrigger("MOTION_HIT_RESET");
             motionFlagForHitResetAnimation=false;
             OnMotionHitReset();
            }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_HIT_RIFLE){
-            string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
-            Log.DebugMessage("fullPath:"+fullPath);
+            //string fullPath=animatorController.GetFullPath(layerIndex,currentClipName);
+            //Log.DebugMessage("fullPath:"+fullPath);
             //animatorController.animator.Play(fullPath,layerIndex,0f);
             animatorController.animator.SetTrigger("MOTION_HIT_RIFLE_RESET");
             motionFlagForHitResetAnimation=false;
             OnMotionHitReset();
            }
           }
-         }
-         if(motionFlagForDeathAnimation){
-          if(motionFlagForDeathInstantAnimationJumpToEnd){
-           //animatorController.animator.Play
+         }else{
+          if(motionFlagForDeathAnimation){
+           if(motionFlagForDeathInstantAnimationJumpToEnd){
+            if      (MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?motion)&&motion.Value==ActorMotion.MOTION_DEAD){
+             Log.DebugMessage("motionFlagForDeathInstantAnimationJumpToEnd");
+             animatorController.SetMotionTime(1f);
+             motionFlagForDeathInstantAnimationJumpToEnd=false;
+            }else if(MapAnimatorClipNameToActorMotion(currentClipName,out             motion)&&motion.Value==ActorMotion.MOTION_DEAD_RIFLE){
+             Log.DebugMessage("motionFlagForDeathInstantAnimationJumpToEnd");
+             animatorController.SetMotionTime(1f);
+             motionFlagForDeathInstantAnimationJumpToEnd=false;
+            }
+           }
           }
          }
         }
@@ -310,16 +320,6 @@ namespace AKCondinoO.Sims.Actors{
           Log.DebugMessage("MapAnimatorClipNameToActorMotion:return "+motion+" from mapped clipName "+clipName);
           return true;
          }
-         if(clipName.Contains("MOTION_HIT_RIFLE")){
-          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT_RIFLE;
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT_RIFLE");
-          return true;
-         }
-         if(clipName.Contains("MOTION_HIT")){
-          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT;
-          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
-          return true;
-         }
          if(clipName.Contains("MOTION_ATTACK_RIFLE")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK_RIFLE;
           Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK_RIFLE");
@@ -328,6 +328,26 @@ namespace AKCondinoO.Sims.Actors{
          if(clipName.Contains("MOTION_ATTACK")){
           motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_ATTACK;
           Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_ATTACK");
+          return true;
+         }
+         if(clipName.Contains("MOTION_DEAD_RIFLE")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_DEAD_RIFLE;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_DEAD_RIFLE");
+          return true;
+         }
+         if(clipName.Contains("MOTION_DEAD")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_DEAD;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_DEAD");
+          return true;
+         }
+         if(clipName.Contains("MOTION_HIT_RIFLE")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT_RIFLE;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT_RIFLE");
+          return true;
+         }
+         if(clipName.Contains("MOTION_HIT")){
+          motion=animatorClipNameToActorMotion[clipName]=ActorMotion.MOTION_HIT;
+          Log.DebugMessage("MapAnimatorClipNameToActorMotion:mapped "+clipName+" to MOTION_HIT");
           return true;
          }
          return false;
