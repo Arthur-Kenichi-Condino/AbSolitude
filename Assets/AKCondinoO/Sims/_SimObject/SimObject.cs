@@ -357,47 +357,54 @@ namespace AKCondinoO.Sims{
                   }
                  }
              }else{
-                 if(checkIfOutOfSight){
-                    checkIfOutOfSight=false;
-                     if(IsOutOfSight()){
-                         if(Core.singleton.isServer){
-                          if(IsOwner){
-                           bool ownershipChanged=false;
-                           foreach(var gameplayer in GameplayerManagement.singleton.all){
-                            ulong clientId=gameplayer.Key;
-                            //Log.DebugMessage("'should the ownership be changed to client id?':clientId:"+clientId);
-                            if(gameplayer.Value!=Gameplayer.main&&IsInPlayerWorldBounds(gameplayer.Value)){
-                             Log.DebugMessage("'change ownership to client id':clientId:"+clientId);
-                             netObj.ChangeOwnership(clientId);
-                             netObj.DontDestroyWithOwner=true;
-                             ownershipChanged=true;
-                             break;
-                            }
-                           }
-                           if(!ownershipChanged){
-                            //Log.DebugMessage("'sim object is out of sight (IsOutOfSight)':id:"+id);
-                            DisableInteractions();
-                            if(netObj.IsSpawned){
-                             netObj.DontDestroyWithOwner=true;
-                             netObj.Despawn(destroy:false);
-                            }
-                            SimObjectManager.singleton.deactivateQueue.Enqueue(this);
-                            result=1;
-                           }
-                          }
-                         }
+                 if(IsDead()){
+                     if(Core.singleton.isServer){
+                      if(IsMotionComplete()){
+                      }
                      }
                  }else{
-                     if(poolRequested){
-                        poolRequested=false;
-                         if(Core.singleton.isServer){
-                          DisableInteractions();
-                          if(netObj.IsSpawned){
-                           netObj.DontDestroyWithOwner=true;
-                           netObj.Despawn(destroy:false);
-                          }
-                          SimObjectManager.singleton.deactivateQueue.Enqueue(this);
-                          result=1;
+                     if(checkIfOutOfSight){
+                        checkIfOutOfSight=false;
+                         if(IsOutOfSight()){
+                             if(Core.singleton.isServer){
+                              if(IsOwner){
+                               bool ownershipChanged=false;
+                               foreach(var gameplayer in GameplayerManagement.singleton.all){
+                                ulong clientId=gameplayer.Key;
+                                //Log.DebugMessage("'should the ownership be changed to client id?':clientId:"+clientId);
+                                if(gameplayer.Value!=Gameplayer.main&&IsInPlayerWorldBounds(gameplayer.Value)){
+                                 Log.DebugMessage("'change ownership to client id':clientId:"+clientId);
+                                 netObj.ChangeOwnership(clientId);
+                                 netObj.DontDestroyWithOwner=true;
+                                 ownershipChanged=true;
+                                 break;
+                                }
+                               }
+                               if(!ownershipChanged){
+                                //Log.DebugMessage("'sim object is out of sight (IsOutOfSight)':id:"+id);
+                                DisableInteractions();
+                                if(netObj.IsSpawned){
+                                 netObj.DontDestroyWithOwner=true;
+                                 netObj.Despawn(destroy:false);
+                                }
+                                SimObjectManager.singleton.deactivateQueue.Enqueue(this);
+                                result=1;
+                               }
+                              }
+                             }
+                         }
+                     }else{
+                         if(poolRequested){
+                            poolRequested=false;
+                             if(Core.singleton.isServer){
+                              DisableInteractions();
+                              if(netObj.IsSpawned){
+                               netObj.DontDestroyWithOwner=true;
+                               netObj.Despawn(destroy:false);
+                              }
+                              SimObjectManager.singleton.deactivateQueue.Enqueue(this);
+                              result=1;
+                             }
                          }
                      }
                  }

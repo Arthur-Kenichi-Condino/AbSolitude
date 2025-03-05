@@ -265,5 +265,9 @@ namespace AKCondinoO.Sims.Actors{
          }
          return false;
         }
+        internal override bool IsMotionComplete(float after=1f){
+         Log.DebugMessage("currentAnimationMapsToMotion:"+currentAnimationMapsToMotion);
+         return false;
+        }
     }
 }

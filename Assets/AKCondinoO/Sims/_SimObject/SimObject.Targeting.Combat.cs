@@ -33,5 +33,8 @@ namespace AKCondinoO.Sims{
         internal virtual bool IsDead(){
          return false;
         }
+        internal virtual bool IsMotionComplete(float after=1f){
+         return true;
+        }
     }
 }
