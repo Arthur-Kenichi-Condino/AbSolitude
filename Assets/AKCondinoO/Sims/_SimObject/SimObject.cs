@@ -241,6 +241,8 @@ namespace AKCondinoO.Sims{
      [NonSerialized](bool isOverlapping,bool isOverlapped)overlapState;
       [NonSerialized]internal bool overlapper;
      [NonSerialized]bool unplaceRequested;
+     [NonSerialized]float timeDeadToDespawn=20f;
+     [NonSerialized]float timerDeadToDespawn;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
         internal virtual int ManualUpdate(bool doValidationChecks){
@@ -360,9 +362,23 @@ namespace AKCondinoO.Sims{
                  if(IsDead()){
                      if(Core.singleton.isServer){
                       if(IsMotionComplete()){
+                       if(timerDeadToDespawn>=timeDeadToDespawn){
+                        timerDeadToDespawn=0f;
+                        Log.DebugMessage("despawn dead corpse");
+                        DisableInteractions();
+                        if(netObj.IsSpawned){
+                         netObj.DontDestroyWithOwner=true;
+                         netObj.Despawn(destroy:false);
+                        }
+                        SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
+                        result=2;
+                       }else{
+                        timerDeadToDespawn+=Time.deltaTime;
+                       }
                       }
                      }
                  }else{
+                     timerDeadToDespawn=0f;
                      if(checkIfOutOfSight){
                         checkIfOutOfSight=false;
                          if(IsOutOfSight()){

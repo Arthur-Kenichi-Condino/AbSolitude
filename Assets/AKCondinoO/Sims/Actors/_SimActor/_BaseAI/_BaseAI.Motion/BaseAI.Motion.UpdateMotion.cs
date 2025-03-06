@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     internal bool currentAnimationMapsToMotion;
+     internal readonly Dictionary<ActorMotion,int>motionMappedToLayerIndex=new Dictionary<ActorMotion,int>();
+      internal Dictionary<int,bool>currentAnimationMapsToMotion;
+       internal Dictionary<int,float>currentMotionAnimationTime;
         internal virtual void UpdateMotion(bool fromAI){
          if(motionFlagForReloadingAnimation){
              if(MyWeaponLayerMotion==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING||
@@ -213,7 +215,11 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void OnShouldSetNextMotionAnimatorAnimationChanged(AnimatorStateInfo animatorState,int layerIndex,string lastClipName,string currentClipName){
          //Log.DebugMessage("OnShouldSetNextMotionAnimatorAnimationChanged:currentClipName:"+currentClipName+",lastClipName:"+lastClipName);
-         currentAnimationMapsToMotion=(MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?curMotion)&&curMotion==MyMotion);
+         bool mapped=MapAnimatorClipNameToActorMotion(currentClipName,out ActorMotion?curMotion);
+         if(mapped){
+          motionMappedToLayerIndex[curMotion.Value]=layerIndex;
+         }
+         currentAnimationMapsToMotion[layerIndex]=(mapped&&curMotion==MyMotion);
          if(motionFlagForReloadingAnimation){
           if      (MapAnimatorClipNameToActorWeaponLayerMotion(lastClipName,out ActorWeaponLayerMotion?wMotion)&&wMotion.Value==ActorWeaponLayerMotion.MOTION_STAND_RIFLE_RELOADING){
            motionFlagForReloadingAnimation=false;

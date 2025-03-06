@@ -267,10 +267,10 @@ namespace AKCondinoO.Sims{
              statsBoolsList .Clear();
              int statsFloatsStringStart=s.IndexOf("statsFloats={");
              if(statsFloatsStringStart>=0){
-              Log.DebugMessage("statsFloatsStringStart:"+statsFloatsStringStart);
+              //Log.DebugMessage("statsFloatsStringStart:"+statsFloatsStringStart);
                 statsFloatsStringStart+=13;
               int statsFloatsStringEnd=s.IndexOf("} , ",statsFloatsStringStart);
-              Log.DebugMessage("statsFloatsStringEnd:"+statsFloatsStringEnd);
+              //Log.DebugMessage("statsFloatsStringEnd:"+statsFloatsStringEnd);
               string statsFloatsString=s.Substring(statsFloatsStringStart,statsFloatsStringEnd-statsFloatsStringStart);
               int statsFloatStringStart=0;
               while((statsFloatStringStart=statsFloatsString.IndexOf("[",statsFloatStringStart))>=0){
@@ -285,10 +285,10 @@ namespace AKCondinoO.Sims{
              }
              int statsIntsStringStart=s.IndexOf("statsInts={");
              if(statsIntsStringStart>=0){
-              Log.DebugMessage("statsIntsStringStart:"+statsIntsStringStart);
+              //Log.DebugMessage("statsIntsStringStart:"+statsIntsStringStart);
                 statsIntsStringStart+=11;
               int statsIntsStringEnd=s.IndexOf("} , ",statsIntsStringStart);
-              Log.DebugMessage("statsIntsStringEnd:"+statsIntsStringEnd);
+              //Log.DebugMessage("statsIntsStringEnd:"+statsIntsStringEnd);
               string statsIntsString=s.Substring(statsIntsStringStart,statsIntsStringEnd-statsIntsStringStart);
               int statsIntStringStart=0;
               while((statsIntStringStart=statsIntsString.IndexOf("[",statsIntStringStart))>=0){
@@ -303,10 +303,10 @@ namespace AKCondinoO.Sims{
              }
              int statsBoolsStringStart=s.IndexOf("statsBools={");
              if(statsBoolsStringStart>=0){
-              Log.DebugMessage("statsBoolsStringStart:"+statsBoolsStringStart);
+              //Log.DebugMessage("statsBoolsStringStart:"+statsBoolsStringStart);
                 statsBoolsStringStart+=12;
               int statsBoolsStringEnd=s.IndexOf("} , ",statsBoolsStringStart);
-              Log.DebugMessage("statsBoolsStringEnd:"+statsBoolsStringEnd);
+              //Log.DebugMessage("statsBoolsStringEnd:"+statsBoolsStringEnd);
               string statsBoolsString=s.Substring(statsBoolsStringStart,statsBoolsStringEnd-statsBoolsStringStart);
               int statsBoolStringStart=0;
               while((statsBoolStringStart=statsBoolsString.IndexOf("[",statsBoolStringStart))>=0){

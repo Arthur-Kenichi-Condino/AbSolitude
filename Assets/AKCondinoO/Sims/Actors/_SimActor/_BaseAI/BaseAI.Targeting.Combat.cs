@@ -266,7 +266,13 @@ namespace AKCondinoO.Sims.Actors{
          return false;
         }
         internal override bool IsMotionComplete(float after=1f){
-         Log.DebugMessage("currentAnimationMapsToMotion:"+currentAnimationMapsToMotion);
+         if(motionMappedToLayerIndex.TryGetValue(MyMotion,out int layerIndex)){
+          Log.DebugMessage("currentAnimationMapsToMotion[layerIndex]:"+currentAnimationMapsToMotion[layerIndex]);
+          if(currentAnimationMapsToMotion[layerIndex]&&animatorController.animationTime[layerIndex]>=after){
+           Log.DebugMessage("IsMotionComplete:yes");
+           return true;
+          }
+         }
          return false;
         }
     }

@@ -110,7 +110,7 @@ namespace AKCondinoO.Sims{
            int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
            ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
            if(simObjectSpawnAtIndex.TryGetValue(simObjectIdNumber,out int index)){
-            Log.DebugMessage("sim object stats data has to be loaded for id:"+simObjectIdNumber);
+            //Log.DebugMessage("sim object stats data has to be loaded for id:"+simObjectIdNumber);
             int persistentStatsStringStart=line.IndexOf("persistentStats=",simObjectIdNumberStringEnd+3);
             int persistentStatsStringEnd  =line.IndexOf(" , }",persistentStatsStringStart)+4;
             string persistentStatsString=line.Substring(persistentStatsStringStart,persistentStatsStringEnd-persistentStatsStringStart);

@@ -97,6 +97,8 @@ namespace AKCondinoO.Sims.Actors{
                animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
                currentClipInstanceID=new Dictionary<int,int>(layerCount);
                 currentClipName=new Dictionary<int,string>(layerCount);
+               actor.currentAnimationMapsToMotion=new Dictionary<int,bool>(layerCount);
+                actor.currentMotionAnimationTime=new Dictionary<int,float>(layerCount);
                for(int i=0;i<layerCount;++i){
                 motionTime[i]=0f;
                  animationStarted[i]=false;
@@ -111,6 +113,8 @@ namespace AKCondinoO.Sims.Actors{
                 animatorClip[i]=new List<AnimatorClipInfo>();
                 currentClipInstanceID[i]=0;
                  currentClipName[i]="";
+                actor.currentAnimationMapsToMotion[i]=false;
+                 actor.currentMotionAnimationTime[i]=0f;
                }
                #region init animator layers values and transitions
                    int GetLayer(string layerName){
