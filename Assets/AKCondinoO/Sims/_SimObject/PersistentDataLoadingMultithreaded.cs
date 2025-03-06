@@ -12,6 +12,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal class PersistentDataLoadingBackgroundContainer:BackgroundContainer{
      internal AutoResetEvent waitingForSimObjectSpawnData;
+     internal readonly Dictionary<Type,HashSet<ulong>>persistentReleasedIds=new Dictionary<Type,HashSet<ulong>>();
      internal readonly HashSet<int>terraincnkIdxToLoad=new HashSet<int>();
      internal readonly Dictionary<(Type simType,ulong number),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simType,ulong number)?asInventoryItemOwnerId)>specificIdsToLoad=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
      internal readonly SpawnData spawnDataFromFiles=new SpawnData();
@@ -37,6 +38,7 @@ namespace AKCondinoO.Sims{
          container.spawnDataFromFiles.dequeued=false;
          foreach(var simObjectTypeFileStreamPair in this.simObjectFileStream){
           Type simObjectType=simObjectTypeFileStreamPair.Key;
+          var releasedIds=container.persistentReleasedIds[simObjectType];
           Dictionary<ulong,int>simObjectSpawnAtIndex=null;
           if(!simObjectSpawnAtIndexByType.TryGetValue(simObjectType,out simObjectSpawnAtIndex)){
            simObjectSpawnAtIndexByType.Add(simObjectType,simObjectSpawnAtIndex=new Dictionary<ulong,int>());
@@ -109,6 +111,7 @@ namespace AKCondinoO.Sims{
            int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
            int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
            ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           if(releasedIds.Contains(simObjectIdNumber)){continue;}
            if(simObjectSpawnAtIndex.TryGetValue(simObjectIdNumber,out int index)){
             //Log.DebugMessage("sim object stats data has to be loaded for id:"+simObjectIdNumber);
             int persistentStatsStringStart=line.IndexOf("persistentStats=",simObjectIdNumberStringEnd+3);
@@ -140,6 +143,7 @@ namespace AKCondinoO.Sims{
             }
            }
           }
+          releasedIds.Clear();
          }
          foreach(var specificIdToLoad in container.specificIdsToLoad){
           (Type simObjectType,ulong idNumber)id=specificIdToLoad.Key;

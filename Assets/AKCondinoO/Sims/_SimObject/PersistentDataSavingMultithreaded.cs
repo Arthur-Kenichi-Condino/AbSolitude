@@ -210,12 +210,16 @@ namespace AKCondinoO.Sims{
            int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
            ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
            //Log.DebugMessage("simObjectIdNumber:"+simObjectIdNumber);
+           if(container.idsToRelease[simObjectType].Contains(simObjectIdNumber)){continue;}
+           if(container.persistentReleasedIds[simObjectType].Contains(simObjectIdNumber)){continue;}
            if(!persistentStatsToSave.ContainsKey(simObjectIdNumber)){
             stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
            }
           }
           foreach(var simObjectIdNumberPersistentStatsPair in persistentStatsToSave){
            ulong simObjectIdNumber=simObjectIdNumberPersistentStatsPair.Key;
+           if(container.idsToRelease[simObjectType].Contains(simObjectIdNumber)){continue;}
+           if(container.persistentReleasedIds[simObjectType].Contains(simObjectIdNumber)){continue;}
            SimObject.PersistentStats persistentStats=simObjectIdNumberPersistentStatsPair.Value;
            string s=persistentStats.ToString();
            if(!string.IsNullOrEmpty(s)){

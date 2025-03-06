@@ -130,6 +130,7 @@ namespace AKCondinoO.Sims{
            FileStream loaderSimStatsFileStream;
            SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStream[simObjectType]=loaderSimStatsFileStream=new FileStream(simStatsSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStreamReader[simObjectType]=new StreamReader(loaderSimStatsFileStream);
+           SimObjectManager.singleton.persistentDataLoadingBG.persistentReleasedIds.Add(simObjectType,new HashSet<ulong>());
           }
           if(SimObjectUtil.IsSimActor(simObjectType)){
            if(Core.singleton.isServer){
@@ -342,11 +343,11 @@ namespace AKCondinoO.Sims{
                  }
                 }
                 if(persistentStats!=null){
-                 //Log.DebugMessage("simObject persistentStats loaded");
+                 Log.DebugMessage("simObject persistentStats loaded");
                  simObject.persistentStats=persistentStats.Value;
                  simObject.stats.InitFrom(simObject.persistentStats,simObject);
                 }else{
-                 //Log.DebugMessage("simObject persistentStats must be generated");
+                 Log.DebugMessage("simObject persistentStats must be generated");
                  simObject.persistentStats=new SimObject.PersistentStats();
                  simObject.stats.Generate(simObject,true);
                 }
@@ -588,6 +589,10 @@ namespace AKCondinoO.Sims{
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
              SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
          ){
+          foreach(var kvp in SimObjectManager.singleton.releasedIds){
+           Type simObjectType=kvp.Key;
+           SimObjectManager.singleton.persistentDataLoadingBG.persistentReleasedIds[simObjectType].UnionWith(kvp.Value);
+          }
           foreach(int cnkIdx in terraincnkIdxPhysMeshBaked){
            SimObjectManager.singleton.persistentDataLoadingBG.terraincnkIdxToLoad.Add(cnkIdx);
           }
