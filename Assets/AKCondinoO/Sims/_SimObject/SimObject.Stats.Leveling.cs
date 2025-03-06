@@ -34,7 +34,9 @@ namespace AKCondinoO.Sims{
            }
             [NonSerialized]protected bool updatedIsTranscendent;
              internal void OnRefresh_IsTranscendent(SimObject statsSim=null){
-              if(updatedIsTranscendent){
+              if(onGeneration||
+                 updatedIsTranscendent
+              ){
                refreshedIsTranscendent=true;
               }
              }
@@ -56,7 +58,8 @@ namespace AKCondinoO.Sims{
             }
              [NonSerialized]protected bool updatedExperience;
               internal void OnRefresh_Experience(SimObject statsSim=null){
-               if(updatedExperience||
+               if(onGeneration||
+                  updatedExperience||
                   refreshedIsTranscendent
                ){
                 bool isTranscendent=isTranscendent_value;
@@ -192,7 +195,8 @@ namespace AKCondinoO.Sims{
              }
               [NonSerialized]protected bool updatedSimLevel;
                internal void OnRefresh_SimLevel(SimObject statsSim=null){
-                if(updatedSimLevel||
+                if(onGeneration||
+                   updatedSimLevel||
                    refreshedIsTranscendent
                 ){
                  totalStatPoints_value=AddStatPointsFrom201To250(simLevel_value,isTranscendent_value);
@@ -293,7 +297,8 @@ namespace AKCondinoO.Sims{
              }
               [NonSerialized]protected bool updatedAgeLevel;
                internal void OnRefresh_AgeLevel(SimObject statsSim=null){
-                if(updatedAgeLevel
+                if(onGeneration||
+                   updatedAgeLevel
                 ){
                  refreshedAgeLevel=true;
                 }

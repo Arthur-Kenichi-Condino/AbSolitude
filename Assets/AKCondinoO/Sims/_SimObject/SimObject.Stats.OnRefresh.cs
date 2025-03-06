@@ -53,6 +53,7 @@ namespace AKCondinoO.Sims{
                      updatedIntegrity=false;refreshedIntegrity=false;
                      updatedPhysicalPowerFlatValue  =false;refreshedPhysicalPowerFlatValue  =false;
                      updatedPhysicalDefenseFlatValue=false;refreshedPhysicalDefenseFlatValue=false;
+              onGeneration=false;
               pendingRefresh=false;
              }
             }

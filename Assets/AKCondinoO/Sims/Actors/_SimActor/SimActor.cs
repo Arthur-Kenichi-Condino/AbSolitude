@@ -67,11 +67,13 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected override void EnableInteractions(){
          Log.Warning("implementation incomplete");
-         interactionsEnabled=true;
+         base.EnableInteractions();
+         //interactionsEnabled=true;
         }
         protected override void DisableInteractions(){
          Log.Warning("implementation incomplete");
-         interactionsEnabled=false;
+         base.DisableInteractions();
+         //interactionsEnabled=false;
         }
     }
 }

@@ -149,6 +149,8 @@ namespace AKCondinoO.Sims.Actors{
           motionFlagForReloadingAnimation=false;
            motionFlagForShootingAnimation=false;
          MyWeaponLayerMotion=ActorWeaponLayerMotion.MOTION_STAND_RIFLE_AIMING;
+         motionFlagForDeathAnimation=false;
+          motionFlagForDeathInstantAnimationJumpToEnd=false;
          motionFlagForHitAnimation=false;
           motionFlagForHitResetAnimation=false;
          MyMotion=ActorMotion.MOTION_STAND;

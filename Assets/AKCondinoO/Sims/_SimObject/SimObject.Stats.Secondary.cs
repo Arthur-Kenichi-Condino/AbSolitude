@@ -27,7 +27,8 @@ namespace AKCondinoO.Sims{
                }
                 [NonSerialized]protected bool updatedAgility;
                  internal void OnRefresh_Agility(SimObject statsSim=null){
-                  if(updatedBodily_kinesthetic  ||
+                  if(onGeneration||
+                     updatedBodily_kinesthetic  ||
                      updatedInterpersonal       ||
                      updatedLinguistic          ||
                      updatedLogical_mathematical||
@@ -70,7 +71,8 @@ namespace AKCondinoO.Sims{
                }
                 [NonSerialized]protected bool updatedDexterity;
                  internal void OnRefresh_Dexterity(SimObject statsSim=null){
-                  if(updatedBodily_kinesthetic  ||
+                  if(onGeneration||
+                     updatedBodily_kinesthetic  ||
                      updatedInterpersonal       ||
                      updatedLinguistic          ||
                      updatedLogical_mathematical||
@@ -113,7 +115,8 @@ namespace AKCondinoO.Sims{
                }
                 [NonSerialized]protected bool updatedIntelligence;
                  internal void OnRefresh_Intelligence(SimObject statsSim=null){
-                  if(updatedInterpersonal       ||
+                  if(onGeneration||
+                     updatedInterpersonal       ||
                      updatedIntrapersonal       ||
                      updatedLinguistic          ||
                      updatedLogical_mathematical||
@@ -156,7 +159,8 @@ namespace AKCondinoO.Sims{
                }
                 [NonSerialized]protected bool updatedStrength;
                  internal void OnRefresh_Strength(SimObject statsSim=null){
-                  if(updatedBodily_kinesthetic  
+                  if(onGeneration||
+                     updatedBodily_kinesthetic  
                   ){
                    strength_value_stats=
                     ((  bodily_kinesthetic_value*4f)/4f)
@@ -189,7 +193,8 @@ namespace AKCondinoO.Sims{
                }
                 [NonSerialized]protected bool updatedVitality;
                  internal void OnRefresh_Vitality(SimObject statsSim=null){
-                  if(updatedBodily_kinesthetic  ||
+                  if(onGeneration||
+                     updatedBodily_kinesthetic  ||
                      updatedIntrapersonal       ||
                      updatedNaturalistic        
                   ){

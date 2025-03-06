@@ -26,7 +26,8 @@ namespace AKCondinoO.Sims{
            }
             [NonSerialized]protected bool updatedIntegrity;
              internal void OnRefresh_Integrity(SimObject statsSim=null){
-               if(refreshedMaxIntegrity
+               if(onGeneration||
+                  refreshedMaxIntegrity
                ){
                 //Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+":scaleIntegrity:"+scaleIntegrity);
                 if(scaleIntegrity<0f){
@@ -67,7 +68,8 @@ namespace AKCondinoO.Sims{
             }
              [NonSerialized]protected bool updatedMaxIntegrity;
               internal void OnRefresh_MaxIntegrity(SimObject statsSim=null){
-               if(refreshedSimLevel||
+               if(onGeneration||
+                  refreshedSimLevel||
                   refreshedAgeLevel||
                   updatedBodily_kinesthetic||
                   refreshedVitality
@@ -87,7 +89,7 @@ namespace AKCondinoO.Sims{
                 //Log.DebugMessage(statsSim+":maxIntegrity:"+maxIntegrity);
                 float previousMaxIntegrity=maxIntegrity_value_stats;
                 maxIntegrity_value_stats=maxIntegrity;
-                if(previousMaxIntegrity<=0f){
+                if(onGeneration||previousMaxIntegrity<=0f){
                  scaleIntegrity=-1f;
                 }else{
                  scaleIntegrity=maxIntegrity/previousMaxIntegrity;

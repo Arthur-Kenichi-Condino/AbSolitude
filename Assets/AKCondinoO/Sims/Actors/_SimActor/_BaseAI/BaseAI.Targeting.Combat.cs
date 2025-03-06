@@ -267,9 +267,9 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal override bool IsMotionComplete(float after=1f){
          if(motionMappedToLayerIndex.TryGetValue(MyMotion,out int layerIndex)){
-          Log.DebugMessage("currentAnimationMapsToMotion[layerIndex]:"+currentAnimationMapsToMotion[layerIndex]);
+          //Log.DebugMessage("currentAnimationMapsToMotion[layerIndex]:"+currentAnimationMapsToMotion[layerIndex]);
           if(currentAnimationMapsToMotion[layerIndex]&&animatorController.animationTime[layerIndex]>=after){
-           Log.DebugMessage("IsMotionComplete:yes");
+           //Log.DebugMessage("IsMotionComplete:yes");
            return true;
           }
          }

@@ -241,7 +241,7 @@ namespace AKCondinoO.Sims{
      [NonSerialized](bool isOverlapping,bool isOverlapped)overlapState;
       [NonSerialized]internal bool overlapper;
      [NonSerialized]bool unplaceRequested;
-     [NonSerialized]float timeDeadToDespawn=20f;
+     [NonSerialized]float timeDeadToDespawn=5f;//20f;
      [NonSerialized]float timerDeadToDespawn;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;

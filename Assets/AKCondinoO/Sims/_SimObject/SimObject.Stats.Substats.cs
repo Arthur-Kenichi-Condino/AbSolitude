@@ -30,7 +30,8 @@ namespace AKCondinoO.Sims{
                    }
                     [NonSerialized]protected bool updatedPhysicalPowerFlatValue;
                      internal void OnRefresh_PhysicalPowerFlatValue(SimObject statsSim=null){
-                      if(refreshedSimLevel||
+                      if(onGeneration||
+                         refreshedSimLevel||
                          refreshedAgeLevel||
                          refreshedDexterity||
                          refreshedStrength||
@@ -67,7 +68,8 @@ namespace AKCondinoO.Sims{
                    }
                     [NonSerialized]protected bool updatedPhysicalDefenseFlatValue;
                      internal void OnRefresh_PhysicalDefenseFlatValue(SimObject statsSim=null){
-                      if(refreshedSimLevel||
+                      if(onGeneration||
+                         refreshedSimLevel||
                          refreshedAgeLevel||
                          refreshedAgility||
                          refreshedStrength||

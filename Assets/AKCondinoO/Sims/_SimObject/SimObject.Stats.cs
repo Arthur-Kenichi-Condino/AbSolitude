@@ -414,14 +414,19 @@ namespace AKCondinoO.Sims{
               }
              }
             }
+         internal bool onGeneration;
             internal virtual void Generate(SimObject statsSim=null,bool reset=true){
              //Log.DebugMessage("Stats:Generate");
              if(reset){
               OnReset(statsSim);
              }
+             onGeneration=true;
              OnGenerateValidation_Level(statsSim,reset);
              OnGenerateValidation_Stats(statsSim,reset);
              SetPendingRefresh(statsSim,false);
+             Log.DebugMessage("maxIntegrity_value_stats:"+maxIntegrity_value_stats);
+             Log.DebugMessage("integrity_value:"+integrity_value);
+             Log.DebugMessage("scaleIntegrity:"+scaleIntegrity);
             }
             protected virtual void OnReset(SimObject statsSim=null){
              simLevel_value=0;
