@@ -183,6 +183,12 @@ namespace AKCondinoO.Sims.Actors{
                     if(inTheWayColliderHitsCount>0){
                      for(int i=0;i<inTheWayColliderHitsCount;++i){
                       RaycastHit hit=inTheWayColliderHits[i];
+                      if(Math.Abs(hit.collider.transform.position.z-me.transform.position.z)>ai.attackDistance.z||
+                         Math.Abs(hit.collider.transform.position.y-me.transform.position.y)>ai.attackDistance.y||
+                         Math.Abs(hit.collider.transform.position.x-me.transform.position.x)>ai.attackDistance.x
+                      ){
+                       continue;
+                      }
                       if(
                        hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
                        actorHit.characterController!=null&&

@@ -80,10 +80,11 @@ namespace AKCondinoO.Sims.Actors{
               isInAttackRange          =me.IsInAttackRange(MyEnemy,out attackDistance               );
               isInAttackRangeWithWeapon=me.IsInAttackRange(MyEnemy,out attackDistanceWithWeapon,true);
              }else{
-              attackDistance          =me.AttackDistance(    );
-              attackDistanceWithWeapon=me.AttackDistance(true);
+              attackDistance          =me.AttackDistance(out _     );
+              attackDistanceWithWeapon=me.AttackDistance(out _,true);
              }
              UpdateMyState();
+             Log.DebugMessage("UpdateMyState:"+MyState);
              SetSkill();
              ProcessStateRoutine();
             }

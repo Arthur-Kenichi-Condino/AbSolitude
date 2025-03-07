@@ -189,7 +189,7 @@ namespace AKCondinoO.Sims.Actors{
                    Quaternion rotation=me.GetRotation();
                    float height=me.GetHeight();
                    float radius=me.GetRadius();
-                   Vector3 attackDistance=me.AttackDistance();
+                   Vector3 attackDistance=me.AttackDistance(out _);
                    Vector3 forward=(MyEnemy.transform.root.position-me.transform.root.position).normalized;
                    forward.y=0f;
                    //Log.DebugMessage("attackDistance:"+attackDistance);

@@ -1,0 +1,4 @@
+não snipe se não tiver arma fallback to chase testar se está segurando arma não entrar no state
+causar dano com soco add hitbox to player jogador está sem hitibox e só estava testando com arma
+correr se estiver em combate; evitar andar
+homunculus seguir e atacar imediatamente alvo do mestre

@@ -66,11 +66,13 @@ namespace AKCondinoO.Sims.Actors{
      }
      internal Vector3 attackRange=new Vector3(0.125f/8f,0.125f/8f,0.0625f/8f);
      readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
-        internal Vector3 AttackDistance(bool checkWeapon=false){
+        internal Vector3 AttackDistance(out bool hasWeapon,bool checkWeapon=false){
+         hasWeapon=false;
          float radius=GetRadius();
          float weaponRange=0f;
          if(checkWeapon){
           CurrentWeapons(attackDistanceSimWeapons);
+          hasWeapon=attackDistanceSimWeapons.Count>0;
           foreach(SimWeapon weapon in attackDistanceSimWeapons){
            weaponRange=Mathf.Max(weaponRange,weapon.shootDis);
           }
@@ -89,11 +91,14 @@ namespace AKCondinoO.Sims.Actors{
           Mathf.Abs(simObject.transform.position.z-transform.position.z)
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
-         attackDistance=AttackDistance(checkWeapon);
+         attackDistance=AttackDistance(out bool hasWeapon,checkWeapon);
          float radius=GetRadius();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
          if((disXZPlane<=radius+attackDistance.z+simObjectRadius||disXZPlane<=radius+attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
+          if(checkWeapon&&!hasWeapon){
+           return false;
+          }
           return true;
          }
          return false;
