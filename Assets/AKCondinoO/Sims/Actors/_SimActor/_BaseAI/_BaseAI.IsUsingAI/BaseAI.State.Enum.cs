@@ -46,7 +46,7 @@ namespace AKCondinoO.Sims.Actors{
                canSnipe&=snipeSt.onStateCooldown<=0f;
                if(canSnipe){
                 if(me.sniper){
-                 if(isInAttackRangeWithWeapon){
+                 if(isInAttackRangeWithWeapon&&hasWeapon){
                   if(!isInAttackRange||(
                     me.IsFasterThan(MyEnemy)&&(
                     attackDistance.z<attackDistanceWithWeapon.z||

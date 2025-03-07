@@ -84,20 +84,20 @@ namespace AKCondinoO.Sims.Actors{
           Mathf.Max(radius*.95f+attackRange.z,radius+weaponRange)
          );
         }
-        internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,bool checkWeapon=false){
+        internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,out bool hasWeapon,bool checkWeapon=false){
+         hasWeapon=false;
          Vector3 delta=new Vector3(
           Mathf.Abs(simObject.transform.position.x-transform.position.x),
           Mathf.Abs(simObject.transform.position.y-transform.position.y),
           Mathf.Abs(simObject.transform.position.z-transform.position.z)
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
-         attackDistance=AttackDistance(out bool hasWeapon,checkWeapon);
+         attackDistance=AttackDistance(out hasWeapon,checkWeapon);
          float radius=GetRadius();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
          if((disXZPlane<=radius+attackDistance.z+simObjectRadius||disXZPlane<=radius+attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
           if(checkWeapon&&!hasWeapon){
-           return false;
           }
           return true;
          }

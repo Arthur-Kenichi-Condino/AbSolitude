@@ -424,9 +424,9 @@ namespace AKCondinoO.Sims{
              OnGenerateValidation_Level(statsSim,reset);
              OnGenerateValidation_Stats(statsSim,reset);
              SetPendingRefresh(statsSim,false);
-             Log.DebugMessage("maxIntegrity_value_stats:"+maxIntegrity_value_stats);
-             Log.DebugMessage("integrity_value:"+integrity_value);
-             Log.DebugMessage("scaleIntegrity:"+scaleIntegrity);
+             //Log.DebugMessage("maxIntegrity_value_stats:"+maxIntegrity_value_stats);
+             //Log.DebugMessage("integrity_value:"+integrity_value);
+             //Log.DebugMessage("scaleIntegrity:"+scaleIntegrity);
             }
             protected virtual void OnReset(SimObject statsSim=null){
              simLevel_value=0;

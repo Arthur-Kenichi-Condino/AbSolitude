@@ -59,6 +59,7 @@ namespace AKCondinoO.Sims.Actors{
           [NonSerialized]bool isInAttackRangeWithWeapon=false;
           [NonSerialized]Vector3 attackDistance          ;
           [NonSerialized]Vector3 attackDistanceWithWeapon;
+          [NonSerialized]bool hasWeapon;
             internal virtual void Main(){
              me.RenewTargets();
              damageSourcesIterator.AddRange(damageSources.Keys);
@@ -77,14 +78,14 @@ namespace AKCondinoO.Sims.Actors{
              isInAttackRange          =false;
              isInAttackRangeWithWeapon=false;
              if(MyEnemy!=null){
-              isInAttackRange          =me.IsInAttackRange(MyEnemy,out attackDistance               );
-              isInAttackRangeWithWeapon=me.IsInAttackRange(MyEnemy,out attackDistanceWithWeapon,true);
+              isInAttackRange          =me.IsInAttackRange(MyEnemy,out attackDistance          ,out _             );
+              isInAttackRangeWithWeapon=me.IsInAttackRange(MyEnemy,out attackDistanceWithWeapon,out hasWeapon,true);
              }else{
               attackDistance          =me.AttackDistance(out _     );
-              attackDistanceWithWeapon=me.AttackDistance(out _,true);
+              attackDistanceWithWeapon=me.AttackDistance(out hasWeapon,true);
              }
              UpdateMyState();
-             Log.DebugMessage("UpdateMyState:"+MyState);
+             //Log.DebugMessage("UpdateMyState:"+MyState);
              SetSkill();
              ProcessStateRoutine();
             }

@@ -163,90 +163,94 @@ namespace AKCondinoO.Sims.Actors{
                  if(stoppedPredictingMyEnemyDestCanPredictAgainTimer>0f){
                   stoppedPredictingMyEnemyDestCanPredictAgainTimer-=Time.deltaTime;
                  }
+                 ai.DoSkill();
                  if(getDestination){
-                  if(shouldPredictMyEnemyDest){
-                   if(stoppedPredictingMyEnemyDestCanPredictAgainTimer<=0f){
-                    predictMyEnemyDest=true;
-                   }
-                  }
-                  if(predictMyEnemyDest){
-                   if(!shouldPredictMyEnemyDest){
-                    predictMyEnemyDest=false;
-                    stoppedPredictingMyEnemyDestCanPredictAgainTimer=stoppedPredictingMyEnemyDestCanPredictAgainTimeInterval;
-                   }
-                  }
-                  ai.MyDest=ai.MyEnemy.transform.position;
-                  if(predictMyEnemyDest){
-                   ai.MyDest=ai.MyEnemy.transform.position+myEnemyBaseAI.characterController.transform.forward*predictMyEnemyDestDis;
+                  if(me.IsTraversingPath()){
+                   me.MoveStop();
                   }else{
-                   if(me.characterController!=null){
-                    if(inTheWayColliderHitsCount>0){
-                     for(int i=0;i<inTheWayColliderHitsCount;++i){
-                      RaycastHit hit=inTheWayColliderHits[i];
-                      if(Math.Abs(hit.collider.transform.position.z-me.transform.position.z)>ai.attackDistance.z||
-                         Math.Abs(hit.collider.transform.position.y-me.transform.position.y)>ai.attackDistance.y||
-                         Math.Abs(hit.collider.transform.position.x-me.transform.position.x)>ai.attackDistance.x
-                      ){
-                       continue;
-                      }
-                      if(
-                       hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
-                       actorHit.characterController!=null&&
-                       (actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude
-                      ){
-                       Log.DebugMessage("'there's someone between me and my enemy':"+actorHit.name);
-                       Vector3 cross=Vector3.Cross(me.transform.root.position,actorHit.transform.root.position);
-                       Debug.DrawLine(actorHit.transform.root.position,me.transform.root.position,Color.gray,1f);
-                       Debug.DrawRay(actorHit.transform.root.position,cross,Color.gray,1f);
-                       Vector3 right=cross;
-                       right=Vector3.ProjectOnPlane(right,Vector3.up);
-                       right.Normalize();
-                       Debug.DrawRay(actorHit.transform.root.position,right,Color.gray,1f);
-                       Vector3 cross2=Vector3.Cross(actorHit.transform.root.position+right,actorHit.transform.root.position+Vector3.up);
-                       Vector3 forward=cross2;
-                       forward=Vector3.ProjectOnPlane(forward,Vector3.up);
-                       forward.Normalize();
-                       Debug.DrawRay(actorHit.transform.root.position,forward,Color.gray,1f);
-                       int sign=1;
-                       float disFromActor1=3.0f;
-                       float disFromActor2=1.5f;
-                       switch(avoidMode){
-                        default:{
-                         sign=me.math_random.CoinFlip()?-1:1;
-                         disFromActor1=(float)me.math_random.NextDouble(2.0d,6d);
-                         disFromActor2=(float)me.math_random.NextDouble(1.0d,6d);
-                         avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRight;
-                         break;
-                        }
-                        case(AvoidMode.MoveLeft):{
-                         sign=-1;
-                         disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
-                         disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
-                         avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRandom;
-                         break;
-                        }
-                        case(AvoidMode.MoveRight):{
-                         sign=1;
-                         disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
-                         disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
-                         avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveRight:AvoidMode.MoveRandom;
-                         break;
-                        }
+                   if(shouldPredictMyEnemyDest){
+                    if(stoppedPredictingMyEnemyDestCanPredictAgainTimer<=0f){
+                     predictMyEnemyDest=true;
+                    }
+                   }
+                   if(predictMyEnemyDest){
+                    if(!shouldPredictMyEnemyDest){
+                     predictMyEnemyDest=false;
+                     stoppedPredictingMyEnemyDestCanPredictAgainTimer=stoppedPredictingMyEnemyDestCanPredictAgainTimeInterval;
+                    }
+                   }
+                   ai.MyDest=ai.MyEnemy.transform.position;
+                   if(predictMyEnemyDest){
+                    ai.MyDest=ai.MyEnemy.transform.position+myEnemyBaseAI.characterController.transform.forward*predictMyEnemyDestDis;
+                   }else{
+                    if(me.characterController!=null){
+                     if(inTheWayColliderHitsCount>0){
+                      for(int i=0;i<inTheWayColliderHitsCount;++i){
+                       RaycastHit hit=inTheWayColliderHits[i];
+                       if(Math.Abs(hit.collider.transform.position.z-me.transform.position.z)>ai.attackDistance.z||
+                          Math.Abs(hit.collider.transform.position.y-me.transform.position.y)>ai.attackDistance.y||
+                          Math.Abs(hit.collider.transform.position.x-me.transform.position.x)>ai.attackDistance.x
+                       ){
+                        continue;
                        }
-                       ai.MyDest=
-                        actorHit.transform.root.position+
-                         ((right*sign)*disFromActor1-forward*disFromActor2)*
-                          (actorHit.characterController.character.radius+me.characterController.character.radius)+
-                           Vector3.down*(me.height/2f);
-                       break;
+                       if(
+                        hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
+                        actorHit.characterController!=null&&
+                        (actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude
+                       ){
+                        Log.DebugMessage("'there's someone between me and my enemy':"+actorHit.name);
+                        Vector3 cross=Vector3.Cross(me.transform.root.position,actorHit.transform.root.position);
+                        Debug.DrawLine(actorHit.transform.root.position,me.transform.root.position,Color.gray,1f);
+                        Debug.DrawRay(actorHit.transform.root.position,cross,Color.gray,1f);
+                        Vector3 right=cross;
+                        right=Vector3.ProjectOnPlane(right,Vector3.up);
+                        right.Normalize();
+                        Debug.DrawRay(actorHit.transform.root.position,right,Color.gray,1f);
+                        Vector3 cross2=Vector3.Cross(actorHit.transform.root.position+right,actorHit.transform.root.position+Vector3.up);
+                        Vector3 forward=cross2;
+                        forward=Vector3.ProjectOnPlane(forward,Vector3.up);
+                        forward.Normalize();
+                        Debug.DrawRay(actorHit.transform.root.position,forward,Color.gray,1f);
+                        int sign=1;
+                        float disFromActor1=3.0f;
+                        float disFromActor2=1.5f;
+                        switch(avoidMode){
+                         default:{
+                          sign=me.math_random.CoinFlip()?-1:1;
+                          disFromActor1=(float)me.math_random.NextDouble(2.0d,6d);
+                          disFromActor2=(float)me.math_random.NextDouble(1.0d,6d);
+                          avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRight;
+                          break;
+                         }
+                         case(AvoidMode.MoveLeft):{
+                          sign=-1;
+                          disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
+                          disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
+                          avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRandom;
+                          break;
+                         }
+                         case(AvoidMode.MoveRight):{
+                          sign=1;
+                          disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
+                          disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
+                          avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveRight:AvoidMode.MoveRandom;
+                          break;
+                         }
+                        }
+                        ai.MyDest=
+                         actorHit.transform.root.position+
+                          ((right*sign)*disFromActor1-forward*disFromActor2)*
+                           (actorHit.characterController.character.radius+me.characterController.character.radius)+
+                            Vector3.down*(me.height/2f);
+                        break;
+                       }
                       }
                      }
                     }
                    }
+                   me.Move(ai.MyDest);
                   }
                  }
-                 ai.DoSkill();
-                 me.Move(ai.MyDest);
                  previousMyEnemyPos=myEnemyPos;
                 }
              internal Coroutine getDataCoroutine;
