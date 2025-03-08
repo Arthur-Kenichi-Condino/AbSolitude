@@ -50,8 +50,8 @@ namespace AKCondinoO.Sims.Actors{
          ai.MyEnemy=null;
         }
      [NonSerialized]internal float targetTimeout=30f;
-      [NonSerialized]internal float targetCooldownAfterTimeout=6f;
-      [NonSerialized]internal float targetFastTimeout=5f;
+      [NonSerialized]internal float targetCooldownAfterTimeout=3f;
+      [NonSerialized]internal float targetFastTimeout=10f;
        [NonSerialized]internal float targetCooldownAfterFastTimeout=2f;
      internal readonly Dictionary<(Type simType,ulong number),(GotTargetMode mode,EnemyPriority priority)>targetsByPriority=new Dictionary<(Type,ulong),(GotTargetMode,EnemyPriority)>();
       internal readonly Dictionary<(Type simType,ulong number),float>targetTimeouts =new Dictionary<(Type,ulong),float>();

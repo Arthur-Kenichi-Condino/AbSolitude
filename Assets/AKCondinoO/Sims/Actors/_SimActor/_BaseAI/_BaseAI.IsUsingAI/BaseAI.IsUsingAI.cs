@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]internal bool sniper=false;
      [SerializeField]protected bool doIdleMove=true;
-     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(1f/2f),0.0005f*(2f));
+     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(4f/2f),0.125f*(2f));
         internal partial class AI{
          [NonSerialized]BaseAI me;
             internal AI(BaseAI me){

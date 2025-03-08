@@ -32,12 +32,13 @@ namespace AKCondinoO.Sims.Actors{
                 [NonSerialized]bool hasJustAvoided;
                  [NonSerialized]float hasFriendlyTargetsToAvoidMaxTime=8f;
                  [NonSerialized]float hasFriendlyTargetsToAvoidTimer;
-             [NonSerialized]protected float travelMaxTime=2f;
+             [NonSerialized]protected float travelMaxTime=.5f;
               [NonSerialized]protected float travelTime;
                 internal void Finish(){
                  firstAttack=false;
                 }
                 internal void Start(){
+                 Log.DebugMessage("ATTACK_ST:Start");
                  firstAttack=true;
                  targetsToAvoidRefreshedFlag=false;
                  avoidMode=AvoidMode.MoveAway;
@@ -51,131 +52,134 @@ namespace AKCondinoO.Sims.Actors{
                   me.MoveStop();
                   return;
                  }
-                 if(firstAttack){
-                  //Log.DebugMessage("'firstAttack'");
-                  me.MoveStop();
-                  if(me.Attack(ai.MyEnemy)){
-                   firstAttack=false;
-                  }else{
-                   return;
-                  }
-                 }
+                 //me.MoveStop();
                  ai.DoSkill();
-                 if(avoiding&&avoidingMoving){
-                  if(!me.IsTraversingPath()){
-                   //Log.DebugMessage("'stop avoiding':ai.MyPathfinding:"+ai.MyPathfinding);
-                   shouldAvoid=false;
-                   avoiding=false;
-                   avoidingMoving=false;
-                   hasJustAvoided=true;
-                  }else{
-                   //Log.DebugMessage("'I am avoiding'");
-                   //Debug.DrawLine(me.transform.root.position,ai.MyDest,Color.gray,1f);
-                   travelTime+=Time.deltaTime;
-                   if(travelTime>=travelMaxTime){
-                    travelTime=0f;
-                    shouldAvoid=false;
-                    avoiding=false;
-                    avoidingMoving=false;
-                    hasJustAvoided=true;
-                   }
-                  }
+                 if(me.Attack(ai.MyEnemy)){
                  }
-                 if(targetsToAvoidRefreshedFlag){
-                  targetsToAvoidRefreshedFlag=false;
-                  shouldAvoid=hasFriendlyTargetsToAvoid.Count>0;
-                 }
-                 if(!shouldAvoid){
-                  avoiding=false;
-                  avoidingMoving=false;
-                  hasFriendlyTargetsToAvoidTimer=0f;
-                 }else{
-                  hasFriendlyTargetsToAvoidTimer+=Time.deltaTime;
-                 }
-                 //Log.DebugMessage("shouldAvoid:"+shouldAvoid);
-                 if(shouldAvoid&&!hasJustAvoided){
-                  if(!me.IsAttacking()){
-                   if(hasFriendlyTargetsToAvoidTimer>=hasFriendlyTargetsToAvoidMaxTime){
-                    hasFriendlyTargetsToAvoidTimer=0f;
-                    me.MoveStop();
-                    //Log.DebugMessage("'TeleportToRandomNearMyEnemy(ai.attackDistance)'");
-                    me.TeleportToRandomNearMyEnemy(ai.attackDistance);
-                   }else{
-                    if(!me.IsTraversingPath()){
-                     if(!avoiding){
-                      switch(avoidMode){
-                       default:{
-                        Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
-                        destDir.y=0f;
-                        float destAngle=0f;
-                        for(int i=0;i<hasFriendlyTargetsToAvoid.Count;++i){
-                         //Log.DebugMessage("hasFriendlyTargetsToAvoid["+i+"].sim.name:"+hasFriendlyTargetsToAvoid[i].sim.name);
-                         RaycastHit hit=hasFriendlyTargetsToAvoid[i].hit;
-                         SimObject simHit=hasFriendlyTargetsToAvoid[i].sim;
-                         Vector3 dirFromEnemyToAlly=(simHit.transform.root.position-MyEnemy.transform.root.position).normalized;
-                         dirFromEnemyToAlly.y=0f;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.gray,1f);
-                         Vector3 dirFromEnemyToMe=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
-                         dirFromEnemyToMe.y=0f;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.gray,1f);
-                         float angle=180f-Vector3.Angle(dirFromEnemyToMe,dirFromEnemyToAlly);
-                         destAngle+=angle;
-                        }
-                        if(destAngle!=0f){
-                         destAngle/=hasFriendlyTargetsToAvoid.Count;
-                         destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
-                        }
-                        Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.1f);
-                        //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
-                        ai.MyDest=dest;
-                        //Log.DebugMessage("'avoiding, move away'");
-                        avoidMode=AvoidMode.MoveRandom;
-                        break;
-                       }
-                       case(AvoidMode.MoveRandom):{
-                        Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
-                        destDir.y=0f;
-                        float destAngle=0f;
-                        destAngle+=(float)me.math_random.NextDouble(-90f,90f);
-                        if(destAngle!=0f){
-                         destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
-                         //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
-                        }
-                        Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.5f);
-                        //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
-                        ai.MyDest=dest;
-                        //Log.DebugMessage("'avoiding, random move'");
-                        avoidMode=AvoidMode.MoveAway;
-                        break;
-                       }
-                      }
-                      avoiding=true;
-                     }
-                     if(me.Move(ai.MyDest)){
-                      avoidingMoving=true;
-                      //Log.DebugMessage("'avoiding, move!'");
-                     }else{
-                      travelTime+=Time.deltaTime;
-                      if(travelTime>=travelMaxTime){
-                       travelTime=0f;
-                       shouldAvoid=false;
-                       avoiding=false;
-                       avoidingMoving=false;
-                       hasJustAvoided=true;
-                      }
-                     }
-                    }
-                   }
-                  }
-                 }
-                 if(!shouldAvoid||hasJustAvoided){
-                  //Log.DebugMessage("'MoveStop()'");
-                  me.MoveStop();
-                  if(me.Attack(ai.MyEnemy)){
-                   hasJustAvoided=false;
-                  }
-                 }
+                 //if(firstAttack){
+                 // //Log.DebugMessage("'firstAttack'");
+                 // me.MoveStop();
+                 // if(me.Attack(ai.MyEnemy)){
+                 //  firstAttack=false;
+                 // }else{
+                 //  return;
+                 // }
+                 //}
+                 //if(avoiding&&avoidingMoving){
+                 // if(!me.IsTraversingPath()){
+                 //  //Log.DebugMessage("'stop avoiding':ai.MyPathfinding:"+ai.MyPathfinding);
+                 //  shouldAvoid=false;
+                 //  avoiding=false;
+                 //  avoidingMoving=false;
+                 //  hasJustAvoided=true;
+                 // }else{
+                 //  //Log.DebugMessage("'I am avoiding'");
+                 //  //Debug.DrawLine(me.transform.root.position,ai.MyDest,Color.gray,1f);
+                 //  travelTime+=Time.deltaTime;
+                 //  if(travelTime>=travelMaxTime){
+                 //   travelTime=0f;
+                 //   shouldAvoid=false;
+                 //   avoiding=false;
+                 //   avoidingMoving=false;
+                 //   hasJustAvoided=true;
+                 //  }
+                 // }
+                 //}
+                 //if(targetsToAvoidRefreshedFlag){
+                 // targetsToAvoidRefreshedFlag=false;
+                 // shouldAvoid=hasFriendlyTargetsToAvoid.Count>0;
+                 //}
+                 //if(!shouldAvoid){
+                 // avoiding=false;
+                 // avoidingMoving=false;
+                 // hasFriendlyTargetsToAvoidTimer=0f;
+                 //}else{
+                 // hasFriendlyTargetsToAvoidTimer+=Time.deltaTime;
+                 //}
+                 ////Log.DebugMessage("shouldAvoid:"+shouldAvoid);
+                 //if(shouldAvoid&&!hasJustAvoided){
+                 // if(!me.IsAttacking()){
+                 //  if(hasFriendlyTargetsToAvoidTimer>=hasFriendlyTargetsToAvoidMaxTime){
+                 //   hasFriendlyTargetsToAvoidTimer=0f;
+                 //   me.MoveStop();
+                 //   //Log.DebugMessage("'TeleportToRandomNearMyEnemy(ai.attackDistance)'");
+                 //   me.TeleportToRandomNearMyEnemy(ai.attackDistance);
+                 //  }else{
+                 //   if(!me.IsTraversingPath()){
+                 //    if(!avoiding){
+                 //     switch(avoidMode){
+                 //      default:{
+                 //       Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
+                 //       destDir.y=0f;
+                 //       float destAngle=0f;
+                 //       for(int i=0;i<hasFriendlyTargetsToAvoid.Count;++i){
+                 //        //Log.DebugMessage("hasFriendlyTargetsToAvoid["+i+"].sim.name:"+hasFriendlyTargetsToAvoid[i].sim.name);
+                 //        RaycastHit hit=hasFriendlyTargetsToAvoid[i].hit;
+                 //        SimObject simHit=hasFriendlyTargetsToAvoid[i].sim;
+                 //        Vector3 dirFromEnemyToAlly=(simHit.transform.root.position-MyEnemy.transform.root.position).normalized;
+                 //        dirFromEnemyToAlly.y=0f;
+                 //        //Debug.DrawRay(MyEnemy.transform.root.position,dirFromAllyToEnemy,Color.gray,1f);
+                 //        Vector3 dirFromEnemyToMe=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
+                 //        dirFromEnemyToMe.y=0f;
+                 //        //Debug.DrawRay(MyEnemy.transform.root.position,dirFromEnemyToMe,Color.gray,1f);
+                 //        float angle=180f-Vector3.Angle(dirFromEnemyToMe,dirFromEnemyToAlly);
+                 //        destAngle+=angle;
+                 //       }
+                 //       if(destAngle!=0f){
+                 //        destAngle/=hasFriendlyTargetsToAvoid.Count;
+                 //        destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+                 //        //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
+                 //       }
+                 //       Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.05f);
+                 //       //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
+                 //       ai.MyDest=dest;
+                 //       //Log.DebugMessage("'avoiding, move away'");
+                 //       avoidMode=AvoidMode.MoveRandom;
+                 //       break;
+                 //      }
+                 //      case(AvoidMode.MoveRandom):{
+                 //       Vector3 destDir=(me.transform.root.position-MyEnemy.transform.root.position).normalized;
+                 //       destDir.y=0f;
+                 //       float destAngle=0f;
+                 //       destAngle+=(float)me.math_random.NextDouble(-90f,90f);
+                 //       if(destAngle!=0f){
+                 //        destDir=Quaternion.AngleAxis(destAngle,Vector3.up)*destDir;
+                 //        //Debug.DrawRay(MyEnemy.transform.root.position,destDir,Color.gray,1f);
+                 //       }
+                 //       Vector3 dest=MyEnemy.transform.root.position+(destDir*ai.attackDistance.z*1.05f);
+                 //       //Debug.DrawLine(me.transform.root.position,dest,Color.gray,1f);
+                 //       ai.MyDest=dest;
+                 //       //Log.DebugMessage("'avoiding, random move'");
+                 //       avoidMode=AvoidMode.MoveAway;
+                 //       break;
+                 //      }
+                 //     }
+                 //     avoiding=true;
+                 //    }
+                 //    if(me.Move(ai.MyDest,true)){
+                 //     avoidingMoving=true;
+                 //     //Log.DebugMessage("'avoiding, move!'");
+                 //    }else{
+                 //     travelTime+=Time.deltaTime;
+                 //     if(travelTime>=travelMaxTime){
+                 //      travelTime=0f;
+                 //      shouldAvoid=false;
+                 //      avoiding=false;
+                 //      avoidingMoving=false;
+                 //      hasJustAvoided=true;
+                 //     }
+                 //    }
+                 //   }
+                 //  }
+                 // }
+                 //}
+                 //if(!shouldAvoid||hasJustAvoided){
+                 // //Log.DebugMessage("'MoveStop()'");
+                 // me.MoveStop();
+                 // if(me.Attack(ai.MyEnemy)){
+                 //  hasJustAvoided=false;
+                 // }
+                 //}
                 }
              [NonSerialized]internal Coroutine getDataCoroutine;
              [NonSerialized]protected WaitUntil getDataThrottler;

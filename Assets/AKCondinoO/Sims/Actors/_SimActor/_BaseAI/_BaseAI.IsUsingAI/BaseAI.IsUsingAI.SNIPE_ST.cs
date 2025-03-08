@@ -52,159 +52,159 @@ namespace AKCondinoO.Sims.Actors{
                  tryShootTimer=0f;
                 }
                 internal void DoRoutine(){
-                 //  TO DO
-                 //  se tentar mover várias vezes depois de um tempo e não conseguir ficar longe o suficiente, atirar
-                 //  corrigir direção do tiro
-                 timer+=Time.deltaTime;
-                 if(MyEnemy==null){
-                  me.MoveStop();
-                  return;
-                 }
-                 float myMoveSpeed=Mathf.Max(
-                  me.moveMaxVelocity.x,
-                  me.moveMaxVelocity.y,
-                  me.moveMaxVelocity.z
-                 );
-                 float myEnemyMoveSpeed=0f;
-                 if(MyEnemy is BaseAI myEnemyBaseAI){
-                  myEnemyMoveSpeed=Mathf.Max(
-                   myEnemyBaseAI.moveMaxVelocity.x,
-                   myEnemyBaseAI.moveMaxVelocity.y,
-                   myEnemyBaseAI.moveMaxVelocity.z
-                  );
-                 }
-                 float dis1=     myMoveSpeed*retreatTime;
-                 float dis2=myEnemyMoveSpeed*retreatTime;
-                 float ratio;
-                 if(dis2<=0f){
-                  ratio=1f;
-                 }else{
-                  ratio=dis1/dis2;
-                 }
-                 retreatDis=ratio*dis1;
-                 //Log.DebugMessage("retreatDis:"+retreatDis);
-                 ai.DoSkill();
-                 if(reloading){
-                  if(!me.IsReloading()){
-                   alternateRetreatShoot=true;
-                   reloading=false;
-                   if(me.characterController!=null){
-                      me.characterController.isAiming=false;
-                   }
-                  }else{
-                   if(
-                    !me.IsTraversingPath()
-                   ){
-                    me.TurnToMyEnemy();
-                   }
-                  }
-                 }
-                 if(shooting){
-                  if(
-                   me.IsTraversingPath()
-                  ){
-                   me.MoveStop();
-                  }
-                  if(!me.IsShooting()){
-                   alternateRetreatShoot=true;
-                   shooting=false;
-                   if(me.characterController!=null){
-                      me.characterController.isAiming=false;
-                   }
-                  }else{
-                   me.TurnToMyEnemy();
-                  }
-                 }
-                 if(moving){
-                  if(
-                   !me.IsTraversingPath()
-                  ){
-                   //Log.DebugMessage("'not me.IsTraversingPath':moving=false");
-                   alternateRetreatShoot=true;
-                   moving=false;
-                  }
-                 }
-                 //Log.DebugMessage("ai.MyPathfinding:"+ai.MyPathfinding);
-                 if(!reloading&&
-                    !shooting&&
-                    !moving
-                 ){
-                  if(alternateRetreatShoot){
-                   alternateRetreatShoot=false;
-                   movingDestSet=null;
-                   noDestTimer=0f;
-                   tryMoveTimer=0f;
-                   tryShootTimer=0f;
-                   tryingShooting=!tryingShooting;
-                  }
-                  if(tryingShooting){
-                   me.MoveStop();
-                   //Log.DebugMessage("tryingShooting");
-                   if(me.TryShoot(MyEnemy,out bool r,out bool s)){
-                    if(s){
-                     shooting=true;
-                    }else if(r){
-                     reloading=true;
-                    }else{
-                     alternateRetreatShoot=true;
-                    }
-                   }else{
-                    tryShootTimer+=Time.deltaTime;
-                    if(tryShootTimer>=tryShootMaxTime){
-                     tryShootTimer=0f;
-                     tryCount++;
-                     //  timer to cancel shoot and try movement
-                     // then total snipe try count ++
-                     // then add cooldown to SNIPE_ST
-                     alternateRetreatShoot=true;
-                    }
-                   }
-                  }else{
-                   //Log.DebugMessage("!tryingShooting");
-                   if(Vector3.Distance(me.transform.position,MyEnemy.transform.position)<=retreatDis){
-                    if(movingDestSet==null){
-                     Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;
-                     dir.y=0f;
-                     Vector3 dest=MyEnemy.transform.position+dir*retreatDis+Vector3.down*(me.height/2f);
-                     if(Vector3.Distance(ai.MyDest,me.transform.position)<=.125f){
-                      if(me.GetRandomPosition(MyEnemy.transform.position,retreatDis,out Vector3 randomPos)){
-                       dest=randomPos;
-                       movingDestSet=dest;
-                      }
-                     }else{
-                      movingDestSet=dest;
-                     }
-                    }
-                    if(movingDestSet!=null){
-                     ai.MyDest=movingDestSet.Value;
-                     if(me.Move(ai.MyDest)){
-                      Debug.DrawLine(MyEnemy.transform.position,ai.MyDest,Color.blue,5f);
-                      moving=true;
-                     }else{
-                      tryMoveTimer+=Time.deltaTime;
-                      if(tryMoveTimer>=tryMoveMaxTime){
-                       tryMoveTimer=0f;
-                       tryCount++;
-                       //  timer to cancel movement and try shoot
-                       // then total snipe try count ++
-                       // then add cooldown to SNIPE_ST
-                       alternateRetreatShoot=true;
-                      }
-                     }
-                    }else{
-                     noDestTimer+=Time.deltaTime;
-                     if(noDestTimer>=noDestMaxTime){
-                      noDestTimer=0f;
-                      tryCount++;
-                      //  try count ++
-                      alternateRetreatShoot=true;
-                     }
-                    }
-                   }else{
-                    alternateRetreatShoot=true;
-                   }
-                  }
-                 }
+                 ////  TO DO
+                 ////  se tentar mover várias vezes depois de um tempo e não conseguir ficar longe o suficiente, atirar
+                 ////  corrigir direção do tiro
+                 //timer+=Time.deltaTime;
+                 //if(MyEnemy==null){
+                 // me.MoveStop();
+                 // return;
+                 //}
+                 //float myMoveSpeed=Mathf.Max(
+                 // me.moveMaxVelocity.x,
+                 // me.moveMaxVelocity.y,
+                 // me.moveMaxVelocity.z
+                 //);
+                 //float myEnemyMoveSpeed=0f;
+                 //if(MyEnemy is BaseAI myEnemyBaseAI){
+                 // myEnemyMoveSpeed=Mathf.Max(
+                 //  myEnemyBaseAI.moveMaxVelocity.x,
+                 //  myEnemyBaseAI.moveMaxVelocity.y,
+                 //  myEnemyBaseAI.moveMaxVelocity.z
+                 // );
+                 //}
+                 //float dis1=     myMoveSpeed*retreatTime;
+                 //float dis2=myEnemyMoveSpeed*retreatTime;
+                 //float ratio;
+                 //if(dis2<=0f){
+                 // ratio=1f;
+                 //}else{
+                 // ratio=dis1/dis2;
+                 //}
+                 //retreatDis=ratio*dis1;
+                 ////Log.DebugMessage("retreatDis:"+retreatDis);
+                 //ai.DoSkill();
+                 //if(reloading){
+                 // if(!me.IsReloading()){
+                 //  alternateRetreatShoot=true;
+                 //  reloading=false;
+                 //  if(me.characterController!=null){
+                 //     me.characterController.isAiming=false;
+                 //  }
+                 // }else{
+                 //  if(
+                 //   !me.IsTraversingPath()
+                 //  ){
+                 //   me.TurnToMyEnemy();
+                 //  }
+                 // }
+                 //}
+                 //if(shooting){
+                 // if(
+                 //  me.IsTraversingPath()
+                 // ){
+                 //  me.MoveStop();
+                 // }
+                 // if(!me.IsShooting()){
+                 //  alternateRetreatShoot=true;
+                 //  shooting=false;
+                 //  if(me.characterController!=null){
+                 //     me.characterController.isAiming=false;
+                 //  }
+                 // }else{
+                 //  me.TurnToMyEnemy();
+                 // }
+                 //}
+                 //if(moving){
+                 // if(
+                 //  !me.IsTraversingPath()
+                 // ){
+                 //  //Log.DebugMessage("'not me.IsTraversingPath':moving=false");
+                 //  alternateRetreatShoot=true;
+                 //  moving=false;
+                 // }
+                 //}
+                 ////Log.DebugMessage("ai.MyPathfinding:"+ai.MyPathfinding);
+                 //if(!reloading&&
+                 //   !shooting&&
+                 //   !moving
+                 //){
+                 // if(alternateRetreatShoot){
+                 //  alternateRetreatShoot=false;
+                 //  movingDestSet=null;
+                 //  noDestTimer=0f;
+                 //  tryMoveTimer=0f;
+                 //  tryShootTimer=0f;
+                 //  tryingShooting=!tryingShooting;
+                 // }
+                 // if(tryingShooting){
+                 //  me.MoveStop();
+                 //  //Log.DebugMessage("tryingShooting");
+                 //  if(me.TryShoot(MyEnemy,out bool r,out bool s)){
+                 //   if(s){
+                 //    shooting=true;
+                 //   }else if(r){
+                 //    reloading=true;
+                 //   }else{
+                 //    alternateRetreatShoot=true;
+                 //   }
+                 //  }else{
+                 //   tryShootTimer+=Time.deltaTime;
+                 //   if(tryShootTimer>=tryShootMaxTime){
+                 //    tryShootTimer=0f;
+                 //    tryCount++;
+                 //    //  timer to cancel shoot and try movement
+                 //    // then total snipe try count ++
+                 //    // then add cooldown to SNIPE_ST
+                 //    alternateRetreatShoot=true;
+                 //   }
+                 //  }
+                 // }else{
+                 //  //Log.DebugMessage("!tryingShooting");
+                 //  if(Vector3.Distance(me.transform.position,MyEnemy.transform.position)<=retreatDis){
+                 //   if(movingDestSet==null){
+                 //    Vector3 dir=(me.transform.position-MyEnemy.transform.position).normalized;
+                 //    dir.y=0f;
+                 //    Vector3 dest=MyEnemy.transform.position+dir*retreatDis+Vector3.down*(me.height/2f);
+                 //    if(Vector3.Distance(ai.MyDest,me.transform.position)<=.125f){
+                 //     if(me.GetRandomPosition(MyEnemy.transform.position,retreatDis,out Vector3 randomPos)){
+                 //      dest=randomPos;
+                 //      movingDestSet=dest;
+                 //     }
+                 //    }else{
+                 //     movingDestSet=dest;
+                 //    }
+                 //   }
+                 //   if(movingDestSet!=null){
+                 //    ai.MyDest=movingDestSet.Value;
+                 //    if(me.Move(ai.MyDest)){
+                 //     Debug.DrawLine(MyEnemy.transform.position,ai.MyDest,Color.blue,5f);
+                 //     moving=true;
+                 //    }else{
+                 //     tryMoveTimer+=Time.deltaTime;
+                 //     if(tryMoveTimer>=tryMoveMaxTime){
+                 //      tryMoveTimer=0f;
+                 //      tryCount++;
+                 //      //  timer to cancel movement and try shoot
+                 //      // then total snipe try count ++
+                 //      // then add cooldown to SNIPE_ST
+                 //      alternateRetreatShoot=true;
+                 //     }
+                 //    }
+                 //   }else{
+                 //    noDestTimer+=Time.deltaTime;
+                 //    if(noDestTimer>=noDestMaxTime){
+                 //     noDestTimer=0f;
+                 //     tryCount++;
+                 //     //  try count ++
+                 //     alternateRetreatShoot=true;
+                 //    }
+                 //   }
+                 //  }else{
+                 //   alternateRetreatShoot=true;
+                 //  }
+                 // }
+                 //}
                 }
             }
         }

@@ -19,76 +19,173 @@ namespace AKCondinoO.Sims.Actors{
         internal partial class AI{
          internal State MyState=State.IDLE_ST;
           State lastState;
+         [NonSerialized]SimObject currentMyEnemy;
+         [NonSerialized]internal BaseAI myEnemyBaseAI;
+         [NonSerialized]internal Vector3 myEnemyPos,previousMyEnemyPos;
+         [NonSerialized]internal bool myEnemyChangedPos;
+         [NonSerialized]internal float myMoveSpeed;
+         [NonSerialized]internal float myEnemyMoveSpeed;
+         [NonSerialized]internal bool traveling;
+         [NonSerialized]protected float travelMaxTime=2f;
+          [NonSerialized]protected float travelTime;
+         [NonSerialized]internal float predictMyEnemyDestDis;
+         [NonSerialized]protected float renewDestinationMyEnemyMovedTimeInterval=.125f/2f;
+          [NonSerialized]protected float renewDestinationMyEnemyMovedTimer;
+         [NonSerialized]internal bool changeDest;
+         [NonSerialized]internal bool shouldPredictMyEnemyDest;
             void UpdateMyState(){
              lastState=MyState;
-             if(me.IsDead()){
-              SetMyState(State.DEAD_ST);
-              goto _MyStateSet;
-             }else{
-              if      (MyState==State. SNIPE_ST){
-               //  so the animation is completed
-               if(me.IsShooting()||me.IsReloading()){
-                SetMyState(State. SNIPE_ST);
-                goto _MyStateSet;
-               }
-              }else if(MyState==State.ATTACK_ST){
-               //  so the animation is completed
-               if(me.IsAttacking()||attackSt.firstAttack){
-                SetMyState(State.ATTACK_ST);
-                goto _MyStateSet;
-               }
-              }
-              if(MyEnemy!=null){
-               bool canSnipe=snipeSt.tryCount<snipeSt.maxTryCount;
-               if(snipeSt.onStateCooldown>0f){
-                snipeSt.onStateCooldown-=Time.deltaTime;
-               }
-               canSnipe&=snipeSt.onStateCooldown<=0f;
-               if(canSnipe){
-                if(me.sniper){
-                 if(isInAttackRangeWithWeapon&&hasWeapon){
-                  if(!isInAttackRange||(
-                    me.IsFasterThan(MyEnemy)&&(
-                    attackDistance.z<attackDistanceWithWeapon.z||
-                    attackDistance.x<attackDistanceWithWeapon.x||
-                    attackDistance.y<attackDistanceWithWeapon.y)
-                   )
-                  ){
-                   SetMyState(State.SNIPE_ST);
-                   goto _MyStateSet;
-                  }
-                 }
-                }
-               }
-               if(isInAttackRange){
-                SetMyState(State.ATTACK_ST);
-                goto _MyStateSet;
-               }
-               if(canSnipe){
-                if(MyState==State.SNIPE_ST){
-                 if(snipeSt.timer<snipeSt.minTimeBeforeCanChase){
-                  SetMyState(State.SNIPE_ST);
-                  goto _MyStateSet;
-                 }
-                }
-               }
-               SetMyState(State.CHASE_ST);
-               goto _MyStateSet;
+             if(MyEnemy!=currentMyEnemy){
+              myEnemyBaseAI=MyEnemy as BaseAI;
+              if(MyEnemy==null){
+               myEnemyPos=previousMyEnemyPos=me.transform.position;
               }else{
-               if(me.masterId!=null){
-                float disToMaster=me.GetDistance(me,me.masterSimObject);
-                if(disToMaster>=0f){
-                 if(disToMaster>8f){
-                  //Log.DebugMessage("I should follow my master:"+me.masterSimObject+";me:"+me);
-                  SetMyState(State.FOLLOW_ST);
-                  goto _MyStateSet;
-                 }
-                }
-               }
-               SetMyState(State.IDLE_ST);
-               goto _MyStateSet;
+               myEnemyPos=previousMyEnemyPos=MyEnemy.transform.position;
+              }
+              travelTime=0f;
+              renewDestinationMyEnemyMovedTimer=0f;
+              currentMyEnemy=MyEnemy;
+             }
+             traveling=me.IsTraversingPath();
+             changeDest=false;
+             shouldPredictMyEnemyDest=false;
+             myMoveSpeed=Mathf.Max(
+              me.moveMaxVelocity.x,
+              me.moveMaxVelocity.y,
+              me.moveMaxVelocity.z
+             );
+             myEnemyMoveSpeed=0f;
+             if(MyEnemy==null){
+              myEnemyChangedPos=false;
+             }else{
+              previousMyEnemyPos=myEnemyPos;
+              myEnemyPos=MyEnemy.transform.position;
+              myEnemyChangedPos=(myEnemyPos!=previousMyEnemyPos);
+              if(myEnemyBaseAI!=null){
+               myEnemyMoveSpeed=Mathf.Max(
+                myEnemyBaseAI.moveMaxVelocity.x,
+                myEnemyBaseAI.moveMaxVelocity.y,
+                myEnemyBaseAI.moveMaxVelocity.z
+               );
               }
              }
+             float dis1=     myMoveSpeed*Time.deltaTime*1.5f;
+             float dis2=myEnemyMoveSpeed*Time.deltaTime*1.5f;
+             float ratio;
+             if(dis2<=0f){
+              ratio=1f;
+             }else{
+              ratio=dis1/dis2;
+             }
+             predictMyEnemyDestDis=ratio*dis1;
+             if(!traveling){
+              changeDest=true;
+             }else{
+              changeDest=false;
+             }
+             if(MyEnemy==null){
+             }else{
+              if(renewDestinationMyEnemyMovedTimer>0f){
+               renewDestinationMyEnemyMovedTimer-=Time.deltaTime;
+               if(renewDestinationMyEnemyMovedTimer<=0f){
+                changeDest=true;
+                shouldPredictMyEnemyDest=true;
+               }
+              }
+              if(myEnemyChangedPos){
+               //Log.DebugMessage("myEnemyChangedPos");
+               if(renewDestinationMyEnemyMovedTimer<=0f){
+                renewDestinationMyEnemyMovedTimer=renewDestinationMyEnemyMovedTimeInterval;
+               }
+              }
+              if(shouldPredictMyEnemyDest){
+               Log.DebugMessage("shouldPredictMyEnemyDest");
+              }
+              if(changeDest){
+               traveling=false;
+              }
+              if(traveling){
+               travelTime+=Time.deltaTime;
+              }else{
+               travelTime=0f;
+              }
+              //if(isInAttackRange){
+              // SetMyState(State.ATTACK_ST);
+              // goto _MyStateSet;
+              //}
+              SetMyState(State.CHASE_ST);
+              goto _MyStateSet;
+             }
+             SetMyState(State.IDLE_ST);
+             goto _MyStateSet;
+             //if(me.IsDead()){
+             // SetMyState(State.DEAD_ST);
+             // goto _MyStateSet;
+             //}else{
+             // if      (MyState==State. SNIPE_ST&&isInAttackRangeWithWeapon){
+             //  //  so the animation is completed
+             //  if(me.IsShooting()||me.IsReloading()){
+             //   SetMyState(State. SNIPE_ST);
+             //   goto _MyStateSet;
+             //  }
+             // }else if(MyState==State.ATTACK_ST&&isInAttackRange          ){
+             //  //  so the animation is completed
+             //  if(me.IsAttacking()||attackSt.firstAttack){
+             //   SetMyState(State.ATTACK_ST);
+             //   goto _MyStateSet;
+             //  }
+             // }
+             // if(MyEnemy!=null){
+             //  bool canSnipe=snipeSt.tryCount<snipeSt.maxTryCount;
+             //  if(snipeSt.onStateCooldown>0f){
+             //   snipeSt.onStateCooldown-=Time.deltaTime;
+             //  }
+             //  canSnipe&=snipeSt.onStateCooldown<=0f;
+             //  if(canSnipe){
+             //   if(me.sniper){
+             //    if(isInAttackRangeWithWeapon&&hasWeapon){
+             //     if(!isInAttackRange||(
+             //       me.IsFasterThan(MyEnemy)&&(
+             //       attackDistance.z<attackDistanceWithWeapon.z||
+             //       attackDistance.x<attackDistanceWithWeapon.x||
+             //       attackDistance.y<attackDistanceWithWeapon.y)
+             //      )
+             //     ){
+             //      SetMyState(State.SNIPE_ST);
+             //      goto _MyStateSet;
+             //     }
+             //    }
+             //   }
+             //  }
+             //  if(isInAttackRange){
+             //   SetMyState(State.ATTACK_ST);
+             //   goto _MyStateSet;
+             //  }
+             //  if(canSnipe){
+             //   if(MyState==State.SNIPE_ST){
+             //    if(snipeSt.timer<snipeSt.minTimeBeforeCanChase){
+             //     SetMyState(State.SNIPE_ST);
+             //     goto _MyStateSet;
+             //    }
+             //   }
+             //  }
+             //  SetMyState(State.CHASE_ST);
+             //  goto _MyStateSet;
+             // }else{
+             //  if(me.masterId!=null){
+             //   float disToMaster=me.GetDistance(me,me.masterSimObject);
+             //   if(disToMaster>=0f){
+             //    if(disToMaster>8f){
+             //     //Log.DebugMessage("I should follow my master:"+me.masterSimObject+";me:"+me);
+             //     SetMyState(State.FOLLOW_ST);
+             //     goto _MyStateSet;
+             //    }
+             //   }
+             //  }
+             //  SetMyState(State.IDLE_ST);
+             //  goto _MyStateSet;
+             // }
+             //}
              _MyStateSet:{}
             }
             void SetMyState(State state){
