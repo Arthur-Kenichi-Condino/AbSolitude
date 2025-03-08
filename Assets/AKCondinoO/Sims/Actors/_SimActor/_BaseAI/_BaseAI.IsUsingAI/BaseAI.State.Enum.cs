@@ -109,10 +109,18 @@ namespace AKCondinoO.Sims.Actors{
               }else{
                travelTime=0f;
               }
-              //if(isInAttackRange){
+              Vector3 chaseStDest=MyDest;
+              if(changeDest){
+               chaseSt.GetMyDest(out chaseStDest);
+              }
+              if(isInAttackRange){
               // SetMyState(State.ATTACK_ST);
               // goto _MyStateSet;
-              //}
+              }else{
+              }
+              if(changeDest){
+               MyDest=chaseStDest;
+              }
               SetMyState(State.CHASE_ST);
               goto _MyStateSet;
              }

@@ -46,7 +46,7 @@ namespace AKCondinoO.Sims.Actors{
           IsTraversingPath()
          ){
           moveDest=navMeshAgent.transform.position;
-          if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)<=navMeshAgent.stoppingDistance){
+          if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)>navMeshAgent.stoppingDistance){
            navMeshAgent.destination=moveDest;
           }
          }

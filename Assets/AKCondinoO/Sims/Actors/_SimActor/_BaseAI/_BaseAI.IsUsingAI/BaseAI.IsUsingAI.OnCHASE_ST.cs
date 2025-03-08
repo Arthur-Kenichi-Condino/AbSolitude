@@ -61,12 +61,6 @@ namespace AKCondinoO.Sims.Actors{
                  bool traveling=ai.traveling;
                  ai.DoSkill();
                  if(ai.changeDest){
-                  if(ai.shouldPredictMyEnemyDest){
-                   //Log.DebugMessage("dis1:"+dis1+";dis2:"+dis2);
-                   ai.MyDest=ai.MyEnemy.transform.position+ai.myEnemyBaseAI.characterController.transform.forward*ai.predictMyEnemyDestDis;
-                  }else{
-                   ai.MyDest=ai.MyEnemy.transform.position;
-                  }
                   me.Move(ai.MyDest,true);
                  }
                  //if(travelTime>=travelMaxTime){
@@ -256,6 +250,15 @@ namespace AKCondinoO.Sims.Actors{
                  // }
                  // me.Move(ai.MyDest,true);
                  //}
+                }
+                internal void GetMyDest(out Vector3 MyDest){
+                 MyDest=Vector3.zero;
+                 if(ai.shouldPredictMyEnemyDest){
+                  //Log.DebugMessage("dis1:"+dis1+";dis2:"+dis2);
+                  MyDest=ai.MyEnemy.transform.position+ai.myEnemyBaseAI.characterController.transform.forward*ai.predictMyEnemyDestDis;
+                 }else{
+                  MyDest=ai.MyEnemy.transform.position;
+                 }
                 }
              internal Coroutine getDataCoroutine;
              protected WaitUntil getDataThrottler;
