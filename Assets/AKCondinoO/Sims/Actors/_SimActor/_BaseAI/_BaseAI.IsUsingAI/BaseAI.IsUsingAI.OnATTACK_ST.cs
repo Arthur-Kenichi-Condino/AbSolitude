@@ -54,8 +54,8 @@ namespace AKCondinoO.Sims.Actors{
                  }
                  //me.MoveStop();
                  ai.DoSkill();
-                 if(me.Attack(ai.MyEnemy)){
-                 }
+                 //if(me.Attack(ai.MyEnemy)){
+                 //}
                  //if(firstAttack){
                  // //Log.DebugMessage("'firstAttack'");
                  // me.MoveStop();

@@ -113,9 +113,23 @@ namespace AKCondinoO.Sims.Actors{
               if(changeDest){
                chaseSt.GetMyDest(out chaseStDest);
               }
+              if(MyState==State.ATTACK_ST){
+               if(isInAttackRange){
+                SetMyState(State.ATTACK_ST);
+                goto _MyStateSet;
+               }
+              }
               if(isInAttackRange){
-              // SetMyState(State.ATTACK_ST);
-              // goto _MyStateSet;
+               if(changeDest){
+                if(Vector3.Distance(me.navMeshAgent.destination,me.navMeshAgent.transform.position)<=me.navMeshAgent.stoppingDistance){
+                 SetMyState(State.ATTACK_ST);
+                 goto _MyStateSet;
+                //}else if(){
+                }
+               }else{
+                SetMyState(State.ATTACK_ST);
+                goto _MyStateSet;
+               }
               }else{
               }
               if(changeDest){
