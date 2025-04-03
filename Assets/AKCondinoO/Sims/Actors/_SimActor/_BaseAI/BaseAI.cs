@@ -328,35 +328,15 @@ namespace AKCondinoO.Sims.Actors{
              DisableNavMeshAgent();
             }
             if(navMeshAgent.enabled){
+             if(movePauseDelay>0f){
+              movePauseDelay-=Time.deltaTime;
+             }
              if(characterController!=null){
                 characterController.ManualUpdateUsingAI();
              }
              ai.MyPathfinding=GetPathfindingResult();
              ai.Main();
              characterController.character.transform.rotation=aiRotTurnTo.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
-             if(movePauseDelay>0f){
-              movePauseDelay-=Time.deltaTime;
-             }
-             if(
-              IsTraversingPath()
-             ){
-              if(
-               IsAttacking()
-              ){
-               MoveStop();
-               if(ai.MyEnemy!=null){
-                TurnToMyEnemy();
-               }
-              }else{
-               if(!TurnToMoveDest()){
-                if(movePauseDelay<=0f){
-                 MovePause();
-                }
-               }else{
-                MoveResume();
-               }
-              }
-             }
              UpdateMotion(true);
              bool stopNavMesh=navMeshAgentShouldBeStopped;
              stopNavMesh|=movePaused;

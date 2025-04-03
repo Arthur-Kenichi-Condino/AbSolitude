@@ -79,9 +79,8 @@ namespace AKCondinoO.Sims.Actors{
      Vector3 targetDir;
         protected virtual void TurnToTargetDir(Vector3 lookDir){
          if(characterController!=null){
-          Vector3 planarLookDir=lookDir;
+          Vector3 planarLookDir=Vector3.ProjectOnPlane(lookDir,Vector3.up);
           targetDir=planarLookDir.normalized;
-          targetDir=Vector3.ProjectOnPlane(targetDir,Vector3.up);
           targetDir.Normalize();
           if(targetDir==Vector3.zero){
            targetDir=transform.forward;
@@ -104,7 +103,7 @@ namespace AKCondinoO.Sims.Actors{
            animatorPlanarLookEuler.z=0f;
            Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
            //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
-           if(Vector3.Angle(targetDir,animatorPlanarLookDir)<=1.25f){
+           if(Vector3.Angle(targetDir,animatorPlanarLookDir)<=1.25f*(2f)){
             return true;
            }
           }
@@ -116,13 +115,23 @@ namespace AKCondinoO.Sims.Actors{
           return true;
          }
          if(characterController!=null){
+          bool lookDirSet=false;
           Vector3 lookDir=characterController.character.transform.forward;
-          if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
-           if(Vector3.Distance(navMeshAgent.steeringTarget,transform.position)>.0625f){
-            lookDir=navMeshAgent.steeringTarget-transform.position;
+          if(!lookDirSet){
+           if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
+            if(Vector3.Distance(navMeshAgent.steeringTarget,transform.position)>.0125f/2f){
+             lookDir=navMeshAgent.steeringTarget-transform.position;
+             lookDirSet=true;
+            }
            }
-          }else if(Vector3.Distance(moveDest,transform.position)>.0625f){
-           lookDir=moveDest-transform.position;
+          }
+          if(!lookDirSet){
+           if(IsTraversingPath()){
+            if(Vector3.Distance(moveDest,transform.position)>.0625f){
+             lookDir=moveDest-transform.position;
+             lookDirSet=true;
+            }
+           }
           }
           TurnToTargetDir(lookDir);
           return IsTurnedToTargetDir();

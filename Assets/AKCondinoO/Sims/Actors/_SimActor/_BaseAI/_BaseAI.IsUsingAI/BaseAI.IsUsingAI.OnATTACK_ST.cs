@@ -20,41 +20,44 @@ namespace AKCondinoO.Sims.Actors{
             internal class ATTACK_ST:ST{
                 internal ATTACK_ST(BaseAI me,AI ai):base(me,ai){
                 }
-             [NonSerialized]internal bool firstAttack;
              [NonSerialized]AvoidMode avoidMode=AvoidMode.MoveAway;
                 enum AvoidMode:int{
                  MoveAway=0,
                  MoveRandom=1,
                 }
-             [NonSerialized]bool shouldAvoid;
-              [NonSerialized]bool avoiding;
-               [NonSerialized]bool avoidingMoving;
-                [NonSerialized]bool hasJustAvoided;
-                 [NonSerialized]float hasFriendlyTargetsToAvoidMaxTime=8f;
-                 [NonSerialized]float hasFriendlyTargetsToAvoidTimer;
-             [NonSerialized]protected float travelMaxTime=.5f;
-              [NonSerialized]protected float travelTime;
+             //[NonSerialized]bool shouldAvoid;
+             // [NonSerialized]bool avoiding;
+             //  [NonSerialized]bool avoidingMoving;
+             //   [NonSerialized]bool hasJustAvoided;
+             //    [NonSerialized]float hasFriendlyTargetsToAvoidMaxTime=8f;
+             //    [NonSerialized]float hasFriendlyTargetsToAvoidTimer;
+             //[NonSerialized]protected float travelMaxTime=.5f;
+             // [NonSerialized]protected float travelTime;
                 internal void Finish(){
-                 firstAttack=false;
                 }
                 internal void Start(){
                  Log.DebugMessage("ATTACK_ST:Start");
-                 firstAttack=true;
-                 targetsToAvoidRefreshedFlag=false;
-                 avoidMode=AvoidMode.MoveAway;
-                 shouldAvoid=false;
-                 avoiding=false;
-                 avoidingMoving=false;
-                 travelTime=0f;
+                 ai.tryingAttack=true;
+                 //targetsToAvoidRefreshedFlag=false;
+                 //avoidMode=AvoidMode.MoveAway;
+                 //shouldAvoid=false;
+                 //avoiding=false;
+                 //avoidingMoving=false;
+                 //travelTime=0f;
                 }
                 internal void DoRoutine(){
                  if(MyEnemy==null){
                   me.MoveStop();
                   return;
                  }
+                 //ai.DoSkill();
                  //me.MoveStop();
-                 ai.DoSkill();
-                 //if(me.Attack(ai.MyEnemy)){
+                 //if(!ai.traveling){
+                 if(me.Attack(ai.MyEnemy)){
+                  ai.tryingAttack=false;
+                 }else{
+                  me.Move(ai.MyDest,true);
+                 }
                  //}
                  //if(firstAttack){
                  // //Log.DebugMessage("'firstAttack'");
@@ -180,6 +183,9 @@ namespace AKCondinoO.Sims.Actors{
                  //  hasJustAvoided=false;
                  // }
                  //}
+                }
+                internal void GetMyDest(out Vector3 MyDest,List<BaseAI>actorsHitInTheWay){
+                 MyDest=MyEnemy.transform.position;
                 }
              [NonSerialized]internal Coroutine getDataCoroutine;
              [NonSerialized]protected WaitUntil getDataThrottler;

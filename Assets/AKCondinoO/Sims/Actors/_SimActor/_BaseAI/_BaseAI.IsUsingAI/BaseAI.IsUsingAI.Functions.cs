@@ -16,25 +16,25 @@ namespace AKCondinoO.Sims.Actors{
          if(ai==null){
           return true;
          }
-         if(
-          !IsTraversingPath()
-         ){
-          GetAStarPath(dest);
-         }
+         //if(
+         // !IsTraversingPath()
+         //){
+         // GetAStarPath(dest);
+         //}
          moveDest=dest;
-         if(TurnToMoveDest()){
-          if(run){
-           navMeshAgent.speed=navMeshAgentRunSpeed;
-          }else{
+         //if(TurnToMoveDest()){
+         // if(run){
+         //  navMeshAgent.speed=navMeshAgentRunSpeed;
+         // }else{
            navMeshAgent.speed=navMeshAgentWalkSpeed;
-          }
+         // }
           navMeshAgent.destination=moveDest;
-          if(
-           IsTraversingPath()
-          ){
+         // if(
+         //  IsTraversingPath()
+         // ){
            return true;
-          }
-         }
+         // }
+         //}
          return false;
         }
         internal void MoveStop(){
@@ -45,9 +45,9 @@ namespace AKCondinoO.Sims.Actors{
          if(
           IsTraversingPath()
          ){
-          moveDest=navMeshAgent.transform.position;
+          //moveDest=navMeshAgent.transform.position;
           if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)>navMeshAgent.stoppingDistance){
-           navMeshAgent.destination=moveDest;
+           //navMeshAgent.destination=moveDest;
           }
          }
         }
@@ -61,8 +61,8 @@ namespace AKCondinoO.Sims.Actors{
          if(movePaused){
           return;
          }
-         movePauseDelay=movePauseInterval;
-         movePaused=true;
+         //movePauseDelay=movePauseInterval;
+         //movePaused=true;
         }
         internal void MoveResume(){
          if(ai==null){

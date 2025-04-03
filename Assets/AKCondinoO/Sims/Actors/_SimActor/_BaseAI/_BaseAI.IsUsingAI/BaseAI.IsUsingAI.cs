@@ -31,7 +31,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      [SerializeField]internal bool sniper=false;
      [SerializeField]protected bool doIdleMove=true;
-     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(4f/2f),0.125f*(2f));
+     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(2f/1f),0.125f*(1f/2f));
         internal partial class AI{
          [NonSerialized]BaseAI me;
             internal AI(BaseAI me){
@@ -57,8 +57,8 @@ namespace AKCondinoO.Sims.Actors{
             [NonSerialized]protected readonly List<SimObject>damageSourcesIterator=new();
           [NonSerialized]bool isInAttackRange          =false;
           [NonSerialized]bool isInAttackRangeWithWeapon=false;
-          [NonSerialized]Vector3 attackDistance          ;
-          [NonSerialized]Vector3 attackDistanceWithWeapon;
+          [NonSerialized]internal Vector3 attackDistance          ;
+          [NonSerialized]internal Vector3 attackDistanceWithWeapon;
           [NonSerialized]bool hasWeapon;
             internal virtual void Main(){
              me.RenewTargets();

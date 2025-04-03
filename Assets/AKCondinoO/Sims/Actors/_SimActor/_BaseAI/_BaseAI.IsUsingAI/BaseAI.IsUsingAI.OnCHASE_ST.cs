@@ -35,12 +35,6 @@ namespace AKCondinoO.Sims.Actors{
              // [NonSerialized]protected float renewDestinationTimer;
              //[NonSerialized]protected float renewDestinationMyEnemyIsMovingTimeInterval=.125f;
              // [NonSerialized]protected float renewDestinationMyEnemyIsMovingTimer;
-             [NonSerialized]AvoidMode avoidMode=AvoidMode.MoveRandom;
-                enum AvoidMode:int{
-                 MoveLeft=0,
-                 MoveRight=1,
-                 MoveRandom=2,
-                }
                 internal void Finish(){
                 }
                 internal void Start(){
@@ -58,9 +52,10 @@ namespace AKCondinoO.Sims.Actors{
                   me.MoveStop();
                   return;
                  }
-                 bool traveling=ai.traveling;
-                 ai.DoSkill();
-                 if(ai.changeDest){
+                 //bool traveling=ai.traveling;
+                 //ai.DoSkill();
+                 if(ai.setDest){
+                 //me.navMeshAgent.destination=ai.MyDest;
                   me.Move(ai.MyDest,true);
                  }
                  //if(travelTime>=travelMaxTime){
@@ -251,14 +246,110 @@ namespace AKCondinoO.Sims.Actors{
                  // me.Move(ai.MyDest,true);
                  //}
                 }
-                internal void GetMyDest(out Vector3 MyDest){
-                 MyDest=Vector3.zero;
+                internal void GetMyDest(out Vector3 MyDest,List<BaseAI>actorsHitInTheWay){
+                 actorsHitInTheWay.Clear();
+                 MyDest=ai.MyDest;
+                 if(me.characterController!=null){
+                  if(inTheWayColliderHitsCount>0){
+                   for(int i=0;i<inTheWayColliderHitsCount;++i){
+                    RaycastHit hit=inTheWayColliderHits[i];
+                    //if(Math.Abs(hit.collider.transform.position.z-MyEnemy.transform.position.z)>ai.attackDistance.z||
+                    //   Math.Abs(hit.collider.transform.position.y-MyEnemy.transform.position.y)>ai.attackDistance.y||
+                    //   Math.Abs(hit.collider.transform.position.x-MyEnemy.transform.position.x)>ai.attackDistance.x
+                    //){
+                    // continue;
+                    //}
+                    if(
+                     hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
+                     actorHit.characterController!=null
+                    ){
+                     if((actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude){
+                      if(IsInRange(actorHit.transform.root.position,me.transform.root.position,ai.attackDistance,me.GetRadius(),actorHit.GetRadius())){
+                       //  add to list for avoidance
+                       actorsHitInTheWay.Add(actorHit);
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
                  if(ai.shouldPredictMyEnemyDest){
                   //Log.DebugMessage("dis1:"+dis1+";dis2:"+dis2);
                   MyDest=ai.MyEnemy.transform.position+ai.myEnemyBaseAI.characterController.transform.forward*ai.predictMyEnemyDestDis;
                  }else{
                   MyDest=ai.MyEnemy.transform.position;
                  }
+                }
+             [NonSerialized]AvoidMode avoidMode=AvoidMode.MoveRandom;
+                enum AvoidMode:int{
+                 MoveLeft=0,
+                 MoveRight=1,
+                 MoveRandom=2,
+                }
+                internal void GetMyDestWithAvoidance(List<BaseAI>actorsHitInTheWay,out Vector3 MyDest){
+                 MyDest=ai.MyDest;
+                 for(int i=0;i<actorsHitInTheWay.Count;++i){
+                  BaseAI actorHitInTheWay=actorsHitInTheWay[i];
+                  //Log.DebugMessage("'there's someone between me and my dest':"+actorHitInTheWay.name);
+                  float dis1=Vector3.Distance(MyEnemy.transform.position,              me.transform.position);
+                  float dis2=Vector3.Distance(MyEnemy.transform.position,actorHitInTheWay.transform.position);
+                  Vector3 dir1=(              me.transform.position-MyEnemy.transform.position).normalized;
+                  Vector3 dir2=(actorHitInTheWay.transform.position-MyEnemy.transform.position).normalized;
+                  float angle=Vector3.Angle(
+                   dir1,
+                   dir2
+                  );
+                  float cos=Mathf.Cos(Mathf.Deg2Rad*angle);
+                  Vector3 forward=-dir2;
+                  forward=Vector3.ProjectOnPlane(forward,Vector3.up);
+                  forward.Normalize();
+                  Vector3 cross=Vector3.Cross(
+                   Vector3.up,
+                   forward
+                  );
+                  Vector3 right=cross;
+                  right=Vector3.ProjectOnPlane(right,Vector3.up);
+                  right.Normalize();
+                  Debug.DrawLine(actorHitInTheWay.transform.root.position,me.transform.root.position,Color.yellow,0f);
+                  //Debug.DrawRay(actorHitInTheWay.transform.root.position,cross,Color.yellow,1f);
+                  Debug.DrawRay(actorHitInTheWay.transform.root.position,right,Color.red,0f);
+                  Debug.DrawRay(actorHitInTheWay.transform.root.position,forward,Color.blue,0f);
+                  float hypotenuse=dis2/cos;
+                  Vector3 dir3=Quaternion.AngleAxis(angle,Vector3.up)*-forward;
+                  float dis4=(me.GetRadius()+actorHitInTheWay.GetRadius())/2f;
+                  Vector3 dest=MyEnemy.transform.position+(dir3*hypotenuse);
+                  MyDest=dest;
+                 }
+                 //int sign=1;
+                 //Vector3 disFromActor=ai.attackDistance;
+                 //switch(avoidMode){
+                 // default:{
+                 //  sign=me.math_random.CoinFlip()?-1:1;
+                 //         //disFromActor1=(float)me.math_random.NextDouble(2.0d,6d);
+                 //         //disFromActor2=(float)me.math_random.NextDouble(1.0d,6d);
+                 //         //avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRight;
+                 //  break;
+                 // }
+                 // //       case(AvoidMode.MoveLeft):{
+                 // //        sign=-1;
+                 // //        disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
+                 // //        disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
+                 // //        avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveLeft:AvoidMode.MoveRandom;
+                 // //        break;
+                 // //       }
+                 // //       case(AvoidMode.MoveRight):{
+                 // //        sign=1;
+                 // //        disFromActor1=(float)me.math_random.NextDouble(3.0d,6.0d);
+                 // //        disFromActor2=(float)me.math_random.NextDouble(1.5d,3.0d);
+                 // //        avoidMode=me.math_random.CoinFlip()?AvoidMode.MoveRight:AvoidMode.MoveRandom;
+                 // //        break;
+                 // //       }
+                 // }
+                 // MyDest=
+                 //  actorHitInTheWay.transform.root.position+
+                 //   ((right*sign)*disFromActor.x-forward*disFromActor.z)*
+                 //    (actorHitInTheWay.GetRadius()+me.GetRadius())+
+                 //     Vector3.down*(me.height/2f);
                 }
              internal Coroutine getDataCoroutine;
              protected WaitUntil getDataThrottler;
@@ -289,14 +380,14 @@ namespace AKCondinoO.Sims.Actors{
                   //Log.DebugMessage("OnChaseGetDataCoroutine");
                   if(me.characterController!=null&&MyEnemy!=null){
                    var values=me.simCollisions.GetCapsuleValuesForCollisionTesting(me.characterController.character,me.transform.root);
-                   float maxDis=Vector3.Distance(MyEnemy.transform.position,me.transform.root.position);
+                   float maxDis=Vector3.Distance(ai.MyDest,me.transform.root.position);
                    int inTheWayLength=0;
                    _GetInTheWayColliderHits:{
                     inTheWayLength=Physics.CapsuleCastNonAlloc(
                      values.point0,
                      values.point1,
                      values.radius,
-                     (MyEnemy.transform.position-me.transform.root.position).normalized,
+                     (ai.MyDest-me.transform.root.position).normalized,
                      inTheWayColliderHits,
                      maxDis,
                      PhysUtil.physObstaclesLayer

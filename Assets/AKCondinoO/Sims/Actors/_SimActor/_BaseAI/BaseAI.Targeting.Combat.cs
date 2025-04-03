@@ -11,6 +11,19 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        internal static bool IsInRange(Vector3 pos1,Vector3 pos2,Vector3 dis,float radius1=0f,float radius2=0f){
+         Vector3 delta=new Vector3(
+          Mathf.Abs(pos1.x-pos2.x),
+          Mathf.Abs(pos1.y-pos2.y),
+          Mathf.Abs(pos1.z-pos2.z)
+         );
+         float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
+         if((disXZPlane<=radius1+dis.z+radius2||disXZPlane<=radius1+dis.x+radius2)&&delta.y<=dis.y){
+          //Log.DebugMessage("is in range:disXZPlane:"+disXZPlane);
+          return true;
+         }
+         return false;
+        }
         internal partial class AI{
          protected Vector3 MyAttackRange{get{return me.attackRange;}}
         }
@@ -64,7 +77,7 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     internal Vector3 attackRange=new Vector3(0.125f/8f,0.125f/8f,0.0625f/8f);
+     internal Vector3 attackRange=new Vector3((0.125f/8f)*(3f),(0.125f/8f)*(3f),(0.0625f/8f)*(3f));
      readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
         internal Vector3 AttackDistance(out bool hasWeapon,bool checkWeapon=false){
          hasWeapon=false;
