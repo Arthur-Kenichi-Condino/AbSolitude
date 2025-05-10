@@ -12,47 +12,130 @@ namespace AKCondinoO.Sims.Actors{
         internal partial class AI{
          internal SimObject MyEnemy=null;
         }
-        protected void OnAddTarget(SimObject target,GotTargetMode gotTargetMode,EnemyPriority enemyPriority){
-         if(targetsByPriority.TryGetValue(target.id.Value,out _)){
+        protected void OnAddTarget(SimObject target,GotTargetMode gotTargetMode,EnemyPriority enemyPriority,bool updateWhenPossible=true){
+         bool addingNewTarget=true;
+         if(updateWhenPossible){
+          if(targetsByPriority.TryGetValue(target.id.Value,out(GotTargetMode mode,EnemyPriority priority)modeAndPriority)){
+           if(modeAndPriority.mode>=gotTargetMode&&modeAndPriority.priority>=enemyPriority){
+            addingNewTarget=false;
+           }else{
+            OnRemoveTarget(target.id.Value,false);
+           }
+          }
+         }else{
           OnRemoveTarget(target.id.Value,false);
          }
-         targetsByPriority.Add(target.id.Value,(gotTargetMode,enemyPriority));
-         targetsGotten[gotTargetMode][enemyPriority].Add(target.id.Value,target);
-         targetTimeouts[target.id.Value]=-1;
-         targetDis     [target.id.Value]=Vector3.Distance(transform.position,target.transform.position);
+         if(addingNewTarget){
+          targetsGotten[gotTargetMode][enemyPriority].Add(target.id.Value,target);
+          targetsByPriority.Add(target.id.Value,(gotTargetMode,enemyPriority));
+         }
+         if(!targetTimeouts.TryGetValue(target.id.Value,out _)){
+          targetTimeouts[target.id.Value]=-1;
+         }
+         targetDis[target.id.Value]=Vector3.Distance(transform.position,target.transform.position);
          //if(ai!=null){
          // ai.damageSources[target]=ai.damageSourceForgiveTime;
          //}
+         //Log.DebugMessage("OnAddTarget:"+target.id.Value+";targetTimeouts[target.id.Value]="+targetTimeouts[target.id.Value]);
         }
         protected void OnRemoveTarget((Type simType,ulong number)id,bool validateMyEnemy=true){
          if(targetsByPriority.TryGetValue(id,out(GotTargetMode mode,EnemyPriority priority)modeAndPriority)){
-          targetsGotten[modeAndPriority.mode][modeAndPriority.priority].Remove(id);
           targetTimeouts.Remove(id);
           targetDis     .Remove(id);
-         // if(targetCooldowns.TryGetValue(id,out float cooldown)){
-         //  if(cooldown>0f){
-         //   targetsOnCooldown[id]=cooldown;
-         //  }
-         //  targetCooldowns.Remove(id);
-         // }
+          if(targetsGotten[modeAndPriority.mode][modeAndPriority.priority].TryGetValue(id,out SimObject sim)){
+           if(targetCooldowns.TryGetValue(id,out float cooldown)){
+            if(cooldown>0f){
+             if(ai!=null){
+              #region se eu estou ocioso, ignore cooldown
+              if(
+               ai.MyState!=State.CHASE_ST&&
+               ai.MyState!=State.ATTACK_ST&&
+               ai.MyState!=State.SNIPE_ST
+              ){
+               goto _IgnoreCooldown;
+              }
+              if(ai.MyEnemy==null){
+               goto _IgnoreCooldown;
+              }
+              if(ai.MyEnemy.id==null){
+               goto _IgnoreCooldown;
+              }
+              #endregion
+             }
+             if(sim is BaseAI simAI){
+              if(simAI.IsDead()){
+               goto _IgnoreCooldown;
+              }
+              if(simAI.ai!=null){
+               #region se inimigo está ocioso, aplique cooldown
+               if(
+                simAI.state!=State.CHASE_ST&&
+                simAI.state!=State.ATTACK_ST&&
+                simAI.state!=State.SNIPE_ST
+               ){
+                goto _SetCooldown;
+               }
+               if(simAI.enemy==null){
+                goto _SetCooldown;
+               }
+               if(simAI.enemy.id==null){
+                goto _SetCooldown;
+               }
+               #endregion
+               if(simAI.enemy==this){
+                goto _IgnoreCooldown;
+               }
+               if(masterId==null&&slaves.Count<=0){
+                goto _SetCooldown;
+               }
+               if(simAI.enemy.id==masterId){
+                goto _IgnoreCooldown;
+               }
+               if(slaves.Contains(simAI.enemy.id.Value)){
+                goto _IgnoreCooldown;
+               }
+              }
+             }
+             _SetCooldown:{
+              targetsOnCooldown[id]=cooldown;
+              goto _End;
+             }
+             _IgnoreCooldown:{
+              goto _End;
+             }
+             _End:{}
+            }
+            targetCooldowns.Remove(id);
+           }
+          }
+          targetsGotten[modeAndPriority.mode][modeAndPriority.priority].Remove(id);
           targetsByPriority.Remove(id);
          }
-         //if(validateMyEnemy){
-         // if(ai.MyEnemy!=null){
-         //  if(ai.MyEnemy.id==id){
-         //   ai.MyEnemy=null;
-         //  }
-         // }
-         //}
+         if(validateMyEnemy){
+          if(ai!=null){
+           if(ai.MyEnemy!=null){
+            if(ai.MyEnemy.id==id){
+             ai.MyEnemy=null;
+            }
+           }
+          }
+         }
         }
         internal virtual void SetTargetToBeRemoved(SimObject target,float afterSeconds=30f,float cooldown=1f){
          if(target.id==null){
           return;
          }
          if(targetsByPriority.TryGetValue(target.id.Value,out _)){
-         // //Log.DebugMessage("target set to be removed:"+target.id.Value);
-          targetTimeouts [target.id.Value]=afterSeconds;
-         // targetCooldowns[target.id.Value]=cooldown    ;
+          if(!targetTimeouts.TryGetValue(target.id.Value,out float timeout)||afterSeconds>=timeout){
+          // //Log.DebugMessage("target set to be removed:"+target.id.Value);
+           targetTimeouts[target.id.Value]=afterSeconds;
+          }
+          if(targetCooldowns.TryGetValue(target.id.Value,out float hasCooldown)){
+           hasCooldown=Mathf.Max(hasCooldown,cooldown);
+           targetCooldowns[target.id.Value]=hasCooldown;
+          }else{
+           targetCooldowns[target.id.Value]=cooldown;
+          }
          }
         }
         internal virtual void ApplyAggressionModeForThenAddTarget(SimObject target,SimObject allyToHelp=null,bool onHitDamaged=true){
@@ -63,7 +146,7 @@ namespace AKCondinoO.Sims.Actors{
          float setTimeout=targetFastTimeout;
          float setCooldown=0f;
          if(target.IsDead()){
-          Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.IsDead()'");
+          //Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.IsDead()'");
           return;
          }
          if(target.id==id){//  it's me
@@ -89,7 +172,7 @@ namespace AKCondinoO.Sims.Actors{
          if(target.masterId!=null&&target.masterId==masterId){
           if(target is BaseAI targetAI){
            if(targetAI.isUsingAI){
-            Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.masterId is owner:we are siblings:and is using AI'");
+            //Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.masterId is owner:we are siblings:and is using AI'");
             return;
            }else if(!onHitDamaged){
             Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'target.masterId is owner:we are siblings:and it's not damaging me'");
@@ -119,9 +202,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          void SetTimeout(){
-          if(!targetTimeouts.TryGetValue(target.id.Value,out float timeout)||timeout-Time.deltaTime<=0f){
-           SetTargetToBeRemoved(target,setTimeout,setCooldown);
-          }
+          SetTargetToBeRemoved(target,setTimeout,setCooldown);
          }
          if(MyAggressionMode==AggressionMode.AggressiveToAll){
           if(target is SimActor targetSimActor){
@@ -165,7 +246,7 @@ namespace AKCondinoO.Sims.Actors{
               }
              }
              if(!onHitDamaged){
-              Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'ignore non-aggressive target':AI:enemy is null:and no damage");
+              //Log.DebugMessage("ApplyAggressionModeForThenAddTarget:'ignore non-aggressive target':AI:enemy is null:and no damage");
               return;
              }
             }else if(targetAI.enemy.id==null){
@@ -235,10 +316,10 @@ namespace AKCondinoO.Sims.Actors{
           //Log.DebugMessage("ApplyEnemyPriorityForThenAddTarget:'target.id==null'");
           return;
          }
-         //if(targetsOnCooldown.TryGetValue(target.id.Value,out _)){
-         // Log.DebugMessage("ApplyEnemyPriorityForThenAddTarget:'on cooldown'");
-         // return;
-         //}
+         if(targetsOnCooldown.TryGetValue(target.id.Value,out _)){
+          //Log.DebugMessage("ApplyEnemyPriorityForThenAddTarget:'on cooldown'");
+          return;
+         }
          EnemyPriority enemyPriority=EnemyPriority.Low;
          //Log.DebugMessage("target to add:"+target.id.Value);
          OnAddTarget(target,gotTargetMode,enemyPriority);
@@ -278,7 +359,11 @@ namespace AKCondinoO.Sims.Actors{
           OnRemoveTarget(id);
          }
          targetsToRemove.Clear();
-         ai.MyEnemy=null;
+         targetCooldowns  .Clear();
+         targetsOnCooldown.Clear();
+         if(ai!=null){
+          ai.MyEnemy=null;
+         }
         }
      [NonSerialized]internal float targetTimeout=30f;
       [NonSerialized]internal float targetCooldownAfterTimeout=3f;
@@ -286,27 +371,17 @@ namespace AKCondinoO.Sims.Actors{
        [NonSerialized]internal float targetCooldownAfterFastTimeout=2f;
      internal readonly Dictionary<(Type simType,ulong number),(GotTargetMode mode,EnemyPriority priority)>targetsByPriority=new Dictionary<(Type,ulong),(GotTargetMode,EnemyPriority)>();
       internal readonly Dictionary<(Type simType,ulong number),float>targetTimeouts =new Dictionary<(Type,ulong),float>();
-      internal readonly Dictionary<(Type simType,ulong number),float>targetCooldowns=new Dictionary<(Type,ulong),float>();
       internal readonly Dictionary<(Type simType,ulong number),float>targetDis      =new Dictionary<(Type,ulong),float>();
        internal readonly HashSet<(Type simType,ulong number)>targetsToRemove=new HashSet<(Type,ulong)>();
+      internal readonly Dictionary<(Type simType,ulong number),float>targetCooldowns=new Dictionary<(Type,ulong),float>();
      internal readonly Dictionary<(Type simType,ulong number),float                                      >targetsOnCooldown=new Dictionary<(Type,ulong),float                        >();
       internal readonly List<(Type simType,ulong number)>targetsOnCooldownIterator=new();
      [NonSerialized]internal readonly Dictionary<SimObject,float>alliesInTrouble=new();
       [NonSerialized]internal readonly List<SimObject>alliesInTroubleIterator=new();
        [NonSerialized]internal float alliesTroubleForgetTimeout=30f;
-     [SerializeField]protected float renewEnemyInterval=3f;
-      protected float renewEnemyTimer=3f;
+     [SerializeField]protected float renewEnemyInterval=10f;
+      protected float renewEnemyTimer=10f;
         internal virtual void RenewTargets(){
-         targetsOnCooldownIterator.AddRange(targetsOnCooldown.Keys);
-         foreach(var id in targetsOnCooldownIterator){
-          var cooldown=targetsOnCooldown[id]-Time.deltaTime;
-          if(cooldown<=0f){
-           targetsOnCooldown.Remove(id);
-          }else{
-           targetsOnCooldown[id]=cooldown;
-          }
-         }
-         targetsOnCooldownIterator.Clear();
          alliesInTroubleIterator.AddRange(alliesInTrouble.Keys);
          foreach(var id in alliesInTroubleIterator){
           var timeout=alliesInTrouble[id]-Time.deltaTime;
@@ -318,29 +393,31 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          alliesInTroubleIterator.Clear();
-         if(ai!=null){
-          if(ai.MyEnemy!=null){
-           if(ai.MyEnemy.id==null){
-            ai.MyEnemy=null;
-           }else if(
-            (targetTimeouts.TryGetValue(ai.MyEnemy.id.Value,out float timeout)&&timeout-Time.deltaTime<=0f)
-           ){
-            ai.MyEnemy=null;
-           }
-          // }else{
-          //  renewEnemyTimer-=Time.deltaTime;
-          //  if(renewEnemyTimer<=0f){
-          //   renewEnemyTimer=renewEnemyInterval;
-          //   ai.MyEnemy=null;
-          //  }
-          }else{
-          // renewEnemyTimer=renewEnemyInterval;
-          }
-         }
          SimObject myEnemy=null;
          SimObject newEnemy=null;
          if(ai!=null){
           newEnemy=myEnemy=ai.MyEnemy;
+         }
+         if(myEnemy!=null){
+          if(myEnemy.id==null){
+           myEnemy=null;
+          }else if(myEnemy.IsDead()){
+           myEnemy=null;
+          }else if(
+           (targetTimeouts.TryGetValue(myEnemy.id.Value,out float timeout)&&
+            timeout-Time.deltaTime<=0f)
+          ){
+           myEnemy=null;
+          }else{
+           renewEnemyTimer-=Time.deltaTime;
+           if(renewEnemyTimer<=0f){
+            renewEnemyTimer=renewEnemyInterval;
+            myEnemy=null;
+           }
+          }
+         }
+         if(myEnemy==null){
+          renewEnemyTimer=renewEnemyInterval;
          }
          foreach(var targetsByGottenMode in targetsGotten){
           GotTargetMode gotTargetMode=targetsByGottenMode.Key;
@@ -361,39 +438,95 @@ namespace AKCondinoO.Sims.Actors{
              targetsToRemove.Add(id);
              continue;
             }
-         //   if(idTargetPair.Value==null||idTargetPair.Value.id==null||idTargetPair.Value.id.Value!=id){
-         //    targetsToRemove.Add(id);
-         //    continue;
-         //   }
-         //   if(idTargetPair.Value.IsDead()){
-         //    targetsToRemove.Add(id);
-         //    continue;
-         //   }
-         //   if(targetTimeouts[id]>=0f){
-         //    targetTimeouts[id]-=Time.deltaTime;
-         //    if(targetTimeouts[id]<=0f){
-         //     targetsToRemove.Add(id);
-         //     continue;
-         //    }
-         //   }
-         //   SimObject target=idTargetPair.Value;
-         //   targetDis[id]=Vector3.Distance(transform.position,target.transform.position);
-         //   if(myEnemy==null&&targetDis[id]<closestDis){
-         //    closestDis=targetDis[id];
-         //    ai.MyEnemy=target;
-         //   }
-           }
-           myEnemy=newEnemy;
-           if(ai!=null){
-            ai.MyEnemy=myEnemy;
+            if(idTargetPair.Value.IsDead()){
+             targetsToRemove.Add(id);
+             continue;
+            }
+            if(targetTimeouts[id]>=0f){
+             targetTimeouts[id]-=Time.deltaTime;
+             if(targetTimeouts[id]<=0f){
+              targetsToRemove.Add(id);
+              continue;
+             }
+            }
+            SimObject target=idTargetPair.Value;
+            targetDis[id]=Vector3.Distance(transform.position,target.transform.position);
+            if(newEnemy==null||
+             targetDis[id]<closestDis
+            ){
+             closestDis=targetDis[id];
+             newEnemy=target;
+            }
            }
           }
+         }
+         if(myEnemy==null){
+          myEnemy=newEnemy;
+         }
+         if(ai!=null){
+          ai.MyEnemy=myEnemy;
          }
          foreach((Type simType,ulong number)id in targetsToRemove){
           //Log.DebugMessage("target to remove:"+id);
           OnRemoveTarget(id);
          }
          targetsToRemove.Clear();
+         targetsOnCooldownIterator.AddRange(targetsOnCooldown.Keys);
+         foreach(var id in targetsOnCooldownIterator){
+          SimObject target;
+          if(!SimObjectManager.singleton.active.TryGetValue(id,out target)){
+           targetsOnCooldown.Remove(id);
+          }else{
+           var cooldown=targetsOnCooldown[id]-Time.deltaTime;
+           if(target is BaseAI simAI){
+            if(ai!=null){
+             #region se estou ocioso, remova qualquer cooldown
+             if(
+              ai.MyState!=State.CHASE_ST&&
+              ai.MyState!=State.ATTACK_ST&&
+              ai.MyState!=State.SNIPE_ST
+             ){
+              cooldown=0f;
+              goto _CooldownUpdated;
+             }
+             #endregion
+            }
+            if(simAI.ai!=null){
+             if(simAI.enemy!=null){
+              #region se inimigo está me atacando
+              if(simAI.enemy==this){
+               cooldown=0f;
+               goto _CooldownUpdated;
+              }
+              #endregion
+              if(simAI.enemy.id!=null){
+               #region se inimigo está atacando o mestre
+               if(masterId!=null){
+                if(simAI.enemy.id==masterId){
+                 cooldown=0f;
+                 goto _CooldownUpdated;
+                }
+               }
+               #endregion
+               #region se inimigo está atacando aliado
+               if(slaves.Contains(simAI.enemy.id.Value)){
+                cooldown=0f;
+                goto _CooldownUpdated;
+               }
+               #endregion
+              }
+             }
+            }
+           }
+           _CooldownUpdated:{}
+           if(cooldown<=0f){
+            targetsOnCooldown.Remove(id);
+           }else{
+            targetsOnCooldown[id]=cooldown;
+           }
+          }
+         }
+         targetsOnCooldownIterator.Clear();
         }
     }
 }

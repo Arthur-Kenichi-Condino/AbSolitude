@@ -288,38 +288,107 @@ namespace AKCondinoO.Sims.Actors{
                 }
                 internal void GetMyDestWithAvoidance(List<BaseAI>actorsHitInTheWay,out Vector3 MyDest){
                  MyDest=ai.MyDest;
+                 float resultSignedAngle=0f;
+                 Vector3 resultSignedAngleUpAxis=Vector3.up;
+                 float resultSignedAngleFromActorHitInTheWay=0f;
+                 float radius1=me.GetRadius();
+                 Vector3 dir1=(me.transform.position-MyEnemy.transform.position).normalized;
+                 float dis1=Vector3.Distance(me.transform.position,MyEnemy.transform.position);
+                 Vector3 resultSignedAngleStartVector=dir1;
+                 float resultSignedAngleStartVectorDis=radius1+MyEnemy.GetRadius();
                  for(int i=0;i<actorsHitInTheWay.Count;++i){
                   BaseAI actorHitInTheWay=actorsHitInTheWay[i];
                   //Log.DebugMessage("'there's someone between me and my dest':"+actorHitInTheWay.name);
-                  float dis1=Vector3.Distance(MyEnemy.transform.position,              me.transform.position);
-                  float dis2=Vector3.Distance(MyEnemy.transform.position,actorHitInTheWay.transform.position);
-                  Vector3 dir1=(              me.transform.position-MyEnemy.transform.position).normalized;
+                  float radius2=actorHitInTheWay.GetRadius();
                   Vector3 dir2=(actorHitInTheWay.transform.position-MyEnemy.transform.position).normalized;
-                  float angle=Vector3.Angle(
-                   dir1,
-                   dir2
+                  float dis2=Vector3.Distance(actorHitInTheWay.transform.position,MyEnemy.transform.position);
+                  float dis3=radius1+radius2;
+                  Vector3 up=Vector3.up;
+                  Vector3 projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
+                  Vector3 projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                  if(
+                   projDir1OnUp==Vector3.zero||
+                   projDir2OnUp==Vector3.zero
+                  ){
+                   up=Vector3.right;
+                   projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
+                   projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                   if(
+                    projDir1OnUp==Vector3.zero||
+                    projDir2OnUp==Vector3.zero
+                   ){
+                    up=Vector3.forward;
+                    projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
+                    projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                    if(
+                     projDir1OnUp==Vector3.zero||
+                     projDir2OnUp==Vector3.zero
+                    ){
+                     Vector3 a=-me.transform.right;
+                     Vector3 b=-dir1;
+                     up=Vector3.Cross(
+                      a,
+                      b
+                     );
+                     projDir1OnUp=-b;
+                     projDir2OnUp=Quaternion.AngleAxis(1f,up)*projDir1OnUp;
+                    }
+                   }
+                  }
+                  float signedAngle1=Vector3.SignedAngle(
+                   projDir1OnUp,
+                   projDir2OnUp,
+                   up
                   );
-                  float cos=Mathf.Cos(Mathf.Deg2Rad*angle);
-                  Vector3 forward=-dir2;
-                  forward=Vector3.ProjectOnPlane(forward,Vector3.up);
-                  forward.Normalize();
-                  Vector3 cross=Vector3.Cross(
-                   Vector3.up,
-                   forward
-                  );
-                  Vector3 right=cross;
-                  right=Vector3.ProjectOnPlane(right,Vector3.up);
-                  right.Normalize();
-                  Debug.DrawLine(actorHitInTheWay.transform.root.position,me.transform.root.position,Color.yellow,0f);
-                  //Debug.DrawRay(actorHitInTheWay.transform.root.position,cross,Color.yellow,1f);
-                  Debug.DrawRay(actorHitInTheWay.transform.root.position,right,Color.red,0f);
-                  Debug.DrawRay(actorHitInTheWay.transform.root.position,forward,Color.blue,0f);
-                  float hypotenuse=dis2/cos;
-                  Vector3 dir3=Quaternion.AngleAxis(angle,Vector3.up)*-forward;
-                  float dis4=(me.GetRadius()+actorHitInTheWay.GetRadius())/2f;
-                  Vector3 dest=MyEnemy.transform.position+(dir3*hypotenuse);
-                  MyDest=dest;
+                  if(Mathf.Approximately(signedAngle1,0f)){
+                   signedAngle1=1f;
+                  }
+                  int sign1=-Math.Sign(signedAngle1);
+                  float disFromActorToMe=dis3;
+                  float disFromActorToEnemy=radius2+MyEnemy.GetRadius();
+                  float sin1=(disFromActorToMe/2f)/disFromActorToEnemy;
+                  float angleForDis=((Mathf.Rad2Deg*Mathf.Asin(sin1))*sign1)*2f;
+                  if(Mathf.Approximately(angleForDis,0f)){
+                   angleForDis=1f;
+                  }
+                  Log.DebugMessage("angleForDis:"+angleForDis);
+                  if(Math.Abs(angleForDis)>Math.Abs(resultSignedAngle)){
+                   resultSignedAngle=angleForDis;
+                   resultSignedAngleUpAxis=up;
+                   resultSignedAngleStartVector=projDir2OnUp;
+                   //resultSignedAngleStartVectorDis=dis2;
+                  }else if(Math.Abs(signedAngle1)>Math.Abs(resultSignedAngleFromActorHitInTheWay)){
+                   resultSignedAngleUpAxis=up;
+                   resultSignedAngleStartVector=projDir2OnUp;
+                  }
+                  //Vector3 forward=-dir2;
+                  //forward=Vector3.ProjectOnPlane(forward,Vector3.up);
+                  //forward.Normalize();
+                  //Vector3 cross=Vector3.Cross(
+                  // Vector3.up,
+                  // forward
+                  //);
+                  //Vector3 right=cross;
+                  //right=Vector3.ProjectOnPlane(right,Vector3.up);
+                  //right.Normalize();
+                  //Debug.DrawLine(actorHitInTheWay.transform.root.position,me.transform.root.position,Color.yellow,0f);
+                  ////Debug.DrawRay(actorHitInTheWay.transform.root.position,cross,Color.yellow,1f);
+                  //Debug.DrawRay(actorHitInTheWay.transform.root.position,right,Color.red,0f);
+                  //Debug.DrawRay(actorHitInTheWay.transform.root.position,forward,Color.blue,0f);
+                  //float hypotenuse=dis2/cos;
+                  //Vector3 dir3=Quaternion.AngleAxis(angle,Vector3.up)*-forward;
+                  //float dis4=(me.GetRadius()+actorHitInTheWay.GetRadius())/2f;
+                  //Vector3 dest=MyEnemy.transform.position+(dir3*hypotenuse);
+                  //MyDest=dest;
                  }
+                 //float cos1=Mathf.Cos(Mathf.Deg2Rad*signedAngle);
+                 //float hypotenuse=signedAngleStartVectorDis/cos1;
+                 Vector3 dir4=Quaternion.AngleAxis(resultSignedAngle,resultSignedAngleUpAxis)*resultSignedAngleStartVector;
+                 float dis4=resultSignedAngleStartVectorDis;
+                 Vector3 relPosVector=dir4*dis4; 
+                 Vector3 dest=MyEnemy.transform.position+(relPosVector);
+                 MyDest=dest;
+                 //Log.DebugMessage("signedAngle:"+signedAngle+";cos1:"+cos1);
                  //int sign=1;
                  //Vector3 disFromActor=ai.attackDistance;
                  //switch(avoidMode){

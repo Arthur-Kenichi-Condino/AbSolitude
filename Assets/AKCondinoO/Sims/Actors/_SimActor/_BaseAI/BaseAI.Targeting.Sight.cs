@@ -22,7 +22,7 @@ namespace AKCondinoO.Sims.Actors{
         }
      [NonSerialized]internal readonly Dictionary<SimObject,BaseAI>inAudioRange=new();
         internal virtual void OnSimObjectIsInAudioRange(SimObject simObject,BaseAI ai){
-         Log.DebugMessage("OnSimObjectIsInAudioRange:ai:"+ai);
+         //Log.DebugMessage("OnSimObjectIsInAudioRange:ai:"+ai);
          inAudioRange[simObject]=ai;
         }
         internal virtual void OnSimObjectIsOutOfAudioRange(SimObject simObject,BaseAI ai){

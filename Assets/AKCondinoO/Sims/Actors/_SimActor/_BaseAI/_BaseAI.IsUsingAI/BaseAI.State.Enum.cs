@@ -155,7 +155,7 @@ namespace AKCondinoO.Sims.Actors{
                if(actorsHitInTheWay.Count>0){
                 chaseSt.GetMyDestWithAvoidance(actorsHitInTheWay,out chaseStDestWithAvoidance);
                 Debug.DrawLine(me.transform.position,chaseStDestWithAvoidance,Color.yellow,1f);
-             ////   chaseStDest=chaseStDestWithAvoidance;
+                chaseStDest=chaseStDestWithAvoidance;
                }
               }
              //// if(MyState==State.ATTACK_ST){
