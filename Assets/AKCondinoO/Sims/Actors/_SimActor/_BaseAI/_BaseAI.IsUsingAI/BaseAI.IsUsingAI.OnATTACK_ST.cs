@@ -37,7 +37,15 @@ namespace AKCondinoO.Sims.Actors{
                 }
                 internal void Start(){
                  Log.DebugMessage("ATTACK_ST:Start");
-                 ai.tryingAttack=true;
+                 if(ai.forcedAttackOnAvoidanceCooldownTimer<=0f){
+                  ai.priorityAttack=true;
+                  Log.DebugMessage("'ai.priorityAttack=true'");
+                 }
+                 if(ai.actorAvoidanceBeforeAttackTimer>0f){
+                  if(ai.priorityAttack){
+                   ai.forcedAttackOnAvoidanceCooldownTimer=ai.forcedAttackOnAvoidanceCooldown;
+                  }
+                 }
                  //targetsToAvoidRefreshedFlag=false;
                  //avoidMode=AvoidMode.MoveAway;
                  //shouldAvoid=false;
@@ -53,10 +61,26 @@ namespace AKCondinoO.Sims.Actors{
                  //ai.DoSkill();
                  //me.MoveStop();
                  //if(!ai.traveling){
-                 if(me.Attack(ai.MyEnemy)){
-                  ai.tryingAttack=false;
+                 if(ai.priorityAttack){
+                  if(me.Attack(ai.MyEnemy)){
+                   ai.priorityAttack=false;
+                   return;
+                  }else{
+                   me.Move(ai.MyDest,true);
+                   return;
+                  }
                  }else{
-                  me.Move(ai.MyDest,true);
+                  if(ai.shouldAvoidActorBeforeAttack){
+                   me.Move(ai.MyDest,true);
+                   return;
+                  }else{
+                   if(me.Attack(ai.MyEnemy)){
+                    return;
+                   }else{
+                    me.Move(ai.MyDest,true);
+                    return;
+                   }
+                  }
                  }
                  //}
                  //if(firstAttack){
@@ -185,7 +209,29 @@ namespace AKCondinoO.Sims.Actors{
                  //}
                 }
                 internal void GetMyDest(out Vector3 MyDest,List<BaseAI>actorsHitInTheWay){
-                 MyDest=MyEnemy.transform.position;
+                 actorsHitInTheWay.Clear();
+                 MyDest=ai.MyEnemy.transform.position;
+                 if(me.characterController!=null){
+                  if(inTheWayColliderHitsCount>0){
+                   for(int i=0;i<inTheWayColliderHitsCount;++i){
+                    RaycastHit hit=inTheWayColliderHits[i];
+                    if(
+                     hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
+                     actorHit.characterController!=null
+                    ){
+                     if((actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<=(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude){
+                      if(IsInRange(actorHit.transform.root.position,me.transform.root.position,ai.attackDistance,me.GetRadius(),actorHit.GetRadius())){
+                       //  add to list for avoidance
+                       actorsHitInTheWay.Add(actorHit);
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+                internal void GetMyDestWithAvoidance(List<BaseAI>actorsHitInTheWay,out Vector3 MyDest){
+                 MyDest=ai.MyDest;
                 }
              [NonSerialized]internal Coroutine getDataCoroutine;
              [NonSerialized]protected WaitUntil getDataThrottler;

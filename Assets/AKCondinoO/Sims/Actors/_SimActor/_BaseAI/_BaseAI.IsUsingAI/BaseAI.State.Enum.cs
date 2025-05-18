@@ -36,7 +36,15 @@ namespace AKCondinoO.Sims.Actors{
          [NonSerialized]readonly List<BaseAI>actorsHitInTheWay=new();
           [NonSerialized]internal Vector3 enemyAtPosOnPredictDest;
          [NonSerialized]internal bool shouldAttack;
-          [NonSerialized]internal bool tryingAttack;
+          [NonSerialized]internal bool priorityAttack;
+           [NonSerialized]internal float forcedAttackOnAvoidanceCooldown=30.5f;
+            [NonSerialized]internal float forcedAttackOnAvoidanceCooldownTimer;
+         [NonSerialized]readonly List<BaseAI>actorsHitInTheWayOnAttack=new();
+          [NonSerialized]internal bool shouldAvoidActorBeforeAttack;
+           [NonSerialized]internal float actorAvoidanceBeforeAttackTime=3.0f;
+            [NonSerialized]internal float actorAvoidanceBeforeAttackTimer;
+             [NonSerialized]internal float actorAvoidanceBeforeAttackCooldown=1.5f;
+              [NonSerialized]internal float actorAvoidanceBeforeAttackOnCooldownTimer;
             void UpdateMyState(){
              bool turnToDest=false;
              bool turnToEnemy=false;
@@ -109,6 +117,21 @@ namespace AKCondinoO.Sims.Actors{
               if(renewDestinationMyEnemyMovedTimer<=0f){
                renewDestinationMyEnemyMovedTimer=renewDestinationMyEnemyMovedTimeInterval;
               }
+             }
+             if(shouldAvoidActorBeforeAttack){
+              if(actorAvoidanceBeforeAttackTimer<=0f){
+               actorAvoidanceBeforeAttackTimer=actorAvoidanceBeforeAttackTime;
+              }
+              if(actorAvoidanceBeforeAttackTimer>0f){
+               actorAvoidanceBeforeAttackTimer-=Time.deltaTime;
+               if(actorAvoidanceBeforeAttackTimer<=0f){
+                //shouldAvoidActorBeforeAttack=false;
+                //actorAvoidanceBeforeAttackOnCooldownTimer=actorAvoidanceBeforeAttackCooldown;
+               }
+              }
+             }
+             if(forcedAttackOnAvoidanceCooldownTimer>0f){
+              forcedAttackOnAvoidanceCooldownTimer-=Time.deltaTime;
              }
              if(MyEnemy==null){
              }else{
@@ -192,10 +215,11 @@ namespace AKCondinoO.Sims.Actors{
              ////  }
              //// }else{
               }
-              if(tryingAttack){
+              if(priorityAttack){
                turnToEnemy=true;
               }
               Vector3 attackStDest=MyDest;
+              Vector3 attackStDestWithAvoidance=attackStDest;
               if(turnToEnemy){
                if(me.TurnToMyEnemy()){
                 //Log.DebugMessage("can attack");
@@ -207,7 +231,19 @@ namespace AKCondinoO.Sims.Actors{
                }
               }
               if(shouldAttack){
-               attackSt.GetMyDest(out attackStDest,null);
+               attackSt.GetMyDest(out attackStDest,actorsHitInTheWayOnAttack);
+               if(actorAvoidanceBeforeAttackOnCooldownTimer>0f){
+                actorAvoidanceBeforeAttackOnCooldownTimer-=Time.deltaTime;
+               }
+               if(actorAvoidanceBeforeAttackOnCooldownTimer<=0f){
+                if(actorsHitInTheWayOnAttack.Count>0){
+                 //Log.DebugMessage("actorsHitInTheWayOnAttack.Count>0");
+                 attackSt.GetMyDestWithAvoidance(actorsHitInTheWayOnAttack,out attackStDestWithAvoidance);
+                 Debug.DrawLine(me.transform.position,attackStDestWithAvoidance,Color.yellow,1f);
+                 attackStDest=attackStDestWithAvoidance;
+                 shouldAvoidActorBeforeAttack=true;
+                }
+               }
                MyDest=attackStDest;
                SetMyState(State.ATTACK_ST);
                goto _MyStateSet;

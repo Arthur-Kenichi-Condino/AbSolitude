@@ -57,6 +57,7 @@ namespace AKCondinoO.Sims.Actors{
                  if(ai.setDest){
                  //me.navMeshAgent.destination=ai.MyDest;
                   me.Move(ai.MyDest,true);
+                  return;
                  }
                  //if(travelTime>=travelMaxTime){
                  // travelTime=0f;
@@ -263,7 +264,7 @@ namespace AKCondinoO.Sims.Actors{
                      hit.collider.transform.root.GetComponentInChildren<SimObject>()is BaseAI actorHit&&
                      actorHit.characterController!=null
                     ){
-                     if((actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude){
+                     if((actorHit.transform.root.position-me.transform.root.position).sqrMagnitude<=(MyEnemy.transform.root.position-me.transform.root.position).sqrMagnitude){
                       if(IsInRange(actorHit.transform.root.position,me.transform.root.position,ai.attackDistance,me.GetRadius(),actorHit.GetRadius())){
                        //  add to list for avoidance
                        actorsHitInTheWay.Add(actorHit);
@@ -351,7 +352,7 @@ namespace AKCondinoO.Sims.Actors{
                   if(Mathf.Approximately(angleForDis,0f)){
                    angleForDis=1f;
                   }
-                  Log.DebugMessage("angleForDis:"+angleForDis);
+                  //Log.DebugMessage("angleForDis:"+angleForDis);
                   if(Math.Abs(angleForDis)>Math.Abs(resultSignedAngle)){
                    resultSignedAngle=angleForDis;
                    resultSignedAngleUpAxis=up;
