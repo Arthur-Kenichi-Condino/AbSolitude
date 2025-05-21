@@ -77,6 +77,7 @@ namespace AKCondinoO.Sims.Actors{
                    if(me.Attack(ai.MyEnemy)){
                     return;
                    }else{
+                    Log.DebugMessage("failed to attack");
                     me.Move(ai.MyDest,true);
                     return;
                    }

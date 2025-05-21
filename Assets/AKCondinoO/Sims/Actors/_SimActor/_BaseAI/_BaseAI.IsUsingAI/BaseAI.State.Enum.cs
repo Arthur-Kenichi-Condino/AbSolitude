@@ -34,16 +34,21 @@ namespace AKCondinoO.Sims.Actors{
          [NonSerialized]internal bool setDest;
          [NonSerialized]internal bool shouldPredictMyEnemyDest;
          [NonSerialized]readonly List<BaseAI>actorsHitInTheWay=new();
+          [NonSerialized]internal bool shouldAvoidActorWhileChasing;
+           [NonSerialized]internal float actorAvoidanceWhileChasingTime=2.5f;
+            [NonSerialized]internal float actorAvoidanceWhileChasingTimer;
+             [NonSerialized]internal float actorAvoidanceWhileChasingCooldown=2.5f;
+              [NonSerialized]internal float actorAvoidanceWhileChasingOnCooldownTimer;
           [NonSerialized]internal Vector3 enemyAtPosOnPredictDest;
          [NonSerialized]internal bool shouldAttack;
           [NonSerialized]internal bool priorityAttack;
-           [NonSerialized]internal float forcedAttackOnAvoidanceCooldown=30.5f;
+           [NonSerialized]internal float forcedAttackOnAvoidanceCooldown=2.5f;
             [NonSerialized]internal float forcedAttackOnAvoidanceCooldownTimer;
          [NonSerialized]readonly List<BaseAI>actorsHitInTheWayOnAttack=new();
           [NonSerialized]internal bool shouldAvoidActorBeforeAttack;
-           [NonSerialized]internal float actorAvoidanceBeforeAttackTime=3.0f;
+           [NonSerialized]internal float actorAvoidanceBeforeAttackTime=2.5f;
             [NonSerialized]internal float actorAvoidanceBeforeAttackTimer;
-             [NonSerialized]internal float actorAvoidanceBeforeAttackCooldown=1.5f;
+             [NonSerialized]internal float actorAvoidanceBeforeAttackCooldown=2.5f;
               [NonSerialized]internal float actorAvoidanceBeforeAttackOnCooldownTimer;
             void UpdateMyState(){
              bool turnToDest=false;
@@ -118,6 +123,18 @@ namespace AKCondinoO.Sims.Actors{
                renewDestinationMyEnemyMovedTimer=renewDestinationMyEnemyMovedTimeInterval;
               }
              }
+             if(shouldAvoidActorWhileChasing){
+              if(actorAvoidanceWhileChasingTimer<=0f){
+               actorAvoidanceWhileChasingTimer=actorAvoidanceWhileChasingTime;
+              }
+              if(actorAvoidanceWhileChasingTimer>0f){
+               actorAvoidanceWhileChasingTimer-=Time.deltaTime;
+               if(actorAvoidanceWhileChasingTimer<=0f){
+                shouldAvoidActorWhileChasing=false;
+                actorAvoidanceWhileChasingOnCooldownTimer=actorAvoidanceWhileChasingCooldown;
+               }
+              }
+             }
              if(shouldAvoidActorBeforeAttack){
               if(actorAvoidanceBeforeAttackTimer<=0f){
                actorAvoidanceBeforeAttackTimer=actorAvoidanceBeforeAttackTime;
@@ -125,8 +142,8 @@ namespace AKCondinoO.Sims.Actors{
               if(actorAvoidanceBeforeAttackTimer>0f){
                actorAvoidanceBeforeAttackTimer-=Time.deltaTime;
                if(actorAvoidanceBeforeAttackTimer<=0f){
-                //shouldAvoidActorBeforeAttack=false;
-                //actorAvoidanceBeforeAttackOnCooldownTimer=actorAvoidanceBeforeAttackCooldown;
+                shouldAvoidActorBeforeAttack=false;
+                actorAvoidanceBeforeAttackOnCooldownTimer=actorAvoidanceBeforeAttackCooldown;
                }
               }
              }
@@ -175,10 +192,17 @@ namespace AKCondinoO.Sims.Actors{
               Vector3 chaseStDestWithAvoidance=chaseStDest;
               if(setDest){
                chaseSt.GetMyDest(out chaseStDest,actorsHitInTheWay);
-               if(actorsHitInTheWay.Count>0){
-                chaseSt.GetMyDestWithAvoidance(actorsHitInTheWay,out chaseStDestWithAvoidance);
-                Debug.DrawLine(me.transform.position,chaseStDestWithAvoidance,Color.yellow,1f);
-                chaseStDest=chaseStDestWithAvoidance;
+               if(actorAvoidanceWhileChasingOnCooldownTimer<=0f){
+                if(actorsHitInTheWay.Count>0){
+                 chaseSt.GetMyDestWithAvoidance(actorsHitInTheWay,out chaseStDestWithAvoidance);
+                 Debug.DrawLine(me.transform.position,chaseStDestWithAvoidance,Color.yellow,1f);
+                 chaseStDest=chaseStDestWithAvoidance;
+                 Log.DebugMessage("avoiding actorsHitInTheWay on chaseSt"+me.name);
+                 shouldAvoidActorWhileChasing=true;
+                }
+               }
+               if(actorAvoidanceWhileChasingOnCooldownTimer>0f){
+                actorAvoidanceWhileChasingOnCooldownTimer-=Time.deltaTime;
                }
               }
              //// if(MyState==State.ATTACK_ST){
@@ -232,9 +256,6 @@ namespace AKCondinoO.Sims.Actors{
               }
               if(shouldAttack){
                attackSt.GetMyDest(out attackStDest,actorsHitInTheWayOnAttack);
-               if(actorAvoidanceBeforeAttackOnCooldownTimer>0f){
-                actorAvoidanceBeforeAttackOnCooldownTimer-=Time.deltaTime;
-               }
                if(actorAvoidanceBeforeAttackOnCooldownTimer<=0f){
                 if(actorsHitInTheWayOnAttack.Count>0){
                  //Log.DebugMessage("actorsHitInTheWayOnAttack.Count>0");
@@ -243,6 +264,9 @@ namespace AKCondinoO.Sims.Actors{
                  attackStDest=attackStDestWithAvoidance;
                  shouldAvoidActorBeforeAttack=true;
                 }
+               }
+               if(actorAvoidanceBeforeAttackOnCooldownTimer>0f){
+                actorAvoidanceBeforeAttackOnCooldownTimer-=Time.deltaTime;
                }
                MyDest=attackStDest;
                SetMyState(State.ATTACK_ST);
