@@ -79,7 +79,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          return result;
         }
-     [NonSerialized]RaycastHit[]tryShootHits=new RaycastHit[4];
+     [NonSerialized]RaycastHit[]tryShootHits=new RaycastHit[128];
         internal bool TryShoot(SimObject enemy,out bool reloading,out bool shooting){
          reloading=false;
          shooting=false;

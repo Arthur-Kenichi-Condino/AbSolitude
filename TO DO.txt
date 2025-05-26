@@ -2,3 +2,10 @@ não snipe se não tiver arma fallback to chase testar se está segurando arma n
 causar dano com soco add hitbox to player jogador está sem hitibox e só estava testando com arma
 correr se estiver em combate; evitar andar
 homunculus seguir e atacar imediatamente alvo do mestre
+
+movendo na frente então não prevê movimento predict
+se não tem como atravessar terreno teleport depois de tentativas path incomplete unreachable
+my enemy não é actor in the way
+reduz dano entre aliados em 90% se usando AI
+trying attack cooldown
+timer avoidance chase

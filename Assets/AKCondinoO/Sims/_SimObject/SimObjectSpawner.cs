@@ -178,14 +178,31 @@ namespace AKCondinoO.Sims{
          terraincnkIdxPhysMeshBaked.Add(cnk.id.Value.cnkIdx);
         }
      readonly Dictionary<(Type simObjectType,ulong idNumber),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
-        internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null){
+        internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null,bool move=false){
          //Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
-         Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+         if(SimObjectManager.singleton.spawned.TryGetValue(id,out SimObject sim)){
+          Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+          sim.transform.position=position;
+          sim.transform.rotation=Quaternion.Euler(eulerAngles);
+          sim.transform.localScale=localScale;
+          return;
+         }
          specificSpawnRequests[id]=(position,eulerAngles,localScale,asInventoryItemOwnerId);
         }
-        internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
+        internal void OnSpecificSpawnRequestAt(SpawnData spawnData,bool move=false){
          //Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
-         Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+         for(int i=spawnData.at.Count-1;i>=0;--i){
+          var toSpawn=spawnData.at[i];
+          if(toSpawn.simObjectType!=null&&toSpawn.idNumber!=null){
+           if(SimObjectManager.singleton.spawned.TryGetValue((toSpawn.simObjectType,toSpawn.idNumber.Value),out SimObject sim)){
+            Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+            spawnData.RemoveAt(i);
+            sim.transform.position=toSpawn.position;
+            sim.transform.rotation=Quaternion.Euler(toSpawn.rotation);
+            sim.transform.localScale=toSpawn.scale;
+           }
+          }
+         }
          spawnQueue.Enqueue(spawnData);
         }
      Coroutine spawnCoroutine;
@@ -292,6 +309,7 @@ namespace AKCondinoO.Sims{
                 if(numberIsNew||numberIsRecycled){
                  goto _GetId;
                 }
+                //Log.DebugMessage("SpawnCoroutine:ignore already spawned id :"+id);
                 continue;
                }
                SimObject asInventoryItemOwner=null;

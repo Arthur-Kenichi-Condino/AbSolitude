@@ -22,7 +22,7 @@ namespace AKCondinoO{
      internal PointerEventData pointerEventData;
       internal readonly List<RaycastResult>eventSystemRaycastResults=new List<RaycastResult>();
      internal Ray?screenPointRay;
-     internal RaycastHit[]screenPointRaycastResults=new RaycastHit[1];
+     internal RaycastHit[]screenPointRaycastResults=new RaycastHit[128];
      internal int screenPointRaycastResultsCount=0;
         public void Init(){
          pointerEventData=new PointerEventData(EventSystem.current);

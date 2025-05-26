@@ -171,6 +171,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.PooledPrefabInstanceHandler.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\SimUMATransform.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />

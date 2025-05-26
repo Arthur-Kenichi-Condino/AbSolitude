@@ -31,5 +31,10 @@ namespace AKCondinoO{
           }
          }
         }
+        public int Count{
+         get{
+          return elements.Length;
+         }
+        }
     }
 }

@@ -36,10 +36,10 @@ namespace AKCondinoO.Sims.Actors{
                 internal void Finish(){
                 }
                 internal void Start(){
-                 Log.DebugMessage("ATTACK_ST:Start");
+                 //Log.DebugMessage("ATTACK_ST:Start");
                  if(ai.forcedAttackOnAvoidanceCooldownTimer<=0f){
                   ai.priorityAttack=true;
-                  Log.DebugMessage("'ai.priorityAttack=true'");
+                  //Log.DebugMessage("'ai.priorityAttack=true'");
                  }
                  if(ai.actorAvoidanceBeforeAttackTimer>0f){
                   if(ai.priorityAttack){
@@ -238,7 +238,7 @@ namespace AKCondinoO.Sims.Actors{
              [NonSerialized]protected WaitUntil getDataThrottler;
               [NonSerialized]protected float getDataThrottlerInterval=.125f;
                [NonSerialized]protected float getDataThrottlerTimer;
-             [NonSerialized]protected RaycastHit[]inTheWayColliderHits=new RaycastHit[8];
+             [NonSerialized]protected RaycastHit[]inTheWayColliderHits=new RaycastHit[128];
               [NonSerialized]protected int inTheWayColliderHitsCount=0;
              [NonSerialized]readonly List<(SimObject sim,RaycastHit hit)>hasFriendlyTargetsToAvoid=new List<(SimObject,RaycastHit)>();
              [NonSerialized]bool targetsToAvoidRefreshedFlag;

@@ -2,26 +2,35 @@
     #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     internal Vector3 dest{get{return ai==null?transform.position:ai.MyDest;}}
-     internal PathfindingResult pathfinding{get{return ai==null?PathfindingResult.IDLE:ai.MyPathfinding;}}
+     internal Vector3 dest{get{return(!isUsingAI||ai==null)?transform.position:ai.MyDest;}}
+     internal PathfindingResult pathfinding{get{return(!isUsingAI||ai==null)?PathfindingResult.PLAYER_CONTROLLED:ai.MyPathfinding;}}
         internal partial class AI{
-         internal Vector3 MyDest;
-         internal PathfindingResult MyPathfinding=PathfindingResult.IDLE;
+         internal Vector3 MyDest{
+          get{return(!me.isUsingAI)?me.transform.position:aiDest;}
+          set{aiDest=value;}
+         }protected Vector3 aiDest;
+         internal PathfindingResult MyPathfinding{
+          get{return(!me.isUsingAI)?PathfindingResult.PLAYER_CONTROLLED:aiPathfinding;}
+          set{aiPathfinding=value;}
+         }
+         protected PathfindingResult aiPathfinding=PathfindingResult.IDLE;
         }
         internal enum PathfindingResult:int{
-         IDLE                      =0,
-         REACHED                   =1,
-         PENDING                   =2,
-         TRAVELLING                =3,
-         TRAVELLING_BUT_NO_SPEED   =4,
-         TRAVELLING_BUT_UNREACHABLE=5,
-         TIMEOUT                   =6,
-         UNREACHABLE               =7,
-         PAUSED                    =8,
+         PLAYER_CONTROLLED         =13,
+         IDLE                      = 0,
+         REACHED                   = 1,
+         PENDING                   = 2,
+         TRAVELLING                = 3,
+         TRAVELLING_BUT_NO_SPEED   = 4,
+         TRAVELLING_BUT_UNREACHABLE= 5,
+         TIMEOUT                   = 6,
+         UNREACHABLE               = 7,
+         PAUSED                    = 8,
         }
      protected float pathfindingTimeout=16f;
       protected float pathfindingTimer;

@@ -12,6 +12,7 @@ using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
@@ -136,6 +137,11 @@ namespace AKCondinoO.Sims.Actors{
                #region init simUMA
                    if(actor.simUMA!=null){
                     actor.simUMA.transform.parent.SetParent(null);
+                    SimUMATransform simUMATransform=actor.simUMA.transform.parent.GetComponent<SimUMATransform>();
+                    if(simUMATransform==null){
+                     simUMATransform=actor.simUMA.transform.parent.AddComponent<SimUMATransform>();
+                    }
+                    simUMATransform.goToActor=actor.gameObject;
                     GetTransformTgtValuesFromCharacterController();
                     rotLerp.tgtRot_Last=rotLerp.tgtRot;
                     posLerp.tgtPos_Last=posLerp.tgtPos;

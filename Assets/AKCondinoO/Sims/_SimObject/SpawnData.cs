@@ -27,10 +27,50 @@ namespace AKCondinoO.Sims{
         }
         internal void Clear(){
          at.Clear();
-         actorData.Clear();
-         masters.Clear();
+         actorData              .Clear();
+         masters                .Clear();
          asInventoryItemOwnerIds.Clear();
-         statsData.Clear();
+         statsData              .Clear();
+        }
+        internal void RemoveAt(int index){
+         if(index>=at.Count){
+          Log.Error("SpawnData:RemoveAt:index out of range");
+          return;
+         }
+         at.RemoveAt(index);
+         for(int i=index;i<at.Count;++i){
+          if(actorData              .TryGetValue(i+1,out var               actorData_next)){actorData              [i]=              actorData_next;}else{actorData              .Remove(i);}
+          if(masters                .TryGetValue(i+1,out var                 masters_next)){masters                [i]=                masters_next;}else{masters                .Remove(i);}
+          if(asInventoryItemOwnerIds.TryGetValue(i+1,out var asInventoryItemOwnerIds_next)){asInventoryItemOwnerIds[i]=asInventoryItemOwnerIds_next;}else{asInventoryItemOwnerIds.Remove(i);}
+          if(statsData              .TryGetValue(i+1,out var               statsData_next)){statsData              [i]=              statsData_next;}else{statsData              .Remove(i);}
+         }
+         actorData              .Remove(at.Count);
+         masters                .Remove(at.Count);
+         asInventoryItemOwnerIds.Remove(at.Count);
+         statsData              .Remove(at.Count);
         }
     }
 }
+          /*  Código para testagem
+          SpawnData s=new SpawnData(3);
+          for(int i=0;i<3;++i){
+           s.at.Add((Vector3.zero,Vector3.zero,Vector3.one,null,(ulong)i,new SimObject.PersistentData()));
+           SimObject.PersistentStats stats=new SimObject.PersistentStats();
+           List<SimObject.PersistentStats.StatsBoolData>bools=new List<SimObject.PersistentStats.StatsBoolData>();
+           for(int j=0;j<i;++j){
+            bools.Add(new SimObject.PersistentStats.StatsBoolData());
+           }
+           stats.statsBools=new ListWrapper<SimObject.PersistentStats.StatsBoolData>(bools);
+           s.statsData[i]=stats;
+          }
+          for(int i=2;i>=1;--i){
+           Log.DebugMessage("traversing:remove at i:"+i+":idNumber:"+s.at[i].idNumber+":s.at.Count:"+s.at.Count+":s.statsData.Count:"+s.statsData.Count+":s.statsData[i]:"+(s.statsData.ContainsKey(i)?s.statsData[i].statsBools.Count:"False"));
+           s.RemoveAt(i);
+          }
+          //s.RemoveAt(0);
+          //s.RemoveAt(1);
+          //s.RemoveAt(2);
+          for(int i=0;i<s.at.Count;++i){
+           Log.DebugMessage("traversing:i:"+i+":idNumber:"+s.at[i].idNumber+":s.at.Count:"+s.at.Count+":s.statsData.Count:"+s.statsData.Count+":s.statsData[i]:"+(s.statsData.ContainsKey(i)?s.statsData[i].statsBools.Count:"False"));
+          }
+          */

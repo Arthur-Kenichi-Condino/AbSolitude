@@ -276,7 +276,7 @@ namespace AKCondinoO.Sims.Actors{
                  }
                  if(ai.shouldPredictMyEnemyDest){
                   //Log.DebugMessage("dis1:"+dis1+";dis2:"+dis2);
-                  MyDest=ai.MyEnemy.transform.position+ai.myEnemyBaseAI.characterController.transform.forward*ai.predictMyEnemyDestDis;
+                  MyDest=ai.MyEnemy.transform.position+ai.myEnemyMoveDir*ai.predictMyEnemyDestDis;
                  }else{
                   MyDest=ai.MyEnemy.transform.position;
                  }
@@ -425,7 +425,7 @@ namespace AKCondinoO.Sims.Actors{
              protected WaitUntil getDataThrottler;
               protected float getDataThrottlerInterval=.125f;
                protected float getDataThrottlerTimer;
-             protected RaycastHit[]inTheWayColliderHits=new RaycastHit[8];
+             protected RaycastHit[]inTheWayColliderHits=new RaycastHit[128];
               protected int inTheWayColliderHitsCount=0;
                 internal virtual IEnumerator GetDataCoroutine(){
                  getDataThrottler=new WaitUntil(

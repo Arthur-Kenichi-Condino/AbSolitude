@@ -15,9 +15,12 @@ using static AKCondinoO.InputHandler;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     internal State state{get{return ai==null?State.IDLE_ST:ai.MyState;}}
+     internal State state{get{return(!isUsingAI||ai==null)?State.PLAYER_CONTROLLED_ST:ai.MyState;}}
         internal partial class AI{
-         internal State MyState=State.IDLE_ST;
+         internal State MyState{
+          get{return(!me.isUsingAI)?State.PLAYER_CONTROLLED_ST:aiState;}
+          set{aiState=value;}
+         }protected State aiState=State.IDLE_ST;
           State lastState;
          [NonSerialized]SimObject currentEnemy;
          [NonSerialized]internal BaseAI myEnemyBaseAI;
@@ -25,6 +28,8 @@ namespace AKCondinoO.Sims.Actors{
          [NonSerialized]internal bool myEnemyChangedPos;
          [NonSerialized]internal float myMoveSpeed;
          [NonSerialized]internal float myEnemyMoveSpeed;
+          [NonSerialized]internal Vector3 myEnemyMoveDir;
+         [NonSerialized]internal Vector3 dirFromMyEnemyToMe;
          [NonSerialized]internal bool traveling;
          [NonSerialized]protected float travelMaxTime=2f;
           [NonSerialized]protected float travelTime;
@@ -33,11 +38,13 @@ namespace AKCondinoO.Sims.Actors{
           [NonSerialized]protected float renewDestinationMyEnemyMovedTimer;
          [NonSerialized]internal bool setDest;
          [NonSerialized]internal bool shouldPredictMyEnemyDest;
+          [NonSerialized]internal float shouldPredictMyEnemyDestPredictionTimeSpan=10f;
+           [NonSerialized]internal float shouldPredictMyEnemyDestConsiderInFrontAngle=45.0f;
          [NonSerialized]readonly List<BaseAI>actorsHitInTheWay=new();
           [NonSerialized]internal bool shouldAvoidActorWhileChasing;
-           [NonSerialized]internal float actorAvoidanceWhileChasingTime=2.5f;
+           [NonSerialized]internal float actorAvoidanceWhileChasingTime=3.5f;
             [NonSerialized]internal float actorAvoidanceWhileChasingTimer;
-             [NonSerialized]internal float actorAvoidanceWhileChasingCooldown=2.5f;
+             [NonSerialized]internal float actorAvoidanceWhileChasingCooldown=3.5f;
               [NonSerialized]internal float actorAvoidanceWhileChasingOnCooldownTimer;
           [NonSerialized]internal Vector3 enemyAtPosOnPredictDest;
          [NonSerialized]internal bool shouldAttack;
@@ -51,6 +58,10 @@ namespace AKCondinoO.Sims.Actors{
              [NonSerialized]internal float actorAvoidanceBeforeAttackCooldown=2.5f;
               [NonSerialized]internal float actorAvoidanceBeforeAttackOnCooldownTimer;
             void UpdateMyState(){
+             if(me.IsDead()){
+              SetMyState(State.DEAD_ST);
+              goto _MyStateSet;
+             }
              bool turnToDest=false;
              bool turnToEnemy=false;
              lastState=MyState;
@@ -73,19 +84,43 @@ namespace AKCondinoO.Sims.Actors{
              }
              if(traveling){
               turnToDest=true;
+              if(
+               MyPathfinding==PathfindingResult.TRAVELLING_BUT_NO_SPEED||
+               MyPathfinding==PathfindingResult.TRAVELLING_BUT_UNREACHABLE
+              ){
+               //  traveling:no movement detected
+               Log.DebugMessage("traveling:no movement detected");
+              }
+             }
+             if(
+              !traveling||
+              Vector3.Distance(
+               me.navMeshAgent.destination,me.navMeshAgent.transform.position
+              )<=me.navMeshAgent.stoppingDistance
+             ){
+              //  standing still:no movement detected
+              Log.DebugMessage("standing still:no movement detected");
              }
              myMoveSpeed=Mathf.Max(
               me.moveMaxVelocity.x,
               me.moveMaxVelocity.y,
               me.moveMaxVelocity.z
              );
+             dirFromMyEnemyToMe=Vector3.zero;
              myEnemyMoveSpeed=0f;
+             myEnemyMoveDir=Vector3.zero;
              if(MyEnemy==null){
               myEnemyChangedPos=false;
              }else{
+              dirFromMyEnemyToMe=(me.transform.position-MyEnemy.transform.position).normalized;
               previousMyEnemyPos=myEnemyPos;
               myEnemyPos=MyEnemy.transform.position;
               myEnemyChangedPos=(myEnemyPos!=previousMyEnemyPos);
+              if(myEnemyChangedPos){
+               myEnemyMoveDir=(myEnemyPos-previousMyEnemyPos).normalized;
+              }else{
+               myEnemyMoveDir=myEnemyBaseAI.characterController.transform.forward;
+              }
               if(myEnemyBaseAI!=null){
                myEnemyMoveSpeed=Mathf.Max(
                 myEnemyBaseAI.moveMaxVelocity.x,
@@ -94,8 +129,8 @@ namespace AKCondinoO.Sims.Actors{
                );
               }
              }
-             float dis1=     myMoveSpeed*Time.deltaTime*10.0f;
-             float dis2=myEnemyMoveSpeed*Time.deltaTime*10.0f;
+             float dis1=     myMoveSpeed*Time.deltaTime*shouldPredictMyEnemyDestPredictionTimeSpan;
+             float dis2=myEnemyMoveSpeed*Time.deltaTime*shouldPredictMyEnemyDestPredictionTimeSpan;
              float ratio;
              if(dis2<=0f){
               ratio=1f;
@@ -188,6 +223,12 @@ namespace AKCondinoO.Sims.Actors{
              }
              if(MyEnemy==null){
              }else{
+              if(shouldPredictMyEnemyDest){
+               if(Vector3.Angle(myEnemyMoveDir,dirFromMyEnemyToMe)<=shouldPredictMyEnemyDestConsiderInFrontAngle){
+                //Log.DebugMessage("estou prevendo posição do inimigo mas já estou na frente");
+                shouldPredictMyEnemyDest=false;
+               }
+              }
               Vector3 chaseStDest=MyDest;
               Vector3 chaseStDestWithAvoidance=chaseStDest;
               if(setDest){
@@ -197,7 +238,7 @@ namespace AKCondinoO.Sims.Actors{
                  chaseSt.GetMyDestWithAvoidance(actorsHitInTheWay,out chaseStDestWithAvoidance);
                  Debug.DrawLine(me.transform.position,chaseStDestWithAvoidance,Color.yellow,1f);
                  chaseStDest=chaseStDestWithAvoidance;
-                 Log.DebugMessage("avoiding actorsHitInTheWay on chaseSt"+me.name);
+                 //Log.DebugMessage("avoiding actorsHitInTheWay on chaseSt"+me.name);
                  shouldAvoidActorWhileChasing=true;
                 }
                }
@@ -205,28 +246,15 @@ namespace AKCondinoO.Sims.Actors{
                 actorAvoidanceWhileChasingOnCooldownTimer-=Time.deltaTime;
                }
               }
-             //// if(MyState==State.ATTACK_ST){
-             ////  if(tryingAttack){
-             ////   SetMyState(State.ATTACK_ST);
-             ////   goto _MyStateSet;
-             ////  }
-             //  //if(isInAttackRange){
-             //  // SetMyState(State.ATTACK_ST);
-             //  // goto _MyStateSet;
-             //  //}
-             //// }
               if(setDest){
                MyDest=chaseStDest;
               }
+              if(priorityAttack){
+               turnToEnemy|=true;
+              }
               if(isInAttackRange){
-               turnToEnemy=true;
+               turnToEnemy|=true;
              ////  if(setDest){//  not traveling
-             ////   if(!shouldPredictMyEnemyDest){
-             ////    if(Vector3.Distance(me.navMeshAgent.destination,me.navMeshAgent.transform.position)<=me.navMeshAgent.stoppingDistance){
-             ////     SetMyState(State.ATTACK_ST);
-             ////     goto _MyStateSet;
-             ////    }
-             ////   }
              ////   if(IsInRange(chaseStDest,me.navMeshAgent.transform.position,attackDistance,me.GetRadius(),MyEnemy.GetRadius())){
              ////    SetMyState(State.ATTACK_ST);
              ////    goto _MyStateSet;
@@ -238,9 +266,6 @@ namespace AKCondinoO.Sims.Actors{
              ////   }
              ////  }
              //// }else{
-              }
-              if(priorityAttack){
-               turnToEnemy=true;
               }
               Vector3 attackStDest=MyDest;
               Vector3 attackStDestWithAvoidance=attackStDest;
@@ -410,6 +435,7 @@ namespace AKCondinoO.Sims.Actors{
             }
         }
         internal enum State:int{
+         PLAYER_CONTROLLED_ST=13,
            IDLE_ST= 0,
          FOLLOW_ST= 1,
           CHASE_ST= 2,
