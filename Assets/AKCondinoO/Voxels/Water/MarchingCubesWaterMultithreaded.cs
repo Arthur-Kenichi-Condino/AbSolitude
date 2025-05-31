@@ -162,8 +162,9 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
            if(container.readCacheStream[oftIdx1]!=null){
             container.readCacheStream[oftIdx1].Position=0L;
             while(container.readCacheBinaryReader[oftIdx1].BaseStream.Position!=container.readCacheBinaryReader[oftIdx1].BaseStream.Length){
-             var v=BinaryReadVoxelWater(container.readCacheBinaryReader[oftIdx1]);
-             voxels[oftIdx1][v.vxlIdx]=v.voxel;
+               int vxlIdx=BinaryReadvxlIdx    (container.readCacheBinaryReader[oftIdx1]);
+             VoxelWater v=BinaryReadVoxelWater(container.readCacheBinaryReader[oftIdx1]);
+             voxels[oftIdx1][vxlIdx]=v;
             }
            }
           }}

@@ -89,7 +89,7 @@ namespace AKCondinoO.Sims.Actors{
                MyPathfinding==PathfindingResult.TRAVELLING_BUT_UNREACHABLE
               ){
                //  traveling:no movement detected
-               Log.DebugMessage("traveling:no movement detected");
+               Log.DebugMessage("traveling:no movement detected:"+MyPathfinding,this.me);
               }
              }
              if(

@@ -33,6 +33,7 @@ namespace AKCondinoO.Sims.Actors{
          }
          //Log.DebugMessage("OnTeleportTo success, position:"+position+", transform.position:"+transform.position);
          transform.position=position;
+         transform.rotation=rotation;
          teleportedMove=true;
          return true;
         }

@@ -181,9 +181,8 @@ namespace AKCondinoO.Sims{
         internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null,bool move=false){
          //Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
          if(SimObjectManager.singleton.spawned.TryGetValue(id,out SimObject sim)){
-          Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
-          sim.transform.position=position;
-          sim.transform.rotation=Quaternion.Euler(eulerAngles);
+          //Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+          sim.OnTeleportTo(position,Quaternion.Euler(eulerAngles));
           sim.transform.localScale=localScale;
           return;
          }
@@ -195,10 +194,9 @@ namespace AKCondinoO.Sims{
           var toSpawn=spawnData.at[i];
           if(toSpawn.simObjectType!=null&&toSpawn.idNumber!=null){
            if(SimObjectManager.singleton.spawned.TryGetValue((toSpawn.simObjectType,toSpawn.idNumber.Value),out SimObject sim)){
-            Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+            //Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
             spawnData.RemoveAt(i);
-            sim.transform.position=toSpawn.position;
-            sim.transform.rotation=Quaternion.Euler(toSpawn.rotation);
+            sim.OnTeleportTo(toSpawn.position,Quaternion.Euler(toSpawn.rotation));
             sim.transform.localScale=toSpawn.scale;
            }
           }

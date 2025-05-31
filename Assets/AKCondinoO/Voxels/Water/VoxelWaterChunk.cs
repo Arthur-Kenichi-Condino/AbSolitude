@@ -245,8 +245,9 @@ namespace AKCondinoO.Voxels.Water{
             }
             cache.stream.Position=0L;
             while(cache.reader.BaseStream.Position!=cache.reader.BaseStream.Length){
-             var v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
-             DEBUG_DRAW_WATER_DENSITY_VOXELS[v.vxlIdx]=v.voxel;
+               int vxlIdx=WaterSpreadingMultithreaded.BinaryReadvxlIdx    (cache.reader);
+             VoxelWater v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
+             DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx]=v;
             }
            }catch{
             throw;

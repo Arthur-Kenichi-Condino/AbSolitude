@@ -445,7 +445,9 @@ namespace AKCondinoO.Sims{
          worldBoundsVertices[7]=transform.TransformPoint(localBounds.min.x,localBounds.max.y,localBounds.max.z);
         }
         internal virtual bool OnTeleportTo(Vector3 position,Quaternion rotation){
-         return false;
+         transform.position=position;
+         transform.rotation=rotation;
+         return true;
         }
         internal void OnCollision(Collider collider,SimObject colliderSimObject){
          if(Core.singleton.isServer){
