@@ -277,22 +277,53 @@ namespace AKCondinoO.Voxels.Water{
              continue;
             }
            }
-           double density=voxel.density;
-           if(density==0d){
-            continue;
+           bool wakeUp           =voxel.wakeUp;
+           double density        =voxel.density;
+           double previousDensity=voxel.previousDensity;
+           double absorbValue=0.0d;
+           double spreadValue=0.0d;
+           if(tCnk.DEBUG_DRAW_WATER_CHANGES){
+            if      (voxel.density<voxel.previousDensity){
+             absorbValue=Math.Max(voxel.density,voxel.previousDensity);
+            }else if(voxel.density>voxel.previousDensity){
+             spreadValue=voxel.density;
+            }else if(voxel.wakeUp){
+             if(voxel.density>0.0d){
+              
+             }
+            }
+            if      (absorbValue!=0.0d){
+             Gizmos.color=Color.yellow;
+             Vector3 center=new Vector3(
+               tCnk.id.Value.cnkRgn.x-Mathf.FloorToInt(Width/2.0f),
+               -Mathf.FloorToInt(Height/2.0f),
+               tCnk.id.Value.cnkRgn.y-Mathf.FloorToInt(Depth/2.0f)
+              )+vCoord1;
+             Gizmos.DrawWireCube(center,Vector3.one*(float)(absorbValue*.01d));
+            }else if(spreadValue!=0.0d){
+             Gizmos.color=Color.blue;
+             Vector3 center=new Vector3(
+               tCnk.id.Value.cnkRgn.x-Mathf.FloorToInt(Width/2.0f),
+               -Mathf.FloorToInt(Height/2.0f),
+               tCnk.id.Value.cnkRgn.y-Mathf.FloorToInt(Depth/2.0f)
+              )+vCoord1;
+             Gizmos.DrawWireCube(center,Vector3.one*(float)(spreadValue*.01d));
+            }
            }
-           //Log.DebugMessage("DrawVoxelsDensity:density:"+density);
-           if(-density<MarchingCubesWater.isoLevel){
-            Gizmos.color=Color.white;
-           }else{
-            Gizmos.color=Color.black;
+           if(density!=0d){
+            //Log.DebugMessage("DrawVoxelsDensity:density:"+density);
+            if(-density<MarchingCubesWater.isoLevel){
+             Gizmos.color=Color.white;
+            }else{
+             Gizmos.color=Color.black;
+            }
+            Vector3 center=new Vector3(
+              tCnk.id.Value.cnkRgn.x-Mathf.FloorToInt(Width/2.0f),
+              -Mathf.FloorToInt(Height/2.0f),
+              tCnk.id.Value.cnkRgn.y-Mathf.FloorToInt(Depth/2.0f)
+             )+vCoord1;
+            Gizmos.DrawCube(center,Vector3.one*(float)(density*.01d));
            }
-           Vector3 center=new Vector3(
-             tCnk.id.Value.cnkRgn.x-Mathf.FloorToInt(Width/2.0f),
-             -Mathf.FloorToInt(Height/2.0f),
-             tCnk.id.Value.cnkRgn.y-Mathf.FloorToInt(Depth/2.0f)
-            )+vCoord1;
-           Gizmos.DrawCube(center,Vector3.one*(float)(density*.01d));
           }}}
          }
         }

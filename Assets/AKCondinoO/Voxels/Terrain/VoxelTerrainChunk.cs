@@ -232,5 +232,6 @@ namespace AKCondinoO.Voxels.Terrain{
         #endif
         [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY=false;
         [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY_AUTO_ENABLE=false;
+        [SerializeField]internal bool DEBUG_DRAW_WATER_CHANGES=true;
     }
 }
