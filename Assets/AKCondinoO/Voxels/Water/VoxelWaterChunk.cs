@@ -228,13 +228,16 @@ namespace AKCondinoO.Voxels.Water{
         }
         void OnDrawGizmos(){
          #if UNITY_EDITOR
-          DrawVoxelsDensity();
+          DrawVoxelsDensity(UnityEditor.Selection.Contains(this.gameObject)||UnityEditor.Selection.Contains(tCnk.gameObject));
          #endif
         }
         VoxelWater?[]DEBUG_DRAW_WATER_DENSITY_VOXELS=null;
         #if UNITY_EDITOR
-        void DrawVoxelsDensity(){
-         if(tCnk!=null&&tCnk.DEBUG_DRAW_WATER_DENSITY&&tCnk.id!=null){
+        void DrawVoxelsDensity(bool selected=false){
+         if(tCnk!=null&&(tCnk.DEBUG_DRAW_WATER_DENSITY||selected)&&tCnk.id!=null){
+          if(tCnk.DEBUG_DRAW_WATER_DENSITY_AUTO_ENABLE){
+           tCnk.DEBUG_DRAW_WATER_DENSITY|=selected;
+          }
           if(VoxelSystem.Concurrent.waterCache_rwl.TryEnterReadLock(0)){
            try{
             if(!VoxelSystem.Concurrent.waterCache.TryGetValue(tCnk.id.Value.cnkIdx,out var cache)){
@@ -243,11 +246,13 @@ namespace AKCondinoO.Voxels.Water{
             if(DEBUG_DRAW_WATER_DENSITY_VOXELS==null){
              DEBUG_DRAW_WATER_DENSITY_VOXELS=new VoxelWater?[VoxelsPerChunk];
             }
+            //Log.DebugMessage("DEBUG_DRAW_WATER_DENSITY_VOXELS:tCnk.id.Value.cCoord:"+tCnk.id.Value.cCoord+":cache.reader.BaseStream.Length:"+cache.reader.BaseStream.Length);
             cache.stream.Position=0L;
             while(cache.reader.BaseStream.Position!=cache.reader.BaseStream.Length){
                int vxlIdx=WaterSpreadingMultithreaded.BinaryReadvxlIdx    (cache.reader);
              VoxelWater v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
              DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx]=v;
+             //Log.DebugMessage("DEBUG_DRAW_WATER_DENSITY_VOXELS:v.density:"+v.density);
             }
            }catch{
             throw;
@@ -258,6 +263,7 @@ namespace AKCondinoO.Voxels.Water{
           if(DEBUG_DRAW_WATER_DENSITY_VOXELS==null){
            return;
           }
+          //Log.DebugMessage("DrawVoxelsDensity:'DEBUG_DRAW_WATER_DENSITY_VOXELS!=null'");
           Vector3Int vCoord1;
           for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
           for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
@@ -275,7 +281,7 @@ namespace AKCondinoO.Voxels.Water{
            if(density==0d){
             continue;
            }
-           //Log.DebugMessage("density:"+density);
+           //Log.DebugMessage("DrawVoxelsDensity:density:"+density);
            if(-density<MarchingCubesWater.isoLevel){
             Gizmos.color=Color.white;
            }else{

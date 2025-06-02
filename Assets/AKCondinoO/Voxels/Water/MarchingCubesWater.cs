@@ -28,21 +28,22 @@ namespace AKCondinoO.Voxels.Water.MarchingCubes{
       }
      );
         internal struct VoxelWater{
+         internal bool wakeUp;
          internal double density;
          internal double previousDensity;
-         internal bool sleeping;
+         internal bool hasBlockage;
          internal float evaporateAfter;
          internal Vector3 normal;
          internal bool isCreated;
-            internal VoxelWater(double density,double previousDensity,bool sleeping):this(density,previousDensity,sleeping,-1f){
+            internal VoxelWater(bool wakeUp,double density,double previousDensity,bool hasBlockage):this(wakeUp,density,previousDensity,hasBlockage,-1f){
             }
-            internal VoxelWater(double density,double previousDensity,bool sleeping,float evaporateAfter){
-             this.density=density;this.previousDensity=previousDensity;this.sleeping=sleeping;this.evaporateAfter=evaporateAfter;normal=Vector3.zero;isCreated=true;
+            internal VoxelWater(bool wakeUp,double density,double previousDensity,bool hasBlockage,float evaporateAfter){
+             this.wakeUp=wakeUp;this.density=density;this.previousDensity=previousDensity;this.hasBlockage=hasBlockage;this.evaporateAfter=evaporateAfter;normal=Vector3.zero;isCreated=true;
             }
-         internal static VoxelWater air    {get;}=new VoxelWater(0.0,0.0,true);
-         internal static VoxelWater bedrock{get;}=new VoxelWater(0.0,0.0,true);
+         internal static VoxelWater air    {get;}=new VoxelWater(false,0.0,0.0,true);
+         internal static VoxelWater bedrock{get;}=new VoxelWater(false,0.0,0.0,true);
          public static bool operator==(VoxelWater lhs,VoxelWater rhs){
-          return lhs.density==rhs.density&&lhs.previousDensity==rhs.previousDensity&&lhs.sleeping==rhs.sleeping&&lhs.evaporateAfter==rhs.evaporateAfter;
+          return lhs.wakeUp==rhs.wakeUp&&lhs.density==rhs.density&&lhs.previousDensity==rhs.previousDensity&&lhs.hasBlockage==rhs.hasBlockage&&lhs.evaporateAfter==rhs.evaporateAfter;
          }
          public static bool operator!=(VoxelWater lhs,VoxelWater rhs){
           return!(lhs==rhs);

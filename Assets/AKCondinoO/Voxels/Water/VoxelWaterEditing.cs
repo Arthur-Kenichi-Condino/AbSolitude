@@ -27,26 +27,29 @@ namespace AKCondinoO.Voxels.Water.Editing{
         internal struct WaterEditRequest{
          internal Vector3 center;
          internal Vector3Int size;
+         internal bool wakeUp;
          internal double density;
          internal double previousDensity;
-         internal bool sleeping;
+         internal bool hasBlockage;
          internal float evaporateAfter;
         }
         internal void EditWater(
          Vector3 at,
           Vector3Int size,
-           double density,
-            double previousDensity,
-             bool sleeping,
-              float evaporateAfter
+           bool wakeUp,
+            double density,
+             double previousDensity,
+              bool hasBlockage,
+               float evaporateAfter
         ){
          editRequests.Enqueue(
           new WaterEditRequest{
            center=at,
            size=size,
+           wakeUp=wakeUp,
            density=density,
            previousDensity=previousDensity,
-           sleeping=sleeping,
+           hasBlockage=hasBlockage,
            evaporateAfter=evaporateAfter
           }
          );
@@ -56,7 +59,8 @@ namespace AKCondinoO.Voxels.Water.Editing{
      [SerializeField]Vector3Int DEBUG_ADD_WATER_SOURCE_SIZE=new Vector3Int(1,1,1);
      [SerializeField]double     DEBUG_ADD_WATER_SOURCE_DENSITY=100.0;
      [SerializeField]double     DEBUG_ADD_WATER_SOURCE_PREVIOUS_DENSITY=0.0;
-     [SerializeField]bool       DEBUG_ADD_WATER_SOURCE_SLEEPING=false;
+     [SerializeField]bool       DEBUG_ADD_WATER_SOURCE_WAKE_UP=true;
+     [SerializeField]bool       DEBUG_ADD_WATER_SOURCE_HAS_BLOCKAGE=false;
      [SerializeField]float      DEBUG_ADD_WATER_SOURCE_EVAPORATE_AFTER=-1f;
      readonly Queue<WaterEditRequest>editRequests=new Queue<WaterEditRequest>();
      bool applyingEdits;
@@ -67,9 +71,10 @@ namespace AKCondinoO.Voxels.Water.Editing{
           EditWater(
            DEBUG_ADD_WATER_SOURCE_AT,
            DEBUG_ADD_WATER_SOURCE_SIZE,
+           DEBUG_ADD_WATER_SOURCE_WAKE_UP,
            DEBUG_ADD_WATER_SOURCE_DENSITY,
            DEBUG_ADD_WATER_SOURCE_PREVIOUS_DENSITY,
-           DEBUG_ADD_WATER_SOURCE_SLEEPING,
+           DEBUG_ADD_WATER_SOURCE_HAS_BLOCKAGE,
            DEBUG_ADD_WATER_SOURCE_EVAPORATE_AFTER
           );
          }
