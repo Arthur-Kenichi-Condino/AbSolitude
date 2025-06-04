@@ -424,6 +424,10 @@ namespace AKCondinoO.Voxels.Water{
           }else if(voxel.wakeUp){
            if(voxel.density>0.0d){DoSpreading(vCoord1,voxel);
            }
+          }else{
+           if(!(voxel.density!=0.0d)){
+            voxels[oftIdx1].Remove(vxlIdx1);
+           }
           }
           //if      (voxel.density<voxel.previousDensity){
           // DoAbsorbing(vCoord1,voxel);
@@ -1054,7 +1058,17 @@ namespace AKCondinoO.Voxels.Water{
             voxel.wakeUp=true;
             voxels[oftIdx][atvxlIdx]=voxel;
            }else{
-            //  se realizar absorb, acordar top
+            if(atvCoord.y<Height-1){
+             //  se realizar absorb, acordar top
+             Vector3Int vCoord4=new Vector3Int(atvCoord.x,atvCoord.y+1,atvCoord.z);
+                    int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+             if(voxels[oftIdx].TryGetValue(vxlIdx4,out VoxelWater v4)){
+              if(v4.density>0f){
+               v4.wakeUp=true;
+               voxels[oftIdx][vxlIdx4]=v4;
+              }
+             }
+            }
            }
           }
           return;

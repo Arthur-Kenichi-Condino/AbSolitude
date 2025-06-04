@@ -247,12 +247,14 @@ namespace AKCondinoO.Voxels.Water{
              DEBUG_DRAW_WATER_DENSITY_VOXELS=new VoxelWater?[VoxelsPerChunk];
             }
             //Log.DebugMessage("DEBUG_DRAW_WATER_DENSITY_VOXELS:tCnk.id.Value.cCoord:"+tCnk.id.Value.cCoord+":cache.reader.BaseStream.Length:"+cache.reader.BaseStream.Length);
-            cache.stream.Position=0L;
-            while(cache.reader.BaseStream.Position!=cache.reader.BaseStream.Length){
-               int vxlIdx=WaterSpreadingMultithreaded.BinaryReadvxlIdx    (cache.reader);
-             VoxelWater v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
-             DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx]=v;
-             //Log.DebugMessage("DEBUG_DRAW_WATER_DENSITY_VOXELS:v.density:"+v.density);
+            lock(cache.stream){
+             cache.stream.Position=0L;
+             while(cache.reader.BaseStream.Position!=cache.reader.BaseStream.Length){
+                int vxlIdx=WaterSpreadingMultithreaded.BinaryReadvxlIdx    (cache.reader);
+              VoxelWater v=WaterSpreadingMultithreaded.BinaryReadVoxelWater(cache.reader);
+              DEBUG_DRAW_WATER_DENSITY_VOXELS[vxlIdx]=v;
+              //Log.DebugMessage("DEBUG_DRAW_WATER_DENSITY_VOXELS:v.density:"+v.density);
+             }
             }
            }catch{
             throw;
