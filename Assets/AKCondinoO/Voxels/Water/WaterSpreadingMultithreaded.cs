@@ -419,30 +419,25 @@ namespace AKCondinoO.Voxels.Water{
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           //  carregar dados do bioma aqui em voxels:
           VoxelWater voxel=GetVoxelAt(vxlIdx1,oftIdx1,cnkRgn1,editData1);
+          //  para cada voxel, verifica se está em estado de se espalhar ou absorver comparando
+          // alterações realizadas na execução anterior (density com previousDensity ou wakeUp)
+          //  prioridade para absorção
           if      (voxel.density<voxel.previousDensity){DoAbsorbing(vCoord1,voxel);
           }else if(voxel.density>voxel.previousDensity){DoSpreading(vCoord1,voxel);
           }else if(voxel.wakeUp){
-           if(voxel.density>0.0d){DoSpreading(vCoord1,voxel);
+           if(!(voxel.density>0.0d)){DoAbsorbing(vCoord1,voxel);
+           }else{                    DoSpreading(vCoord1,voxel);
            }
           }else{
            if(!(voxel.density!=0.0d)){
             voxels[oftIdx1].Remove(vxlIdx1);
            }
           }
-          //if      (voxel.density<voxel.previousDensity){
-          // DoAbsorbing(vCoord1,voxel);
-          //}else if(voxel.density>voxel.previousDensity){
-          // DoSpreading(vCoord1,voxel);
-          //}else if(voxel.wakeUp){
-          // if(voxel.density>0.0d){
-          //  DoSpreading(vCoord1,voxel);
-          // }else{
-          //  DoAbsorbing(vCoord1,voxel);
-          // }
-          //}
          }}}
          ProcessNeighbourSpreading(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,editData1,ref hadChanges);
          ProcessNeighbourAbsorbing(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,editData1,ref hadChanges);
+         //  ...acima, já foram processados os dados de chunks vizinhos neste chunk: limpar registros para
+         // adicionar valores que serão passados então deste chunk para chunks vizinhos
          neighbourhoodSpreading[oftIdx1].Clear();
          neighbourhoodAbsorbing[oftIdx1].Clear();
          ProcessSpreading(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,ref hadChanges);
@@ -450,42 +445,6 @@ namespace AKCondinoO.Voxels.Water{
 
 
 
-         //foreach(var vCoordSpreadingPair in neighbourhoodSpreading[oftIdx1]){
-         // Vector3Int vCoord3=vCoordSpreadingPair.Key;
-         //        int atvxlIdx=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-         //     double spreadValue=vCoordSpreadingPair.Value.spread;
-         //  Vector3Int fromvCoord=vCoordSpreadingPair.Value.fromvCoord;
-         //   VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
-         // bool hasBlockage=HasBlockageAt(vCoord3,cCoord1,cnkIdx1);
-         // Log.DebugMessage("neighbourhoodSpreading:atvCoord:"+vCoord3+":atvCoord:"+vCoord3+":spreadValue:"+spreadValue+":hasBlockage:"+hasBlockage);
-         // HorizontalSpread();
-         // void HorizontalSpread(){
-         //  int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-         //  bool hasBlockage=HasBlockageAt(vCoord3,cCoord1,cnkIdx1);
-         //  Log.DebugMessage("HorizontalSpread:"+vCoord3+":hasBlockage:"+hasBlockage);
-         //  VoxelWater curVoxel=GetVoxelAt(vxlIdx3,oftIdx1,cnkRgn1,null);
-         //  double previousDensity=curVoxel.density;
-         //  double density=spreadValue-5.0d;
-         //  if(density<30.0d){
-         //   goto _Done;
-         //  }
-         //  if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
-         //   goto _Done;
-         //  }
-         //  if(beforeSpreadValue[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater beforeSpreadVoxel)){
-         //   previousDensity=beforeSpreadVoxel.density;
-         //  }
-         //  VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-         //  newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-         //  if(hasBlockage){
-         //   newVoxel.hasBlockage=true;
-         //  }
-         //  Log.DebugMessage("HorizontalSpread:newVoxel.density:"+newVoxel.density);
-         //  voxels[oftIdx1][vxlIdx3]=newVoxel;
-         //  OnSpread(vxlIdx3,curVoxel,newVoxel);
-         //  goto _Done;
-         //  _Done:{}
-         // }
          // void OnSpread(int vxlIdx3,VoxelWater oldVoxel,VoxelWater newVoxel){
          //  if(!beforeSpreadValue[oftIdx1].ContainsKey(vxlIdx3)){
          //   beforeAbsorbValue[oftIdx1][vxlIdx3]=beforeSpreadValue[oftIdx1][vxlIdx3]=oldVoxel;
@@ -1098,6 +1057,8 @@ namespace AKCondinoO.Voxels.Water{
           goto _Done;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
          }
          double previousDensity;
+         //  pega a previousDensity de antes de tudo começar, e não só de após cada processamento
+         // de absorção ou espalhar
          if(beforeSpreadValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeSpreadVoxel)){
           previousDensity=beforeSpreadVoxel.density;
          }else{
