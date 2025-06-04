@@ -965,11 +965,13 @@ namespace AKCondinoO.Voxels.Water{
               double spreadValue=vCoordSpreadingPair.Value.spread;
             VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
           Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-          //waterfall
-          vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);DoHorizontalSpread(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);DoHorizontalSpread(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);DoHorizontalSpread(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);DoHorizontalSpread(ref hadChanges);
+          bool waterfall=OnVerticalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
+          if(!waterfall){
+           vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);DoHorizontalSpread(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);DoHorizontalSpread(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);DoHorizontalSpread(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);DoHorizontalSpread(ref hadChanges);
+          }
           void DoHorizontalSpread(ref bool hadChanges){
            OnHorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
           }
@@ -987,11 +989,13 @@ namespace AKCondinoO.Voxels.Water{
               double absorbValue=vCoordAbsorbingPair.Value.absorb;
             VoxelWater fromVoxel=vCoordAbsorbingPair.Value.fromVoxel;
           Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-          //waterfall
-          vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);DoHorizontalAbsorb(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);DoHorizontalAbsorb(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);DoHorizontalAbsorb(ref hadChanges);
-          vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);DoHorizontalAbsorb(ref hadChanges);
+          bool waterfall=OnVerticalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
+          if(!waterfall){
+           vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);DoHorizontalAbsorb(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);DoHorizontalAbsorb(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);DoHorizontalAbsorb(ref hadChanges);
+           vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);DoHorizontalAbsorb(ref hadChanges);
+          }
           void DoHorizontalAbsorb(ref bool hadChanges){
            OnHorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
           }
@@ -1006,6 +1010,16 @@ namespace AKCondinoO.Voxels.Water{
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
           Log.DebugMessage("OnVerticalSpread:"+atvCoord+":hasBlockage:"+hasBlockage);
           return OnVerticalSpreadSetVoxel(fromvCoord,fromVoxel,atvxlIdx,spreadValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
+         }else{
+          return false;
+         }
+        }
+        bool OnVerticalAbsorb(Vector3Int fromvCoord,VoxelWater fromVoxel,Vector3Int atvCoord,double absorbValue,int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,ref bool hadChanges){
+         if(atvCoord.y>=0){
+          int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
+          bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
+          Log.DebugMessage("OnVerticalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
+          return OnVerticalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
          }else{
           return false;
          }
@@ -1039,6 +1053,8 @@ namespace AKCondinoO.Voxels.Water{
            if(voxel.density>0f){
             voxel.wakeUp=true;
             voxels[oftIdx][atvxlIdx]=voxel;
+           }else{
+            //  se realizar absorb, acordar top
            }
           }
           return;
@@ -1053,32 +1069,108 @@ namespace AKCondinoO.Voxels.Water{
         bool OnVerticalSpreadSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double spreadValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
          //  se bloqueado por terreno, retorna falso
          bool waterfall=true;
+         if(hasBlockage){
+          waterfall=false;
+          if(fromVoxel.hasBlockage){
+           goto _Done;
+          }
+         }
+         VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
+         double density=spreadValue;/* sem perda porque é vertical */
+         if(density<30.0d){
+          goto _Done;
+         }
+         if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
+          goto _Done;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
+         }
+         double previousDensity;
+         if(beforeSpreadValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeSpreadVoxel)){
+          previousDensity=beforeSpreadVoxel.density;
+         }else{
+          previousDensity=curVoxel.density;
+         }
+         VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
+         newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
+         if(hasBlockage){
+          newVoxel.hasBlockage=true;
+         }
+         Log.DebugMessage("OnVerticalSpreadSetVoxel:newVoxel.density:"+newVoxel.density);
+         voxels[oftIdx][atvxlIdx]=newVoxel;
+         OnSpread(atvxlIdx,curVoxel,newVoxel,oftIdx,ref hadChanges);
+         goto _Done;
+         _Done:{}
+         return waterfall;
+        }
+        bool OnVerticalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
+         //  se bloqueado por terreno, retorna falso
+         bool waterfall=true;
+         if(hasBlockage){
+          waterfall=false;
+          if(fromVoxel.hasBlockage){
+           goto _Done;
+          }
+         }
+         VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
+         if(curVoxel.density<30.0d){
+          goto _Done;
+          //  não há necessidade de absorver o voxel caso ele já tenha uma densidade menor
+         }
+         double density=curVoxel.density-absorbValue;
+         double previousDensity;
+         if(beforeAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeAbsorbVoxel)){
+          previousDensity=beforeAbsorbVoxel.density;
+          if(beforeAbsorbVoxel.density>0f){
+           double newDensity=beforeAbsorbVoxel.density-(absorbValue-5.0d);
+           if(newDensity<density){
+            density=newDensity;
+           }
+          }
+         }else{
+          previousDensity=curVoxel.density;
+         }
+         if(density>0d){//  
+          goto _Done;
+         }
+         //bool wasAbsorbed=false;
          //VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
          //double previousDensity=curVoxel.density;
-         //double density=spreadValue;/* sem perda porque é vertical */
-         //if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
-         // SetPostSpread(atvxlIdx,oldVoxel:curVoxel,null,wasSpreaded,oftIdx,ref hadChanges);
-         // return true;//  true porque não foi bloqueado por terreno e encostou em outro voxel de água (sim para waterfall, então não espalhar horizontalmente)
+         //double density=curVoxel.density-absorbValue;
+         //if(beforeAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeAbsorbVoxel)){
+         // previousDensity=beforeAbsorbVoxel.density;
+         // if(beforeAbsorbVoxel.density>0f){
+         //  double newDensity=beforeAbsorbVoxel.density-absorbValue;
+         //  if(newDensity<curVoxel.density){
+         //   density=newDensity;
+         //  }
+         // }
          //}
-         //if(beforeSpreadValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeSpreadVoxel)){
-         // previousDensity=beforeSpreadVoxel.density;
+         //if(density>0d){
+         // SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,null,wasAbsorbed,oftIdx,ref hadChanges);
+         // return true;
          //}
-         //VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-         //newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-         //if(hasBlockage){
-         // //newVoxel.previousDensity=newVoxel.density;
-         // newVoxel.hasBlockage=true;
-         //}
-         //Log.DebugMessage("VerticalSpreadSetVoxel:newVoxel.density:"+newVoxel.density);
-         //voxels[oftIdx][atvxlIdx]=newVoxel;
-         //wasSpreaded=true;
-         //SetPostSpread(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasSpreaded,oftIdx,ref hadChanges);
+         VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
+         newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
+         if(hasBlockage){
+          newVoxel.hasBlockage=true;
+         }
+         //Log.DebugMessage("OnVerticalAbsorbSetVoxel:curVoxel.density:"+curVoxel.density+":newVoxel.density:"+newVoxel.density);
+         voxels[oftIdx][atvxlIdx]=newVoxel;
+         OnAbsorb(atvxlIdx,curVoxel,newVoxel,oftIdx,ref hadChanges);
+         //wasAbsorbed=true;
+         //SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasAbsorbed,oftIdx,ref hadChanges);
          //if(hasBlockage){
          // return false;
          //}
+         goto _Done;
+         _Done:{}
          return waterfall;
         }
         void OnHorizontalSpreadSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double spreadValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
+         if(hasBlockage){
+          if(fromVoxel.hasBlockage){
+           goto _Done;
+          }
+         }
          VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
          double density=spreadValue-5.0d;
          if(density<30.0d){
@@ -1109,6 +1201,11 @@ namespace AKCondinoO.Voxels.Water{
         }
         void OnHorizontalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
          //  se realizar absorb, acordar top
+         if(hasBlockage){
+          if(fromVoxel.hasBlockage){
+           goto _Done;
+          }
+         }
          VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
          if(curVoxel.density<30.0d){
           goto _Done;
@@ -1124,7 +1221,7 @@ namespace AKCondinoO.Voxels.Water{
           previousDensity=beforeAbsorbVoxel.density;
           if(beforeAbsorbVoxel.density>0f){
            double newDensity=beforeAbsorbVoxel.density-(absorbValue-5.0d);
-           if(newDensity<curVoxel.density){
+           if(newDensity<density){
             density=newDensity;
            }
           }
@@ -1149,14 +1246,14 @@ namespace AKCondinoO.Voxels.Water{
         }
         void OnSpread(int atvxlIdx,VoxelWater oldVoxel,VoxelWater newVoxel,int oftIdx,ref bool hadChanges){
          if(!beforeSpreadValue[oftIdx].ContainsKey(atvxlIdx)){
-          beforeSpreadValue[oftIdx][atvxlIdx]=oldVoxel;
+          beforeSpreadValue[oftIdx][atvxlIdx]=beforeAbsorbValue[oftIdx][atvxlIdx]=oldVoxel;
          }
          afterSpreadValue[oftIdx][atvxlIdx]=newVoxel;
          hadChanges=true;
         }
         void OnAbsorb(int atvxlIdx,VoxelWater oldVoxel,VoxelWater newVoxel,int oftIdx,ref bool hadChanges){
          if(!beforeAbsorbValue[oftIdx].ContainsKey(atvxlIdx)){
-          beforeAbsorbValue[oftIdx][atvxlIdx]=oldVoxel;
+          beforeAbsorbValue[oftIdx][atvxlIdx]=beforeSpreadValue[oftIdx][atvxlIdx]=oldVoxel;
          }
          afterAbsorbValue[oftIdx][atvxlIdx]=newVoxel;
          hadChanges=true;
@@ -1564,50 +1661,6 @@ namespace AKCondinoO.Voxels.Water{
         // // voxels[oftIdx][vxlIdx2]=fromVoxel;
         // //}
         //}
-        bool   VerticalAbsorb(Vector3Int fromvCoord,VoxelWater fromVoxel,Vector3Int atvCoord,double absorbValue,int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,ref bool hadChanges){
-         if(atvCoord.y>=0){
-          int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
-          bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("VerticalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
-          return   VerticalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
-         }else{
-          return false;
-         }
-        }
-        bool   VerticalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
-         //  se bloqueado por terreno, retorna falso
-         bool wasAbsorbed=false;
-         VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
-         double previousDensity=curVoxel.density;
-         double density=curVoxel.density-absorbValue;
-         if(beforeAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeAbsorbVoxel)){
-          previousDensity=beforeAbsorbVoxel.density;
-          if(beforeAbsorbVoxel.density>0f){
-           double newDensity=beforeAbsorbVoxel.density-absorbValue;
-           if(newDensity<curVoxel.density){
-            density=newDensity;
-           }
-          }
-         }
-         if(density>0d){
-          SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,null,wasAbsorbed,oftIdx,ref hadChanges);
-          return true;
-         }
-         VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-         newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-         if(hasBlockage){
-          //newVoxel.previousDensity=newVoxel.density;
-          newVoxel.hasBlockage=true;
-         }
-         Log.DebugMessage("VerticalAbsorbSetVoxel:curVoxel.density:"+curVoxel.density+":newVoxel.density:"+newVoxel.density);
-         voxels[oftIdx][atvxlIdx]=newVoxel;
-         wasAbsorbed=true;
-         SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasAbsorbed,oftIdx,ref hadChanges);
-         if(hasBlockage){
-          return false;
-         }
-         return true;
-        }
         bool HorizontalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
          //  se bloqueado por terreno, retorna falso
          bool result=true;

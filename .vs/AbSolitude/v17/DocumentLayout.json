@@ -2005,7 +2005,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Water\\WaterSpreadingMultithreaded.cs",
-              "ViewState": "AgIAABoEAAAAAAAAAAAgwC4EAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAGQEAAAAAAAAAAAqwPgDAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-26T18:56:36.973Z",
               "IsPinned": true,
@@ -2098,10 +2098,10 @@
       "FloatingWindowState": {
         "Id": "a2a06f37-7921-41e8-bc85-e76a2f11be4d",
         "Display": 1,
-        "X": 1,
-        "Y": 1,
-        "Width": 1291,
-        "Height": 731,
+        "X": -7,
+        "Y": -7,
+        "Width": 1295,
+        "Height": 735,
         "WindowState": 2
       },
       "DocumentGroups": [
