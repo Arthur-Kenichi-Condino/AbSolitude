@@ -59,14 +59,32 @@ namespace AKCondinoO.Sims.Actors{
            OnStoppedAiming();
           }
          }
-         var characterController=animatorController.actor.characterController.character;
-         var headOffset=characterController.transform.rotation*animatorController.actor.characterController.headOffset;
+         var character=animatorController.actor.characterController.character;
+         var headOffset=character.transform.rotation*animatorController.actor.characterController.headOffset;
          var aimAtMaxDistance=animatorController.actor.characterController.aimAtMaxDistance;
-         var rotForAim=animatorController.actor.characterController.viewRotationForAiming;
-         Vector3 aimAt=animatorController.actor.characterController.aimingAt;
+         var viewRotationForAiming=animatorController.actor.characterController.viewRotationForAiming;
+         Vector3 aimingAt=animatorController.actor.characterController.aimingAt;
          bool aiming=false;
          if(animatorController.actor.characterController.isAiming||head==null){
           aiming=true;
+         }
+         Vector3 whereToLook=aimingAt;
+         Transform bodyRotationTransform;
+         if(animatorController.actor.simUMA!=null){
+          bodyRotationTransform=animatorController.actor.simUMA.transform;
+         }else{
+          bodyRotationTransform=character.transform;
+         }
+         Vector3 headPos=bodyRotationTransform.position+(bodyRotationTransform.rotation*headOffset);
+         Vector3 up=Vector3.up;
+         Vector3 characterForward=bodyRotationTransform.rotation*Vector3.forward;
+         Vector3 lookForward=(whereToLook-headPos).normalized;
+         float bodyToHeadRotationYComponentSignedAngle=Vector3.SignedAngle(characterForward,lookForward,up);
+         if(!Mathf.Approximately(bodyToHeadRotationYComponentSignedAngle,0f)){
+          Log.DebugMessage("bodyToHeadRotationYComponentSignedAngle:"+bodyToHeadRotationYComponentSignedAngle);
+          if(Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)>=20f){
+           float angleToRotate=Mathf.Abs(bodyToHeadRotationYComponentSignedAngle)-10f;
+          }
          }
          //float bodyToHeadRotationXComponentSignedAngle=RotationHelper.SignedAngleFromRotationXComponentFromAToB(characterController.transform.rotation,rotForAim);
          //if(Mathf.Abs(bodyToHeadRotationXComponentSignedAngle)>=10f){
@@ -91,13 +109,8 @@ namespace AKCondinoO.Sims.Actors{
          // aimAt=characterController.transform.position+headOffset+rotForAim*Vector3.forward*aimAtMaxDistance;
          //}
          ////  [https://discussions.unity.com/t/upper-torso-ik/133564/2]:m_Anim.SetLookAtWeight(m_LookWeight,m_BodyWeight,m_HeadWeight,m_EyesWeight,m_ClampWeight);
-         //if(aiming){
-         // animatorController.animator.SetLookAtWeight(1f,1f,1f,1f,0.0f);
-         //}else{
-         // animatorController.animator.SetLookAtWeight(1f,0f,1f,1f,0.0f);
-         //}
-         //headLookAtPositionLerp.tgtPos=aimAt;
-         //headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
+         headLookAtPositionLerp.tgtPos=whereToLook;
+         headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
          //float bodyToHeadLookAtYSignedAngle=Vector3.SignedAngle(animatorController.animator.transform.forward,headLookAtPositionLerped.normalized,Vector3.up);
          //float bodyToHeadLookAtXSignedAngle=Vector3.SignedAngle(animatorController.animator.transform.forward,headLookAtPositionLerped.normalized,Vector3.right);
          //if(
@@ -106,7 +119,12 @@ namespace AKCondinoO.Sims.Actors{
          //){
          // headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
          //}
-         //animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
+         if(aiming){
+          animatorController.animator.SetLookAtWeight(1f,1f,1f,1f,0.0f);
+         }else{
+          animatorController.animator.SetLookAtWeight(1f,0f,1f,1f,0.0f);
+         }
+         animatorController.animator.SetLookAtPosition(headLookAtPositionLerped);
          #region feet IK
              if(leftFoot!=null&&rightFoot!=null){
               //float disBetweenFeet=(leftFoot.position-rightFoot.position).magnitude;
