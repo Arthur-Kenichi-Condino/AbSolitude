@@ -89,7 +89,7 @@ namespace AKCondinoO.Sims.Actors{
                MyPathfinding==PathfindingResult.TRAVELLING_BUT_UNREACHABLE
               ){
                //  traveling:no movement detected
-               Log.DebugMessage("traveling:no movement detected:"+MyPathfinding,this.me);
+               //Log.DebugMessage("traveling:no movement detected:"+MyPathfinding,this.me);
               }
              }
              if(
@@ -99,7 +99,7 @@ namespace AKCondinoO.Sims.Actors{
               )<=me.navMeshAgent.stoppingDistance
              ){
               //  standing still:no movement detected
-              Log.DebugMessage("standing still:no movement detected");
+              //Log.DebugMessage("standing still:no movement detected");
              }
              myMoveSpeed=Mathf.Max(
               me.moveMaxVelocity.x,

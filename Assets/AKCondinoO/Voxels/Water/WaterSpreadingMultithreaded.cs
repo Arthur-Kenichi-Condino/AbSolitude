@@ -445,167 +445,6 @@ namespace AKCondinoO.Voxels.Water{
 
 
 
-         //foreach(var vCoordSpreadingPair in spreading){
-         // Vector3Int vCoord2=vCoordSpreadingPair.Key;
-         //        int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-         //     double spreadValue=vCoordSpreadingPair.Value.spread;
-         //   VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
-         // Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-         // vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-         // HorizontalSpread();
-         // vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-         // HorizontalSpread();
-         // fromVoxel.previousDensity=fromVoxel.density;
-         // voxels[oftIdx1][vxlIdx2]=fromVoxel;
-         // void HorizontalSpread(){
-         //  if(!(vCoord3.x<0||vCoord3.x>=Width||
-         //       vCoord3.z<0||vCoord3.z>=Depth)
-         //  ){
-         //   int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-         //   bool hasBlockage=HasBlockageAt(vCoord3,cCoord1,cnkIdx1);
-         //   Log.DebugMessage("HorizontalSpread:"+vCoord3+":hasBlockage:"+hasBlockage);
-         //   VoxelWater curVoxel=GetVoxelAt(vxlIdx3,oftIdx1,cnkRgn1,null);
-         //   double previousDensity=curVoxel.density;
-         //   double density=spreadValue-5.0d;
-         //   if(density<30.0d){
-         //    goto _Done;
-         //   }
-         //   if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
-         //    goto _Done;
-         //   }
-         //   if(beforeSpreadValue[oftIdx1].TryGetValue(vxlIdx3,out VoxelWater beforeSpreadVoxel)){
-         //    previousDensity=beforeSpreadVoxel.density;
-         //   }
-         //   VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-         //   newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-         //   if(hasBlockage){
-         //    newVoxel.hasBlockage=true;
-         //   }
-         //   Log.DebugMessage("HorizontalSpread:newVoxel.density:"+newVoxel.density);
-         //   voxels[oftIdx1][vxlIdx3]=newVoxel;
-         //   OnSpread(vxlIdx3,curVoxel,newVoxel);
-         //   goto _Done;
-         //   _Done:{}
-         //  }else{
-         //   Vector2Int cnkRgn3=cCoordTocnkRgn(cCoord1);
-         //   ValidateCoord(ref cnkRgn3,ref vCoord3);
-         //   Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
-         //   int        cnkIdx3=GetcnkIdx(cCoord3.x,cCoord3.y);
-         //   int        oftIdx3=GetoftIdx(cCoord3-container.cCoord.Value);
-         //   DoNeighbourhoodSpread(
-         //    vCoord2,
-         //    fromVoxel,
-         //    vCoord3,
-         //    spreadValue,
-         //    oftIdx3
-         //   );
-         //  }
-         // }
-         // void OnSpread(int vxlIdx3,VoxelWater oldVoxel,VoxelWater newVoxel){
-         //  if(!beforeSpreadValue[oftIdx1].ContainsKey(vxlIdx3)){
-         //   beforeAbsorbValue[oftIdx1][vxlIdx3]=beforeSpreadValue[oftIdx1][vxlIdx3]=oldVoxel;
-         //  }
-         //  afterSpreadValue[oftIdx1][vxlIdx3]=newVoxel;
-         //  hadChanges=true;
-         // }
-         //}
-         //ProcessNeighbourSpreading(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,editData1,ref hadChanges);
-         //ProcessNeighbourAbsorbing(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,editData1,ref hadChanges);
-         //neighbourhoodSpreading[oftIdx1].Clear();
-         //neighbourhoodAbsorbing[oftIdx1].Clear();
-         //Vector3Int vCoord1;
-         //for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-         //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-         //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-         // int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
-         // //  carregar dados do bioma aqui em voxels:
-         // VoxelWater voxel=GetVoxelAt(vxlIdx1,oftIdx1,cnkRgn1,editData1);
-         // if      (voxel.density<voxel.previousDensity){
-         //  DoAbsorbing(vCoord1,voxel);
-         // }else if(voxel.density>voxel.previousDensity){
-         //  DoSpreading(vCoord1,voxel);
-         // }
-         //}}}
-         //ProcessAbsorbing(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,ref hadChanges);
-         //ProcessSpreading(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,ref hadChanges);
-         //Vector3Int vCoord1;
-         //for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-         //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-         //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-         // int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
-         // //  carregar dados do bioma aqui em voxels:
-         // VoxelWater voxel=GetVoxelAt(vxlIdx1,oftIdx1,cnkRgn1,editData1);
-         // if(!voxel.hasBlockage){
-         //  if      (voxel.density>voxel.previousDensity){
-         //   //Log.DebugMessage("'!voxel.sleeping':voxel.density:"+voxel.density+":WaterSpreadingMultithreaded");
-         //   AddToSpreading(vCoord1,voxel);
-         //  }else if(voxel.density<voxel.previousDensity){
-         //   AddToAbsorbing(vCoord1,voxel);
-         //  }else{
-         //   //voxel.sleeping=true;
-         //   voxels[oftIdx1][vxlIdx1]=voxel;
-         //  }
-         // }
-         //}}}
-         //foreach(var vCoordAbsorbingPair in neighbourhoodAbsorbing[oftIdx1]){
-         // Vector3Int vCoord=vCoordAbsorbingPair.Key;
-         // int vxlIdx=GetvxlIdx(vCoord.x,vCoord.y,vCoord.z);
-         // Log.DebugMessage("neighbourhoodAbsorbing:cCoord1:"+cCoord1+":vCoord:"+vCoord+":vCoordAbsorbingPair.Value.absorb:"+vCoordAbsorbingPair.Value.absorb);
-         // bool absorb=HorizontalAbsorbSetVoxel(vCoordAbsorbingPair.Value.fromVoxel,vxlIdx,vCoordAbsorbingPair.Value.absorb,oftIdx1,cnkRgn1,HasBlockageAt(vCoord),editData1);
-         // if(absorb){
-         //  WakeTop();
-         // }
-         // void WakeTop(){
-         //  Vector3Int vCoord4=new Vector3Int(vCoord.x,vCoord.y+1,vCoord.z);
-         //         int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
-         //  if(voxels[oftIdx1].TryGetValue(vxlIdx4,out VoxelWater v4)){
-         //   if(v4.density>0f){
-         //    v4.sleeping=false;
-         //    voxels[oftIdx1][vxlIdx4]=v4;
-         //   }
-         //  }
-         // }
-         //}
-         //foreach(var vCoordSpreadingPair in neighbourhoodSpreading[oftIdx1]){
-         // Vector3Int vCoord=vCoordSpreadingPair.Key;
-         // int vxlIdx=GetvxlIdx(vCoord.x,vCoord.y,vCoord.z);
-         // Log.DebugMessage("neighbourhoodSpreading:cCoord1:"+cCoord1+":vCoord:"+vCoord+":vCoordSpreadingPair.Value.spread:"+vCoordSpreadingPair.Value.spread);
-         // //  carregar dados do bioma aqui em voxels,
-         // HorizontalSpreadSetVoxel(vCoordSpreadingPair.Value.fromVoxel,vxlIdx,vCoordSpreadingPair.Value.spread,oftIdx1,cnkRgn1,HasBlockageAt(vCoord),editData1);
-         //}
-         //Vector3Int vCoord1;
-         //for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
-         //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
-         //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){
-         // //  carregar dados do bioma aqui em voxels,
-         // int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
-         // VoxelWater voxel=GetVoxelAt(vxlIdx1,oftIdx1,cnkRgn1,editData1);
-         // voxel.sleeping=voxel.sleeping&&(voxel.density==voxel.previousDensity);
-         // if(voxel.density!=0.0d||voxel.previousDensity!=0.0d){
-         //  if(!voxel.sleeping){
-         //   hadChanges=true;
-         //   if(voxel.density<voxel.previousDensity){
-         //    //Log.DebugMessage("to absorb:"+vCoord1);
-         //    if(absorbing.TryGetValue(vCoord1,out var currentAbsorb)){
-         //     double absorbValueOld=currentAbsorb.absorb;
-         //     double absorbValueNew=voxel.previousDensity-voxel.density;
-         //     if(absorbValueNew>absorbValueOld){
-         //       absorbing[vCoord1]=(absorbValueNew,voxel);
-         //     }
-         //    }else{
-         //       absorbing.Add(vCoord1,(voxel.previousDensity-voxel.density,voxel));
-         //    }
-         //   }else if(voxel.density==voxel.previousDensity){
-         //    //Log.DebugMessage("to spread (voxel.density==voxel.previousDensity):"+vCoord1);
-         //    if(spreading.TryGetValue(vCoord1,out var currentSpread)){
-         //     double spreadValueOld=currentSpread.spread;
-         //     double spreadValueNew=voxel.density;
-         //     if(spreadValueNew>spreadValueOld){
-         //       spreading[vCoord1]=(spreadValueNew,voxel);
-         //     }
-         //    }else{
-         //       spreading.Add(vCoord1,(voxel.density,voxel));
-         //    }
          //   }else{
          //    //Log.DebugMessage("to spread:"+vCoord1);
          //    if(spreading.TryGetValue(vCoord1,out var currentSpread)){
@@ -705,8 +544,6 @@ namespace AKCondinoO.Voxels.Water{
              }
              VoxelSystem.Concurrent.waterNeighbourhoodSpreadingCache[cnkIdx2].Add((fileStream,binWriter,binReader));
              VoxelSystem.Concurrent.waterNeighbourhoodSpreadingCacheIds[fileStream]=(cCoord2,cnkRgn2,cnkIdx2);
-             //VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
-             //VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
             }
             fileStream=container.neighbourhoodAbsorbingCacheStream[oftIdx2];
             binWriter=container.neighbourhoodAbsorbingCacheBinaryWriter[oftIdx2];
@@ -743,8 +580,6 @@ namespace AKCondinoO.Voxels.Water{
              }
              VoxelSystem.Concurrent.waterNeighbourhoodAbsorbingCache[cnkIdx2].Add((fileStream,binWriter,binReader));
              VoxelSystem.Concurrent.waterNeighbourhoodAbsorbingCacheIds[fileStream]=(cCoord2,cnkRgn2,cnkIdx2);
-             //VoxelSystem.Concurrent.waterCache[container.cnkIdx.Value]=(fileStream,binWriter,binReader);
-             //VoxelSystem.Concurrent.waterCacheIds[fileStream]=(container.cCoord.Value,container.cnkRgn.Value,container.cnkIdx.Value);
             }
            }
           }}
@@ -891,7 +726,7 @@ namespace AKCondinoO.Voxels.Water{
          if(atvCoord.y>=0){
           int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("OnVerticalSpread:"+atvCoord+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("OnVerticalSpread:"+atvCoord+":hasBlockage:"+hasBlockage);
           return OnVerticalSpreadSetVoxel(fromvCoord,fromVoxel,atvxlIdx,spreadValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
          }else{
           return false;
@@ -901,7 +736,7 @@ namespace AKCondinoO.Voxels.Water{
          if(atvCoord.y>=0){
           int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("OnVerticalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("OnVerticalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
           return OnVerticalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
          }else{
           return false;
@@ -916,7 +751,7 @@ namespace AKCondinoO.Voxels.Water{
          ){
           int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("OnHorizontalSpread:"+atvCoord+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("OnHorizontalSpread:"+atvCoord+":hasBlockage:"+hasBlockage);
           OnHorizontalSpreadSetVoxel(fromvCoord,fromVoxel,atvxlIdx,spreadValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
           if(voxels[oftIdx].TryGetValue(atvxlIdx,out VoxelWater voxel)){
            if(voxel.density>0f){
@@ -948,7 +783,7 @@ namespace AKCondinoO.Voxels.Water{
          ){
           int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("OnHorizontalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("OnHorizontalAbsorb:"+atvCoord+":hasBlockage:"+hasBlockage);
           OnHorizontalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
           if(voxels[oftIdx].TryGetValue(atvxlIdx,out VoxelWater voxel)){
            if(voxel.density>0f){
@@ -978,7 +813,7 @@ namespace AKCondinoO.Voxels.Water{
          DoNeighbourhoodAbsorb(fromvCoord,fromVoxel,atvCoord,absorbValue,oftIdx3);
         }
         bool OnVerticalSpreadSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double spreadValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
-         //  se bloqueado por terreno, retorna falso
+         //  se bloqueado por terreno, retorna falso para então espalhar horizontalmente
          bool waterfall=true;
          if(hasBlockage){
           waterfall=false;
@@ -988,7 +823,7 @@ namespace AKCondinoO.Voxels.Water{
          }
          VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
          double density=spreadValue;/* sem perda porque é vertical */
-         if(density<30.0d){
+         if(density<30.0d){//  não criar voxels com densidade tão baixa, ou seja, menor que 30.0d
           goto _Done;
          }
          if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
@@ -1007,7 +842,7 @@ namespace AKCondinoO.Voxels.Water{
          if(hasBlockage){
           newVoxel.hasBlockage=true;
          }
-         Log.DebugMessage("OnVerticalSpreadSetVoxel:newVoxel.density:"+newVoxel.density);
+         //Log.DebugMessage("OnVerticalSpreadSetVoxel:newVoxel.density:"+newVoxel.density);
          voxels[oftIdx][atvxlIdx]=newVoxel;
          OnSpread(atvxlIdx,curVoxel,newVoxel,oftIdx,ref hadChanges);
          goto _Done;
@@ -1015,7 +850,7 @@ namespace AKCondinoO.Voxels.Water{
          return waterfall;
         }
         bool OnVerticalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
-         //  se bloqueado por terreno, retorna falso
+         //  se bloqueado por terreno, retorna falso, para realizar absorção horizontal
          bool waterfall=true;
          if(hasBlockage){
           waterfall=false;
@@ -1044,23 +879,6 @@ namespace AKCondinoO.Voxels.Water{
          if(density>0d){//  
           goto _Done;
          }
-         //bool wasAbsorbed=false;
-         //VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
-         //double previousDensity=curVoxel.density;
-         //double density=curVoxel.density-absorbValue;
-         //if(beforeAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeAbsorbVoxel)){
-         // previousDensity=beforeAbsorbVoxel.density;
-         // if(beforeAbsorbVoxel.density>0f){
-         //  double newDensity=beforeAbsorbVoxel.density-absorbValue;
-         //  if(newDensity<curVoxel.density){
-         //   density=newDensity;
-         //  }
-         // }
-         //}
-         //if(density>0d){
-         // SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,null,wasAbsorbed,oftIdx,ref hadChanges);
-         // return true;
-         //}
          VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
          newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
          if(hasBlockage){
@@ -1069,11 +887,6 @@ namespace AKCondinoO.Voxels.Water{
          //Log.DebugMessage("OnVerticalAbsorbSetVoxel:curVoxel.density:"+curVoxel.density+":newVoxel.density:"+newVoxel.density);
          voxels[oftIdx][atvxlIdx]=newVoxel;
          OnAbsorb(atvxlIdx,curVoxel,newVoxel,oftIdx,ref hadChanges);
-         //wasAbsorbed=true;
-         //SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasAbsorbed,oftIdx,ref hadChanges);
-         //if(hasBlockage){
-         // return false;
-         //}
          goto _Done;
          _Done:{}
          return waterfall;
@@ -1092,9 +905,6 @@ namespace AKCondinoO.Voxels.Water{
          if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
           goto _Done;
          }
-         //if(afterAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater afterAbsorbVoxel)){
-         // goto _Done;
-         //}
          double previousDensity;
          if(beforeSpreadValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeSpreadVoxel)){
           previousDensity=beforeSpreadVoxel.density;
@@ -1149,7 +959,7 @@ namespace AKCondinoO.Voxels.Water{
           goto _Done;
          }
          //if(curVoxel.density<=density){//  atualizar o voxel mesmo assim...
-          //  não realizar esta condição if, ela quebra o sistema por algum motivo...
+          //  não ir para _Done nesta condição if, ela quebra o sistema por algum motivo...
          //}
          VoxelWater newVoxel=new VoxelWater(false,density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
          newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
@@ -1262,7 +1072,7 @@ namespace AKCondinoO.Voxels.Water{
            if(ConflictResolution(spreadValue,absorbConflict.absorb)){continue;}
           }
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("neighbourhoodSpreading:cCoord:"+cCoord+":atvCoord:"+atvCoord+":spreadValue:"+spreadValue+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("neighbourhoodSpreading:cCoord:"+cCoord+":atvCoord:"+atvCoord+":spreadValue:"+spreadValue+":hasBlockage:"+hasBlockage);
           OnHorizontalSpreadSetVoxel(fromvCoord,fromVoxel,atvxlIdx,spreadValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
          }
         }
@@ -1276,13 +1086,12 @@ namespace AKCondinoO.Voxels.Water{
         ){
          foreach(var vCoordAbsorbingPair in neighbourhoodAbsorbing[oftIdx]){
           Vector3Int atvCoord=vCoordAbsorbingPair.Key;
-          //neighbourhoodSpreading[oftIdx].Remove(atvCoord);
                  int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
               double absorbValue=vCoordAbsorbingPair.Value.absorb;
            Vector3Int fromvCoord=vCoordAbsorbingPair.Value.fromvCoord;
             VoxelWater fromVoxel=vCoordAbsorbingPair.Value.fromVoxel;
           bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-          Log.DebugMessage("neighbourhoodAbsorbing:cCoord:"+cCoord+":atvCoord:"+atvCoord+":absorbValue:"+absorbValue+":hasBlockage:"+hasBlockage);
+          //Log.DebugMessage("neighbourhoodAbsorbing:cCoord:"+cCoord+":atvCoord:"+atvCoord+":absorbValue:"+absorbValue+":hasBlockage:"+hasBlockage);
           OnHorizontalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
          }
         }
@@ -1383,213 +1192,6 @@ namespace AKCondinoO.Voxels.Water{
 
 
 #region ...remove
-        //void ProcessNeighbourAbsorbing(int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
-        // foreach(var vCoordAbsorbingPair in neighbourhoodAbsorbing[oftIdx]){
-        //  Vector3Int atvCoord=vCoordAbsorbingPair.Key;
-        //         int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
-        //      double absorbValue=vCoordAbsorbingPair.Value.absorb;
-        //   Vector3Int fromvCoord=vCoordAbsorbingPair.Value.fromvCoord;
-        //    VoxelWater fromVoxel=vCoordAbsorbingPair.Value.fromVoxel;
-        //  bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-        //  //Log.DebugMessage("neighbourhoodAbsorbing:cCoord:"+cCoord+":atvCoord:"+atvCoord+":absorbValue:"+absorbValue+":hasBlockage:"+hasBlockage);
-        //  HorizontalAbsorbSetVoxel(fromvCoord,fromVoxel,atvxlIdx,absorbValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
-        //  //bool result=true;
-        //  //bool wasAbsorbed=false;
-        //  //VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
-        //  ////Log.DebugMessage("curVoxel.density-(absorbValue-5.0d):"+(curVoxel.density-(absorbValue-5.0d)));
-        //  //double previousDensity=curVoxel.density;
-        //  //double density=curVoxel.density-(absorbValue-5.0d);
-        //  //if(beforeAbsorbValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeAbsorbVoxel)){
-        //  // previousDensity=beforeAbsorbVoxel.density;
-        //  // if(beforeAbsorbVoxel.density>0f){
-        //  //  double newDensity=beforeAbsorbVoxel.density-(absorbValue-5.0d);
-        //  //  if(newDensity<curVoxel.density){
-        //  //   density=newDensity;
-        //  //  }
-        //  // }
-        //  //}
-        //  //if(density>0d){//  
-        //  // result=false;
-        //  // SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,null,wasAbsorbed,oftIdx,ref hadChanges);
-        //  // continue;
-        //  //}
-        //  //VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-        //  //newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-        //  //if(hasBlockage){
-        //  // //newVoxel.previousDensity=newVoxel.density;
-        //  // //newVoxel.sleeping=true;
-        //  // newVoxel.hasBlockage=true;
-        //  // result=false;
-        //  //}
-        //  //Log.DebugMessage("HorizontalAbsorbSetVoxel:curVoxel.density:"+curVoxel.density+":newVoxel.density:"+newVoxel.density+":hasBlockage:"+hasBlockage);
-        //  //voxels[oftIdx][atvxlIdx]=newVoxel;
-        //  //wasAbsorbed=true;
-        //  ////if(!result){
-        //  //// if(voxels[oftIdx].TryGetValue(atvxlIdx,out VoxelWater v)){
-        //  ////  if(v.density>0f){
-        //  ////   v.sleeping=false;
-        //  ////   voxels[oftIdx][atvxlIdx]=v;
-        //  ////  }
-        //  //// }
-        //  ////}
-        //  //SetPostAbsorb(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasAbsorbed,oftIdx,ref hadChanges);
-        // }
-        //}
-        //void ProcessNeighbourSpreading(int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
-        // foreach(var vCoordSpreadingPair in neighbourhoodSpreading[oftIdx]){
-        //  Vector3Int atvCoord=vCoordSpreadingPair.Key;
-        //         int atvxlIdx=GetvxlIdx(atvCoord.x,atvCoord.y,atvCoord.z);
-        //      double spreadValue=vCoordSpreadingPair.Value.spread;
-        //   Vector3Int fromvCoord=vCoordSpreadingPair.Value.fromvCoord;
-        //    VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
-        //  bool hasBlockage=HasBlockageAt(atvCoord,cCoord,cnkIdx);
-        //  //Log.DebugMessage("neighbourhoodSpreading:cCoord:"+cCoord+":atvCoord:"+atvCoord+":spreadValue:"+spreadValue+":hasBlockage:"+hasBlockage);
-        //  OnHorizontalSpreadSetVoxel(fromvCoord,fromVoxel,atvxlIdx,spreadValue,oftIdx,cnkRgn,hasBlockage,null,ref hadChanges);
-        //  //bool wasSpreaded=false;
-        //  //VoxelWater curVoxel=GetVoxelAt(atvxlIdx,oftIdx,cnkRgn,editData);
-        //  //double previousDensity=curVoxel.density;
-        //  //double density=spreadValue-5.0d;
-        //  //if(density<30.0d){
-        //  // SetPostSpread(atvxlIdx,oldVoxel:curVoxel,null,wasSpreaded,oftIdx,ref hadChanges);
-        //  // return;
-        //  //}
-        //  //if(curVoxel.density>=density){//  não há necessidade de espalhar para o voxel caso ele já tenha uma densidade maior
-        //  // SetPostSpread(atvxlIdx,oldVoxel:curVoxel,null,wasSpreaded,oftIdx,ref hadChanges);
-        //  // return;
-        //  //}
-        //  //if(beforeSpreadValue[oftIdx].TryGetValue(atvxlIdx,out VoxelWater beforeSpreadVoxel)){
-        //  // previousDensity=beforeSpreadVoxel.density;
-        //  //}
-        //  //VoxelWater newVoxel=new VoxelWater(density,previousDensity,false,Mathf.Max(fromVoxel.evaporateAfter,curVoxel.evaporateAfter));
-        //  //newVoxel.density=Math.Clamp(newVoxel.density,0.0d,100.0d);
-        //  //if(hasBlockage){
-        //  // //newVoxel.previousDensity=newVoxel.density;
-        //  // newVoxel.hasBlockage=true;
-        //  //}
-        //  //Log.DebugMessage("ProcessNeighbourSpreading:newVoxel.density:"+newVoxel.density);
-        //  //voxels[oftIdx][atvxlIdx]=newVoxel;
-        //  //wasSpreaded=true;
-        //  //SetPostSpread(atvxlIdx,oldVoxel:curVoxel,newVoxel,wasSpreaded,oftIdx,ref hadChanges);
-        // }
-        //}
-        //void ProcessAbsorbing(int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,ref bool hadChanges){
-        // foreach(var vCoordAbsorbingPair in absorbing){
-        //  Vector3Int vCoord2=vCoordAbsorbingPair.Key;
-        //         int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-        //      double absorbValue=vCoordAbsorbingPair.Value.absorb;
-        //    VoxelWater fromVoxel=vCoordAbsorbingPair.Value.fromVoxel;
-        //  Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-        //  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-        //  HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        //  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-        //  HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // }
-        // // Vector3Int vCoord2=vCoordAbsorbingPair.Key;
-        // //        int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-        // //     double absorbValue=vCoordAbsorbingPair.Value.absorb;
-        // //   VoxelWater fromVoxel=vCoordAbsorbingPair.Value.fromVoxel;
-        // // if(!fromVoxel.isCreated){continue;}
-        // // Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-        // // bool waterfall=VerticalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // // Log.DebugMessage("waterfall:"+waterfall+":WaterSpreadingMultithreaded");
-        // // if(!waterfall){
-        // //  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-        // //  if(HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges)){
-        // //   WakeTop();
-        // //  }
-        // //  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-        // //  if(HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges)){
-        // //   WakeTop();
-        // //  }
-        // //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
-        // //  if(HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges)){
-        // //   WakeTop();
-        // //  }
-        // //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
-        // //  if(HorizontalAbsorb(vCoord2,fromVoxel,vCoord3,absorbValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges)){
-        // //   WakeTop();
-        // //  }
-        // // }
-        // // fromVoxel.previousDensity=fromVoxel.density;
-        // // //fromVoxel.sleeping=true;
-        // // voxels[oftIdx][vxlIdx2]=fromVoxel;
-        // //}
-        // //// Vector3Int vCoord2=vCoordAbsorbingPair.Key;
-        // ////        int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-        // ////     double absorbValue=vCoordAbsorbingPair.Value.absorb;
-        // ////   VoxelWater fromVoxel=vCoordAbsorbingPair.Value.voxel;
-        // //// if(!fromVoxel.isCreated){continue;}
-        // //// Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-        // //// bool waterfall=VerticalAbsorb();
-        // //// if(!waterfall){
-        // ////  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-        // ////  if(HorizontalAbsorb()){WakeTop();}
-        // ////  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-        // ////  if(HorizontalAbsorb()){WakeTop();}
-        // ////  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
-        // ////  if(HorizontalAbsorb()){WakeTop();}
-        // ////  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
-        // ////  if(HorizontalAbsorb()){WakeTop();}
-        // //  void WakeTop(){
-        // ////   Vector3Int vCoord4=new Vector3Int(vCoord3.x,vCoord3.y+1,vCoord3.z);
-        // ////          int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
-        // ////   if(voxels[oftIdx1].TryGetValue(vxlIdx4,out VoxelWater v4)){
-        // ////    if(v4.density>0f){
-        // ////     v4.sleeping=false;
-        // ////     voxels[oftIdx1][vxlIdx4]=v4;
-        // ////    }
-        // ////   }
-        // //  }
-        // //// }else{
-        // ////  Vector3Int vCoord4=new Vector3Int(vCoord2.x,vCoord2.y+1,vCoord2.z);
-        // ////         int vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
-        // ////  if(voxels[oftIdx1].TryGetValue(vxlIdx4,out VoxelWater v4)){
-        // ////   if(v4.density>0f){
-        // ////    v4.sleeping=false;
-        // ////    voxels[oftIdx1][vxlIdx4]=v4;
-        // ////   }
-        // ////  }
-        // //// }
-        // //// fromVoxel.previousDensity=fromVoxel.density;
-        // //// fromVoxel.sleeping=true;
-        // //// voxels[oftIdx1][vxlIdx2]=fromVoxel;
-        // ////}
-        //}
-        //void ProcessSpreading(int oftIdx,Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx,ref bool hadChanges){
-        // foreach(var vCoordSpreadingPair in spreading){
-        //  Vector3Int vCoord2=vCoordSpreadingPair.Key;
-        //         int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-        //      double spreadValue=vCoordSpreadingPair.Value.spread;
-        //    VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
-        //  Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-        //  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-        //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        //  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-        //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // }
-        // // Vector3Int vCoord2=vCoordSpreadingPair.Key;
-        // //        int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-        // //     double spreadValue=vCoordSpreadingPair.Value.spread;
-        // //   VoxelWater fromVoxel=vCoordSpreadingPair.Value.fromVoxel;
-        // // if(!fromVoxel.isCreated){continue;}
-        // // Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-        // // bool waterfall=  VerticalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // // Log.DebugMessage("waterfall:"+waterfall+":WaterSpreadingMultithreaded");
-        // // if(!waterfall){
-        // //  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-        // //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // //  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-        // //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
-        // //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
-        // //  HorizontalSpread(vCoord2,fromVoxel,vCoord3,spreadValue,oftIdx,cCoord,cnkRgn,cnkIdx,ref hadChanges);
-        // // }
-        // // fromVoxel.previousDensity=fromVoxel.density;
-        // // //fromVoxel.sleeping=true;
-        // // voxels[oftIdx][vxlIdx2]=fromVoxel;
-        // //}
-        //}
         bool HorizontalAbsorbSetVoxel(Vector3Int fromvCoord,VoxelWater fromVoxel,int atvxlIdx,double absorbValue,int oftIdx,Vector2Int cnkRgn,bool hasBlockage,Dictionary<Vector3Int,WaterEditOutputData>editData,ref bool hadChanges){
          //  se bloqueado por terreno, retorna falso
          bool result=true;
