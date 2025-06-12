@@ -1,0 +1,83 @@
+Índice:
+I.Criar um morph do zero
+II.Tornar um morph como sendo Weight Map Mode (paint)
+III.Criar um D-Former de um Morph
+IV.Adicionar influência a outras geometrias
+
+I.Criar um morph do zero:
+  1.First, select the root of the figure, here, Genesis
+
+  2.use the Create menu command to create a D-Former
+
+  3.Position the D-Former field and Base
+    o Field é o campo de ação do D-Former, e o D-Former em si aplica alterações baseando-se no Transform (o D-Former Base é só um Transform)
+
+  4.move the control to distort the mesh
+    aqui, você ajusta o morph como quiser, quais movimentos serão feitos ao ajustar a barra de efetividade do morph, em positivo ou negativo
+    quando terminar, siga para o passo 5
+
+  5.Open the D-Former Tab (Window->Panes (Tabs)->DForm)
+
+  6.Spawn your morph from the D-Former Tab:
+    selecione Create Root Control Parameter, Delete Applied D-Former(s) e Apply Spawned Morph e clique em Spawn Morph...
+    nota: se quiser reutilizar o D-Former para outra coisa, não selecione a opção Delete...
+
+  observações:
+    é possível usar vários D-Formers para criar um único Morph
+
+  fontes (sites de instruções):
+    [http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/shaping/tutorials/create_morph/start]
+
+II.Tornar um morph como sendo Weight Map Mode (paint):
+  1.clique em D-Former Field na hierarquia
+
+  2.selecione Parameters->Influence e troque Influence Mode de Sphere para Weight Map
+
+  3.escolha Tools->Node Weight Map Brush e abrir a aba Tool Settings
+    decida se usar Symmetry: (em X, será na esquerda e direita)
+
+  4.em Unused Maps, selecione Influence Weights e clique em Add Map
+    agora você pode pintar os vértices clicando e apagar os vértices segurando Alt esquerdo enquanto clica 
+
+  observações: caso não haja Add Map, use Window->Panes (Tabs)->DForm, selecione a Geometria e clique em Add Influence to Selected
+
+III.Criar um D-Former de um Morph:
+  nota: não é possível realizar a tarefa facilmente e de forma total, mas é um modo de recuperar D-Formers apagados por engano
+  1.crie um novo D-Form
+
+  2.abra/selecione a ferramenta Geometry Editor Tool
+
+  3.selecione a geometria na qual está o Morph e selecione o Morph desejado na lista de Parameters->Morphs ou outra lista
+
+  4.clique com o botão direito na lista de Morphs e marque Edit Mode
+
+  5.clique com o botão direito no Morph desejado e clique em Select Morph Vertices
+
+  6.note que se os vértices não estão visíveis, então primeiro, na Tool Settings, selecione a opção Vertex Selection
+  e teremos agora que tentar alguns Troubleshootings:
+    a. primeiro, tente fechar e abrir o programa e fazer de novo
+    b. alterne entre Vertex Selection e outros tipos de Selection
+    c. selecione os vértices de outro Morph e selecione o Morph a ser selecionado de novo
+    d. clique várias vezes em Select Morph Vertices
+    e. veja se a Geometria do corpo inteiro (root) está selecionada em Scene e tente Select Morph Vertices de novo
+  os vértices se tornarão visíveis
+
+  7.coloque o campo do D-Former (Field) englobando todos os vértices (mas agora coloque fora de qualquer geometria antes de trocar a Influence do
+  D-Former para Weight Map e somente então englobe os vértices)
+
+  8.troque o Influence para Weight Map e faça o Add Map
+
+  9.somente agora, então, coloque o Field englobando os vértices
+
+  10.selecione o Field do D-Former na Scene
+
+  11.certificando-se de que os vértices ainda estão selecionados, agora clique com o botão direito na tela e aperte em Weight Editing->Fill Selected
+  com o valor 100%
+
+  12.o peso do Weight Map está em 100% para todos os vértices, então agora faça Smooth e Paint no Node Weight Map Brush Tool até chegar aos valores
+  desejados
+
+IV.Adicionar influência a outras geometrias:
+  1.abra Window->Panes (Tabs)->DForm
+
+  2.

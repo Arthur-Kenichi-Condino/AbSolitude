@@ -305,27 +305,30 @@ namespace AKCondinoO.Sims.Actors{
                   float dis2=Vector3.Distance(actorHitInTheWay.transform.position,MyEnemy.transform.position);
                   float dis3=radius1+radius2;
                   Vector3 up=Vector3.up;
-                  Vector3 projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
-                  Vector3 projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                  Vector3 projDir1OnUp=Vector3.ProjectOnPlane(dir1,up).normalized;
+                  Vector3 projDir2OnUp=Vector3.ProjectOnPlane(dir2,up).normalized;
                   if(
                    projDir1OnUp==Vector3.zero||
-                   projDir2OnUp==Vector3.zero
+                   projDir2OnUp==Vector3.zero||
+                   projDir1OnUp==projDir2OnUp
                   ){
                    up=Vector3.right;
-                   projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
-                   projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                   projDir1OnUp=Vector3.ProjectOnPlane(dir1,up).normalized;
+                   projDir2OnUp=Vector3.ProjectOnPlane(dir2,up).normalized;
                    if(
                     projDir1OnUp==Vector3.zero||
-                    projDir2OnUp==Vector3.zero
+                    projDir2OnUp==Vector3.zero||
+                    projDir1OnUp==projDir2OnUp
                    ){
                     up=Vector3.forward;
-                    projDir1OnUp=Vector3.ProjectOnPlane(dir1,up);
-                    projDir2OnUp=Vector3.ProjectOnPlane(dir2,up);
+                    projDir1OnUp=Vector3.ProjectOnPlane(dir1,up).normalized;
+                    projDir2OnUp=Vector3.ProjectOnPlane(dir2,up).normalized;
                     if(
                      projDir1OnUp==Vector3.zero||
-                     projDir2OnUp==Vector3.zero
+                     projDir2OnUp==Vector3.zero||
+                     projDir1OnUp==projDir2OnUp
                     ){
-                     Vector3 a=-me.transform.right;
+                     Vector3 a=-me.transform.right;//  "a" é left do forward (forward é "-dir1")
                      Vector3 b=-dir1;
                      up=Vector3.Cross(
                       a,

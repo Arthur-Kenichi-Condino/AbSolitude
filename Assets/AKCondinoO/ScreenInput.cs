@@ -78,6 +78,9 @@ namespace AKCondinoO{
            Array.Sort(screenPointRaycastResults,HitsArraySortComparer);
           }
          }
+         if(Enabled.RELEASE_MOUSE.curState!=Enabled.RELEASE_MOUSE.lastState){
+          GameMode.singleton.OnGameModeChangeTo(GameMode.singleton.current);
+         }
         }
         //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
         private int HitsArraySortComparer(RaycastHit a,RaycastHit b){

@@ -10,4 +10,10 @@ reduz dano entre aliados em 90% se usando AI
 trying attack cooldown
 timer avoidance chase
 
+move to dest com onteleportto
+
 cabeça, rotação limites está com bug
+
+salvar com binary writer
+
+wake top

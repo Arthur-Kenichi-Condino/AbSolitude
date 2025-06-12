@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.GameMode;
+using static AKCondinoO.InputHandler;
 namespace AKCondinoO.UI.Fixed{
     internal partial class FixedUI:MonoBehaviour,ISingletonInitialization{
      internal static FixedUI singleton{get;set;}
@@ -65,6 +66,13 @@ namespace AKCondinoO.UI.Fixed{
           }
           case GameModesEnum.Interact:{
                interactModeUI.gameObject.SetActive(true);
+           break;
+          }
+          case GameModesEnum.ThirdPerson:{
+               interactModeUI.gameObject.SetActive(true);
+           if(Enabled.RELEASE_MOUSE.curState){
+           }else{
+           }
            break;
           }
          }

@@ -202,7 +202,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\HealingSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeaponOnShootVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Gameplayer.cs" />
@@ -244,7 +243,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditing.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.Events.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
@@ -264,6 +262,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.PersistentData.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.ButtonPressEvents.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ReflectionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DebugGizmos.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
@@ -282,6 +281,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Leveling.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.ButtonPressEvents.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
