@@ -1,0 +1,130 @@
+{
+    "penis2": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": false
+        },
+        "Export Directory": "C:/Users/arthu/Documentos/GitHub/AbSolitude/Assets/AKCondinoO/Sims/Actors/Humanoid/_3D",
+        "Object": {
+            "penis2": {
+                "Physics": {
+                    "Collision Shapes": {
+                        "Shadow_Catcher": {},
+                        "CC_Base_Pivot": {},
+                        "Plane_001": {},
+                        "Hotdog_Packed5": {},
+                        "Dick_Base": {},
+                        "nylRoot": {},
+                        "nylBase": {},
+                        "nylShaft_1": {},
+                        "nylShaft_2": {},
+                        "nylShaft3": {},
+                        "nylShaft_4": {},
+                        "nylShaft_5": {},
+                        "nylForeskin": {},
+                        "nylForeskin_end": {},
+                        "nylRod": {},
+                        "nylRod_end": {},
+                        "nylBalls": {},
+                        "nylBalls_2": {},
+                        "nylBalls_2_end": {},
+                        "Preview_Camera": {},
+                        "Dick_Mesh_Base": {}
+                    }
+                },
+                "Meshes": {
+                    "Dick_Mesh_Base": {
+                        "Materials": {
+                            "Dick": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    124.00000762939453,
+                                    126.00000762939453,
+                                    99.00000762939453
+                                ],
+                                "Ambient Color": [
+                                    12.973402976989746,
+                                    12.973402976989746,
+                                    12.973402976989746
+                                ],
+                                "Specular Color": [
+                                    204.0,
+                                    204.0,
+                                    204.0
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {
+                                    "Metallic": {
+                                        "Texture Path": "./textures/penis2/penis2/Dick_Mesh_Base/Dick/Dick_metallic.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Base Color": {
+                                        "Texture Path": "Dick_Diffuse.jpg",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Roughness": {
+                                        "Texture Path": "./textures/penis2/penis2/Dick_Mesh_Base/Dick/Dick_roughness.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Normal": {
+                                        "Texture Path": "Dick_Normal.jpg",
+                                        "Strength": 0.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "AO": {
+                                        "Texture Path": "./textures/penis2/penis2/Dick_Mesh_Base/Dick/Dick_ao.jpg",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    }
+                                },
+                                "Resource Textures": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
