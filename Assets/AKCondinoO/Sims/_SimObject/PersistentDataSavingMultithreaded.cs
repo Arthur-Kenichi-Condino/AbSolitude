@@ -20,6 +20,7 @@ namespace AKCondinoO.Sims{
           internal Dictionary<Type,List<ulong>>simInventoryReleasedSimObjectsIdsToRelease;
          internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>simObjectDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentData>>();
           internal readonly Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>simActorDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimActor.PersistentSimActorData>>();
+           internal readonly Dictionary<Type,Dictionary<ulong,SimObject.PersistentStats>>simStatsDataToSerializeToFile=new Dictionary<Type,Dictionary<ulong,SimObject.PersistentStats>>();
          internal readonly Dictionary<Type,HashSet<ulong>>persistentReleasedIds=new Dictionary<Type,HashSet<ulong>>();
           internal readonly Dictionary<Type,HashSet<ulong>>idsToRelease=new Dictionary<Type,HashSet<ulong>>();
          internal readonly Dictionary<Type,ulong>persistentIds=new Dictionary<Type,ulong>();
@@ -35,6 +36,9 @@ namespace AKCondinoO.Sims{
        internal readonly Dictionary<Type,FileStream>simActorFileStream=new Dictionary<Type,FileStream>();
         internal readonly Dictionary<Type,StreamWriter>simActorFileStreamWriter=new Dictionary<Type,StreamWriter>();
         internal readonly Dictionary<Type,StreamReader>simActorFileStreamReader=new Dictionary<Type,StreamReader>();
+       internal readonly Dictionary<Type,FileStream>simStatsFileStream=new Dictionary<Type,FileStream>();
+        internal readonly Dictionary<Type,StreamWriter>simStatsFileStreamWriter=new Dictionary<Type,StreamWriter>();
+        internal readonly Dictionary<Type,StreamReader>simStatsFileStreamReader=new Dictionary<Type,StreamReader>();
        readonly Dictionary<Type,Dictionary<int,List<(ulong simObjectIdNumber,SimObject.PersistentData persistentData)>>>simObjectIdNumberPersistentDataListBycnkIdxBySimObjectType=new Dictionary<Type,Dictionary<int,List<(ulong,SimObject.PersistentData)>>>();
         readonly Queue<List<(ulong simObjectIdNumber,SimObject.PersistentData persistentData)>>simObjectIdNumberPersistentDataListPool=new Queue<List<(ulong,SimObject.PersistentData)>>();
        readonly Dictionary<Type,List<ulong>>simObjectIdNumberListByType=new Dictionary<Type,List<ulong>>();
@@ -187,10 +191,51 @@ namespace AKCondinoO.Sims{
           fileStreamWriter.Write(stringBuilder.ToString());
           fileStreamWriter.Flush();
          }
+         foreach(var simObjectTypePersistentStatsToSavePair in container.simStatsDataToSerializeToFile){
+          Type simObjectType=simObjectTypePersistentStatsToSavePair.Key;
+          var persistentStatsToSave=simObjectTypePersistentStatsToSavePair.Value;
+          if(!simStatsFileStream.ContainsKey(simObjectType)){
+           goto _Skip;
+          }
+          FileStream fileStream=this.simStatsFileStream[simObjectType];
+          StreamWriter fileStreamWriter=this.simStatsFileStreamWriter[simObjectType];
+          StreamReader fileStreamReader=this.simStatsFileStreamReader[simObjectType];
+          stringBuilder.Clear();
+          fileStream.Position=0L;
+          fileStreamReader.DiscardBufferedData();
+          string line;
+          while((line=fileStreamReader.ReadLine())!=null){
+           if(string.IsNullOrEmpty(line)){continue;}
+           int simObjectIdNumberStringStart=line.IndexOf("id=")+3;
+           int simObjectIdNumberStringEnd  =line.IndexOf(" , ",simObjectIdNumberStringStart);
+           ulong simObjectIdNumber=ulong.Parse(line.Substring(simObjectIdNumberStringStart,simObjectIdNumberStringEnd-simObjectIdNumberStringStart),NumberStyles.Any,CultureInfoUtil.en_US);
+           //Log.DebugMessage("simObjectIdNumber:"+simObjectIdNumber);
+           if(container.idsToRelease[simObjectType].Contains(simObjectIdNumber)){continue;}
+           if(container.persistentReleasedIds[simObjectType].Contains(simObjectIdNumber)){continue;}
+           if(!persistentStatsToSave.ContainsKey(simObjectIdNumber)){
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{0}{1}",line,Environment.NewLine);
+           }
+          }
+          foreach(var simObjectIdNumberPersistentStatsPair in persistentStatsToSave){
+           ulong simObjectIdNumber=simObjectIdNumberPersistentStatsPair.Key;
+           if(container.idsToRelease[simObjectType].Contains(simObjectIdNumber)){continue;}
+           if(container.persistentReleasedIds[simObjectType].Contains(simObjectIdNumber)){continue;}
+           SimObject.PersistentStats persistentStats=simObjectIdNumberPersistentStatsPair.Value;
+           string s=persistentStats.ToString();
+           if(!string.IsNullOrEmpty(s)){
+            stringBuilder.AppendFormat(CultureInfoUtil.en_US,"{{ id={0} , {{ {1} }} }} , endOfLine{2}",simObjectIdNumber,s,Environment.NewLine);
+           }
+          }
+          fileStream.SetLength(0L);
+          fileStreamWriter.Write(stringBuilder.ToString());
+          fileStreamWriter.Flush();
+          _Skip:{}
+          persistentStatsToSave.Clear();
+         }
          foreach(var simActorTypePersistentSimActorDataToSavePair in container.simActorDataToSerializeToFile){
           Type simActorType=simActorTypePersistentSimActorDataToSavePair.Key;
           var persistentSimActorDataToSave=simActorTypePersistentSimActorDataToSavePair.Value;
-          Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
+          //Log.DebugMessage("persistentSimActorDataToSave.Count:"+persistentSimActorDataToSave.Count);
           if(!simActorFileStream.ContainsKey(simActorType)){
            goto _Skip;
           }

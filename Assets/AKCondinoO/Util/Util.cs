@@ -7,7 +7,7 @@ namespace AKCondinoO{
     internal class Util{
      internal static int UILayer;
         internal static void SetUtil(){
-         UILayer=LayerMask.NameToLayer("UI");
+         UILayer=LayerMask.GetMask("UI");
         }
         internal static Transform FindChildRecursively(Transform parent,string name){
          foreach(Transform child in parent){

@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace AKCondinoO{
         }
     }
     internal abstract class BaseMultithreaded<T>where T:BackgroundContainer{
-     internal static bool Stop{
+     internal static bool Stopped{
       get{bool tmp;lock(Stop_syn){tmp=Stop_v;      }return tmp;}
       set{         lock(Stop_syn){    Stop_v=value;}if(value){enqueued.Set();}}
      }static bool Stop_v=false;static readonly object Stop_syn=new object();
@@ -57,6 +58,48 @@ namespace AKCondinoO{
          }
          return count;
         }
+     static readonly List<BaseMultithreaded<T>>allThreadsStarted=new List<BaseMultithreaded<T>>();
+        internal static void Start(BaseMultithreaded<T>[]threads,ConstructorInfo ctorInfo,object[]ctorParams){
+         //Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:threads.Length:"+threads.Length);
+         if(Stopped){
+          Stopped=false;
+         }
+         if(threads!=null&&threads.Length>0){
+          for(int i=0;i<threads.Length;++i){
+                        threads[i]=Start(ctorInfo,ctorParams);
+          }
+         }
+        }
+        internal static BaseMultithreaded<T>Start(ConstructorInfo ctorInfo,object[]ctorParams){
+         //Log.DebugMessage("BaseMultithreaded<"+typeof(T)+">:start thread");
+         if(Stopped){
+          Stopped=false;
+         }
+         BaseMultithreaded<T>thread=(BaseMultithreaded<T>)ctorInfo.Invoke(ctorParams);
+         allThreadsStarted.Add(thread);
+         return thread;
+        }
+        internal static bool Stop(params BaseMultithreaded<T>[]allThreads){
+         if(Clear()!=0){
+          Log.Error(((allThreads!=null&&allThreads.Length>0&&allThreads[0]!=null)?allThreads[0].GetType():"BaseMultithreaded<"+typeof(T)+">")+" will stop with pending work");
+         }
+         Stopped=true;
+         bool result=false;
+         if(allThreads!=null&&allThreads.Length>0){
+          for(int i=0;i<allThreads.Length;++i){
+                     if(allThreads[i]==null){continue;}
+                        allThreads[i].Wait();
+          }
+          result=true;
+         }
+         if(allThreadsStarted.Count>0){
+          foreach(BaseMultithreaded<T>thread in allThreadsStarted){
+           thread.Wait();
+          }
+         }
+         allThreadsStarted.Clear();
+         return result;
+        }
      readonly System.Threading.ThreadPriority priority;
      readonly Task task;
         internal BaseMultithreaded(System.Threading.ThreadPriority priority=System.Threading.ThreadPriority.BelowNormal){
@@ -69,7 +112,7 @@ namespace AKCondinoO{
          Thread.CurrentThread.Priority=priority;
          ManualResetEvent backgroundData;
            AutoResetEvent foregroundData;
-         while(!Stop){enqueued.WaitOne();if(Stop){enqueued.Set();goto _Stop;}
+         while(!Stopped){enqueued.WaitOne();if(Stopped){enqueued.Set();goto _Stop;}
           if(queued.TryDequeue(out T dequeued)){
            container=dequeued;
            foregroundData=container.foregroundData;
@@ -112,7 +155,7 @@ namespace AKCondinoO{
         protected virtual void Release(){}
         protected virtual void Cleanup(){}
         internal bool IsRunning(){
-         return Stop==false&&task!=null&&!task.IsCompleted;
+         return Stopped==false&&task!=null&&!task.IsCompleted;
         }
         internal void Wait(){
          try{

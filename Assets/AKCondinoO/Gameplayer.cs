@@ -5,6 +5,7 @@ using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace AKCondinoO{
             Log.Error(s);
            }
           }else{
-           Log.DebugMessage("navMeshValidation:success!");
+           //Log.DebugMessage("navMeshValidation:success!");
           }
           if(this==Gameplayer.main){
            navMeshData[agentType]=new NavMeshData(NavMeshHelper.navMeshBuildSettings[agentType].agentTypeID){
@@ -68,10 +69,18 @@ namespace AKCondinoO{
          }
          if(Core.singleton.isServer){
           if(this==Gameplayer.main){
-           netObj.Spawn(destroyWithScene:false);
+           try{
+            netObj.Spawn(destroyWithScene:false);
+           }catch(Exception e){
+            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           }
            netObj.DontDestroyWithOwner=true;
           }else{
-           netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           try{
+            netObj.SpawnWithOwnership(clientId,destroyWithScene:false);
+           }catch(Exception e){
+            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           }
            netObj.DontDestroyWithOwner=true;
           }
          }
@@ -176,7 +185,7 @@ namespace AKCondinoO{
          }
          if(navMeshDataAsyncUpdateTimer<=0.0f){
             navMeshDataAsyncUpdateTimer=navMeshDataAsyncUpdateInterval;
-          Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
+          //Log.DebugMessage("CanStartNavMeshAsyncUpdate:start async operation");
           VoxelSystem.singleton.CollectNavMeshSources(out List<NavMeshBuildSource>sourcesCollected,navMeshSourcesDirty);
           sources.Clear();
           for(int i=0;i<sourcesCollected.Count;++i){
@@ -196,7 +205,7 @@ namespace AKCondinoO{
         }
         bool OnNavMeshDataAsyncOperationEnd(){
          if(navMeshAsyncOperation.All(o=>o==null||o.isDone)){
-          Log.DebugMessage("OnNavMeshDataAsyncOperationEnd");
+          //Log.DebugMessage("OnNavMeshDataAsyncOperationEnd");
           return true;
          }
          return false;

@@ -22,24 +22,31 @@ namespace AKCondinoO.Sims{
          SetWastelandSpawnSettings();
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimsMachine:OnDestroyingCoreEvent");
         }
      internal readonly Dictionary<(Type simType,ulong number),SimActor>actors=new Dictionary<(Type,ulong),SimActor>();
+      internal readonly IdSortedList<SimActor>selectableActorsList=new();
         internal void OnActorSpawn(SimActor simActor){
          Type simType=simActor.id.Value.simObjectType;
          if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
           spawned.Add(simActor.id.Value);
-          Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
+          //Log.DebugMessage(simType+" actor has been spawned;count:"+spawned.Count);
          }
          actors.Add(simActor.id.Value,simActor);//  remember to remove in both types of despawn
+         if(simActor is BaseAI baseAI){
+          if(baseAI.canBeThirdPersonCamFollowed){
+           selectableActorsList.Add(baseAI);
+          }
+         }
         }
         internal void OnActorDespawn(SimActor simActor){
          Type simType=simActor.id.Value.simObjectType;
          if(spawnControl.TryGetValue(simType,out HashSet<(Type simType,ulong number)>spawned)){
           spawned.Remove(simActor.id.Value);
-          Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
+          //Log.DebugMessage(simType+" actor has been despawned;count:"+spawned.Count);
          }
          actors.Remove(simActor.id.Value);
+         selectableActorsList.Remove(simActor);
         }
      Vector3 mainCamPos,lastMainCamPos;
       bool initMainCamPos=true;
@@ -54,7 +61,7 @@ namespace AKCondinoO.Sims{
         void Update(){
          if(initMainCamPos|(lastMainCamPos=mainCamPos)!=(mainCamPos=MainCamera.singleton.transform.position)){
           if(initMainCamPos){
-           Log.DebugMessage("SimsMachine:mainCamPos init");
+           //Log.DebugMessage("SimsMachine:mainCamPos init");
            lastMainCamPos=mainCamPos;
            initMainCamPos=false;
           }
@@ -99,14 +106,14 @@ namespace AKCondinoO.Sims{
         }
      internal readonly Dictionary<Type,HashSet<(Type simType,ulong number)>>spawnControl=new Dictionary<Type,HashSet<(Type simType,ulong number)>>();
         internal void SetDefaultSpawnSettings(){
-         Log.DebugMessage("SetDefaultSpawnSettings()");
+         //Log.DebugMessage("SetDefaultSpawnSettings()");
          spawnSettingsByBiome.Add(Biomes.Default,
           new SimsMachineSpawnSettings{
            spawns=new Dictionary<Type,SimsMachineSpawnSettings.SimObjectSettings>{
             {
              typeof(DisfiguringHomunculusAI),
               new SimsMachineSpawnSettings.SimObjectSettings{
-               count=1,
+               count=0,//10,//1,
                chance=1.0f,
               }
             },

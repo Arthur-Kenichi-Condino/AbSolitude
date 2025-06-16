@@ -18,23 +18,28 @@ namespace AKCondinoO.Sims.Actors.Skills{
           GameObject gameObject=(GameObject)o;
           Skill skill=gameObject.GetComponent<Skill>();
           if(skill==null)continue;
-          Log.DebugMessage("skill prefab:"+skill.name);
+          //Log.DebugMessage("skill prefab:"+skill.name);
           Type t=skill.GetType();
           skillPrefabs.Add(t,gameObject);
           pool.Add(t,new LinkedList<Skill>());
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SkillsManager:OnDestroyingCoreEvent");
         }
         internal(GameObject skillGameObject,Skill skill)SpawnSkillGameObject(Type skillType,int level,BaseAI actor){
          GameObject skillGameObject;
          var pool=this.pool[skillType];
          Skill skill;
+         _Spawn:{}
          if(pool.Count>0){
           skill=pool.First.Value;
           pool.RemoveFirst();
           skill.pooled=null;
+          if(skill==null||skill.gameObject==null){
+           Log.Warning("trying to use destroyed game object skill from pool");
+           goto _Spawn;
+          }
           skillGameObject=skill.gameObject;
          }else{
           skillGameObject=Instantiate(skillPrefabs[skillType]);
@@ -48,6 +53,10 @@ namespace AKCondinoO.Sims.Actors.Skills{
         internal void Pool(Type skillType,Skill skill){
          skill.OnPool();
          skill.actor=null;
+         if(skill==null||skill.gameObject==null){
+          Log.Warning("trying to pool destroyed game object skill");
+          return;
+         }
          skill.pooled=pool[skillType].AddLast(skill);
         }
     }

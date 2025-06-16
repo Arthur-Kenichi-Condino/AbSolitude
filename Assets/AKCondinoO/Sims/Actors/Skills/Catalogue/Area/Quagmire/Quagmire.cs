@@ -18,9 +18,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          (GameObject skillAoEGameObject,SkillAoE skillAoE)aoe=SkillAoEManager.singleton.SpawnSkillAoEGameObject(typeof(QuagmireSkillAoE),this);
          activeAoE.Add(aoe.skillAoE);
          float duration=useLevel*5f;
-         Log.DebugMessage("Quagmire duration:"+duration);
+         //Log.DebugMessage("Quagmire duration:"+duration);
          aoeActiveCooldowns.Add(aoe.skillAoE,duration);
-         Log.DebugMessage("activeAoE.Count:"+activeAoE.Count);
+         //Log.DebugMessage("activeAoE.Count:"+activeAoE.Count);
          aoe.skillAoE.ActivateAt(targetPos.Value,null,0f,1,duration);
          base.Invoke();//  the invoked flag is set here
         }

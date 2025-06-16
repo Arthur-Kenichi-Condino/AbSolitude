@@ -5,12 +5,14 @@ using AKCondinoO.Ambience.Clouds;
 using AKCondinoO.Gameplaying;
 using AKCondinoO.Music;
 using AKCondinoO.Sims;
+using AKCondinoO.Sims.Actors.Pathfinding;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillVisualEffects;
 using AKCondinoO.Sims.Inventory;
 using AKCondinoO.UI;
 using AKCondinoO.UI.Context;
 using AKCondinoO.UI.Fixed;
+using AKCondinoO.UI.WorldSpace;
 using AKCondinoO.Voxels;
 using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Water.Editing;
@@ -60,11 +62,11 @@ namespace AKCondinoO{
          simObjectToSpriteToolLoadSceneParameters.localPhysicsMode=LocalPhysicsMode.Physics3D;
          SceneManager.LoadScene("SimObjectToSpriteTool",simObjectToSpriteToolLoadSceneParameters);
          int procCt=Environment.ProcessorCount;
-         Log.DebugMessage("Environment.ProcessorCount:"+procCt);
+         //Log.DebugMessage("Environment.ProcessorCount:"+procCt);
          ThreadPool.GetMinThreads(out int minWorkerThreads,out int minIOCThreads);
-         Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
+         //Log.DebugMessage("minimum number of worker threads:"+minWorkerThreads+";minimum asynchronous I/O completion threads:"+minIOCThreads);
          ThreadPool.GetMaxThreads(out int maxWorkerThreads,out int maxIOCThreads);
-         Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
+         //Log.DebugMessage("maximum number of worker threads:"+maxWorkerThreads+";maximum asynchronous I/O completion threads:"+maxIOCThreads);
          Thread.CurrentThread.Priority=System.Threading.ThreadPriority.Normal;
          #if !UNITY_EDITOR
           GarbageCollector.GCMode=GarbageCollector.Mode.Manual;
@@ -76,9 +78,10 @@ namespace AKCondinoO{
            RenderingUtil.SetUtil();
          savePath=string.Format("{0}{1}/",saveLocation,saveName);
          Directory.CreateDirectory(savePath);
+         AStarPathfindingHelper.SetAStarPathfindingSettings();
          NavMeshHelper.SetNavMeshBuildSettings();
          resolutions=Screen.resolutions;
-         Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
+         //Log.DebugMessage("Screen.currentResolution.refreshRateRatio:"+Screen.currentResolution.refreshRateRatio);
          #if UNITY_STANDALONE_WIN
           if(Screen.currentResolution.refreshRateRatio.value>=144){
            QualitySettings.vSyncCount=2;
@@ -124,6 +127,8 @@ namespace AKCondinoO{
           {o++,VoxelSystem              .singleton},
           {o++,VoxelTerrainEditing      .singleton},
           {o++,VoxelWaterEditing        .singleton},
+          {o++,AnimationManager         .singleton},
+          {o++,AStarPathfinding         .singleton},
           {o++,SimInventoryManager      .singleton},
           {o++,SimObjectManager         .singleton},
           {o++,SimObjectSpawner         .singleton},
@@ -135,13 +140,14 @@ namespace AKCondinoO{
           {o++,Placeholder              .singleton},
           {o++,FixedUI                  .singleton},
           {o++,ContextMenuUI            .singleton},
+          {o++,WorldSpaceUI             .singleton},
          };
          foreach(var singletonOrdered in singletonInitOrder){
-          Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
+          //Log.DebugMessage("initialization at "+singletonOrdered.Key+":"+singletonOrdered.Value);
           singletonOrdered.Value.Init();
          }
          foreach(var singletonOrderedInReverse in singletonInitReversedOrder=singletonInitOrder.Reverse()){
-          Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+          //Log.DebugMessage("set deinitialization at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
           OnDestroyingCoreEvent+=singletonOrderedInReverse.Value.OnDestroyingCoreEvent;
          }
          if(Gameplayer.main!=null){
@@ -171,12 +177,12 @@ namespace AKCondinoO{
                }
               }
               foreach(var singletonOrderedInReverse in singletonInitReversedOrder){
-               Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
+               //Log.DebugMessage("unset destroyed singleton at "+singletonOrderedInReverse.Key+":"+singletonOrderedInReverse.Value);
                Type singletonType=singletonOrderedInReverse.Value.GetType();
                PropertyInfo singletonPropertyInfo=singletonType.GetProperty("singleton",BindingFlags.Static|BindingFlags.NonPublic);
-               Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
+               //Log.DebugMessage("singletonPropertyInfo:"+singletonPropertyInfo);
                singletonPropertyInfo.SetValue(null,null);
-               Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
+               //Log.DebugMessage("singletonPropertyInfo.GetValue(null):"+singletonPropertyInfo.GetValue(null));
               }
               Gameplayer.main=null;//  also unset current player prefab that is no more active
               //  game was deinitialized
@@ -207,7 +213,7 @@ namespace AKCondinoO{
          currentRenderingTargetCameraChanged=false;
          if(Camera.main!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.main)){
           currentRenderingTargetCameraChanged=true;
-          Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
+          //Log.DebugMessage("currentRenderingTargetCameraChanged changed to Camera.main:"+currentRenderingTargetCamera);
          }
          if(currentRenderingTargetCamera==null){
           if(Camera.current!=null&&currentRenderingTargetCamera!=(currentRenderingTargetCamera=Camera.current)){

@@ -46,7 +46,7 @@ namespace AKCondinoO.Sims.Weapons{
          if(ammoToLoad>0f){
           ammoToLoad=Math.Min(ammoToLoad,ammo);
           if(ammoToLoad>0f){
-           Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
+           //Log.DebugMessage("OnWillReloadChecks():ammoToLoad:"+ammoToLoad);
            return true;
           }
          }
@@ -76,7 +76,7 @@ namespace AKCondinoO.Sims.Weapons{
          }
          return false;
         }
-     [NonSerialized]RaycastHit[]shootHits=new RaycastHit[4];
+     [NonSerialized]RaycastHit[]shootHits=new RaycastHit[128];
         internal void OnShoot(SimObject simAiming){
          if(ammoLoaded>0f){
           OnShootGetHits(simAiming,ref shootHits,out int shootHitsLength);
@@ -115,8 +115,11 @@ namespace AKCondinoO.Sims.Weapons{
          shootHitsLength=0;
          if(muzzle!=null){
           if(holder is BaseAI actor&&actor.characterController!=null){
-           Vector3 shootDir=(actor.characterController.aimingAt-muzzle.transform.position).normalized;
+           //  TO DO: este valor está errado: shootDir
+           Vector3 shootDir=(actor.characterController.aimingAtRaw-muzzle.transform.position).normalized;
            Ray shootRay=new Ray(muzzle.transform.position,shootDir);
+           Debug.DrawRay(shootRay.origin,shootRay.direction*shootDis,Color.white,1f);
+           Debug.DrawLine(shootRay.origin,shootRay.origin+(shootRay.direction*shootDis),Color.blue,5f);
            _GetShootHits:{
             shootHitsLength=Physics.RaycastNonAlloc(shootRay,shootHits,shootDis,PhysUtil.shootingHitsLayer,QueryTriggerInteraction.Collide);
            }
@@ -127,6 +130,7 @@ namespace AKCondinoO.Sims.Weapons{
             }
            }
            for(int i=shootHits.Length-1;i>=0;--i){
+            Log.DebugMessage("shootHits[i]:"+shootHits[i].transform?.name);
             if(i>=shootHitsLength){
              shootHits[i]=default(RaycastHit);
              continue;

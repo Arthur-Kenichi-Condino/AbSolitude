@@ -1,0 +1,50 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xmlns:nv="Unity.Multiplayer.Tools.NetVis.Editor.UI"
+         editor-extension-mode="True">
+    <Style src="../Uss/NetVisGlobal.uss" />
+    <ui:VisualElement name="content-container">
+        <ui:HelpBox 
+                name="BandwidthWarning"
+                text="No data has been gathered so far. Unpause the application to get data." 
+                message-type="Warning"
+                class="unity-help-box" 
+                style="flex-grow: 1;" 
+        />
+        <ui:DropdownField
+            name="BandwidthType"
+            label="Type"
+            index="0"
+            tooltip="Filter bandwidth by type. 'All' includes spawn, despawn, ownership change, RPC, and network variable."
+        />
+        <ui:DropdownField
+            name="NetworkDirection"
+            label="Direction"
+            index="0"
+            tooltip="Filter bandwidth by direction."
+        />
+        <ui:Slider
+            name="Smoothing"
+            label="Smoothing (sec)"
+            value="5"
+            high-value="10"
+            show-input-field="true"
+            width="100px"
+            tooltip="This option smooths bandwidth data over time. The higher the smoothing value, the more it filters out sudden data changes and improves readability. Smoothing is disabled while paused."
+        />
+        <ui:Toggle
+            name="TextOverlayEnabled"
+            text="Text Overlay"
+            tooltip="Enable this option to visualize per-object bandwidth using text labels."
+        />
+        <ui:VisualElement class="toggleable-foldout">
+            <ui:Toggle
+                name="MeshShadingEnabled"
+                tooltip="Enable this option to visualize per-object bandwidth using a colored overlay."
+            />
+            <ui:Foldout text="Shading">
+                <nv:BandwidthShadingConfigurationView name="BandwidthShadingConfigurationView" />
+            </ui:Foldout>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

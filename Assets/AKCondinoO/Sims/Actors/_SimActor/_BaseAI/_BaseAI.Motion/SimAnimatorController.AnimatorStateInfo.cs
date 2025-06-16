@@ -1,12 +1,18 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController{
+     Dictionary<int,bool>animatorHasMotionTime;
+     Dictionary<int,bool>animatorHasMotionSpeedMultiplier;
+     Dictionary<int,float>motionTime;
+      Dictionary<int,bool>animationStarted;
+     Dictionary<int,float>motionSpeedMultiplier;
      internal Dictionary<int,float>animationTime{get;private set;}
       internal Dictionary<int,float>animationTimeInCurrentLoop{get;private set;}
      Dictionary<int,float>normalizedTime;
@@ -26,17 +32,36 @@ namespace AKCondinoO.Sims.Actors{
           AnimatorStateInfo animatorState=animator.GetCurrentAnimatorStateInfo(layerIndex);
                                           animator.GetCurrentAnimatorClipInfo (layerIndex,clipList);
           if(clipList.Count>0){
+           //Log.DebugMessage("clipList[0].clip.wrapMode:"+clipList[0].clip.wrapMode);
            if(currentClipInstanceID[layerIndex]!=(currentClipInstanceID[layerIndex]=clipList[0].clip.GetInstanceID())||currentClipName[layerIndex]!=clipList[0].clip.name){
             //Log.DebugMessage("changed to new clipList[0].clip.name:"+clipList[0].clip.name+";clipList[0].clip.GetInstanceID():"+clipList[0].clip.GetInstanceID());
             OnAnimationChanged(animatorState:animatorState,layerIndex:layerIndex,lastClipName:currentClipName[layerIndex],currentClipName:clipList[0].clip.name);
             currentClipName[layerIndex]=clipList[0].clip.name;
             looped[layerIndex]=false;
+            if(motionTimeOnAnimationChange.Remove(layerIndex,out float motionTimeOnAnimationChangeValue)){
+             motionTime[layerIndex]=motionTimeOnAnimationChangeValue;
+            }else{
+             motionTime[layerIndex]=Mathf.Repeat(motionTime[layerIndex],1.0f);
+            }
+            animationStarted[layerIndex]=(currentClipInstanceID[layerIndex]!=0);
            }
            lastLoopCount[layerIndex]=loopCount[layerIndex];
            if(loopCount[layerIndex]<(loopCount[layerIndex]=Mathf.FloorToInt(animatorState.normalizedTime))){
             //Log.DebugMessage("current animation (layerIndex:"+layerIndex+") looped:"+loopCount[layerIndex]);
             looped[layerIndex]=true;
             OnAnimationLooped(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
+            if(!clipList[0].clip.isLooping){
+             motionTime[layerIndex]=1f;
+            }
+           }
+           if(animationStarted[layerIndex]&&(clipList[0].clip.isLooping||motionTime[layerIndex]<1f)){
+            float timeDeltaNormalized=Time.deltaTime/clipList[0].clip.length;
+            motionTime[layerIndex]+=timeDeltaNormalized;
+            if(!clipList[0].clip.isLooping){
+             if(motionTime[layerIndex]>=1f){
+              motionTime[layerIndex]=1f;
+             }
+            }
            }
            normalizedTime[layerIndex]=animatorState.normalizedTime;
             normalizedTimeInCurrentLoop[layerIndex]=Mathf.Repeat(animatorState.normalizedTime,1.0f);
@@ -45,7 +70,26 @@ namespace AKCondinoO.Sims.Actors{
             animationTimeInCurrentLoop[layerIndex]=clipList[0].clip.length*normalizedTimeInCurrentLoop[layerIndex];
            //Log.DebugMessage("current animationTime:"+animationTime[layerIndex]);
            OnAnimationIsPlaying(animatorState:animatorState,layerIndex:layerIndex,currentClipName:currentClipName[layerIndex]);
+           if(animatorHasMotionTime[layerIndex]){
+            //Log.DebugMessage("animatorHasMotionTime[layerIndex]");
+            animator.SetFloat(String.Intern("MotionTime_Layer"+layerIndex),motionTime[layerIndex]);
+           }
           }
+         }
+        }
+     Dictionary<int,float>motionTimeOnAnimationChange;
+        internal void SetMotionTime(float value,bool onAnimationChanged=false){
+         Log.DebugMessage("SetMotionTime:"+value);
+         if(onAnimationChanged){
+          foreach(var layer in animatorClip){
+           int layerIndex=layer.Key;
+           motionTimeOnAnimationChange[layerIndex]=value;
+          }
+          return;
+         }
+         foreach(var layer in animatorClip){
+          int layerIndex=layer.Key;
+          motionTime[layerIndex]=value;
          }
         }
         protected void OnAnimationLooped(AnimatorStateInfo animatorState,int layerIndex,string currentClipName){

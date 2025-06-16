@@ -9,7 +9,7 @@ using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimsMachine{
         internal void SetWastelandSpawnSettings(){
-         Log.DebugMessage("SetWastelandSpawnSettings()");
+         //Log.DebugMessage("SetWastelandSpawnSettings()");
          spawnSettingsByBiome.Add(Biomes.Wasteland,
           new SimsMachineSpawnSettings{
            spawns=new Dictionary<Type,SimsMachineSpawnSettings.SimObjectSettings>{

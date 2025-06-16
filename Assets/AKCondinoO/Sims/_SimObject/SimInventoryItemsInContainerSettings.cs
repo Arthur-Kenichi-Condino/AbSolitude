@@ -15,7 +15,7 @@ namespace AKCondinoO.Sims.Inventory{
         internal SimInventoryItemsInContainerSettings(){
         }
         internal void Set(){
-         Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
+         //Log.DebugMessage("Set SimInventoryItemsInContainerSettings");
          foreach(var simObjectPrefab in SimObjectSpawner.singleton.simObjectPrefabs){
           SimObjectAsInventoryItemInContainerData inContainerData=simObjectPrefab.Value.GetComponent<SimObjectAsInventoryItemInContainerData>();
           if(inContainerData!=null){
@@ -28,7 +28,7 @@ namespace AKCondinoO.Sims.Inventory{
              }
             }
            }
-           Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
+           //Log.DebugMessage("simObjectType:"+simObjectType+";added to SimInventoryItemsInContainerSettings");
            allSettings.Add(simObjectType,
             new InContainerSettings(
              inContainerData
@@ -42,7 +42,7 @@ namespace AKCondinoO.Sims.Inventory{
          public WeaponTypes weaponType;
          public readonly ReadOnlyDictionary<Type,int>spacesUsage;
          public readonly ReadOnlyDictionary<Type,
-                          ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                          ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer),
                            ReadOnlyDictionary<string,
                             InContainerTransformData
                            >
@@ -53,7 +53,7 @@ namespace AKCondinoO.Sims.Inventory{
              this.weaponType=inContainerData.weaponType;
              Dictionary<Type,int>spacesUsage=new Dictionary<Type,int>();
              var transformSettings=new Dictionary<Type,
-                                        ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+                                        ReadOnlyDictionary<(Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer),
                                          ReadOnlyDictionary<string,
                                           InContainerTransformData
                                          >
@@ -63,10 +63,10 @@ namespace AKCondinoO.Sims.Inventory{
               SimObjectAsInventoryItemInContainerData.InContainerData data=inContainerData.dataArrays[i];
               Type simInventoryType=ReflectionUtil.GetTypeByName(data.simInventoryType,typeof(SimInventory));
               if(simInventoryType!=null){
-               Log.DebugMessage("simInventoryType:"+simInventoryType);
+               //Log.DebugMessage("simInventoryType:"+simInventoryType);
                int spaces=data.simInventorySpacesUsage;
                spacesUsage.Add(simInventoryType,spaces);
-               var transformSettingsDictionary=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+               var transformSettingsDictionary=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer),
                                                      Dictionary<string,
                                                       InContainerTransformData
                                                      >
@@ -74,14 +74,14 @@ namespace AKCondinoO.Sims.Inventory{
                foreach(var transformData in data.transformData){
                 Type simType=ReflectionUtil.GetTypeByName(transformData.simTypeName,typeof(SimObject));
                 if(simType!=null){
-                 var key=(simType,transformData.motion,transformData.layer);
+                 var key=(simType,transformData.motion,transformData.weaponMotion,transformData.toolMotion,transformData.layer);
                  if(!transformSettingsDictionary.TryGetValue(key,out var parentBodyPartNameDictionary)){
                   transformSettingsDictionary.Add(key,parentBodyPartNameDictionary=new());
                  }
                  parentBodyPartNameDictionary.Add(transformData.parentBodyPartName,transformData);
                 }
                }
-               var transformSettingsForReadOnly=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,string layer),
+               var transformSettingsForReadOnly=new Dictionary<(Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer),
                                                      ReadOnlyDictionary<string,
                                                       InContainerTransformData
                                                      >

@@ -63,7 +63,7 @@ MonoBehaviour:
     tgtRotLerpSpeed: 1000
     tgtRotLerpMaxTime: 0.025
   moveAcceleration: {x: 0.1, y: 0.1, z: 0.1}
-  maxMoveSpeed: {x: 0.5, y: 0.5, z: 0.5}
+  maxMoveSpeed: {x: 0.4, y: 0.4, z: 0.4}
 --- !u!20 &6595663811422386843
 Camera:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 60
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -141,7 +141,7 @@ MonoBehaviour:
     m_Bits: 65
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
-  antialiasingMode: 3
+  antialiasingMode: 2
   temporalAntialiasing:
     jitterSpread: 0.25
     sharpness: 0.25

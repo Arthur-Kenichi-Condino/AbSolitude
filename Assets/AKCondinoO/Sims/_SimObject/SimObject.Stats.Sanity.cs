@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace AKCondinoO.Sims{
          /// <summary>
          ///  Sanidade mental ou noção existencial atual para o objeto Sim: se este valor chegar a 0f, o Sim irá desmaiar ou perder o controle das ações
          /// </summary>
-         protected float sanity_value;
+         [NonSerialized]protected float sanity_value;
           internal float SanityGet(SimObject statsSim=null){
            OnRefresh(statsSim);
            return sanity_value;
@@ -22,14 +23,14 @@ namespace AKCondinoO.Sims{
             updatedSanity=true;
             SetPendingRefresh(statsSim,forceRefresh);
            }
-            protected bool updatedSanity;
+            [NonSerialized]protected bool updatedSanity;
           #region MaxSanity
           /// <summary>
           ///  Sanidade mental ou noção existencial máxima do objeto Sim: valor calculado com base em outros atributos
           /// </summary>
-          protected float maxSanity_value_stats;
-          protected float maxSanity_value_set;
-          protected float maxSanity_value_buffs;
+          [NonSerialized]protected float maxSanity_value_stats;
+          [NonSerialized]protected float maxSanity_value_set;
+          [NonSerialized]protected float maxSanity_value_buffs;
            internal float MaxSanityGet(SimObject statsSim=null){
             OnRefresh(statsSim);
             return maxSanity_value_stats+maxSanity_value_set;
@@ -40,12 +41,12 @@ namespace AKCondinoO.Sims{
              updatedMaxSanity=true;
              SetPendingRefresh(statsSim,forceRefresh);
             }
-             protected bool updatedMaxSanity;
+             [NonSerialized]protected bool updatedMaxSanity;
            #region Focus
            /// <summary>
            ///  Energia de concentração da mente disponível para realizar ações de valor mental, ou mágicas
            /// </summary>
-           protected float focus_value;
+           [NonSerialized]protected float focus_value;
             internal float FocusGet(SimObject statsSim=null){
              OnRefresh(statsSim);
              return focus_value;
@@ -55,14 +56,14 @@ namespace AKCondinoO.Sims{
               updatedFocus=true;
               SetPendingRefresh(statsSim,forceRefresh);
              }
-              protected bool updatedFocus;
+              [NonSerialized]protected bool updatedFocus;
             #region MaxFocus
             /// <summary>
             ///  Energia de concentração da mente máxima para realizar ações de valor mental, ou mágicas: valor calculado com base em outros atributos
             /// </summary>
-            protected float maxFocus_value_stats;
-            protected float maxFocus_value_set;
-            protected float maxFocus_value_buffs;
+            [NonSerialized]protected float maxFocus_value_stats;
+            [NonSerialized]protected float maxFocus_value_set;
+            [NonSerialized]protected float maxFocus_value_buffs;
              internal float MaxFocusGet(SimObject statsSim=null){
               OnRefresh(statsSim);
               return maxFocus_value_stats+maxFocus_value_set;
@@ -73,7 +74,7 @@ namespace AKCondinoO.Sims{
                updatedMaxFocus=true;
                SetPendingRefresh(statsSim,forceRefresh);
               }
-               protected bool updatedMaxFocus;
+               [NonSerialized]protected bool updatedMaxFocus;
             #endregion
            #endregion
           #endregion

@@ -1,0 +1,6 @@
+	**Descrição rápida da visão do jogo**
+
+	Mundo sandbox/editável gerado aleatoriamente com sistema homúnculo e 
+sistema de combate, que é baseado em atributos e habilidades, que possui IA controlando o 
+personagens, deixando então o jogo principal focar em ser relaxante para os jogadores; mas 
+contendo histórias e missões focadas em dilemas éticos.

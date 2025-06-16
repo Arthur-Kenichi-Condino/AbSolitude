@@ -25,5 +25,9 @@ namespace AKCondinoO.Sims.Actors{
          MOTION_STAND_RIFLE_RELOADING=502,
          MOTION_STAND_RIFLE_FIRING   =503,
         }
+     protected ActorToolLayerMotion MyToolLayerMotion=ActorToolLayerMotion.NONE;internal ActorToolLayerMotion toolLayerMotion{get{return MyToolLayerMotion;}}
+        internal enum ActorToolLayerMotion:int{
+         NONE=0,
+        }
     }
 }

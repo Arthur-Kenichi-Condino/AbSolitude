@@ -2,14 +2,15 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Voxels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal Renderer[]renderers;
-      internal readonly Dictionary<Material,Shader>materialShader=new();
+     [NonSerialized]internal Renderer[]renderers;
+      [NonSerialized]internal readonly Dictionary<Material,Shader>materialShader=new();
         protected virtual void EnableRenderers(){
          updateRenderersFlag=true;
         }
@@ -19,19 +20,19 @@ namespace AKCondinoO.Sims{
          }
         }
      [SerializeField]internal bool useMultipleMaterials=true;
-      internal readonly Dictionary<Renderer,Dictionary<int,Dictionary<int,Material>>>derivedMaterials=new Dictionary<Renderer,Dictionary<int,Dictionary<int,Material>>>();
-       protected readonly Dictionary<Renderer,List<Material>>derivedMaterialsBlendModeOpaque=new Dictionary<Renderer,List<Material>>();
-       protected readonly Dictionary<Renderer,List<Material>>derivedMaterialsBlendModeFade  =new Dictionary<Renderer,List<Material>>();
-        protected int usingDerivedMaterialsBlendMode=0;
+      [NonSerialized]internal readonly Dictionary<Renderer,Dictionary<int,Dictionary<int,Material>>>derivedMaterials=new Dictionary<Renderer,Dictionary<int,Dictionary<int,Material>>>();
+       [NonSerialized]protected readonly Dictionary<Renderer,List<Material>>derivedMaterialsBlendModeOpaque=new Dictionary<Renderer,List<Material>>();
+       [NonSerialized]protected readonly Dictionary<Renderer,List<Material>>derivedMaterialsBlendModeFade  =new Dictionary<Renderer,List<Material>>();
+        [NonSerialized]protected int usingDerivedMaterialsBlendMode=0;
      [SerializeField]internal bool autoSetMaterialsToFade=true;
         protected virtual void UpdateRenderers(){
          if(updateRenderersFlag){
           if((Core.singleton.currentRenderingTargetCamera!=null)||Core.singleton.currentRenderingTargetCamera==Camera.main){
-           //Log.DebugMessage("UpdateRenderers:update");
+           //Log.DebugMessage("UpdateRenderers:'update'");
            float viewDistance=Vector3.Distance(Core.singleton.currentRenderingTargetCamera.transform.position,transform.root.position);
            float opacity=(VoxelSystem.fadeEndDis-viewDistance)/(VoxelSystem.fadeEndDis-VoxelSystem.fadeStartDis);
            opacity=Mathf.Clamp01(opacity);
-           //Log.DebugMessage("opacity:"+opacity);
+           //Log.DebugMessage("UpdateRenderers:opacity:"+opacity);
            foreach(Renderer renderer in renderers){
             if(useMultipleMaterials){
              if(opacity!=1f){

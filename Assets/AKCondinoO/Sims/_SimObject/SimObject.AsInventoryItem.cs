@@ -14,11 +14,11 @@ using UnityEngine.Animations;
 using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal SimInventoryItem asInventoryItem=null;
-     internal bool actingAsInventoryItem=false;
+     [NonSerialized]internal SimInventoryItem asInventoryItem=null;
+     [NonSerialized]internal bool actingAsInventoryItem=false;
         internal void ChangeInteractionsToActAsInventoryItem(SimInventory simInventory,SimInventoryItemsInContainerSettings.InContainerSettings settings){
-         Log.DebugMessage("ChangeInteractionsToActAsInventoryItem:"+id);
-         //  TO DO: disable some types of collisions and enable triggers or special collisions
+         //Log.DebugMessage("SimObject:ChangeInteractionsToActAsInventoryItem:id:"+id);
+         Log.Warning("'TO DO: disable some types of collisions and enable triggers or special collisions'");
          actingAsInventoryItem=true;
          OnActAsInventoryItem();
          persistentData.UpdateData(this);
@@ -32,7 +32,7 @@ namespace AKCondinoO.Sims{
          }
         }
         internal void ChangeInteractionsToActAsNonInventorySimObject(SimInventory simInventory){
-         Log.DebugMessage("ChangeInteractionsToActAsNonInventorySimObject:"+id);
+         Log.DebugMessage("SimObject:ChangeInteractionsToActAsNonInventorySimObject:id:"+id);
          actingAsInventoryItem=false;
          OnActAsNonInventorySimObject();
          persistentData.UpdateData(this);

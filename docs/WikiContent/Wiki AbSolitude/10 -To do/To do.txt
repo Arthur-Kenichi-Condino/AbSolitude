@@ -1,0 +1,217 @@
+Terreno (Rede:Multiplayer):
+
+Já foi feito:
+
+-Sistema de mensagem: do cliente para o servidores: quando é necessário atualizar o terreno com modificações no servidor
+-Servidor: Sistema de enviar modificações no terreno para o cliente
+-Sistema de Throttling (Sistema de Evitar excesso de mensagens que causa lag na rede: ainda falta ajustar os valores para que o lag seja praticamente imperceptível)
+
+
+Falta fazer:
+
+-Sistema de enviar modificações que o cliente fez para o servidor (Colocar as informações de edição de terreno em mensagens)
+-Terminar de fazer a sincronização de seed do terreno e assim que a seed
+-E assim que as modificações e a seed estiverem sincronizadas, renderizar o terreno no cliente
+-Terminar de reescrever o sistema de rede de forma limpa e organizada como já foi iniciado
+
+======================================================================
+
+
+Terreno (água voxel):
+
+Já foi feito:
+-Água se espalha (parecido com minecraft)
+-Shader que faz a água ficar balançando no oceano (Como ondulações)
+-A água para de se espalhar depois de um tempo, quando entra em colisão com um terreno e na horizontal(parecido com Minecraft)
+-Sistema de edição para jogador adicionar água
+
+Falta fazer:
+
+-Geração automática da água por bioma
+-Fazer a água colidir com objetos no terreno (Como árvores e paredes)
+
+
+
+Terreno (água voxel:Rede:Multiplayer):
+OBS: Falta fazer tudo
+
+======================================================================
+
+Sistema de música:
+
+Já foi feito:
+
+-Sistema de música de fundo BGM
+
+Falta fazer:
+
+-Adicionar musicas que tocam esporadicamente quando um monstro ou boss spawna
+-Adicionar habilidades musicais de bardo
+-Procurar ajuda de um músico que consiga criar versões sem copyright de outras músicas
+
+======================================================================
+
+HUD:
+
+Já foi feito:
+
+-Criação de alguns botões para comandos específicos para alguns testes do jogo (Selecionar personagem ativo mais próximo, mudar a câmera entre câmera livre, câmera de terceira pessoa, câmera de primeira pessoa, mudar entre modo construção e modo simulação)
+-Barra de console de comandos/chat: Sistema já ta pronto em outro projeto do github, porém falta adicionar no projeto atual, e também colocar os comandos especiais de debug desse jogo, no sistema de console de comandos
+-Janela de contexto que se abre ao clicar com o botão direito em algum objeto do jogo (Com comandos e interações que o jogador pode fazer)
+
+Falta fazer:
+
+-Adicionar os botões de todos outros comandos:
+	_ Painel que mostra os controles do jogo no canto superior direito
+	_ Botões  que servem para editar o terreno e a agua
+	_ Colocar funcionalidade nos botões de escolher o item que está equipado no jogador
+	
+-Sistema de interface do inventário
+-Adicionar ícones da interface
+-Barra de estamina, e concentração do jogador
+-Janela de equipamentos
+-Janela de chat
+-Fazer a interface do menu principal ao invés de atualmente o jogo já pular o menu e começar automaticamente para testes
+
+======================================================================
+
+Sistema de AI e Combate:
+
+Já foi feito:
+
+-Sistema de navmesh do Unity para os personagens se moverem pelo terreno automaticamente
+-O personagem tem sistema de detectar os personagens em volta
+-Personagens agressivos já procuram o alvos mais próximo e inicia o combate
+-Personagens passivos reagem ao combate 
+-Personagens aliados, defendem outros personagens passivos (Homunculus defende jogador)
+-Homunculus e jogador usam habilidades automaticamente (Bênção caótica, e pantano dos mortos)
+-Monstros Spawnam em determinados biomas automaticamente (Mas falta spawnar dependendo do horário e reativar o sistema de sumir quando morre, e respawnar)
+-O jogo já salva em arquivo de texto a posição do jogador e de outros itens do mapa (mas falta terminar de salvar os itens do inventário e carregar, mas o jogo já carrega os personagens e a posição da câmera quando a câmera está livre)
+
+
+Falta fazer:
+
+-Continuar a criação da customização de personagem: DAZ→Blender→Unity(Sistema UMA):Continuar escrevendo como que faz a customização no bloco de notas, para refazer esse sistema sem precisar ficar assistindo vídeo tutorial
+-Colocar o sistema de customização numa interface para o jogador e adicionar roupas e armamentos para o personagem
+-Depois de customização começar a adicionar personagens específicos e suas habilidades e atributos:
+	_ Personagem baseado na Leblanc (LOL): Magias de teletransporte, e Duplicação do personagem com Verdadeiro e Falso (ou seja um Mímico/Clone)
+	_ Monstro chamado Alarme (Baseado em Ragnarok online, e baseado no Coil-Head): ele se mexe quando você não olha pra ele, e para de se mexer quando você olha pra ele
+	
+-Adicionar mais tipos de homunculus:
+	_ Terminar o Vanilmirth
+	_ Adicionar a lif
+	_ Adicionar o Filir (Prioridade): habilidade S.B.R.44
+	_ Amistr
+
+-Sistema de evolução de homunculus (Coletar itens dropados de monstros para fazer transmutação do homunculus e Alteração de aparência será opcional):
+	_ Dieter
+	_ Eleanor
+	_ Sera
+	_ Bayeri
+	_ Eira
+
+-Barra de estamina e concentração,  e o nome dele embaixo do personagem, seguindo o personagem na tela
+-Trazer dos projetos antigos no github, a AI de movimentação do personagem que eu tinha feito, que não usa navmesh do unity, que se chama A*: Ela será usada para nadar e voar, ou para movimentos mais complexos, que a navmesh do unity não comporta e não funciona
+-Personagens derrubarem itens quando morrem
+-Adicionar mais monstros para serem spawnados automaticamente, e em maior quantidade, para cada bioma
+-Adicionar mais animações para os modelos 3d: principalmente para quando estiver segurando armas e itens
+-Adicionar itens interativos e animações como por exemplo: geladeira e personagem abrindo a geladeira
+-Comandos parecidos com the sims a partir do menu de contexto quando a câmera está livre
+
+======================================================================
+
+Sistema de AI e Combate (Rede: Multiplayer);
+
+Já foi feito:
+
+-Sincronização do tamanho, posição e rotação do personagem entre servidor e cliente
+
+Falta fazer:
+
+-Sincronizar animações do personagem
+-Sincronização de configurações específicas como customização
+-Ativar no cliente configurações especiais para cada modelo 3d como acontece no servidor (Sistema UMA)
+======================================================================
+
+Sistema de Construção:
+
+Já foi feito:
+
+-Em outros projetos do github, já há um início do sistema de construção: baseando se no sistema do jogo Valheim e Fallout 6 e Fortnite: Chão e parede plugam e grudam um no outro: trazer dos projetos github antigo para o atual
+
+Falta fazer:
+
+-Adicionar diversidades de chão e paredes que grudam um no outro quando você arrasta para perto (por enquanto o chão e a parede são um cubo e uma parede simples): adicionar paredes com janelas, paredes com porta, chão com estruturas de metal e etc…
+
+======================================================================
+
+Sistema de habilidades e atributos:
+
+Já foi feito:
+
+- No início de programação de habilidades passivas e ativas em c# para que toda habilidade derive deste sistema
+-Sistema de buffs e debuffs
+-Sistema de atributos:o jogo já cria os atributos de (Parecido com RPG):
+
+PRIMÁRIOS:
+
+	_ Corpo e cinestésico: Habilidades corporais
+	_ Interpessoal: Habilidades de comunicação
+	_ Intrapessoal: Habilidades de raciocínio rápido e autoconhecimento
+	_ Linguística: Habilidades de manusear documentos e livros
+	_ Lógico matemática: Habilidades de resolver problemas mentais difíceis
+	_ Músical: Autodescritivo
+	_ Naturalista: Sobrevivência no meio ambiente, e conhecimentos de proteção ambiental
+	_ Espacial/3d: Habilidades de Construir e analisar dimensões para planejar posicionamentos, e tiro ao alvo
+
+SECUNDÁRIOS:
+
+_ Agilidade
+_ Destreza
+_ Inteligência
+_ Força
+_ Vitalidade
+
+ESPECIAL:
+_ Sorte: A cada intervalo de tempo ele muda, soltando um valor aleatório, e altera todos os atributos dos personagem finais, para mais ou menos (Parecido com Stardew Valley)
+
+OBS: os atributos influenciam em habilidades, estamina e concentração do personagem, no combate
+
+- O jogo gera atributos aleatorizados para cada personagem ou monstro, durante a criação automática
+- Iniciar o sistema de salvamentos de atributos em arquivos (ainda falta terminar)
+- No sistema de combate os atributos influenciam a estamina e o dano dos personagens
+
+Falta fazer:
+
+- Continuar a criação de uma wiki, feito manualmente com html e javascript (está na pasta docs do github do projeto atual)
+- Na wiki colocar todas habilidades para cada personagem: gerar uma página da web estática a partir de um sistema dinâmico para poder fazer uma wiki no github, mas ja ter um sistema automático pronto para quando eu puder alugar um domínio da web
+- Fazer a criação do personagem e selecionar os atributos iniciais ao invés da geração automática
+- Adicionar uma variedade grande de habilidades: assim que a customização estiver pronta: para que o jogador possa construir sua árvore de habilidades e atributos (itens também influenciam nos atributos do jogador):
+
+	_ Terminar de fazer a habilidade bênção caótica (que usa qualquer habilidade do jogo aleatoriamente)
+	_ Capricho (usa uma habilidade ofensiva elemental, porém de elemento aleatório)
+	_ Terminar habilidade Pantano dos mortos (Faz todo mundo ficar lento)
+	_ Habilidades de combo (Exemplo: Homunculus Eleanor)
+	_ S.B.R.44 (O homunculus entra em processo de concentração e entrar na velocidade da luz e causar dano da bala de uma arma em outra pessoa)
+	_ Esquiva especial (Homunculos se torna da propriedade vento e fica muito rápido)
+	_ Distorção da Leblanc (Se teletransporta para frente e deixa um clone atrás que se mexe sozinho e finge estar atacando mas nao causa dano)
+	_ Destino das cartas (Sorteia carta de tarô e cada carte dá um efeito diferente)
+	_ Habilidades musicais (Toca uma música e todo mundo na área de efeito, recebe o efeito da música): a área de efeito, é até onde o som espacial chega (se vários bardos tocarem ao mesmo, para que o som do jogo não machuque o ouvido do jogador, as músicas se anulam, e os dois bardos precisam esperar alguns segundos para tocar de novo, como um atordoamento) … (Música clássica, Músicas de jogo versão sem copyright)
+
+
+- Também assim que a customização estiver pronta, adicionar algumas variedades maior de monstros 3d, cada um com uma habilidade e atributos específicos, para que o jogador tenha com o que lutar e de onde ganhar experiência:
+	
+_ Alarme
+_ Homunculus obsoleto (Alicel, Aliot)
+_ Monstros de calabouço que representam as maldades da sociedade (Glast Heim)  
+
+
+- Adicionar bosses:
+	_ Colocar uma música especial quando o boss aparece e entra em combate (Naive Rave)
+	_ Margaretha sorin (Bio Laboratório de clonagem de supersoldados: a sacerdotisa )
+	_ Cecil Damon (Super Soldado arqueira que arremessa flechas extremamente rápidos)
+	_ Kathryne keyron (Super soldado, Mago elemental)
+
+
+- Procurar um modelador 3d para me ajudar a criar personagens específicos que não sejam genéricos, humanoides de customização
+- Procurar um animador 3d, que coloque rig e faça animações 3d

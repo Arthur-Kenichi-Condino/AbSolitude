@@ -27,7 +27,7 @@ namespace AKCondinoO.Ambience.Clouds{
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("CloudParticleSystem:OnDestroyingCoreEvent");
+         //Log.DebugMessage("CloudParticleSystem:OnDestroyingCoreEvent");
         }
      [SerializeField]float spawnInterval=20f;
       float spawnTimer;

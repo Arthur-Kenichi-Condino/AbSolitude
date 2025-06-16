@@ -14,9 +14,9 @@ namespace AKCondinoO.Sims.Actors.Skills{
          if(!skillVFXs.TryGetValue(skillVFX.skillVisualEffect.GetType(),out List<SkillVisualEffect>skillVFXsOfType)){
           skillVFXs.Add(skillVFX.skillVisualEffect.GetType(),skillVFXsOfType=new List<SkillVisualEffect>());
          }
-         Log.DebugMessage("skillVFXs.Count:"+skillVFXs.Count);
+         //Log.DebugMessage("skillVFXs.Count:"+skillVFXs.Count);
          skillVFXsOfType.Add(skillVFX.skillVisualEffect);
-         Log.DebugMessage("skillVFXsOfType.Count:"+skillVFXsOfType.Count);
+         //Log.DebugMessage("skillVFXsOfType.Count:"+skillVFXsOfType.Count);
          skillVFX.skillVisualEffect.ActivateAt(targetPos.Value,target,delay,loops,skillVFXsDuration);
         }
     }

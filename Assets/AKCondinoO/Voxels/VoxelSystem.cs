@@ -10,12 +10,15 @@ using AKCondinoO.Voxels.Terrain.Networking;
 using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using AKCondinoO.Voxels.Water;
 using AKCondinoO.Voxels.Water.Editing;
+using AKCondinoO.Voxels.Water.MarchingCubes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
@@ -84,7 +87,7 @@ namespace AKCondinoO.Voxels{
             }
         #endregion
         static VoxelSystem(){
-         Log.DebugMessage("static VoxelSystem()");
+         //Log.DebugMessage("static VoxelSystem()");
          var GetvCoordArray=new Vector3Int[VoxelsPerChunk];
          Vector3Int vCoord1;
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
@@ -107,12 +110,16 @@ namespace AKCondinoO.Voxels{
      internal static string chunkStateFile;
       internal static readonly object chunkStateFileSync=new();
      [SerializeField]internal int _MarchingCubesExecutionCountLimit=7;
+     [SerializeField]internal int _SpreadWaterExecutionCountLimit=7;
+     [SerializeField]internal int _MarchingCubesWaterExecutionCountLimit=7;
      internal readonly MarchingCubesMultithreaded[]marchingCubesBGThreads=new MarchingCubesMultithreaded[Environment.ProcessorCount];
      internal readonly VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[]surfaceSimObjectsPlacerBGThreads=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded[Environment.ProcessorCount];
      internal VoxelTerrainEditingMultithreaded terrainEditingBGThread;
      internal readonly WaterSpreadingMultithreaded[]waterSpreadingBGThreads=new WaterSpreadingMultithreaded[Environment.ProcessorCount];
+     internal readonly MarchingCubesWaterMultithreaded[]marchingCubesWaterBGThreads=new MarchingCubesWaterMultithreaded[Environment.ProcessorCount];
      internal VoxelWaterEditingMultithreaded waterEditingBGThread;
      internal readonly VoxelTerrainGetFileEditDataToNetSyncMultithreaded[]terrainGetFileEditDataToNetSyncBGThreads=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded[Environment.ProcessorCount];
+     internal readonly VoxelTerrainSendEditDataToServerMultithreaded    []terrainSendEditDataToServerBGThreads    =new VoxelTerrainSendEditDataToServerMultithreaded    [Environment.ProcessorCount];
      internal static Vector2Int expropriationDistance{get;}=new Vector2Int(9,9);//  pool size
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(6,6);
       internal static float fadeStartDis;
@@ -122,30 +129,34 @@ namespace AKCondinoO.Voxels{
      internal VoxelTerrainChunk[]terrain;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         VoxelSystem.Concurrent.terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.  waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.  waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         voxelTerrainLayer=1<<LayerMask.NameToLayer("VoxelTerrain");
+         VoxelSystem.Concurrent.           terrainFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.             waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.             waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         voxelTerrainLayer=LayerMask.GetMask("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
-         MarchingCubesMultithreaded.Stop=false;
-         for(int i=0;i<marchingCubesBGThreads.Length;++i){
-                       marchingCubesBGThreads[i]=new MarchingCubesMultithreaded();
-         }
-         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=false;
+         MarchingCubesMultithreaded.Start(marchingCubesBGThreads,typeof(MarchingCubesMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
+         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stopped=false;
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i]=new VoxelTerrainSurfaceSimObjectsPlacerMultithreaded();
          }
-         VoxelTerrainEditingMultithreaded.Stop=false;
+         VoxelTerrainEditingMultithreaded.Stopped=false;
          terrainEditingBGThread=new VoxelTerrainEditingMultithreaded();
-         WaterSpreadingMultithreaded.Stop=false;
-         for(int i=0;i<waterSpreadingBGThreads.Length;++i){
-                       waterSpreadingBGThreads[i]=new WaterSpreadingMultithreaded();
+         VoxelWaterChunk.sSpreadWaterExecutionCount=0;
+         WaterSpreadingMultithreaded.Start(waterSpreadingBGThreads,typeof(WaterSpreadingMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
+         VoxelWaterChunk.sMarchingCubesWaterExecutionCount=0;
+         MarchingCubesWaterMultithreaded.Stopped=false;
+         for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
+                       marchingCubesWaterBGThreads[i]=new MarchingCubesWaterMultithreaded();
          }
-         VoxelWaterEditingMultithreaded.Stop=false;
-         waterEditingBGThread=new VoxelWaterEditingMultithreaded();
-         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stop=false;
+         waterEditingBGThread=(VoxelWaterEditingMultithreaded)VoxelWaterEditingMultithreaded.Start(typeof(VoxelWaterEditingMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
+         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stopped=false;
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i]=new VoxelTerrainGetFileEditDataToNetSyncMultithreaded();
+         }
+         VoxelTerrainSendEditDataToServerMultithreaded.Stopped=false;
+         for(int i=0;i<terrainSendEditDataToServerBGThreads.Length;++i){
+                       terrainSendEditDataToServerBGThreads[i]=new VoxelTerrainSendEditDataToServerMultithreaded();
          }
         }
      internal int chunkPoolMultiplier=1;
@@ -155,6 +166,8 @@ namespace AKCondinoO.Voxels{
          if(Core.singleton.isServer){
           VoxelSystem.Concurrent.waterCachePath=string.Format("{0}{1}",Core.savePath,"WaterChunkCache/");
           Directory.CreateDirectory(VoxelSystem.Concurrent.waterCachePath);
+          VoxelSystem.Concurrent.waterNeighbourhoodCachePath=string.Format("{0}{1}",VoxelSystem.Concurrent.waterCachePath,"Neighbourhood/");
+          Directory.CreateDirectory(VoxelSystem.Concurrent.waterNeighbourhoodCachePath);
           chunkStatePath=string.Format("{0}{1}",Core.savePath,"ChunkState/");
           Directory.CreateDirectory(chunkStatePath);
           chunkStateFile=string.Format("{0}{1}",chunkStatePath,"chunkState.txt");
@@ -181,20 +194,17 @@ namespace AKCondinoO.Voxels{
           fadeEndDis  =Mathf.Min(instantiationDistance.x,instantiationDistance.y)*16f+8f
          );
          if(Core.singleton.isServer){
-          NetServerSideInit();
           biome.Seed=0;
           proceduralGenerationCoroutine=StartCoroutine(ProceduralGenerationCoroutine());
          }
-         if(Core.singleton.isClient){
-          NetClientSideInit();
-         }
+         NetInit();
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
+         //Log.DebugMessage("VoxelSystem:OnDestroyingCoreEvent");
          if(this!=null&&proceduralGenerationCoroutine!=null){
           StopCoroutine(proceduralGenerationCoroutine);
          }
-         OnDestroyingCoreNetDestroy();
+         OnDestroyingCoreNetworkDestroy();
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
            terrain[i].OnDestroyingCore();
@@ -203,32 +213,30 @@ namespace AKCondinoO.Voxels{
          if(VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Clear()!=0){
           Log.Error("VoxelTerrainGetFileEditDataToNetSyncMultithreaded will stop with pending work");
          }
-         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stop=true;
+         VoxelTerrainGetFileEditDataToNetSyncMultithreaded.Stopped=true;
          for(int i=0;i<terrainGetFileEditDataToNetSyncBGThreads.Length;++i){
                        terrainGetFileEditDataToNetSyncBGThreads[i].Wait();
          }
-         OnDestroyingCoreNetDispose();
-         if(WaterSpreadingMultithreaded.Clear()!=0){
-          Log.Error("WaterSpreadingMultithreaded will stop with pending work");
+         VoxelTerrainSendEditDataToServerMultithreaded.Stopped=true;
+         for(int i=0;i<terrainSendEditDataToServerBGThreads.Length;++i){
+                       terrainSendEditDataToServerBGThreads[i].Wait();
          }
-         WaterSpreadingMultithreaded.Stop=true;
-         for(int i=0;i<waterSpreadingBGThreads.Length;++i){
-                       waterSpreadingBGThreads[i].Wait();
+         OnDestroyingCoreNetworkDispose();
+         WaterSpreadingMultithreaded.Stop(waterSpreadingBGThreads);
+         if(MarchingCubesWaterMultithreaded.Clear()!=0){
+          Log.Error("MarchingCubesWaterMultithreaded will stop with pending work");
          }
-         VoxelWaterEditingMultithreaded.Stop=true;
-         waterEditingBGThread.Wait();
+         MarchingCubesWaterMultithreaded.Stopped=true;
+         for(int i=0;i<marchingCubesWaterBGThreads.Length;++i){
+                       marchingCubesWaterBGThreads[i].Wait();
+         }
+         VoxelWaterEditingMultithreaded.Stop(waterEditingBGThread);
          VoxelWaterEditing.singleton.waterEditingBG.Dispose();
-         if(MarchingCubesMultithreaded.Clear()!=0){
-          Log.Error("MarchingCubesMultithreaded will stop with pending work");
-         }
-         MarchingCubesMultithreaded.Stop=true;
-         for(int i=0;i<marchingCubesBGThreads.Length;++i){
-                       marchingCubesBGThreads[i].Wait();
-         }
+         MarchingCubesMultithreaded.Stop(marchingCubesBGThreads);
          if(VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Clear()!=0){
           Log.Error("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded will stop with pending work");
          }
-         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stop=true;
+         VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Stopped=true;
          for(int i=0;i<surfaceSimObjectsPlacerBGThreads.Length;++i){
                        surfaceSimObjectsPlacerBGThreads[i].Wait();
           if(Core.singleton.isServer){
@@ -238,25 +246,22 @@ namespace AKCondinoO.Voxels{
          }
          if(terrain!=null){
           for(int i=0;i<terrain.Length;++i){
-           terrain[i].marchingCubesBG.Dispose();
-           terrain[i].simObjectsPlacing.
-                       surface.
-                        surfaceSimObjectsPlacerBG.
-                         Dispose();
-           terrain[i].wCnk.waterSpreadingBG.Dispose();
+           terrain[i].OnDisposal();
           }
          }
-         VoxelTerrainEditingMultithreaded.Stop=true;
+         VoxelTerrainEditingMultithreaded.Stopped=true;
          terrainEditingBGThread.Wait();
          VoxelTerrainEditing.singleton.terrainEditingBG.Dispose();
          if(proceduralGenerationCoroutine!=null){
           biome.DisposeModules();
          }
-         VoxelSystem.Concurrent.terrainFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.  waterFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.  waterCache_rwl.Dispose();
+         VoxelSystem.Concurrent.             terrainFiles_rwl.Dispose();
+         VoxelSystem.Concurrent.               waterFiles_rwl.Dispose();
+         VoxelSystem.Concurrent.               waterCache_rwl.Dispose();
+         VoxelSystem.Concurrent.  waterNeighbourhoodCache_rwl.Dispose();
          VoxelSystem.Concurrent.  waterCache   .Clear();
          VoxelSystem.Concurrent.  waterCacheIds.Clear();
+         VoxelSystem.Concurrent.ReleaseCacheAndDispose();
         }
         void OnDestroy(){
         }
@@ -368,7 +373,7 @@ namespace AKCondinoO.Voxels{
          sourcesCollected=sources;
          if(navMeshSourcesCollectionChanged){
             navMeshSourcesCollectionChanged=false;
-          Log.DebugMessage("CollectNavMeshSources");
+          //Log.DebugMessage("CollectNavMeshSources");
           sources.Clear();
           markups.Clear();
           sources.AddRange(navMeshSources.Values);

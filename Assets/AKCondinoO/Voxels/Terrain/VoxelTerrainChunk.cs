@@ -20,7 +20,7 @@ using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundCont
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain{
-    internal class VoxelTerrainChunk:MonoBehaviour{
+    internal partial class VoxelTerrainChunk:MonoBehaviour,Interactable{
      [SerializeField]VoxelWaterChunk _VoxelWaterChunkPrefab;
      internal VoxelWaterChunk wCnk;
      internal MarchingCubesBackgroundContainer marchingCubesBG=new MarchingCubesBackgroundContainer();
@@ -68,6 +68,7 @@ namespace AKCondinoO.Voxels.Terrain{
          wCnk=Instantiate(_VoxelWaterChunkPrefab);
          wCnk.tCnk=this;
          wCnk.OnInstantiated();
+         SetInteractionsList();
         }
         internal void OnDestroyingCore(){
          wCnk.OnDestroyingCore();
@@ -81,12 +82,27 @@ namespace AKCondinoO.Voxels.Terrain{
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundRays.Dispose();
          if(simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.IsCreated)simObjectsPlacing.surface.surfaceSimObjectsPlacerBG.GetGroundHits.Dispose();
         }
+        internal void OnDisposal(){
+         marchingCubesBG.Dispose();
+         simObjectsPlacing.
+          surface.
+           surfaceSimObjectsPlacerBG.
+            Dispose();
+         #region water
+             wCnk.waterSpreadingBG.Dispose();
+             wCnk.marchingCubesWaterBG.Dispose();
+         #endregion water
+        }
         internal void OncCoordChanged(Vector2Int cCoord1,int cnkIdx1,bool firstCall){
          hasPhysMeshBaked=false;
+         bool rebuild=false;
          if(firstCall||cCoord1!=id.Value.cCoord){
           id=(cCoord1,cCoordTocnkRgn(cCoord1),cnkIdx1);
           pendingMarchingCubes=true;
+          this.name=id+".VoxelTerrainChunk";
+          rebuild=true;
          }
+         wCnk.OncCoordChanged(rebuild);
         }
         internal void OnEdited(){
          Log.DebugMessage("OnEdited():chunk:"+id);
@@ -215,5 +231,7 @@ namespace AKCondinoO.Voxels.Terrain{
             }
         #endif
         [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY=false;
+        [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY_AUTO_ENABLE=false;
+        [SerializeField]internal bool DEBUG_DRAW_WATER_CHANGES=true;
     }
 }

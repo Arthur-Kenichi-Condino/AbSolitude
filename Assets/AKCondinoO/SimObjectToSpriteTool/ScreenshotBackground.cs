@@ -27,7 +27,7 @@ namespace AKCondinoO.SimObjectToSpriteTool{
          }
          screenshotHelper=transform.GetComponentInParent<SimObjectScreenshotHelper>();
          previewSpriteRenderer=GetComponentInChildren<SpriteRenderer>();
-         Log.DebugMessage("previewSpriteRenderer:"+previewSpriteRenderer);
+         //Log.DebugMessage("previewSpriteRenderer:"+previewSpriteRenderer);
         }
      [SerializeField]GameObject prefabToExtractThumbnail;
      Bounds bounds;

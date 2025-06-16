@@ -64,7 +64,7 @@ namespace AKCondinoO{
          activityDetectionInputState.Add(Enabled.LEFT    );
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
+         //Log.DebugMessage("InputHandler:OnDestroyingCoreEvent");
         }
         bool InvokeDelegate(KeyValuePair<string,CommandState>command,Type inputType,GetterReturnMode returnMode){
          if(inputType==typeof(KeyCode))return((Func<Func<KeyCode,bool>,KeyCode,bool>)delegates[inputType]).Invoke((Func<KeyCode,bool>)getters[inputType][(int)returnMode],(KeyCode)command.Value.input);else
@@ -72,12 +72,22 @@ namespace AKCondinoO{
                                        return((Func<Func<string ,bool>,string ,bool>)delegates[inputType]).Invoke((Func<string ,bool>)getters[inputType][(int)returnMode],(string )command.Value.input);
         }
         internal bool focus=true;
+         internal bool hadFocus=true;
+          bool skipHadFocusUpdate=false;
         void OnApplicationFocus(bool focus){
+         hadFocus=this.focus;
          this.focus=focus;
+         skipHadFocusUpdate=true;
         }
         internal bool escape;
+        internal bool tab;
         //  [https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/]
         void Update(){
+         if(skipHadFocusUpdate){
+          skipHadFocusUpdate=false;
+         }else{
+          hadFocus=this.focus;
+         }
          activityDetected=false;
          void SetActivityDetectionFlag(EnabledState enabledState){
           if(activityDetectionInputState.Contains(enabledState)){
@@ -87,6 +97,8 @@ namespace AKCondinoO{
           }
          }
          escape=Input.GetKey(KeyCode.Escape)||Input.GetKeyUp(KeyCode.Escape)||Input.GetKeyDown(KeyCode.Escape);
+         tab   =Input.GetKey(KeyCode.Tab   )||Input.GetKeyUp(KeyCode.Tab   )||Input.GetKeyDown(KeyCode.Tab   );
+         //Log.DebugMessage("escape:"+escape);
          foreach(var command in CommandDictionary){
           string        name=command.Key;
           Type          type=command.Value.input.GetType();

@@ -80,7 +80,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
            simObjectTarget=masterSimObject;
           }
          }
-         Log.DebugMessage("ChaoticBlessing GetRandomTarget:"+(simObjectTarget!=null?simObjectTarget:simActorTarget));
+         //Log.DebugMessage("ChaoticBlessing GetRandomTarget:"+(simObjectTarget!=null?simObjectTarget:simActorTarget));
         }
         protected override void Invoke(){
          //  do more skill initialization here / or use this as main call of the skill

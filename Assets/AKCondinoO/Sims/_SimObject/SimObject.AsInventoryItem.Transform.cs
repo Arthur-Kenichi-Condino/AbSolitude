@@ -14,9 +14,9 @@ using UnityEngine.Animations;
 using static AKCondinoO.Sims.Actors.BaseAI;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     protected InContainerTransformData inContainerTransformData=null;
+     [NonSerialized]protected InContainerTransformData inContainerTransformData=null;
         internal void SetAsInventoryItemTransform(){
-         //Log.DebugMessage("SetAsInventoryItemTransform:"+id);
+         //Log.DebugMessage("SimObject:SetAsInventoryItemTransform:id:"+id);
          if(asInventoryItem.container is SimHands simHands){
           if(simHands.leftHand!=null&&simHands.rightHand!=null){
            Debug.DrawLine(simHands.leftHand.transform.position,simHands.rightHand.transform.position,Color.blue);
@@ -43,7 +43,7 @@ namespace AKCondinoO.Sims{
               if(layerName!=null){
                //Log.DebugMessage("currentWeaponAimLayerIndex.Value:layerName:"+layerName);
                if(settings.transformSettings.TryGetValue(typeof(SimHands),out var transformSettingsForSimHands)){
-                (Type containerSimType,ActorMotion?containerSimMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,layerName);
+                (Type containerSimType,ActorMotion?containerSimMotion,ActorWeaponLayerMotion?containerSimWeaponLayerMotion,ActorToolLayerMotion?containerSimToolLayerMotion,string layer)key=(containerAsBaseAI.GetType(),containerAsBaseAI.motion,containerAsBaseAI.weaponLayerMotion,containerAsBaseAI.toolLayerMotion,layerName);
                 if(transformSettingsForSimHands.TryGetValue(key,out var transformSettingsForParentBodyPartName)){
                  int priority=int.MaxValue;
                  Transform bodyPart=null;
@@ -56,13 +56,13 @@ namespace AKCondinoO.Sims{
                     priority=layerPriority;
                     bodyPart=parentBodyPart;
                     inContainerTransformData=kvp.Value;
-                    //Log.DebugMessage("SetAsInventoryItemTransform:layerName:"+layerName);
+                    //Log.DebugMessage("SimObject:SetAsInventoryItemTransform:layerName:"+layerName);
                    }
                   }
                  }
                  if(bodyPart!=null){
                   if(inContainerTransformData!=this.inContainerTransformData){
-                   Log.DebugMessage("set ParentConstraint:"+layerName);
+                   //Log.DebugMessage("'set ParentConstraint':layerName:"+layerName);
                    this.inContainerTransformData=inContainerTransformData;
                    if(parentConstraint!=null){
                     parentConstraint.locked=false;
@@ -74,9 +74,9 @@ namespace AKCondinoO.Sims{
                      weight=1f,
                     };
                     parentConstraint.AddSource(source);
-                    Log.DebugMessage("set ParentConstraint:localRotation:"+inContainerTransformData.transform.localRotation.eulerAngles);
+                    //Log.DebugMessage("'set ParentConstraint':'localRotation':"+inContainerTransformData.transform.localRotation.eulerAngles);
                     parentConstraint.SetRotationOffset   (parentConstraint.sourceCount-1,inContainerTransformData.transform.localRotation.eulerAngles);
-                    Log.DebugMessage("set ParentConstraint:localPosition:"+inContainerTransformData.transform.localPosition);
+                    //Log.DebugMessage("'set ParentConstraint':'localPosition':"+inContainerTransformData.transform.localPosition);
                     parentConstraint.SetTranslationOffset(parentConstraint.sourceCount-1,inContainerTransformData.transform.localPosition);
                     parentConstraint.locked=true;
                     parentConstraint.constraintActive=true;

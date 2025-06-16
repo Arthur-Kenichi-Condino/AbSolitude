@@ -15,12 +15,12 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
      ParticleSystem highestDurationParticleSystem;
      internal SkillAoE aoe;
         void Awake(){
-         Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
+         //Log.DebugMessage("SkillVisualEffect Awake, Type:"+this.GetType());
          particleSystemParent=GetComponent<ParticleSystem>();
          particleSystem=GetComponentsInChildren<ParticleSystem>();
          float maxDuration=0f;
          foreach(ParticleSystem particleSys in particleSystem){
-          Log.DebugMessage("particleSys:"+particleSys.name);
+          //Log.DebugMessage("particleSys:"+particleSys.name);
           var main=particleSys.main;
           totalDuration.Add(particleSys,(main.duration,main.startLifetime.constantMin,main.startLifetime.constant,main.startLifetime.constantMax));
           main.loop=false;
@@ -75,7 +75,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
          float duration=(this.duration-timer);
          float maxDuration=totalDuration[highestDurationParticleSystem].duration;
          float durationProportion=duration/maxDuration;
-         Log.DebugMessage("SkillVisualEffect:SetParticleSysDuration:duration:"+duration+";maxDuration:"+maxDuration+";durationProportion:"+durationProportion,this);
+         //Log.DebugMessage("SkillVisualEffect:SetParticleSysDuration:duration:"+duration+";maxDuration:"+maxDuration+";durationProportion:"+durationProportion,this);
          foreach(ParticleSystem particleSys in particleSystem){
           var main=particleSys.main;
           if(duration>0f){
@@ -123,12 +123,12 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
              main.startLifetime=startLifetime;
             }
            }
-           Log.DebugMessage("SkillVisualEffect:SetDuration:proportion:"+proportion+";main.duration:"+main.duration+";main.startLifetime.constantMax:"+main.startLifetime.constantMax,this);
+           //Log.DebugMessage("SkillVisualEffect:SetDuration:proportion:"+proportion+";main.duration:"+main.duration+";main.startLifetime.constantMax:"+main.startLifetime.constantMax,this);
           }
          }
         }
         internal virtual void OnDeactivate(){
-         Log.DebugMessage("SkillVisualEffect:OnDeactivate:timer:"+timer+";duration:"+duration+";particleSystemParent.main.duration:"+particleSystemParent.main.duration,this);
+         //Log.DebugMessage("SkillVisualEffect:OnDeactivate:timer:"+timer+";duration:"+duration+";particleSystemParent.main.duration:"+particleSystemParent.main.duration,this);
          particleSystemParent.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
          stopSFX=true;
          this.active=false;
@@ -156,7 +156,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
             if(duration-timer>=1f){
              if(!particleSystem.Any(particleSys=>particleSys.isPlaying)){
               SetParticleSysDuration();
-              Log.DebugMessage("SkillVisualEffect:particleSystemParent.Play(true):timer:"+timer+";duration:"+duration+";particleSystemParent.main.duration:"+particleSystemParent.main.duration,this);
+              //Log.DebugMessage("SkillVisualEffect:particleSystemParent.Play(true):timer:"+timer+";duration:"+duration+";particleSystemParent.main.duration:"+particleSystemParent.main.duration,this);
               particleSystemParent.Play(true);
               playSFX=true;
              }
@@ -187,7 +187,7 @@ namespace AKCondinoO.Sims.Actors.Skills.SkillVisualEffects{
           playSFX=false;
           stopSFX=false;
           playingSFX=true;
-          Log.DebugMessage("PlaySkillSFX:playingSFX");
+          //Log.DebugMessage("PlaySkillSFX:playingSFX");
           foreach(AudioSource audioSource in audioSources){
            audioSource.volume=1f;
            audioSource.Play();

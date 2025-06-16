@@ -19,15 +19,15 @@ using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal PersistentData persistentData;
+     [NonSerialized]internal PersistentData persistentData;
         internal struct PersistentData{
-         public Quaternion rotation;
-         public Vector3    position;
-         public Vector3    localScale;
-         public(Type simObjectType,ulong idNumber)?masterId;
-         public bool isInventoryItem;
-         public(Type simInventoryType,ulong idNumber)?containerSimInventoryId;
-         //  Não salvar lista de inventários aqui; ela é salva em uma pasta própria, por tipo e id de sim object
+         [NonSerialized]public Quaternion rotation;
+         [NonSerialized]public Vector3    position;
+         [NonSerialized]public Vector3    localScale;
+         [NonSerialized]public(Type simObjectType,ulong idNumber)?masterId;
+         [NonSerialized]public bool isInventoryItem;
+         [NonSerialized]public(Type simInventoryType,ulong idNumber)?containerSimInventoryId;
+         //  Não salvar lista de inventários aqui; ela é salva em uma pasta própria, por tipo e id de SimObject
             internal void UpdateData(SimObject simObject){
              rotation=simObject.transform.rotation;
              position=simObject.transform.position;

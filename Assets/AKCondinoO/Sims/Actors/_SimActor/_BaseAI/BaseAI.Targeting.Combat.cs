@@ -11,6 +11,22 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
+        internal static bool IsInRange(Vector3 pos1,Vector3 pos2,Vector3 dis,float radius1=0f,float radius2=0f){
+         Vector3 delta=new Vector3(
+          Mathf.Abs(pos1.x-pos2.x),
+          Mathf.Abs(pos1.y-pos2.y),
+          Mathf.Abs(pos1.z-pos2.z)
+         );
+         float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
+         if((disXZPlane<=radius1+dis.z+radius2||disXZPlane<=radius1+dis.x+radius2)&&delta.y<=dis.y){
+          //Log.DebugMessage("is in range:disXZPlane:"+disXZPlane);
+          return true;
+         }
+         return false;
+        }
+        internal partial class AI{
+         protected Vector3 MyAttackRange{get{return me.attackRange;}}
+        }
         internal override bool IsMonster(){
          return MyAggressionMode==AggressionMode.AggressiveToAll;
         }
@@ -47,7 +63,7 @@ namespace AKCondinoO.Sims.Actors{
          if(isAiming){
           if(animatorController.animator!=null){
            if(animatorController.animationEventsHandler!=null){
-            Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon():simWeapon:"+simWeapon,simWeapon);
+            //Log.DebugMessage("DoReloadingOnAnimationEventUsingWeapon():simWeapon:"+simWeapon,simWeapon);
             animatorController.animationEventsHandler.onAnimatorReload+=simWeapon.OnReload;
             motionFlagForReloadingAnimation=true;
             return true;
@@ -61,26 +77,41 @@ namespace AKCondinoO.Sims.Actors{
        return motionFlagForReloadingAnimation;
       }
      }
-     [SerializeField]protected Vector3 MyAttackRange=new Vector3(0f,.25f,.25f);internal Vector3 attackRange{get{return MyAttackRange;}}
-        internal Vector3 AttackDistance(){
+     internal Vector3 attackRange=new Vector3((0.125f/8f)*(3f),(0.125f/8f)*(3f),(0.0625f/8f)*(3f));
+     readonly List<SimWeapon>attackDistanceSimWeapons=new List<SimWeapon>();
+        internal Vector3 AttackDistance(out bool hasWeapon,bool checkWeapon=false){
+         hasWeapon=false;
          float radius=GetRadius();
+         float weaponRange=0f;
+         if(checkWeapon){
+          CurrentWeapons(attackDistanceSimWeapons);
+          hasWeapon=attackDistanceSimWeapons.Count>0;
+          foreach(SimWeapon weapon in attackDistanceSimWeapons){
+           weaponRange=Mathf.Max(weaponRange,weapon.shootDis);
+          }
+         }
+         float height=GetHeight();
          return new Vector3(
-          radius+MyAttackRange.x,
-          GetHeight()+MyAttackRange.y,
-          radius+MyAttackRange.z
+          radius*.95f+attackRange.x,
+          height*.95f+attackRange.y,
+          Mathf.Max(radius*.95f+attackRange.z,radius+weaponRange)
          );
         }
-        internal virtual bool IsInAttackRange(SimObject simObject){
+        internal virtual bool IsInAttackRange(SimObject simObject,out Vector3 attackDistance,out bool hasWeapon,bool checkWeapon=false){
+         hasWeapon=false;
          Vector3 delta=new Vector3(
           Mathf.Abs(simObject.transform.position.x-transform.position.x),
           Mathf.Abs(simObject.transform.position.y-transform.position.y),
           Mathf.Abs(simObject.transform.position.z-transform.position.z)
          );
          float disXZPlane=new Vector3(delta.x,0f,delta.z).magnitude;
-         Vector3 attackDistance=AttackDistance();
+         attackDistance=AttackDistance(out hasWeapon,checkWeapon);
+         float radius=GetRadius();
          float simObjectRadius=Mathf.Max(simObject.localBounds.extents.x,simObject.localBounds.extents.z);
-         if((disXZPlane<=attackDistance.z+simObjectRadius||disXZPlane<=attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
+         if((disXZPlane<=radius+attackDistance.z+simObjectRadius||disXZPlane<=radius+attackDistance.x+simObjectRadius)&&delta.y<=attackDistance.y){
           //Log.DebugMessage("simObject is in my attack range:disXZPlane:"+disXZPlane);
+          if(checkWeapon&&!hasWeapon){
+          }
           return true;
          }
          return false;
@@ -136,21 +167,21 @@ namespace AKCondinoO.Sims.Actors{
           OnHitProcessStatDamageFrom(hitbox,hitbox.actor);
          }
          ApplyAggressionModeForThenAddTarget(hitbox.actor);
-         SetTargetToBeRemoved(hitbox.actor,15f);
+         SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
          foreach(var slaveId in slaves){
           if(SimObjectManager.singleton.active.TryGetValue(slaveId,out SimObject slaveSimObject)&&slaveSimObject is BaseAI slaveAI){
            slaveAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-           slaveAI.SetTargetToBeRemoved(hitbox.actor,15f);
+           slaveAI.SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
           }
          }
          if(masterSimObject is BaseAI masterAI){
           masterAI.ApplyAggressionModeForThenAddTarget(hitbox.actor,this);
-          masterAI.SetTargetToBeRemoved(hitbox.actor,15f);
+          masterAI.SetTargetToBeRemoved(hitbox.actor,targetFastTimeout,targetCooldownAfterFastTimeout);
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,fromSimObject:simObject);
-         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         //Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
          if(postDamageIntegrity<=0f){
           Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
           OnDeath();
@@ -236,15 +267,29 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
      protected bool motionFlagForDeathAnimation=false;
-        protected override void OnDeath(){
+      protected bool motionFlagForDeathInstantAnimationJumpToEnd=false;
+        protected override void OnDeath(bool instant=false){
          Log.DebugMessage("OnDeath()");
          motionFlagForDeathAnimation=true;
+         if(!IsDead()){
+          motionFlagForDeathInstantAnimationJumpToEnd|=instant;
+         }
         }
         internal override bool IsDead(){
          if(MyMotion==ActorMotion.MOTION_DEAD||
             MyMotion==ActorMotion.MOTION_DEAD_RIFLE
          ){
           return true;
+         }
+         return false;
+        }
+        internal override bool IsMotionComplete(float after=1f){
+         if(motionMappedToLayerIndex.TryGetValue(MyMotion,out int layerIndex)){
+          //Log.DebugMessage("currentAnimationMapsToMotion[layerIndex]:"+currentAnimationMapsToMotion[layerIndex]);
+          if(currentAnimationMapsToMotion[layerIndex]&&animatorController.animationTime[layerIndex]>=after){
+           //Log.DebugMessage("IsMotionComplete:yes");
+           return true;
+          }
          }
          return false;
         }

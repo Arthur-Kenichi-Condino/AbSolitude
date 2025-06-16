@@ -1,28 +1,55 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Gameplaying;
 using AKCondinoO.Music;
 using AKCondinoO.Sims.Actors;
 using AKCondinoO.Voxels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static AKCondinoO.GameMode;
 using static AKCondinoO.InputHandler;
 namespace AKCondinoO{
-    internal class MainCamera:MonoBehaviour,ISingletonInitialization{
+    internal partial class MainCamera:MonoBehaviour,ISingletonInitialization{
      internal static MainCamera singleton{get;set;}
+     internal static string mainCameraSavePath;
+     internal static string mainCameraSaveFile;
+     internal new Camera camera;
         private void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         camera=GetComponent<Camera>();
         }
         public void Init(){
          Camera.main.transparencySortMode=TransparencySortMode.Default;
+         GameplayerManagement.singleton.persistentDataSavingBG.IsCompleted(GameplayerManagement.singleton.persistentDataSavingBGThread.IsRunning,-1);
+         if(Core.singleton.isServer){
+          mainCameraSavePath=string.Format("{0}{1}",Core.savePath,"MainCameraState/");
+          Directory.CreateDirectory(mainCameraSavePath);
+          mainCameraSaveFile=string.Format("{0}{1}",mainCameraSavePath,"mainCameraState.txt");
+          FileStream mainCameraFileStream=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStream=new FileStream(mainCameraSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+          StreamWriter mainCameraFileStreamWriter=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStreamWriter=new StreamWriter(mainCameraFileStream);
+          StreamReader mainCameraFileStreamReader=GameplayerManagement.singleton.persistentDataSavingBG.mainCameraFileStreamReader=new StreamReader(mainCameraFileStream);
+          mainCameraFileStream.Position=0L;
+          mainCameraFileStreamReader.DiscardBufferedData();
+          string line=mainCameraFileStreamReader.ReadLine();
+          if(line!=null){
+           if(!string.IsNullOrEmpty(line)){
+            persistentData=PersistentData.Parse(line);
+           }
+          }
+          transform.rotation=persistentData.rotation;
+          transform.position=persistentData.position;
+         }
          rotLerp.tgtRot=rotLerp.tgtRot_Last=transform.rotation;
          posLerp.tgtPos=posLerp.tgtPos_Last=transform.position;
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
+         //Log.DebugMessage("MainCamera:OnDestroyingCoreEvent");
+         GameplayerManagement.singleton.persistentDataSavingBG.IsCompleted(GameplayerManagement.singleton.persistentDataSavingBGThread.IsRunning,-1);
+         GameplayerManagement.singleton.persistentDataSavingBG.mainCameraPersistentData=persistentData;
         }
         internal void OnStopFollowing(){
          Log.DebugMessage("MainCamera:OnStopFollowing");
@@ -108,6 +135,9 @@ namespace AKCondinoO{
           if(toFollowActor!=null){
            OnStopFollowing();
           }else{
+           if(ScreenInput.singleton.currentActiveSim!=null){
+            ScreenInput.singleton.currentActiveSim.OnThirdPersonCamFollow();
+           }
           }
          }
          if(GameMode.singleton.current==GameMode.GameModesEnum.ThirdPerson){
@@ -204,14 +234,20 @@ namespace AKCondinoO{
         }
         void UpdateTransformRotation(){
          transform.rotation=rotLerp.UpdateRotation(transform.rotation,Core.magicDeltaTimeNumber);
+         if(Core.singleton.isServer){
+          persistentData.rotation=transform.rotation;
+         }
         }
         void UpdateTransformPosition(){
          transform.position=posLerp.UpdatePosition(transform.position,Core.magicDeltaTimeNumber);
+         if(Core.singleton.isServer){
+          persistentData.position=transform.position;
+         }
         }
      QuaternionRotLerpHelper predictCameraPosFollowing_posRotLerp=new QuaternionRotLerpHelper();
-        internal void PredictCameraPosFollowing(Transform transform,Quaternion tgtRot,out Vector3 predictCameraPos,out Quaternion predictCameraRot){
+        internal void PredictCameraPosRawFollowing(Transform transform,Quaternion tgtRot,out Vector3 predictCameraPos,out Quaternion predictCameraRot){
          predictCameraPosFollowing_posRotLerp.tgtRot=tgtRot;
-         Vector3 onlyHeightOffsetTgtPos=transform.position+predictCameraPosFollowing_posRotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
+         //Vector3 onlyHeightOffsetTgtPos=transform.position+predictCameraPosFollowing_posRotLerp.tgtRot*new Vector3(0f,thirdPersonOffset.y,0f);
          predictCameraPos=transform.position+(predictCameraPosFollowing_posRotLerp.tgtRot*thirdPersonOffset);
          predictCameraRot=predictCameraPosFollowing_posRotLerp.tgtRot;
         }

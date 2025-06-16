@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c58afae3b6ecd4380baf4ef9792961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultPrefabList: {fileID: 11400000, guid: 39d044afcdbd76d438084798f56419e8, type: 2}
   editorNetAsClient: 0
-  devBuildNetAsClient: 0
+  devBuildNetAsClient: 1
   manuallyAddedPrefabs:
   - {fileID: 47513358957190350, guid: 27e0aae3b40922649b43ec001a83e2fd, type: 3}
   - {fileID: 764480898399811415, guid: c8b969b87a9e7b145a2e8596787626db, type: 3}
   - {fileID: 6282034162402426788, guid: 932a398d402fb7044840d9cb6ce63234, type: 3}
+  - {fileID: 6688585100717056002, guid: 8230d626d89f3de4ebee9dc1bcf16fcc, type: 3}
+  - {fileID: 8696407547420296089, guid: 9a29819c92bd6994caefacf1039b8da9, type: 3}

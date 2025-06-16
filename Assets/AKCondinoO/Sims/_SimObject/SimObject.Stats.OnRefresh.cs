@@ -1,13 +1,14 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
         internal partial class Stats{
-         protected bool pendingRefresh;
+         [NonSerialized]protected bool pendingRefresh;
             internal void SetPendingRefresh(SimObject statsSim=null,bool forceRefresh=false){
              pendingRefresh=true;
              if(forceRefresh){
@@ -17,6 +18,7 @@ namespace AKCondinoO.Sims{
             internal void OnRefresh(SimObject statsSim=null){
              if(pendingRefresh){
               OnRefresh_IsTranscendent(statsSim);
+               OnRefresh_Experience(statsSim);
                OnRefresh_SimLevel(statsSim);
                OnRefresh_AgeLevel(statsSim);
                  OnRefresh_Luck(statsSim);//  Luck must be applied at the start and then at the end so it adds random attributes
@@ -31,6 +33,7 @@ namespace AKCondinoO.Sims{
                      OnRefresh_PhysicalPowerFlatValue  (statsSim);
                      OnRefresh_PhysicalDefenseFlatValue(statsSim);
               updatedIsTranscendent=false;refreshedIsTranscendent=false;
+               updatedExperience    =false;refreshedExperience    =false;
                updatedSimLevel      =false;refreshedSimLevel      =false;
                updatedAgeLevel      =false;refreshedAgeLevel      =false;
                 updatedBodily_kinesthetic  =false;
@@ -50,6 +53,7 @@ namespace AKCondinoO.Sims{
                      updatedIntegrity=false;refreshedIntegrity=false;
                      updatedPhysicalPowerFlatValue  =false;refreshedPhysicalPowerFlatValue  =false;
                      updatedPhysicalDefenseFlatValue=false;refreshedPhysicalDefenseFlatValue=false;
+              onGeneration=false;
               pendingRefresh=false;
              }
             }

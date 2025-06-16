@@ -34,7 +34,7 @@ namespace AKCondinoO.Sims.Inventory{
           //Log.DebugMessage("SimInventoryType already registered:"+simInventoryType);
           return;
          }
-         Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
+         //Log.DebugMessage("registering SimInventoryType:"+simInventoryType);
          if(!ids.TryGetValue(simInventoryType,out _)){
           ids.Add(simInventoryType,0uL);
          }
@@ -46,7 +46,7 @@ namespace AKCondinoO.Sims.Inventory{
          registeredSimInventoryTypes.Add(simInventoryType);
         }
         internal void OnSaveSimInventoryTypeRegistration(Type simInventoryType){
-         Log.DebugMessage("On save SimInventoryType registration:"+simInventoryType);
+         //Log.DebugMessage("On save SimInventoryType registration:"+simInventoryType);
          persistentSimInventoryDataSavingBG.idsToRelease.Add(simInventoryType,new HashSet<ulong>());
          persistentSimInventoryDataSavingBG.persistentIds.Add(simInventoryType,0);
          persistentSimInventoryDataSavingBG.persistentReleasedIds.Add(simInventoryType,new HashSet<ulong>());
@@ -102,7 +102,7 @@ namespace AKCondinoO.Sims.Inventory{
            string simInventoryTypeString=line.Substring(simInventoryTypeStringStart,simInventoryTypeStringEnd-simInventoryTypeStringStart);
            Type simInventoryType=Type.GetType(simInventoryTypeString);
            if(simInventoryType==null){continue;}
-           Log.DebugMessage("t:"+simInventoryType);
+           //Log.DebugMessage("t:"+simInventoryType);
            int nextSimInventoryIdNumberStringStart=line.IndexOf("nextId=",simInventoryTypeStringEnd)+7;
            int nextSimInventoryIdNumberStringEnd  =line.IndexOf(" } , endOfLine",nextSimInventoryIdNumberStringStart);
            string nextSimInventoryIdNumberString=line.Substring(nextSimInventoryIdNumberStringStart,nextSimInventoryIdNumberStringEnd-nextSimInventoryIdNumberStringStart);
@@ -115,7 +115,7 @@ namespace AKCondinoO.Sims.Inventory{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimInventoryManager:OnDestroyingCoreEvent");
          if(Core.singleton.isServer){
          }
         }

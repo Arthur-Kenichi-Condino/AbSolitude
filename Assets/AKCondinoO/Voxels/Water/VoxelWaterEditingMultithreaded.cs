@@ -17,22 +17,31 @@ namespace AKCondinoO.Voxels.Water.Editing{
     }
     internal class VoxelWaterEditingMultithreaded:BaseMultithreaded<VoxelWaterEditingContainer>{
         internal struct WaterEditOutputData{
+         public bool wakeUp;
          public double density;
          public double previousDensity;
-         public bool sleeping;
+         public bool hasBlockage;
          public float evaporateAfter;
-            internal WaterEditOutputData(double density,double previousDensity,bool sleeping,float evaporateAfter){
-             this.density=density;this.previousDensity=previousDensity;this.sleeping=sleeping;this.evaporateAfter=evaporateAfter;
+            internal WaterEditOutputData(bool wakeUp,double density,double previousDensity,bool hasBlockage,float evaporateAfter){
+             this.wakeUp=wakeUp;this.density=density;this.previousDensity=previousDensity;this.hasBlockage=hasBlockage;this.evaporateAfter=evaporateAfter;
             }
             public override string ToString(){
-             return string.Format(CultureInfoUtil.en_US,"waterEditOutputData={{ density={0} , previousDensity={1} , sleeping={2} , evaporateAfter={3} , }}",density,previousDensity,sleeping,evaporateAfter);
+             return string.Format(CultureInfoUtil.en_US,"waterEditOutputData={{ wakeUp={0} , density={1} , previousDensity={2} , hasBlockage={3} , evaporateAfter={4} , }}",wakeUp,density,previousDensity,hasBlockage,evaporateAfter);
             }
             internal static WaterEditOutputData Parse(string s){
              WaterEditOutputData result=new WaterEditOutputData();
+             bool wakeUp=false;
              double density=0d;
              double previousDensity=0d;
-             bool sleeping=false;
+             bool hasBlockage=false;
              float evaporateAfter=-1f;
+             int wakeUpStringStart=s.IndexOf("wakeUp=");
+             if(wakeUpStringStart>=0){
+                wakeUpStringStart+=7;
+              int wakeUpStringEnd=s.IndexOf(" , ",wakeUpStringStart);
+              string wakeUpString=s.Substring(wakeUpStringStart,wakeUpStringEnd-wakeUpStringStart);
+              wakeUp=bool.Parse(wakeUpString);
+             }
              int densityStringStart=s.IndexOf("density=");
              if(densityStringStart>=0){
                 densityStringStart+=8;
@@ -48,12 +57,12 @@ namespace AKCondinoO.Voxels.Water.Editing{
               string previousDensityString=s.Substring(previousDensityStringStart,previousDensityStringEnd-previousDensityStringStart);
               previousDensity=double.Parse(previousDensityString,NumberStyles.Any,CultureInfoUtil.en_US);
              }
-             int sleepingStringStart=s.IndexOf("sleeping=");
-             if(sleepingStringStart>=0){
-                sleepingStringStart+=9;
-              int sleepingStringEnd=s.IndexOf(" , ",sleepingStringStart);
-              string sleepingString=s.Substring(sleepingStringStart,sleepingStringEnd-sleepingStringStart);
-              sleeping=bool.Parse(sleepingString);
+             int hasBlockageStringStart=s.IndexOf("hasBlockage=");
+             if(hasBlockageStringStart>=0){
+                hasBlockageStringStart+=12;
+              int hasBlockageStringEnd=s.IndexOf(" , ",hasBlockageStringStart);
+              string hasBlockageString=s.Substring(hasBlockageStringStart,hasBlockageStringEnd-hasBlockageStringStart);
+              hasBlockage=bool.Parse(hasBlockageString);
              }
              int evaporateAfterStringStart=s.IndexOf("evaporateAfter=");
              if(evaporateAfterStringStart>=0){
@@ -62,9 +71,10 @@ namespace AKCondinoO.Voxels.Water.Editing{
               string evaporateAfterString=s.Substring(evaporateAfterStringStart,evaporateAfterStringEnd-evaporateAfterStringStart);
               evaporateAfter=float.Parse(evaporateAfterString);
              }
+             result.wakeUp=wakeUp;
              result.density=density;
              result.previousDensity=previousDensity;
-             result.sleeping=sleeping;
+             result.hasBlockage=hasBlockage;
              result.evaporateAfter=evaporateAfter;
              return result;
             }
@@ -85,9 +95,10 @@ namespace AKCondinoO.Voxels.Water.Editing{
           WaterEditRequest editRequest=container.requests.Dequeue();
           Vector3    center         =editRequest.center;
           Vector3Int size           =editRequest.size;
+          bool       wakeUp         =editRequest.wakeUp;
           double     density        =editRequest.density;
           double     previousDensity=editRequest.previousDensity;
-          bool       sleeping       =editRequest.sleeping;
+          bool       hasBlockage    =editRequest.hasBlockage;
           float      evaporateAfter =editRequest.evaporateAfter;
           Vector2Int cCoord1=vecPosTocCoord(center );
           Vector2Int cnkRgn1=cCoordTocnkRgn(cCoord1);
@@ -95,9 +106,9 @@ namespace AKCondinoO.Voxels.Water.Editing{
           Vector3Int vCoord1=vecPosTovCoord(center );
           int vxlIdx1=GetvxlIdx(vCoord1.x,vCoord1.y,vCoord1.z);
           double resultDensity=density;
-          MergeEdits(cCoord1,vCoord1,cnkRgn1,resultDensity,previousDensity,sleeping,evaporateAfter);
+          MergeEdits(cCoord1,vCoord1,cnkRgn1,wakeUp,resultDensity,previousDensity,hasBlockage,evaporateAfter);
          }
-         void MergeEdits(Vector2Int cCoord,Vector3Int vCoord,Vector2Int cnkRgn,double resultDensity,double previousDensity,bool sleeping,float evaporateAfter){
+         void MergeEdits(Vector2Int cCoord,Vector3Int vCoord,Vector2Int cnkRgn,bool wakeUp,double resultDensity,double previousDensity,bool hasBlockage,float evaporateAfter){
           resultDensity=Math.Clamp(resultDensity,0.0d,100.0d);
           if(!dataFromFileToMerge.ContainsKey(cCoord)){
            if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
@@ -110,20 +121,31 @@ namespace AKCondinoO.Voxels.Water.Editing{
           VoxelWater currentVoxel;
           if(dataFromFileToMerge.ContainsKey(cCoord)&&dataFromFileToMerge[cCoord].ContainsKey(vCoord)){
            WaterEditOutputData voxelData=dataFromFileToMerge[cCoord][vCoord];
-           currentVoxel=new VoxelWater(voxelData.density,voxelData.previousDensity,voxelData.sleeping,voxelData.evaporateAfter);
+           currentVoxel=new VoxelWater(voxelData.wakeUp,voxelData.density,voxelData.previousDensity,voxelData.hasBlockage,voxelData.evaporateAfter);
           }else{
-           //  TO DO: valor do bioma
-           currentVoxel=new VoxelWater(0.0d,0.0d,true,-1f);
+           //  valor do bioma
+           currentVoxel=new VoxelWater();
+           Vector3Int noiseInput=vCoord;noiseInput.x+=cnkRgn.x;
+                                        noiseInput.z+=cnkRgn.y;
+           VoxelSystem.biome.SetvxlWater(
+            noiseInput,
+             null,
+              0,
+               vCoord.z+vCoord.x*Depth,
+                ref currentVoxel
+           );
           }
-          previousDensity=currentVoxel.density;
-          sleeping=false;
+          if(previousDensity<0d){
+           previousDensity=currentVoxel.density;
+          }
+          hasBlockage=false;
           if(!dataForSavingToFile.ContainsKey(cCoord)){
            if(!waterEditOutputDataPool.TryDequeue(out Dictionary<Vector3Int,WaterEditOutputData>editData)){
             editData=new Dictionary<Vector3Int,WaterEditOutputData>();
            }
            dataForSavingToFile.Add(cCoord,editData);
           }
-          dataForSavingToFile[cCoord][vCoord]=new WaterEditOutputData(resultDensity,previousDensity,sleeping,evaporateAfter);
+          dataForSavingToFile[cCoord][vCoord]=new WaterEditOutputData(wakeUp,resultDensity,previousDensity,hasBlockage,evaporateAfter);
           //  TO DO: add neighbours that are dirty too
          }
          void LoadDataFromFile(Vector2Int cCoord,Dictionary<Vector3Int,WaterEditOutputData>editData){

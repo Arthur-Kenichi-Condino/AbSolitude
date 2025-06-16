@@ -30,7 +30,7 @@ namespace AKCondinoO.Sims.Actors{
          if(simUMAPrefab!=null){
           simUMAPosOffset=simUMAPrefab.transform.localPosition;
           simUMA=Instantiate(simUMAPrefab,this.transform).GetComponentInChildren<DynamicCharacterAvatar>();
-          Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
+          //Log.DebugMessage("simUMAPosOffset:"+simUMAPosOffset);
           simUMA.CharacterUpdated.AddAction(OnUMACharacterUpdated);
           goToSimUMA=simUMA.gameObject;
          }
@@ -54,7 +54,7 @@ namespace AKCondinoO.Sims.Actors{
            nameToBodyPart.Remove(name);
           }
          }
-         Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
+         //Log.DebugMessage("SetBodyPart:"+name+":"+bodyPart);
         }
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
@@ -66,12 +66,14 @@ namespace AKCondinoO.Sims.Actors{
          base.OnDeactivated();
         }
         protected override void EnableInteractions(){
-         Log.DebugMessage("implementation incomplete");
-         interactionsEnabled=true;
+         Log.Warning("implementation incomplete");
+         base.EnableInteractions();
+         //interactionsEnabled=true;
         }
         protected override void DisableInteractions(){
-         Log.DebugMessage("implementation incomplete");
-         interactionsEnabled=false;
+         Log.Warning("implementation incomplete");
+         base.DisableInteractions();
+         //interactionsEnabled=false;
         }
     }
 }

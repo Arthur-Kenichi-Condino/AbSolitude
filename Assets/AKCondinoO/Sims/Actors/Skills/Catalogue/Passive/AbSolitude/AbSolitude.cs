@@ -16,7 +16,7 @@ namespace AKCondinoO.Sims.Actors.Skills{
          base.Awake();
         }
         protected override void Invoke(){
-         Log.DebugMessage("AbSolitude:Invoke()");
+         //Log.DebugMessage("AbSolitude:Invoke()");
          base.Invoke();
         }
         protected override void OnBuffDequeued(SkillBuff buff){

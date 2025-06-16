@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO{
     [Serializable]internal class Vector3PosLerpHelper{
+        internal Vector3PosLerpHelper(){
+        }
+        internal Vector3PosLerpHelper(float tgtRotLerpSpeed,float tgtRotLerpMaxTime):this(){
+         this.tgtPosLerpSpeed  =tgtRotLerpSpeed  ;
+         this.tgtPosLerpMaxTime=tgtRotLerpMaxTime;
+        }
      internal Vector3 tgtPos,tgtPos_Last;
       internal float tgtPosLerpTime;
        internal float tgtPosLerpVal;

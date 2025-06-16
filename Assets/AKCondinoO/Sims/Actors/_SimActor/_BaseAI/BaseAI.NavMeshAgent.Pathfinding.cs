@@ -1,34 +1,55 @@
 ﻿#if UNITY_EDITOR
+    #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using System;
 using UnityEngine;
 using UnityEngine.AI;
-namespace AKCondinoO.Sims.Actors {
+namespace AKCondinoO.Sims.Actors{
     internal partial class BaseAI{
-     protected Vector3 MyDest;internal Vector3 dest{get{return MyDest;}}
-     protected PathfindingResult MyPathfinding=PathfindingResult.IDLE;internal PathfindingResult pathfinding{get{return MyPathfinding;}}
-        internal enum PathfindingResult:int{
-         IDLE                      =0,
-         REACHED                   =1,
-         PENDING                   =2,
-         TRAVELLING                =3,
-         TRAVELLING_BUT_NO_SPEED   =4,
-         TRAVELLING_BUT_UNREACHABLE=5,
-         TIMEOUT                   =6,
-         UNREACHABLE               =7,
+     internal Vector3 dest{get{return(!isUsingAI||ai==null)?transform.position:ai.MyDest;}}
+     internal PathfindingResult pathfinding{get{return(!isUsingAI||ai==null)?PathfindingResult.PLAYER_CONTROLLED:ai.MyPathfinding;}}
+        internal partial class AI{
+         internal Vector3 MyDest{
+          get{return(!me.isUsingAI)?me.transform.position:aiDest;}
+          set{aiDest=value;}
+         }protected Vector3 aiDest;
+         internal PathfindingResult MyPathfinding{
+          get{return(!me.isUsingAI)?PathfindingResult.PLAYER_CONTROLLED:aiPathfinding;}
+          set{aiPathfinding=value;}
+         }
+         protected PathfindingResult aiPathfinding=PathfindingResult.IDLE;
         }
-     [SerializeField]protected float pathfindingTimeout=3f;
+        internal enum PathfindingResult:int{
+         PLAYER_CONTROLLED         =13,
+         IDLE                      = 0,
+         REACHED                   = 1,
+         PENDING                   = 2,
+         TRAVELLING                = 3,
+         TRAVELLING_BUT_NO_SPEED   = 4,
+         TRAVELLING_BUT_UNREACHABLE= 5,
+         TIMEOUT                   = 6,
+         UNREACHABLE               = 7,
+         PAUSED                    = 8,
+        }
+     protected float pathfindingTimeout=16f;
       protected float pathfindingTimer;
-      [SerializeField]protected float pathPendingTimeout=4f;
+      protected float pathPendingTimeout=8f;
        protected float pathPendingTimer;
       protected bool stopPathfindingOnTimeout=true;
         PathfindingResult GetPathfindingResult(){
+         if(Vector3.Distance(navMeshAgent.destination,navMeshAgent.transform.position)<=navMeshAgent.stoppingDistance){
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
+          return PathfindingResult.IDLE;
+         }
          if(pathPendingTimer>0f){
             pathPendingTimer-=Time.deltaTime;
           if(pathPendingTimer<=0f){
            if(stopPathfindingOnTimeout){
             Log.DebugMessage("pathPendingTimer<=0f:PathfindingResult.TIMEOUT");
-            navMeshAgent.destination=navMeshAgent.transform.position;
+            MoveStop();
            }
            return PathfindingResult.TIMEOUT;
           }
@@ -42,6 +63,10 @@ namespace AKCondinoO.Sims.Actors {
          }
          pathPendingTimer=0f;
          if(!navMeshAgent.hasPath){
+          //Log.DebugMessage("'!navMeshAgent.hasPath'");
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }
@@ -50,6 +75,10 @@ namespace AKCondinoO.Sims.Actors {
           navMeshAgent.remainingDistance==float.NaN     ||
           navMeshAgent.remainingDistance<0
          ){
+          //Log.DebugMessage("navMeshAgent.remainingDistance invalid:"+navMeshAgent.remainingDistance);
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           pathfindingTimer=0f;
           return PathfindingResult.IDLE;
          }
@@ -58,7 +87,7 @@ namespace AKCondinoO.Sims.Actors {
           if(pathfindingTimer<=0f){
            if(stopPathfindingOnTimeout){
             Log.DebugMessage("pathfindingTimer<=0f:PathfindingResult.TIMEOUT");
-            navMeshAgent.destination=navMeshAgent.transform.position;
+            MoveStop();
            }
            return PathfindingResult.TIMEOUT;
           }
@@ -72,6 +101,9 @@ namespace AKCondinoO.Sims.Actors {
           if(pathfindingTimer<=0f){
              pathfindingTimer=pathfindingTimeout;
           }
+          if(movePaused){
+           return PathfindingResult.PAUSED;
+          }
           if(Mathf.Approximately(navMeshAgent.velocity.magnitude,0f)){
            return PathfindingResult.TRAVELLING_BUT_NO_SPEED;
           }
@@ -80,16 +112,34 @@ namespace AKCondinoO.Sims.Actors {
           }
           return PathfindingResult.TRAVELLING;
          }
+         if(movePaused){
+          return PathfindingResult.PAUSED;
+         }
          pathfindingTimer=0f;
          return PathfindingResult.REACHED;
         }
         internal virtual bool IsTraversingPath(){
-         return!(
-          MyPathfinding==PathfindingResult.IDLE||
-          MyPathfinding==PathfindingResult.REACHED||
-          MyPathfinding==PathfindingResult.TIMEOUT||
-          MyPathfinding==PathfindingResult.UNREACHABLE
+         return ai!=null&&!(
+          ai.MyPathfinding==PathfindingResult.IDLE||
+          ai.MyPathfinding==PathfindingResult.REACHED||
+          ai.MyPathfinding==PathfindingResult.TIMEOUT||
+          ai.MyPathfinding==PathfindingResult.UNREACHABLE
          );
+        }
+        protected override void OnDrawGizmos(){
+         base.OnDrawGizmos();
+         #if UNITY_EDITOR
+          if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
+           Color gizmosColor=Gizmos.color;
+           Gizmos.color=Color.white;
+           //  Draw lines joining each path corner
+           Vector3[]pathCorners=navMeshAgent.path.corners;
+           for(int i=0;i<pathCorners.Length-1;i++){
+            Gizmos.DrawLine(pathCorners[i],pathCorners[i+1]);
+           }
+           Gizmos.color=gizmosColor;
+          }
+         #endif
         }
     }
 }

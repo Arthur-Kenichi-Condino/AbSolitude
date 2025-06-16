@@ -1,8 +1,13 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
+using AKCondinoO.Sims.Actors.Pathfinding;
 using AKCondinoO.Sims.Actors.Skills;
 using AKCondinoO.Sims.Actors.Skills.SkillBuffs;
 using AKCondinoO.Sims.Inventory;
@@ -13,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UMA;
 using UMA.CharacterSystem;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.GameMode;
@@ -24,19 +30,31 @@ namespace AKCondinoO.Sims.Actors{
     ///  [https://www.youtube.com/watch?v=FbM4CkqtOuA]
     ///  [https://www.youtube.com/watch?v=znZXmmyBF-o]
     internal partial class BaseAI:SimActor{
+     internal AStarPathfindingBackgroundContainer aStarPathfindingBG;
      internal SimCharacterController characterController;
       internal float height;
        internal float heightCrouching;
      internal SimAnimatorController animatorController;
      internal AISensor aiSensor;
+     internal AISignal aiSignal;
+     protected AI ai;
         protected override void Awake(){
+         if(ai==null){
+          ai=new AI(this);
+         }
          InitTargets();
          base.Awake();
          aiSensor=GetComponentInChildren<AISensor>();
          if(aiSensor){
           aiSensor.actor=this;
           aiSensor.Deactivate();
-          Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+          //Log.DebugMessage("aiSensor found, search for actor's \"head\" to add sight");
+         }
+         aiSignal=GetComponentInChildren<AISignal>();
+         if(aiSignal){
+          Log.DebugMessage("aiSignal found");
+          aiSignal.actor=this;
+          aiSignal.Deactivate();
          }
          navMeshAgent=GetComponent<NavMeshAgent>();
          navMeshQueryFilter=new NavMeshQueryFilter(){
@@ -52,15 +70,23 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController==null){
           height=heightCrouching;
          }
-         Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
+         aiRotTurnTo.tgtRot=aiRotTurnTo.tgtRot_Last=transform.rotation;
+         //Log.DebugMessage("height:"+height+";heightCrouching:"+heightCrouching);
          animatorController=GetComponent<SimAnimatorController>();
          animatorController.actor=this;
+         aStarPathfindingBG=new AStarPathfindingBackgroundContainer(aStarPathfindingWidth,aStarPathfindingDepth,aStarPathfindingHeight);
+         aStarPathfindingBG.GetGroundRays=new NativeList<RaycastCommand>(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
+         aStarPathfindingBG.GetGroundHits=new NativeList<RaycastHit    >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight,Allocator.Persistent);
+         aStarPathfindingBG.GetObstaclesCommands=new NativeList<OverlapBoxCommand>(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight                                       ,Allocator.Persistent);
+         aStarPathfindingBG.GetObstaclesOverlaps=new NativeList<ColliderHit      >(aStarPathfindingWidth*aStarPathfindingDepth*aStarPathfindingHeight*aStarPathfindingBG.getObstaclesMaxHits,Allocator.Persistent);
+         AStarPathfinding.singleton.aStarPathfindingContainers.Add((this,aStarPathfindingBG));
+         nativeToManagedCoroutine=StartCoroutine(NativeToManagedCoroutine());
         }
      protected bool canSense;
         protected override void OnUMACharacterUpdated(UMAData simUMAData){
          if(aiSensor){
           if(head||leftEye||rightEye){
-           Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
+           //Log.DebugMessage("aiSensor found, sync with actor's \"head's\" and/or \"eyes'\" transforms for providing eyesight to AI");
            canSense=true;
           }
          }
@@ -76,8 +102,10 @@ namespace AKCondinoO.Sims.Actors{
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
         internal override void OnActivated(){
          base.OnActivated();
-         requiredSkills.Add(typeof(OnHitGracePeriod),new SkillData(){skill=typeof(OnHitGracePeriod),level=10,});
-         requiredSkills.Add(typeof(Teleport        ),new SkillData(){skill=typeof(Teleport        ),level=1 ,});
+         attackRange=new Vector3(0.125f/8f,0.125f/8f,0.0625f/8f);
+         requiredSkills.Add(typeof(AskHelpFromAllies),new SkillData(){skill=typeof(AskHelpFromAllies),level=10,});
+         requiredSkills.Add(typeof(OnHitGracePeriod ),new SkillData(){skill=typeof(OnHitGracePeriod ),level=10,});
+         requiredSkills.Add(typeof(Teleport         ),new SkillData(){skill=typeof(Teleport         ),level=1 ,});
          //  load skills from file here:
          persistentSimActorData.skills.Reset();
          while(persistentSimActorData.skills.MoveNext()){
@@ -131,14 +159,14 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
          lastForward=transform.forward;
          OnResetMotion();
-         if(onAttackGetDataCoroutine!=null){
-          StopCoroutine(onAttackGetDataCoroutine);onAttackGetDataCoroutine=null;
+         if(ai.attackSt.getDataCoroutine!=null){
+          StopCoroutine(ai.attackSt.getDataCoroutine);ai.attackSt.getDataCoroutine=null;
          }
-         onAttackGetDataCoroutine=StartCoroutine(OnAttackGetDataCoroutine());
-         if(onChaseGetDataCoroutine!=null){
-          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         ai.attackSt.getDataCoroutine=StartCoroutine(ai.attackSt.GetDataCoroutine());
+         if(ai.chaseSt.getDataCoroutine!=null){
+          StopCoroutine(ai.chaseSt.getDataCoroutine);ai.chaseSt.getDataCoroutine=null;
          }
-         onChaseGetDataCoroutine=StartCoroutine(OnChaseGetDataCoroutine());
+         ai.chaseSt.getDataCoroutine=StartCoroutine(ai.chaseSt.GetDataCoroutine());
          if(animatorController!=null){
           if(animatorController.animationEventsHandler!=null){
            animatorController.animationEventsHandler.CancelAllEvents();
@@ -150,13 +178,16 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController!=null){
           characterController.weaponsReloading.Clear();
          }
-         if(onChaseGetDataCoroutine!=null){
-          StopCoroutine(onChaseGetDataCoroutine);onChaseGetDataCoroutine=null;
+         if(ai.attackSt.getDataCoroutine!=null){
+          StopCoroutine(ai.attackSt.getDataCoroutine);ai.attackSt.getDataCoroutine=null;
+         }
+         if(ai.chaseSt.getDataCoroutine!=null){
+          StopCoroutine(ai.chaseSt.getDataCoroutine);ai.chaseSt.getDataCoroutine=null;
          }
          if(aiSensor){
           aiSensor.Deactivate();
          }
-         Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
+         //Log.DebugMessage("sim actor:OnDeactivated:id:"+id);
          foreach(var skill in skills){
           SkillsManager.singleton.Pool(skill.Key,skill.Value);
          }
@@ -171,6 +202,7 @@ namespace AKCondinoO.Sims.Actors{
          persistentSimActorData.UpdateData(this);
         }
      internal bool isUsingAI=true;
+      internal bool wasUsingAI=true;
      protected Vector3 lastForward=Vector3.forward;
      [SerializeField]bool DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
      [SerializeField]bool DEBUG_TOGGLE_CROUCHING=false;
@@ -188,10 +220,12 @@ namespace AKCondinoO.Sims.Actors{
          bool shouldCrouch=false;//  is crouching required?
          if(Core.singleton.isServer){
           if(IsOwner){
+           ManualUpdateAStarPathfinding();
            if(DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS){
               DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS=false;
             OnThirdPersonCamFollow();
            }
+           wasUsingAI=isUsingAI;
            if(MainCamera.singleton.toFollowActor==this){
             //Log.DebugMessage("following this:"+this);
             if(InputHandler.singleton.activityDetected&&!Enabled.RELEASE_MOUSE.curState){
@@ -214,7 +248,7 @@ namespace AKCondinoO.Sims.Actors{
             if(AFKTimerToUseAI<=0f){
              OnStartUsingAI();
              isUsingAI=true;
-             Log.DebugMessage("AFK for too long, use AI:"+this);
+             //Log.DebugMessage("'AFK for too long, use AI':"+this);
             }
            }
            if(DEBUG_TOGGLE_HOLSTER_WEAPON){
@@ -265,6 +299,11 @@ namespace AKCondinoO.Sims.Actors{
                }
               }
              }
+             if(!aiSignal.isActiveAndEnabled){
+              aiSignal.Activate();
+             }
+             if(aiSignal.isActiveAndEnabled){
+             }
             }
            }
            if(!isAllPassiveSkillsInEffectFlag){
@@ -277,19 +316,39 @@ namespace AKCondinoO.Sims.Actors{
            }
            UpdateHitboxesGracePeriod();
            UpdateWeaponsGracePeriod();
+           if(!IsDead()){
+            if(stats.IntegrityGet(this)<=0f){
+             Log.DebugMessage("I have no integrity points:set motion dead");
+             OnDeath(true);
+            }
+           }
            if(isUsingAI){
             EnableNavMeshAgent();
             if(!navMeshAgent.isOnNavMesh){
              DisableNavMeshAgent();
             }
             if(navMeshAgent.enabled){
-             if(navMeshAgent.isStopped!=navMeshAgentShouldBeStopped){
-              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
-              navMeshAgent.isStopped=navMeshAgentShouldBeStopped;
+             if(movePauseDelay>0f){
+              movePauseDelay-=Time.deltaTime;
              }
-             AI();
+             if(characterController!=null){
+                characterController.ManualUpdateUsingAI();
+             }
+             ai.MyPathfinding=GetPathfindingResult();
+             ai.Main();
+             characterController.character.transform.rotation=aiRotTurnTo.UpdateRotation(characterController.character.transform.rotation,Core.magicDeltaTimeNumber);
+             UpdateMotion(true);
+             bool stopNavMesh=navMeshAgentShouldBeStopped;
+             stopNavMesh|=movePaused;
+             if(navMeshAgent.isStopped!=stopNavMesh){
+              //Log.DebugMessage("navMeshAgentShouldBeStopped:"+navMeshAgentShouldBeStopped);
+              navMeshAgent.isStopped=stopNavMesh;
+             }
             }
            }else{
+            if(wasUsingAI){
+             OnStopUsingAI();
+            }
             DisableNavMeshAgent();
             if(characterController!=null){
                characterController.ManualUpdate();
@@ -360,6 +419,7 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
          UpdateGetters();
+         //Log.DebugMessage("animatorController:"+animatorController);
          if(animatorController!=null){
             animatorController.ManualUpdate();
          }
@@ -422,6 +482,16 @@ namespace AKCondinoO.Sims.Actors{
        return Vector3.zero;
       }
      }
+     internal virtual Vector3 moveMaxVelocity{
+      get{//  TO DO: add flying or swimming speed
+       if(isUsingAI){
+        return new Vector3(navMeshAgent.speed,navMeshAgent.speed,navMeshAgent.speed);
+       }else if(characterController!=null){
+        return characterController.maxMoveSpeed;
+       }
+       return Vector3.zero;
+      }
+     }
      internal virtual bool isMovingBackwards{
       get{
        return moveVelocityFlattened<0f;
@@ -469,17 +539,29 @@ namespace AKCondinoO.Sims.Actors{
           }
          }
         }
+     [SerializeField]internal bool canBeThirdPersonCamFollowed=false;
         internal void OnThirdPersonCamFollow(){
-         Log.DebugMessage("OnThirdPersonCamFollow()");
+         Log.DebugMessage("OnThirdPersonCamFollow()",this);
+         if(!canBeThirdPersonCamFollowed){
+          Log.DebugMessage("!canBeThirdPersonCamFollowed",this);
+          return;
+         }
          MainCamera.singleton.toFollowActor=this;
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.ThirdPerson);
         }
-        internal Vector3 GetHeadPosition(bool fromAnimator){
+        internal Vector3 GetHeadPosition(bool fromAnimator,bool forShooting=false){
          Vector3 headPos;
-         if(fromAnimator&&animatorController!=null&&animatorController.animator!=null){
-          headPos=animatorController.animator.transform.position+animatorController.animator.transform.rotation*(new Vector3(0f,characterController.character.height/2f+characterController.character.radius,0f)+characterController.headOffset);
+         if(head){
+          headPos=head.position;
          }else{
-          headPos=characterController.character.transform.position+characterController.character.transform.rotation*characterController.headOffset;
+          if(fromAnimator&&animatorController!=null&&animatorController.animator!=null){
+           headPos=animatorController.animator.transform.position+animatorController.animator.transform.rotation*(new Vector3(0f,characterController.character.height/2f+characterController.character.radius,0f)+characterController.headOffset);
+          }else{
+           headPos=characterController.character.transform.position+characterController.character.transform.rotation*characterController.headOffset;
+          }
+          if(forShooting){
+           headPos-=new Vector3(0f,.125f,0f);
+          }
          }
          return headPos;
         }

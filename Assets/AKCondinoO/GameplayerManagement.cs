@@ -13,10 +13,16 @@ namespace AKCondinoO.Gameplaying{
     internal class GameplayerManagement:MonoBehaviour,ISingletonInitialization{
      internal static GameplayerManagement singleton{get;set;}
      [SerializeField]Gameplayer _GameplayerPrefab;
+     internal static int maxPlayers=20;
      internal ulong?hostId;
      internal readonly Dictionary<ulong,Gameplayer>all=new();
+     internal GameplayPersistentDataSavingBackgroundContainer persistentDataSavingBG;
+     internal GameplayPersistentDataSavingMultithreaded       persistentDataSavingBGThread;
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
+         GameplayPersistentDataSavingMultithreaded.Stopped=false;
+         persistentDataSavingBG=new GameplayPersistentDataSavingBackgroundContainer();
+         persistentDataSavingBGThread=new GameplayPersistentDataSavingMultithreaded();
         }
         public void Init(){
          if(Core.singleton.isServer){
@@ -28,11 +34,20 @@ namespace AKCondinoO.Gameplaying{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("GameplayerManagement:OnDestroyingCoreEvent");
+         //Log.DebugMessage("GameplayerManagement:OnDestroyingCoreEvent");
          if(Core.singleton.isServer){
           Core.singleton.netManager.OnClientConnectedCallback -=OnServerSideClientConnected;
           Core.singleton.netManager.OnClientDisconnectCallback-=OnServerSideClientDisconnect;
          }
+         persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+         GameplayPersistentDataSavingMultithreaded.Schedule(persistentDataSavingBG);
+         persistentDataSavingBG.IsCompleted(persistentDataSavingBGThread.IsRunning,-1);
+         if(GameplayPersistentDataSavingMultithreaded.Clear()!=0){
+          Log.Error("GameplayPersistentDataSavingMultithreaded will stop with pending work");
+         }
+         GameplayPersistentDataSavingMultithreaded.Stopped=true;
+         persistentDataSavingBGThread.Wait();
+         persistentDataSavingBG.Dispose();
         }
         void OnServerSideClientConnected(ulong clientId){
          Log.DebugMessage("OnServerSideClientConnected:clientId:"+clientId);

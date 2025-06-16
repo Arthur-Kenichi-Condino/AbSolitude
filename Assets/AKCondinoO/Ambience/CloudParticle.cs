@@ -36,7 +36,7 @@ namespace AKCondinoO.Ambience.Clouds{
          if(fadeIn){
           if(!meshRenderer.enabled){
            meshRenderer.enabled=true;
-           Log.DebugMessage("cloud particle spawning:fadeIn==true");
+           //Log.DebugMessage("cloud particle spawning:fadeIn==true");
            alpha.incrementSpeed=CloudParticleSystem.singleton.alphaSettings.minIncrementSpeed;
           }
           if(alpha.value<CloudParticleSystem.singleton.alphaSettings.min){

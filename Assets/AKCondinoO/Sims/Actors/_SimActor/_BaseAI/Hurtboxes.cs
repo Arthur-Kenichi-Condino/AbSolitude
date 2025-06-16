@@ -23,7 +23,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
           return false;
          }
          actor.hitGracePeriod.Add(fromHitbox,fromHitbox.gracePeriod);
-         Log.DebugMessage("OnTakeDamage:fromHitbox:"+fromHitbox+";Hurtbox:"+this);
+         //Log.DebugMessage("OnTakeDamage:fromHitbox:"+fromHitbox+";Hurtbox:"+this);
          actor.OnHit(fromHitbox);
          return true;
         }

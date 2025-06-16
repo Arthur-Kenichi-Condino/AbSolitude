@@ -19,100 +19,115 @@ namespace AKCondinoO.Sims.Actors{
          if(characterController!=null){
           transform.rotation=characterController.character.transform.rotation;
           characterController.character.transform.rotation=transform.rotation;
+          characterController.isAiming=false;
+          aiRotTurnTo.tgtRot=aiRotTurnTo.tgtRot_Last=characterController.character.transform.rotation;
          }
         }
-        protected virtual void AI(){
-         RenewTargets();
-         MyPathfinding=GetPathfindingResult();
-         stopPathfindingOnTimeout=true;
-         //Log.DebugMessage("MyPathfinding is:"+MyPathfinding);
-         State lastState=MyState;
-         if(IsDead()){
-          MyState=State.DEAD_ST;
-          goto _MyStateSet;
-         }else{
-          if(MyEnemy!=null){
-           if(IsInAttackRange(MyEnemy)){
-            MyState=State.ATTACK_ST;
-            goto _MyStateSet;
-           }
-           if(MyState!=State.CHASE_ST){
-            OnCHASE_ST_Start();
-           }
-           MyState=State.CHASE_ST;
-           goto _MyStateSet;
-          }else{
-           if(masterId!=null){
-            float disToMaster=GetDistance(this,masterSimObject);
-            if(disToMaster>=0f){
-             if(disToMaster>8f){
-              //Log.DebugMessage("I should follow my master:"+masterSimObject+";this:"+this);
-              MyState=State.FOLLOW_ST;
-              goto _MyStateSet;
+        protected virtual void OnStopUsingAI(){
+         if(characterController!=null){
+          transform.rotation=characterController.character.transform.rotation;
+          characterController.character.transform.rotation=transform.rotation;
+         }
+        }
+     [SerializeField]internal bool sniper=false;
+     [SerializeField]protected bool doIdleMove=true;
+     [NonSerialized]internal QuaternionRotLerpHelper aiRotTurnTo=new QuaternionRotLerpHelper(76.0f*(2f/1f),0.125f*(1f/2f));
+        [Serializable]internal partial class AI{
+         [NonSerialized]BaseAI me;
+            internal AI(BaseAI me){
+             this.me=me;
+              snipeSt=new  SNIPE_ST(me,this);
+             attackSt=new ATTACK_ST(me,this);
+              chaseSt=new  CHASE_ST(me,this);
+             followSt=new FOLLOW_ST(me,this);
+               idleSt=new   IDLE_ST(me,this);
+            }
+            internal class ST{
+             [NonSerialized]protected BaseAI me;
+             [NonSerialized]protected AI ai;
+              protected State MyState{get{return ai.MyState;}}
+              protected SimObject MyEnemy{get{return ai.MyEnemy;}}
+                internal ST(BaseAI me,AI ai){
+                 this.me=me;
+                 this.ai=ai;
+                }
+            }
+          [NonSerialized]internal float damageSourceForgiveTime=20f;
+           [NonSerialized]internal readonly Dictionary<SimObject,float>damageSources=new Dictionary<SimObject,float>();
+            [NonSerialized]protected readonly List<SimObject>damageSourcesIterator=new();
+          [NonSerialized]bool isInAttackRange          =false;
+          [NonSerialized]bool isInAttackRangeWithWeapon=false;
+          [NonSerialized]internal Vector3 attackDistance          ;
+          [NonSerialized]internal Vector3 attackDistanceWithWeapon;
+          [NonSerialized]bool hasWeapon;
+            internal virtual void Main(){
+             me.RenewTargets();
+             damageSourcesIterator.AddRange(damageSources.Keys);
+             foreach(SimObject damageSourceSim in damageSourcesIterator){
+              float damageSourceForgiveTimer=damageSources[damageSourceSim];
+              damageSourceForgiveTimer-=Time.deltaTime;
+              if(damageSourceForgiveTimer<=0f){
+               damageSources.Remove(damageSourceSim);
+              }else{
+               damageSources[damageSourceSim]=damageSourceForgiveTimer;
+              }
+             }
+             damageSourcesIterator.Clear();
+             me.stopPathfindingOnTimeout=true;
+             //Log.DebugMessage("'MyPathfinding state is':"+MyPathfinding);
+             isInAttackRange          =false;
+             isInAttackRangeWithWeapon=false;
+             if(MyEnemy!=null){
+              isInAttackRange          =me.IsInAttackRange(MyEnemy,out attackDistance          ,out _             );
+              isInAttackRangeWithWeapon=me.IsInAttackRange(MyEnemy,out attackDistanceWithWeapon,out hasWeapon,true);
+             }else{
+              attackDistance          =me.AttackDistance(out _     );
+              attackDistanceWithWeapon=me.AttackDistance(out hasWeapon,true);
+             }
+             UpdateMyState();
+             //Log.DebugMessage("UpdateMyState:"+MyState);
+             SetSkill();
+             ProcessStateRoutine();
+            }
+            internal void SetSkill(){
+             bool callingSlaves=false;
+             if(me.requiredSlaves.Count>0){
+              callingSlaves=true;
+             }
+             foreach(var slave in me.slaves){
+              //Log.DebugMessage("slave:"+slave);
+              if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
+               if(!callingSlaves){
+                callingSlaves=true;
+               }
+              }
+             }
+             if(callingSlaves){
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
+              //Log.DebugMessage("'me.SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves) needed'");
+             }
+             //Log.DebugMessage(me+":'me.SetBestSkillToUse next':MyState:"+MyState);
+             if      (MyState==State.  DEAD_ST){
+              //
+             }else if(MyState==State. SNIPE_ST){
+              
+             }else if(MyState==State.ATTACK_ST){
+              
+             }else if(MyState==State. CHASE_ST){
+              
+             }else if(MyState==State.FOLLOW_ST){
+              //Log.DebugMessage(me+":'me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow)'");
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnFollow);
+             }else{
+              //Log.DebugMessage(me+":'me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle)'");
+              me.SetBestSkillToUse(Skill.SkillUseContext.OnIdle);
              }
             }
-           }
-           if(MyState!=State.IDLE_ST){
-            OnIDLE_ST_Start();
-           }
-           MyState=State.IDLE_ST;
-           goto _MyStateSet;
-          }
-         }
-         _MyStateSet:{}
-         if(lastState!=MyState){
-          if      (lastState==State.ATTACK_ST){
-           if(characterController!=null){
-            ToResetRotation(out Vector3 dir);
-            onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(dir,Vector3.up);
-            characterController.character.transform.rotation=onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.EndRotation();
-            transform.rotation=characterController.character.transform.rotation;
-           }
-          }else if(lastState==State. CHASE_ST){
-           if(characterController!=null){
-            ToResetRotation(out Vector3 dir);
-            onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.tgtRot=Quaternion.LookRotation(dir,Vector3.up);
-            characterController.character.transform.rotation=onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy.EndRotation();
-            transform.rotation=characterController.character.transform.rotation;
-           }
-          }
-          void ToResetRotation(out Vector3 dir){
-           if(MyEnemy!=null){
-            dir=(MyEnemy.transform.position-transform.position).normalized;
-           }else{
-            dir=transform.forward;
-           }
-           if(dir.x==0f&&dir.z==0f){
-            dir=transform.forward;
-           }
-           dir.y=0f;
-          }
-         }
-         bool callingSlaves=false;
-         foreach(var slave in slaves){
-          if(!SimObjectManager.singleton.active.TryGetValue(slave,out SimObject slaveSimObject)){
-           if(!callingSlaves){
-            SetBestSkillToUse(Skill.SkillUseContext.OnCallSlaves);
-            callingSlaves=true;
-           }
-          }
-         }
-         if(MyState==State.IDLE_ST){SetBestSkillToUse(Skill.SkillUseContext.OnIdle);}
-         if(MySkill!=null){
-          DoSkill();
-         }
-         if      (MyState==State.  DEAD_ST){
-          
-         }else if(MyState==State.ATTACK_ST){
-          OnATTACK_ST_Routine();
-         }else if(MyState==State. CHASE_ST){
-           OnCHASE_ST_Routine();
-         }else if(MyState==State.FOLLOW_ST){
-          OnFOLLOW_ST_Routine();
-         }else{
-            OnIDLE_ST_Routine();
-         }
-         UpdateMotion(true);
+            internal void DoSkill(){
+             if(MySkill!=null){
+              me.DoSkill();
+             }
+            }
         }
     }
 }

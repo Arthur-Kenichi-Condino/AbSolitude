@@ -36,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 8519385007539995171}
   - {fileID: 632318490875797378}
+  - {fileID: 4563862955232831128}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8095807949435611358
@@ -51,6 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 1369732706
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -58,6 +62,8 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &7758010734198664649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,17 +76,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295205bb7344dd84ab56517b027108fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZAxisIsUp: 0
+  ShowTopMostFoldoutHeaderGroup: 1
   simCollisionsPrefab: {fileID: 2906383398642107930, guid: ba4e49a8c38fc1147b9ac50896f3033a, type: 3}
+  DEBUG_UNPLACE: 0
   useMultipleMaterials: 1
   autoSetMaterialsToFade: 1
   simUMAPrefab: {fileID: 6477530704369599565, guid: 44a411c272338ab4b870bbecd28904d0, type: 3}
   goToSimUMA: {fileID: 0}
+  aStarPathfindingWidth: 16
+  aStarPathfindingDepth: 16
+  aStarPathfindingHeight: 16
   DEBUG_ACTIVATE_THIRD_PERSON_CAM_TO_FOLLOW_THIS: 1
   DEBUG_TOGGLE_CROUCHING: 0
   DEBUG_TOGGLE_HOLSTER_WEAPON: 1
   DEBUG_TOGGLE_HOLSTER_WEAPON_TYPE: 2
-  AFKTimeToUseAI: 30
+  AFKTimeToUseAI: 5
   moveVelocityFlattenedLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
@@ -90,26 +100,15 @@ MonoBehaviour:
   turnAngleLerp:
     tgtValLerpSpeed: 48
     tgtValLerpMaxTime: 0
+  canBeThirdPersonCamFollowed: 1
   navMeshAgentWalkSpeed: 2
   navMeshAgentRunSpeed: 4
-  pathfindingTimeout: 3
-  pathPendingTimeout: 6
-  MyAttackRange: {x: 0, y: 0.25, z: 0.25}
   hitboxesPrefabs: {fileID: 8448818800453642932, guid: 95272ff4cf936344986c404f072a4499, type: 3}
   hurtboxesPrefabs: {fileID: 2093824147370433556, guid: f4a47ba3b28d06840a197e2db8a347bd, type: 3}
   renewEnemyInterval: 3
   MyAggressionMode: 0
-  onAttackPlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0005
-  onChasePlanarLookRotLerpForCharacterControllerToAimAtMyEnemy:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0005
+  sniper: 1
   doIdleMove: 0
-  useRunSpeedChance: 0.5
-  delayToRandomMove: 8
 --- !u!114 &-3747231846007095047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,27 +121,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a895c5cc94a6c514582649c294c23f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headMaxVerticalRotationAngle: 40
-  headMaxHorizontalRotationAngle: 60
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 38
-    tgtRotLerpMaxTime: 0.0001
-  viewRotationSmoothValue: 0.025
-  posLerp:
-    tgtPosLerpSpeed: 38
-    tgtPosLerpMaxTime: 0.0001
+  actor: {fileID: 0}
+  character: {fileID: 0}
   moveAcceleration: {x: 0.125, y: 0.125, z: 0.125}
   moveDeceleration: {x: 0.25, y: 0.25, z: 0.25}
   maxMoveSpeed: {x: 2, y: 2, z: 2}
   walkSpeedAverage: 2
   moveSpeedRunMultiplier: 2
-  isRunningMoveSpeedMultiplierLerp:
-    tgtValLerpSpeed: 76
-    tgtValLerpMaxTime: 0.0005
-  jumpTimeLength: 0.125
-  jumpSpeed: 8
-  aimAtMaxDistance: 1000
 --- !u!114 &4284808389878888570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,23 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75b995b574cbe145b559ba0b5579a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  animator: {fileID: 0}
+  skinnedMesh: {fileID: 0}
+  animatorIKController: {fileID: 0}
   transformAdjustmentsForUMA: {fileID: 0}
   transformAdjustments: []
-  rotLerp:
-    dealWithGimbalLock: 1
-    tgtRotLerpSpeed: 76
-    tgtRotLerpMaxTime: 0.0005
-  posLerp:
-    xLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-    yLerp:
-      tgtValLerpSpeed: 19
-      tgtValLerpMaxTime: 0.0005
-    zLerp:
-      tgtValLerpSpeed: 76
-      tgtValLerpMaxTime: 0.0005
-  layerTransitionSpeed: 64
   weaponLayerNames:
   - weaponType: 0
     layerName: Base Layer
@@ -195,8 +169,8 @@ NavMeshAgent:
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 240
-  m_StoppingDistance: 0
+  m_AngularSpeed: 270
+  m_StoppingDistance: 0.0625
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -251,7 +225,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -262,6 +235,68 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &166056406672598275
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4631629839819614593}
+    m_Modifications:
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6935709978978324614, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+      propertyPath: m_Name
+      value: AISignal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+--- !u!4 &4563862955232831128 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4403370627295232923, guid: c207b9bb7a19f0446820640c824e5ad8, type: 3}
+  m_PrefabInstance: {fileID: 166056406672598275}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8878565715330186261
 PrefabInstance:
   m_ObjectHideFlags: 0

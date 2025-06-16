@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims;
 using AKCondinoO.Sims.Actors;
 using System;
 using System.Collections;
@@ -21,13 +22,13 @@ namespace AKCondinoO{
      internal PointerEventData pointerEventData;
       internal readonly List<RaycastResult>eventSystemRaycastResults=new List<RaycastResult>();
      internal Ray?screenPointRay;
-     internal RaycastHit[]screenPointRaycastResults=new RaycastHit[1];
+     internal RaycastHit[]screenPointRaycastResults=new RaycastHit[128];
      internal int screenPointRaycastResultsCount=0;
         public void Init(){
          pointerEventData=new PointerEventData(EventSystem.current);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("ScreenInput:OnDestroyingCoreEvent");
+         //Log.DebugMessage("ScreenInput:OnDestroyingCoreEvent");
         }
      internal Vector3 mouse{get;private set;}
         void Update(){
@@ -60,7 +61,12 @@ namespace AKCondinoO{
            Cursor.lockState=CursorLockMode.None;
           }
          }
-         if(Camera.main!=null){
+         if(Camera.main!=null&&Camera.main==MainCamera.singleton.camera&&
+          !float.IsInfinity(Input.mousePosition.x)&&!float.IsNaN(Input.mousePosition.x)&&
+          !float.IsInfinity(Input.mousePosition.y)&&!float.IsNaN(Input.mousePosition.y)&&
+          !float.IsInfinity(Input.mousePosition.z)&&!float.IsNaN(Input.mousePosition.z)
+         ){
+          //Log.DebugMessage("Input.mousePosition:"+Input.mousePosition);
           screenPointRay=Camera.main.ScreenPointToRay(Input.mousePosition);
           if(ScreenInput.singleton.screenPointRay!=null){
            _DoRaycast:{}
@@ -71,6 +77,9 @@ namespace AKCondinoO{
            }
            Array.Sort(screenPointRaycastResults,HitsArraySortComparer);
           }
+         }
+         if(Enabled.RELEASE_MOUSE.curState!=Enabled.RELEASE_MOUSE.lastState){
+          GameMode.singleton.OnGameModeChangeTo(GameMode.singleton.current);
          }
         }
         //  ordena 'a' relativo a 'b', e retorna 'a' antes de 'b' se 'a' for menor que 'b'
@@ -84,7 +93,16 @@ namespace AKCondinoO{
          if(a.collider!=null&&b.collider==null){
           return -1;
          }
-         return Vector3.Distance(transform.root.position,a.point).CompareTo(Vector3.Distance(transform.root.position,b.point));
+         return Vector3.Distance(Camera.main.transform.root.position,a.point).CompareTo(Vector3.Distance(Camera.main.transform.root.position,b.point));
+        }
+        internal void SetActiveSim(SimObject selectedSimObject){
+         ScreenInput.singleton.currentActiveSim=null;
+         if(selectedSimObject is BaseAI baseAI){
+          ScreenInput.singleton.currentActiveSim=baseAI;
+         }
+        }
+        internal void SetToBeSelected(GameObject toBeSelectedGameObject){
+         EventSystem.current.SetSelectedGameObject(toBeSelectedGameObject);
         }
     }
 }

@@ -2,6 +2,7 @@
     #define ENABLE_DEBUG_GIZMOS
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace AKCondinoO.Voxels.Terrain.Editing{
          Directory.CreateDirectory(terrainEditingPath);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
+         //Log.DebugMessage("VoxelTerrainEditing:OnDestroyingCoreEvent");
          terrainEditingBG.IsCompleted(VoxelSystem.singleton.terrainEditingBGThread.IsRunning,-1);
         }
         internal enum EditMode{

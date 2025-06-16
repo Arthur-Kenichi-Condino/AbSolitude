@@ -24,7 +24,7 @@ namespace AKCondinoO{
          bool immediate=false;
          long mem=Profiler.GetMonoUsedSizeLong();
          if(mem<lastFrameMemory){
-          Log.DebugMessage("GC happened mem:"+mem);
+          //Log.DebugMessage("GC happened mem:"+mem+"; was:"+lastFrameMemory);
           nextCollectAt=mem+kCollectAfterAllocating;
          }
          if(mem>=nextCollectAt){
@@ -55,7 +55,7 @@ namespace AKCondinoO{
           }else{
            GarbageCollector.CollectIncremental();
           }
-          Log.DebugMessage("post GC mem:"+mem);
+          Log.DebugMessage("post GC call mem:"+mem);
           lastManualGarbageCollectionTime=time;
           nextCollectAt=mem+kCollectAfterAllocating;
          }

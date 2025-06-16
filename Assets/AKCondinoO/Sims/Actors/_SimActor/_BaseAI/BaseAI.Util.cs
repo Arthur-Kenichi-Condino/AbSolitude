@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.Sims.Actors.Skills;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,13 +56,101 @@ namespace AKCondinoO.Sims.Actors{
         }
         protected void MoveToMasterRandom(BaseAI masterAI,float dis){
          if(GetRandomPosition(masterAI.transform.position,dis,out Vector3 dest)){
-          navMeshAgent.destination=dest;
+          Move(dest);
          }
         }
         protected void MoveToMaster      (BaseAI masterAI,float dis){
          Vector3 dir=(this.transform.position-masterAI.transform.position).normalized;
          Vector3 dest=masterAI.transform.position+dir*(this.characterController.character.radius/2f+masterAI.characterController.character.radius/2f);
-         navMeshAgent.destination=dest;
+         Move(dest);
+        }
+        protected virtual void TeleportToRandomNearMyEnemy(Vector3 distance){
+         if(ai==null){
+          return;
+         }
+         if(this.skills.TryGetValue(typeof(Teleport),out Skill skill)&&skill is Teleport teleport){
+          teleport.targetDest=ai.MyEnemy.transform.position;
+          teleport.cooldown=0f;
+          teleport.useRandom=true;
+          teleport.randomMaxDis=distance.z*1.1f;
+          teleport.DoSkill(this,1);
+         }
+        }
+     Vector3 targetDir;
+        protected virtual void TurnToTargetDir(Vector3 lookDir){
+         if(characterController!=null){
+          Vector3 planarLookDir=Vector3.ProjectOnPlane(lookDir,Vector3.up);
+          targetDir=planarLookDir.normalized;
+          targetDir.Normalize();
+          if(targetDir==Vector3.zero){
+           targetDir=transform.forward;
+          }
+          aiRotTurnTo.tgtRot=Quaternion.LookRotation(targetDir);
+         }
+        }
+        protected bool IsTurnedToTargetDir(){
+         if(characterController!=null){
+          if(simUMA!=null){
+           Quaternion animatorAdjustmentsForUMARotation=Quaternion.identity;
+           if(animatorController!=null&&animatorController.transformAdjustmentsForUMA!=null){
+            animatorAdjustmentsForUMARotation=Quaternion.Inverse(animatorController.transformAdjustmentsForUMA.localRotation);
+           }
+           Vector3 animatorLookDir=animatorAdjustmentsForUMARotation*-simUMA.transform.parent.forward;
+           Vector3 animatorLookEuler=simUMA.transform.parent.eulerAngles+animatorAdjustmentsForUMARotation.eulerAngles;
+           animatorLookEuler.y+=180f;
+           Vector3 animatorPlanarLookEuler=animatorLookEuler;
+           animatorPlanarLookEuler.x=0f;
+           animatorPlanarLookEuler.z=0f;
+           Vector3 animatorPlanarLookDir=Quaternion.Euler(animatorPlanarLookEuler)*Vector3.forward;
+           //Debug.DrawRay(characterController.character.transform.position,animatorPlanarLookDir,Color.white);
+           if(Vector3.Angle(targetDir,animatorPlanarLookDir)<=1.25f*(2f)){
+            return true;
+           }
+          }
+         }
+         return false;
+        }
+        protected virtual bool TurnToMoveDest(){
+         if(ai==null){
+          return true;
+         }
+         if(characterController!=null){
+          bool lookDirSet=false;
+          Vector3 lookDir=characterController.character.transform.forward;
+          if(!lookDirSet){
+           if(navMeshAgent!=null&&navMeshAgent.path!=null&&navMeshAgent.path.corners!=null){
+            if(Vector3.Distance(navMeshAgent.steeringTarget,transform.position)>.0125f/2f){
+             lookDir=navMeshAgent.steeringTarget-transform.position;
+             lookDirSet=true;
+            }
+           }
+          }
+          if(!lookDirSet){
+           if(IsTraversingPath()){
+            if(Vector3.Distance(moveDest,transform.position)>.0625f){
+             lookDir=moveDest-transform.position;
+             lookDirSet=true;
+            }
+           }
+          }
+          TurnToTargetDir(lookDir);
+          return IsTurnedToTargetDir();
+         }
+         return false;
+        }
+        protected virtual bool TurnToMyEnemy(){
+         if(ai==null){
+          return true;
+         }
+         if(ai.MyEnemy==null){
+          return true;
+         }
+         if(characterController!=null){
+          Vector3 lookDir=ai.MyEnemy.transform.position-transform.position;
+          TurnToTargetDir(lookDir);
+          return IsTurnedToTargetDir();
+         }
+         return false;
         }
     }
 }

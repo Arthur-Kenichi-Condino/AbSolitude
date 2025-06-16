@@ -9,7 +9,7 @@ namespace AKCondinoO.UI.Fixed{
     internal partial class FixedUI{
      [SerializeField]internal RectTransform interactModeUI;
         public void OnInteractModeButtonPress(){
-         Log.DebugMessage("FixedUI:OnInteractModeButtonPress");
+         //Log.DebugMessage("FixedUI:OnInteractModeButtonPress");
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
         }
     }

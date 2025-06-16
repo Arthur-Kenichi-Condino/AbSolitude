@@ -1,5 +1,9 @@
-#if UNITY_EDITOR
+#if DEVELOPMENT_BUILD
     #define ENABLE_LOG_DEBUG
+#else
+    #if UNITY_EDITOR
+        #define ENABLE_LOG_DEBUG
+    #endif
 #endif
 using AKCondinoO.Sims.Actors.Homunculi.Vanilmirth;
 using AKCondinoO.Sims.Actors.Humanoid;
@@ -8,25 +12,27 @@ using AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static AKCondinoO.Sims.Actors.BaseAI;
 using static AKCondinoO.Sims.Actors.SimActor;
 namespace AKCondinoO.Sims.Actors{
     internal partial class SimAnimatorController:MonoBehaviour{
-     internal BaseAI actor;
-     [SerializeField]internal Transform transformAdjustmentsForUMA;
+     [SerializeField]internal BaseAI actor;
       internal Vector3 actorLeft;
-      internal Vector3 actorRight;
-     internal Animator animator;
-     internal SimAnimatorIKController animatorIKController;
-     [SerializeField]TransformAdjustment[]transformAdjustments;
+       internal Vector3 actorRight;
+     [SerializeField]internal Animator animator;
+     [SerializeField]internal SkinnedMeshRenderer skinnedMesh;
+     [SerializeField]internal SimAnimatorIKController animatorIKController;
+     [SerializeField]internal Transform transformAdjustmentsForUMA;
+     [SerializeField][Tooltip("adjust transform rotation, position and scale to correct motion wrong offsets or rotations")]TransformAdjustment[]transformAdjustments;
       internal readonly Dictionary<ActorMotion,TransformAdjustment>motionTransformAdjustment=new Dictionary<ActorMotion,TransformAdjustment>();
         [Serializable]internal class TransformAdjustment{
          [SerializeField]internal ActorMotion motion;
          [SerializeField]internal Transform adjustment;
         }
-     [SerializeField]internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper();
-     [SerializeField]internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
+     internal           QuaternionRotLerpHelper rotLerp=new           QuaternionRotLerpHelper(76.0f*1f,0.0005f/1f);
+     internal Vector3PosComponentwiseLerpHelper posLerp=new Vector3PosComponentwiseLerpHelper();
         void Awake(){
          foreach(TransformAdjustment transformAdjustment in transformAdjustments){
           if(transformAdjustment.adjustment!=null){
@@ -36,9 +42,11 @@ namespace AKCondinoO.Sims.Actors{
         }
         internal virtual void ManualUpdate(){
          GetAnimator();
+         //Log.DebugMessage("animator:"+animator);
          if(animator!=null){
           GetTransformTgtValuesFromCharacterController();
           SetTransformTgtValuesUsingActorAndPhysicData();
+          //Log.DebugMessage("actor.simUMA:"+actor.simUMA);
           if(actor.simUMA!=null){
            SetSimUMADataTransform();
           }
@@ -54,68 +62,106 @@ namespace AKCondinoO.Sims.Actors{
          if(animator==null){
           animator=GetComponentInChildren<Animator>();
           if(animator!=null){
-           Log.DebugMessage("add SimActorAnimatorIKController");
-           animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
-           animatorIKController.animatorController=this;
-           animatorIKController.headLookAtPositionLerp.tgtPosLerpSpeed=Mathf.Max(
-            rotLerp.tgtRotLerpSpeed+1f,
-            posLerp.xLerp.tgtValLerpSpeed+1f,
-            posLerp.yLerp.tgtValLerpSpeed+1f,
-            posLerp.zLerp.tgtValLerpSpeed+1f,
-            46.875f
-           );
-           layerCount=animator.layerCount;
-           weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
-            weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
-           animationTime=new Dictionary<int,float>(layerCount);
-            animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
-           normalizedTime=new Dictionary<int,float>(layerCount);
-            normalizedTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
-           loopCount=new Dictionary<int,int>(layerCount);
-            lastLoopCount=new Dictionary<int,int>(layerCount);
-             looped=new Dictionary<int,bool>(layerCount);
-           animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
-           currentClipInstanceID=new Dictionary<int,int>(layerCount);
-            currentClipName=new Dictionary<int,string>(layerCount);
-           for(int i=0;i<layerCount;++i){
-            animationTime[i]=0f;
-             animationTimeInCurrentLoop[i]=0f;
-            normalizedTime[i]=0f;
-             normalizedTimeInCurrentLoop[i]=0f;
-            loopCount[i]=0;
-             lastLoopCount[i]=0;
-              looped[i]=false;
-            animatorClip[i]=new List<AnimatorClipInfo>();
-            currentClipInstanceID[i]=0;
-             currentClipName[i]="";
-           }
-           int GetLayer(string layerName){
-            int layerIndex=animator.GetLayerIndex(layerName);
-            layerIndexToName[layerIndex]=layerName;
-            return layerIndex;
-           }
-           foreach(WeaponLayer weaponLayerName in weaponLayerNames){
-               weaponLayer[   weaponLayerName.weaponType]=GetLayer(   weaponLayerName.layerName);
-            Log.DebugMessage(   "weaponLayer["+   weaponLayerName.weaponType+"]="+   weaponLayerName.layerName);
-           }
-           foreach(WeaponAimLayer weaponAimLayerName in weaponAimLayerNames){
-            weaponAimLayer[weaponAimLayerName.weaponType]=GetLayer(weaponAimLayerName.layerName);
-            Log.DebugMessage("weaponAimLayer["+weaponAimLayerName.weaponType+"]="+weaponAimLayerName.layerName);
-           }
-           layerTransitionCoroutine=StartCoroutine(LayerTransition());
-           AddAnimationEventsHandler();
-           if(actor.simUMA!=null){
-            actor.simUMA.transform.parent.SetParent(null);
-            GetTransformTgtValuesFromCharacterController();
-            rotLerp.tgtRot_Last=rotLerp.tgtRot;
-            posLerp.tgtPos_Last=posLerp.tgtPos;
-            actor.simUMA.transform.parent.rotation=rotLerp.tgtRot;
-            actor.simUMA.transform.parent.position=posLerp.tgtPos;
+           animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
+           //Log.DebugMessage("add SimActorAnimatorIKController");
+           #region init SimAnimatorIKController
+               animatorIKController=animator.gameObject.AddComponent<SimAnimatorIKController>();
+               animatorIKController.animatorController=this;
+               animatorIKController.ResetHeadLookAtPositionLerpSpeed();
+           #endregion
+           #region init animator values tracking
+               foreach(var animationClip in animator.runtimeAnimatorController.animationClips){
+                //Log.DebugMessage("animationClip.wrapMode:"+animationClip.wrapMode);
+                //Log.DebugMessage("animationClip.name:"+animationClip.name);
+                //Log.DebugMessage("animationClip.isLooping:"+animationClip.isLooping);
+               }
+               layerCount=animator.layerCount;
+               animatorHasMotionTime=new Dictionary<int,bool>(layerCount);
+               animatorHasMotionSpeedMultiplier=new Dictionary<int,bool>(layerCount);
+               for(int i=0;i<layerCount;++i){
+                animatorHasMotionTime[i]=AnimatorUtil.HasParameter(String.Intern("MotionTime_Layer"+i),animator);
+                animatorHasMotionSpeedMultiplier[i]=AnimatorUtil.HasParameter(String.Intern("MotionSpeedMultiplier_Layer"+i),animator);
+               }
+               motionTime=new Dictionary<int,float>(layerCount);
+                animationStarted=new Dictionary<int,bool>(layerCount);
+                 motionTimeOnAnimationChange=new Dictionary<int,float>(layerCount);
+               motionSpeedMultiplier=new Dictionary<int,float>(layerCount);
+               weaponLayer=new Dictionary<WeaponTypes,int>(layerCount);
+                weaponAimLayer=new Dictionary<WeaponTypes,int>(layerCount);
+               animationTime=new Dictionary<int,float>(layerCount);
+                animationTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
+               normalizedTime=new Dictionary<int,float>(layerCount);
+                normalizedTimeInCurrentLoop=new Dictionary<int,float>(layerCount);
+               loopCount=new Dictionary<int,int>(layerCount);
+                lastLoopCount=new Dictionary<int,int>(layerCount);
+                 looped=new Dictionary<int,bool>(layerCount);
+               animatorClip=new Dictionary<int,List<AnimatorClipInfo>>(layerCount);
+               currentClipInstanceID=new Dictionary<int,int>(layerCount);
+                currentClipName=new Dictionary<int,string>(layerCount);
+               actor.currentAnimationMapsToMotion=new Dictionary<int,bool>(layerCount);
+                actor.currentMotionAnimationTime=new Dictionary<int,float>(layerCount);
+               for(int i=0;i<layerCount;++i){
+                motionTime[i]=0f;
+                 animationStarted[i]=false;
+                motionSpeedMultiplier[i]=1f;
+                animationTime[i]=0f;
+                 animationTimeInCurrentLoop[i]=0f;
+                normalizedTime[i]=0f;
+                 normalizedTimeInCurrentLoop[i]=0f;
+                loopCount[i]=0;
+                 lastLoopCount[i]=0;
+                  looped[i]=false;
+                animatorClip[i]=new List<AnimatorClipInfo>();
+                currentClipInstanceID[i]=0;
+                 currentClipName[i]="";
+                actor.currentAnimationMapsToMotion[i]=false;
+                 actor.currentMotionAnimationTime[i]=0f;
+               }
+               #region init animator layers values and transitions
+                   int GetLayer(string layerName){
+                    int layerIndex=animator.GetLayerIndex(layerName);
+                    layerIndexToName[layerIndex]=layerName;
+                    return layerIndex;
+                   }
+                   foreach(WeaponLayer weaponLayerName in weaponLayerNames){
+                       weaponLayer[   weaponLayerName.weaponType]=GetLayer(   weaponLayerName.layerName);
+                    //Log.DebugMessage(   "weaponLayer["+   weaponLayerName.weaponType+"]="+   weaponLayerName.layerName);
+                   }
+                   foreach(WeaponAimLayer weaponAimLayerName in weaponAimLayerNames){
+                    weaponAimLayer[weaponAimLayerName.weaponType]=GetLayer(weaponAimLayerName.layerName);
+                    //Log.DebugMessage("weaponAimLayer["+weaponAimLayerName.weaponType+"]="+weaponAimLayerName.layerName);
+                   }
+                   layerTransitionCoroutine=StartCoroutine(LayerTransition());
+               #endregion
+               AddAnimationEventsHandler();
+               #region init simUMA
+                   if(actor.simUMA!=null){
+                    actor.simUMA.transform.parent.SetParent(null);
+                    SimUMATransform simUMATransform=actor.simUMA.transform.parent.GetComponent<SimUMATransform>();
+                    if(simUMATransform==null){
+                     simUMATransform=actor.simUMA.transform.parent.AddComponent<SimUMATransform>();
+                    }
+                    simUMATransform.goToActor=actor.gameObject;
+                    GetTransformTgtValuesFromCharacterController();
+                    rotLerp.tgtRot_Last=rotLerp.tgtRot;
+                    posLerp.tgtPos_Last=posLerp.tgtPos;
+                    actor.simUMA.transform.parent.rotation=rotLerp.tgtRot;
+                    actor.simUMA.transform.parent.position=posLerp.tgtPos;
+                   }
+               #endregion
+           #endregion
+          }
+         }
+         if(actor.simUMA!=null){
+          if(skinnedMesh==null){
+           skinnedMesh=actor.simUMA.GetComponentInChildren<SkinnedMeshRenderer>();
+           if(skinnedMesh!=null){
+            skinnedMesh.updateWhenOffscreen=true;
            }
           }
          }
         }
-     [SerializeField]float layerTransitionSpeed=64.0f;
+     float layerTransitionSpeed=20.0f;
      Coroutine layerTransitionCoroutine;
       internal readonly Dictionary<int,float>layerTargetWeight=new Dictionary<int,float>();
        internal readonly Dictionary<int,float>layerWeight=new Dictionary<int,float>();
@@ -147,12 +193,8 @@ namespace AKCondinoO.Sims.Actors{
             goto Loop;
         }
         protected virtual void GetTransformTgtValuesFromCharacterController(){
-         if(actor. leftEye!=null){
-          Debug.DrawLine(actor. leftEye.transform.position,actor.characterController.aimingAt,Color.red);
-         }
-         if(actor.rightEye!=null){
-          Debug.DrawLine(actor.rightEye.transform.position,actor.characterController.aimingAt,Color.red);
-         }
+         if(actor. leftEye!=null){Debug.DrawLine(actor. leftEye.transform.position,actor.characterController.aimingAt,Color.red);}
+         if(actor.rightEye!=null){Debug.DrawLine(actor.rightEye.transform.position,actor.characterController.aimingAt,Color.red);}
          Quaternion rotAdjustment=Quaternion.identity;
          if(motionTransformAdjustment.TryGetValue(actor.motion,out TransformAdjustment adjustment)){
           rotAdjustment=adjustment.adjustment.localRotation;
@@ -161,73 +203,74 @@ namespace AKCondinoO.Sims.Actors{
          posLerp.tgtPos=actor.characterController.character.transform.position+actor.simUMAPosOffset;
         }
         protected virtual void SetTransformTgtValuesUsingActorAndPhysicData(){
-         actorLeft=-actor.transform.right;
-         actorRight=actor.transform.right;
-         Vector3 boundsMaxRight=actor.characterController.character.bounds.max;
-                 boundsMaxRight.y=actor.characterController.character.transform.position.y;
-                 boundsMaxRight.z=actor.characterController.character.transform.position.z;
-         float maxRightDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMaxRight);
-         Vector3 maxRight=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.right*maxRightDis);
-         Vector3 boundsMinLeft=actor.characterController.character.bounds.min;
-                 boundsMinLeft.y=actor.characterController.character.transform.position.y;
-                 boundsMinLeft.z=actor.characterController.character.transform.position.z;
-         float minLeftDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMinLeft);
-         Vector3 minLeft=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.left*minLeftDis);
-         if(actor.navMeshAgent.enabled||actor.characterController.isGrounded){
-          Debug.DrawRay(maxRight,Vector3.down,Color.blue);
-          if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f,PhysUtil.considerGroundLayer)){
-           Debug.DrawRay(rightFloorHit.point,rightFloorHit.normal);
-           Vector3 bottom=actor.characterController.character.bounds.center;
-                   bottom.y=actor.characterController.character.bounds.min.y;
-           Plane floorPlane=new Plane(rightFloorHit.normal,bottom);
-           Ray leftRay=new Ray(minLeft,Vector3.down);
-           Debug.DrawRay(leftRay.origin,leftRay.direction,Color.blue);
-           if(floorPlane.Raycast(leftRay,out float enter)){
-            Vector3 leftFloorHitPoint=leftRay.GetPoint(enter);
-            float minY=Mathf.Min(bottom.y,leftFloorHitPoint.y,rightFloorHit.point.y);
-            posLerp.tgtPos.y+=minY-bottom.y;
-            Debug.DrawLine(bottom,posLerp.tgtPos,Color.yellow);
-           }
-          }
-         }
+         #region change target transform values based on physics data (e.g. terrain slopes)
+             actorLeft=-actor.transform.right;
+             actorRight=actor.transform.right;
+             Vector3 boundsMaxRight=actor.characterController.character.bounds.max;
+                     boundsMaxRight.y=actor.characterController.character.transform.position.y;
+                     boundsMaxRight.z=actor.characterController.character.transform.position.z;
+             float maxRightDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMaxRight);
+             Vector3 maxRight=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.right*maxRightDis);
+             Vector3 boundsMinLeft=actor.characterController.character.bounds.min;
+                     boundsMinLeft.y=actor.characterController.character.transform.position.y;
+                     boundsMinLeft.z=actor.characterController.character.transform.position.z;
+             float minLeftDis=Vector3.Distance(actor.characterController.character.transform.position,boundsMinLeft);
+             Vector3 minLeft=actor.characterController.character.transform.position+actor.characterController.character.transform.rotation*(Vector3.left*minLeftDis);
+             if(actor.navMeshAgent.enabled||actor.characterController.isGrounded){//  if touching ground
+              if(Physics.Raycast(maxRight,Vector3.down,out RaycastHit rightFloorHit,2f,PhysUtil.considerGroundLayer)){
+               Vector3 bottom=actor.characterController.character.bounds.center;
+                       bottom.y=actor.characterController.character.bounds.min.y;
+               Plane floorPlane=new Plane(rightFloorHit.normal,bottom);
+               Ray leftRay=new Ray(minLeft,Vector3.down);
+               if(floorPlane.Raycast(leftRay,out float enter)){
+                Vector3 leftFloorHitPoint=leftRay.GetPoint(enter);
+                float minY=Mathf.Min(bottom.y,leftFloorHitPoint.y,rightFloorHit.point.y);
+                posLerp.tgtPos.y+=minY-bottom.y;//  set height on slopes based on to feet direction raycasts
+               }
+              }
+             }
+         #endregion
         }
         bool transformAdjustmentsForUMAScaleApplied;
         bool transformAdjustmentsForUMARotationApplied;
         bool transformAdjustmentsForUMAPositionApplied;
         protected virtual void SetSimUMADataTransform(){
-         if(transformAdjustmentsForUMA!=null){
-          if(transformAdjustmentsForUMAScaleApplied){
-           actor.simUMA.transform.root.localScale=Vector3.Scale(
-            actor.simUMA.transform.root.localScale,
-            new Vector3(
-             1f/transformAdjustmentsForUMA.localScale.x,
-             1f/transformAdjustmentsForUMA.localScale.y,
-             1f/transformAdjustmentsForUMA.localScale.z
-            )
-           );
-           transformAdjustmentsForUMAScaleApplied=false;
-          }
-          if(transformAdjustmentsForUMARotationApplied){
-           actor.simUMA.transform.root.rotation*=Quaternion.Inverse(transformAdjustmentsForUMA.localRotation);
-           transformAdjustmentsForUMARotationApplied=false;
-          }
-         }
+         #region remove transformAdjustmentsForUMA before setting transform position and rotation
+             if(transformAdjustmentsForUMA!=null){
+              if(transformAdjustmentsForUMAScaleApplied){
+               actor.simUMA.transform.root.localScale=Vector3.Scale(
+                actor.simUMA.transform.root.localScale,
+                new Vector3(
+                 1f/transformAdjustmentsForUMA.localScale.x,
+                 1f/transformAdjustmentsForUMA.localScale.y,
+                 1f/transformAdjustmentsForUMA.localScale.z
+                )
+               );
+               transformAdjustmentsForUMAScaleApplied=false;
+              }
+              if(transformAdjustmentsForUMARotationApplied){
+               actor.simUMA.transform.root.rotation*=Quaternion.Inverse(transformAdjustmentsForUMA.localRotation);
+               transformAdjustmentsForUMARotationApplied=false;
+              }
+             }
+         #endregion
          actor.simUMA.transform.parent.rotation=rotLerp.UpdateRotation(actor.simUMA.transform.parent.rotation,Core.magicDeltaTimeNumber);
          actor.simUMA.transform.parent.position=posLerp.UpdatePosition(actor.simUMA.transform.parent.position,Core.magicDeltaTimeNumber);
-         if(transformAdjustmentsForUMA!=null){
-          if(!transformAdjustmentsForUMAScaleApplied){
-           actor.simUMA.transform.root.localScale=Vector3.Scale(
-            actor.simUMA.transform.root.localScale,
-            transformAdjustmentsForUMA.localScale
-           );
-           transformAdjustmentsForUMAScaleApplied=true;
-           //Log.DebugMessage("actor.simUMA.transform.root.localScale:"+actor.simUMA.transform.root.localScale,actor.simUMA.transform.root);
-          }
-          if(!transformAdjustmentsForUMARotationApplied){
-           actor.simUMA.transform.root.rotation*=transformAdjustmentsForUMA.localRotation;
-           transformAdjustmentsForUMARotationApplied=true;
-          }
-         }
+         #region apply transformAdjustmentsForUMA after setting transform position and rotation
+             if(transformAdjustmentsForUMA!=null){
+              if(!transformAdjustmentsForUMAScaleApplied){
+               actor.simUMA.transform.root.localScale=Vector3.Scale(
+                actor.simUMA.transform.root.localScale,
+                transformAdjustmentsForUMA.localScale
+               );
+               transformAdjustmentsForUMAScaleApplied=true;
+              }
+              if(!transformAdjustmentsForUMARotationApplied){
+               actor.simUMA.transform.root.rotation*=transformAdjustmentsForUMA.localRotation;
+               transformAdjustmentsForUMARotationApplied=true;
+              }
+             }
+         #endregion
         }
         void LateUpdate(){
         }

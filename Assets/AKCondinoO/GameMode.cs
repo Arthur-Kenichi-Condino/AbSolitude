@@ -19,7 +19,7 @@ namespace AKCondinoO{
         public void Init(){
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("GameMode:OnDestroyingCoreEvent");
+         //Log.DebugMessage("GameMode:OnDestroyingCoreEvent");
         }
      internal GameModesEnum current=GameModesEnum.BuildBuyEdit;
         internal void OnGameModeChangeTo(GameModesEnum newGameMode){
@@ -27,7 +27,7 @@ namespace AKCondinoO{
           last=current,
          };
          current=newGameMode;
-         Log.DebugMessage("GameModesEnum current:"+current);
+         //Log.DebugMessage("GameModesEnum current:"+current);
          EventHandler handler=OnGameModeChangeEvent;
          handler?.Invoke(this,args);
         }

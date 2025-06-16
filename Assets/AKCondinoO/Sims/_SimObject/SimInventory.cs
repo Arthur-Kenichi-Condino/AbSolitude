@@ -165,10 +165,10 @@ namespace AKCondinoO.Sims.Inventory{
          }
          SimInventoryItem simInventoryItem=null;
          if(simInventoryItemPool.Count>0){
-          Log.DebugMessage("use simInventoryItemPool");
+          //Log.DebugMessage("use simInventoryItemPool");
           simInventoryItem=simInventoryItemPool.Dequeue();
          }else{
-          Log.DebugMessage("simInventoryItemPool is empty");
+          //Log.DebugMessage("simInventoryItemPool is empty");
           simInventoryItem=new SimInventoryItem();
          }
          simInventoryItem.SetAsInventoryItem(this,simObject,settings,slots);

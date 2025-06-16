@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-#define ENABLE_LOG_DEBUG
+    #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims.Actors.Combat;
 using AKCondinoO.Sims.Actors.Skills;
@@ -28,10 +28,13 @@ namespace AKCondinoO.Sims{
         internal virtual bool OnShotByWeapon(SimWeapon simWeapon,Hurtboxes hurtbox=null){
          return false;
         }
-        protected virtual void OnDeath(){
+        protected virtual void OnDeath(bool instant=false){
         }
         internal virtual bool IsDead(){
          return false;
+        }
+        internal virtual bool IsMotionComplete(float after=1f){
+         return true;
         }
     }
 }

@@ -1,0 +1,6 @@
+https://github.com/Arthur-Kenichi-Condino/AbSolitude
+
+Licença do projeto AbSolitude (jogo “O Saneador”):
+
+A licença atualizada pode ser encontrada na página GitHub do projeto
+(https://github.com/Arthur-Kenichi-Condino/AbSolitude/blob/main/README.md).

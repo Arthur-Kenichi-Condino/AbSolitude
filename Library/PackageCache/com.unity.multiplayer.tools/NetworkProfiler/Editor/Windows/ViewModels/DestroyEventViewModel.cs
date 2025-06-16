@@ -1,0 +1,17 @@
+using System;
+using Unity.Multiplayer.Tools.MetricTypes;
+using Unity.Multiplayer.Tools.NetStats;
+
+namespace Unity.Multiplayer.Tools.NetworkProfiler.Editor
+{
+    internal class DestroyEventViewModel : ViewModelBase
+    {
+        public DestroyEventViewModel(ulong treeViewId, IRowData parent, Action onSelectedCallback = null)
+            : base(
+                parent,
+                $"{MetricType.ObjectDestroyed.GetDisplayNameString()}",
+                MetricType.ObjectDestroyed,
+                onSelectedCallback,
+                treeViewId) { }
+    }
+}

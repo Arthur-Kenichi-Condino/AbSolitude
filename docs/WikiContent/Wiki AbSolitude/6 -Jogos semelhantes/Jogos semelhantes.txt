@@ -1,0 +1,38 @@
+	Abaixo, alguns jogos de referência que possuem a “energia” que o jogo deveria trazer 
+para o jogador.
+
+	**Ragnarök Online (Lee Myung Jin and Gravity Corp, August 31st, 2002)**
+
+	O que há em Ragnarök que é o primeiro jogo de referência: 
+		A) o jogo oferece a experiência de viajar com amigos, jogar e 
+		   festa para matar os chamados “MVPs”*, fazer parte de um grupo e matar alguns  
+		   monstros e compartilhe o Level Experience, e então vá para a cidade e 
+		   sente-se na entrada para conversar por horas;
+		B) o principal sistema de homúnculos é apresentado neste jogo: você apenas fica sentado aí 
+		   e abra seu chat para conversar; e o homúnculo faz todo o trabalho duro 
+		   para você! Você só precisava programar sua IA de antemão.
+
+	*chefes principais, eles receberam esse nome porque dão um emote de MVP ao 
+jogador que causou a maior parte do dano
+
+	Arte original de Lee Myung Jin:
+	{imagem: 1}
+	“Alquimista, aquele que invadiu o território de Deus…”, por Lee Myung Jin, Ragnarök Online
+	
+	Os alquimistas do Ragnarök Online são os criadores dos homúnculos, são os 
+classe o jogador pode escolher que seus “animais de estimação” o sigam.
+
+	Na verdade, o jogo dá uma vibração relaxante por causa dos bichinhos: você não precisa 
+se preocupar com monstros ou inimigos, você pode sentar e deixar o homúnculo fazer todo o trabalho 
+trabalhar.
+
+	Ragnarök Online é aconchegante e amigável. Você não precisa ficar louco e focado o tempo todo 
+tempo e fique realmente “cansado” quando terminar de jogar.
+	
+	{imagem: 2}
+	“Mago, Espadachim, Novato e Ladrão”, de Lee Myung Jin, Ragnarök Online
+
+	Algo que o jogo poderia ter adotado é permitir os chamados “Bots”,
+personagens de jogadores controlados por software: não eram permitidos; mas tendo o seu 
+jogador fazendo seu trabalho enquanto você fica observando calmamente até que você realmente queira 
+assumir o controle também tem tudo a ver com o relaxamento que quero trazer para o meu jogo.

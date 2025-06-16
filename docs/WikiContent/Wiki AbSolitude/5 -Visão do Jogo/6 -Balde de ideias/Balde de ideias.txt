@@ -1,0 +1,19 @@
+	**Balde de ideias**
+	
+	Novas ideias que este jogo apresenta:
+	
+	1) “Sistema Homúnculo”: personagens controlados por IA que seguem um jogador 
+	   ou um NPC e trabalham como um esquadrão para defendê-lo: eles têm sua árvore de habilidades 		
+	   e atributos que podem ser selecionados pelo jogador para que cada um seja 
+	   exclusivo; e seus atributos são aumentados ou reduzidos dependendo do 
+	   os atributos e habilidades do jogador ou do NPC que ele está seguindo;
+	2) combate que pode funcionar na visão em primeira pessoa, visão em terceira pessoa ou livre 
+	   visualização da câmera, também com sistema de esquadrão ou controlada por IA, o que ajuda 
+	   o jogo para ser mais relaxante;
+	3) mundo editável gerado aleatoriamente; o jogador cria uma microssociedade 
+	   povoado por NPCs controlados por IA, então o jogo pode ser realmente 
+	   relaxante;
+	4) habilidades de combate baseadas em música (canções de batalha, músicas que causam efeitos positivos 
+	   ou efeitos negativos em outros personagens).
+	5) árvore de habilidades e opções de atributos ilimitadas: você pode ter qualquer habilidade 
+	   combinado com quaisquer atributos que você deseja para seu personagem.

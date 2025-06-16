@@ -11,6 +11,8 @@ namespace AKCondinoO{
             //  Always log warnings
             Debug.LogWarning(logMsg);
         }
+        //  tudo na frente de Log.DebugMessage deve ser vazio ou comentário, pois a linha
+        // será constantemente 'comentada' (com barras //) após testes
         [System.Diagnostics.Conditional("ENABLE_LOG_DEBUG")]
         internal static void DebugMessage(string logMsg){
             Debug.Log(logMsg);

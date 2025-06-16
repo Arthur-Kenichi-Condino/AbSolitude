@@ -97,6 +97,15 @@ namespace AKCondinoO.Sims{
            }
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile.Add(simObjectType,new Dictionary<ulong,SimActor.PersistentSimActorData>());
           }
+          string simStatsSaveFile=null;
+          if(Core.singleton.isServer){
+           simStatsSaveFile=string.Format("{0}{1}{2}",SimObjectManager.simStatsDataSavePath,simObjectType,".txt");
+           FileStream simStatsFileStream;
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStream[simObjectType]=simStatsFileStream=new FileStream(simStatsSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStreamWriter[simObjectType]=new StreamWriter(simStatsFileStream);
+           SimObjectManager.singleton.persistentDataSavingBGThread.simStatsFileStreamReader[simObjectType]=new StreamReader(simStatsFileStream);
+          }
+          SimObjectManager.singleton.persistentDataSavingBG.simStatsDataToSerializeToFile.Add(simObjectType,new Dictionary<ulong,SimObject.PersistentStats>());
           string simInventorySaveFile=null;
           if(Core.singleton.isServer){
            simInventorySaveFile=string.Format("{0}{1}{2}",SimInventoryManager.simInventoryDataSavePath,simObjectType,".txt");
@@ -118,6 +127,10 @@ namespace AKCondinoO.Sims{
            FileStream loaderSimObjectFileStream;
            SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStream[simObjectType]=loaderSimObjectFileStream=new FileStream(simObjectSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
            SimObjectManager.singleton.persistentDataLoadingBGThread.simObjectFileStreamReader[simObjectType]=new StreamReader(loaderSimObjectFileStream);
+           FileStream loaderSimStatsFileStream;
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStream[simObjectType]=loaderSimStatsFileStream=new FileStream(simStatsSaveFile,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+           SimObjectManager.singleton.persistentDataLoadingBGThread.simStatsFileStreamReader[simObjectType]=new StreamReader(loaderSimStatsFileStream);
+           SimObjectManager.singleton.persistentDataLoadingBG.persistentReleasedIds.Add(simObjectType,new HashSet<ulong>());
           }
           if(SimObjectUtil.IsSimActor(simObjectType)){
            if(Core.singleton.isServer){
@@ -136,13 +149,13 @@ namespace AKCondinoO.Sims{
           }
           SimObjectManager.singleton.pool.Add(simObjectType,new LinkedList<SimObject>());
          }
-         Log.DebugMessage("load thumbnails");
+         //Log.DebugMessage("load thumbnails");
          foreach(var o in Resources.LoadAll("AKCondinoO/Prefabs/Network/Sims/",typeof(Texture))){
-          Log.DebugMessage("load Texture, o.name:"+o.name);
+          //Log.DebugMessage("load Texture, o.name:"+o.name);
           string typeName=o.name.Substring(0,o.name.IndexOf("."));
-          Log.DebugMessage("load Texture, typeName:"+typeName);
+          //Log.DebugMessage("load Texture, typeName:"+typeName);
           Type t=ReflectionUtil.GetTypeByName(typeName,typeof(SimObject));
-          Log.DebugMessage("load Texture, t:"+t);
+          //Log.DebugMessage("load Texture, t:"+t);
           if(t!=null){
            Log.DebugMessage("register Texture for SimObject of Type t:"+t);
           }
@@ -153,7 +166,7 @@ namespace AKCondinoO.Sims{
          }
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
+         //Log.DebugMessage("SimObjectSpawner:OnDestroyingCoreEvent");
          if(this!=null&&spawnCoroutine!=null){
           StopCoroutine(spawnCoroutine);
          }
@@ -165,14 +178,29 @@ namespace AKCondinoO.Sims{
          terraincnkIdxPhysMeshBaked.Add(cnk.id.Value.cnkIdx);
         }
      readonly Dictionary<(Type simObjectType,ulong idNumber),(Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId)>specificSpawnRequests=new Dictionary<(Type,ulong),(Vector3,Vector3,Vector3,(Type,ulong)?)>();
-        internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null){
-         Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
-         //  TO DO: move to destination if already spawned because it won't be spawned again
+        internal void OnSpecificSpawnRequestAt((Type simObjectType,ulong idNumber)id,Vector3 position,Vector3 eulerAngles,Vector3 localScale,(Type simObjectType,ulong idNumber)?asInventoryItemOwnerId=null,bool move=false){
+         //Log.DebugMessage("OnSpecificSpawnRequestAt:id:"+id);
+         if(SimObjectManager.singleton.spawned.TryGetValue(id,out SimObject sim)){
+          //Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+          sim.OnTeleportTo(position,Quaternion.Euler(eulerAngles));
+          sim.transform.localScale=localScale;
+          return;
+         }
          specificSpawnRequests[id]=(position,eulerAngles,localScale,asInventoryItemOwnerId);
         }
-        internal void OnSpecificSpawnRequestAt(SpawnData spawnData){
-         Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
-         //  TO DO: move to destination if already spawned because it won't be spawned again
+        internal void OnSpecificSpawnRequestAt(SpawnData spawnData,bool move=false){
+         //Log.DebugMessage("OnSpecificSpawnRequestAt:spawnData");
+         for(int i=spawnData.at.Count-1;i>=0;--i){
+          var toSpawn=spawnData.at[i];
+          if(toSpawn.simObjectType!=null&&toSpawn.idNumber!=null){
+           if(SimObjectManager.singleton.spawned.TryGetValue((toSpawn.simObjectType,toSpawn.idNumber.Value),out SimObject sim)){
+            //Log.Warning("TO DO: move to destination if already spawned because it won't be spawned again");
+            spawnData.RemoveAt(i);
+            sim.OnTeleportTo(toSpawn.position,Quaternion.Euler(toSpawn.rotation));
+            sim.transform.localScale=toSpawn.scale;
+           }
+          }
+         }
          spawnQueue.Enqueue(spawnData);
         }
      Coroutine spawnCoroutine;
@@ -219,6 +247,9 @@ namespace AKCondinoO.Sims{
               int index=0;
               foreach(var at in toSpawn.at){
                SimObject.PersistentStats?persistentStats=null;
+               if(toSpawn.statsData.TryGetValue(index,out var persistentStatsValue)){
+                persistentStats=persistentStatsValue;
+               }
                SimActor.PersistentSimActorData?persistentSimActorData=null;
                if(SimObjectUtil.IsSimActor(at.simObjectType)){
                 //Log.DebugMessage("SimObjectUtil.IsSimActor(at.type)");
@@ -276,6 +307,7 @@ namespace AKCondinoO.Sims{
                 if(numberIsNew||numberIsRecycled){
                  goto _GetId;
                 }
+                //Log.DebugMessage("SpawnCoroutine:ignore already spawned id :"+id);
                 continue;
                }
                SimObject asInventoryItemOwner=null;
@@ -303,7 +335,7 @@ namespace AKCondinoO.Sims{
                 simObject.id=id;
                 simObject.OnSpawned();
                 if(masterId!=null){
-                 Log.DebugMessage("simObject has master");
+                 //Log.DebugMessage("simObject has master");
                  simObject.masterId=masterId;
                 }else{
                  //Log.DebugMessage("simObject has no master");
@@ -311,7 +343,7 @@ namespace AKCondinoO.Sims{
                 }
                 if(simObject is SimActor simActor){
                  if(persistentSimActorData!=null){
-                  Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
+                  //Log.DebugMessage("set simActor.persistentSimActorData from loaded value");
                   simActor.persistentSimActorData=persistentSimActorData.Value;
                  }else{
                   //Log.DebugMessage("clear simActor.persistentSimActorData");
@@ -321,9 +353,9 @@ namespace AKCondinoO.Sims{
                  SimsMachine.singleton.OnActorSpawn(simActor);
                 }
                 if(asInventoryItemOwner!=null){
-                 Log.DebugMessage("add simObject asInventoryItem to Owner");
+                 //Log.DebugMessage("add simObject asInventoryItem to Owner");
                  if(!asInventoryItemOwner.AddToInventory(simObject)){
-                  Log.DebugMessage("couldn't add to inventory, set simObject as a released world object");
+                  Log.Warning("TO DO: couldn't add to inventory, set simObject as a released world object");
                  }
                 }
                 if(persistentStats!=null){
@@ -347,7 +379,7 @@ namespace AKCondinoO.Sims{
                      }
                  }else{
                      if(savingPersistentData){
-                         Log.DebugMessage("savingPersistentData");
+                         //Log.DebugMessage("savingPersistentData");
                          if(OnPersistentDataSaved()){
                              savingPersistentData=false;
                          }
@@ -366,7 +398,7 @@ namespace AKCondinoO.Sims{
                                  }
                              }else{
                                  if(despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0){
-                                     Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
+                                     //Log.DebugMessage("despawnQueue.Count>0||despawnAndReleaseIdQueue.Count>0");
                                      if(OnPersistentDataPushToFile()){
                                          OnPersistentDataPushedToFile();
                                      }
@@ -419,10 +451,11 @@ namespace AKCondinoO.Sims{
           if(exitSave){
            simObject.OnExitSaveDataCollection();
           }
-          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData);
+          SimObjectManager.singleton.persistentDataSavingBG.simObjectDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentData        );
           if(simObject is SimActor simActor){
            SimObjectManager.singleton.persistentDataSavingBG.simActorDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simActor .persistentSimActorData);
           }
+          SimObjectManager.singleton.persistentDataSavingBG. simStatsDataToSerializeToFile[simObject.id.Value.simObjectType].Add(simObject.id.Value.idNumber,simObject.persistentStats       );
           if(!PersistentSimInventoryDataSavingBackgroundContainer.simInventoryDataBySimInventoryTypeDictionaryPool.TryDequeue(out var simInventoryDataBySimInventoryTypeDictionary)){
            simInventoryDataBySimInventoryTypeDictionary=new Dictionary<Type,Dictionary<ulong,SimInventory.PersistentSimInventoryData>>();
           }
@@ -572,6 +605,10 @@ namespace AKCondinoO.Sims{
          if(SimObjectManager.singleton.persistentDataLoadingBG.IsCompleted(SimObjectManager.singleton.persistentDataLoadingBGThread.IsRunning)&&
              SimInventoryManager.singleton.persistentSimInventoryDataLoadingBG.IsCompleted(SimInventoryManager.singleton.persistentSimInventoryDataLoadingBGThread.IsRunning)
          ){
+          foreach(var kvp in SimObjectManager.singleton.releasedIds){
+           Type simObjectType=kvp.Key;
+           SimObjectManager.singleton.persistentDataLoadingBG.persistentReleasedIds[simObjectType].UnionWith(kvp.Value);
+          }
           foreach(int cnkIdx in terraincnkIdxPhysMeshBaked){
            SimObjectManager.singleton.persistentDataLoadingBG.terraincnkIdxToLoad.Add(cnkIdx);
           }

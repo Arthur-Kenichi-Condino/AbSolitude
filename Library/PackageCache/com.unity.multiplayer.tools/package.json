@@ -1,0 +1,45 @@
+{
+  "name": "com.unity.multiplayer.tools",
+  "displayName": "Multiplayer Tools",
+  "version": "2.2.1",
+  "unity": "6000.0",
+  "description": "Adds a suite of tools that improve workflows for multiplayer development",
+  "dependencies": {
+    "com.unity.profiling.core": "1.0.2",
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.unity.nuget.mono-cecil": "1.11.4",
+    "com.unity.collections": "2.4.0",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.burst": "1.8.17",
+    "com.unity.mathematics": "1.3.1"
+  },
+  "keywords": [
+    "Multiplayer",
+    "Netcode",
+    "GameObjects",
+    "Tools"
+  ],
+  "samples": [
+    {
+      "displayName": "Network Scenario Samples",
+      "description": "Samples showcasing the different ways of building custom network simulator scenarios.\n\nNote: In order to use these Samples, make sure you have Netcode for GameObjects (com.unity.netcode.gameobjects) 1.1.0 or later and Unity Transport (com.unity.transport) 2.0.0 or later. For more info, please check the Network Simulator documentation: https://docs-multiplayer.unity3d.com/tools/current/tools-network-simulator",
+      "path": "Samples~/NetworkSimulator"
+    }
+  ],
+  "relatedPackages": {
+    "com.unity.multiplayer.tools.tests": "2.2.1"
+  },
+  "_upm": {
+    "changelog": "### *Network Scene Visualization*\n- Fixed a bug which showed the wrong number of clients in the SceneView overlay\n- Fixed a bug which caused null reference exception when entering Play Mode without Domain Reload\n- Fixed a bug which showed wrong ownership visuals with Distributed Authority when reconnecting\n\n### *Runtime Network Stats Monitor*\n- Fixed a bug where RNSM showed no metrics in builds with code stripping enabled\n- Fixed a bug where RNSM stopped working with NGO 2.0.0 or above"
+  },
+  "upmCi": {
+    "footprint": "fd028d23bcee4990c43f09e565ce0afbf6d45717"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.multiplayer.tools@2.2/manual/index.html",
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.multiplayer.tools.git",
+    "type": "git",
+    "revision": "a769d0b44c5f5e6308dc848d2a4b49d3e30b7a9e"
+  },
+  "_fingerprint": "212d83b66f830476aafd30cff2797a3a0ae2ea64"
+}

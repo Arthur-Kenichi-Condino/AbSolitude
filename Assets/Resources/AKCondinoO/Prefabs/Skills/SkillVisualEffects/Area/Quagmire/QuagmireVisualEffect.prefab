@@ -15,7 +15,7 @@ GameObject:
   m_Layer: 0
   m_Name: QuagmireVisualEffect
   m_TagString: Untagged
-  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -760,9 +760,9 @@ ParticleSystem:
     m_TextureColorAffectsParticles: 1
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
-    randomDirectionAmount: 0
+    randomDirectionAmount: 0.75
     sphericalDirectionAmount: 0
-    randomPositionAmount: 0
+    randomPositionAmount: 0.75
     radius:
       value: 1
       mode: 0
@@ -2998,11 +2998,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     separateAxes: 1
-    frequency: 0.4
+    frequency: 1
     damping: 1
-    octaves: 1
-    octaveMultiplier: 0.5
-    octaveScale: 2
+    octaves: 4
+    octaveMultiplier: 0.25
+    octaveScale: 1.85
     quality: 2
     scrollSpeed:
       serializedVersion: 2
@@ -4104,28 +4104,28 @@ ParticleSystem:
     lifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
-      minScalar: 1
+      scalar: 0.75
+      minScalar: 0.25
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          time: -0.49564856
+          value: 1.0028255
+          inSlope: 0.05459449
+          outSlope: 0.05459449
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.113635466
         - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          time: 0.99140143
+          value: 1.0009565
+          inSlope: -0.05583623
+          outSlope: -0.05583623
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.7310945
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -4136,25 +4136,25 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: -0.04135024
+          outSlope: -0.04135024
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.13611113
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: 0.049977347
+          outSlope: 0.049977347
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.14722222
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    minVertexDistance: 0.2
+    minVertexDistance: 0.125
     textureMode: 0
     textureScale: {x: 1, y: 1}
     ribbonCount: 1
@@ -4241,23 +4241,50 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.17241374
-          value: 0
-          inSlope: -0.16268317
-          outSlope: -0.16268317
+          time: 0.005866632
+          value: -0.0000020656735
+          inSlope: 0.0068428726
+          outSlope: 0.0068428726
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 1
+        - serializedVersion: 3
+          time: 0.27411076
+          value: 0.00043674046
+          inSlope: 0.001469691
+          outSlope: 0.001469691
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.2198352
+          outWeight: 0.6395237
         - serializedVersion: 3
-          time: 0.92901945
-          value: 0.0058823535
-          inSlope: -3.993185
-          outSlope: -3.993185
+          time: 0.5400976
+          value: 0.81685126
+          inSlope: 4.5278134
+          outSlope: 4.5278134
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.078658074
+          inWeight: 0.30772033
           outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.8572597
+          value: 1.1424505
+          inSlope: -3.9043944
+          outSlope: -3.9043944
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.204119
+        - serializedVersion: 3
+          time: 0.9750019
+          value: 0.000004030764
+          inSlope: 0.006037257
+          outSlope: 0.006037257
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 1
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -4938,6 +4965,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4977,13 +5007,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 1
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 1
   m_VertexStreams: 000304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}

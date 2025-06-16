@@ -9,12 +9,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.GameMode;
+using static AKCondinoO.InputHandler;
 namespace AKCondinoO.UI.Fixed{
     internal partial class FixedUI:MonoBehaviour,ISingletonInitialization{
      internal static FixedUI singleton{get;set;}
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
-         (buildBuyEditModeUIContent.buildCategoryTableFloors=Instantiate(buildBuyEditModeUIContent.buildCategorySimObjectsTablePrefab,buildBuyEditModeUIContent.buildCategoryRectTransform,false).AddComponent<TableFloors>()).name="TableFloors";
+         foreach(Type tableType in buildBuyEditModeUIContent.tablesTypes){
+          BuildSimObjectsTable table;
+          (table=(BuildSimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
+          buildBuyEditModeUIContent.tables.Add(tableType,table);
+         }
+         AwakeUIForCameraMode();
         }
         public void Init(){
          //  Change UI for game mode:
@@ -22,18 +28,32 @@ namespace AKCondinoO.UI.Fixed{
          foreach(var typePrefabPair in SimObjectSpawner.singleton.simObjectPrefabs){
           Type t=typePrefabPair.Key;
           GameObject prefab=typePrefabPair.Value;
-          switch(prefab.GetComponent<SimObject>()){
+          SimObject prefabSimObject=prefab.GetComponent<SimObject>();
+          Type prefabSimObjectType=prefabSimObject.GetType();
+          foreach(var simTypeTablesTypes in buildBuyEditModeUIContent.simsTablesTypes){
+           Type simType=simTypeTablesTypes.Key;
+           if(!simType.IsAssignableFrom(prefabSimObjectType)){
+            continue;
+           }
+           foreach(Type tableType in simTypeTablesTypes.Value){
+            BuildSimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
+            table.tableSimObjectPrefabs.Add(t.ToString(),prefabSimObject);
+           }
+          }
+          switch(prefabSimObject){
            case SimFloor simFloor:{
-            buildBuyEditModeUIContent.buildCategoryTableFloors.tableSimObjects.Add(t.ToString(),simFloor);
             break;
            }
           }
          }
-         buildBuyEditModeUIContent.buildCategoryTableFloors.OnCreateTable();
+         foreach(var table in buildBuyEditModeUIContent.tables){
+          table.Value.OnCreateTable();
+         }
+         //buildBuyEditModeUIContent.tableFloors.OnCreateTable();
          GameMode.singleton.OnGameModeChangeTo(GameModesEnum.Interact);
         }
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
-         Log.DebugMessage("FixedUI:OnDestroyingCoreEvent");
+         //Log.DebugMessage("FixedUI:OnDestroyingCoreEvent");
         }
         void OnGameModeChangeEvent(object sender,EventArgs ev){
          OnGameModeChangeEventArgs args=(OnGameModeChangeEventArgs)ev;
@@ -48,9 +68,19 @@ namespace AKCondinoO.UI.Fixed{
                interactModeUI.gameObject.SetActive(true);
            break;
           }
+          case GameModesEnum.ThirdPerson:{
+               interactModeUI.gameObject.SetActive(true);
+           if(Enabled.RELEASE_MOUSE.curState){
+           }else{
+           }
+           break;
+          }
          }
         }
      [SerializeField]SimObject DEBUG_SET_PLACEHOLDER=null;
+        void OnGUI(){
+         OnGUIForCameraMode();
+        }
         void LateUpdate(){
         }
         void Update(){
@@ -59,6 +89,7 @@ namespace AKCondinoO.UI.Fixed{
           Placeholder.singleton.GetPlaceholderFor(DEBUG_SET_PLACEHOLDER.GetType());
             DEBUG_SET_PLACEHOLDER=null;
          }
+         UpdateUIForCameraMode();
         }
     }
 }

@@ -1,0 +1,106 @@
+1.open DAZ Studio
+1.a.add a Genesis morph body to the Scene
+1.b.(optional)add underwear
+1.c.export as FBX 2012 -- Binary:
+--Deselect all settings
+--Select the following:
+---Selected(Selected Only), with the morph body selected only
+---Figures(Include Figures)
+---Props(Include Props)
+---Morphs(Include Morphs) with the following export rules:
+----FBM-Export
+----PBM-Export
+----PHM-Export
+----eCTRL-Export
+----pCTRL-Export
+----SCL-Export
+----CTRLBodybuilder-Export
+----pJCM-Export
+---Embed Textures(Embed Textures [Binary Only])
+---Collect Textures To Folder(Collect Textures)
+---Merge Clothing Into Figure Skeleton(Merge Followers [into Target])
+---Allow Degraded Skinning
+---Allow Degraded Scaling
+---Collapse UV Tiles
+--...there are 10 settings in total to be selected.
+
+2.open Blender3D
+--Note: H hides vertices, Alt+H unhides all, A selects all vertices, Alt+A deselects everything
+2.a.select File->Import->FBX
+2.b.[[Deselect]] the following settings:
+--Transform: Use Pre/Post Rotation
+2.c.[[Select]] the following settings:
+--Armature: Force Connect Children
+--Armature: Automatic Bone Orientation
+2.d.(optional)save settings as an import preset
+2.e.enter Edit Mode and reduce the size of the facial bones without moving them(so we can see the character's face): select the endings and move them towards the start
+2.f.change to Object Mode and select the 3D model body
+2.g.select the Material tab
+2.h.now, we will [[Assign]] materials which are the ''same'' (they have the same texture mapped to them) to only one of the materials in the list:
+--For example:
+---Enter Edit Mode and deselect everything in the current View
+---Select Face and press the Select button in the Material tab
+---Do the same for Lips, Ears and EyeSocket
+---Select Face again and press the Assign button
+---Go to Object Mode again and remove with the Minus button the Materials which were assigned to Face (Lips, Ears and EyeSocket [but [[not]] Face])
+---Repeat these steps for each material in the list which ''repeats'' itself
+--Change Cornea material to Blend Mode: Alpha Blend and Shadow Mode: None then set its alpha to 0
+
+3.clear the morphs list in Blender for every mesh (in Data tab->Shape Keys in Object Mode), so only the used ones are remaining
+
+4.splitting the model in Blender for each material
+4.a.go to Object mode
+--Note: Shift+D duplicates the selected object
+4.b.create ''splits'' of the model for each material, following these next steps:
+--duplicate the ''unified'' model(all model whole body vertices)
+--hide(using the Eye Icon) the ''unified'' model so it's safe from changes
+--rename the duplicate to TEMP, as it's used for separations
+--go to Edit Mode
+--select the material (Face) in the Material tab list and press the Select button
+--Mesh->Separate the mesh by Selection(or use P->Selection)
+--rename the duplicate(separation just created) to the same name of the material, for example: Face
+--repeat the process for each material in the Material tab list
+--Delete the TEMP duplicate, which is empty now
+--unhide(using the Eye Icon) everything
+--go through every separation created and remove all materials except the material which is used for the Separation selection (in Object Mode)
+4.c.do the step 4.b for each ''unified'' mesh in the Blender Collection/Scene which has more than one material, for example: Eyelashes
+
+5.prepare for exporting to Unity
+5.a.in Object mode, select the entire Rig/Model(everything in the hierarchy which is part of the 3D model, not just the ''root'':the ''parent'' and all ''children'':every item)
+5.b.do Object->Aplly(or use Ctrl+A) and apply Rotation & Scale to everything
+5.c.add Global and Position bones to the Skeleton by doing the following:
+--open the Skeleton/Rig in the hierarchy and select the first bone, for example: hip
+--enter Edit Mode
+--add 2 Single Bones
+--call the first Single Bone ''Global'' and set its Bone tab Transform as:
+---Head:
+----X:0,
+----Y:-0.01,
+----Z:0
+---Tail:
+----X:0,
+----Y:0,
+----Z:0
+--and the second Single Bone, ''Position'', set it as the exact opposite:
+---Head:
+----X:0,
+----Y:0,
+----Z:0
+---Tail:
+----X:0,
+----Y:-0.01,
+----Z:0
+5.d.set the parent of the first bone in the Rig, for example, hip, as Position:
+--select hip and Position and then do Armature->Parent->Make (or use Ctrl+P) and choose Keep Offset
+--repeat the process, but now set Position parent as Global
+--now you have the hierarchy Global.Position.hip
+
+5.export to Unity
+5.a.do File->Export->FBX and set the following export settings
+--first remove everything in Object Types except Armature and Mesh to be exported
+--Armature: deselect Add Leaf Bones
+5.b.(optional)save settings as an export preset
+
+6.import into Unity
+6.a.put the FBX file into the Unity project folder
+6.b.

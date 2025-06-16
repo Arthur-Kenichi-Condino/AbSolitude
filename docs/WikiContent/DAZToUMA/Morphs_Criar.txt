@@ -1,0 +1,134 @@
+Índice:
+I.Criar um morph do zero
+II.Tornar um morph como sendo Weight Map Mode (paint)
+III.Criar um D-Former de um Morph
+IV.Adicionar influência a outras geometrias
+V.Copiar área de Influence (influência) para outro Field
+VI.Limpar área de influência e aplicar simetria
+
+I.Criar um morph do zero:
+  1.First, select the root of the figure, here, Genesis
+
+  2.use the Create menu command to create a D-Former
+
+  3.Position the D-Former field and Base
+    o Field é o campo de ação do D-Former, e o D-Former em si aplica alterações baseando-se no Transform (o D-Former Base é só um Transform)
+
+  4.move the control to distort the mesh
+    aqui, você ajusta o morph como quiser, quais movimentos serão feitos ao ajustar a barra de efetividade do morph, em positivo ou negativo
+    quando terminar, siga para o passo 5
+
+  5.Open the D-Former Tab (Window->Panes (Tabs)->DForm)
+
+  6.Spawn your morph from the D-Former Tab:
+    selecione Create Root Control Parameter, Delete Applied D-Former(s) e Apply Spawned Morph e clique em Spawn Morph...
+    nota: se quiser reutilizar o D-Former para outra coisa, não selecione a opção Delete...
+
+  observações:
+    é possível usar vários D-Formers para criar um único Morph
+
+  fontes (sites de instruções):
+    [http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/shaping/tutorials/create_morph/start]
+
+II.Tornar um morph como sendo Weight Map Mode (paint):
+  1.clique em D-Former Field na hierarquia
+
+  2.selecione Parameters->Influence e troque Influence Mode de Sphere para Weight Map
+
+  3.escolha Tools->Node Weight Map Brush e abrir a aba Tool Settings
+    decida se usar Symmetry: (em X, será na esquerda e direita)
+
+  4.em Unused Maps, selecione Influence Weights e clique em Add Map
+    agora você pode pintar os vértices clicando e apagar os vértices segurando Alt esquerdo enquanto clica 
+
+  observações: caso não haja Add Map, use Window->Panes (Tabs)->DForm, selecione a Geometria e clique em Add Influence to Selected
+
+III.Criar um D-Former de um Morph:
+  nota: não é possível realizar a tarefa facilmente e de forma total, mas é um modo de recuperar D-Formers apagados por engano
+  1.crie um novo D-Form
+
+  2.abra/selecione a ferramenta Geometry Editor Tool
+
+  3.selecione a geometria na qual está o Morph e selecione o Morph desejado na lista de Parameters->Morphs ou outra lista
+
+  4.clique com o botão direito na lista de Morphs e marque Edit Mode
+
+  5.clique com o botão direito no Morph desejado e clique em Select Morph Vertices
+
+  6.note que se os vértices não estão visíveis, então primeiro, na Tool Settings, selecione a opção Vertex Selection
+  e teremos agora que tentar alguns Troubleshootings:
+    a. primeiro, tente fechar e abrir o programa e fazer de novo
+    b. alterne entre Vertex Selection e outros tipos de Selection
+    c. selecione os vértices de outro Morph e selecione o Morph a ser selecionado de novo
+    d. clique várias vezes em Select Morph Vertices
+    e. veja se a Geometria do corpo inteiro (root) está selecionada em Scene e tente Select Morph Vertices de novo
+  os vértices se tornarão visíveis
+
+  7.coloque o campo do D-Former (Field) englobando todos os vértices (mas agora coloque fora de qualquer geometria antes de trocar a Influence do
+  D-Former para Weight Map e somente então englobe os vértices)
+
+  8.troque o Influence para Weight Map e faça o Add Map
+
+  9.somente agora, então, coloque o Field englobando os vértices
+
+  10.selecione o Field do D-Former na Scene
+
+  11.certificando-se de que os vértices ainda estão selecionados, agora clique com o botão direito na tela e aperte em Weight Editing->Fill Selected
+  com o valor 100%
+
+  12.o peso do Weight Map está em 100% para todos os vértices, então agora faça Smooth e Paint no Node Weight Map Brush Tool até chegar aos valores
+  desejados
+
+IV.Adicionar influência a outras geometrias:
+  1.abra Window->Panes (Tabs)->DForm
+
+  2.tenha a Geometria (objeto/transform 3D) em que você quer aplicar a influência selecionada
+
+  3.na janela do DForm do passo 1, clique em Add Influence to Selected...
+
+  4.escolha o Field na lista que aparecer o qual terá influência na Geometria
+
+  5.aplique a influência usando Node Weight Map Brush
+
+V.Copiar área de Influence (influência) para outro Field:
+  1.limpe a área de influência com os primeiros passos em "Limpar área de influência e aplicar simetria"
+
+  2.selecione o Field do qual copiar o Weight Map
+
+  3.na aba Tool Settings, clique com o botão direito do mouse no Map da lista, da Geometria desejada, e clique em Copy Selected
+
+  4.agora, clique no Field em que se deseja colar os valores do Weight Map
+
+  5.na aba Tool Settings da ferramenta Node Weight Map Brush, encontre o Map na lista que serve para a Geometria da qual foi copiada a influência 
+  Weight Map. Caso a lista Map não tenha a Geometria, siga os passos de "Adicionar influência a outras geometrias"
+
+  6.clique com o botão direito no item da lista, em Influence Weights da Geometria e selecione Paste Selected
+
+VI.Limpar área de influência e aplicar simetria:
+  1.clique com o botão direito sobre uma Geometria
+
+  2.escolha Geometry Selection->Select All e todos os vértices serão selecionados
+  caso não esteja visível, troque a ferramenta para Node Weight Map Brush
+
+  3.na ferramenta Node Weight Map Brush, dentro da aba Tool Settings, escolha Vertex Selection
+
+  4.clique com o botão direito na Geometria selecionada na Viewport, escolha Weight Editing->Fill Selected... e então marque para "Enter a weight value 
+  to fill with" ser 0% e pressione Accept
+
+  5.agora, para aplicar a simetria, pinte com Node Weight Map Brush da forma desejada ou realize os passos de "Copiar área de Influence (influência) para outro Field"
+
+  6.na aba Window->Tool Settings, ative Use Symmetry e escolha o eixo desejado
+
+  7.na Viewport, clique com o botão direito e escolha Weight Map Symmetry...
+
+  8.selecione o eixo desejado e escolha de que lado será copiada e em qual lado será colada a pintura de nodes do Weight Map. Por exemplo, da esquerda
+  para a direita ou da direita para a esquerda. 
+  nota: se for, por exemplo, da direita para a esquerda, será da direita do objeto em si, seguindo a bússola do plano 3D do DAZ
+
+  observações: cuidado, pois não é possível fazer Desfazer ou Refazer nessa ação. Faça o mesmo para todas a Geometrias desejadas, adicionando os mapas
+  necessários na lista Map (com "Adicionar influência a outras geometrias")
+
+considerações: 
+  para renomear DForms na lista de parâmetros, ative Edit Mode, clique na engrenagem e escolha Parameter Settings...
+
+

@@ -1,0 +1,7 @@
+	**Como obter receita?**
+
+	Para gerar receita, a principal funcionalidade será o sistema de microtransações de itens 
+que podem ajudar a terminar as interações do jogo mais rapidamente (exemplos: ganhar experiência mais rapidamente, 
+gerar produção mais rápida de uma Fazenda, adquirir recursos mais facilmente de 
+derrubar uma árvore, etc.); e de itens visuais como roupas, penteados, efeitos visuais 
+e outros cosméticos em geral.
