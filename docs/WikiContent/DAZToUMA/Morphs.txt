@@ -1,7 +1,7 @@
   Índice
-  1.Lista de Morphs para criar em todos os corpos humanos (versão 0)
+  I.Lista de Morphs para criar em todos os corpos humanos (versão 0)
 
-  1.Lista de Morphs para criar em todos os corpos humanos (versão 0):
+  I.Lista de Morphs para criar em todos os corpos humanos (versão 0):
     MorphableHumanFemaleG8:
     nota: para os Morphs é só adicionar o prefixo _Morph...(_Morph_D_Former_Human_Eye_Pos_Height)
 
@@ -17,9 +17,12 @@
     _D_Former_Human_Head_Eye_Pos_Depth
       _Morph_D_Former_Human_Head_Eye_Pos_Depth
 
+    _D_Former_Human_Head_Eye_Pos_Horizontal
+    _D_Former_Human_Head_Eye_Pos_Horizontal_R
+      _Morph_D_Former_Human_Head_Eye_Pos_Horizontal
 
 
-    _D_Former_Human_Eye_Pos_Depth
+    
     _D_Former_Human_Eye_Pos_Horizontal
     _D_Former_Human_Nose_Bridge_Height
     _D_Former_Human_Nose_Bridge_Width

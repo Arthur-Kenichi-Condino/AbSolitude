@@ -3,6 +3,8 @@ I.Criar um morph do zero
 II.Tornar um morph como sendo Weight Map Mode (paint)
 III.Criar um D-Former de um Morph
 IV.Adicionar influência a outras geometrias
+V.Copiar área de Influence (influência) para outro Field
+VI.Limpar área de influência e aplicar simetria
 
 I.Criar um morph do zero:
   1.First, select the root of the figure, here, Genesis
@@ -80,4 +82,53 @@ III.Criar um D-Former de um Morph:
 IV.Adicionar influência a outras geometrias:
   1.abra Window->Panes (Tabs)->DForm
 
-  2.
+  2.tenha a Geometria (objeto/transform 3D) em que você quer aplicar a influência selecionada
+
+  3.na janela do DForm do passo 1, clique em Add Influence to Selected...
+
+  4.escolha o Field na lista que aparecer o qual terá influência na Geometria
+
+  5.aplique a influência usando Node Weight Map Brush
+
+V.Copiar área de Influence (influência) para outro Field:
+  1.limpe a área de influência com os primeiros passos em "Limpar área de influência e aplicar simetria"
+
+  2.selecione o Field do qual copiar o Weight Map
+
+  3.na aba Tool Settings, clique com o botão direito do mouse no Map da lista, da Geometria desejada, e clique em Copy Selected
+
+  4.agora, clique no Field em que se deseja colar os valores do Weight Map
+
+  5.na aba Tool Settings da ferramenta Node Weight Map Brush, encontre o Map na lista que serve para a Geometria da qual foi copiada a influência 
+  Weight Map. Caso a lista Map não tenha a Geometria, siga os passos de "Adicionar influência a outras geometrias"
+
+  6.clique com o botão direito no item da lista, em Influence Weights da Geometria e selecione Paste Selected
+
+VI.Limpar área de influência e aplicar simetria:
+  1.clique com o botão direito sobre uma Geometria
+
+  2.escolha Geometry Selection->Select All e todos os vértices serão selecionados
+  caso não esteja visível, troque a ferramenta para Node Weight Map Brush
+
+  3.na ferramenta Node Weight Map Brush, dentro da aba Tool Settings, escolha Vertex Selection
+
+  4.clique com o botão direito na Geometria selecionada na Viewport, escolha Weight Editing->Fill Selected... e então marque para "Enter a weight value 
+  to fill with" ser 0% e pressione Accept
+
+  5.agora, para aplicar a simetria, pinte com Node Weight Map Brush da forma desejada ou realize os passos de "Copiar área de Influence (influência) para outro Field"
+
+  6.na aba Window->Tool Settings, ative Use Symmetry e escolha o eixo desejado
+
+  7.na Viewport, clique com o botão direito e escolha Weight Map Symmetry...
+
+  8.selecione o eixo desejado e escolha de que lado será copiada e em qual lado será colada a pintura de nodes do Weight Map. Por exemplo, da esquerda
+  para a direita ou da direita para a esquerda. 
+  nota: se for, por exemplo, da direita para a esquerda, será da direita do objeto em si, seguindo a bússola do plano 3D do DAZ
+
+  observações: cuidado, pois não é possível fazer Desfazer ou Refazer nessa ação. Faça o mesmo para todas a Geometrias desejadas, adicionando os mapas
+  necessários na lista Map (com "Adicionar influência a outras geometrias")
+
+considerações: 
+  para renomear DForms na lista de parâmetros, ative Edit Mode, clique na engrenagem e escolha Parameter Settings...
+
+
