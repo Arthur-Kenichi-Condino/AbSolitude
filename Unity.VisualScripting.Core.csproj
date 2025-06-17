@@ -200,8 +200,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Serialization\Converters\NamespaceConverter.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Profiling\ProfilingUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Reflection\RuntimeCodebase.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Listeners\MonoBehaviour\UnityOnMouseUpMessageListener.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Dependencies\FullSerializer\Converters\Unity\GUIStyle_DirectConverter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Listeners\MonoBehaviour\UnityOnMouseUpMessageListener.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Ensure\EnsureThat.Reflection.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Unity\MacroScriptableObject.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Core\Reflection\Operators\LessThanOrEqualHandler.cs" />

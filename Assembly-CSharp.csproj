@@ -172,8 +172,8 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.PooledPrefabInstanceHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\SimUMATransform.cs" />
-    <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
+    <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\PassiveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
@@ -1711,6 +1711,10 @@
     <ProjectReference Include="Unity.AI.Navigation.Editor.ConversionSystem.csproj">
       <Project>{E829E590-095B-3FA7-1437-7598FB4D5960}</Project>
       <Name>Unity.AI.Navigation.Editor.ConversionSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{8233F9EE-7A68-586B-0ACF-517A5B300ECC}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Multiplayer.Tools.NetStatsReporting.csproj">
       <Project>{B7C9CF6A-D3D3-81BE-523E-D0EF700EBE7B}</Project>
