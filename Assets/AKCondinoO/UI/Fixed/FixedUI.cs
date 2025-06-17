@@ -16,8 +16,8 @@ namespace AKCondinoO.UI.Fixed{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          foreach(Type tableType in buildBuyEditModeUIContent.tablesTypes){
-          BuildSimObjectsTable table;
-          (table=(BuildSimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
+          BuildBuyEditModeSimObjectsTable table;
+          (table=(BuildBuyEditModeSimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
           buildBuyEditModeUIContent.tables.Add(tableType,table);
          }
          AwakeUIForCameraMode();
@@ -36,7 +36,7 @@ namespace AKCondinoO.UI.Fixed{
             continue;
            }
            foreach(Type tableType in simTypeTablesTypes.Value){
-            BuildSimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
+            BuildBuyEditModeSimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
             table.tableSimObjectPrefabs.Add(t.ToString(),prefabSimObject);
            }
           }

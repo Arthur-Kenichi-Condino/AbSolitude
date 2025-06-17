@@ -142,6 +142,7 @@
     <Compile Include="Assets\AKCondinoO\InputHandler.Enabled.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.HandsUsage.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildBuyEditModeSimObjectsTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosComponentwiseLerpHelper.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DepthOfFieldEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.Stats.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\Tables\BuildSimObjectsTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillsManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.PersistentSimActorData.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ListWrapper.cs" />
@@ -202,6 +202,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\HealingSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeaponOnShootVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Gameplayer.cs" />
@@ -281,7 +282,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Leveling.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.ButtonPressEvents.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
@@ -326,6 +326,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\AtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Interactions\GoHere.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FindNextSelectableSim\FixedUI.InteractMode.ButtonPressEvents.FindNextSelectableSim.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
@@ -348,6 +349,8 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\TheSims3CameraModeButton\FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\Fixed\FollowerCameraModeButton\FixedUI.ButtonPressEvents.FollowerCameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />

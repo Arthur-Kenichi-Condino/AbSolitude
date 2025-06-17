@@ -20,7 +20,7 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode{
         }
        },
       };
-       [NonSerialized]internal readonly Dictionary<Type,BuildSimObjectsTable>tables=new();
+       [NonSerialized]internal readonly Dictionary<Type,BuildBuyEditModeSimObjectsTable>tables=new();
       //[NonSerialized]internal BuildSimObjectsTable tableFloors;
     }
 }
