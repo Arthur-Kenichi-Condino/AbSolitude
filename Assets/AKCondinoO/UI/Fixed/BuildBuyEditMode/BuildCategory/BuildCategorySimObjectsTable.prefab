@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 7677264001075567360}
   - component: {fileID: 4604837949018014831}
   m_Layer: 5
-  m_Name: BuildBuyEditModeSimObjectsTable
+  m_Name: BuildCategorySimObjectsTable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

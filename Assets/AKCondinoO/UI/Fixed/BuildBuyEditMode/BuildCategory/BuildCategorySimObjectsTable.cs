@@ -2,14 +2,15 @@
     #define ENABLE_LOG_DEBUG
 #endif
 using AKCondinoO.Sims;
+using AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables{
-    internal class BuildBuyEditModeSimObjectsTable:MonoBehaviour{
+namespace AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory{
+    internal class BuildCategorySimObjectsTable:MonoBehaviour{
      [NonSerialized]internal readonly SortedDictionary<string,SimObject>tableSimObjectPrefabs=new SortedDictionary<string,SimObject>();
       [NonSerialized]internal readonly Dictionary<SimObject,PlaceholderObject>tableSimObjectPlaceholders=new();
      [NonSerialized]internal RectTransform tableScrollViewContent;

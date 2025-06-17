@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Sims;
 using AKCondinoO.UI.Fixed.BuildBuyEditMode;
+using AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory;
 using AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables;
 using System;
 using System.Collections;
@@ -16,8 +17,8 @@ namespace AKCondinoO.UI.Fixed{
         void Awake(){
          if(singleton==null){singleton=this;}else{DestroyImmediate(this);return;}
          foreach(Type tableType in buildBuyEditModeUIContent.tablesTypes){
-          BuildBuyEditModeSimObjectsTable table;
-          (table=(BuildBuyEditModeSimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
+          BuildCategorySimObjectsTable table;
+          (table=(BuildCategorySimObjectsTable)Instantiate(buildBuyEditModeUIContent.tablePrefab,buildBuyEditModeUIContent.tablesParent,false).AddComponent(tableType)).name=tableType.ToString();
           buildBuyEditModeUIContent.tables.Add(tableType,table);
          }
          AwakeUIForCameraMode();
@@ -36,7 +37,7 @@ namespace AKCondinoO.UI.Fixed{
             continue;
            }
            foreach(Type tableType in simTypeTablesTypes.Value){
-            BuildBuyEditModeSimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
+            BuildCategorySimObjectsTable table=buildBuyEditModeUIContent.tables[tableType];
             table.tableSimObjectPrefabs.Add(t.ToString(),prefabSimObject);
            }
           }
