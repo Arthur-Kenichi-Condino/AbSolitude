@@ -1,4 +1,5 @@
 using AKCondinoO.Sims;
+using AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory;
 using AKCondinoO.UI.Fixed.BuildBuyEditMode.BuildCategory.Tables;
 using System;
 using System.Collections;
@@ -20,7 +21,7 @@ namespace AKCondinoO.UI.Fixed.BuildBuyEditMode{
         }
        },
       };
-       [NonSerialized]internal readonly Dictionary<Type,BuildSimObjectsTable>tables=new();
+       [NonSerialized]internal readonly Dictionary<Type,BuildCategorySimObjectsTable>tables=new();
       //[NonSerialized]internal BuildSimObjectsTable tableFloors;
     }
 }
