@@ -75,7 +75,7 @@ namespace AKCondinoO.Sims.Actors{
          internal Vector3 afterMovePos;
           internal Vector3 moveDelta;
      internal Vector3 headOffset;
-     internal float headMaxVerticalRotationAngle=30f;
+     internal float headMaxVerticalRotationAngle=40f;
       internal float headMaxHorizontalRotationAngle=40f;
      internal Vector3 aimingAt;
      internal Vector3 aimingAtRaw;

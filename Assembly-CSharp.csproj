@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\AIUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoE.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Sanity.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Integrity.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
@@ -92,9 +94,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachineSpawnSettings.cs" />
     <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\ScreenshotBackground.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Substats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAI.Stats.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Integrity.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkArraySync.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\GetVoxelMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectUtil.cs" />
@@ -107,7 +107,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealing.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiomeSimObjectsSpawnSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Secondary.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.SNIPE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />
@@ -116,10 +115,8 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.OnSkillUsed.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Sanity.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayerManagement.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildBuyEditModeUIContent.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Client.cs" />
@@ -144,6 +141,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.OnRefresh.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosComponentwiseLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\TangentSpaceVisualizer.cs" />
@@ -153,6 +151,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\WorldSpaceUI.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
@@ -182,10 +181,9 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallHomunculus\CallHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSendEditDataToServerMultithreaded.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.OnRefresh.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Command.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\_SimConstruction\SimConstruction.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
@@ -239,9 +237,9 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\AnimationManager.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriodSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\BuildCategorySimObjectsTable.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Luck.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriodSkillBuff.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Secondary.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
@@ -270,6 +268,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.ExperiencePoints.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticle.cs" />
@@ -279,9 +278,9 @@
     <Compile Include="Assets\AKCondinoO\Ambience\WindTrails.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\AI\AICommandSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\InContainerTransformData.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Substats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
@@ -318,6 +317,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Skill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AutonomyCore.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSimObjectsPlacing.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\StatsTable.cs" />
     <Compile Include="Assets\AKCondinoO\MemoryManagement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.cs" />
     <Compile Include="Assets\AKCondinoO\ISingletonInitialization.cs" />
@@ -352,8 +352,10 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\TheSims3CameraModeButton\FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FollowerCameraModeButton\FixedUI.ButtonPressEvents.FollowerCameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\paulbourke\MarchingCubes\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimCollisions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimCollisionsChildTrigger.cs" />

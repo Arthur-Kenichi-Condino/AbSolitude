@@ -165,6 +165,7 @@ namespace AKCondinoO.Sims{
           StopCoroutine(updateSafePositionCoroutine);updateSafePositionCoroutine=null;
          }
          updateSafePositionCoroutine=StartCoroutine(UpdateSafePosition());
+         SetExpGiven(null);
         }
         internal virtual void OnDeactivated(){
          if(updateSafePositionCoroutine!=null){

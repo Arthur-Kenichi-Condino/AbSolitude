@@ -94,12 +94,13 @@ namespace AKCondinoO.Sims.Actors{
          //Debug.DrawLine(headPos,headPos+projLookForwardOnUp,Color.green);
          //Debug.DrawLine(headPos,headPos+up,Color.yellow);
          float bodyToHeadRotationYComponentSignedAngle=Vector3.SignedAngle(projCharacterForwardOnUp,projLookForwardOnUp,up);
+         float bodyToHeadRotationYComponentSignedAngleUnclamped=bodyToHeadRotationYComponentSignedAngle;
          if(!Mathf.Approximately(bodyToHeadRotationYComponentSignedAngle,0f)){
           //Log.DebugMessage("unclamped bodyToHeadRotationYComponentSignedAngle:"+bodyToHeadRotationYComponentSignedAngle);
           if(up!=upToRotateAroundY){
            bodyToHeadRotationYComponentSignedAngle=0f;
           }else{
-           bodyToHeadRotationYComponentSignedAngle=Mathf.Clamp(bodyToHeadRotationYComponentSignedAngle,-40f,40f);
+           bodyToHeadRotationYComponentSignedAngle=Mathf.Clamp(bodyToHeadRotationYComponentSignedAngle,-headMaxHorizontalRotationAngle,headMaxHorizontalRotationAngle);
           }
          }
          up=Vector3.Cross(
@@ -117,12 +118,13 @@ namespace AKCondinoO.Sims.Actors{
          //Debug.DrawLine(headPos,headPos+projLookForwardOnUp,Color.green);
          //Debug.DrawLine(headPos,headPos+up,Color.yellow);
          float bodyToHeadRotationXComponentSignedAngle=Vector3.SignedAngle(projCharacterForwardOnUp,projLookForwardOnUp,up);
+         float bodyToHeadRotationXComponentSignedAngleUnclamped=bodyToHeadRotationXComponentSignedAngle;
          if(!Mathf.Approximately(bodyToHeadRotationXComponentSignedAngle,0f)){
           //Log.DebugMessage("unclamped bodyToHeadRotationXComponentSignedAngle:"+bodyToHeadRotationXComponentSignedAngle);
           if(up!=upToRotateAroundX){
            bodyToHeadRotationXComponentSignedAngle=0f;
           }else{
-           bodyToHeadRotationXComponentSignedAngle=Mathf.Clamp(bodyToHeadRotationXComponentSignedAngle,-40f,40f);
+           bodyToHeadRotationXComponentSignedAngle=Mathf.Clamp(bodyToHeadRotationXComponentSignedAngle,-headMaxVerticalRotationAngle,headMaxVerticalRotationAngle);
           }
          }
          rotToLook=
@@ -143,12 +145,12 @@ namespace AKCondinoO.Sims.Actors{
          headLookAtPositionLerped=headLookAtPositionLerp.UpdatePosition(headLookAtPositionLerped,Core.magicDeltaTimeNumber);
          //float bodyToHeadLookAtYSignedAngle=Vector3.SignedAngle(animatorController.animator.transform.forward,headLookAtPositionLerped.normalized,Vector3.up);
          //float bodyToHeadLookAtXSignedAngle=Vector3.SignedAngle(animatorController.animator.transform.forward,headLookAtPositionLerped.normalized,Vector3.right);
-         //if(
-         // Mathf.Abs(bodyToHeadLookAtYSignedAngle)>=headMaxHorizontalRotationAngle||
-         // Mathf.Abs(bodyToHeadLookAtXSignedAngle)>=headMaxVerticalRotationAngle
-         //){
-         // headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
-         //}
+         if(
+          Mathf.Abs(bodyToHeadRotationYComponentSignedAngleUnclamped)>=headMaxHorizontalRotationAngle||
+          Mathf.Abs(bodyToHeadRotationXComponentSignedAngleUnclamped)>=headMaxVerticalRotationAngle
+         ){
+          headLookAtPositionLerped=headLookAtPositionLerp.EndPosition();
+         }
          //  [https://discussions.unity.com/t/upper-torso-ik/133564/2]:
          // m_Anim.SetLookAtWeight(m_LookWeight,m_BodyWeight,m_HeadWeight,m_EyesWeight,m_ClampWeight);
          if(aiming){
@@ -183,7 +185,7 @@ namespace AKCondinoO.Sims.Actors{
                    true
                );
                float angleToRotateLeftFootAroundY=Vector3.SignedAngle(leftFootProjCharacterForwardOnRotationUp,leftFootProjSlopeCorrectedOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateLeftFootAroundY:"+angleToRotateLeftFootAroundY);
+               //Log.DebugMessage("angleToRotateLeftFootAroundY:"+angleToRotateLeftFootAroundY);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjCharacterForwardOnRotationUp,Color.blue);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjSlopeCorrectedOnRotationUp,Color.green);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+rotationUp,Color.yellow);
@@ -197,7 +199,7 @@ namespace AKCondinoO.Sims.Actors{
                    true
                );
                float angleToRotateLeftFootAroundX=Vector3.SignedAngle(leftFootProjCharacterForwardOnRotationUp,leftFootProjSlopeCorrectedOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateLeftFootAroundX:"+angleToRotateLeftFootAroundX);
+               //Log.DebugMessage("angleToRotateLeftFootAroundX:"+angleToRotateLeftFootAroundX);
                angleToRotateLeftFootAroundX=Mathf.Clamp(angleToRotateLeftFootAroundX,-20f,50f);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjCharacterForwardOnRotationUp,Color.blue);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjSlopeCorrectedOnRotationUp,Color.green);
@@ -214,7 +216,7 @@ namespace AKCondinoO.Sims.Actors{
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjHitNormalOnRotationUp,Color.green);
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+rotationUp,Color.yellow);
                float angleToRotateLeftFootAroundZ=Vector3.SignedAngle(leftFootProjCharacterUpOnRotationUp,leftFootProjHitNormalOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateLeftFootAroundZ:"+angleToRotateLeftFootAroundZ);
+               //Log.DebugMessage("angleToRotateLeftFootAroundZ:"+angleToRotateLeftFootAroundZ);
                angleToRotateLeftFootAroundZ=Mathf.Clamp(angleToRotateLeftFootAroundZ,-10f,30f);
                leftFootIKRotation=
                 Quaternion.AngleAxis(angleToRotateLeftFootAroundZ,upToRotateLeftFootAroundZ)*//  Z
@@ -226,7 +228,7 @@ namespace AKCondinoO.Sims.Actors{
                //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootIKRotation*Vector3.up,Color.green);
               }
               Quaternion rightFootIKRotation=bodyRotationTransform.rotation;
-              Vector3 rightFootIKPosition=new Vector3(
+              Vector3    rightFootIKPosition=new Vector3(
                rightFoot.position.x,
                rightFoot.position.y,
                rightFoot.position.z
@@ -246,7 +248,7 @@ namespace AKCondinoO.Sims.Actors{
                    true
                );
                float angleToRotateRightFootAroundY=Vector3.SignedAngle(rightFootProjCharacterForwardOnRotationUp,rightFootProjSlopeCorrectedOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateRightFootAroundY:"+angleToRotateRightFootAroundY);
+               //Log.DebugMessage("angleToRotateRightFootAroundY:"+angleToRotateRightFootAroundY);
                //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjCharacterForwardOnRotationUp,Color.blue);
                //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjSlopeCorrectedOnRotationUp,Color.green);
                //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rotationUp,Color.yellow);
@@ -260,7 +262,7 @@ namespace AKCondinoO.Sims.Actors{
                    true
                );
                float angleToRotateRightFootAroundX=Vector3.SignedAngle(rightFootProjCharacterForwardOnRotationUp,rightFootProjSlopeCorrectedOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateRightFootAroundX:"+angleToRotateRightFootAroundX);
+               //Log.DebugMessage("angleToRotateRightFootAroundX:"+angleToRotateRightFootAroundX);
                angleToRotateRightFootAroundX=Mathf.Clamp(angleToRotateRightFootAroundX,-50f,20f);
                //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjCharacterForwardOnRotationUp,Color.blue);
                //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjSlopeCorrectedOnRotationUp,Color.green);
@@ -268,16 +270,16 @@ namespace AKCondinoO.Sims.Actors{
                rotationUp=characterForward;
                Vector3 upToRotateRightFootAroundZ=rotationUp;
                Vector3Util.GetBestUpAndProjectionsOnPlane(
-                bodyRotationTransform.up,leftToFloorHit.normal,
+                bodyRotationTransform.up,rightToFloorHit.normal,
                  ref rotationUp,
-                  out Vector3 leftFootProjCharacterUpOnRotationUp,out Vector3 leftFootProjHitNormalOnRotationUp,
+                  out Vector3 rightFootProjCharacterUpOnRotationUp,out Vector3 rightFootProjHitNormalOnRotationUp,
                    true
                );
-               //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjCharacterUpOnRotationUp,Color.blue);
-               //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+leftFootProjHitNormalOnRotationUp,Color.green);
-               //Debug.DrawLine(leftFootIKPosition,leftFootIKPosition+rotationUp,Color.yellow);
-               float angleToRotateRightFootAroundZ=Vector3.SignedAngle(leftFootProjCharacterUpOnRotationUp,leftFootProjHitNormalOnRotationUp,rotationUp);
-               Log.DebugMessage("angleToRotateRightFootAroundZ:"+angleToRotateRightFootAroundZ);
+               //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjCharacterUpOnRotationUp,Color.blue);
+               //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rightFootProjHitNormalOnRotationUp,Color.green);
+               //Debug.DrawLine(rightFootIKPosition,rightFootIKPosition+rotationUp,Color.yellow);
+               float angleToRotateRightFootAroundZ=Vector3.SignedAngle(rightFootProjCharacterUpOnRotationUp,rightFootProjHitNormalOnRotationUp,rotationUp);
+               //Log.DebugMessage("angleToRotateRightFootAroundZ:"+angleToRotateRightFootAroundZ);
                angleToRotateRightFootAroundZ=Mathf.Clamp(angleToRotateRightFootAroundZ,-30f,10f);
                rightFootIKRotation=
                 Quaternion.AngleAxis(angleToRotateRightFootAroundZ,upToRotateRightFootAroundZ)*//  Z

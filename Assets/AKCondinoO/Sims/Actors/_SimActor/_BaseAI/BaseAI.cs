@@ -195,6 +195,7 @@ namespace AKCondinoO.Sims.Actors{
          passiveSkills.Clear();
          base.OnDeactivated();
          ReleaseTargets();
+         damageFromActorTempHistory.Clear();
         }
         protected override void SetSlave(SimObject slave){
          slaves.Add(slave.id.Value);
@@ -314,8 +315,24 @@ namespace AKCondinoO.Sims.Actors{
              }
             }
            }
+           damageFromActorTempHistoryIterator.AddRange(damageFromActorTempHistory.Keys);
+           foreach(SimObject sim in damageFromActorTempHistoryIterator){
+            var damageTempHistory=damageFromActorTempHistory[sim];
+            float timeout=damageTempHistory.timeout;
+            timeout-=Time.deltaTime;
+            damageTempHistory.timeout=timeout;
+            damageFromActorTempHistory[sim]=damageTempHistory;
+            if(timeout<=0f){
+             toRemoveFromTempHistory.Add(sim);
+            }
+           }
+           damageFromActorTempHistoryIterator.Clear();
+           foreach(var toRemove in toRemoveFromTempHistory){
+            damageFromActorTempHistory.Remove(toRemove);
+           }
+           toRemoveFromTempHistory.Clear();
            UpdateHitboxesGracePeriod();
-           UpdateWeaponsGracePeriod();
+            UpdateWeaponsGracePeriod();
            if(!IsDead()){
             if(stats.IntegrityGet(this)<=0f){
              Log.DebugMessage("I have no integrity points:set motion dead");

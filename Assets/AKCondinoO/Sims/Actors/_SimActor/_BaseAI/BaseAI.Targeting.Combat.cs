@@ -158,7 +158,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
-         ProcessOnHitGracePeriodSkillBuff(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag);
+         ProcessOnHitGracePeriod(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag);
          motionFlagForHitResetAnimation|=canSetMotionResetFlag;
          Log.DebugMessage("motionFlagForHitResetAnimation="+motionFlagForHitResetAnimation);
          motionFlagForHitAnimation|=canSetMotionFlag;
@@ -180,10 +180,16 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(Hitboxes hitbox,SimObject simObject){
+         float preDamageIntegrity=0f;
+         if(stats!=null){
+          preDamageIntegrity=stats.IntegrityGet(this);
+         }
+         Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:preDamageIntegrity:"+preDamageIntegrity);
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,fromSimObject:simObject);
-         //Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         ProcessOnHitDamage(preDamageIntegrity,postDamageIntegrity,simObject);
          if(postDamageIntegrity<=0f){
-          Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
+          Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:set motion dead");
           OnDeath();
          }
         }
@@ -222,7 +228,7 @@ namespace AKCondinoO.Sims.Actors{
            }
           }
          }
-         ProcessOnHitGracePeriodSkillBuff(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag);
+         ProcessOnHitGracePeriod(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag);
          motionFlagForHitResetAnimation|=canSetMotionResetFlag;
          Log.DebugMessage("motionFlagForHitResetAnimation="+motionFlagForHitResetAnimation);
          motionFlagForHitAnimation|=canSetMotionFlag;
@@ -232,14 +238,43 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal virtual void OnHitProcessStatDamageFrom(SimWeapon simWeapon,Hurtboxes hurtbox,SimObject simObject=null){
+         float preDamageIntegrity=0f;
+         if(stats!=null){
+          preDamageIntegrity=stats.IntegrityGet(this);
+         }
+         Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:preDamageIntegrity:"+preDamageIntegrity);
          float postDamageIntegrity=Stats.ProcessStatPhysicalDamageOn(this,hurtbox,fromSimWeapon:simWeapon);
-         Log.DebugMessage("OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:postDamageIntegrity:"+postDamageIntegrity);
+         ProcessOnHitDamage(preDamageIntegrity,postDamageIntegrity,simObject);
          if(postDamageIntegrity<=0f){
-          Log.DebugMessage("OnHitProcessStatDamageFrom:set motion dead");
+          Log.DebugMessage(this.name+":OnHitProcessStatDamageFrom:set motion dead");
           OnDeath();
          }
         }
-        protected virtual void ProcessOnHitGracePeriodSkillBuff(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag){
+     internal readonly Dictionary<SimObject,(float damage,float timeout)>damageFromActorTempHistory=new();
+     internal readonly List<SimObject>damageFromActorTempHistoryIterator=new();
+      internal float damageFromActorHistoryTimeout=30f;
+       internal readonly List<SimObject>toRemoveFromTempHistory=new();
+        protected virtual void ProcessOnHitDamage(float preDamageIntegrity,float postDamageIntegrity,SimObject fromSimObject){
+         if(fromSimObject==null){
+          Log.DebugMessage(this.name+":ProcessOnHitDamage:'fromSimObject==null'");
+          return;
+         }
+         float damage=preDamageIntegrity-postDamageIntegrity;
+         if(damage<=0f){
+          Log.DebugMessage(this.name+":ProcessOnHitDamage:'damage<=0f'");
+          return;
+         }
+         if(damageFromActorTempHistory.TryGetValue(fromSimObject,out var damageTempHistory)){
+          damageTempHistory.damage+=damage;
+          damageTempHistory.timeout=damageFromActorHistoryTimeout;
+         }else{
+          damageTempHistory=(damage,damageFromActorHistoryTimeout);
+         }
+         Log.DebugMessage(this.name+":ProcessOnHitDamage:damageTempHistory:"+damageTempHistory);
+         damageFromActorTempHistory[fromSimObject]=damageTempHistory;
+        }
+        protected virtual void ProcessOnHitGracePeriod(out bool canTakeDamage,out bool canSetMotionFlag,out bool canSetMotionResetFlag){
          canTakeDamage=true;
          canSetMotionFlag=true;canSetMotionResetFlag=true;
          OnHitGracePeriodSkillBuff onHitGracePeriodSkillBuff=null;
@@ -274,6 +309,15 @@ namespace AKCondinoO.Sims.Actors{
          if(!IsDead()){
           motionFlagForDeathInstantAnimationJumpToEnd|=instant;
          }
+         float totalDamage=0f;
+         foreach(var kvp in damageFromActorTempHistory){
+          var damageTempHistory=kvp.Value;
+          Log.DebugMessage(this.name+":OnDeath:damageTempHistory:"+damageTempHistory);
+          totalDamage+=damageTempHistory.damage;
+         }
+         foreach(var kvp in damageFromActorTempHistory){
+         }
+         damageFromActorTempHistory.Clear();
         }
         internal override bool IsDead(){
          if(MyMotion==ActorMotion.MOTION_DEAD||
