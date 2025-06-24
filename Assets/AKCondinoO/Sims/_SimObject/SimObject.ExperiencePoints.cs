@@ -7,11 +7,16 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Sims{
     internal partial class SimObject{
-     internal ExperiencePoints expPointsData;
+     internal ExperiencePoints expPoints;
         internal struct ExperiencePoints{
-         public float SimLevelExpGivenOnDeath;
+         public float simLevelExpGivenOnDeath;
+         public float jobLevelExpGivenOnDeath;
+            internal ExperiencePoints(float simLevelExpGivenOnDeath,float jobLevelExpGivenOnDeath){
+             this.simLevelExpGivenOnDeath=simLevelExpGivenOnDeath;
+             this.jobLevelExpGivenOnDeath=jobLevelExpGivenOnDeath;
+            }
         }
-        internal virtual void SetExpGiven(Stats stats){
+        internal virtual void ProcessExpPointsGiven(Stats stats){
          //Log.DebugMessage(this.name+":SetExpGiven");
          if(stats==null){
           return;

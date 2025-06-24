@@ -176,7 +176,7 @@ namespace AKCondinoO.Sims{
             }
             return result;
            }
-           internal static float ProcessExpPointsFor(SimObject simObject,SimObject fromDeadSim,float exp){
+           internal static float ProcessExpPoints(SimObject simObject,SimObject fromDeadSim,float exp){
             return 0f;
            }
          #endregion

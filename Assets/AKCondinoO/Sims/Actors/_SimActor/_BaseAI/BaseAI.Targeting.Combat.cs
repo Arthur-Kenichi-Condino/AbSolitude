@@ -309,6 +309,7 @@ namespace AKCondinoO.Sims.Actors{
          if(!IsDead()){
           motionFlagForDeathInstantAnimationJumpToEnd|=instant;
          }
+         ProcessExpPointsGiven(stats);
          float totalDamage=0f;
          foreach(var kvp in damageFromActorTempHistory){
           var damageTempHistory=kvp.Value;

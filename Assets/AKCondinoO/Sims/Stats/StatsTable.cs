@@ -67,6 +67,13 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
 #region DisfiguringHomunculusAI
 namespace AKCondinoO.Sims.Actors.Humanoid{
     internal partial class DisfiguringHomunculusAI{
+        internal override void ProcessExpPointsGiven(Stats stats){
+         expPoints=new ExperiencePoints(
+          472f,
+          507f
+         );
+         base.ProcessExpPointsGiven(stats);
+        }
         internal partial class DisfiguringHomunculusAIStats:HumanoidAIStats{
             internal override void Generate(SimObject statsSim=null,bool reset=true){
              //Log.DebugMessage("Stats Generate");
