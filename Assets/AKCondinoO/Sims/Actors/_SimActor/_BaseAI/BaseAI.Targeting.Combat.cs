@@ -305,20 +305,28 @@ namespace AKCondinoO.Sims.Actors{
       protected bool motionFlagForDeathInstantAnimationJumpToEnd=false;
         protected override void OnDeath(bool instant=false){
          Log.DebugMessage("OnDeath()");
+         bool wasDead=motionFlagForDeathAnimation||IsDead();
+         if(wasDead){
+          Log.DebugMessage("OnDeath():'ignorar repetições de comandos se já estava morto'");
+         }
          motionFlagForDeathAnimation=true;
-         if(!IsDead()){
+         if(!wasDead){
           motionFlagForDeathInstantAnimationJumpToEnd|=instant;
          }
-         ProcessExpPointsGiven(stats);
-         float totalDamage=0f;
-         foreach(var kvp in damageFromActorTempHistory){
-          var damageTempHistory=kvp.Value;
-          Log.DebugMessage(this.name+":OnDeath:damageTempHistory:"+damageTempHistory);
-          totalDamage+=damageTempHistory.damage;
+         //  TO DO: ignorar chamadas subseqüentes de distribuir EXP porque pode ser
+         // por um Hit, mas já estava morto.
+         if(!wasDead){
+          ProcessExpPointsGiven(stats);
+          float totalDamage=0f;
+          foreach(var kvp in damageFromActorTempHistory){
+           var damageTempHistory=kvp.Value;
+           Log.DebugMessage(this.name+":OnDeath:damageTempHistory:"+damageTempHistory);
+           totalDamage+=damageTempHistory.damage;
+          }
+          foreach(var kvp in damageFromActorTempHistory){
+          }
+          damageFromActorTempHistory.Clear();
          }
-         foreach(var kvp in damageFromActorTempHistory){
-         }
-         damageFromActorTempHistory.Clear();
         }
         internal override bool IsDead(){
          if(MyMotion==ActorMotion.MOTION_DEAD||

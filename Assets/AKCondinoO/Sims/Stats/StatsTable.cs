@@ -68,10 +68,15 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
 namespace AKCondinoO.Sims.Actors.Humanoid{
     internal partial class DisfiguringHomunculusAI{
         internal override void ProcessExpPointsGiven(Stats stats){
-         expPoints=new ExperiencePoints(
-          472f,
-          507f
-         );
+         if(expPoints.simLevelExpGivenOnDeath==0f){
+          Log.DebugMessage(this.name+":ProcessExpPointsGiven:'init expPoints'");
+          expPoints=new ExperiencePoints(
+           472f,
+           507f
+          );
+         }else{
+          Log.DebugMessage(this.name+":ProcessExpPointsGiven:'expPoints is already initialized'");
+         }
          base.ProcessExpPointsGiven(stats);
         }
         internal partial class DisfiguringHomunculusAIStats:HumanoidAIStats{
