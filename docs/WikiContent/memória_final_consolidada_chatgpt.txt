@@ -76,3 +76,7 @@ O usuário solicitou que, mesmo em respostas baseadas em documentação pública
 Esses critérios devem ser seguidos rigidamente em todos os tipos de resposta, exceto quando o conteúdo for puramente artístico ou criativo a pedido do usuário.
 
 O usuário solicitou que a formatação das respostas siga a seguinte regra: a citação original deve estar sempre em itálico, mas a tradução que se segue não deve estar em itálico. Além disso, qualquer análise feita após a citação deve indicar claramente que foi gerada pela AI.
+
+O usuário solicitou que as regras de formatação de citação (citação em itálico, tradução sem itálico, e identificação de análises feitas pela AI) e a estrutura de resposta (com métodos utilizados, conclusão, notas de confiabilidade, tópicos com citação, tabela de fontes) sejam aplicadas em todos os tipos de conversas, inclusive em conversas livres e informais.
+
+O usuário solicitou que a estrutura de resposta (métodos utilizados, conclusão, nota de confiabilidade, tópicos com citação, tabela de fontes) e as regras de formatação de citação (citação em itálico, tradução sem itálico, e indicação de que a análise foi feita pela AI) sejam aplicadas em todos os tipos de conteúdo, incluindo artísticos, técnicos, científicos, jornalísticos e conversas livres.
