@@ -23,6 +23,25 @@ namespace AKCondinoO.Sims{
          if(stats==null){
           return;
          }
+         int level=stats.SimLevelGet(this);
+         if(level!=expPoints.atLevel){
+          Log.DebugMessage(this.name+":ProcessExpPointsGiven:'add level compensation'");
+          float simExpPerLevel;
+          float jobExpPerLevel;
+          if(expPoints.atLevel>0){
+           simExpPerLevel=expPoints.simLevelExpGivenOnDeath/expPoints.atLevel;
+           jobExpPerLevel=expPoints.jobLevelExpGivenOnDeath/expPoints.atLevel;
+          }else if(level>0){
+           simExpPerLevel=expPoints.simLevelExpGivenOnDeath/level;
+           jobExpPerLevel=expPoints.jobLevelExpGivenOnDeath/level;
+          }else{
+           simExpPerLevel=expPoints.simLevelExpGivenOnDeath;
+           jobExpPerLevel=expPoints.jobLevelExpGivenOnDeath;
+          }
+          expPoints.simLevelExpGivenOnDeath=simExpPerLevel*level;
+          expPoints.jobLevelExpGivenOnDeath=jobExpPerLevel*level;
+          expPoints.atLevel=level;
+         }
         }
     }
 }

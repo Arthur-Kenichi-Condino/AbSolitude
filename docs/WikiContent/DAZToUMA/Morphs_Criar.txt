@@ -4,7 +4,9 @@ II.Tornar um morph como sendo Weight Map Mode (paint)
 III.Criar um D-Former de um Morph
 IV.Adicionar influência a outras geometrias
 V.Copiar área de Influence (influência) para outro Field
-VI.Limpar área de influência e aplicar simetria
+VI.Limpar área de influência
+VII.Aplicar simetria
+
 
 I.Criar um morph do zero:
   1.First, select the root of the figure, here, Genesis
@@ -26,9 +28,11 @@ I.Criar um morph do zero:
 
   observações:
     é possível usar vários D-Formers para criar um único Morph
+    o item com Base no nome é o Pivot dos transforms do Morph
 
   fontes (sites de instruções):
     [http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/shaping/tutorials/create_morph/start]
+
 
 II.Tornar um morph como sendo Weight Map Mode (paint):
   1.clique em D-Former Field na hierarquia
@@ -42,6 +46,7 @@ II.Tornar um morph como sendo Weight Map Mode (paint):
     agora você pode pintar os vértices clicando e apagar os vértices segurando Alt esquerdo enquanto clica 
 
   observações: caso não haja Add Map, use Window->Panes (Tabs)->DForm, selecione a Geometria e clique em Add Influence to Selected
+
 
 III.Criar um D-Former de um Morph:
   nota: não é possível realizar a tarefa facilmente e de forma total, mas é um modo de recuperar D-Formers apagados por engano
@@ -79,6 +84,7 @@ III.Criar um D-Former de um Morph:
   12.o peso do Weight Map está em 100% para todos os vértices, então agora faça Smooth e Paint no Node Weight Map Brush Tool até chegar aos valores
   desejados
 
+
 IV.Adicionar influência a outras geometrias:
   1.abra Window->Panes (Tabs)->DForm
 
@@ -89,6 +95,7 @@ IV.Adicionar influência a outras geometrias:
   4.escolha o Field na lista que aparecer o qual terá influência na Geometria
 
   5.aplique a influência usando Node Weight Map Brush
+
 
 V.Copiar área de Influence (influência) para outro Field:
   1.limpe a área de influência com os primeiros passos em "Limpar área de influência e aplicar simetria"
@@ -104,7 +111,8 @@ V.Copiar área de Influence (influência) para outro Field:
 
   6.clique com o botão direito no item da lista, em Influence Weights da Geometria e selecione Paste Selected
 
-VI.Limpar área de influência e aplicar simetria:
+
+VI.Limpar área de influência:
   1.clique com o botão direito sobre uma Geometria
 
   2.escolha Geometry Selection->Select All e todos os vértices serão selecionados
@@ -115,18 +123,21 @@ VI.Limpar área de influência e aplicar simetria:
   4.clique com o botão direito na Geometria selecionada na Viewport, escolha Weight Editing->Fill Selected... e então marque para "Enter a weight value 
   to fill with" ser 0% e pressione Accept
 
-  5.agora, para aplicar a simetria, pinte com Node Weight Map Brush da forma desejada ou realize os passos de "Copiar área de Influence (influência) para outro Field"
 
-  6.na aba Window->Tool Settings, ative Use Symmetry e escolha o eixo desejado
+VII.Aplicar simetria:
+  1.agora, para aplicar a simetria, pinte com Node Weight Map Brush da forma desejada ou realize os passos de "Copiar área de Influence (influência) para outro Field"
 
-  7.na Viewport, clique com o botão direito e escolha Weight Map Symmetry...
+  2.na aba Window->Tool Settings, ative Use Symmetry e escolha o eixo desejado
 
-  8.selecione o eixo desejado e escolha de que lado será copiada e em qual lado será colada a pintura de nodes do Weight Map. Por exemplo, da esquerda
+  3.na Viewport, clique com o botão direito e escolha Weight Map Symmetry...
+
+  4.selecione o eixo desejado e escolha de que lado será copiada e em qual lado será colada a pintura de nodes do Weight Map. Por exemplo, da esquerda
   para a direita ou da direita para a esquerda. 
   nota: se for, por exemplo, da direita para a esquerda, será da direita do objeto em si, seguindo a bússola do plano 3D do DAZ
 
   observações: cuidado, pois não é possível fazer Desfazer ou Refazer nessa ação. Faça o mesmo para todas a Geometrias desejadas, adicionando os mapas
   necessários na lista Map (com "Adicionar influência a outras geometrias")
+
 
 considerações: 
   para renomear DForms na lista de parâmetros, ative Edit Mode, clique na engrenagem e escolha Parameter Settings...

@@ -33,6 +33,9 @@
     _D_Former_Human_Head_Eye_Pos_Horizontal_R
       _Morph_D_Former_Human_Head_Eye_Pos_Horizontal
 
+    _D_Former_Human_Head_Eye_Size
+    _D_Former_Human_Head_Eye_Size_R
+      _Morph_D_Former_Human_Head_Eye_Size
 
     
     

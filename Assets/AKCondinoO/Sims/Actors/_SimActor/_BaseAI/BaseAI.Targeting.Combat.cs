@@ -305,7 +305,7 @@ namespace AKCondinoO.Sims.Actors{
       protected bool motionFlagForDeathInstantAnimationJumpToEnd=false;
         protected override void OnDeath(bool instant=false){
          Log.DebugMessage("OnDeath()");
-         bool wasDead=motionFlagForDeathAnimation||IsDead();
+         bool wasDead=IsDead();
          if(wasDead){
           Log.DebugMessage("OnDeath():'ignorar repetições de comandos se já estava morto'");
          }
@@ -329,6 +329,9 @@ namespace AKCondinoO.Sims.Actors{
          }
         }
         internal override bool IsDead(){
+         if(motionFlagForDeathAnimation){
+          return true;
+         }
          if(MyMotion==ActorMotion.MOTION_DEAD||
             MyMotion==ActorMotion.MOTION_DEAD_RIFLE
          ){
