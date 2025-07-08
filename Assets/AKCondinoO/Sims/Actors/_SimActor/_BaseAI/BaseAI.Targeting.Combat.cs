@@ -317,6 +317,7 @@ namespace AKCondinoO.Sims.Actors{
          // por um Hit, mas já estava morto.
          if(!wasDead){
           ProcessExpPointsGiven(stats);
+          Log.DebugMessage(this.name+":OnDeath:'give sim EXP':"+expPoints.simLevelExpGivenOnDeath);
           float totalDamage=0f;
           foreach(var kvp in damageFromActorTempHistory){
            var damageTempHistory=kvp.Value;

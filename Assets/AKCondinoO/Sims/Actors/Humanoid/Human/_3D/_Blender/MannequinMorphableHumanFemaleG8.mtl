@@ -1,0 +1,92 @@
+newmtl Torso
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasetorsomapd_1002.jpg"
+
+newmtl Face
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasefacemapd_1001.jpg"
+
+newmtl Lips
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasefacemapd_1001.jpg"
+
+newmtl Teeth
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasemouthmapd_1005.jpg"
+
+newmtl Ears
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasefacemapd_1001.jpg"
+
+newmtl Legs
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaselegsmapd_1003.jpg"
+
+newmtl EyeSocket
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasefacemapd_1001.jpg"
+
+newmtl Mouth
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasemouthmapd_1005.jpg"
+
+newmtl Arms
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasearmsmapd_1004.jpg"
+
+newmtl Pupils
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaseeyes01_1007.jpg"
+
+newmtl EyeMoisture
+d 0.995
+Kd 1 1 1
+
+newmtl Fingernails
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbasearmsmapd_1004.jpg"
+
+newmtl Cornea
+d 0.995
+Kd 1 1 1
+
+newmtl Irises
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaseeyes01_1007.jpg"
+
+newmtl Sclera
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaseeyes01_1007.jpg"
+
+newmtl Toenails
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaselegsmapd_1003.jpg"
+
+newmtl EyeMoisture_Genesis_8_Female_Eyelashes
+d 0.995
+Kd 1 1 1
+
+newmtl Eyelashes
+d 1
+Kd 0 0 0
+map_D "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/daz/characters/genesis8/femalebase/g8fbaseeyelashes_1006.jpg"
+
+newmtl Panties
+d 1
+Kd 1 1 1
+map_Kd "C:/Users/arthu/Documentos/DAZ 3D/Studio/My Daz Connect Library/data/cloud/1_42071/runtime/textures/aben/basicwear8/05_undies_base_color.jpg"
+

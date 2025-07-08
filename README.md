@@ -1,4 +1,16 @@
-old video: https://www.youtube.com/watch?v=yhfvo8e-jDY
+# Participantes ativos do projeto:
+
+Arthur "Gibraltar" Kenichi Condino Odaguiri
+- Programador do mundo do jogo, com C# em Unity
+
+Daniel Lucas, "Lucas Works"
+- Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
+
+neves482
+
+Night Moon Games
+
+Tiago
 
 Original official Portuguese README below the following English translation.
 
@@ -19,3 +31,5 @@ Para acessar o código e jogo e usá-los você deve aceitar o Termo de Uso no ar
 A solution C# é a AbSolitude.sln. A scene principal está em 'Assets/Scenes/MainScene'. Estou usando atualmente o Unity 2022.2.21 Personal.
  
 O usuário deve cessar imediatamente o acesso e uso do código e jogo, se não aceitar o Termo de Uso.
+
+vídeo antigo mostrando algumas coisas: https://www.youtube.com/watch?v=yhfvo8e-jDY
