@@ -1,10 +1,10 @@
 ## Participantes ativos do projeto:
 
 ### Arthur "Gibraltar" Kenichi Condino Odaguiri
-Programador do mundo do jogo, com C# em Unity
+- Programador do mundo do jogo, com C# em Unity
 
 ### Daniel Lucas, "Lucas Works"
-Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
+- Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
 
 ### neves482
 
