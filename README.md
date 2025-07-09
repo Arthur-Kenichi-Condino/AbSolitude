@@ -1,16 +1,16 @@
-# Participantes ativos do projeto:
+## Participantes ativos do projeto:
 
-Arthur "Gibraltar" Kenichi Condino Odaguiri
-- Programador do mundo do jogo, com C# em Unity
+### Arthur "Gibraltar" Kenichi Condino Odaguiri
+Programador do mundo do jogo, com C# em Unity
 
-Daniel Lucas, "Lucas Works"
-- Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
+### Daniel Lucas, "Lucas Works"
+Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
 
-neves482
+### neves482
 
-Night Moon Games
+### Night Moon Games
 
-Tiago
+### Tiago
 
 Original official Portuguese README below the following English translation.
 
