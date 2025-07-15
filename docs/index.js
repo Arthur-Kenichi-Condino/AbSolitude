@@ -1,3 +1,23 @@
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.wiki_menu_dropdown_folder').forEach(el => {
+      let depth = 0;
+      let parent = el.parentElement;
+  
+      while (parent) {
+        if (parent.tagName.toLowerCase() === 'ul') {
+          depth++;
+        }
+        parent = parent.parentElement;
+      }
+  
+      // Aplique o padding-left proporcional à profundidade
+      el.style.paddingLeft = `${depth * 10}px`;
+    });
+  });
+console.log('index.js is alive');
+
+
+
 // const rootPath=".\\WikiContent/";
 // const hierarchy={};
 // import{RequestDirectoryHierarchyRecursivelyExport as RequestDirectoryHierarchyRecursively}from"./hierarchy.js"

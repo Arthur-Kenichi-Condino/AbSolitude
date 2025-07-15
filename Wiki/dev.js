@@ -16,6 +16,8 @@ app.get('/',function(request,response){
       return;
     }
     hierarchy.BuildDirectoryHierarchyArrayRecursively();
+    //console.log("wikiContentDirectoryHierarchy:"+hierarchy.public.wikiContentDirectoryHierarchy);
+    hierarchy.DoForEachRecursivelyAndCreateIndex(hierarchy.public.wikiContentDirectoryHierarchy,0);
     var homepageParsed=homepageHtml;
     response.send(homepageParsed);
   });

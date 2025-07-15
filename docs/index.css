@@ -1,10 +1,10 @@
 /*Reset CSS:*/
 *{
-  border:0;
   list-style:none;
-  margin:0;
-  padding:0;
   vertical-align:baseline;
+  padding:0;
+  border:0;
+  margin:0;
 }
 html,body{
   background-color:rgb(33,33,33);
@@ -14,26 +14,28 @@ html,body{
   height:100%;
 }
 header{
-  align-items:center;
   background-color:rgb(57,57,57);
   display:flex;
-  font-family:"Gantari";
-  height:8%;
   position:fixed;
+  font-family:"Gantari";
+  align-items:center;
   top:0;
+  height:8%;
   width:100%;
 }
 .wiki_name{
   margin-left:1rem;
 }
 .wiki_menu{
-  border-right:3px solid rgb(57,57,57);
   display:flex;
+  position:relative;
+  overflow:visible;
   flex-direction:column;
-  height:91vh;
-  overflow:auto;
-  position:fixed;
   top:8vh;
+  height:91vh;
+  width:180px;
+  max-width:180px;
+  border-right:3px solid rgb(57,57,57);
 }
 .wiki_menu::-webkit-scrollbar{
   background:rgb(33,33,33);
@@ -57,7 +59,53 @@ header{
 .wiki_menu::-webkit-scrollbar-thumb:horizontal:hover{
   background:#555;
 }
-.menu_section{
+.wiki_menu_dropdown{
+  position:relative;
+  overflow:visible;
+  width:180px;
+  max-width:180px;
+}
+.wiki_menu_dropdown_folder{
+  display:inline-block;  
+  position:relative;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap; 
+  box-sizing:border-box;
+  vertical-align:left;
+  width:180px;
+  max-width:180px;
+}
+/* .wiki_menu_dropdown ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.wiki_menu_dropdown li{
+  display:block;
+  position:relative;
+  overflow:visible;
+  height:20px;
+  padding:2px;
+  border:0px;
+  margin-bottom:5px;
+} */
+/* .wiki_menu_dropdown li ul{
+  background:#eee;
+  display:none;
+  position:absolute;
+  left:180px;
+  padding:2px;
+  border:0px;
+  margin-bottom:5px;
+}
+.wiki_menu_dropdown li:hover ul{
+  display:block;
+}
+.wiki_menu_dropdown li:hover ul{
+  display:block;
+} */
+/* .menu_section{
   background:rgb(33,33,33);
 }
 .menu_item{
@@ -103,4 +151,4 @@ header{
 .text{
   color:rgb(224,228,235);
   text-align:justify;
-}
+} */

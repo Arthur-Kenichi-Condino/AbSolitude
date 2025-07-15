@@ -1,17 +1,20 @@
-module.exports={
-  directoryHierarchy,
-  BuildDirectoryHierarchyArrayRecursively,
-};
 const path=require('path');
 const fs=require('fs');
 //  get hierarchy
-var directoryHierarchy=[];
+const public={
+  wikiContentDirectoryHierarchy:{},
+};
 function BuildDirectoryHierarchyArrayRecursively(){
   var wikiContentPath=path.join(__dirname,'..','WikiContent');
   console.log("RequestDirectoryHierarchyRecursively for "+wikiContentPath);
-  TraverseItemsRecursively(wikiContentPath,0);
-  function TraverseItemsRecursively(hierarchySubdirPath,hierarchySubdirDepth){
-    hierarchySubdirDepth++;
+  for(let key in public.wikiContentDirectoryHierarchy){
+    if(Object.hasOwn(public.wikiContentDirectoryHierarchy,key)){
+      delete public.wikiContentDirectoryHierarchy[key];
+    }
+  }  
+  TraverseItemsRecursively(wikiContentPath,0,public.wikiContentDirectoryHierarchy);
+  function TraverseItemsRecursively(hierarchySubdirPath,hierarchySubdirDepth,hierarchy){
+    console.log('hierarchySubdirDepth:',hierarchySubdirDepth);
     const items=fs.readdirSync(hierarchySubdirPath);
     if(items.length>0){
       var folders=[];
@@ -24,10 +27,13 @@ function BuildDirectoryHierarchyArrayRecursively(){
           folders.push(itemPath);
         }else if(itemStat.isFile()){
           console.log(`arquivo:${item}`);
+          hierarchy[itemPath]={};
         }
       });
+      hierarchySubdirDepth++;
       folders.forEach(folder=>{
-        TraverseItemsRecursively(folder,hierarchySubdirDepth);
+        hierarchy[folder]={};
+        TraverseItemsRecursively(folder,hierarchySubdirDepth,hierarchy[folder]);
       });
       return;
     }else{
@@ -36,6 +42,79 @@ function BuildDirectoryHierarchyArrayRecursively(){
     return;
   }
 }
+function DoForEachRecursivelyAndCreateIndex(hierarchyObj,hierarchyDepth){
+  for(let key in hierarchyObj){
+    if(typeof key==='string'){
+      const itemPath=key;
+      try{
+        if(fs.existsSync(itemPath)){
+          const itemStat=fs.statSync(itemPath);
+          if(itemStat.isFile()){
+            console.log('hierarchyDepth:'+hierarchyDepth+':file:'+itemPath);
+            continue;
+          }
+        }
+      }catch(error){
+        console.error(`erro com ${itemPath}:`,error.message);
+      }
+    }    
+  }
+  hierarchyDepth++;
+  for(let key in hierarchyObj){
+    //console.log("key:"+key);
+    if(typeof key==='string'){
+      const itemPath=key;
+      try{
+        if(fs.existsSync(itemPath)){
+          const itemStat=fs.statSync(itemPath);
+          if(itemStat.isDirectory()){
+            console.log('hierarchyDepth:'+hierarchyDepth+':folder:'+itemPath);
+            DoForEachRecursivelyAndCreateIndex(hierarchyObj[key],hierarchyDepth);
+            continue;
+          }
+        }
+      }catch(error){
+        console.error(`erro com ${itemPath}:`,error.message);
+      }
+    }    
+  }
+  //       var contentTxtFile=null;
+
+
+
+//         if(key=="files"){
+//           console.log("ParseMenuText for files");
+//           for(var key2 in hierarchyObj[key]){
+//             var fileInHierarchy=hierarchyObj[key][key2];
+//             console.log("ParseMenuText:fileInHierarchy:"+fileInHierarchy);
+//             if(contentTxtFile==null&&fileInHierarchy.endsWith("Content.txt")){
+//               contentTxtFile=fileInHierarchy;
+//               continue;
+//             }
+//           }
+//           continue;
+//         }
+//       }
+//       if(hierarchyPath!=null){
+//         hierarchyParentElement=CreateMenuDOMelement(menuObj,hierarchyPath,0,hierarchyParentElement,contentTxtFile);
+//       }
+//       for(var key in hierarchyObj){
+//         if(key=="files"){
+//           continue;
+//         }
+//         if(typeof key=="string"&&key.endsWith("/")){
+//           console.log("ParseMenuText:doing parse:next key:"+key);
+//           DoForEachRecursively(hierarchyObj[key],key,hierarchyParentElement);
+//           continue;
+//         }
+}
+//     console.log("ParseMenuText:do parsing now!");
+//     DoForEachRecursively(hierarchy,null,null);
+module.exports={
+  public,
+  BuildDirectoryHierarchyArrayRecursively,
+  DoForEachRecursivelyAndCreateIndex,
+};
 console.log("hierarchy.js is alive");
 //   hierarchy[path]={};
 //   hierarchy[path]["files"]={};

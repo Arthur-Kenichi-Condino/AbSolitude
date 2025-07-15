@@ -10,12 +10,8 @@
       integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
       crossorigin="anonymous"
     ></script>
+    <script src="index.js"></script>
     <link rel="stylesheet"href="index.css"/>
-    <script type="text/javascript"src="util.js"defer></script>
-    <script type="text/javascript"src="JqueryUtil.js"defer></script>
-    <script type="text/javascript"src="JqueryEffects.js"defer></script>
-    <script type="module"src="hierarchy.js"defer></script>
-    <script type="module"src="index.js"></script>
   </head>
   <body>
     <header>
@@ -25,9 +21,27 @@
     </header>
     <main>
       <aside class="wiki_menu">
-        <select name="Menu"class="wiki_dropdown_menu">
-          {{wiki_dropdown_menu}}
-        </select>
+        <nav name="Menu"class="wiki_menu_dropdown">
+          {{wiki_menu_dropdown}}
+            <ul>
+              <li><span class="wiki_menu_dropdown_folder">Frutaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas</span>
+                <ul>
+                  <li><a href="#">Bananaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</a></li>
+                  <li><a href="#">Maçã</a></li>
+                </ul>
+              </li>
+              <li><span class="wiki_menu_dropdown_folder">Legumes</span>
+                <ul>
+                  <li><span class="wiki_menu_dropdown_folder">Cenoura</span>
+                    <ul>
+                      <li><a href="#">Batata Doce</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Batata</a></li>
+                </ul>
+              </li>
+            </ul>
+        </nav>
       </aside>
       <section class="wiki_content"></section>
     </main>
