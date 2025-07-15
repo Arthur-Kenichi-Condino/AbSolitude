@@ -55,7 +55,7 @@
     <UnityVersion>6000.0.26f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Users\arthu\Documentos\GitHub\AbSolitude\Library\PackageCache\com.unity.transport\Analyzers\Unity.Transport.Analyzers.dll" />
     <Analyzer Include="C:\Unity\Hub\Editor\6000.0.26f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Unity\Hub\Editor\6000.0.26f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
@@ -356,6 +356,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Doppelgänger\Doppelganger.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\paulbourke\MarchingCubes\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimCollisions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimCollisionsChildTrigger.cs" />

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible"content="IE=edge"/>
+    <meta name="viewport"content="width=device-width,initial-scale=1.0"/>
+    <title>AbSolitude Wiki</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet"href="index.css"/>
+    <script type="text/javascript"src="util.js"defer></script>
+    <script type="text/javascript"src="JqueryUtil.js"defer></script>
+    <script type="text/javascript"src="JqueryEffects.js"defer></script>
+    <script type="module"src="hierarchy.js"defer></script>
+    <script type="module"src="index.js"></script>
+  </head>
+  <body>
+    <header>
+      <h4 class="wiki_name">
+        AbSolitude Wiki
+      </h4>
+    </header>
+    <main>
+      <aside class="wiki_menu">
+        <select name="Menu"class="wiki_dropdown_menu">
+          {{wiki_dropdown_menu}}
+        </select>
+      </aside>
+      <section class="wiki_content"></section>
+    </main>
+  </body>
+</html>
