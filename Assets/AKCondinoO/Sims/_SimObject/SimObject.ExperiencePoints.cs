@@ -43,7 +43,10 @@ namespace AKCondinoO.Sims{
           expPoints.atLevel=level;
          }
         }
-        internal virtual void ReceiveExp(Stats stats,SimObject fromDeadSim,float exp){
+        internal virtual void ReceiveExp(SimObject fromDeadSim,float simExp){
+         if(stats!=null){
+          Stats.ProcessExpPoints(this,fromDeadSim,simExp);
+         }
         }
     }
 }

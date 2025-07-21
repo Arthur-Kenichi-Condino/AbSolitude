@@ -25,6 +25,7 @@ app.get('/',function(request,response){
 //  rota-padrão
 app.use(express.static(path.join(__dirname,'..','docs')));
 //  execute no terminal o seguinte para iniciar o servidor: 
+// (local de execução: C:\[...]\GitHub\AbSolitude\Wiki)
 // npm run dev
 const server=app.listen(port,()=>{
   console.log(`updated app listening on port ${port}`);

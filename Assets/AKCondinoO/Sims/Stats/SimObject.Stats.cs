@@ -354,6 +354,17 @@ namespace AKCondinoO.Sims{
         internal partial class Stats{
             static Stats(){
              //Log.DebugMessage("static Stats():'cache values'");
+             Log.DebugMessage("static Stats():'cache ExpPoints'");
+             for(int simLevel=1;simLevel<250;++simLevel){
+              Log.DebugMessage("static Stats():cache ExpPoints:simLevel:"+simLevel);
+              float simExpRequired=GetExpPointsForNextLevelFrom201To250(simLevel,false);
+              //Log.DebugMessage("static Stats():simExpRequired for next level:"+simExpRequired);
+              simExpRequired=GetExpPointsForNextLevelFrom201To250(simLevel,true);
+              //Log.DebugMessage("static Stats():simExpRequired for next level:(transcendent):"+simExpRequired);
+             }
+             Log.DebugMessage("expCurveFrom1To99.GetTotalExpPointsForLevel(99):"+expCurveFrom1To99.GetTotalExpPointsForLevel(99));
+             Log.DebugMessage("expCurveFrom1To99.GetTotalExpPointsForLevel(100):"+expCurveFrom1To99.GetTotalExpPointsForLevel(100));
+             Log.DebugMessage("expCurveFrom1To99.GetTotalExpPointsForLevel(101):"+expCurveFrom1To99.GetTotalExpPointsForLevel(101));
              int statPointsFor99=GetStatPointsSpentFor(99);
              //Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
              //Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):'wrong cached value'");

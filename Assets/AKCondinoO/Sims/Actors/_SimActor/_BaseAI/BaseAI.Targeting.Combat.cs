@@ -325,13 +325,20 @@ namespace AKCondinoO.Sims.Actors{
            totalDamage+=damageTempHistory.damage;
           }
           foreach(var kvp in damageFromActorTempHistory){
+           SimObject sim=kvp.Key;
            if(totalDamage<=0f){
             //  dividir igualmente
+            if(sim.id!=null){
+             sim.ReceiveExp(this,expPoints.simLevelExpGivenOnDeath/damageFromActorTempHistory.Count);
+            }
             continue;
            }
            var damageTempHistory=kvp.Value;
            float damagePercentage=damageTempHistory.damage/totalDamage;
            float simExp=expPoints.simLevelExpGivenOnDeath*damagePercentage;
+           if(sim.id!=null){
+            sim.ReceiveExp(this,simExp);
+           }
           }
           damageFromActorTempHistory.Clear();
          }
