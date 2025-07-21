@@ -440,7 +440,7 @@
         "Y": 59,
         "Width": 1241,
         "Height": 665,
-        "WindowState": 2
+        "WindowState": 0
       },
       "DocumentGroups": [
         {
@@ -1301,7 +1301,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.cs",
-              "ViewState": "AgIAAF8BAAAAAAAAAAAiwG4BAABOAAAAAAAAAA==",
+              "ViewState": "AgIAAF8BAAAAAAAAAAAiwHABAABdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-22T17:21:53.747Z",
               "IsPinned": true,
@@ -1315,7 +1315,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.Leveling.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.Leveling.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.Leveling.cs",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAIwK8AAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAJoAAAAAAAAAAAAUwIcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-22T17:22:02.329Z",
               "IsPinned": true,
