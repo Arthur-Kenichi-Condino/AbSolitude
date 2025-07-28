@@ -210,6 +210,42 @@ namespace AKCondinoO.Sims{
            new(100, 15_578_516f,1f),
           }
          );
+         static readonly ExpCurve expCurveFrom100To150=new(
+          new ExpCurvePoint[]{
+           new( 99,     14_305_769f,1f),
+           new(100,     15_578_516f,1f),
+           new(101,     16_932_718f,1f),
+           new(102,     18_373_588f,1f),
+           new(103,     19_906_673f,1f),
+           new(110,     33_766_814f,1f),
+           new(125,     95_515_147f,1f),
+           new(150,    611_169_449f,1f),
+           new(151,    659_677_653f,1f),
+          }
+         );
+         static readonly ExpCurve expCurveFrom151To200=new(
+          new ExpCurvePoint[]{
+           new(150,    611_169_449f,1f),
+           new(151,    659_677_653f,1f),
+           new(175,  4_182_888_718f,1f),
+           new(190, 10_140_031_377f,1f),
+           new(197, 13_963_672_526f,1f),
+           new(198, 14_577_391_223f,1f),
+           new(199, 15_209_521_480f,1f),
+           new(200, 15_860_615_644f,1f),
+           new(201, 16_513_663_090f,1f),
+          }
+         );
+         static readonly ExpCurve expCurveFrom201To260=new(
+          new ExpCurvePoint[]{
+           new(201,   16_513_663_090f,1f),
+           new(202,   17_821_717_124f,1f),
+           new(225,   35_162_890_397f,1f),
+           new(250,  311_128_271_573f,1f),
+           new(260,1_585_926_900_139f,1f),
+          }
+         );
+         //  Pontos baseados no iRO Wiki (Transc)
          static readonly ExpCurve expCurveFrom1To99Transc=new(
           new ExpCurvePoint[]{
            new(  2,        658f,1f),
@@ -225,21 +261,56 @@ namespace AKCondinoO.Sims{
            new(100, 18_608_840f,1f),
           }
          );
+         static readonly ExpCurve expCurveFrom100To150Transc=new(
+          new ExpCurvePoint[]{
+           new( 99,     17_336_093f,1f),
+           new(100,     18_608_840f,1f),
+           new(101,     19_963_042f,1f),
+           new(102,     21_403_912f,1f),
+           new(103,     22_936_997f,1f),
+           new(110,     36_797_138f,1f),
+           new(125,    105_548_675f,1f),
+           new(150,    614_199_773f,1f),
+           new(151,    662_707_977f,1f),
+          }
+         );
+         static readonly ExpCurve expCurveFrom151To200Transc=new(
+          new ExpCurvePoint[]{
+           new(150,    614_199_773f,1f),
+           new(151,    662_707_977f,1f),
+           new(175,  4_185_419_042f,1f),
+           new(190, 10_143_061_701f,1f),
+           new(197, 13_966_702_850f,1f),
+           new(198, 14_580_421_547f,1f),
+           new(199, 15_212_551_804f,1f),
+           new(200, 15_863_645_968f,1f),
+           new(201, 16_516_693_414f,1f),
+          }
+         );
+         static readonly ExpCurve expCurveFrom201To260Transc=new(
+          new ExpCurvePoint[]{
+           new(201,   16_516_693_414f,1f),
+           new(202,   17_824_747_448f,1f),
+           new(225,   35_165_920_721f,1f),
+           new(250,  311_131_301_897f,1f),
+           new(260,1_585_929_930_463f,1f),
+          }
+         );
             internal static float GetExpPointsForNextLevelFrom1To99(int currentLevel,bool transcendent){
              if(currentLevel>99){
               return GetExpPointsForNextLevelFrom100To150(currentLevel,transcendent);
              }
-             float result=(!transcendent?expCurveFrom1To99[0].totalExp:expCurveFrom1To99Transc[0].totalExp);
-             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
-              (!transcendent)?expCurveFrom1To99:expCurveFrom1To99Transc
-             );
-             result=expRequired;
+             float result;
+             if(currentLevel<=1){
+              result=(!transcendent?expCurveFrom1To99[0].totalExp:expCurveFrom1To99Transc[0].totalExp);
+             }else{
+              float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
+               (!transcendent)?expCurveFrom1To99:expCurveFrom1To99Transc
+              );
+              result=expRequired;
+             }
              return result;
             }
-         [NonSerialized]const float expPointsForLevel100NonTransc       =1272747f;
-          [NonSerialized]const float totalExpPointsFrom100To150NonTransc=596863680f;
-         [NonSerialized]const float expPointsForLevel100Transc          =1528225f;
-          [NonSerialized]const float totalExpPointsFrom100To150Transc   =981363532f;
             internal static float GetExpPointsForNextLevelFrom100To150(int currentLevel,bool transcendent){
              lock(expPointsForNextLevel){
               if(expPointsForNextLevel.TryGetValue((currentLevel,transcendent),out float cached)){
@@ -249,66 +320,55 @@ namespace AKCondinoO.Sims{
              if(currentLevel<=99){
               return GetExpPointsForNextLevelFrom1To99   (currentLevel,transcendent);
              }
-             if(currentLevel>=150){
+             if(currentLevel>150){
               return GetExpPointsForNextLevelFrom151To200(currentLevel,transcendent);
              }
-             float result=(!transcendent?expPointsForLevel100NonTransc:expPointsForLevel100Transc);
-             if(currentLevel>99){
-              if(!transcendent){
-               result=expPointsForLevel100NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150NonTransc/expPointsForLevel100NonTransc),1f/50f),Math.Min(currentLevel-100,150-100));
-              }else{
-               result=expPointsForLevel100Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom100To150Transc   /expPointsForLevel100Transc   ),1f/50f),Math.Min(currentLevel-100,150-100));
-              }
-             }
+             float result;
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
+              (!transcendent)?expCurveFrom100To150:expCurveFrom100To150Transc
+             );
+             result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
              }
              return result;
             }
-         [NonSerialized]const float expPointsForLevel151NonTransc       =645371884f;
-          [NonSerialized]const float totalExpPointsFrom151To200NonTransc=15846309875f;
-         [NonSerialized]const float expPointsForLevel151Transc          =774446260f;
-          [NonSerialized]const float totalExpPointsFrom151To200Transc   =19015571850f;
             internal static float GetExpPointsForNextLevelFrom151To200(int currentLevel,bool transcendent){
              lock(expPointsForNextLevel){
               if(expPointsForNextLevel.TryGetValue((currentLevel,transcendent),out float cached)){
                return cached;
               }
              }
-             if(currentLevel<150){
+             if(currentLevel<=150){
               return GetExpPointsForNextLevelFrom100To150(currentLevel,transcendent);
              }
-             if(currentLevel>=200){
+             if(currentLevel>200){
               return GetExpPointsForNextLevelFrom201To250(currentLevel,transcendent);
              }
-             float result=(!transcendent?expPointsForLevel151NonTransc:expPointsForLevel151Transc);
-             if(currentLevel>150){
-              if(!transcendent){
-               result=expPointsForLevel151NonTransc*Mathf.Pow(Mathf.Pow((totalExpPointsFrom151To200NonTransc/expPointsForLevel151NonTransc),1f/50f),Math.Min(currentLevel-150,200-150));
-              }else{
-               result=expPointsForLevel151Transc   *Mathf.Pow(Mathf.Pow((totalExpPointsFrom151To200Transc   /expPointsForLevel151Transc   ),1f/50f),Math.Min(currentLevel-150,200-150));
-              }
-             }
+             float result;
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
+              (!transcendent)?expCurveFrom151To200:expCurveFrom151To200Transc
+             );
+             result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
              }
              return result;
             }
-         [NonSerialized]const float expPointsForLevel201       =653047446f;
-          [NonSerialized]const float totalExpPointsFrom201To250=1503757559122f;
             internal static float GetExpPointsForNextLevelFrom201To250(int currentLevel,bool transcendent){
              lock(expPointsForNextLevel){
               if(expPointsForNextLevel.TryGetValue((currentLevel,transcendent),out float cached)){
                return cached;
               }
              }
-             if(currentLevel<200){
+             if(currentLevel<=200){
               return GetExpPointsForNextLevelFrom151To200(currentLevel,transcendent);
              }
-             float result=expPointsForLevel201;
-             if(currentLevel>200){
-              result=expPointsForLevel201*Mathf.Pow(Mathf.Pow((totalExpPointsFrom201To250/expPointsForLevel201),1f/50f),Math.Min(currentLevel-200,250-200));
-             }
+             float result;
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
+              (!transcendent)?expCurveFrom201To260:expCurveFrom201To260Transc
+             );
+             result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
              }
