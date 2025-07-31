@@ -296,6 +296,62 @@ namespace AKCondinoO.Sims{
            new(260,1_585_929_930_463f,1f),
           }
          );
+            internal static float GetTotalExpPointsForLevel(int level,bool transcendent){
+             if(level<=99){
+              return GetTotalExpPointsForLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom1To99):
+                (expCurveFrom1To99Transc)
+              );
+             }
+             if(level<=150){
+              return GetTotalExpPointsForLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom100To150):
+                (expCurveFrom100To150Transc)
+              );
+             }
+             if(level<=200){
+              return GetTotalExpPointsForLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom151To200):
+                (expCurveFrom151To200Transc)
+              );
+             }
+             return GetTotalExpPointsForLevel(level,transcendent,
+              (!transcendent)?
+               (expCurveFrom201To260):
+               (expCurveFrom201To260Transc)
+             );
+            }
+            internal static float GetExpRequiredForNextLevel(int level,bool transcendent){
+             if(level<=99){
+              return GetExpRequiredForNextLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom1To99):
+                (expCurveFrom1To99Transc)
+              );
+             }
+             if(level<=150){
+              return GetExpRequiredForNextLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom100To150):
+                (expCurveFrom100To150Transc)
+              );
+             }
+             if(level<=200){
+              return GetExpRequiredForNextLevel(level,transcendent,
+               (!transcendent)?
+                (expCurveFrom151To200):
+                (expCurveFrom151To200Transc)
+              );
+             }
+             return GetExpRequiredForNextLevel(level,transcendent,
+              (!transcendent)?
+               (expCurveFrom201To260):
+               (expCurveFrom201To260Transc)
+             );
+            }
             internal static float GetExpPointsForNextLevelFrom1To99(int currentLevel,bool transcendent){
              if(currentLevel>99){
               return GetExpPointsForNextLevelFrom100To150(currentLevel,transcendent);
@@ -304,9 +360,7 @@ namespace AKCondinoO.Sims{
              if(currentLevel<=1){
               result=(!transcendent?expCurveFrom1To99[0].totalExp:expCurveFrom1To99Transc[0].totalExp);
              }else{
-              float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
-               (!transcendent)?expCurveFrom1To99:expCurveFrom1To99Transc
-              );
+              float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent);
               result=expRequired;
              }
              return result;
@@ -324,9 +378,7 @@ namespace AKCondinoO.Sims{
               return GetExpPointsForNextLevelFrom151To200(currentLevel,transcendent);
              }
              float result;
-             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
-              (!transcendent)?expCurveFrom100To150:expCurveFrom100To150Transc
-             );
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent);
              result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
@@ -346,9 +398,7 @@ namespace AKCondinoO.Sims{
               return GetExpPointsForNextLevelFrom201To250(currentLevel,transcendent);
              }
              float result;
-             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
-              (!transcendent)?expCurveFrom151To200:expCurveFrom151To200Transc
-             );
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent);
              result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
@@ -365,9 +415,7 @@ namespace AKCondinoO.Sims{
               return GetExpPointsForNextLevelFrom151To200(currentLevel,transcendent);
              }
              float result;
-             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent,
-              (!transcendent)?expCurveFrom201To260:expCurveFrom201To260Transc
-             );
+             float expRequired=GetExpRequiredForNextLevel(currentLevel,transcendent);
              result=expRequired;
              lock(expPointsForNextLevel){
               expPointsForNextLevel[(currentLevel,transcendent)]=result;
@@ -407,24 +455,16 @@ namespace AKCondinoO.Sims{
                   refreshedExperience
               ){
                bool isTranscendent=isTranscendent_value;
-               int prevLevel=simLevel_value-1;
-               if(prevLevel<=1){
-                prevLevel=1;
-               }
                int curLevel=simLevel_value;
                if(curLevel<=1){
                 curLevel=1;
                }
-               //float expForPreviousLevel=GetExpPointsForNextLevelFrom201To250(prevLevel,isTranscendent);
-               //float expForNextLevel=GetExpPointsForNextLevelFrom201To250(curLevel,isTranscendent);
-               //float totalExpForPreviousLevel=experience_value;
-               //if(){
-               //}
-               //while((experience_value-)>=(expForNextLevel=GetExpPointsForNextLevelFrom201To250(curLevel,isTranscendent))){
-               // int nextLevel=curLevel+1;
-               // curLevel=nextLevel;
-               //}
-               //Log.DebugMessage("curLevel:"+curLevel+";expForNextLevel:"+expForNextLevel);
+               int nextLevel;
+               float simExpAtNextLevel;
+               while((nextLevel=curLevel+1)<=260&&experience_value>=(simExpAtNextLevel=GetTotalExpPointsForLevel(nextLevel,isTranscendent))){
+                curLevel=nextLevel;
+               }
+               simLevel_value=curLevel;
                totalStatPoints_value=AddStatPointsFrom201To250(simLevel_value,isTranscendent_value);
                //Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
                refreshedSimLevel=true;
