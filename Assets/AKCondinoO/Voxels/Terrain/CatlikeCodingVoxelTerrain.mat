@@ -167,7 +167,7 @@ Material:
     - _height: 0.02
     - _heightDistortion: 0.03
     - _rows: 3
-    - _scale: 0.375
+    - _scale: 0.75
     - _sharpness: 1.25
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -176,3 +176,4 @@ Material:
     - _cameraPosition: {r: 0.5381253, g: 17.866096, b: -5.9936066, a: 0}
     - _fogColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

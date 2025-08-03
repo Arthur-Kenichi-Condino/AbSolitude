@@ -705,6 +705,7 @@
 "Assets/AKCondinoO/UI/Fixed/TheSims3CameraModeButton/FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs"
 "Assets/AKCondinoO/UI/Placeholder.cs"
 "Assets/AKCondinoO/UI/PlaceholderObject.cs"
+"Assets/AKCondinoO/UI/StatBar.cs"
 "Assets/AKCondinoO/UI/WorldSpace/SimObjectInfo/SimObjectInfo.cs"
 "Assets/AKCondinoO/UI/WorldSpace/WorldSpaceUI.cs"
 "Assets/AKCondinoO/Util/AnimatorUtil.cs"

@@ -355,32 +355,32 @@ namespace AKCondinoO.Sims{
             static Stats(){
              //Log.DebugMessage("static Stats():'cache values'");
              Log.DebugMessage("static Stats():'cache ExpPoints'");
-             for(int simLevel=1;simLevel<250;++simLevel){
+             for(int simLevel=1;simLevel<260;++simLevel){
               Log.DebugMessage("static Stats():cache ExpPoints:simLevel:"+simLevel);
-              float simExpRequired=GetExpPointsForNextLevelFrom201To250(simLevel,false);
+              float simExpRequired=GetExpPointsForNextLevelFrom201To260(simLevel,false);
               Log.DebugMessage("static Stats():simExpRequired for next level:"+simExpRequired);
               //Debug.Assert(simExpRequired>0f,"static Stats():simExpRequired:'wrong cached value'");
-              simExpRequired=GetExpPointsForNextLevelFrom201To250(simLevel,true);
+              simExpRequired=GetExpPointsForNextLevelFrom201To260(simLevel,true);
               Log.DebugMessage("static Stats():simExpRequired for next level:(transcendent):"+simExpRequired);
               //Debug.Assert(simExpRequired>0f,"static Stats():simExpRequired:(transcendent):'wrong cached value'");
              }
              int statPointsFor99=GetStatPointsSpentFor(99);
-             //Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
+             Log.DebugMessage("static Stats():GetStatPointsSpentFor(99):"+statPointsFor99);
              //Debug.Assert(GetStatPointsSpentFor(99)==statPointsFor99,"static Stats():GetStatPointsSpentFor(99):'wrong cached value'");
              int statPoints=GetStatPointsSpentFor(130);
-             //Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
+             Log.DebugMessage("static Stats():GetStatPointsSpentFor(130):"+statPoints);
              //Debug.Assert(GetStatPointsSpentFor(130)==statPoints,"static Stats():GetStatPointsSpentFor(130):'wrong cached value'");
              for(int statLevel=1;statLevel<130;++statLevel){
               statPoints=GetStatPointsRequired(statLevel,statLevel+1);
-              //Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
+              Log.DebugMessage("static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):"+statPoints);
               //Debug.Assert(GetStatPointsRequired(statLevel,statLevel+1)==statPoints,"static Stats():GetStatPointsRequired("+statLevel+","+(statLevel+1)+"):'wrong cached value'");
              }
-             int totalStatPoints=AddStatPointsFrom201To250(250,false);
-             Log.DebugMessage("static Stats():AddStatPointsFrom201To250(250,false):"+totalStatPoints);
-             //Debug.Assert(AddStatPointsFrom201To250(250,false)==totalStatPoints,"static Stats():AddStatPointsFrom201To250(250,false):'wrong cached value'");
-             totalStatPoints=AddStatPointsFrom201To250(250,true);
-             Log.DebugMessage("static Stats():AddStatPointsFrom201To250(250,true):"+totalStatPoints);
-             //Debug.Assert(AddStatPointsFrom201To250(250,true)==totalStatPoints,"static Stats():AddStatPointsFrom201To250(250,true):'wrong cached value'");
+             int totalStatPoints=AddStatPointsFrom201To260(260,false);
+             Log.DebugMessage("static Stats():AddStatPointsFrom201To260(260,false):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom201To260(260,false)==totalStatPoints,"static Stats():AddStatPointsFrom201To260(260,false):'wrong cached value'");
+             totalStatPoints=AddStatPointsFrom201To260(260,true);
+             Log.DebugMessage("static Stats():AddStatPointsFrom201To260(260,true):"+totalStatPoints);
+             //Debug.Assert(AddStatPointsFrom201To260(260,true)==totalStatPoints,"static Stats():AddStatPointsFrom201To260(260,true):'wrong cached value'");
             }
          [NonSerialized]internal static System.Random seedGenerator;
          [NonSerialized]internal readonly System.Random math_random;

@@ -337,6 +337,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Util.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ArrayHelper.cs" />

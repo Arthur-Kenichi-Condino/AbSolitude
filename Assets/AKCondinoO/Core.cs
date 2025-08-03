@@ -43,7 +43,7 @@ namespace AKCondinoO{
       /// </summary>
       internal bool isClient=false;
      internal static int threadCount;
-     internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\","/")+"/AbSolitude/";
+     internal static readonly string saveLocation=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Replace("\\","/")+"/AbSolitude/";
      internal static string saveName="terra";
      internal static string savePath;
      internal static Resolution[]resolutions;
