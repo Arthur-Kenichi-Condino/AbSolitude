@@ -457,6 +457,12 @@ namespace AKCondinoO.Sims{
             internal void OnUnappliedSkillBuff(SkillBuff skillBuff){
              pendingRefresh=true;
             }
+            internal class BoolEventArgs:EventArgs{
+            }
+            internal class IntEventArgs:EventArgs{
+            }
+            internal class FloatEventArgs:EventArgs{
+            }
         }
     }
 }

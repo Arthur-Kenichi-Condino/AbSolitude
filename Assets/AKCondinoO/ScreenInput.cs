@@ -100,6 +100,15 @@ namespace AKCondinoO{
          if(selectedSimObject is BaseAI baseAI){
           ScreenInput.singleton.currentActiveSim=baseAI;
          }
+         var args=new ActiveSimSetEventArgs(){
+         };
+         ActiveSimSetRaiseEvent(args);
+        }
+     internal event EventHandler ActiveSimSetEvent;
+        internal class ActiveSimSetEventArgs:EventArgs{
+        }
+        internal virtual void ActiveSimSetRaiseEvent(ActiveSimSetEventArgs e){
+         ActiveSimSetEvent?.Invoke(this,e);
         }
         internal void SetToBeSelected(GameObject toBeSelectedGameObject){
          EventSystem.current.SetSelectedGameObject(toBeSelectedGameObject);

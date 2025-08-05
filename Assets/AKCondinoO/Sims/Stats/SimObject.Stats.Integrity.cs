@@ -26,23 +26,35 @@ namespace AKCondinoO.Sims{
            }
             [NonSerialized]protected bool updatedIntegrity;
              internal void OnRefresh_Integrity(SimObject statsSim=null){
-               if(onGeneration||
-                  refreshedMaxIntegrity
-               ){
-                //Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+":scaleIntegrity:"+scaleIntegrity);
-                if(scaleIntegrity<0f){
-                 integrity_value=maxIntegrity_value_stats+maxIntegrity_value_set;
-                }else{
-                 integrity_value*=scaleIntegrity;
-                }
-                //Log.DebugMessage(statsSim+":integrity_value:"+integrity_value);
-                refreshedIntegrity=true;
+              if(onGeneration||
+                 refreshedMaxIntegrity
+              ){
+               //Log.DebugMessage("OnRefresh_Integrity:maxIntegrity_value_stats+maxIntegrity_value_set:"+(maxIntegrity_value_stats+maxIntegrity_value_set)+":scaleIntegrity:"+scaleIntegrity);
+               if(scaleIntegrity<0f){
+                integrity_value=maxIntegrity_value_stats+maxIntegrity_value_set;
+               }else{
+                integrity_value*=scaleIntegrity;
                }
-               if(updatedIntegrity){
-                refreshedIntegrity=true;
-               }
+               //Log.DebugMessage(statsSim+":integrity_value:"+integrity_value);
+               refreshedIntegrity=true;
+              }
+              if(updatedIntegrity){
+               refreshedIntegrity=true;
+              }
+              IntegrityRaiseEvent();
              }
               [NonSerialized]protected bool refreshedIntegrity;
+         internal event EventHandler IntegrityEvent;
+            internal class IntegrityEventArgs:FloatEventArgs{
+            }
+            protected virtual void OnIntegrityEvent(IntegrityEventArgs e){
+             IntegrityEvent?.Invoke(this,e);
+            }
+            internal virtual void IntegrityRaiseEvent(){
+             var args=new IntegrityEventArgs(){
+             };
+             OnIntegrityEvent(args);
+            }
          #region MaxIntegrity
          /// <summary>
          ///  Integridade física máxima do Sim: valor calculado com base em outros atributos
@@ -99,8 +111,20 @@ namespace AKCondinoO.Sims{
               if(updatedMaxIntegrity){
                refreshedMaxIntegrity=true;
               }
+              MaxIntegrityRaiseEvent();
              }
               [NonSerialized]protected bool refreshedMaxIntegrity;
+         internal event EventHandler MaxIntegrityEvent;
+            internal class MaxIntegrityEventArgs:FloatEventArgs{
+            }
+            protected virtual void OnMaxIntegrityEvent(MaxIntegrityEventArgs e){
+             MaxIntegrityEvent?.Invoke(this,e);
+            }
+            internal virtual void MaxIntegrityRaiseEvent(){
+             var args=new MaxIntegrityEventArgs(){
+             };
+             OnMaxIntegrityEvent(args);
+            }
          #region Stamina
          /// <summary>
          ///  Energia física disponível para realizar ações
@@ -114,8 +138,20 @@ namespace AKCondinoO.Sims{
             stamina_value=value;
             updatedStamina=true;
             SetPendingRefresh(statsSim,forceRefresh);
+            StaminaRaiseEvent();
            }
             [NonSerialized]protected bool updatedStamina;
+         internal event EventHandler StaminaEvent;
+            internal class StaminaEventArgs:FloatEventArgs{
+            }
+            protected virtual void OnStaminaEvent(StaminaEventArgs e){
+             StaminaEvent?.Invoke(this,e);
+            }
+            internal virtual void StaminaRaiseEvent(){
+             var args=new StaminaEventArgs(){
+             };
+             OnStaminaEvent(args);
+            }
          #region MaxStamina
          /// <summary>
          ///  Energia física máxima para o Sim realizar ações: valor calculado com base em outros atributos
@@ -132,8 +168,20 @@ namespace AKCondinoO.Sims{
             maxStamina_value_set=value-maxStamina_value_stats;
             updatedMaxStamina=true;
             SetPendingRefresh(statsSim,forceRefresh);
+            MaxStaminaRaiseEvent();
            }
             [NonSerialized]protected bool updatedMaxStamina;
+         internal event EventHandler MaxStaminaEvent;
+            internal class MaxStaminaEventArgs:FloatEventArgs{
+            }
+            protected virtual void OnMaxStaminaEvent(MaxStaminaEventArgs e){
+             MaxStaminaEvent?.Invoke(this,e);
+            }
+            internal virtual void MaxStaminaRaiseEvent(){
+             var args=new MaxStaminaEventArgs(){
+             };
+             OnMaxStaminaEvent(args);
+            }
          #endregion
          #endregion
          #endregion
