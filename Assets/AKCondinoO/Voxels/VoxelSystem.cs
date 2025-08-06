@@ -124,6 +124,7 @@ namespace AKCondinoO.Voxels{
      internal static Vector2Int instantiationDistance{get;}=new Vector2Int(6,6);
       internal static float fadeStartDis;
        internal static float fadeEndDis;
+     [SerializeField]internal BiomeBehaviour biomeBehaviour;
      internal static readonly BaseBiome biome=new BaseBiome();
      [SerializeField]VoxelTerrainChunk _VoxelTerrainChunkPrefab;
      internal VoxelTerrainChunk[]terrain;

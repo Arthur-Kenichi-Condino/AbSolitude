@@ -186,9 +186,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                blocked[index2]=true;
               }}
              }
+             Log.DebugMessage("set to be spawned:simObjectPicked.Value.simObject:"+simObjectPicked.Value.simObject);
              container.spawnData.at.Add((position,rotation.eulerAngles,modifiers.scale,simObjectPicked.Value.simObject,null,new SimObject.PersistentData()));
             }
             _Continue:{
+             Log.Warning("TO DO: grandes objetos (maiores que um chunk) devem ser salvos aqui para serem aplicados em outros chunks, com cooldown também em conta");
              continue;
             }
            }}
@@ -196,6 +198,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
           case Execution.SaveStateToFile:{
            //Log.DebugMessage("Execution.SaveStateToFile");
+           Log.Warning("TO DO: salvar um blocked para todos os chunks, salvando também o cooldown");
            lock(VoxelSystem.chunkStateFileSync){
             bool stateSavedFlag=false;
             stringBuilder.Clear();

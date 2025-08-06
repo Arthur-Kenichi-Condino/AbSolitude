@@ -43,6 +43,8 @@ namespace AKCondinoO.Sims{
       [NonSerialized]protected SimObject masterSimObject;
      [NonSerialized]internal Rigidbody hasRigidbody;//  componente Rigidbody tem que ficar sempre no transform root
      [NonSerialized]internal Collider[]colliders;
+     [SerializeField]internal bool createVolumeCollider=false;
+     [SerializeField]internal VolumeCreationPrefab volumeCreationPrefab;
      [NonSerialized]internal readonly List<Collider>volumeColliders=new List<Collider>();
       [SerializeField]internal SimCollisions simCollisionsPrefab;
        [NonSerialized]internal SimCollisions simCollisions;
@@ -55,6 +57,9 @@ namespace AKCondinoO.Sims{
          math_random=new System.Random(seedGenerator.Next());
          netObj=GetComponent<NetworkObject>();
          hasRigidbody=transform.root.GetComponent<Rigidbody>();
+         if(createVolumeCollider){
+          CreateVolumeCollider();
+         }
          foreach(Collider collider in colliders=GetComponentsInChildren<Collider>()){
           if(collider.CompareTag("SimObjectVolume")){
            if(localBounds.extents==Vector3.zero){
@@ -103,6 +108,10 @@ namespace AKCondinoO.Sims{
          waitForFixedUpdate=new WaitForFixedUpdate();
          parentConstraint=gameObject.GetComponent<ParentConstraint>();
          SetInteractionsList();
+        }
+        internal virtual void CreateVolumeCollider(){
+         if(volumeCreationPrefab!=null){
+         }
         }
         public override void OnDestroy(){
          foreach(var kvp1 in derivedMaterials){
@@ -549,7 +558,7 @@ namespace AKCondinoO.Sims{
           yield return null;
           yield return waitForFixedUpdate;
           if(Core.singleton.isServer){
-           if(!initManualUpdate&&!overlapState.isOverlapping&&simCollisions.simObjectColliders.Count<=0){
+           if(!initManualUpdate&&!overlapState.isOverlapping&&(simCollisions==null||simCollisions.simObjectColliders.Count<=0)){
             if(transform.hasChanged){
              //Log.DebugMessage("UpdateSafePosition:id:"+id+":safePosition:"+safePosition);
              safePosition=transform.position;

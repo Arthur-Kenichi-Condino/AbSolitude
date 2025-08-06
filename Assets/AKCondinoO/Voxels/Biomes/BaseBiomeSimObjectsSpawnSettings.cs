@@ -9,8 +9,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
+using static AKCondinoO.Voxels.Biomes.BiomeSettings;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BaseBiomeSimObjectsSpawnSettings{
+     internal BiomeBehaviour biomeBehaviour{get{if(VoxelSystem.singleton!=null){return VoxelSystem.singleton.biomeBehaviour;}return null;}}
         internal enum SpawnedTypes:int{
          All=0,
          Grass=1,
@@ -49,50 +51,61 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly BaseBiome biome;
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
-         AddSimObjectTypeAtPicking(1,typeof(Pinus_elliottii_1),out List<SimObjectSettings>Pinus_elliottii_1SettingsListAtPicking1);
-         Pinus_elliottii_1SettingsListAtPicking1.Add(
-          new SimObjectSettings(
-           chance:.5f,
-           inclination:.125f,
-           minScale:Vector3.one*.25f,
-           maxScale:Vector3.one*.5f,
-           depth:1.8f,
-           minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Trees,Vector3.one*2.0f}},
-           maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Trees,Vector3.one*4.0f}},
-           blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees},
-           isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees}
-          ){
-          }
-         );
-         AddSimObjectTypeAtPicking(1,typeof(Betula_occidentalis_1),out List<SimObjectSettings>Betula_occidentalis_1SettingsListAtPicking1);
-         Betula_occidentalis_1SettingsListAtPicking1.Add(
-          new SimObjectSettings(
-           chance:.5f,
-           inclination:.125f,
-           minScale:Vector3.one*.125f,
-           maxScale:Vector3.one*.25f,
-           depth:-1.2f,
-           minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Bushes,Vector3.one*1.0f}},
-           maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Bushes,Vector3.one*2.0f}},
-           blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes},
-           isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes}
-          ){
-          }
-         );
-        }
-        protected void AddSimObjectTypeAtPicking(int picking,Type simObjectType,out List<SimObjectSettings>simObjectTypeSettingsListAtPicking){
-         if(!simObjectPicking.TryGetValue(picking,out var typesAtPicking)){
-          typesAtPicking=simObjectPicking[picking]=new HashSet<Type>();
-         }
-         typesAtPicking.Add(simObjectType);
-         if(!allSettings.TryGetValue(simObjectType,out var simObjectTypeSettings)){
-          simObjectTypeSettings=allSettings[simObjectType]=new Dictionary<int,List<SimObjectSettings>>();
-         }
-         if(!simObjectTypeSettings.TryGetValue(picking,out simObjectTypeSettingsListAtPicking)){
-          simObjectTypeSettingsListAtPicking=simObjectTypeSettings[picking]=new List<SimObjectSettings>();
-         }
         }
         internal void Set(){
+         if(biomeBehaviour.useHardCodedSurfaceSpawnIfAvailable){
+          #region hard-coded settings
+          SetSimObjectTypeAtPicking(1,typeof(Pinus_elliottii_1),out List<SimObjectSettings>Pinus_elliottii_1SettingsListAtPicking1);
+          Pinus_elliottii_1SettingsListAtPicking1.Add(
+           new SimObjectSettings(
+            chance:.5f,
+            inclination:.125f,
+            minScale:Vector3.one*.25f,
+            maxScale:Vector3.one*.5f,
+            depth:1.8f,
+            minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Trees,Vector3.one*2.0f}},
+            maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Trees,Vector3.one*4.0f}},
+            blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees},
+            isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Trees}
+           ){
+           }
+          );
+          SetSimObjectTypeAtPicking(1,typeof(Betula_occidentalis_1),out List<SimObjectSettings>Betula_occidentalis_1SettingsListAtPicking1);
+          Betula_occidentalis_1SettingsListAtPicking1.Add(
+           new SimObjectSettings(
+            chance:.5f,
+            inclination:.125f,
+            minScale:Vector3.one*.125f,
+            maxScale:Vector3.one*.25f,
+            depth:-1.2f,
+            minSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*1.0f},{SpawnedTypes.Bushes,Vector3.one*1.0f}},
+            maxSpacing:new Dictionary<SpawnedTypes,Vector3>{{SpawnedTypes.All,Vector3.one*2.0f},{SpawnedTypes.Bushes,Vector3.one*2.0f}},
+            blocksTypes:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes},
+            isBlockedBy:new SpawnedTypes[]{SpawnedTypes.All,SpawnedTypes.Bushes}
+           ){
+           }
+          );
+          #endregion hard-coded settings
+         }
+         foreach(SurfaceSpawn surfaceSpawnSetting in biomeBehaviour.settings.biomeSurfaceSpawns){
+          Log.DebugMessage("spawn setting added for:"+surfaceSpawnSetting.simObject.GetType());
+          Log.Warning("TO DO: criar cooldown de spawn de objeto (e remover/refazer 'divisão de chance' no Selection) e lidar com objetos maiores que um chunk");
+          SetSimObjectTypeAtPicking(surfaceSpawnSetting.picking,surfaceSpawnSetting.simObject.GetType(),out List<SimObjectSettings>settingsListAtPicking);
+          settingsListAtPicking.Add(
+           new SimObjectSettings(
+            chance:     surfaceSpawnSetting.chance,
+            inclination:surfaceSpawnSetting.inclination,
+            minScale:   surfaceSpawnSetting.minScale,
+            maxScale:   surfaceSpawnSetting.maxScale,
+            depth:      surfaceSpawnSetting.depth,
+            minSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
+            maxSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
+            blocksTypes:surfaceSpawnSetting.blocksTypes,
+            isBlockedBy:surfaceSpawnSetting.isBlockedBy
+           ){
+           }
+          );
+         }
          foreach(var selectionTypesPair in simObjectPicking){
           int selection=selectionTypesPair.Key;
           HashSet<Type>types=selectionTypesPair.Value;
@@ -110,6 +123,18 @@ namespace AKCondinoO.Voxels.Biomes{
           //Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
          }
         }
+        protected void SetSimObjectTypeAtPicking(int picking,Type simObjectType,out List<SimObjectSettings>simObjectTypeSettingsListAtPicking){
+         if(!simObjectPicking.TryGetValue(picking,out var typesAtPicking)){
+          typesAtPicking=simObjectPicking[picking]=new HashSet<Type>();
+         }
+         typesAtPicking.Add(simObjectType);
+         if(!allSettings.TryGetValue(simObjectType,out var simObjectTypeSettings)){
+          simObjectTypeSettings=allSettings[simObjectType]=new Dictionary<int,List<SimObjectSettings>>();
+         }
+         if(!simObjectTypeSettings.TryGetValue(picking,out simObjectTypeSettingsListAtPicking)){
+          simObjectTypeSettingsListAtPicking=simObjectTypeSettings[picking]=new List<SimObjectSettings>();
+         }
+        }
      internal Perlin simObjectSpawnChancePerlin;
         internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(Vector3Int noiseInputRounded){
          Vector3 noiseInput=noiseInputRounded+biome.deround;
@@ -124,6 +149,7 @@ namespace AKCondinoO.Voxels.Biomes{
               float dicing=Mathf.Clamp01(((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,(count+1)*.5f)+1f)/2f);
               count++;
               if(dicing<chance){
+               //Log.DebugMessage("'dicing<chance':dicing:"+dicing+";chance:"+chance+";(type,setting):"+(type,setting));
                return(type,setting);
               }
              }

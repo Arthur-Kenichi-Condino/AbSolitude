@@ -246,6 +246,7 @@ namespace AKCondinoO.Sims{
              while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
               int index=0;
               foreach(var at in toSpawn.at){
+               Log.DebugMessage("at.simObjectType:"+at.simObjectType);
                SimObject.PersistentStats?persistentStats=null;
                if(toSpawn.statsData.TryGetValue(index,out var persistentStatsValue)){
                 persistentStats=persistentStatsValue;

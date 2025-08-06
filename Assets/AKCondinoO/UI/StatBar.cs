@@ -7,6 +7,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using static AKCondinoO.Sims.SimObject;
+using static AKCondinoO.Sims.SimObject.Stats;
 namespace AKCondinoO.UI{
     internal class StatBar:MonoBehaviour{
      [SerializeField]internal Image backgroundBar;
@@ -102,7 +103,7 @@ namespace AKCondinoO.UI{
           raiseEventMethod=raiseEventMethodData.raiseEvent;
          }else{
           string raiseEventMethodName=statName.EndsWith("Event")?String.Intern(statName.Insert(statName.Length-"Event".Length,"RaiseEvent")):String.Intern(statName+"RaiseEvent");
-          raiseEventMethod=typeof(Stats).GetMethod(raiseEventMethodName,BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance);
+          raiseEventMethod=typeof(Stats).GetMethod(raiseEventMethodName,BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance,null,new Type[]{},null);
           Log.DebugMessage("GetRaiseEventMethod:raiseEventMethod:"+raiseEventMethod);
           reflectionCacheRaiseEventMethods[statName]=(raiseEventMethod,null);
          }
@@ -111,14 +112,18 @@ namespace AKCondinoO.UI{
      float maxValue=1f;
         internal void SetMaxValue(object sender,EventArgs args){
          Log.DebugMessage("SetMaxValue:sender:"+sender);
-         float maxValue;
-         //this.maxValue=maxValue;
+         if(args is FloatEventArgs floatArgs){
+          float maxValue=floatArgs.value;
+          this.maxValue=maxValue;
+         }
         }
      float value=.25f;
         internal void SetValue(object sender,EventArgs args){
          Log.DebugMessage("SetValue:sender:"+sender);
-         float value;
-         //this.value=value;
+         if(args is FloatEventArgs floatArgs){
+          float value=floatArgs.value;
+          this.value=value;
+         }
         }
      float percentage;
         void OnGUI(){

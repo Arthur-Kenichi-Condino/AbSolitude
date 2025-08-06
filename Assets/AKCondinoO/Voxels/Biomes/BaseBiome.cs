@@ -12,10 +12,10 @@ using static AKCondinoO.Voxels.VoxelSystem;
 using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
 namespace AKCondinoO.Voxels.Biomes{
     internal partial class BaseBiome{
+     internal BiomeBehaviour biomeBehaviour{get{if(VoxelSystem.singleton!=null){return VoxelSystem.singleton.biomeBehaviour;}return null;}}
      internal readonly BaseBiomeSimObjectsSpawnSettings biomeSpawnSettings;
          internal BaseBiome(){
           biomeSpawnSettings=new BaseBiomeSimObjectsSpawnSettings(this);
-          biomeSpawnSettings.Set();
          }
      internal Vector3 deround{get;}=new Vector3(.5f,.5f,.5f);
      protected readonly List<ModuleBase>modules=new List<ModuleBase>();//  dispose after usage
@@ -24,6 +24,7 @@ namespace AKCondinoO.Voxels.Biomes{
          internal virtual int Seed{
           get{return seed_v;}
           set{       seed_v=value;
+           biomeSpawnSettings.Set();
            random[0]=new System.Random(seed_v          );
            random[1]=new System.Random(random[0].Next());
            SetModules();
