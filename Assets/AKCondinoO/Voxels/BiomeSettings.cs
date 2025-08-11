@@ -12,8 +12,10 @@ namespace AKCondinoO.Voxels.Biomes{
         [Serializable]internal struct SurfaceSpawn{
          public int picking;
          public SimObject simObject;
+         public Vector3 size;
          public float chance;
          public float inclination;
+         public Vector3 assetScale;
          public Vector3 minScale;
          public Vector3 maxScale;
          public float depth;

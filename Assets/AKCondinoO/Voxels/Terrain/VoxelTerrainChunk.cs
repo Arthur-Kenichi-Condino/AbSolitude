@@ -228,6 +228,11 @@ namespace AKCondinoO.Voxels.Terrain{
         #if UNITY_EDITOR
             void OnDrawGizmos(){
                 //DebugGizmos.DrawBounds(worldBounds,Color.gray);
+             if(simObjectsPlacing!=null){
+              if(simObjectsPlacing.surface!=null){
+               simObjectsPlacing.surface.OnDrawGizmos();
+              }
+             }
             }
         #endif
         [SerializeField]internal bool DEBUG_DRAW_WATER_DENSITY=false;

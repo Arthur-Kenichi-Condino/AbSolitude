@@ -3,6 +3,7 @@
 #endif
 using AKCondinoO.Voxels.Terrain.Editing;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
+using AKCondinoO.Voxels.Terrain.SimObjectsPlacing;
 using AKCondinoO.Voxels.Water;
 using System;
 using System.Collections;
@@ -36,6 +37,8 @@ namespace AKCondinoO.Voxels{
          internal static readonly Dictionary<FileStream,(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>             waterNeighbourhoodAbsorbingCacheIds=new();
           internal static readonly ConcurrentQueue<HashSet<(FileStream stream,BinaryWriter writer,BinaryReader reader)>>waterNeighbourhoodCacheListPool=new();
          internal static ReaderWriterLockSlim   waterNeighbourhoodCache_rwl;
+         internal static Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
+         internal static ReaderWriterLockSlim spawnMaps_rwl;
          static readonly Dictionary<int,string      >editsFileCacheName        =new Dictionary<int,string      >();
          static readonly Dictionary<int,FileStream  >editsFileCacheStream      =new Dictionary<int,FileStream  >();
          static readonly Dictionary<int,StreamReader>editsFileCacheStreamReader=new Dictionary<int,StreamReader>();

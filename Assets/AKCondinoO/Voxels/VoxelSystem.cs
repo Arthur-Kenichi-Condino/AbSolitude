@@ -49,8 +49,8 @@ namespace AKCondinoO.Voxels{
             internal static readonly ReadOnlyDictionary<int,Vector2Int>GetcCoord;
         #endregion
         #region voxel
-            internal static Vector3Int vecPosTovCoord(Vector3 pos){
-             Vector2Int rgn=vecPosTocnkRgn(pos);
+            internal static Vector3Int vecPosTovCoord(Vector3 pos,out Vector2Int rgn){
+             rgn=vecPosTocnkRgn(pos);
              pos.x=(pos.x>0)?(pos.x-(int)pos.x==0.5f?Mathf.FloorToInt(pos.x):Mathf.RoundToInt(pos.x)):(int)Math.Round(pos.x,MidpointRounding.AwayFromZero);
              pos.y=(pos.y>0)?(pos.y-(int)pos.y==0.5f?Mathf.FloorToInt(pos.y):Mathf.RoundToInt(pos.y)):(int)Math.Round(pos.y,MidpointRounding.AwayFromZero);
              pos.z=(pos.z>0)?(pos.z-(int)pos.z==0.5f?Mathf.FloorToInt(pos.z):Mathf.RoundToInt(pos.z)):(int)Math.Round(pos.z,MidpointRounding.AwayFromZero);
@@ -59,6 +59,9 @@ namespace AKCondinoO.Voxels{
              coord.y+=Mathf.FloorToInt(Height/2.0f);coord.y=Mathf.Clamp(coord.y,0,Height-1);
              coord.z+=Mathf.FloorToInt(Depth /2.0f);coord.z=Mathf.Clamp(coord.z,0,Depth -1);
              return coord;
+            }
+            internal static Vector3Int vecPosTovCoord(Vector3 pos){
+             return vecPosTovCoord(pos,out _);
             }
             internal static int GetvxlIdx(int vcx,int vcy,int vcz){return vcy*FlattenOffset+vcx*Depth+vcz;}
             internal static readonly ReadOnlyCollection<Vector3Int>GetvCoord;
@@ -134,6 +137,7 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.             waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.             waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.              spawnMaps_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          voxelTerrainLayer=LayerMask.GetMask("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Start(marchingCubesBGThreads,typeof(MarchingCubesMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
@@ -260,6 +264,7 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.               waterFiles_rwl.Dispose();
          VoxelSystem.Concurrent.               waterCache_rwl.Dispose();
          VoxelSystem.Concurrent.  waterNeighbourhoodCache_rwl.Dispose();
+         VoxelSystem.Concurrent.                spawnMaps_rwl.Dispose();
          VoxelSystem.Concurrent.  waterCache   .Clear();
          VoxelSystem.Concurrent.  waterCacheIds.Clear();
          VoxelSystem.Concurrent.ReleaseCacheAndDispose();

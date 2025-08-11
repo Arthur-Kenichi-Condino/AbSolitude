@@ -174,7 +174,7 @@ namespace AKCondinoO{
           backgroundData.Set();
           container=null;
           try{
-           Cleanup();
+           Cleanup();//
           }catch(Exception e){
            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }

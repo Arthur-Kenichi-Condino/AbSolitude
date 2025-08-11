@@ -124,17 +124,18 @@ namespace AKCondinoO.Voxels.Biomes{
           biomeSpawnSettings.rotationModifierPerlin.Dispose();
          }
      protected Select[]selectors=new Select[1];
-         internal virtual int Selection(Vector3 noiseInput){
-          double min=selectors[0].Minimum;
-          double max=selectors[0].Maximum;
-          double fallOff=selectors[0].FallOff*.5;
-          double selectionValue=selectors[0].Controller.GetValue(noiseInput.z,noiseInput.x,0);
-          if(selectionValue<=min-fallOff||selectionValue>=max+fallOff){
-           return 1;
-          }else{
-           return 0;
-          }
-         }
+             //  Noise
+             internal virtual int GetSelectorValue(Vector3 noiseInput,out double selectionValue){
+              double min=selectors[0].Minimum;
+              double max=selectors[0].Maximum;
+              double fallOff=selectors[0].FallOff*.5;
+              selectionValue=selectors[0].Controller.GetValue(noiseInput.z,noiseInput.x,0);
+              if(selectionValue<=min-fallOff||selectionValue>=max+fallOff){
+               return 1;
+              }else{
+               return 0;
+              }
+             }
      internal virtual int cacheLength{get{return 1;}}
              internal void Setvxl(
               Vector3Int noiseInputRounded,
@@ -151,17 +152,22 @@ namespace AKCondinoO.Voxels.Biomes{
               double noiseValue=(noiseCache1!=null&&noiseCache1[0][oftIdx][noiseIndex]!=0)?
                noiseCache1[0][oftIdx][noiseIndex]:
                 (noiseCache1!=null?
-                 (noiseCache1[0][oftIdx][noiseIndex]=Noise()):
-                  Noise());
-              double Noise(){return modules[6/* terrain height module index */].GetValue(noiseInput.z,noiseInput.x,0);}
+                 (noiseCache1[0][oftIdx][noiseIndex]=Get2DValue(noiseInput)):
+                  Get2DValue(noiseInput));
               if(noiseInput.y<=noiseValue){
                double d;
-               vxl=new Voxel(d=Density(100,noiseInput,noiseValue),Vector3.zero,Material(d,noiseInput,materialIdCache1,oftIdx,noiseIndex));
+               vxl=new Voxel(d=DensityAt(100,noiseInput,noiseValue),Vector3.zero,MaterialAt(d,noiseInput,materialIdCache1,oftIdx,noiseIndex));
                return;
               }
               vxl=Voxel.air;
              }
-             protected double Density(
+             protected virtual double Get2DValue(Vector3 noiseInput){
+              return modules[6/* terrain height module index */].GetValue(noiseInput.z,noiseInput.x,0);
+             }
+             protected virtual double GetValue(Vector3 noiseInput){
+              return modules[6/* terrain height module index */].GetValue(noiseInput.z,noiseInput.x,noiseInput.y);
+             }
+             protected virtual double DensityAt(
               double density,
                Vector3 noiseInput,
                 double noiseValue,
@@ -183,7 +189,7 @@ namespace AKCondinoO.Voxels.Biomes{
       MaterialId.Rock,
       MaterialId.Dirt,
      };
-             protected virtual MaterialId Material(
+             protected virtual MaterialId MaterialAt(
               double density,
                Vector3 noiseInput,
                 MaterialId[][][]materialIdCache1,
@@ -201,7 +207,7 @@ namespace AKCondinoO.Voxels.Biomes{
                 return materialIdCache1[0][oftIdx][noiseIndex];
                }
               }
-              MaterialId m=materialIdPicking[Selection(noiseInput)];
+              MaterialId m=materialIdPicking[GetSelectorValue(noiseInput,out _)];
               return materialIdCache1!=null?materialIdCache1[0][oftIdx][noiseIndex]=m:m;
              }
     }

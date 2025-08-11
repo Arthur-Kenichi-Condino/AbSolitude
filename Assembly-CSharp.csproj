@@ -81,8 +81,8 @@
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\NetworkCommandLine.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudsCamera.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\RockBig_Desert_HighTower\RockBig_Desert_HighTower.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\Tables\TableFloors.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DeferredFogEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\Hitboxes.cs" />

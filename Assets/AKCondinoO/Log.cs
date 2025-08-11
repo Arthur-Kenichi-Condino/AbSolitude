@@ -18,6 +18,11 @@ namespace AKCondinoO{
             Debug.Log(logMsg);
         }
         [System.Diagnostics.Conditional("ENABLE_LOG_DEBUG")]
+        internal static void DebugMessage(string logMsg,bool condition){
+            if(!condition){return;}
+            Debug.Log(logMsg);
+        }
+        [System.Diagnostics.Conditional("ENABLE_LOG_DEBUG")]
         internal static void DebugMessage(string logMsg,Object context){
             Debug.Log(logMsg,context);
         }
