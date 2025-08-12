@@ -61,23 +61,21 @@ namespace AKCondinoO{
         /// <param name="scaleB">Escala a aplicar a B (component-wise, >= 0 preferencial)</param>
         /// <param name="epsilon">Pequena tolerância numérica (padrão 1e-6)</param>
         /// <returns>true se intersectam (inclui touching), false se separados</returns>
-        public static bool BoundsIntersectsScaledRotated(
-            Bounds boundsA, Quaternion rotA, Vector3 scaleA,
-            Bounds boundsB, Quaternion rotB, Vector3 scaleB,
-            float epsilon = 1e-6f)
-        {
-            // --- Semi-extents (meio do size) multiplicado pela escala (usando abs para segurança) ---
-            Vector3 halfA = Vector3.Scale(boundsA.size * 0.5f, new Vector3(Mathf.Abs(scaleA.x), Mathf.Abs(scaleA.y), Mathf.Abs(scaleA.z)));
-            Vector3 halfB = Vector3.Scale(boundsB.size * 0.5f, new Vector3(Mathf.Abs(scaleB.x), Mathf.Abs(scaleB.y), Mathf.Abs(scaleB.z)));
-
-            // --- Centros em world space ---
-            Vector3 CA = boundsA.center;
-            Vector3 CB = boundsB.center;
-
-            // --- Eixos locais (unitários) em world space ---
-            Vector3 A0 = rotA * Vector3.right;   // local X
-            Vector3 A1 = rotA * Vector3.up;      // local Y
-            Vector3 A2 = rotA * Vector3.forward; // local Z
+        internal static bool BoundsIntersectsScaledRotated(
+         Bounds boundsA,Quaternion rotA,Vector3 scaleA,
+         Bounds boundsB,Quaternion rotB,Vector3 scaleB,
+         float epsilon=1e-6f
+        ){
+         //---  Semi-extents (meio do size) multiplicado pela escala (usando abs para segurança)  ---
+         Vector3 halfA=Vector3.Scale(boundsA.size*0.5f,new Vector3(Mathf.Abs(scaleA.x),Mathf.Abs(scaleA.y),Mathf.Abs(scaleA.z)));
+         Vector3 halfB=Vector3.Scale(boundsB.size*0.5f,new Vector3(Mathf.Abs(scaleB.x),Mathf.Abs(scaleB.y),Mathf.Abs(scaleB.z)));
+         //---  Centros em world space  ---
+         Vector3 CA=boundsA.center;
+         Vector3 CB=boundsB.center;
+         //---  Eixos locais (unitários) em world space  ---
+         Vector3 A0=rotA*Vector3.right  ;//  local X
+         Vector3 A1=rotA*Vector3.up     ;//  local Y
+         Vector3 A2=rotA*Vector3.forward; // local Z
 
             Vector3 B0 = rotB * Vector3.right;
             Vector3 B1 = rotB * Vector3.up;
