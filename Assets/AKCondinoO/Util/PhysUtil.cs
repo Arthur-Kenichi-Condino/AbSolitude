@@ -237,5 +237,85 @@ namespace AKCondinoO{
         localPoint.y >= -halfExtents.y - epsilon && localPoint.y <= halfExtents.y + epsilon &&
         localPoint.z >= -halfExtents.z - epsilon && localPoint.z <= halfExtents.z + epsilon;
 }
+    // Versão 3D
+    public static IEnumerable<(int x, int y, int z)> GetCoords3DInsideBounds(
+        Bounds bounds, Quaternion rot, Vector3 scale)
+    {
+        // Aplicar escala nos extents
+        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale);
+
+        // Calcular matriz de rotação
+        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rot);
+
+        // Calcular AABB que engloba o OBB
+        Vector3 right = rotationMatrix.MultiplyVector(Vector3.right) * scaledExtents.x;
+        Vector3 up = rotationMatrix.MultiplyVector(Vector3.up) * scaledExtents.y;
+        Vector3 forward = rotationMatrix.MultiplyVector(Vector3.forward) * scaledExtents.z;
+
+        Vector3 worldExtents = new Vector3(
+            Mathf.Abs(right.x) + Mathf.Abs(up.x) + Mathf.Abs(forward.x),
+            Mathf.Abs(right.y) + Mathf.Abs(up.y) + Mathf.Abs(forward.y),
+            Mathf.Abs(right.z) + Mathf.Abs(up.z) + Mathf.Abs(forward.z)
+        );
+
+        // Determinar limites globais de iteração
+        Vector3 min = bounds.center - worldExtents;
+        Vector3 max = bounds.center + worldExtents;
+
+        // Iterar por todas as coordenadas inteiras no AABB
+        for (int x = Mathf.FloorToInt(min.x); x <= Mathf.CeilToInt(max.x); x++)
+        for (int y = Mathf.FloorToInt(min.y); y <= Mathf.CeilToInt(max.y); y++)
+        for (int z = Mathf.FloorToInt(min.z); z <= Mathf.CeilToInt(max.z); z++)
+        {
+            if (PointInsideScaledRotatedBounds(new Vector3(x, y, z), bounds, rot, scale))
+                yield return (x, y, z);
+        }
+    }
+
+    // Versão 2D (XZ)
+    public static IEnumerable<(int x, int z)> GetCoordsInsideBounds(
+        Bounds bounds, Quaternion rot, Vector3 scale)
+    {
+        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale);
+        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rot);
+
+        Vector3 right = rotationMatrix.MultiplyVector(Vector3.right) * scaledExtents.x;
+        Vector3 up = rotationMatrix.MultiplyVector(Vector3.up) * scaledExtents.y;
+        Vector3 forward = rotationMatrix.MultiplyVector(Vector3.forward) * scaledExtents.z;
+
+        Vector3 worldExtents = new Vector3(
+            Mathf.Abs(right.x) + Mathf.Abs(up.x) + Mathf.Abs(forward.x),
+            Mathf.Abs(right.y) + Mathf.Abs(up.y) + Mathf.Abs(forward.y),
+            Mathf.Abs(right.z) + Mathf.Abs(up.z) + Mathf.Abs(forward.z)
+        );
+
+        Vector3 min = bounds.center - worldExtents;
+        Vector3 max = bounds.center + worldExtents;
+
+        // Apenas XZ
+        for (int x = Mathf.FloorToInt(min.x); x <= Mathf.CeilToInt(max.x); x++)
+        for (int z = Mathf.FloorToInt(min.z); z <= Mathf.CeilToInt(max.z); z++)
+        {
+            Vector3 point = new Vector3(x, bounds.center.y, z);
+            if (PointInsideScaledRotatedBounds(point, bounds, rot, scale))
+                yield return (x, z);
+        }
+    }
+
+    // Método de checagem otimizado
+    private static bool PointInsideScaledRotatedBounds(
+        Vector3 point, Bounds bounds, Quaternion rot, Vector3 scale)
+    {
+        Vector3 localPoint = Quaternion.Inverse(rot) * (point - bounds.center);
+        localPoint = new Vector3(
+            localPoint.x / scale.x,
+            localPoint.y / scale.y,
+            localPoint.z / scale.z
+        );
+
+        return Mathf.Abs(localPoint.x) <= bounds.extents.x &&
+               Mathf.Abs(localPoint.y) <= bounds.extents.y &&
+               Mathf.Abs(localPoint.z) <= bounds.extents.z;
+    }
     }
 }

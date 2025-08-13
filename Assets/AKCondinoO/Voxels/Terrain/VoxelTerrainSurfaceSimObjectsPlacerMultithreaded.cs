@@ -304,9 +304,17 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput1,out double selectionValue1);
             if(simObjectPicked1!=null){
              //  try to spawn simObjectPicked1
+             SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
+             Vector3 size1=simObjectSettings1.size;
+             Bounds bounds1=new Bounds(pos1,size1);
              SimObjectSpawnModifiers modifiers1=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput1,simObjectPicked1.Value.simObjectSettings);
              bool canSpawnInX2=false;
              bool canSpawnInZ2=false;
+             Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
+             for(coord2.x=-2;coord2.x<2;coord2.x++){
+             for(coord2.z=-2;coord2.z<2;coord2.z++){
+             }}
+             _End2:{}
             }
            }}
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
