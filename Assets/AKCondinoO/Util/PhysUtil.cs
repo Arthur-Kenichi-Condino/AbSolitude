@@ -215,5 +215,27 @@ namespace AKCondinoO{
          //  No separating axis found -> intersect
          return true;
         }
+        internal static bool PointInsideScaledRotatedBounds(
+         Bounds bounds,Quaternion rot,Vector3 scale,
+         Vector3 pos,float epsilon=1e-6f
+        ){
+         //  1. Ajustar escala (somente valores positivos)
+         Vector3 scaledSize=Vector3.Scale(bounds.size,new Vector3(
+           Mathf.Abs(scale.x),
+           Mathf.Abs(scale.y),
+           Mathf.Abs(scale.z)
+         ));
+         //  2. Transformar ponto para espaço local do bounds
+    Vector3 localPoint = pos - bounds.center; // deslocar para origem no centro do bounds
+    localPoint = Quaternion.Inverse(rot) * localPoint; // aplicar rotação inversa
+
+    // 3. Checar se está dentro do bounds AABB escalado
+    Vector3 halfExtents = scaledSize * 0.5f;
+
+    return
+        localPoint.x >= -halfExtents.x - epsilon && localPoint.x <= halfExtents.x + epsilon &&
+        localPoint.y >= -halfExtents.y - epsilon && localPoint.y <= halfExtents.y + epsilon &&
+        localPoint.z >= -halfExtents.z - epsilon && localPoint.z <= halfExtents.z + epsilon;
+}
     }
 }

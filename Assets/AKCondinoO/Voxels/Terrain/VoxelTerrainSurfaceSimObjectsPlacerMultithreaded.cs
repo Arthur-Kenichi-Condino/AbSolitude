@@ -283,14 +283,40 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          switch(container.execution){
           case Execution.ReserveBounds:{
            Log.DebugMessage("ReserveBounds");
+           Vector2Int cnkRgn1=container.cnkRgn;
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
-           for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
-           for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
-            bool canSpawn=TryReserveBoundsAt(vCoord1,container.cnkRgn,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,out double selectionValue1);
-            if(canSpawn){
-             //Log.DebugMessage("at vCoord1:"+vCoord1+":container.cnkRgn:"+container.cnkRgn+":spawn object:"+simObjectPicked1.Value.simObject);
+           for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+           for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+            int surfaceSpawnMapArrayIdx=vCoord1.z+vCoord1.x*Depth;
+            Vector3 pos1=vCoord1;
+            pos1.x+=cnkRgn1.x;
+            pos1.z+=cnkRgn1.y;
+            int seqResult1a=MathUtil.AlternatingSequenceWithSeparator((int)pos1.x,container.maxSpawnSize.x,0);
+            bool priorityOverEast1 =seqResult1a==0;
+            bool priorityOverWest1 =seqResult1a==1;
+            bool priorityOverBothX1=seqResult1a==2;
+            int seqResult1b=MathUtil.AlternatingSequenceWithSeparator((int)pos1.z,container.maxSpawnSize.z,0);
+            bool priorityOverNorth1=seqResult1b==0;
+            bool priorityOverSouth1=seqResult1b==1;
+            bool priorityOverBothZ1=seqResult1b==2;
+            Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
+                                           noiseInput1.z+=cnkRgn1.y;
+            (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput1,out double selectionValue1);
+            if(simObjectPicked1!=null){
+             //  try to spawn simObjectPicked1
+             SimObjectSpawnModifiers modifiers1=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput1,simObjectPicked1.Value.simObjectSettings);
+             bool canSpawnInX2=false;
+             bool canSpawnInZ2=false;
             }
            }}
+           //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+           //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+           // bool canSpawn=TryReserveBoundsAt(vCoord1,container.cnkRgn,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,out double selectionValue1);
+           // if(canSpawn){
+           //  //Log.DebugMessage("at vCoord1:"+vCoord1+":container.cnkRgn:"+container.cnkRgn+":spawn object:"+simObjectPicked1.Value.simObject);
+           // }
+           //}}
            //Vector2Int chunkCenter=;
            //Vector3Int reserveMaxSize=container.maxSpawnSize;
            //Vector3Int reserveMaxRadius=reserveMaxSize/2;

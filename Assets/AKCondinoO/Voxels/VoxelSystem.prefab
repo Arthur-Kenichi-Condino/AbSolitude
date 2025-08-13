@@ -171,27 +171,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxScale.x
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxScale.y
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxScale.z
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minScale.x
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minScale.y
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minScale.z
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].inclination
@@ -203,7 +203,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].inclination
-      value: 0.125
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[2].assetScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[2].assetScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[2].assetScale.z
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.size

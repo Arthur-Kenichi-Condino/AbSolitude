@@ -53,7 +53,7 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();
      readonly protected Dictionary<int,int>settingsCountForSelection=new Dictionary<int,int>();
      readonly BaseBiome biome;
-     internal static Vector3Int maxSpawnSize=new Vector3Int(60,60,60);
+     internal static Vector3Int maxSpawnSize=new Vector3Int(256,256,256);
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
         }
