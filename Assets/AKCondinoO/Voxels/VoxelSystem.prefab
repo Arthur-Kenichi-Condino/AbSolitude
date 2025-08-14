@@ -399,27 +399,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxSpacing.Array.data[0].spacingDis.x
-      value: 40
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxSpacing.Array.data[0].spacingDis.y
-      value: 38.1
+      value: 39.1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxSpacing.Array.data[0].spacingDis.z
-      value: 16.3
+      value: 17.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minSpacing.Array.data[0].spacingDis.x
-      value: 40
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minSpacing.Array.data[0].spacingDis.y
-      value: 38.1
+      value: 39.1
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minSpacing.Array.data[0].spacingDis.z
-      value: 16.3
+      value: 17.3
       objectReference: {fileID: 0}
     - target: {fileID: 2998841467349146929, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: m_LocalPosition.x

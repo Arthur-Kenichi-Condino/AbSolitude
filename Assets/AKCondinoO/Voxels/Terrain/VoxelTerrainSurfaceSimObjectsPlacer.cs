@@ -182,8 +182,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              bool canSpawnInX2=false;
              bool canSpawnInZ2=false;
              Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
-             for(coord2.x=-2             ;coord2.x<2;coord2.x++){
-             for(coord2.z=-2             ;coord2.z<2;coord2.z++){
+             for(coord2.x=-2             ;coord2.x<=2;coord2.x++){
+             for(coord2.z=-2             ;coord2.z<=2;coord2.z++){
               if(
                coord2.x==0&&
                coord2.z==0

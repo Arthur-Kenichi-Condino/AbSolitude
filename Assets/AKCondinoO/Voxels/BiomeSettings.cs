@@ -18,6 +18,7 @@ namespace AKCondinoO.Voxels.Biomes{
          public Vector3 assetScale;
          public Vector3 minScale;
          public Vector3 maxScale;
+         public Vector2 rotation;
          public float depth;
             [Serializable]internal struct SpacingData{
              public SpawnedTypes spawnedType;

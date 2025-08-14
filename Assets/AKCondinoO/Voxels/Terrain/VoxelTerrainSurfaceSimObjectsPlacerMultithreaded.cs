@@ -55,6 +55,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
      //readonly Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
+     Vector3Int[]getCoordsOutputArray2=new Vector3Int[0];
+     readonly HashSet<Vector3Int>getCoordsOutputHashSet2=new();
+     Vector3Int[]getCoordsOutputArray3=new Vector3Int[0];
         protected override void Cleanup(){
          //spawnMaps.Clear();
         }
@@ -279,10 +282,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          //if(priorityOverEast1&&priorityOverWest2)return true;//  empate -> objeto vence / candidato perde
          //return false;//  objeto perde / candidato vence
         }
+     readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
           case Execution.ReserveBounds:{
            Log.DebugMessage("ReserveBounds");
+           sw.Restart();
            Vector2Int cnkRgn1=container.cnkRgn;
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
@@ -291,32 +296,212 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Vector3 pos1=vCoord1;
             pos1.x+=cnkRgn1.x;
             pos1.z+=cnkRgn1.y;
-            int seqResult1a=MathUtil.AlternatingSequenceWithSeparator((int)pos1.x,container.maxSpawnSize.x,0);
-            bool priorityOverEast1 =seqResult1a==0;
-            bool priorityOverWest1 =seqResult1a==1;
-            bool priorityOverBothX1=seqResult1a==2;
-            int seqResult1b=MathUtil.AlternatingSequenceWithSeparator((int)pos1.z,container.maxSpawnSize.z,0);
-            bool priorityOverNorth1=seqResult1b==0;
-            bool priorityOverSouth1=seqResult1b==1;
-            bool priorityOverBothZ1=seqResult1b==2;
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
             (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput1,out double selectionValue1);
             if(simObjectPicked1!=null){
              //  try to spawn simObjectPicked1
+             Vector3 margin1=Vector3.one;
              SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
              Vector3 size1=simObjectSettings1.size;
-             Bounds bounds1=new Bounds(pos1,size1);
+             Bounds bounds1=new Bounds(Vector3.zero,size1);
+             Bounds maxScaledBounds1=new Bounds(Vector3.zero,Vector3.Scale(size1,simObjectSettings1.maxScale));
+             int seqSizeX1=Mathf.CeilToInt(maxScaledBounds1.extents.x+margin1.x);
+             int seqSizeZ1=Mathf.CeilToInt(maxScaledBounds1.extents.z+margin1.z);
+             int seqResult1a=MathUtil.AlternatingSequenceWithSeparator((int)pos1.x,seqSizeX1,0);
+             int seqResult1b=MathUtil.AlternatingSequenceWithSeparator((int)pos1.z,seqSizeZ1,0);
+             bool priorityOverEast1 =seqResult1a==0;
+             bool priorityOverWest1 =seqResult1a==1;
+             bool priorityOverBothX1=seqResult1a==2;
+             bool priorityOverNorth1=seqResult1b==0;
+             bool priorityOverSouth1=seqResult1b==1;
+             bool priorityOverBothZ1=seqResult1b==2;
              SimObjectSpawnModifiers modifiers1=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput1,simObjectPicked1.Value.simObjectSettings);
+             //double highestSelectionValue2=double.MinValue;
              bool canSpawnInX2=false;
              bool canSpawnInZ2=false;
-             Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
-             for(coord2.x=-2;coord2.x<2;coord2.x++){
-             for(coord2.z=-2;coord2.z<2;coord2.z++){
-             }}
+             int getCoordsOutputArraySize2=PhysUtil.GetCoordsInsideBoundsMinArraySize(bounds1,modifiers1.scale,margin1);
+             if(getCoordsOutputArraySize2>getCoordsOutputArray2.Length){
+              Array.Resize(ref getCoordsOutputArray2,getCoordsOutputArraySize2);
+             }
+             int length2=PhysUtil.GetCoordsInsideBounds(bounds1,modifiers1.scale,Quaternion.AngleAxis(modifiers1.rotation,Vector3.up),margin1,
+              true,getCoordsOutputArray2
+             );
+             for(int i2=0;i2<length2;++i2){
+              Vector3Int coord2=getCoordsOutputArray2[i2];
+              if(
+               coord2.x==0&&
+               coord2.z==0
+              ){
+               continue;
+              }
+              //Log.DebugMessage("coord2:"+coord2,container.cnkRgn.x==0&&container.cnkRgn.y==0);
+              Vector3 pos2=pos1;
+              pos2.x+=coord2.x;
+              pos2.z+=coord2.z;
+              Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+              Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                             noiseInput2.z+=cnkRgn2.y;
+              (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput2,out double selectionValue2);
+              if(simObjectPicked2!=null){
+               //  can we still spawn simObjectPicked1 if there's simObjectPicked2?
+               Vector3 margin2=Vector3.one;
+               SimObjectSettings simObjectSettings2=simObjectPicked2.Value.simObjectSettings;
+               Vector3 size2=simObjectSettings2.size;
+               Bounds bounds2=new Bounds(Vector3.zero,size2);
+               Bounds maxScaledBounds2=new Bounds(Vector3.zero,Vector3.Scale(size2,simObjectSettings2.maxScale));
+               int seqSizeX2=Mathf.CeilToInt(maxScaledBounds2.extents.x+margin2.x);
+               int seqSizeZ2=Mathf.CeilToInt(maxScaledBounds2.extents.z+margin2.z);
+               int seqResult2a=MathUtil.AlternatingSequenceWithSeparator((int)pos2.x,Mathf.Max(seqSizeX2,seqSizeX1),0);
+               int seqResult2b=MathUtil.AlternatingSequenceWithSeparator((int)pos2.z,Mathf.Max(seqSizeZ2,seqSizeZ1),0);
+               bool priorityOverEast2 =seqResult2a==0;
+               bool priorityOverWest2 =seqResult2a==1;
+               bool priorityOverBothX2=seqResult2a==2;
+               bool priorityOverNorth2=seqResult2b==0;
+               bool priorityOverSouth2=seqResult2b==1;
+               bool priorityOverBothZ2=seqResult2b==2;
+               if(!priorityOverBothX2){
+                if(coord2.x<0){
+                 if(priorityOverWest1){
+                  if(priorityOverWest2){
+                   canSpawnInX2=true;
+                  }
+                 }
+                }
+                if(coord2.x>0){
+                 if(priorityOverWest2){
+                  canSpawnInX2=false;
+                  goto _End2;
+                 }
+                }
+               }
+               if(!priorityOverBothZ2){
+                if(coord2.z<0){
+                 if(priorityOverSouth1){
+                  if(priorityOverSouth2){
+                   if(canSpawnInX2){
+                    canSpawnInZ2=true;
+                   }
+                  }
+                 }
+                }
+                if(coord2.z>0){
+                 if(priorityOverSouth2){
+                  canSpawnInZ2=false;
+                  goto _End2;
+                 }
+                }
+               }
+              }
+              //if(simObjectPicked2!=null){
+              // if(selectionValue2>highestSelectionValue2){
+              //  highestSelectionValue2=selectionValue2;
+              // }
+              //}
+              //(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2=null;
+              //double selectionValue2=0;
+              //if(!priorityOverBothX2){
+              // if(coord2.x<0){
+              //  if(priorityOverWest1){
+              //   if(priorityOverWest2){
+              //    if(Conflicts2b()){
+              //     canSpawnInX2=false;
+              //     goto _End2;
+              //    }
+              //    canSpawnInX2=true;
+              //   }
+              //  }
+              // }
+              // if(coord2.x>0){
+              //  if(priorityOverWest2){
+              //   if(Conflicts2a()){
+              //    canSpawnInX2=false;
+              //    goto _End2;
+              //   }
+              //  }
+              // }
+              //}
+              //if(!priorityOverBothZ2){
+              // if(coord2.z<0){
+              //  if(priorityOverSouth1){
+              //   if(priorityOverSouth2){
+              //    if(canSpawnInX2){
+              //     if(Conflicts2b()){
+              //      canSpawnInZ2=false;
+              //      goto _End2;
+              //     }
+              //     canSpawnInZ2=true;
+              //    }
+              //   }
+              //  }
+              // }
+              // if(coord2.z>0){
+              //  if(priorityOverSouth2){
+              //   if(Conflicts2a()){
+              //    canSpawnInZ2=false;
+              //    goto _End2;
+              //   }
+              //  }
+              // }
+              //}
+              //bool Conflicts2a(){
+              // PickSimObject2();
+              // if(simObjectPicked2!=null){
+              //  return true;
+              // }
+              // return false;
+              //}
+              //bool Conflicts2b(){
+              // //PickSimObject2();
+              // if(simObjectPicked2!=null){
+              //  if(selectionValue2>=selectionValue1){
+              //   //return true;
+              //  }
+              // }
+              // return false;
+              //}
+              //void PickSimObject2(){
+              // if(simObjectPicked2==null){
+              //  simObjectPicked2=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput2,out selectionValue2);
+              // }
+              //}
+             }
              _End2:{}
+             //if(selectionValue1>highestSelectionValue2){
+             // Log.DebugMessage("at pos1:"+pos1+":cnkRgn1:"+cnkRgn1+":spawn object:"+simObjectPicked1.Value.simObject);
+             //}
+             if(canSpawnInX2&&canSpawnInZ2){
+              Log.DebugMessage("at pos1:"+pos1+":cnkRgn1:"+cnkRgn1+":spawn object:"+simObjectPicked1.Value.simObject);
+              bool canSpawnInX3=false;
+              bool canSpawnInZ3=false;
+              Vector3 maxSpawnMargin=Vector3.one;
+              Vector3 maxSpawnSize=container.maxSpawnSize;
+              Bounds maxSpawnBounds=new Bounds(Vector3.zero,maxSpawnSize);
+              int getCoordsOutputArraySize3=PhysUtil.GetCoordsInsideBoundsMinArraySize(maxSpawnBounds,Vector3.one,maxSpawnMargin);
+              if(getCoordsOutputArraySize3>getCoordsOutputArray3.Length){
+               Array.Resize(ref getCoordsOutputArray3,getCoordsOutputArraySize3);
+              }
+              getCoordsOutputHashSet2.Clear();
+              getCoordsOutputHashSet2.UnionWith(getCoordsOutputArray2);
+              int length3=PhysUtil.GetCoordsInsideBounds(maxSpawnBounds,Vector3.one,Quaternion.identity,maxSpawnMargin,
+               false,getCoordsOutputArray3,getCoordsOutputHashSet2
+              );
+              for(int i3=0;i3<length3;++i3){
+               Vector3Int coord3=getCoordsOutputArray3[i3];
+              }
+              Vector3 scaledSize1=Vector3.Scale(size1,modifiers1.scale);
+              if(
+               scaledSize1.x+margin1.x>=Width||
+               scaledSize1.z+margin1.z>=Depth
+              ){
+               goto _End1;
+              }
+             }
             }
            }}
+           _End1:{}
+           sw.Stop();
+           Log.DebugMessage("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded Execute ReserveBounds:cnkRgn:"+container.cnkRgn+":time:"+sw.ElapsedMilliseconds+" ms");
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){

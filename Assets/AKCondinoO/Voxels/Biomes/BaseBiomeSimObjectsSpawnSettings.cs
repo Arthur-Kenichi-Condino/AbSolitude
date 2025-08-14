@@ -26,18 +26,20 @@ namespace AKCondinoO.Voxels.Biomes{
          internal Vector3 assetScale;
          internal Vector3 minScale;
          internal Vector3 maxScale;
+         internal Vector2 rotation;
          internal float depth;
          internal readonly ReadOnlyDictionary<SpawnedTypes,Vector3>minSpacing;
          internal readonly ReadOnlyDictionary<SpawnedTypes,Vector3>maxSpacing;
          internal readonly ReadOnlyCollection<SpawnedTypes>blocksTypes;
          internal readonly ReadOnlyCollection<SpawnedTypes>isBlockedBy;
-            internal SimObjectSettings(Vector3 size,float chance,float inclination,Vector3 assetScale,Vector3 minScale,Vector3 maxScale,float depth,Dictionary<SpawnedTypes,Vector3>minSpacing,Dictionary<SpawnedTypes,Vector3>maxSpacing,SpawnedTypes[]blocksTypes,SpawnedTypes[]isBlockedBy){
+            internal SimObjectSettings(Vector3 size,float chance,float inclination,Vector3 assetScale,Vector3 minScale,Vector3 maxScale,Vector2 rotation,float depth,Dictionary<SpawnedTypes,Vector3>minSpacing,Dictionary<SpawnedTypes,Vector3>maxSpacing,SpawnedTypes[]blocksTypes,SpawnedTypes[]isBlockedBy){
              this.size=size;
              this.chance=chance;
              this.inclination=inclination;
              this.assetScale=assetScale;
              this.minScale=minScale;
              this.maxScale=maxScale;
+             this.rotation=rotation;
              this.depth=depth;
              this.minSpacing=new ReadOnlyDictionary<SpawnedTypes,Vector3>(minSpacing);
              this.maxSpacing=new ReadOnlyDictionary<SpawnedTypes,Vector3>(maxSpacing);
@@ -106,6 +108,7 @@ namespace AKCondinoO.Voxels.Biomes{
             assetScale: surfaceSpawnSetting.assetScale,
             minScale:   surfaceSpawnSetting.minScale,
             maxScale:   surfaceSpawnSetting.maxScale,
+            rotation:   surfaceSpawnSetting.rotation,
             depth:      surfaceSpawnSetting.depth,
             minSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
             maxSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
@@ -148,6 +151,7 @@ namespace AKCondinoO.Voxels.Biomes{
         internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(Vector3Int noiseInputRounded,out double selectionValue){
          Vector3 noiseInput=noiseInputRounded+biome.deround;
          int selection=biome.GetSelectorValue(noiseInput,out selectionValue);
+         selection=1;//  debug
          if(simObjectPicking.TryGetValue(selection,out var types)){
           int count=0;
           foreach(var type in types){
@@ -177,10 +181,16 @@ namespace AKCondinoO.Voxels.Biomes{
            simObjectSettings.minScale,
            simObjectSettings.maxScale,
            Mathf.Clamp01(
-            ((float)scaleModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f
+            ((float)   scaleModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f
            )
           ),
-          rotation=(float)rotationModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)*720f,
+          rotation=Mathf.Lerp(
+           simObjectSettings.rotation.x,
+           simObjectSettings.rotation.y,
+           Mathf.Clamp01(
+            ((float)rotationModifierPerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f
+           )
+          ),
          };
          return modifiers;
         }
