@@ -43,27 +43,27 @@ namespace AKCondinoO{
           }
          }
         }
-        /// <summary>
+        ///<summary>
         ///  [https://answers.unity.com/questions/50279/check-if-layer-is-in-layermask.html]
-        /// </summary>
+        ///</summary>
         internal static bool LayerMaskContains(int layerMask,int layer){
          return layerMask==(layerMask|(1<<layer));
         }
         //  feito com ajuda do chatGPT
-        /// <summary>
+        ///<summary>
         ///  Testa interseção entre dois Bounds (Unity) aplicando rotação e escala em torno de cada Bounds.center.
         ///  Usa Separating Axis Theorem (15 eixos) para OBB vs OBB.
         /// - touching (apenas tocar) é considerado intersect.
         /// - scale negativo é tratado com Mathf.Abs (mirroring não afeta magnitudes).
-        /// </summary>
-        /// <param name="boundsA">Bounds A (center em world space)</param>
-        /// <param name="rotA">Rotação a aplicar a A (em torno de boundsA.center)</param>
-        /// <param name="scaleA">Escala a aplicar a A (component-wise, >= 0 preferencial)</param>
-        /// <param name="boundsB">Bounds B (center em world space)</param>
-        /// <param name="rotB">Rotação a aplicar a B (em torno de boundsB.center)</param>
-        /// <param name="scaleB">Escala a aplicar a B (component-wise, >= 0 preferencial)</param>
-        /// <param name="epsilon">Pequena tolerância numérica (padrão 1e-6)</param>
-        /// <returns>true se intersectam (inclui touching), false se separados</returns>
+        ///</summary>
+        ///<param name="boundsA">Bounds A (center em world space)</param>
+        ///<param name="rotA">Rotação a aplicar a A (em torno de boundsA.center)</param>
+        ///<param name="scaleA">Escala a aplicar a A (component-wise, >= 0 preferencial)</param>
+        ///<param name="boundsB">Bounds B (center em world space)</param>
+        ///<param name="rotB">Rotação a aplicar a B (em torno de boundsB.center)</param>
+        ///<param name="scaleB">Escala a aplicar a B (component-wise, >= 0 preferencial)</param>
+        ///<param name="epsilon">Pequena tolerância numérica (padrão 1e-6)</param>
+        ///<returns>true se intersectam (inclui touching), false se separados</returns>
         internal static bool BoundsIntersectsScaledRotated(
          Bounds boundsA,Quaternion rotA,Vector3 scaleA,
          Bounds boundsB,Quaternion rotB,Vector3 scaleB,
@@ -228,218 +228,175 @@ namespace AKCondinoO{
            Mathf.Abs(scale.z)
          ));
          //  2. Transformar ponto para espaço local do bounds
-    Vector3 localPoint = pos - bounds.center; // deslocar para origem no centro do bounds
-    localPoint = Quaternion.Inverse(rot) * localPoint; // aplicar rotação inversa
-
-    // 3. Checar se está dentro do bounds AABB escalado
-    Vector3 halfExtents = scaledSize * 0.5f;
-
-    return
-        localPoint.x >= -halfExtents.x - epsilon && localPoint.x <= halfExtents.x + epsilon &&
-        localPoint.y >= -halfExtents.y - epsilon && localPoint.y <= halfExtents.y + epsilon &&
-        localPoint.z >= -halfExtents.z - epsilon && localPoint.z <= halfExtents.z + epsilon;
-}
-    // Versão 3D
-    public static IEnumerable<(int x, int y, int z)> GetCoords3DInsideBounds(
-        Bounds bounds, Quaternion rot, Vector3 scale,Vector3 margin)
-    {
-        // Aplicar escala nos extents
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale) + margin;
-
-        // Calcular matriz de rotação
-        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rot);
-
-        // Calcular AABB que engloba o OBB
-        Vector3 right = rotationMatrix.MultiplyVector(Vector3.right) * scaledExtents.x;
-        Vector3 up = rotationMatrix.MultiplyVector(Vector3.up) * scaledExtents.y;
-        Vector3 forward = rotationMatrix.MultiplyVector(Vector3.forward) * scaledExtents.z;
-
-        Vector3 worldExtents = new Vector3(
-            Mathf.Abs(right.x) + Mathf.Abs(up.x) + Mathf.Abs(forward.x),
-            Mathf.Abs(right.y) + Mathf.Abs(up.y) + Mathf.Abs(forward.y),
-            Mathf.Abs(right.z) + Mathf.Abs(up.z) + Mathf.Abs(forward.z)
-        );
-
-        // Determinar limites globais de iteração
-        Vector3 min = bounds.center - worldExtents;
-        Vector3 max = bounds.center + worldExtents;
-
-        // Iterar por todas as coordenadas inteiras no AABB
-        for (int x = Mathf.FloorToInt(min.x); x <= Mathf.CeilToInt(max.x); x++)
-        for (int y = Mathf.FloorToInt(min.y); y <= Mathf.CeilToInt(max.y); y++)
-        for (int z = Mathf.FloorToInt(min.z); z <= Mathf.CeilToInt(max.z); z++)
-        {
-            if (PointInsideScaledRotatedBounds(new Vector3(x, y, z), bounds, rot, scale,margin))
-                yield return (x, y, z);
+         Vector3 localPoint=pos-bounds.center;//  deslocar para origem no centro do bounds
+         localPoint=Quaternion.Inverse(rot)*localPoint;//  aplicar rotação inversa
+         //  3. Checar se está dentro do bounds AABB escalado
+         Vector3 halfExtents=scaledSize*0.5f;
+         return
+          localPoint.x>=-halfExtents.x-epsilon&&localPoint.x<=halfExtents.x+epsilon&&
+          localPoint.y>=-halfExtents.y-epsilon&&localPoint.y<=halfExtents.y+epsilon&&
+          localPoint.z>=-halfExtents.z-epsilon&&localPoint.z<=halfExtents.z+epsilon;
         }
-    }
-
-    // Versão 2D (XZ)
-    public static IEnumerable<(int x, int z)> GetCoordsInsideBounds(
-        Bounds bounds, Quaternion rot, Vector3 scale,Vector3 margin)
-    {
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale) + margin;
-        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rot);
-
-        Vector3 right = rotationMatrix.MultiplyVector(Vector3.right) * scaledExtents.x;
-        Vector3 up = rotationMatrix.MultiplyVector(Vector3.up) * scaledExtents.y;
-        Vector3 forward = rotationMatrix.MultiplyVector(Vector3.forward) * scaledExtents.z;
-
-        Vector3 worldExtents = new Vector3(
-            Mathf.Abs(right.x) + Mathf.Abs(up.x) + Mathf.Abs(forward.x),
-            Mathf.Abs(right.y) + Mathf.Abs(up.y) + Mathf.Abs(forward.y),
-            Mathf.Abs(right.z) + Mathf.Abs(up.z) + Mathf.Abs(forward.z)
-        );
-
-        Vector3 min = bounds.center - worldExtents;
-        Vector3 max = bounds.center + worldExtents;
-
-        // Apenas XZ
-        for (int x = Mathf.FloorToInt(min.x); x <= Mathf.CeilToInt(max.x); x++)
-        for (int z = Mathf.FloorToInt(min.z); z <= Mathf.CeilToInt(max.z); z++)
-        {
-            Vector3 point = new Vector3(x, bounds.center.y, z);
-            if (PointInsideScaledRotatedBounds(point, bounds, rot, scale,margin))
-                yield return (x, z);
+        //  feito com ajuda do chatGPT,
+        // versão 3D
+        internal static IEnumerable<(int x,int y,int z)>GetCoords3DInsideBounds(
+         Bounds bounds,Quaternion rot,Vector3 scale,Vector3 margin
+        ){
+         //  Aplicar escala nos extents
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale)+margin;
+         //  Calcular matriz de rotação
+         Matrix4x4 rotationMatrix=Matrix4x4.Rotate(rot);
+         //  Calcular AABB que engloba o OBB
+         Vector3 right  =rotationMatrix.MultiplyVector(Vector3.right  )*scaledExtents.x;
+         Vector3 up     =rotationMatrix.MultiplyVector(Vector3.up     )*scaledExtents.y;
+         Vector3 forward=rotationMatrix.MultiplyVector(Vector3.forward)*scaledExtents.z;
+         Vector3 worldExtents=new Vector3(
+          Mathf.Abs(right.x)+Mathf.Abs(up.x)+Mathf.Abs(forward.x),
+          Mathf.Abs(right.y)+Mathf.Abs(up.y)+Mathf.Abs(forward.y),
+          Mathf.Abs(right.z)+Mathf.Abs(up.z)+Mathf.Abs(forward.z)
+         );
+         //  Determinar limites globais de iteração
+         Vector3 min=bounds.center-worldExtents;
+         Vector3 max=bounds.center+worldExtents;
+         //  Iterar por todas as coordenadas inteiras no AABB
+         for(int x=Mathf.FloorToInt(min.x);x<=Mathf.CeilToInt(max.x);x++)
+         for(int y=Mathf.FloorToInt(min.y);y<=Mathf.CeilToInt(max.y);y++)
+         for(int z=Mathf.FloorToInt(min.z);z<=Mathf.CeilToInt(max.z);z++){
+          if(GetCoordsPointInsideScaledRotatedBounds(new Vector3(x,y,z),bounds,rot,scale,margin))
+           yield return(x,y,z);
+         }
         }
-    }
-
-    // Método de checagem otimizado
-    private static bool PointInsideScaledRotatedBounds(
-        Vector3 point, Bounds bounds, Quaternion rot, Vector3 scale,Vector3 margin)
-    {
-        Vector3 localPoint = Quaternion.Inverse(rot) * (point - bounds.center);
-        localPoint = new Vector3(
-            localPoint.x / scale.x,
-            localPoint.y / scale.y,
-            localPoint.z / scale.z
-        );
-
-return Mathf.Abs(localPoint.x) <= bounds.extents.x + (margin.x / scale.x) &&
-       Mathf.Abs(localPoint.y) <= bounds.extents.y + (margin.y / scale.y) &&
-       Mathf.Abs(localPoint.z) <= bounds.extents.z + (margin.z / scale.z);
-    }
-    public static int GetCoords3DInsideBounds(Bounds bounds, Vector3 scale, Quaternion rotation, Vector3 margin,
-                                              bool sorted, Vector3Int[] outputArray)
-    {
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale);
-        Vector3 finalExtents = scaledExtents + margin;
-        Vector3 min = bounds.center - finalExtents;
-        Vector3 max = bounds.center + finalExtents;
-
-        int index = 0;
-        object lockObj = new object();
-
-        Parallel.For((int)Math.Floor(min.x), (int)Math.Ceiling(max.x) + 1, x =>
-        {
-            for (int y = (int)Math.Floor(min.y); y <= (int)Math.Ceiling(max.y); y++)
-            {
-                for (int z = (int)Math.Floor(min.z); z <= (int)Math.Ceiling(max.z); z++)
-                {
-                    Vector3 localPoint = new Vector3(x, y, z) - bounds.center;
-                    localPoint = rotation * localPoint;
-
-                    if (Mathf.Abs(localPoint.x) <= finalExtents.x &&
-                        Mathf.Abs(localPoint.y) <= finalExtents.y &&
-                        Mathf.Abs(localPoint.z) <= finalExtents.z)
-                    {
-                        lock (lockObj)
-                        {
-                            outputArray[index++] = new Vector3Int(x, y, z);
-                        }
-                    }
-                }
+        //  feito com ajuda do chatGPT,
+        // versão 2D (XZ)
+        internal static IEnumerable<(int x,int z)>GetCoordsInsideBounds(
+         Bounds bounds,Quaternion rot,Vector3 scale,Vector3 margin
+        ){
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale)+margin;
+         Matrix4x4 rotationMatrix=Matrix4x4.Rotate(rot);
+         Vector3 right  =rotationMatrix.MultiplyVector(Vector3.right  )*scaledExtents.x;
+         Vector3 up     =rotationMatrix.MultiplyVector(Vector3.up     )*scaledExtents.y;
+         Vector3 forward=rotationMatrix.MultiplyVector(Vector3.forward)*scaledExtents.z;
+         Vector3 worldExtents=new Vector3(
+          Mathf.Abs(right.x)+Mathf.Abs(up.x)+Mathf.Abs(forward.x),
+          Mathf.Abs(right.y)+Mathf.Abs(up.y)+Mathf.Abs(forward.y),
+          Mathf.Abs(right.z)+Mathf.Abs(up.z)+Mathf.Abs(forward.z)
+         );
+         Vector3 min=bounds.center-worldExtents;
+         Vector3 max=bounds.center+worldExtents;
+         //  apenas XZ
+         for(int x=Mathf.FloorToInt(min.x);x<=Mathf.CeilToInt(max.x);x++)
+         for(int z=Mathf.FloorToInt(min.z);z<=Mathf.CeilToInt(max.z);z++){
+          Vector3 point=new Vector3(x,bounds.center.y,z);
+          if(GetCoordsPointInsideScaledRotatedBounds(point,bounds,rot,scale,margin))
+           yield return(x,z);
+         }
+        }
+        //  método de checagem otimizado para usar em GetCoords3D e GetCoords acima
+        private static bool GetCoordsPointInsideScaledRotatedBounds(
+         Vector3 point,Bounds bounds,Quaternion rot,Vector3 scale,Vector3 margin
+        ){
+         Vector3 localPoint=Quaternion.Inverse(rot)*(point-bounds.center);
+         localPoint=new Vector3(
+          localPoint.x/scale.x,
+          localPoint.y/scale.y,
+          localPoint.z/scale.z
+         );
+         return Mathf.Abs(localPoint.x)<=bounds.extents.x+(margin.x/scale.x)&&
+                Mathf.Abs(localPoint.y)<=bounds.extents.y+(margin.y/scale.y)&&
+                Mathf.Abs(localPoint.z)<=bounds.extents.z+(margin.z/scale.z);
+        }
+        internal static int GetCoords3DInsideBoundsUsingParallelFor(
+         Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
+         bool sorted,Vector3Int[]outputArray
+        ){
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale);
+         Vector3 finalExtents=scaledExtents+margin;
+         Vector3 min=bounds.center-finalExtents;
+         Vector3 max=bounds.center+finalExtents;
+         int index=0;
+         Parallel.For((int)Math.Floor(min.x),   (int)Math.Ceiling(max.x)+1,x=>{
+            for(int y=(int)Math.Floor(min.y);y<=(int)Math.Ceiling(max.y);  y++){
+            for(int z=(int)Math.Floor(min.z);z<=(int)Math.Ceiling(max.z);  z++){
+             Vector3 localPoint=new Vector3(x,y,z)-bounds.center;
+                     localPoint=rotation*localPoint;
+             if(
+              Mathf.Abs(localPoint.x)<=finalExtents.x&&
+              Mathf.Abs(localPoint.y)<=finalExtents.y&&
+              Mathf.Abs(localPoint.z)<=finalExtents.z
+             ){
+              lock(outputArray){
+               outputArray[index++]=new Vector3Int(x,y,z);
+              }
+             }
+            }}
+         });
+         if(sorted&&index>1)
+          Array.Sort(outputArray,0,index,Comparer<Vector3Int>.Create((a,b)=>{
+           int cmpX=a.x.CompareTo(b.x);if(cmpX!=0)return cmpX;
+           int cmpY=a.y.CompareTo(b.y);if(cmpY!=0)return cmpY;
+             return a.z.CompareTo(b.z);
+          }));
+         return index;
+        }
+        //---  2D (X e Z somente)  ---
+        internal static int GetCoordsInsideBoundsUsingParallelFor(
+         Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
+         bool sorted,Vector3Int[]outputArray,HashSet<Vector3Int>ignored=null
+        ){
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale);
+         Vector3 finalExtents=scaledExtents+margin;
+         Vector3 min=bounds.center-finalExtents;
+         Vector3 max=bounds.center+finalExtents;
+         int index=0;
+         Parallel.For((int)Math.Floor(min.x),   (int)Math.Ceiling(max.x)+1,x=>{
+            for(int z=(int)Math.Floor(min.z);z<=(int)Math.Ceiling(max.z);  z++){
+             Vector3 localPoint=new Vector3(x,bounds.center.y,z)-bounds.center;
+                     localPoint=rotation*localPoint;
+             if(
+              Mathf.Abs(localPoint.x)<=finalExtents.x&&
+              Mathf.Abs(localPoint.z)<=finalExtents.z
+             ){
+              Vector3Int coord=new Vector3Int(x,Mathf.RoundToInt(bounds.center.y),z);
+              if(ignored==null||!ignored.Contains(coord)){
+               lock(outputArray){
+                outputArray[index++]=coord;
+               }
+              }
+             }
             }
-        });
-
-        if (sorted && index > 1)
-            Array.Sort(outputArray, 0, index, Comparer<Vector3Int>.Create((a, b) =>
-            {
-                int cmpX = a.x.CompareTo(b.x);
-                if (cmpX != 0) return cmpX;
-                int cmpY = a.y.CompareTo(b.y);
-                if (cmpY != 0) return cmpY;
-                return a.z.CompareTo(b.z);
-            }));
-
-        return index;
-    }
-
-    // --- 2D (XZ) ---
-    public static int GetCoordsInsideBounds(Bounds bounds, Vector3 scale, Quaternion rotation, Vector3 margin,
-                                            bool sorted, Vector3Int[] outputArray,HashSet<Vector3Int>ignored=null)
-    {
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale);
-        Vector3 finalExtents = scaledExtents + margin;
-        Vector3 min = bounds.center - finalExtents;
-        Vector3 max = bounds.center + finalExtents;
-
-        int index = 0;
-        object lockObj = new object();
-
-        Parallel.For((int)Math.Floor(min.x), (int)Math.Ceiling(max.x) + 1, x =>
-        {
-            for (int z = (int)Math.Floor(min.z); z <= (int)Math.Ceiling(max.z); z++)
-            {
-                Vector3 localPoint = new Vector3(x, bounds.center.y, z) - bounds.center;
-                localPoint = rotation * localPoint;
-
-                if (Mathf.Abs(localPoint.x) <= finalExtents.x &&
-                    Mathf.Abs(localPoint.z) <= finalExtents.z)
-                {
-                    Vector3Int coord=new Vector3Int(x, Mathf.RoundToInt(bounds.center.y), z);
-                    if(ignored==null||!ignored.Contains(coord)){
-                     lock (lockObj)
-                     {
-                         outputArray[index++] = coord;
-                     }
-                    }
-                }
-            }
-        });
-
-        if (sorted && index > 1)
-            Array.Sort(outputArray, 0, index, Comparer<Vector3Int>.Create((a, b) =>
-            {
-                int cmpX = a.x.CompareTo(b.x);
-                if (cmpX != 0) return cmpX;
-                return a.z.CompareTo(b.z);
-            }));
-
-        return index;
-    }
-    /// <summary>
-    /// Calcula o tamanho necessário do array para armazenar todos os pontos inteiros dentro de um Bounds escalado, com margem.
-    /// </summary>
-    /// <param name="bounds">Bounds original (sem escala aplicada)</param>
-    /// <param name="scale">Escala a ser aplicada</param>
-    /// <param name="margin">Margem adicional aplicada após escala</param>
-    /// <returns>Tamanho mínimo seguro do array para armazenar todas as coordenadas</returns>
-    public static int GetCoordsInsideBoundsMinArraySize3D(Bounds bounds, Vector3 scale, Vector3 margin)
-    {
-        // Aplica escala e adiciona margem
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale) + margin;
-
-        // Conta número de coordenadas inteiras por eixo
-        int countX = Mathf.CeilToInt(scaledExtents.x * 2) + 1;
-        int countY = Mathf.CeilToInt(scaledExtents.y * 2) + 1;
-        int countZ = Mathf.CeilToInt(scaledExtents.z * 2) + 1;
-
-        // Retorna o produto total
-        return countX * countY * countZ;
-    }
-
-    /// <summary>
-    /// Calcula o tamanho necessário do array para armazenar todas as coordenadas XZ dentro de um Bounds escalado, com margem.
-    /// </summary>
-    public static int GetCoordsInsideBoundsMinArraySize(Bounds bounds, Vector3 scale, Vector3 margin)
-    {
-        Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale) + margin;
-
-        int countX = Mathf.CeilToInt(scaledExtents.x * 2) + 1;
-        int countZ = Mathf.CeilToInt(scaledExtents.z * 2) + 1;
-
-        return countX * countZ;
-    }
+         });
+         if(sorted&&index>1)
+          Array.Sort(outputArray,0,index,Comparer<Vector3Int>.Create((a,b)=>{
+           int cmpX=a.x.CompareTo(b.x);if(cmpX!=0)return cmpX;
+             return a.z.CompareTo(b.z);
+          }));
+         return index;
+        }
+        ///<summary>
+        ///  Calcula o tamanho necessário do array para armazenar todos os pontos inteiros dentro de um Bounds escalado, com margem.
+        ///</summary>
+        ///<param name="bounds">Bounds original (sem escala aplicada)</param>
+        ///<param name="scale">Escala a ser aplicada</param>
+        ///<param name="margin">Margem adicional aplicada após escala</param>
+        ///<returns>Tamanho mínimo seguro do array para armazenar todas as coordenadas</returns>
+        internal static int GetCoordsInsideBoundsMinArraySize3D(Bounds bounds,Vector3 scale,Vector3 margin){
+         //  Aplica escala e adiciona margem
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale)+margin;
+         //  Conta número de coordenadas inteiras por eixo
+         int countX=Mathf.CeilToInt(scaledExtents.x*2)+1;
+         int countY=Mathf.CeilToInt(scaledExtents.y*2)+1;
+         int countZ=Mathf.CeilToInt(scaledExtents.z*2)+1;
+         //  Retorna o produto total
+         return countX*countY*countZ;
+        }
+        ///<summary>
+        ///  Calcula o tamanho necessário do array para armazenar todas as coordenadas XZ dentro de um Bounds escalado, com margem.
+        ///</summary>
+        internal static int GetCoordsInsideBoundsMinArraySize(Bounds bounds,Vector3 scale,Vector3 margin){
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale)+margin;
+         int countX=Mathf.CeilToInt(scaledExtents.x*2)+1;
+         int countZ=Mathf.CeilToInt(scaledExtents.z*2)+1;
+         return countX*countZ;
+        }
     }
 }

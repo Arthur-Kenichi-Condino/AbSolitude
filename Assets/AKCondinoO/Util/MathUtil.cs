@@ -36,28 +36,21 @@ namespace AKCondinoO{
         /// <param name="seqStart">o número onde a sequência começa com 0 (ex: 0 ou qualquer outro número inicial).</param>
         /// <returns></returns>
         internal static int AlternatingSequence(int num,int seqSize,int seqStart){
-         //  Ajusta o número para que y seja o primeiro valor de 0
          int adjustedNum=num-seqStart;
-         //  Divide o número ajustado por x, arredonda para baixo e aplica mod 2
-         return((adjustedNum/seqSize)%2==0)?0:1;
+         int block=Mathf.FloorToInt((float)adjustedNum/seqSize);
+         return(Mathf.Abs(block)%2==0)?0:1;
         }
         //  feito com ajuda do chatGPT
         internal static int AlternatingSequenceWithSeparator(int num,int seqSize,int seqStart){
-         //  relative index from the chosen start
          int rel=num-seqStart;
-         int cycleLen=seqSize+1;//  cada meia-ciclo: seqSize:'valores' + 1:'separador'
-         int bigCycle=2*cycleLen;//  ciclo completo: zeros + separator + ones + separator
-         //  normaliza index relativo para 0..bigCycle-1, funcionando com negativos
+         int cycleLen=seqSize+1;//  bloco + separador
+         int bigCycle=2*cycleLen;//  ciclo completo: sep+0...sep+1...
+         //  Normaliza para 0..bigCycle-1, funciona para negativos
          int pos=((rel%bigCycle)+bigCycle)%bigCycle;
-         //  mapa de posições:
-         // pos in 0..blockSize-1          => bloco de 0
-         // pos == blockSize               => separador (2)
-         // pos in blockSize+1..bigCycle-2 => bloco de 1
-         // pos == bigCycle-1              => separador (2)
-         if(pos<seqSize)   return 0;
-         if(pos==seqSize)  return 2;
-         if(pos<bigCycle-1)return 1;
-                           return 2;
+         if(pos==0||pos==cycleLen)     return 2;//  separador
+         if(pos>0&&pos<cycleLen)       return 0;//  bloco de 0
+         if(pos>cycleLen&&pos<bigCycle)return 1;//  bloco de 1
+         return 2;//  fallback (nunca deve acontecer)
         }
         //  feito com ajuda do chatGPT
         internal static IEnumerable<(int x,int z)>GetCoords(

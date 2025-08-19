@@ -1456,6 +1456,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VoxelSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 6930058504557553217, guid: ccf50d55e02d3e84993442f72125dee3, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[2].chance
+      value: 0.03125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

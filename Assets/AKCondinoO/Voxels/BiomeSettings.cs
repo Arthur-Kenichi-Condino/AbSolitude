@@ -14,6 +14,7 @@ namespace AKCondinoO.Voxels.Biomes{
          public SimObject simObject;
          public Vector3 size;
          public float chance;
+         public int priority;
          public float inclination;
          public Vector3 assetScale;
          public Vector3 minScale;

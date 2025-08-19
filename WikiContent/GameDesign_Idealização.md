@@ -6,3 +6,5 @@ Eu, Arthur, estou criando este jogo do zero; comecei com o framework XNA da Micr
 2. Unity usa C#, minha linguagem principal;
 3. Unreal usa C++ e seu sistema de gerenciamento de recursos não é tão flexível: por exemplo, se você nomear algo errado, terá dificuldade em alterá-lo para um novo nome.
 4. C++ não é tão flexível quanto C#, na minha opinião (pois requer uma ordem correta para as funções e cada arquivo precisa de seu cabeçalho, e os cabeçalhos devem ser solicitados na ordem correta para outros arquivos).
+
+[em construção...]
