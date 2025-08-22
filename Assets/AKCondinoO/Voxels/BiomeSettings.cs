@@ -8,7 +8,11 @@ using UnityEngine;
 using static AKCondinoO.Voxels.Biomes.BaseBiomeSimObjectsSpawnSettings;
 namespace AKCondinoO.Voxels.Biomes{
     internal class BiomeSettings:MonoBehaviour{
-     [SerializeField]internal SurfaceSpawn[]biomeSurfaceSpawns;
+     [SerializeField]internal SurfaceSpawnLayer[]biomeSurfaceSpawnsByLayer;
+        [Serializable]internal struct SurfaceSpawnLayer{
+         public int layer;
+         public SurfaceSpawn[]biomeSurfaceSpawns;
+        }
         [Serializable]internal struct SurfaceSpawn{
          public int picking;
          public SimObject simObject;

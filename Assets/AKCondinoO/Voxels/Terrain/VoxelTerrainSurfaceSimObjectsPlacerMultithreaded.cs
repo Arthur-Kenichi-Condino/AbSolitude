@@ -17,6 +17,7 @@ using static AKCondinoO.Voxels.Biomes.BaseBiomeSimObjectsSpawnSettings;
 using static AKCondinoO.Voxels.Terrain.SimObjectsPlacing.VoxelTerrainSurfaceSimObjectsPlacerContainer;
 using static AKCondinoO.Sims.SimObject;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal struct SpawnMapInfo{
@@ -26,9 +27,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Bounds bounds;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
-     internal readonly Color[]testArray=new Color[FlattenOffset];
-     internal Vector3 maxSpawnSize;
-     internal Vector3 margin;
+     internal readonly(Color color,Bounds bounds,Vector3 scale)[]testArray=new(Color,Bounds,Vector3)[FlattenOffset];
+     //internal Vector3 maxSpawnSize;
+     //internal Vector3 margin;
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
      internal        int cnkIdx;
@@ -286,130 +287,248 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          Vector3 size1,int priority1,
          Vector3 size2,int priority2,
          Vector3Int coord,
+         double selectionValue1,
+         double selectionValue2,
          bool priorityOverWest1 ,bool priorityOverEast1 ,bool priorityOverBothX1,bool priorityOverSouth1,bool priorityOverNorth1,bool priorityOverBothZ1,
          bool priorityOverWest2 ,bool priorityOverEast2 ,bool priorityOverBothX2,bool priorityOverSouth2,bool priorityOverNorth2,bool priorityOverBothZ2,
-         ref bool canSpawnInX,
-         ref bool canSpawnInZ
+         ref bool canSpawn//InX//,
+         //ref bool canSpawnInZ
         ){
-         //  TO DO: adicionar prioridade por valor ou tamanho opcional ao encontrar priority over both
-         //  TO DO: e prioridade para sul e oeste no empate priority over both
-         if(!priorityOverBothX1){
-          if(coord.x<0){
-           if(priorityOverBothX2){
-            canSpawnInX=false;
-            return;
-           }
-           if(!priorityOverWest1){
-            canSpawnInX=false;
-            return;
-           }
-          }
-          if(coord.x>0){
-           if(priorityOverBothX2){
-            canSpawnInX=false;
-            return;
-           }
-           if(!priorityOverEast1){
-            canSpawnInX=false;
-            return;
-           }
-          }
-          if(coord.x==0){
-           if(!priorityOverBothZ1){
-            if(coord.z<0){
-             if(priorityOverBothZ2){
-              canSpawnInZ=false;
-              return;
-             }
-             if(!priorityOverSouth1){
-              canSpawnInZ=false;
-              return;
-             }
-            }
-            if(coord.z>0){
-             if(priorityOverBothZ2){
-              canSpawnInZ=false;
-              return;
-             }
-             if(!priorityOverNorth1){
-              canSpawnInZ=false;
-              return;
-             }
-            }
-           }else{
-            if(priorityOverBothZ2){//  empate
-             if(priority2>priority1){
-              canSpawnInZ=false;
-              return;
-             }else{
-              if(size2.z>=size1.z){
-               canSpawnInZ=false;
-               return;
-              }
-             }
-            }
-           }
-          }
-         }else{
-          if(coord.x!=0){
-           if(priorityOverBothX2){//  empate
-            if(priority2>priority1){
-             canSpawnInX=false;
-             return;
-            }else{
-             if(size2.x>=size1.x){
-              canSpawnInX=false;
-              return;
-             }
-            }
-           }
-          }
-          if(coord.x==0){
-           if(!priorityOverBothZ1){
-            if(coord.z<0){
-             if(priorityOverBothZ2){
-              canSpawnInZ=false;
-              return;
-             }
-             if(!priorityOverSouth1){
-              canSpawnInZ=false;
-              return;
-             }
-            }
-            if(coord.z>0){
-             if(priorityOverBothZ2){
-              canSpawnInZ=false;
-              return;
-             }
-             if(!priorityOverNorth1){
-              canSpawnInZ=false;
-              return;
-             }
-            }
-           }else{
-            if(priorityOverBothZ2){//  empate
-             if(priority2>priority1){
-              canSpawnInZ=false;
-              return;
-             }else{
-              if(size2.z>=size1.z){
-               canSpawnInZ=false;
-               return;
-              }
-             }
-            }
-           }
-          }
-         }
+         //if(!priorityOverBothX1){
+          //if(!priorityOverWest1){if(coord.x<0){canSpawn=false;return;}}
+          //if(!priorityOverEast1){if(coord.x>0){canSpawn=false;return;}}
+          //if(coord.x<0){
+          // if(priorityOverEast2){
+          // }
+          //}
+          //if(coord.x>0){
+          // if(priorityOverWest2){
+          // }
+          //}
+//          if(coord.x<0){//  obj2 está a oeste
+//           bool obj1=priorityOverWest1||priorityOverBothX1;
+//           bool obj2=priorityOverEast2||priorityOverBothX2;
+//           if(obj2&&!obj1){//  obj2 vence
+//            canSpawn=false;return;
+//           }
+//           if(obj1&&!obj2)return;// obj1 vence
+//           if(obj1&&obj2){
+//           }
+//    return "Nenhum";
+//}
+//else if (obj2.x > obj1.x) // obj2 está a leste
+//{
+//    bool obj1Wins = priorityOverEast1 || priorityOverBothX1;
+//    bool obj2Wins = priorityOverWest2 || priorityOverBothX2;
+
+//    if (obj1Wins && !obj2Wins) return "Obj1 vence";
+//    if (obj2Wins && !obj1Wins) return "Obj2 vence";
+//    if (obj1Wins && obj2Wins) return "Empate";
+//    return "Nenhum";
+//}
+//else
+//{
+//    return "Mesma posição em X";
+//}
+    //# 1. Prioridade absoluta
+    //if obj1.priority > obj2.priority:
+    //    return obj1
+    //if obj2.priority > obj1.priority:
+    //    return obj2
+
+    //# 2. Tamanho (qualquer dimensão maior já define)
+    //if obj1.size.x > obj2.size.x or obj1.size.y > obj2.size.y or obj1.size.z > obj2.size.z:
+    //    return obj1
+    //if obj2.size.x > obj1.size.x or obj2.size.y > obj1.size.y or obj2.size.z > obj1.size.z:
+    //    return obj2
+
+    //# 3. Tabela de prioridades (X e Z)
+    //dx = obj2.coord.x - obj1.coord.x
+    //dz = obj2.coord.z - obj1.coord.z
+
+    //if dx < 0:  # obj2 a oeste de obj1
+    //    if obj1.priorityOverWest1 or obj1.priorityOverBothX1: return obj1
+    //    if obj2.priorityOverEast2 or obj2.priorityOverBothX2: return obj2
+    //if dx > 0:  # obj2 a leste de obj1
+    //    if obj1.priorityOverEast1 or obj1.priorityOverBothX1: return obj1
+    //    if obj2.priorityOverWest2 or obj2.priorityOverBothX2: return obj2
+
+    //if dz < 0:  # obj2 ao sul de obj1
+    //    if obj1.priorityOverSouth1 or obj1.priorityOverBothZ1: return obj1
+    //    if obj2.priorityOverNorth2 or obj2.priorityOverBothZ2: return obj2
+    //if dz > 0:  # obj2 ao norte de obj1
+    //    if obj1.priorityOverNorth1 or obj1.priorityOverBothZ1: return obj1
+    //    if obj2.priorityOverSouth2 or obj2.priorityOverBothZ2: return obj2
+
+    //# 4. Nenhum vencedor ? empate (nenhum criado)
+    //return null
+          //canSpawn=false;
+          //return;
+          //if(priorityOverBothX2){
+          // //  empate
+          //}else{
+          //}
+         //}
+         ////  TO DO: adicionar prioridade por valor ou tamanho opcional ao encontrar priority over both
+         ////  TO DO: e prioridade para sul e oeste no empate priority over both
+         ////canSpawnInX=false;
+         ////canSpawnInZ=false;
+         ////if(!priorityOverBothX1){
+         //// if(coord.x<0){
+         ////  if(!priorityOverWest1){
+         ////   canSpawnInX=false;
+         ////   return;
+         ////  }
+         //// }
+         //// if(coord.x>0){
+         ////  if(!priorityOverEast1){
+         ////   canSpawnInX=false;
+         ////   return;
+         ////  }
+         //// }
+         //// if(!priorityOverBothZ1){
+         ////  if(coord.z<0){
+         ////   if(!priorityOverSouth1){
+         ////    canSpawnInZ=false;
+         ////    return;
+         ////   }
+         ////  }
+         ////  if(coord.z>0){
+         ////   if(!priorityOverNorth1){
+         ////    canSpawnInZ=false;
+         ////    return;
+         ////   }
+         ////  }
+         //// }
+         ////}else{
+         ////}
+         ////if(selectionValue2>selectionValue1){
+         //// if(
+         ////  size2.z>size1.z||
+         ////  size2.x>size1.x
+         //// ){
+         ////  canSpawnInX=false;
+         ////  canSpawnInZ=false;
+         ////  return;
+         //// }
+         ////}
+         //if(!priorityOverBothX1){
+         // if(coord.x<0){
+         //  if(priorityOverBothX2){
+         //   canSpawnInX=false;
+         //   return;
+         //  }
+         //  if(!priorityOverWest1){
+         //   canSpawnInX=false;
+         //   return;
+         //  }
+         // }
+         // if(coord.x>0){
+         //  if(priorityOverBothX2){
+         //   canSpawnInX=false;
+         //   return;
+         //  }
+         //  if(!priorityOverEast1){
+         //   canSpawnInX=false;
+         //   return;
+         //  }
+         // }
+         // if(coord.x==0){
+         //  if(!priorityOverBothZ1){
+         //   if(coord.z<0){
+         //    if(priorityOverBothZ2){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //    if(!priorityOverSouth1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //   }
+         //   if(coord.z>0){
+         //    if(priorityOverBothZ2){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //    if(!priorityOverNorth1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //   }
+         //  }else{
+         //   if(priorityOverBothZ2){//  empate
+         //    if(priority2>priority1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }else{
+         //     if(size2.z>=size1.z){
+         //      canSpawnInZ=false;
+         //      return;
+         //     }
+         //    }
+         //   }
+         //  }
+         // }
+         //}else{
+         // if(coord.x!=0){
+         //  if(priorityOverBothX2){//  empate
+         //   if(priority2>priority1){
+         //    canSpawnInX=false;
+         //    return;
+         //   }else{
+         //    if(size2.x>=size1.x){
+         //     canSpawnInX=false;
+         //     return;
+         //    }
+         //   }
+         //  }
+         // }
+         // if(coord.x==0){
+         //  if(!priorityOverBothZ1){
+         //   if(coord.z<0){
+         //    if(priorityOverBothZ2){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //    if(!priorityOverSouth1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //   }
+         //   if(coord.z>0){
+         //    if(priorityOverBothZ2){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //    if(!priorityOverNorth1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }
+         //   }
+         //  }else{
+         //   if(priorityOverBothZ2){//  empate
+         //    if(priority2>priority1){
+         //     canSpawnInZ=false;
+         //     return;
+         //    }else{
+         //     if(size2.z>=size1.z){
+         //      canSpawnInZ=false;
+         //      return;
+         //     }
+         //    }
+         //   }
+         //  }
+         // }
+         //}
         }
-     Vector3Int[]getCoordsOutputArray2=new Vector3Int[0];
-      readonly HashSet<Vector3Int>getCoordsOutputHashSet2=new();
-     Vector3Int[]getCoordsOutputArray3=new Vector3Int[0];
+     Vector3Int[]getCoordsOutputArray=new Vector3Int[0];
+      readonly HashSet<Vector3Int>getCoordsOutputHashSet=new();
+     //Vector3Int[]getCoordsOutputArray3=new Vector3Int[0];
         void GetCoords(
          SimObjectSpawnModifiers modifiers,Bounds bounds,Quaternion rotation,
          ref Vector3Int[]getCoordsOutputArray,out int length,HashSet<Vector3Int>getCoordsIgnoredHashSet=null
         ){
-         Vector3 margin=container.margin;
+         Vector3 margin=Vector3.one;
          int getCoordsOutputArraySize=PhysUtil.GetCoordsInsideBoundsMinArraySize(bounds,modifiers.scale,margin);
          if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
           Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
@@ -418,17 +537,17 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           false,getCoordsOutputArray,getCoordsIgnoredHashSet
          );
         }
-        bool GetSimObjectSettings(Vector3 pos,Vector3Int noiseInput,
+        bool GetSimObjectSettings(Vector3 margin,int layer,Vector3 pos,Vector3Int noiseInput,
          out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked,
          out SimObjectSettings simObjectSettings,out SimObjectSpawnModifiers modifiers,
          out Vector3 size,out Bounds bounds,out int priority,
          out Quaternion rotation,
          out bool priorityOverWest ,out bool priorityOverEast ,out bool priorityOverBothX,
          out bool priorityOverSouth,out bool priorityOverNorth,out bool priorityOverBothZ,
-         out double selectionValue
+         out double selectionValue,out SpawnPickingLayer pickingLayer
         ){
          //  TO DO: rotação levando em conta o solo
-         simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput,out selectionValue);
+         simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(layer,noiseInput,out selectionValue,out pickingLayer);
          if(simObjectPicked==null){
           simObjectSettings=default;modifiers=default;
           size=default;bounds=default;priority=default;
@@ -443,7 +562,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          bounds=new Bounds(Vector3.zero,size);
          priority=simObjectSettings.priority;
          rotation=Quaternion.AngleAxis(modifiers.rotation,Vector3.up);
-         Vector3 margin=container.margin;
          Bounds maxScaledBounds=new Bounds(Vector3.zero,Vector3.Scale(size,simObjectSettings.maxScale));
          Vector3 maxScaledExtents=maxScaledBounds.extents;
          int seqResultX=MathUtil.AlternatingSequenceWithSeparator((int)pos.x,(Mathf.CeilToInt(maxScaledExtents.x)+Mathf.CeilToInt(margin.x))*2,0);
@@ -456,220 +574,926 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          priorityOverBothZ=seqResultZ==2;
          return true;
         }
+        //bool TryReserveBoundsAt(Vector3Int pos1,Vector3Int noiseInput1,out Bounds bounds1,out SimObjectSpawnModifiers modifiers1,out Color debugColor){
+        // debugColor=new Color(0,0,0,0);
+        // if(
+        //  GetSimObjectSettings(pos1,noiseInput1,
+        //   out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
+        //   out SimObjectSettings simObjectSettings1,out modifiers1,
+        //   out Vector3 size1,out bounds1,out int priority1,
+        //   out Quaternion rotation1,
+        //   out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
+        //   out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
+        //   out double selectionValue1
+        //  )
+        // ){
+        //  debugColor=Color.gray;
+        //  bool canSpawn=true;
+        //  GetCoords(
+        //   modifiers1,bounds1,rotation1,
+        //   ref getCoordsOutputArray,out int length
+        //  );
+        //  var parallelForResult=Parallel.For(0,length,(i,parallelForState)=>{
+        //   Vector3Int coord=getCoordsOutputArray[i];
+        //   if(coord.x==0&&coord.z==0){return;}
+        //   Vector3 pos2=pos1;
+        //   pos2.x+=coord.x;
+        //   pos2.z+=coord.z;
+        //   Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+        //   Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+        //                                  noiseInput2.z+=cnkRgn2.y;
+        //   if(
+        //    GetSimObjectSettings(pos2,noiseInput2,
+        //     out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+        //     out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+        //     out Vector3 size2,out Bounds bounds2,out int priority2,
+        //     out Quaternion rotation2,
+        //     out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+        //     out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+        //     out double selectionValue2
+        //    )
+        //   ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked2 here?
+        //    bool local_canSpawn=true;
+        //    ResolveSpawnConflict(
+        //     size1,priority1,
+        //     size2,priority2,
+        //     coord,
+        //     selectionValue1,
+        //     selectionValue2,
+        //     priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+        //     priorityOverWest2 ,priorityOverEast2 ,priorityOverBothX2,priorityOverSouth2,priorityOverNorth2,priorityOverBothZ2,
+        //     ref local_canSpawn
+        //    );
+        //    if(!local_canSpawn){
+        //     //  try to spawn 2, if cannot spawn 2, 1 still can spawn
+        //     lock(getCoordsOutputArray){
+        //      canSpawn=false;
+        //      parallelForState.Stop();
+        //      return;
+        //     }
+        //    }
+        //   }
+        //  });
+        //  if(canSpawn){
+        //   if(priorityOverBothX1){
+        //    debugColor=Color.cyan;
+        //   }else if(priorityOverWest1){
+        //    debugColor=Color.blue;
+        //   }else{
+        //    debugColor=Color.green;
+        //   }
+        //   return true;
+        //  }
+        // }
+        // return false;
+        //}
+     readonly Dictionary<Vector3Int,bool>state=new();
+        bool TryReserveBoundsAtRecursively(Vector3 margin,int layer,Vector3Int pos1,Vector3Int noiseInput1,ref bool recursion){
+         if(state.TryGetValue(pos1,out bool result1)){
+          return result1;
+         }
+         result1=false;
+         if(
+          GetSimObjectSettings(margin,layer,pos1,noiseInput1,
+           out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
+           out SimObjectSettings simObjectSettings1,out SimObjectSpawnModifiers modifiers1,
+           out Vector3 size1,out Bounds bounds1,out int priority1,
+           out Quaternion rotation1,
+           out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
+           out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
+           out double selectionValue1,out SpawnPickingLayer pickingLayer1
+          )
+         ){
+          result1=true;
+          Dictionary<Vector3Int,bool>candidates            =new();
+          Dictionary<Vector3Int,bool>candidatesWithPriority=new();
+          int max=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(margin.x);
+          Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
+          for(coord2.x=-max;coord2.x<=max;coord2.x++){if(coord2.x==0&&coord2.z==0){continue;}
+           Vector3Int pos2=pos1;
+           pos2.x+=coord2.x;
+           pos2.z+=coord2.z;
+           Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+           Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                          noiseInput2.z+=cnkRgn2.y;
+           if(
+            GetSimObjectSettings(margin,layer,pos2,noiseInput2,
+             out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+             out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+             out Vector3 size2,out Bounds bounds2,out int priority2,
+             out Quaternion rotation2,
+             out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+             out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+             out double selectionValue2,out SpawnPickingLayer pickingLayer2
+            )
+           ){
+            Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            Bounds bounds2a=bounds2;bounds2a.center=pos2;
+            if(bounds2a.Intersects(bounds1a)){
+             if(priorityOverBothX2){
+              //if(priorityOverBothX1){
+              // recursion=false;
+              // result1=false;
+              // break;
+              //}else{
+              // candidatesWithPriority.Add(pos2,true);
+              //}
+              recursion=false;
+              result1=false;
+              break;
+             }else{
+              candidates.Add(pos2,true);
+             }
+            }
+           }
+          }
+          //foreach(var kvp in candidatesWithPriority){
+          // recursion=false;
+          // result1=false;
+          // break;
+          //}
+          foreach(var kvp in candidates){
+           if(recursion){
+            Vector3Int pos2=kvp.Key;
+            Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+            Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                           noiseInput2.z+=cnkRgn2.y;
+            if(state.TryGetValue(pos2,out bool result2)){
+             if(result2){
+              result1=false;
+             }
+             break;
+            }
+            if(TryReserveBoundsAtRecursively(margin,layer,pos2,noiseInput2,ref recursion)){
+             result1=false;
+             break;
+            }
+           }
+          }
+
+    //vai de x -6 até x 6
+    // pega todos os candidatos na lista candidates
+    // e candidateswithpriorityoverbothx
+    //para cada candidato, 
+    // se pelo menos 1 em candidateswithpriorityoverbothx
+    //  ele terá prioridade, então não testa mais nada
+    // caso contrário testa os outros de forma recursiva
+        
+
+          ////for(int x=1;x<pickingLayer1.maxDimensions.x+Mathf.CeilToInt(margin.x);++x){
+          ////}
+          //Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
+          //for(coord2.x=-();coord2.x<=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(margin.x);coord2.x++){
+          // if(coord2.x==0&&coord2.z==0){continue;}
+          // Vector3Int pos2=pos1;
+          // pos2.x+=coord2.x;
+          // pos2.z+=coord2.z;
+          // Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+          // Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+          //                                noiseInput2.z+=cnkRgn2.y;
+          // if(
+          //  GetSimObjectSettings(margin,layer,pos2,noiseInput2,
+          //   out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+          //   out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+          //   out Vector3 size2,out Bounds bounds2,out int priority2,
+          //   out Quaternion rotation2,
+          //   out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+          //   out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+          //   out double selectionValue2,out SpawnPickingLayer pickingLayer2
+          //  )
+          // ){
+          //  Bounds bounds1a=bounds1;bounds1a.center=pos1;
+          //  Bounds bounds2a=bounds2;bounds2a.center=pos2;
+          //  if(state.TryGetValue(pos2,out bool result2)){
+          //   if(result2){
+          //    if(bounds2a.Intersects(bounds1a)){
+          //     result1=false;
+          //    }
+          //   }
+          //   goto _AfterRecursion2;
+          //  }
+          //  if(
+          //   size1.x<size2.x||
+          //   size1.z<size2.z
+          //  ){
+          //  }else if(
+          //   size1.x>size2.x||
+          //   size1.z>size2.z
+          //  ){
+          //   goto _AfterRecursion2;
+          //  }else{
+          //   if(priorityOverBothX2){
+          //    if(bounds2a.Intersects(bounds1a)){
+          //     result1=false;
+          //     goto _AfterRecursion2;
+          //    }
+          //   }
+          //   //if(!priorityOverBothX1){
+          //   // if(!priorityOverWest1){
+          //   //  if(coord2.x<0){
+          //   //   result1=false;
+          //   //   goto _AfterRecursion2;
+          //   //  }
+          //   // }
+          //   // if(!priorityOverEast1){
+          //   //  if(coord2.x>0){
+          //   //   result1=false;
+          //   //   goto _AfterRecursion2;
+          //   //  }
+          //   // }
+          //   //}else{
+          //   // goto _AfterRecursion2;
+          //   //}
+          //  }
+          //  if(bounds2a.Intersects(bounds1a)){
+          //   if(TryReserveBoundsAtRecursively(margin,layer,pos2,noiseInput2)){
+          //    result1=false;
+          //    goto _AfterRecursion2;
+          //   }
+          //  }
+          //  _AfterRecursion2:{}
+          //  if(result1==false){
+          //   goto _End2;
+          //  }
+          // }
+          //}
+          //_End2:{}
+         }
+         state.Add(pos1,result1);
+         return result1;
+        }
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
           case Execution.GetGround:{
-           //Log.DebugMessage("Execution.GetGround");
-           //foreach(var spawnedTypeBlockedArrayPair in container.blocked){
-           // Array.Clear(spawnedTypeBlockedArrayPair.Value,0,spawnedTypeBlockedArrayPair.Value.Length);
-           //}
-           //lock(VoxelSystem.chunkStateFileSync){
-           // chunkStateFileStream.Position=0L;
-           // chunkStateFileStreamReader.DiscardBufferedData();
-           // string line;
-           // while((line=chunkStateFileStreamReader.ReadLine())!=null){
-           //  if(string.IsNullOrEmpty(line)){continue;}
-           //  int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
-           //  int cnkIdxStringEnd  =line.IndexOf(" , ",cnkIdxStringStart);
-           //  int cnkIdxStringLength=cnkIdxStringEnd-cnkIdxStringStart;
-           //  int cnkIdx=int.Parse(line.Substring(cnkIdxStringStart,cnkIdxStringLength),NumberStyles.Any,CultureInfoUtil.en_US);
-           //  int surfaceSimObjectsAddedStringStart=cnkIdxStringEnd+2;
-           //  if(cnkIdx==container.cnkIdx){
-           //   surfaceSimObjectsAddedStringStart=line.IndexOf("surfaceSimObjectsAdded=",surfaceSimObjectsAddedStringStart);
-           //   if(surfaceSimObjectsAddedStringStart>=0){
-           //    int surfaceSimObjectsAddedStringEnd=line.IndexOf(" , ",surfaceSimObjectsAddedStringStart)+3;
-           //    string surfaceSimObjectsAddedString=line.Substring(surfaceSimObjectsAddedStringStart,surfaceSimObjectsAddedStringEnd-surfaceSimObjectsAddedStringStart);
-           //    int surfaceSimObjectsAddedFlagStringStart=surfaceSimObjectsAddedString.IndexOf("=")+1;
-           //    int surfaceSimObjectsAddedFlagStringEnd  =surfaceSimObjectsAddedString.IndexOf(" , ",surfaceSimObjectsAddedFlagStringStart);
-           //    bool surfaceSimObjectsAddedFlag=bool.Parse(surfaceSimObjectsAddedString.Substring(surfaceSimObjectsAddedFlagStringStart,surfaceSimObjectsAddedFlagStringEnd-surfaceSimObjectsAddedFlagStringStart));
-           //    if(surfaceSimObjectsAddedFlag){
-           //     container.surfaceSimObjectsHadBeenAdded=true;
-           //    }
-           //   }
-           //  }
-           // }
-           //}
-           //if(container.surfaceSimObjectsHadBeenAdded){
-           // break;
-           //}
-           //QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
-           //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
-           //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
-           //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
-           // Vector3 from=vCoord1;
-           //         from.x+=container.cnkRgn.x-Width/2f+.5f;
-           //         from.z+=container.cnkRgn.y-Depth/2f+.5f;
-           // container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height));
-           // container.GetGroundHits.AddNoResize(new RaycastHit    ()                                        );
-           //}}
+           Log.DebugMessage("Execution.GetGround");
+           foreach(var spawnedTypeBlockedArrayPair in container.blocked){
+            Array.Clear(spawnedTypeBlockedArrayPair.Value,0,spawnedTypeBlockedArrayPair.Value.Length);
+           }
+           lock(VoxelSystem.chunkStateFileSync){
+            chunkStateFileStream.Position=0L;
+            chunkStateFileStreamReader.DiscardBufferedData();
+            string line;
+            while((line=chunkStateFileStreamReader.ReadLine())!=null){
+             if(string.IsNullOrEmpty(line)){continue;}
+             int cnkIdxStringStart=line.IndexOf("cnkIdx=")+7;
+             int cnkIdxStringEnd  =line.IndexOf(" , ",cnkIdxStringStart);
+             int cnkIdxStringLength=cnkIdxStringEnd-cnkIdxStringStart;
+             int cnkIdx=int.Parse(line.Substring(cnkIdxStringStart,cnkIdxStringLength),NumberStyles.Any,CultureInfoUtil.en_US);
+             int surfaceSimObjectsAddedStringStart=cnkIdxStringEnd+2;
+             if(cnkIdx==container.cnkIdx){
+              surfaceSimObjectsAddedStringStart=line.IndexOf("surfaceSimObjectsAdded=",surfaceSimObjectsAddedStringStart);
+              if(surfaceSimObjectsAddedStringStart>=0){
+               int surfaceSimObjectsAddedStringEnd=line.IndexOf(" , ",surfaceSimObjectsAddedStringStart)+3;
+               string surfaceSimObjectsAddedString=line.Substring(surfaceSimObjectsAddedStringStart,surfaceSimObjectsAddedStringEnd-surfaceSimObjectsAddedStringStart);
+               int surfaceSimObjectsAddedFlagStringStart=surfaceSimObjectsAddedString.IndexOf("=")+1;
+               int surfaceSimObjectsAddedFlagStringEnd  =surfaceSimObjectsAddedString.IndexOf(" , ",surfaceSimObjectsAddedFlagStringStart);
+               bool surfaceSimObjectsAddedFlag=bool.Parse(surfaceSimObjectsAddedString.Substring(surfaceSimObjectsAddedFlagStringStart,surfaceSimObjectsAddedFlagStringEnd-surfaceSimObjectsAddedFlagStringStart));
+               if(surfaceSimObjectsAddedFlag){
+                container.surfaceSimObjectsHadBeenAdded=true;
+               }
+              }
+             }
+            }
+           }
+           if(container.surfaceSimObjectsHadBeenAdded){
+            break;
+           }
+           QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
+           Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+           for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+            Vector3 from=vCoord1;
+                    from.x+=container.cnkRgn.x-Width/2f+.5f;
+                    from.z+=container.cnkRgn.y-Depth/2f+.5f;
+            container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height));
+            container.GetGroundHits.AddNoResize(new RaycastHit    ()                                        );
+           }}
            break;
           }
           case Execution.ReserveBounds:{
            Log.DebugMessage("ReserveBounds");
            sw.Restart();
-           Vector3 margin=container.margin;
+           state.Clear();
+           Vector3 margin=Vector3.one;
+           int layer=0;
            Vector2Int cnkRgn1=container.cnkRgn;
            Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
            for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
             int index1=vCoord1.z+vCoord1.x*Depth;
-            container.testArray[index1]=new Color(0,0,0,0);
             Vector3Int pos1=vCoord1;
             pos1.x+=cnkRgn1.x;
             pos1.z+=cnkRgn1.y;
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
-            if(
-             GetSimObjectSettings(pos1,noiseInput1,
-              out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
-              out SimObjectSettings simObjectSettings1,out SimObjectSpawnModifiers modifiers1,
-              out Vector3 size1,out Bounds bounds1,out int priority1,
-              out Quaternion rotation1,
-              out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
-              out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
-              out double selectionValue1
-             )
-            ){
-             container.testArray[index1]=Color.gray;
-             bool canSpawnInXTest2=true;
-             bool canSpawnInZTest2=true;
-             GetCoords(
-              modifiers1,bounds1,rotation1,
-              ref getCoordsOutputArray2,out int length2
-             );
-             var parallelForResult2=Parallel.For(0,length2,(i2,parallelForState2)=>{
-              Vector3Int coord2=getCoordsOutputArray2[i2];
-              if(
-              coord2.x==0&&
-              coord2.z==0
-              ){
-               return;
-              }
-              Vector3 pos2=pos1;
-              pos2.x+=coord2.x;
-              pos2.z+=coord2.z;
-              Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
-              Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
-                                             noiseInput2.z+=cnkRgn2.y;
-              if(
-               GetSimObjectSettings(pos2,noiseInput2,
-                out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
-                out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
-                out Vector3 size2,out Bounds bounds2,out int priority2,
-                out Quaternion rotation2,
-                out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
-                out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
-                out double selectionValue2
-               )
-              ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked2 here?
-               ResolveSpawnConflict(
-                size1,priority1,
-                size2,priority2,
-                coord2,
-                priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
-                priorityOverWest2 ,priorityOverEast2 ,priorityOverBothX2,priorityOverSouth2,priorityOverNorth2,priorityOverBothZ2,
-                ref canSpawnInXTest2,
-                ref canSpawnInZTest2
-               );
-               if(!canSpawnInXTest2||!canSpawnInZTest2){
-                parallelForState2.Stop();
-                return;
-               }
-              }
-             });
-             if(canSpawnInXTest2&&canSpawnInZTest2){
-              SimObjectSpawnModifiers modifiersSpawnMax=new();
-              modifiersSpawnMax.scale=Vector3.one;
-              Vector3 sizeSpawnMax=container.maxSpawnSize;
-              Bounds boundsSpawnMax=new Bounds(Vector3.zero,sizeSpawnMax);
-              bool canSpawnInXTest3=true;
-              bool canSpawnInZTest3=true;
-              getCoordsOutputHashSet2.Clear();
-              getCoordsOutputHashSet2.UnionWith(getCoordsOutputArray2);
-              GetCoords(modifiersSpawnMax,boundsSpawnMax,Quaternion.identity,
-               ref getCoordsOutputArray3,out int length3,getCoordsOutputHashSet2
-              );
-              var parallelForResult3=Parallel.For(0,length3,(i3,parallelForState3)=>{
-               Vector3Int coord3=getCoordsOutputArray3[i3];
-               if(
-                coord3.x==0&&
-                coord3.z==0
-               ){
-                return;
-               }
-               Vector3 pos3=pos1;
-               pos3.x+=coord3.x;
-               pos3.z+=coord3.z;
-               Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
-               Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
-                                              noiseInput3.z+=cnkRgn3.y;
-               if(
-                GetSimObjectSettings(pos3,noiseInput3,
-                 out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3,
-                 out SimObjectSettings simObjectSettings3,out SimObjectSpawnModifiers modifiers3,
-                 out Vector3 size3,out Bounds bounds3,out int priority3,
-                 out Quaternion rotation3,
-                 out bool priorityOverWest3 ,out bool priorityOverEast3 ,out bool priorityOverBothX3,
-                 out bool priorityOverSouth3,out bool priorityOverNorth3,out bool priorityOverBothZ3,
-                 out double selectionValue3
-                )
-               ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked3 here?
-                ResolveSpawnConflict(
-                 size1,priority1,
-                 size3,priority3,
-                 coord3,
-                 priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
-                 priorityOverWest3 ,priorityOverEast3 ,priorityOverBothX3,priorityOverSouth3,priorityOverNorth3,priorityOverBothZ3,
-                 ref canSpawnInXTest3,
-                 ref canSpawnInZTest3
-                );
-                if(!canSpawnInXTest3||!canSpawnInZTest3){
-                 Bounds bounds1a=bounds1;bounds1a.center=pos1;
-                 Bounds bounds3a=bounds3;bounds3a.center=pos3;
-                 if(
-                  !PhysUtil.BoundsIntersectsScaledRotated(
-                   bounds1a,rotation1,modifiers1.scale,
-                   bounds3a,rotation3,modifiers3.scale
-                  )
-                 ){
-                  canSpawnInXTest3=true;
-                  canSpawnInZTest3=true;
-                 }else{
-                  parallelForState3.Stop();
-                  return;
-                 }
-                }
-               }
-              });
-              if(canSpawnInXTest3&&canSpawnInZTest3){
-               Log.DebugMessage("got a spawn point:pos1:"+pos1+":vCoord1:"+vCoord1+":cnkRgn1:"+cnkRgn1);
-               container.testArray[index1]=Color.green;
-               if(!priorityOverBothX1){
-                if(!priorityOverBothZ1){
-                 container.testArray[index1]=Color.cyan;
-                 //Vector3 pos3=pos1;
-                 //pos3.z+=1;
-                 //Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
-                 //Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
-                 //                               noiseInput3.z+=cnkRgn3.y;
-                 ////(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput3,out double selectionValue3);
-                 ////if(simObjectPicked3!=null){
-                 //// Log.Error("got a normal spawn...WHAT?!");
-                 ////}
-                }
-               }
-              }
-             }
-             //if(priorityOverSouth1){
-             // //container.testArray[index1]=Color.red;
-             //}else{
-             // if(priorityOverNorth1){
-             //  //container.testArray[index1]=Color.yellow;
-             // }
-             //}
+            container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            //if(
+            // GetSimObjectSettings(margin,layer,pos1,noiseInput1,
+            //  out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
+            //  out SimObjectSettings simObjectSettings1,out SimObjectSpawnModifiers modifiers1,
+            //  out Vector3 size1,out Bounds bounds1,out int priority1,
+            //  out Quaternion rotation1,
+            //  out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
+            //  out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
+            //  out double selectionValue1,out SpawnPickingLayer pickingLayer1
+            // )
+            //){
+            // Color debugColor=Color.gray;
+            // bool canSpawn=true;
+            // for(int x=1;x<pickingLayer1.maxDimensions.x+Mathf.CeilToInt(margin.x);++x){
+            //  Vector3 pos2=pos1;
+            //  pos2.x+=x;
+            //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+            //  Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+            //                                 noiseInput2.z+=cnkRgn2.y;
+            //  if(
+            //   GetSimObjectSettings(margin,layer,pos2,noiseInput2,
+            //    out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+            //    out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+            //    out Vector3 size2,out Bounds bounds2,out int priority2,
+            //    out Quaternion rotation2,
+            //    out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+            //    out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+            //    out double selectionValue2,out SpawnPickingLayer pickingLayer2
+            //   )
+            //  ){
+            //   Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            //   Bounds bounds2a=bounds2;bounds2a.center=pos2;
+            //   if(bounds1a.Intersects(bounds2a)){
+            //    if(priorityOverBothX2){
+            //     if(priorityOverBothX1){
+            //      debugColor=Color.red;
+            //      canSpawn=false;
+            //      break;
+            //     }
+            //    }
+            //   //  canSpawn=false;
+            //   //  break;
+            //    if(!priorityOverBothX1){
+            //     canSpawn=false;
+            //     break;
+            //    }
+            //   }
+            //  }
+            // }
+            // if(canSpawn){
+            //  if(debugColor!=Color.red){
+            //   debugColor=Color.green;
+            //  }
+            //  if(priorityOverBothX1){
+            //   //debugColor=Color.cyan;
+            //  }else if(priorityOverWest1){
+            //   //debugColor=Color.blue;
+            //  }else{
+            //   //debugColor=Color.green;
+            //  }
+            // }
+            // container.testArray[index1]=(debugColor,bounds1,modifiers1.scale);
+            //}
+            bool recursion=true;
+            if(TryReserveBoundsAtRecursively(margin,layer,pos1,noiseInput1,ref recursion)){
+             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             }
            }}
+           //bool Recursion(){
+           // Vector3Int vCoord2=new Vector3Int(0,Height/2-1,0);
+           // for(vCoord2.x=0;vCoord2.x<Width;vCoord2.x++){
+           // for(vCoord2.z=0;vCoord2.z<Depth;vCoord2.z++){
+           //  if(Recursion()){
+           //   Recursion();
+           //  }
+           // }}
+           // return true;
+           //}
+           //foreach(var layer in BaseBiomeSimObjectsSpawnSettings.s){
+           //}
+           //Vector3 margin=container.margin;
+           //Vector2Int cnkRgn1=container.cnkRgn;
+           //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           //for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+           //for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+           // int index1=vCoord1.z+vCoord1.x*Depth;
+           // container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+           // Vector3Int pos1=vCoord1;
+           // pos1.x+=cnkRgn1.x;
+           // pos1.z+=cnkRgn1.y;
+           // Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
+           //                                noiseInput1.z+=cnkRgn1.y;
+           // if(TryReserveBoundsAt(pos1,noiseInput1,out Bounds bounds1,out SimObjectSpawnModifiers modifiers1,out Color debugColor)){
+           //  container.testArray[index1]=(debugColor,bounds1,modifiers1.scale);
+           // }
+           //}}
+            //Vector3Int pos1=vCoord1;
+            //pos1.x+=cnkRgn1.x;
+            //pos1.z+=cnkRgn1.y;
+            //Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
+            //                               noiseInput1.z+=cnkRgn1.y;
+            //if(
+            // GetSimObjectSettings(pos1,noiseInput1,
+            //  out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
+            //  out SimObjectSettings simObjectSettings1,out SimObjectSpawnModifiers modifiers1,
+            //  out Vector3 size1,out Bounds bounds1,out int priority1,
+            //  out Quaternion rotation1,
+            //  out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
+            //  out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
+            //  out double selectionValue1
+            // )
+            //){
+            // container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            // bool canSpawnInXTest2=true;
+            // bool canSpawnInZTest2=true;
+            // bool unknownInXTest2=false;
+            // bool unknownInZTest2=false;
+            // GetCoords(
+            //  modifiers1,bounds1,rotation1,
+            //  ref getCoordsOutputArray2,out int length2
+            // );
+            // var parallelForResult2=Parallel.For(0,length2,(i2,parallelForState2)=>{
+            //  Vector3Int coord2=getCoordsOutputArray2[i2];
+            //  if(
+            //  coord2.x==0&&
+            //  coord2.z==0
+            //  ){
+            //   return;
+            //  }
+            //  Vector3 pos2=pos1;
+            //  pos2.x+=coord2.x;
+            //  pos2.z+=coord2.z;
+            //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+            //  Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+            //                                 noiseInput2.z+=cnkRgn2.y;
+            //  if(
+            //   GetSimObjectSettings(pos2,noiseInput2,
+            //    out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+            //    out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+            //    out Vector3 size2,out Bounds bounds2,out int priority2,
+            //    out Quaternion rotation2,
+            //    out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+            //    out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+            //    out double selectionValue2
+            //   )
+            //  ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked2 here?
+            //   bool local_canSpawnInXTest2=true;
+            //   bool local_canSpawnInZTest2=true;
+            //   //ResolveSpawnConflict(
+            //   // size1,priority1,
+            //   // size2,priority2,
+            //   // coord2,
+            //   // selectionValue1,
+            //   // selectionValue2,
+            //   // priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+            //   // priorityOverWest2 ,priorityOverEast2 ,priorityOverBothX2,priorityOverSouth2,priorityOverNorth2,priorityOverBothZ2,
+            //   // ref local_canSpawnInXTest2,
+            //   // ref local_canSpawnInZTest2
+            //   //);
+            //   ////if(!local_canSpawnInXTest2||!local_canSpawnInZTest2){
+            //   //// canSpawnInXTest2=false;
+            //   //// canSpawnInZTest2=false;
+            //   //// parallelForState2.Stop();
+            //   //// return;
+            //   ////}else{
+            //   //// //unknownInXTest2=true;
+            //   //// //unknownInZTest2=true;
+            //   ////}
+            //   //  Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            //   //  Bounds bounds2a=bounds2;bounds2a.center=pos2;
+            //   //  if(
+            //   //   //PhysUtil.BoundsIntersectsRotatedAndScaled(
+            //   //   // bounds1a,rotation1,modifiers1.scale,
+            //   //   // bounds2a,rotation2,modifiers2.scale
+            //   //   //)
+            //   //   bounds1a.Intersects(bounds2a)
+            //   //  ){
+            //   //   if(
+            //   //    size1.x<=size2.x||
+            //   //    size1.z<=size2.z
+            //   //   ){
+            //   //    if(!priorityOverBothX1||!priorityOverBothZ1){
+            //   //     canSpawnInXTest2=false;
+            //   //     canSpawnInZTest2=false;
+            //   //     parallelForState2.Stop();
+            //   //     return;
+            //   //    }else{
+            //   //     //unknownInXTest2=true;
+            //   //     //unknownInZTest2=true;
+            //   //    }
+            //   //   }else{
+            //   //    //unknownInXTest2=true;
+            //   //    //unknownInZTest2=true;
+            //   //   }
+            //   // //  canSpawnInXTest3=false;
+            //   // //  canSpawnInZTest3=false;
+            //   // //  parallelForState3.Stop();
+            //   // //  return;
+            //   //  }
+            //   //}else{//  empate
+            //   // //Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            //   // //Bounds bounds2a=bounds2;bounds2a.center=pos2;
+            //   // //if(
+            //   // // PhysUtil.BoundsIntersectsScaledRotated(
+            //   // //  bounds1a,rotation1,modifiers1.scale,
+            //   // //  bounds2a,rotation2,modifiers2.scale
+            //   // // )
+            //   // //){
+            //   // // if(priorityOverEast1){
+            //   // //  if(priorityOverEast2){
+            //   // //  }
+            //   // // }
+            //   // // //if(priority2>priority1){
+            //   // // //canSpawnInXTest2=false;
+            //   // // //canSpawnInZTest2=false;
+            //   // // //parallelForState2.Stop();
+            //   // // //return;
+            //   // // //}else{
+            //   // //  //if(
+            //   // //  // size2.z>size1.z||
+            //   // //  // size2.x>size1.x
+            //   // //  //){
+            //   // //  // canSpawnInXTest2=false;
+            //   // //  // canSpawnInZTest2=false;
+            //   // //  // parallelForState2.Stop();
+            //   // //  // return;
+            //   // //  //}
+            //   // // //}
+            //   // //}
+            //   //}
+            //  }
+            // });
+            // if(canSpawnInXTest2&&canSpawnInZTest2){
+            //  SimObjectSpawnModifiers maxSpawnTestModifiers=new();
+            //  maxSpawnTestModifiers.scale=Vector3.one;
+            //  Vector3 maxSpawnSize=container.maxSpawnSize;
+            //  Bounds maxSpawnTestBounds=new Bounds(Vector3.zero,maxSpawnSize);
+            //  bool canSpawnInXTest3=true;
+            //  bool canSpawnInZTest3=true;
+            //  bool unknownInXTest3=false;
+            //  bool unknownInZTest3=false;
+            //  getCoordsOutputHashSet2.Clear();
+            //  getCoordsOutputHashSet2.UnionWith(getCoordsOutputArray2);
+            //  GetCoords(maxSpawnTestModifiers,maxSpawnTestBounds,Quaternion.identity,
+            //   ref getCoordsOutputArray3,out int length3,getCoordsOutputHashSet2
+            //  );
+            //  var parallelForResult3=Parallel.For(0,length3,(i3,parallelForState3)=>{
+            //   Vector3Int coord3=getCoordsOutputArray3[i3];
+            //   if(
+            //    coord3.x==0&&
+            //    coord3.z==0
+            //   ){
+            //    return;
+            //   }
+            //   Vector3 pos3=pos1;
+            //   pos3.x+=coord3.x;
+            //   pos3.z+=coord3.z;
+            //   Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
+            //   Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
+            //                                  noiseInput3.z+=cnkRgn3.y;
+            //   if(
+            //    GetSimObjectSettings(pos3,noiseInput3,
+            //     out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3,
+            //     out SimObjectSettings simObjectSettings3,out SimObjectSpawnModifiers modifiers3,
+            //     out Vector3 size3,out Bounds bounds3,out int priority3,
+            //     out Quaternion rotation3,
+            //     out bool priorityOverWest3 ,out bool priorityOverEast3 ,out bool priorityOverBothX3,
+            //     out bool priorityOverSouth3,out bool priorityOverNorth3,out bool priorityOverBothZ3,
+            //     out double selectionValue3
+            //    )
+            //   ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked3 here?
+            //    bool local_canSpawnInXTest3=true;
+            //    bool local_canSpawnInZTest3=true;
+            //    //ResolveSpawnConflict(
+            //    // size1,priority1,
+            //    // size3,priority3,
+            //    // coord3,
+            //    // selectionValue1,
+            //    // selectionValue3,
+            //    // priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+            //    // priorityOverWest3 ,priorityOverEast3 ,priorityOverBothX3,priorityOverSouth3,priorityOverNorth3,priorityOverBothZ3,
+            //    // ref local_canSpawnInXTest3,
+            //    // ref local_canSpawnInZTest3
+            //    //);
+            //    //if(!local_canSpawnInXTest3||!local_canSpawnInZTest3){
+            //    // Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            //    // Bounds bounds3a=bounds3;bounds3a.center=pos3;
+            //    // if(
+            //    //  //PhysUtil.BoundsIntersectsRotatedAndScaled(
+            //    //  // bounds1a,rotation1,modifiers1.scale,
+            //    //  // bounds3a,rotation3,modifiers3.scale
+            //    //  //)
+            //    //  bounds1a.Intersects(bounds3a)
+            //    // ){
+            //    //  if(
+            //    //   size1.x<=size3.x||
+            //    //   size1.z<=size3.z
+            //    //  ){
+            //    //   if(!priorityOverBothX1||!priorityOverBothZ1){
+            //    //    canSpawnInXTest3=false;
+            //    //    canSpawnInZTest3=false;
+            //    //    parallelForState3.Stop();
+            //    //    return;
+            //    //   }else{
+            //    //    //if(
+            //    //    // simObjectPicked1.Value.simObject==typeof(Sims.Trees.Pinus_elliottii_1)&&
+            //    //    // simObjectPicked3.Value.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)
+            //    //    //){
+            //    //     unknownInXTest3=true;
+            //    //     unknownInZTest3=true;
+            //    //   //  if(
+            //    //   //   size1.x<size3.x||
+            //    //   //   size1.z<size3.z
+            //    //   //  ){
+            //    //   //if(!priorityOverBothX3||!priorityOverBothZ3){
+            //    //   // canSpawnInXTest3=false;
+            //    //   // canSpawnInZTest3=false;
+            //    //   // parallelForState3.Stop();
+            //    //   // return;
+            //    //   //}
+            //    //   //  }
+            //    //    //}
+            //    //   }
+            //    //  }else{
+            //    //   //unknownInXTest3=true;
+            //    //   //unknownInZTest3=true;
+            //    //  }
+            //    ////  canSpawnInXTest3=false;
+            //    ////  canSpawnInZTest3=false;
+            //    ////  parallelForState3.Stop();
+            //    ////  return;
+            //    // }
+            //    //}else{
+            //    // Bounds bounds1a=bounds1;bounds1a.center=pos1;
+            //    // Bounds bounds3a=bounds3;bounds3a.center=pos3;
+            //    // if(
+            //    //  PhysUtil.BoundsIntersectsScaledRotated(
+            //    //   bounds1a,rotation1,modifiers1.scale,
+            //    //   bounds3a,rotation3,modifiers3.scale
+            //    //  )
+            //    // ){
+            //    //  //if(
+            //    //  // simObjectPicked1.Value.simObject==typeof(Sims.Trees.Pinus_elliottii_1)&&
+            //    //  // simObjectPicked3.Value.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)
+            //    //  //){
+            //    //   //if(priorityOverBothX1){
+            //    //    //if(priorityOverBothX3){
+            //    //     //Log.Warning("conflict unresolved:simObjectPicked1:"+simObjectPicked1+":simObjectPicked3:"+simObjectPicked3);
+            //    //     unknownInXTest3=true;
+            //    //     unknownInZTest3=true;
+            //    //    //}
+            //    //   //}
+            //    //  //}
+            //    //  //if(
+            //    //  // simObjectPicked1.Value.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)&&
+            //    //  // simObjectPicked3.Value.simObject==typeof(Sims.Trees.Pinus_elliottii_1)
+            //    //  //){
+            //    //  // if(priorityOverBothX1){
+            //    //  //  if(priorityOverBothX3){
+            //    //  //   Log.Warning("conflict unresolved 2");
+            //    //  //  }
+            //    //  // }
+            //    //  //}
+            //    // }
+            //    //}
+            //   }
+            //  });
+            //  if(canSpawnInXTest3&&canSpawnInZTest3){
+            //   if(unknownInXTest2||unknownInZTest2){
+            //    container.testArray[index1]=(Color.red,bounds1,modifiers1.scale);
+            //   }else if(unknownInXTest3||unknownInZTest3){
+            //    container.testArray[index1]=(Color.yellow,bounds1,modifiers1.scale);
+            //   }else{
+            //    if(priorityOverBothX1){
+            //     container.testArray[index1]=(Color.cyan,bounds1,modifiers1.scale);
+            //    }else if(priorityOverWest1){
+            //     container.testArray[index1]=(Color.blue,bounds1,modifiers1.scale);
+            //    }else{
+            //     container.testArray[index1]=(Color.green,bounds1,modifiers1.scale);
+            //    }
+            //   }
+            //  }
+            // }
+            //}
+
+
+
+             //container.testArray[index1]=(Color.gray,bounds1);
+           //  SimObjectSpawnModifiers modifiersSpawnMax=new();
+           //  modifiersSpawnMax.scale=Vector3.one;
+           //  Vector3 sizeSpawnMax=container.maxSpawnSize;
+           //  Bounds boundsSpawnMax=new Bounds(Vector3.zero,sizeSpawnMax);
+           //  bool canSpawnInXTest3=true;
+           //  bool canSpawnInZTest3=true;
+           //  GetCoords(modifiersSpawnMax,boundsSpawnMax,Quaternion.identity,
+           //   ref getCoordsOutputArray3,out int length3,getCoordsOutputHashSet2
+           //  );
+           //  var parallelForResult3=Parallel.For(0,length3,(i3,parallelForState3)=>{
+           //   Vector3Int coord3=getCoordsOutputArray3[i3];
+           //   if(
+           //    coord3.x==0&&
+           //    coord3.z==0
+           //   ){
+           //    return;
+           //   }
+           //   //Log.DebugMessage("coord3:"+coord3,container.cnkRgn==Vector2Int.zero&&vCoord1.x==0&&vCoord1.z==0);
+           //   Vector3 pos3=pos1;
+           //   pos3.x+=coord3.x;
+           //   pos3.z+=coord3.z;
+           //   Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
+           //   Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
+           //                                  noiseInput3.z+=cnkRgn3.y;
+           //   if(
+           //    GetSimObjectSettings(pos3,noiseInput3,
+           //     out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3,
+           //     out SimObjectSettings simObjectSettings3,out SimObjectSpawnModifiers modifiers3,
+           //     out Vector3 size3,out Bounds bounds3,out int priority3,
+           //     out Quaternion rotation3,
+           //     out bool priorityOverWest3 ,out bool priorityOverEast3 ,out bool priorityOverBothX3,
+           //     out bool priorityOverSouth3,out bool priorityOverNorth3,out bool priorityOverBothZ3,
+           //     out double selectionValue3
+           //     )
+           //   ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked3 here?               
+           //    bool local_canSpawnInXTest3=true;
+           //    bool local_canSpawnInZTest3=true;
+           //    ResolveSpawnConflict(
+           //     size1,priority1,
+           //     size3,priority3,
+           //     coord3,
+           //     selectionValue1,
+           //     selectionValue3,
+           //     priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+           //     priorityOverWest3 ,priorityOverEast3 ,priorityOverBothX3,priorityOverSouth3,priorityOverNorth3,priorityOverBothZ3,
+           //     ref local_canSpawnInXTest3,
+           //     ref local_canSpawnInZTest3
+           //    );
+           //    if(!local_canSpawnInXTest3||!local_canSpawnInZTest3){
+           //     Bounds bounds1a=bounds1;bounds1a.center=pos1;
+           //     Bounds bounds3a=bounds3;bounds3a.center=pos3;
+           //     if(
+           //      PhysUtil.BoundsIntersectsScaledRotated(
+           //       bounds1a,rotation1,modifiers1.scale,
+           //       bounds3a,rotation3,modifiers3.scale
+           //      )
+           //     ){
+           //      canSpawnInXTest3=false;
+           //      canSpawnInZTest3=false;
+           //      parallelForState3.Stop();
+           //      return;
+           //     }
+           //    }
+           //   }
+           //  });
+           //  if(canSpawnInXTest3&&canSpawnInZTest3){
+           //   container.testArray[index1]=(Color.green,bounds1,modifiers1.scale);
+           //  }
+           // }
+           //}}
+           //  Log.DebugMessage("trying to spawn:"+simObjectPicked1.Value.simObject);
+           //  //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one));
+           //  bool canSpawnInXTest2=true;
+           //  bool canSpawnInZTest2=true;
+           //  GetCoords(
+           //   modifiers1,bounds1,rotation1,
+           //   ref getCoordsOutputArray2,out int length2
+           //  );
+           //  var parallelForResult2=Parallel.For(0,length2,(i2,parallelForState2)=>{
+           //   Vector3Int coord2=getCoordsOutputArray2[i2];
+           //   if(
+           //   coord2.x==0&&
+           //   coord2.z==0
+           //   ){
+           //    return;
+           //   }
+           //   Vector3 pos2=pos1;
+           //   pos2.x+=coord2.x;
+           //   pos2.z+=coord2.z;
+           //   Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+           //   Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+           //                                  noiseInput2.z+=cnkRgn2.y;
+           //   if(
+           //    GetSimObjectSettings(pos2,noiseInput2,
+           //     out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,
+           //     out SimObjectSettings simObjectSettings2,out SimObjectSpawnModifiers modifiers2,
+           //     out Vector3 size2,out Bounds bounds2,out int priority2,
+           //     out Quaternion rotation2,
+           //     out bool priorityOverWest2 ,out bool priorityOverEast2 ,out bool priorityOverBothX2,
+           //     out bool priorityOverSouth2,out bool priorityOverNorth2,out bool priorityOverBothZ2,
+           //     out double selectionValue2
+           //    )
+           //   ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked2 here?
+           //    ResolveSpawnConflict(
+           //     size1,priority1,
+           //     size2,priority2,
+           //     coord2,
+           //     selectionValue1,
+           //     selectionValue2,
+           //     priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+           //     priorityOverWest2 ,priorityOverEast2 ,priorityOverBothX2,priorityOverSouth2,priorityOverNorth2,priorityOverBothZ2,
+           //     ref canSpawnInXTest2,
+           //     ref canSpawnInZTest2
+           //    );
+           //    if(!canSpawnInXTest2||!canSpawnInZTest2){
+           //     parallelForState2.Stop();
+           //     return;
+           //    }
+           //   }
+           //  });
+           //  if(canSpawnInXTest2&&canSpawnInZTest2){
+           //   SimObjectSpawnModifiers modifiersSpawnMax=new();
+           //   modifiersSpawnMax.scale=Vector3.one;
+           //   Vector3 sizeSpawnMax=container.maxSpawnSize;
+           //   Bounds boundsSpawnMax=new Bounds(Vector3.zero,sizeSpawnMax);
+           //   bool canSpawnInXTest3=true;
+           //   bool canSpawnInZTest3=true;
+           //   getCoordsOutputHashSet2.Clear();
+           //   getCoordsOutputHashSet2.UnionWith(getCoordsOutputArray2);
+           //   GetCoords(modifiersSpawnMax,boundsSpawnMax,Quaternion.identity,
+           //    ref getCoordsOutputArray3,out int length3,getCoordsOutputHashSet2
+           //   );
+           //   var parallelForResult3=Parallel.For(0,length3,(i3,parallelForState3)=>{
+           //    Vector3Int coord3=getCoordsOutputArray3[i3];
+           //    if(
+           //     coord3.x==0&&
+           //     coord3.z==0
+           //    ){
+           //     return;
+           //    }
+           //    Vector3 pos3=pos1;
+           //    pos3.x+=coord3.x;
+           //    pos3.z+=coord3.z;
+           //    Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
+           //    Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
+           //                                   noiseInput3.z+=cnkRgn3.y;
+           //    if(
+           //     GetSimObjectSettings(pos3,noiseInput3,
+           //      out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3,
+           //      out SimObjectSettings simObjectSettings3,out SimObjectSpawnModifiers modifiers3,
+           //      out Vector3 size3,out Bounds bounds3,out int priority3,
+           //      out Quaternion rotation3,
+           //      out bool priorityOverWest3 ,out bool priorityOverEast3 ,out bool priorityOverBothX3,
+           //      out bool priorityOverSouth3,out bool priorityOverNorth3,out bool priorityOverBothZ3,
+           //      out double selectionValue3
+           //     )
+           //    ){//  can we still spawn simObjectPicked1 if there's a simObjectPicked3 here?
+           //     bool local_canSpawnInXTest3=true;
+           //     bool local_canSpawnInZTest3=true;
+           //     ResolveSpawnConflict(
+           //      size1,priority1,
+           //      size3,priority3,
+           //      coord3,
+           //      selectionValue1,
+           //      selectionValue3,
+           //      priorityOverWest1 ,priorityOverEast1 ,priorityOverBothX1,priorityOverSouth1,priorityOverNorth1,priorityOverBothZ1,
+           //      priorityOverWest3 ,priorityOverEast3 ,priorityOverBothX3,priorityOverSouth3,priorityOverNorth3,priorityOverBothZ3,
+           //      ref local_canSpawnInXTest3,
+           //      ref local_canSpawnInZTest3
+           //     );
+           //     if(!local_canSpawnInXTest3||!local_canSpawnInZTest3){
+           //      Bounds bounds1a=bounds1;bounds1a.center=pos1;
+           //      Bounds bounds3a=bounds3;bounds3a.center=pos3;
+           //      if(
+           //       PhysUtil.BoundsIntersectsScaledRotated(
+           //        bounds1a,rotation1,modifiers1.scale,
+           //        bounds3a,rotation3,modifiers3.scale
+           //       )
+           //      ){
+           //       canSpawnInXTest3=false;
+           //       canSpawnInZTest3=false;
+           //       parallelForState3.Stop();
+           //       return;
+           //      }
+           //     }
+           //    }
+           //   });
+           //   if(canSpawnInXTest3&&canSpawnInZTest3){
+           //    container.testArray[index1]=(Color.green,bounds1);
+           //    //if(!priorityOverBothX1){
+           //     //if(!priorityOverBothZ1){
+           //    if(simObjectPicked1.Value.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+           //     container.testArray[index1]=(Color.cyan,bounds1);
+           //    }
+           //      //Vector3 pos3=pos1;
+           //      //pos3.z+=1;
+           //      //Vector3Int vCoord3=vecPosTovCoord(pos3,out Vector2Int cnkRgn3);
+           //      //Vector3Int noiseInput3=vCoord3;noiseInput3.x+=cnkRgn3.x;
+           //      //                               noiseInput3.z+=cnkRgn3.y;
+           //      ////(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked3=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput3,out double selectionValue3);
+           //      ////if(simObjectPicked3!=null){
+           //      //// Log.Error("got a normal spawn...WHAT?!");
+           //      ////}
+           //      //Log.DebugMessage("non priority spawn point:pos1:"+pos1+":vCoord1:"+vCoord1+":cnkRgn1:"+cnkRgn1+":selectionValue1:"+selectionValue1+":"+simObjectPicked1.Value.simObject);
+           //     //}
+           //    //}
+           //    Log.DebugMessage("got a spawn point:pos1:"+pos1+":vCoord1:"+vCoord1+":cnkRgn1:"+cnkRgn1+":selectionValue1:"+selectionValue1+":"+simObjectPicked1.Value.simObject);
+           //   }
+           //  }
+           //  //if(priorityOverSouth1){
+           //  // //container.testArray[index1]=Color.red;
+           //  //}else{
+           //  // if(priorityOverNorth1){
+           //  //  //container.testArray[index1]=Color.yellow;
+           //  // }
+           //  //}
+           // }
+           //}}
            //for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
            //for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
            // int index1=vCoord1.z+vCoord1.x*Depth;

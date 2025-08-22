@@ -53,214 +53,292 @@ namespace AKCondinoO.Voxels.Biomes{
          internal Vector3 scale;
          internal float rotation;
         }
-        internal class WeightedObject<T>{
-         internal T value;
-         internal float chance;//  de 0 a 1
-         internal int priority;//  prioridade em empate
+        //internal class WeightedObject<T>{
+        // internal T value;
+        // internal float chance;//  de 0 a 1
+        // internal int priority;//  prioridade em empate
+        //}
+        //internal class WeightedPicker<T>{
+        // internal readonly T[]lookupTable;
+        // internal readonly int resolution;
+        //    internal WeightedPicker(List<WeightedObject<T>>items,int resolution=100_000){
+        //     if(items==null||items.Count==0){
+        //      Log.Error("WeightedPicker:lista de itens não pode ser vazia.");
+        //      return;
+        //     }
+        //     this.resolution=resolution;
+        //     lookupTable=new T[resolution];
+        //     //  Ordena para garantir prioridade em empate
+        //     items.Sort((a,b)=>{
+        //      int cmp=b.priority.CompareTo(a.priority);//  prioridade maior primeiro
+        //      if(cmp==0)return 0;//  mantém ordem original em empate real
+        //      return cmp;
+        //     });
+        //     //  Normaliza soma dos pesos
+        //     float totalChance=0f;
+        //     foreach(var item in items)totalChance+=item.chance;
+        //     if(totalChance<=0f){
+        //      Log.Error("WeightedPicker:soma das chances deve ser > 0.");
+        //      return;
+        //     }
+        //     //  Preenche tabela
+        //     float cumulative=0f;
+        //     int index=0;
+        //     foreach(var item in items){
+        //      cumulative+=item.chance/totalChance;
+        //      int endIndex=(int)(cumulative*resolution);
+        //      //  Garantir limites corretos
+        //      if(endIndex>resolution)
+        //       endIndex=resolution;
+        //      for(;index<endIndex;index++)
+        //       lookupTable[index]=item.value;
+        //     }
+        //     //  Preencher qualquer sobra (por arredondamento)
+        //     for(;index<resolution;index++)
+        //      lookupTable[index]=items[items.Count-1].value;
+        //    }
+        //    internal bool Get(float value,out T result){
+        //     if(value<0f)value=0f;
+        //     if(value>1f)value=1f;
+        //     int idx=(int)(value*resolution);
+        //     if(idx>=resolution)idx=resolution-1;
+        //     result=lookupTable[idx];
+        //     return true;
+        //    }
+        //}
+        //internal class ByChanceObject<T>{
+        // internal T value;
+        // internal float chance;//  0 < Chance <= 1
+        // internal int priority;//  desempate
+        //}
+        //internal class ByChancePicker<T>{
+        // private readonly Dictionary<int,T>lookupTable=new Dictionary<int,T>();
+        // private readonly float maxWeight;
+        // private readonly int resolution; // tamanho da tabela virtual
+        // private readonly bool isStruct;
+        //    internal ByChancePicker(List<ByChanceObject<T>>items,int resolution=100000){
+        //     if(items==null){
+        //      Log.Error(nameof(items));
+        //      return;
+        //     }
+        //     this.resolution=resolution;
+        //     isStruct=typeof(T).IsValueType;
+        //     //  Ordena por peso decrescente, depois prioridade decrescente
+        //     ByChanceObject<T>[]sortedItems=items
+        //      .OrderByDescending(x=>x.chance)
+        //      .ThenByDescending(x=>x.priority)
+        //      .ToArray();
+        //     if(sortedItems.Length==0){
+        //      Log.Error("items cannot be empty");
+        //      return;
+        //     }
+        //     maxWeight=sortedItems.Max(x=>x.chance);
+        //     //  Construir lookupTable usando resolução
+        //     float cumulative=0f;
+        //     foreach(var entry in sortedItems){
+        //      int startIdx=(int)(cumulative*resolution);
+        //      cumulative+=entry.chance;
+        //      int endIdx=(int)(Math.Min(cumulative,1f)*resolution);
+        //      for(int i=startIdx;i<endIdx;i++){
+        //       lookupTable[i]=entry.value;
+        //      }
+        //     }
+        //    }
+        //    internal bool Get(float value,out T result){
+        //     result=default;
+        //     if(value<0f||value>1f){
+        //      Log.Error(nameof(value));
+        //      return false;
+        //     }
+        //     if(value>maxWeight)return false;//  null para reference ou default(T?) para struct
+        //     int idx=(int)(value*resolution);
+        //     if(lookupTable.TryGetValue(idx,out result)){
+        //      return true;
+        //     }
+        //     return false;
+        //    }
+        //}
+internal class ByChanceObject<T>
+{
+    internal T value;
+    internal float chance; // 0 < chance <= 1
+    internal int priority; // desempate
+}
+
+internal class ByChancePicker<T>
+{
+    private readonly T[] lookupTable;
+    private readonly float maxWeight;
+    private readonly int resolution;
+
+    internal ByChancePicker(List<ByChanceObject<T>> items, int resolution = 100_000)
+    {
+        if (items == null || items.Count == 0)
+        {
+            lookupTable = new T[0];
+            maxWeight = 0f;
+            this.resolution = resolution;
+            return;
         }
-        internal class WeightedPicker<T>{
-         internal readonly T[]lookupTable;
-         internal readonly int resolution;
-            internal WeightedPicker(List<WeightedObject<T>>items,int resolution=100_000){
-             if(items==null||items.Count==0){
-              Log.Error("WeightedPicker:lista de itens não pode ser vazia.");
-              return;
-             }
-             this.resolution=resolution;
-             lookupTable=new T[resolution];
-             //  Ordena para garantir prioridade em empate
-             items.Sort((a,b)=>{
-              int cmp=b.priority.CompareTo(a.priority);//  prioridade maior primeiro
-              if(cmp==0)return 0;//  mantém ordem original em empate real
-              return cmp;
-             });
-             //  Normaliza soma dos pesos
-             float totalChance=0f;
-             foreach(var item in items)totalChance+=item.chance;
-             if(totalChance<=0f){
-              Log.Error("WeightedPicker:soma das chances deve ser > 0.");
-              return;
-             }
-             //  Preenche tabela
-             float cumulative=0f;
-             int index=0;
-             foreach(var item in items){
-              cumulative+=item.chance/totalChance;
-              int endIndex=(int)(cumulative*resolution);
-              //  Garantir limites corretos
-              if(endIndex>resolution)
-               endIndex=resolution;
-              for(;index<endIndex;index++)
-               lookupTable[index]=item.value;
-             }
-             //  Preencher qualquer sobra (por arredondamento)
-             for(;index<resolution;index++)
-              lookupTable[index]=items[items.Count-1].value;
-            }
-            internal bool Get(float value,out T result){
-             if(value<0f)value=0f;
-             if(value>1f)value=1f;
-             int idx=(int)(value*resolution);
-             if(idx>=resolution)idx=resolution-1;
-             result=lookupTable[idx];
-             return true;
+
+        this.resolution = resolution;
+
+        // Filtra itens com chance <= 0
+        var filteredItems = new List<ByChanceObject<T>>();
+        foreach (var item in items)
+        {
+            if (item.chance > 0f)
+                filteredItems.Add(item);
+        }
+
+        if (filteredItems.Count == 0)
+        {
+            lookupTable = new T[0];
+            maxWeight = 0f;
+            return;
+        }
+
+        // Ordena por chance decrescente e prioridade decrescente
+        filteredItems.Sort((a, b) =>
+        {
+            int cmp = b.chance.CompareTo(a.chance);
+            return cmp != 0 ? cmp : b.priority.CompareTo(a.priority);
+        });
+
+        // Calcula soma total
+        float total = 0f;
+        foreach (var item in filteredItems) total += item.chance;
+        maxWeight = filteredItems[0].chance;
+
+        // Cria lookupTable
+        lookupTable = new T[resolution];
+        float cumulative = 0f;
+        for (int i = 0; i < filteredItems.Count; i++)
+        {
+            var obj = filteredItems[i];
+            int startIdx = (int)(cumulative / total * resolution);
+            cumulative += obj.chance;
+            int endIdx = (int)(Math.Min(cumulative / total, 1f) * resolution);
+
+            for (int idx = startIdx; idx < endIdx; idx++)
+            {
+                lookupTable[idx] = obj.value;
             }
         }
-        internal class ByChanceObject<T>{
-         internal T value;
-         internal float chance;//  0 < Chance <= 1
-         internal int priority;//  desempate
-        }
-        internal class ByChancePicker<T>{
-         private readonly Dictionary<int,T>lookupTable=new Dictionary<int,T>();
-         private readonly float maxWeight;
-         private readonly int resolution; // tamanho da tabela virtual
-         private readonly bool isStruct;
-            internal ByChancePicker(List<ByChanceObject<T>>items,int resolution=1000){
-             if(items==null){
-              Log.Error(nameof(items));
-              return;
-             }
-             this.resolution=resolution;
-             isStruct=typeof(T).IsValueType;
-             //  Ordena por peso decrescente, depois prioridade decrescente
-             ByChanceObject<T>[]sortedItems=items
-              .OrderByDescending(x=>x.chance)
-              .ThenByDescending(x=>x.priority)
-              .ToArray();
-             if(sortedItems.Length==0){
-              Log.Error("items cannot be empty");
-              return;
-             }
-             maxWeight=sortedItems.Max(x=>x.chance);
-             //  Construir lookupTable usando resolução
-             float cumulative=0f;
-             foreach(var entry in sortedItems){
-              int startIdx=(int)(cumulative*resolution);
-              cumulative+=entry.chance;
-              int endIdx=(int)(Math.Min(cumulative,1f)*resolution);
-              for(int i=startIdx;i<endIdx;i++){
-               lookupTable[i]=entry.value;
-              }
-             }
-            }
-            internal bool Get(float value,out T result){
-             result=default;
-             if(value<0f||value>1f){
-              Log.Error(nameof(value));
-              return false;
-             }
-             if(value>maxWeight)return false;//  null para reference ou default(T?) para struct
-             int idx=(int)(value*resolution);
-             if(lookupTable.TryGetValue(idx,out result)){
-              return true;
-             }
-             return false;
-            }
-        }
-     readonly protected Dictionary<int,ByChancePicker<(Type simObject,SimObjectSettings settings)>>simObjectPicking=new();
-      readonly Dictionary<int,List<ByChanceObject<(Type,SimObjectSettings)>>>simObjectPickingItems=new();
+    }
+
+    internal bool Get(float value, out T result)
+    {
+        result = default;
+
+        if (value < 0f || value > 1f) return false;
+        if (value * resolution >= lookupTable.Length) return false; // acima da chance máxima
+
+        if (lookupTable.Length == 0) return false;
+
+        int idx = (int)(value * resolution);
+        if (idx >= lookupTable.Length) idx = lookupTable.Length - 1;
+
+        result = lookupTable[idx];
+        if (EqualityComparer<T>.Default.Equals(result, default))
+            return false;
+
+        return true;
+    }
+}
+     internal class SpawnPickingLayer{
+      public int layer;
+      public Vector3 maxDimensions=Vector3.zero;
+      public readonly Dictionary<int,ByChancePicker<(Type simObject,SimObjectSettings settings)>>simObjectPicking=new();
+       public readonly Dictionary<int,List<ByChanceObject<(Type,SimObjectSettings)>>>simObjectPickingItems=new();
+     }
+     readonly protected Dictionary<int,SpawnPickingLayer>simObjectPickingByLayer=new();
+     //readonly protected Dictionary<int,ByChancePicker<(Type simObject,SimObjectSettings settings)>>simObjectPicking=new();
+      //readonly Dictionary<int,List<ByChanceObject<(Type,SimObjectSettings)>>>simObjectPickingItems=new();
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();
      //readonly protected Dictionary<int,int>settingsCountForSelection=new Dictionary<int,int>();
      readonly BaseBiome biome;
-     internal static Vector3 maxSpawnSize=new Vector3(256f,256f,256f);
-     internal static Vector3 margin      =new Vector3(  1f,  1f,  1f);
+     //internal static Vector3 maxSpawnSize=new Vector3(50f,256f,50f);
+     //internal static Vector3 margin      =new Vector3(  1f,  1f,  1f);
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
         }
         internal void Set(){
-         //simObjectPickingItems.Clear();
-         foreach(var kvp in simObjectPickingItems){
-          kvp.Value.Clear();
+         foreach(var layerSpawnPickingPair in simObjectPickingByLayer){
+          SpawnPickingLayer pickingLayer=layerSpawnPickingPair.Value;
+          foreach(var kvp in pickingLayer.simObjectPickingItems){
+           kvp.Value.Clear();
+          }
+          pickingLayer.maxDimensions=Vector3.zero;
+         }
+         for(int i=0;i<biomeBehaviour.settings.biomeSurfaceSpawnsByLayer.Length;++i){
+          SurfaceSpawnLayer surfaceSpawnLayer=biomeBehaviour.settings.biomeSurfaceSpawnsByLayer[i];
+          int layer=surfaceSpawnLayer.layer;
+          if(!simObjectPickingByLayer.TryGetValue(layer,out SpawnPickingLayer pickingLayer)){
+           simObjectPickingByLayer.Add(layer,pickingLayer=new());
+          }
+          pickingLayer.layer=layer;
+          Vector3 maxDimensions=pickingLayer.maxDimensions;
+          foreach(SurfaceSpawn surfaceSpawnSetting in surfaceSpawnLayer.biomeSurfaceSpawns){
+           if(surfaceSpawnSetting.chance<=0){continue;}
+           maxDimensions.x=Mathf.Max(surfaceSpawnSetting.size.x,maxDimensions.x);
+           maxDimensions.y=Mathf.Max(surfaceSpawnSetting.size.y,maxDimensions.y);
+           maxDimensions.z=Mathf.Max(surfaceSpawnSetting.size.z,maxDimensions.z);
+           int picking=surfaceSpawnSetting.picking;
+           if(!pickingLayer.simObjectPickingItems.TryGetValue(picking,out var itemsForPicking)){
+            pickingLayer.simObjectPickingItems.Add(picking,itemsForPicking=new());
+           }
+           Type simObjectType=surfaceSpawnSetting.simObject.GetType();
+           SimObjectSettings simObjectSettings=new(
+            size:       surfaceSpawnSetting.size,
+            chance:     surfaceSpawnSetting.chance,
+            priority:   surfaceSpawnSetting.priority,
+            inclination:surfaceSpawnSetting.inclination,
+            assetScale: surfaceSpawnSetting.assetScale,
+            minScale:   surfaceSpawnSetting.minScale,
+            maxScale:   surfaceSpawnSetting.maxScale,
+            rotation:   surfaceSpawnSetting.rotation,
+            depth:      surfaceSpawnSetting.depth,
+            minSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
+            maxSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
+            blocksTypes:surfaceSpawnSetting.blocksTypes,
+            isBlockedBy:surfaceSpawnSetting.isBlockedBy
+           );
+           ByChanceObject<(Type,SimObjectSettings)>byChanceSimObject=new();
+           byChanceSimObject.value   =(simObjectType,simObjectSettings);
+           byChanceSimObject.chance  =simObjectSettings.chance;
+           byChanceSimObject.priority=simObjectSettings.priority;
+           itemsForPicking.Add(byChanceSimObject);
+           Log.DebugMessage("spawn setting added for:"+simObjectType);
+          }
+          pickingLayer.maxDimensions=maxDimensions;
          }
          if(biomeBehaviour.useHardCodedSurfaceSpawnIfAvailable){
           #region hard-coded settings
           #endregion hard-coded settings
          }
-         foreach(SurfaceSpawn surfaceSpawnSetting in biomeBehaviour.settings.biomeSurfaceSpawns){
-          if(surfaceSpawnSetting.chance<=0){continue;}
-          Type simObjectType=surfaceSpawnSetting.simObject.GetType();
-          SimObjectSettings simObjectSettings=new(
-           size:       surfaceSpawnSetting.size,
-           chance:     surfaceSpawnSetting.chance,
-           priority:   surfaceSpawnSetting.priority,
-           inclination:surfaceSpawnSetting.inclination,
-           assetScale: surfaceSpawnSetting.assetScale,
-           minScale:   surfaceSpawnSetting.minScale,
-           maxScale:   surfaceSpawnSetting.maxScale,
-           rotation:   surfaceSpawnSetting.rotation,
-           depth:      surfaceSpawnSetting.depth,
-           minSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
-           maxSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
-           blocksTypes:surfaceSpawnSetting.blocksTypes,
-           isBlockedBy:surfaceSpawnSetting.isBlockedBy
-          );
-          ByChanceObject<(Type,SimObjectSettings)>byChanceSimObject=new();
-          byChanceSimObject.value   =(simObjectType,simObjectSettings);
-          byChanceSimObject.chance  =simObjectSettings.chance;
-          byChanceSimObject.priority=simObjectSettings.priority;
-          int picking=surfaceSpawnSetting.picking;
-          if(!simObjectPickingItems.TryGetValue(picking,out var itemsForPicking)){
-           simObjectPickingItems.Add(picking,itemsForPicking=new());
+         //Log.Warning("TO DO: rotacionar objeto para que não fique flutuando ao ser spawn'ado");
+         //Log.Warning("TO DO: limitar tamanho de objetos aqui pelo tamanho máximo de spawn");
+         foreach(var layerSpawnPickingPair in simObjectPickingByLayer){
+          int layer=layerSpawnPickingPair.Key;
+          SpawnPickingLayer pickingLayer=layerSpawnPickingPair.Value;
+          foreach(var pickingItemsPair in pickingLayer.simObjectPickingItems){
+           int picking=pickingItemsPair.Key;
+           ByChancePicker<(Type simObject,SimObjectSettings settings)>pickList=new(pickingItemsPair.Value);
+           pickingLayer.simObjectPicking[picking]=pickList;
           }
-          itemsForPicking.Add(byChanceSimObject);
-          Log.DebugMessage("spawn setting added for:"+simObjectType);
-          Log.Warning("TO DO: criar cooldown de spawn de objeto (e remover/refazer 'divisão de chance' no Selection) e lidar com objetos maiores que um chunk");
-          Log.Warning("TO DO: rotacionar objeto para que não fique flutuando ao ser spawn'ado");
-          Log.Warning("TO DO: limitar tamanho de objetos aqui pelo tamanho máximo de spawn menos 1");
-          //settingsListAtPicking.Add(
-          // new SimObjectSettings(
-          //  size:       surfaceSpawnSetting.size,
-          //  chance:     surfaceSpawnSetting.chance,
-          //  priority:   surfaceSpawnSetting.priority,
-          //  inclination:surfaceSpawnSetting.inclination,
-          //  assetScale: surfaceSpawnSetting.assetScale,
-          //  minScale:   surfaceSpawnSetting.minScale,
-          //  maxScale:   surfaceSpawnSetting.maxScale,
-          //  rotation:   surfaceSpawnSetting.rotation,
-          //  depth:      surfaceSpawnSetting.depth,
-          //  minSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
-          //  maxSpacing:surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
-          //  blocksTypes:surfaceSpawnSetting.blocksTypes,
-          //  isBlockedBy:surfaceSpawnSetting.isBlockedBy
-          // ){
-          // }
-          //);
          }
-         foreach(var pickingItemsPair in simObjectPickingItems){
-          int picking=pickingItemsPair.Key;
-          ByChancePicker<(Type simObject,SimObjectSettings settings)>pickList=new(pickingItemsPair.Value);
-          SetSimObjectTypeAtPicking(picking,pickList);
-          //int settingsCount=0;
-          //foreach(var typeSettingsListByPickingPair in allSettings){
-          // Type type=typeSettingsListByPickingPair.Key;
-          // Dictionary<int,List<SimObjectSettings>>settingsListByPicking=typeSettingsListByPickingPair.Value;
-          // if(types.Contains(type)){
-          //  if(settingsListByPicking.TryGetValue(selection,out List<SimObjectSettings>settingsList)){
-          //   settingsCount+=settingsList.Count;
-          //  }
-          // }
-          //}
-          //settingsCountForSelection[selection]=settingsCount;
-          //Log.DebugMessage("BaseBiomeSimObjectsSpawnSettings Set():settingsCountForSelection["+selection+"]="+settingsCount);
-         }
-        }
-        protected void SetSimObjectTypeAtPicking(int picking,ByChancePicker<(Type simObject,SimObjectSettings settings)>pickList){
-         simObjectPicking[picking]=pickList;
-         //typesAtPicking.Add(simObjectType);
-         //if(!allSettings.TryGetValue(simObjectType,out var simObjectTypeSettings)){
-         // simObjectTypeSettings=allSettings[simObjectType]=new Dictionary<int,List<SimObjectSettings>>();
-         //}
-         //if(!simObjectTypeSettings.TryGetValue(picking,out simObjectTypeSettingsListAtPicking)){
-         // simObjectTypeSettingsListAtPicking=simObjectTypeSettings[picking]=new List<SimObjectSettings>();
-         //}
         }
      internal Perlin simObjectSpawnChancePerlin;
-        internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(Vector3Int noiseInputRounded,out double selectionValue){
+        internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(int layer,Vector3Int noiseInputRounded,out double selectionValue,out SpawnPickingLayer pickingLayer){
+         if(!simObjectPickingByLayer.TryGetValue(layer,out pickingLayer)){
+          selectionValue=default;
+          return null;
+         }
          Vector3 noiseInput=noiseInputRounded+biome.deround;
          int selection=biome.GetSelectorValue(noiseInput,out selectionValue);
          selection=1;//  debug
-         if(simObjectPicking.TryGetValue(selection,out var pickList)){
+         if(pickingLayer.simObjectPicking.TryGetValue(selection,out var pickList)){
           float dicing=Mathf.Clamp01(((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f);
           bool picked=pickList.Get(dicing,out var result);
           if(picked){

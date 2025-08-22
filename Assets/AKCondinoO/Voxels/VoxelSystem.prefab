@@ -66,16 +66,32 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].depth
-      value: 1.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[1].depth
-      value: -1.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].chance
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].size.x
+      value: 7.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].size.y
+      value: 17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].size.z
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[1].chance
@@ -206,6 +222,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].assetScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].assetScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawns.Array.data[0].assetScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].assetScale.x
       value: 20
       objectReference: {fileID: 0}
@@ -299,55 +327,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].maxSpacing.Array.data[0].spawnedType
-      value: 3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[0].spacingDis.x
-      value: 2
+      value: 7.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[0].spacingDis.y
-      value: 2
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[0].spacingDis.z
-      value: 2
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[1].spacingDis.x
-      value: 4
+      value: 7.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[1].spacingDis.y
-      value: 4
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].maxSpacing.Array.data[1].spacingDis.z
-      value: 4
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[0].spacingDis.x
-      value: 1
+      value: 7.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[0].spacingDis.y
-      value: 1
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[0].spacingDis.z
-      value: 1
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[1].spacingDis.x
-      value: 2
+      value: 7.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[1].spacingDis.y
-      value: 2
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[0].minSpacing.Array.data[1].spacingDis.z
-      value: 2
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[1].maxSpacing.Array.data[0].spacingDis.x
@@ -420,6 +452,126 @@ PrefabInstance:
     - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: biomeSurfaceSpawns.Array.data[2].minSpacing.Array.data[0].spacingDis.z
       value: 17.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].chance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].size.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].size.y
+      value: 38
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].size.z
+      value: 16.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].chance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].size.x
+      value: 7.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].size.y
+      value: 17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].size.z
+      value: 6.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].picking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].picking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].simObject
+      value: 
+      objectReference: {fileID: 524410053493948808, guid: 24c6ab51bd7c9984c99d9b55587bb2de, type: 3}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].simObject
+      value: 
+      objectReference: {fileID: 340416262610334921, guid: b77aa5960632b804da9b72d6a3d1867e, type: 3}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].maxScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].maxScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].maxScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].minScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].minScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].minScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].maxScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].maxScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].maxScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].minScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].minScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].minScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].assetScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].assetScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].assetScale.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].assetScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].assetScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300843766822354358, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
+      propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].assetScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2998841467349146929, guid: 8933db114a5b7874c94d8188ab9db365, type: 3}
       propertyPath: m_LocalPosition.x
