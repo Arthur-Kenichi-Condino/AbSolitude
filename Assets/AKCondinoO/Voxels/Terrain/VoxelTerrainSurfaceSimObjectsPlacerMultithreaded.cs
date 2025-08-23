@@ -647,7 +647,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         // }
         // return false;
         //}
-     readonly Dictionary<Vector3Int,bool>state=new();
         bool TryReserveBoundsAtRecursively(Vector3 margin,int layer,Vector3Int pos1,Vector3Int noiseInput1,ref bool recursion){
          if(state.TryGetValue(pos1,out bool result1)){
           return result1;
@@ -698,12 +697,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               //}else{
               // candidatesWithPriority.Add(pos2,true);
               //}
-              recursion=false;
-              result1=false;
-              break;
-             }else{
-              candidates.Add(pos2,true);
+              if(size1.x<=size2.x&&size1.z<=size2.z){
+               recursion=false;
+               result1=false;
+               break;
+              }
              }
+             candidates.Add(pos2,true);
             }
            }
           }
@@ -727,6 +727,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(TryReserveBoundsAtRecursively(margin,layer,pos2,noiseInput2,ref recursion)){
              result1=false;
              break;
+            }else{
+             recursion=true;
             }
            }
           }
@@ -822,6 +824,195 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          state.Add(pos1,result1);
          return result1;
         }
+        protected struct SpawnCandidateData{
+         public(Type simObject,SimObjectSettings simObjectSettings)simObjectPicked;
+         public SimObjectSettings simObjectSettings;
+         public SimObjectSpawnModifiers modifiers;
+         public Vector3 size;
+         public Bounds bounds;
+         public int priority;
+         public Quaternion rotation;
+         public bool priorityOverWest, priorityOverEast, priorityOverBothX;
+         public bool priorityOverSouth,priorityOverNorth,priorityOverBothZ;
+         public double selectionValue;
+         public SpawnPickingLayer pickingLayer;
+        }
+     //  TO DO: fazer hasNoData, e fazer hasData, também, aplicando layer
+     readonly Dictionary<Vector3Int,SpawnCandidateData>hasData=new();
+        protected bool GetCandidateData(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
+         out SpawnCandidateData spawnCandidateData1
+        ){
+         if(hasData.TryGetValue(pos1,out spawnCandidateData1)){
+          return true;
+         }
+         (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(layer,noiseInput1,out double selectionValue1,out SpawnPickingLayer pickingLayer1);
+         if(simObjectPicked1==null){
+          spawnCandidateData1=default;
+          return false;
+         }
+         SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
+         SimObjectSpawnModifiers modifiers1=VoxelSystem.biome.biomeSpawnSettings.GetSimObjectSpawnModifiers(noiseInput1,simObjectSettings1);
+         Vector3 size1=simObjectSettings1.size;
+         Bounds bounds1=new Bounds(Vector3.zero,size1);
+         int priority1=simObjectSettings1.priority;
+         //  TO DO: aplicar rotação do chão na rotação final
+         Quaternion rotation1=Quaternion.AngleAxis(modifiers1.rotation,Vector3.up);
+         Bounds maxScaledBounds1=new Bounds(Vector3.zero,Vector3.Scale(size1,simObjectSettings1.maxScale));
+         Vector3 maxScaledExtents1=maxScaledBounds1.extents;
+         //  seqResult tem que levar o tamanho único, porque tem possibilidade de rotação
+         int max=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
+         int seqResultX1=MathUtil.AlternatingSequenceWithSeparator(pos1.x,max*2,0);
+         int seqResultZ1=MathUtil.AlternatingSequenceWithSeparator(pos1.z,max*2,0);//  seqStart:pickingLayer1.maxDimensions.z
+         spawnCandidateData1=new(){
+          simObjectPicked=simObjectPicked1.Value,
+          simObjectSettings=simObjectSettings1,
+          modifiers=modifiers1,
+          size=size1,
+          bounds=bounds1,
+          priority=priority1,
+          rotation=rotation1,
+          priorityOverWest =(seqResultX1==0),priorityOverEast =(seqResultX1==1),priorityOverBothX=(seqResultX1==2),
+          priorityOverSouth=(seqResultZ1==0),priorityOverNorth=(seqResultZ1==1),priorityOverBothZ=(seqResultZ1==2),
+          selectionValue=selectionValue1,
+          pickingLayer=pickingLayer1,
+         };
+         hasData.Add(pos1,spawnCandidateData1);
+         return true;
+        }
+     readonly Dictionary<Vector3Int,bool>state=new();
+        protected bool RecursivelyTryReserveBoundsAt(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
+         out SpawnCandidateData spawnCandidateData1
+        ){
+         if(state.TryGetValue(pos1,out bool result1)){
+          if(result1){
+           GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1);
+          }else{
+           spawnCandidateData1=default;
+          }
+          return result1;
+         }
+         result1=true;
+         if(!GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1)){
+          result1=false;
+         }
+
+
+
+         //  fazer concurrent queue para usar listas necessárias sem ter que criar várias vezes
+         Dictionary<Vector3Int,SpawnCandidateData>candidatesThatConflict=new();
+         if(result1){
+
+
+
+          SpawnPickingLayer pickingLayer1=spawnCandidateData1.pickingLayer;
+          int max=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
+          Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
+          for(coord2.x=-max;coord2.x<=max;coord2.x++){if(coord2.x==0&&coord2.z==0){continue;}
+           Vector3Int pos2=pos1;
+           pos2.x+=coord2.x;
+           Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+           Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                          noiseInput2.z+=cnkRgn2.y;
+           if(GetCandidateData(layer,margin,pos2,noiseInput2,out SpawnCandidateData spawnCandidateData2)){
+            if(spawnCandidateData2.priority<spawnCandidateData1.priority){
+             continue;
+            }
+            if(spawnCandidateData2.size.x<spawnCandidateData1.size.x){
+             continue;
+            }
+            Bounds bounds1=spawnCandidateData1.bounds;
+            Bounds bounds2=spawnCandidateData2.bounds;
+            Bounds worldBounds1=bounds1;worldBounds1.center=pos1;
+            Bounds worldBounds2=bounds2;worldBounds2.center=pos2;
+            if(!worldBounds2.Intersects(worldBounds1)){
+             continue;
+            }
+            if(spawnCandidateData2.priority>spawnCandidateData1.priority){
+             candidatesThatConflict.Add(pos2,spawnCandidateData2);
+             continue;
+            }
+            if(spawnCandidateData2.size.x>spawnCandidateData1.size.x){
+             candidatesThatConflict.Add(pos2,spawnCandidateData2);
+             continue;
+            }
+             //  todos os candidatos farão verificação recursiva, então aqui deve ter desempate relativo total
+             // quando há possibilidade de conflito, para não dar stack overflow:
+             // - se priority maior
+             // - se size maior
+             // - priorityOver maior
+            if(
+             spawnCandidateData2.priorityOverBothX&&
+             spawnCandidateData1.priorityOverBothX
+            ){
+             result1=false;
+             goto _GetCandidatesThatConflictBreak;
+            }
+            if(
+             spawnCandidateData2.priorityOverEast&&
+             spawnCandidateData1.priorityOverWest
+            ){
+             result1=false;
+             goto _GetCandidatesThatConflictBreak;
+            }
+            if(
+             spawnCandidateData2.priorityOverWest&&
+             spawnCandidateData1.priorityOverEast
+            ){
+             result1=false;
+             goto _GetCandidatesThatConflictBreak;
+            }
+            if(spawnCandidateData2.priorityOverBothX){
+             candidatesThatConflict.Add(pos2,spawnCandidateData2);
+             continue;
+            }
+            if(spawnCandidateData1.priorityOverBothX){
+             continue;
+            }
+            if(spawnCandidateData2.priorityOverWest&&coord2.x>0){
+             candidatesThatConflict.Add(pos2,spawnCandidateData2);
+             continue;
+            }
+            if(spawnCandidateData2.priorityOverEast&&coord2.x<0){
+             candidatesThatConflict.Add(pos2,spawnCandidateData2);
+             continue;
+            }
+           }
+          }
+          _GetCandidatesThatConflictBreak:{}
+
+
+
+         }
+         if(result1){
+
+
+
+          foreach(var posSpawnCandidateDataPair2 in candidatesThatConflict){
+           Vector3Int pos2=posSpawnCandidateDataPair2.Key;
+           Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+           Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                          noiseInput2.z+=cnkRgn2.y;
+           if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out SpawnCandidateData spawnCandidateData2)){
+            result1=false;
+            break;
+           }
+          }
+
+
+
+         }
+         candidatesThatConflict.Clear();
+         state.Add(pos1,result1);
+         return result1;
+   //  when to stop recursion and result false:
+   //  when found object bigger
+   //  when found object with same size and higher priority
+   //           found priority<<<<<   stop tests to the left
+   //           priority>>>>>found priority   stop tests to the right
+         //for(){
+         //}
+         //return false;
+        }
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
@@ -874,6 +1065,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           case Execution.ReserveBounds:{
            Log.DebugMessage("ReserveBounds");
            sw.Restart();
+           //  TO DO: colocar em cleanup ao invés de execute e antes adicionar ao cache global como é feito com a água (em arquivos com binary writer e reader)
+           hasData.Clear();
            state.Clear();
            Vector3 margin=Vector3.one;
            int layer=0;
@@ -888,6 +1081,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
             container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1)){
+             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+             //if(spawnCandidateData1.priorityOverBothX){
+             if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+              container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+             }
+            }
             //if(
             // GetSimObjectSettings(margin,layer,pos1,noiseInput1,
             //  out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
@@ -951,10 +1152,25 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             // }
             // container.testArray[index1]=(debugColor,bounds1,modifiers1.scale);
             //}
-            bool recursion=true;
-            if(TryReserveBoundsAtRecursively(margin,layer,pos1,noiseInput1,ref recursion)){
-             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
-            }
+            //bool recursion=true;
+           // if(TryReserveBoundsAtRecursively(margin,layer,pos1,noiseInput1,ref recursion)){
+           //  container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+           //  if(
+           //   GetSimObjectSettings(margin,layer,pos1,noiseInput1,
+           //    out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,
+           //    out SimObjectSettings simObjectSettings1,out SimObjectSpawnModifiers modifiers1,
+           //    out Vector3 size1,out Bounds bounds1,out int priority1,
+           //    out Quaternion rotation1,
+           //    out bool priorityOverWest1 ,out bool priorityOverEast1 ,out bool priorityOverBothX1,
+           //    out bool priorityOverSouth1,out bool priorityOverNorth1,out bool priorityOverBothZ1,
+           //    out double selectionValue1,out SpawnPickingLayer pickingLayer1
+           //   )
+           //  ){
+           //if(simObjectPicked1.Value.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+           //  container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+           //}
+           //  }
+           // }
            }}
            //bool Recursion(){
            // Vector3Int vCoord2=new Vector3Int(0,Height/2-1,0);
