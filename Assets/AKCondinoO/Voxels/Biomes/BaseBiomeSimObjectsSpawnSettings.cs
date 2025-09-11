@@ -331,6 +331,30 @@ internal class ByChancePicker<T>
         }
      internal Perlin simObjectSpawnChancePerlin;
         internal(Type simObject,SimObjectSettings simObjectSettings)?TryGetSettingsToSpawnSimObject(int layer,Vector3Int noiseInputRounded,out double selectionValue,out SpawnPickingLayer pickingLayer){
+
+         //if(!((noiseInputRounded.x==1&&
+         //      noiseInputRounded.z==1)||
+         //     (noiseInputRounded.x==1&&
+         //      noiseInputRounded.z==2))){
+         // pickingLayer=null;
+         // selectionValue=default;
+         // return null;
+         //}
+            //if(cnkRgn1.x!=0||cnkRgn1.y!=0){
+            // continue;
+            //}
+            //if(!(noiseInputRounded.x==1&&noiseInputRounded.z==1)&&!(noiseInputRounded.x==2&&noiseInputRounded.z==2)){
+            //if(!(noiseInputRounded.x==noiseInputRounded.z)){
+            // pickingLayer=null;
+            // selectionValue=default;
+            // return null;
+            //}
+            //if(noiseInputRounded.z!=1&&noiseInputRounded.z!=2){
+            // pickingLayer=null;
+            // selectionValue=default;
+            // return null;
+            //}
+
          if(!simObjectPickingByLayer.TryGetValue(layer,out pickingLayer)){
           selectionValue=default;
           return null;
