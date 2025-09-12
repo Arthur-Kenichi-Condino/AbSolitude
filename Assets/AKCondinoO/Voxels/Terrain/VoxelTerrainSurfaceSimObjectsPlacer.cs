@@ -160,9 +160,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn.y;
              Gizmos.color=testArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
-              //Gizmos.DrawWireCube(pos1,Vector3.Scale(testArray[index1].bounds.size,testArray[index1].scale));
+              Gizmos.DrawWireCube(pos1,Vector3.Scale(testArray[index1].bounds.size,testArray[index1].scale));
              //}else{
-              Gizmos.DrawCube(pos1,Vector3.one/2f);
+              //Gizmos.DrawCube(pos1,Vector3.one/2f);
              //}
             }}
            }

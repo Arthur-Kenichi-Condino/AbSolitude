@@ -366,7 +366,16 @@ internal class ByChancePicker<T>
           float dicing=Mathf.Clamp01(((float)simObjectSpawnChancePerlin.GetValue(noiseInput.z,noiseInput.x,0)+1f)/2f);
           bool picked=pickList.Get(dicing,out var result);
           if(picked){
-           return result;
+           SimObjectSettings settings=result.settings;
+           Vector3 size=settings.size;
+           int max=Mathf.CeilToInt(Mathf.Max(size.x,size.z))*2;
+           if(
+            noiseInputRounded.x%max==0&&
+            noiseInputRounded.z%max==0
+           ){
+            return result;
+           }
+           //return result;
           }
           //int count=0;
           //foreach(var type in types){

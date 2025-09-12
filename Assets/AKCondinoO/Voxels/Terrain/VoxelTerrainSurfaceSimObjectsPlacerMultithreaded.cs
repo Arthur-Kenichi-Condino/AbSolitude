@@ -2321,20 +2321,29 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         }
      readonly Dictionary<Vector3Int,bool>state=new();
         protected bool RecursivelyTryReserveBoundsAt(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
-         out SpawnCandidateData spawnCandidateData1,ref int recursionDepth,ref bool recursionLimitReached
+         out SpawnCandidateData spawnCandidateData1,ref int recursionDepth,ref bool recursionLimitReached,ref int recursionCalls
         ){
-         if(state.TryGetValue(pos1,out bool result1)){
+         int recursionLevel=recursionDepth;
+         recursionCalls++;
+         recursionDepth++;
+         if(recursionDepth>=16){
+          recursionLimitReached=true;
+         }
+         if(recursionCalls>=256){
+          recursionLimitReached=true;
+         }
+         bool result1;
+         if(recursionLimitReached){
+          spawnCandidateData1=default;
+          result1=false;
+          goto _RecursionLimitReached;
+         }else if(state.TryGetValue(pos1,out result1)){
           if(result1){
            GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1);
           }else{
            spawnCandidateData1=default;
           }
           return result1;
-         }
-         int recursionLevel=recursionDepth;
-         recursionDepth++;
-         if(recursionDepth>=2000){
-          recursionLimitReached=true;
          }
          result1=true;
          SpawnPickingLayer pickingLayer1=null;
@@ -2343,6 +2352,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          if(recursionLimitReached){
           spawnCandidateData1=default;
           result1=false;
+          goto _RecursionLimitReached;
          }else if(!GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1)){
           result1=false;
          }else{
@@ -2406,7 +2416,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
                                              noiseInput2.z+=cnkRgn2.y;
               SpawnCandidateData spawnCandidateData2=posSpawnCandidateDataPair2.Value;
-              if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached)){
+              if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
                result1=false;
                break;
               }
@@ -2519,13 +2529,19 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
                                           noiseInput2.z+=cnkRgn2.y;
            SpawnCandidateData spawnCandidateData2=posSpawnCandidateDataPair2.Value;
-           if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached)){
+           if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
             result1=false;
             break;
            }
           }
          }
          candidatesThatUltimatelyConflict.Clear();
+         _RecursionLimitReached:{
+          if(recursionLimitReached){
+           spawnCandidateData1=default;
+           result1=false;
+          }
+         }
          if(!recursionLimitReached||recursionLevel==0){
           state.Add(pos1,result1);
          }
@@ -2604,9 +2620,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
             container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            int recursionCalls=0;
             int recursionDepth=0;
             bool recursionLimitReached=false;
-            if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached)){
+            if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
              container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale);
              if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
               container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale);
@@ -2614,6 +2631,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             }else if(hasData.ContainsKey(pos1)){
              container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             }
+            Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
            }}
             //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             //if(cnkRgn1.x!=0||cnkRgn1.y!=0){
