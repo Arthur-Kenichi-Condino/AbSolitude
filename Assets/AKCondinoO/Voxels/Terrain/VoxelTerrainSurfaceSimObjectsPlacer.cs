@@ -143,7 +143,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          isBusy=false;
         }
         bool testArrayReady=false;
-        readonly (Color color,Bounds bounds,Vector3 scale)[]testArray=new(Color,Bounds,Vector3)[FlattenOffset];
+        readonly (Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
         //[SerializeField]int seqSize1=3;
         //[SerializeField]int seqSize2=3;
         internal void OnDrawGizmos(){
@@ -160,7 +160,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn.y;
              Gizmos.color=testArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
-              Gizmos.DrawWireCube(pos1,Vector3.Scale(testArray[index1].bounds.size,testArray[index1].scale));
+              Gizmos.matrix=Matrix4x4.TRS(pos1,testArray[index1].rotation,testArray[index1].scale);
+              Gizmos.DrawWireCube(Vector3.zero,testArray[index1].bounds.size);
+              Gizmos.matrix=Matrix4x4.identity;
              //}else{
               //Gizmos.DrawCube(pos1,Vector3.one/2f);
              //}

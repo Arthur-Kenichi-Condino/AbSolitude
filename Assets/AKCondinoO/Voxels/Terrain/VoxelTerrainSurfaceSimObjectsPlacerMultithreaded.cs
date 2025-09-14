@@ -27,7 +27,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Bounds bounds;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
-     internal readonly(Color color,Bounds bounds,Vector3 scale)[]testArray=new(Color,Bounds,Vector3)[FlattenOffset];
+     internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      //internal Vector3 maxSpawnSize;
      //internal Vector3 margin;
      internal Vector2Int cCoord;
@@ -2619,17 +2619,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             pos1.z+=cnkRgn1.y;
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
-            container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+            container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
             int recursionCalls=0;
             int recursionDepth=0;
             bool recursionLimitReached=false;
             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
-             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale);
+             Quaternion rotation=spawnCandidateData1.rotation;
+             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
              if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-              container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale);
+              container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
              }
             }else if(hasData.ContainsKey(pos1)){
-             container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
+             container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
             }
             Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
            }}

@@ -368,7 +368,7 @@ internal class ByChancePicker<T>
           if(picked){
            SimObjectSettings settings=result.settings;
            Vector3 size=settings.size;
-           int max=Mathf.CeilToInt(Mathf.Max(size.x,size.z))*2;
+           int max=Mathf.CeilToInt(Mathf.Max(size.x,size.z)*1.05f);
            if(
             noiseInputRounded.x%max==0&&
             noiseInputRounded.z%max==0
