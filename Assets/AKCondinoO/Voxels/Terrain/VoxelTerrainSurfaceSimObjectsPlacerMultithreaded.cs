@@ -2358,7 +2358,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }else{
           pickingLayer1=spawnCandidateData1.pickingLayer;
           //  TO DO: usar o tamanho pensando na possibilidade de rotação
-          max=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
+          //max=Mathf.CeilToInt(Mathf.Max(pickingLayer1.maxDimensions.x,pickingLayer1.maxDimensions.z))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
+          max=Mathf.CeilToInt(Mathf.Sqrt(Mathf.Pow(pickingLayer1.maxDimensions.x,2)+Mathf.Pow(pickingLayer1.maxDimensions.z,2)))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
           size1=new(
            spawnCandidateData1.size.x,
            spawnCandidateData1.size.z
