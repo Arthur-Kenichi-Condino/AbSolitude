@@ -2390,7 +2390,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Bounds bounds2=spawnCandidateData2.bounds;
             Bounds worldBounds1=bounds1;worldBounds1.center=pos1;
             Bounds worldBounds2=bounds2;worldBounds2.center=pos2;
-            if(!worldBounds2.Intersects(worldBounds1)){
+            //if(!worldBounds2.Intersects(worldBounds1)){
+            if(!PhysUtil.BoundsIntersectsRotatedAndScaled(
+              worldBounds2,spawnCandidateData2.rotation,spawnCandidateData2.modifiers.scale,
+              worldBounds1,spawnCandidateData1.rotation,spawnCandidateData1.modifiers.scale
+             )
+            ){
              continue;
             }
             if(
