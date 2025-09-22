@@ -37,8 +37,13 @@ namespace AKCondinoO.Voxels{
          internal static readonly Dictionary<FileStream,(Vector2Int cCoord,Vector2Int cnkRgn,int cnkIdx)>             waterNeighbourhoodAbsorbingCacheIds=new();
           internal static readonly ConcurrentQueue<HashSet<(FileStream stream,BinaryWriter writer,BinaryReader reader)>>waterNeighbourhoodCacheListPool=new();
          internal static ReaderWriterLockSlim   waterNeighbourhoodCache_rwl;
-         internal static Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
-         internal static ReaderWriterLockSlim spawnMaps_rwl;
+         //internal static Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
+         internal static readonly Dictionary<int,int>surfaceDataOpen=new();
+         internal static readonly Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>surfaceHasData=new();
+          internal static readonly Dictionary<int,HashSet<Vector3Int>>surfaceHasNoData=new();
+         internal static readonly Dictionary<int,Dictionary<Vector3Int,bool>>surfaceState=new();
+         internal static ReaderWriterLockSlim  surfaceSpawnData_rwl;
+         internal static ReaderWriterLockSlim surfaceSpawnFiles_rwl;
          static readonly Dictionary<int,string      >editsFileCacheName        =new Dictionary<int,string      >();
          static readonly Dictionary<int,FileStream  >editsFileCacheStream      =new Dictionary<int,FileStream  >();
          static readonly Dictionary<int,StreamReader>editsFileCacheStreamReader=new Dictionary<int,StreamReader>();

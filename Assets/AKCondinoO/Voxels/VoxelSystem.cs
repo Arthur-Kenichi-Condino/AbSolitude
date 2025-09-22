@@ -136,7 +136,8 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.             waterFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.             waterCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         VoxelSystem.Concurrent.              spawnMaps_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.       surfaceSpawnData_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         VoxelSystem.Concurrent.      surfaceSpawnFiles_rwl=new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          voxelTerrainLayer=LayerMask.GetMask("VoxelTerrain");
          VoxelTerrainChunk.sMarchingCubesExecutionCount=0;
          MarchingCubesMultithreaded.Start(marchingCubesBGThreads,typeof(MarchingCubesMultithreaded).GetConstructor(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic,null,new Type[]{},null),new object[]{});
@@ -263,7 +264,8 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.               waterFiles_rwl.Dispose();
          VoxelSystem.Concurrent.               waterCache_rwl.Dispose();
          VoxelSystem.Concurrent.  waterNeighbourhoodCache_rwl.Dispose();
-         VoxelSystem.Concurrent.                spawnMaps_rwl.Dispose();
+         VoxelSystem.Concurrent.         surfaceSpawnData_rwl.Dispose();
+         VoxelSystem.Concurrent.        surfaceSpawnFiles_rwl.Dispose();
          VoxelSystem.Concurrent.  waterCache   .Clear();
          VoxelSystem.Concurrent.  waterCacheIds.Clear();
          VoxelSystem.Concurrent.ReleaseCacheAndDispose();

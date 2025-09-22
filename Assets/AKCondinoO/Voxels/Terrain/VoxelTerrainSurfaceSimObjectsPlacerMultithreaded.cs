@@ -23,11 +23,22 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal struct SpawnMapInfo{
      internal bool isBlocked;
      internal SpawnedTypes type;
-     internal Vector3Int origin;
-     internal Bounds bounds;
+    }
+    internal struct SpawnCandidateData{
+     public(Type simObject,SimObjectSettings simObjectSettings)simObjectPicked;
+     public SimObjectSettings simObjectSettings;
+     public SimObjectSpawnModifiers modifiers;
+     public Vector3 size;
+     public Bounds bounds;
+     public int priority;
+     public Quaternion rotation;
+     public bool priorityOverWest, priorityOverEast, priorityOverBothX;
+     public bool priorityOverSouth,priorityOverNorth,priorityOverBothZ;
+     public double selectionValue;
+     public SpawnPickingLayer pickingLayer;
+     public int halfSeqSize;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
-     internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      //internal Vector3 maxSpawnSize;
      //internal Vector3 margin;
      internal Vector2Int cCoord;
@@ -38,6 +49,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal NativeList<RaycastHit    >GetGroundHits;
      internal readonly Dictionary<int,RaycastHit?>gotGroundHits=new Dictionary<int,RaycastHit?>(Width*Depth);
      internal readonly Dictionary<SpawnedTypes,bool[]>blocked=new Dictionary<SpawnedTypes,bool[]>();
+     internal Dictionary<int,Dictionary<Vector3Int,bool>>state=new();
+     internal Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>hasData=new();
+      internal Dictionary<int,HashSet<Vector3Int>>hasNoData=new();
+     internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
         internal enum Execution{
          ReserveBounds,
@@ -2248,36 +2263,37 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
 
 
 
-        protected struct SpawnCandidateData{
-         public(Type simObject,SimObjectSettings simObjectSettings)simObjectPicked;
-         public SimObjectSettings simObjectSettings;
-         public SimObjectSpawnModifiers modifiers;
-         public Vector3 size;
-         public Bounds bounds;
-         public int priority;
-         public Quaternion rotation;
-         public bool priorityOverWest, priorityOverEast, priorityOverBothX;
-         public bool priorityOverSouth,priorityOverNorth,priorityOverBothZ;
-         public double selectionValue;
-         public SpawnPickingLayer pickingLayer;
-         public int halfSeqSize;
-        }
-     readonly Dictionary<Vector3Int,SpawnCandidateData>hasData=new();
-      readonly HashSet<Vector3Int>hasNoData=new();
-        protected bool GetCandidateData(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
+     readonly Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>hasData=new();
+      readonly Dictionary<int,HashSet<Vector3Int>>hasNoData=new();
+        protected bool GetCandidateData(int layer,Vector3 margin,Vector3Int pos1,int cnkIdx1,Vector3Int noiseInput1,
          out SpawnCandidateData spawnCandidateData1
         ){
-         if(hasNoData.Contains(pos1)){
-          spawnCandidateData1=default;
-          return false;
-         }
-         if(hasData.TryGetValue(pos1,out spawnCandidateData1)){
-          return true;
+         OpenSurfaceData(cnkIdx1);
+         VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+         try{
+          if(hasNoData[cnkIdx1].Contains(pos1)){
+           spawnCandidateData1=default;
+           return false;
+          }
+          if(hasData[cnkIdx1].TryGetValue(pos1,out spawnCandidateData1)){
+           return true;
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
          }
          (Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(layer,noiseInput1,out double selectionValue1,out SpawnPickingLayer pickingLayer1);
          if(simObjectPicked1==null){
           spawnCandidateData1=default;
-          hasNoData.Add(pos1);
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+          try{
+           hasNoData[cnkIdx1].Add(pos1);
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+          }
           return false;
          }
          SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
@@ -2307,7 +2323,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           pickingLayer=pickingLayer1,
           halfSeqSize=halfSeqSize1,
          };
-         hasData.Add(pos1,spawnCandidateData1);
+         VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+         try{
+          hasData[cnkIdx1][pos1]=spawnCandidateData1;
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+         }
          return true;
         }
      readonly CandidateDescendingComparer candidateDescendingComparer=new();
@@ -2319,10 +2342,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              return-a.GetHashCode().CompareTo(b.GetHashCode());
             }
         }
-     readonly Dictionary<Vector3Int,bool>state=new();
+     readonly Dictionary<int,Dictionary<Vector3Int,bool>>state=new();
         protected bool RecursivelyTryReserveBoundsAt(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
          out SpawnCandidateData spawnCandidateData1,ref int recursionDepth,ref bool recursionLimitReached,ref int recursionCalls
         ){
+         Vector2Int cCoord1=vecPosTocCoord(pos1);
+         int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+         OpenSurfaceData(cnkIdx1);
          int recursionLevel=recursionDepth;
          recursionCalls++;
          recursionDepth++;
@@ -2337,13 +2363,24 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           spawnCandidateData1=default;
           result1=false;
           goto _RecursionLimitReached;
-         }else if(state.TryGetValue(pos1,out result1)){
-          if(result1){
-           GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1);
-          }else{
-           spawnCandidateData1=default;
+         }else{
+          bool cached;
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+          try{
+           cached=state[cnkIdx1].TryGetValue(pos1,out result1);
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
           }
-          return result1;
+          if(cached){
+           if(result1){
+            GetCandidateData(layer,margin,pos1,cnkIdx1,noiseInput1,out spawnCandidateData1);
+           }else{
+            spawnCandidateData1=default;
+           }
+           return result1;
+          }
          }
          result1=true;
          SpawnPickingLayer pickingLayer1=null;
@@ -2353,7 +2390,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           spawnCandidateData1=default;
           result1=false;
           goto _RecursionLimitReached;
-         }else if(!GetCandidateData(layer,margin,pos1,noiseInput1,out spawnCandidateData1)){
+         }else if(!GetCandidateData(layer,margin,pos1,cnkIdx1,noiseInput1,out spawnCandidateData1)){
           result1=false;
          }else{
           pickingLayer1=spawnCandidateData1.pickingLayer;
@@ -2378,7 +2415,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
            Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
                                           noiseInput2.z+=cnkRgn2.y;
-           if(GetCandidateData(layer,margin,pos2,noiseInput2,out SpawnCandidateData spawnCandidateData2)){
+           Vector2Int cCoord2=vecPosTocCoord(pos2);
+           int        cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+           if(GetCandidateData(layer,margin,pos2,cnkIdx2,noiseInput2,out SpawnCandidateData spawnCandidateData2)){
             Vector2 size2=new(
              spawnCandidateData2.size.x,
              spawnCandidateData2.size.z
@@ -2549,14 +2588,48 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
          }
          if(!recursionLimitReached||recursionLevel==0){
-          state.Add(pos1,result1);
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+          try{
+           state[cnkIdx1][pos1]=result1;
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+          }
          }
          recursionDepth--;
          return result1;
         }
-
-
-
+        void OpenSurfaceData(int cnkIdx){
+         VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
+         try{
+          if(hasData.ContainsKey(cnkIdx)){
+           return;
+          }
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+          try{
+           if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(cnkIdx,out Dictionary<Vector3Int,SpawnCandidateData>surfaceHasData)){
+            container.hasData  [cnkIdx]=hasData  [cnkIdx]=surfaceHasData;
+            container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx];
+            container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx];
+                                                          VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]++;
+           }else{
+            container.hasData  [cnkIdx]=hasData  [cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [cnkIdx]=surfaceHasData=new();
+            container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
+            container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
+                                                          VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
+         }
+        }
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
@@ -2610,9 +2683,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            Log.DebugMessage("ReserveBounds");
            sw.Restart();
            //  TO DO: colocar em cleanup ao invés de execute e antes adicionar ao cache global como é feito com a água (em arquivos com binary writer e reader)
-           hasData.Clear();
-           hasNoData.Clear();
-           state.Clear();
+
+           //hasData.Clear();
+           //hasNoData.Clear();
+           //state.Clear();
            Vector3 margin=Vector3.one*5;
            int layer=0;
            Vector2Int cnkRgn1=container.cnkRgn;
@@ -2635,8 +2709,21 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
               container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
              }
-            }else if(hasData.ContainsKey(pos1)){
-             container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+            }else{
+             Vector2Int cCoord1=vecPosTocCoord(pos1);
+             int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+             bool gotData;
+             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+             try{
+              gotData=hasData[cnkIdx1].ContainsKey(pos1);
+             }catch{
+              throw;
+             }finally{
+              VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
+             }
+             if(gotData){
+              container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+             }
             }
             Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
            }}
