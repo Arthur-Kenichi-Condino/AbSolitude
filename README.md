@@ -1,4 +1,4 @@
-## Notas importantes:
+## Nota importante
 Se você quiser fazer doações para ajudar que o projeto cresça, use os links ao lado, aqui no GitHub; agradeço muito. Contudo por favor tenha em mente que somente aceito em forma de "Doação simples": caso contrário, recuso/rejeito o valor.
 
 ## Participantes ativos do projeto:
