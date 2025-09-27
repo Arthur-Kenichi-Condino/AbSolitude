@@ -1115,6 +1115,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1293009385162590122, guid: 88f70b0baad58b8449a54b500934063a, type: 3}
+      propertyPath: DEBUG_EDIT_AT.y
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 1293009385162590122, guid: 88f70b0baad58b8449a54b500934063a, type: 3}
+      propertyPath: DEBUG_EDIT_AT.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1293009385162590122, guid: 88f70b0baad58b8449a54b500934063a, type: 3}
+      propertyPath: DEBUG_EDIT_MODE
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6718101330217770390, guid: 88f70b0baad58b8449a54b500934063a, type: 3}
       propertyPath: m_Name
       value: VoxelTerrainEditing

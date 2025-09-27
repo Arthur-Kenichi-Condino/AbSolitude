@@ -78,14 +78,10 @@ namespace AKCondinoO.Voxels{
             }
         #endregion
         #region validation
-            internal static void ValidateCoord(ref Vector2Int region,ref Vector3Int vxlCoord){int a,c;
-             a=region.x;c=vxlCoord.x;ValidateCoordAxis(ref a,ref c,Width);region.x=a;vxlCoord.x=c;
-             a=region.y;c=vxlCoord.z;ValidateCoordAxis(ref a,ref c,Depth);region.y=a;vxlCoord.z=c;
-            }
-            internal static void ValidateCoordAxis(ref int axis,ref int coord,int axisLength){
-             if      (coord<0){          axis-=axisLength*Mathf.CeilToInt (Math.Abs(coord)/(float)axisLength);coord=(coord%axisLength)+axisLength;
-             }else if(coord>=axisLength){axis+=axisLength*Mathf.FloorToInt(Math.Abs(coord)/(float)axisLength);coord=(coord%axisLength);
-             }
+            internal static void ValidateCoord(ref Vector2Int region,ref Vector3Int vxlCoord){
+             Vector2Int relativecnkRgn=vecPosTocnkRgn(vxlCoord);
+             region+=relativecnkRgn;
+             vxlCoord=vecPosTovCoord(vxlCoord);
             }
         #endregion
         static VoxelSystem(){
@@ -266,8 +262,6 @@ namespace AKCondinoO.Voxels{
          VoxelSystem.Concurrent.  waterNeighbourhoodCache_rwl.Dispose();
          VoxelSystem.Concurrent.         surfaceSpawnData_rwl.Dispose();
          VoxelSystem.Concurrent.        surfaceSpawnFiles_rwl.Dispose();
-         VoxelSystem.Concurrent.  waterCache   .Clear();
-         VoxelSystem.Concurrent.  waterCacheIds.Clear();
          VoxelSystem.Concurrent.ReleaseCacheAndDispose();
         }
         void OnDestroy(){

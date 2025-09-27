@@ -215,8 +215,10 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                 string editString=line.Substring(editStringStart,editStringEnd-editStringStart);
                 TerrainEditOutputData edit=TerrainEditOutputData.Parse(editString);
                 voxels[oftIdx1][GetvxlIdx(vCoord.x,vCoord.y,vCoord.z)]=new Voxel(edit.density,Vector3.zero,edit.material);
+                //Log.DebugMessage("vCoord:"+vCoord+";edit.density:"+edit.density);
                }
               }
+              //Log.DebugMessage("line:"+line);
              }
             }
            }}
@@ -226,6 +228,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          }finally{
           VoxelSystem.Concurrent.terrainFiles_rwl.ExitReadLock();
          }
+         //Log.DebugMessage("'voxels[0].ContainsKey(GetvxlIdx(0,46,0))':"+voxels[0].ContainsKey(GetvxlIdx(0,46,0)));
          UInt32 vertexCount=0;
          Vector3Int vCoord1;
          for(vCoord1=new Vector3Int();vCoord1.y<Height;vCoord1.y++){
@@ -374,6 +377,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                          vertexUV
           );
          }}}
+         //Log.DebugMessage(voxels[0].ContainsKey(GetvxlIdx(0,46,0)),()=>{return"voxels[0][GetvxlIdx(0,46,0)].density:"+voxels[0][GetvxlIdx(0,46,0)].density;});
          //  TO DO: luz e oclusão de ambiente neste "for":
          //for(vCoord1.x=0             ;vCoord1.x<Width ;vCoord1.x++){
          //for(vCoord1.z=0             ;vCoord1.z<Depth ;vCoord1.z++){

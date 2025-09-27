@@ -153,6 +153,8 @@ namespace AKCondinoO.Voxels{
             }
             //  TO DO: this:
             internal static void ReleaseCacheAndDispose(){
+             waterCache   .Clear();
+             waterCacheIds.Clear();
              foreach(var kvp in editsFileCacheStream){
               kvp.Value                          .Dispose();
               editsFileCacheStreamReader[kvp.Key].Dispose();

@@ -74,8 +74,6 @@ namespace AKCondinoO.Voxels.Water{
      internal const double stopSpreadingDensity=30.0d;
      readonly Dictionary<int,Dictionary<Vector3Int,(double absorb,Vector3Int fromvCoord,VoxelWater fromVoxel)>>neighbourhoodAbsorbing=new();
      readonly Dictionary<int,Dictionary<Vector3Int,(double spread,Vector3Int fromvCoord,VoxelWater fromVoxel)>>neighbourhoodSpreading=new();
-     //readonly Dictionary<Vector2Int,Dictionary<Vector3Int,(double spread,VoxelWater fromVoxel)>>absorbedFromNeighbourVoxel=new();
-     //readonly Dictionary<Vector2Int,Dictionary<Vector3Int,(double spread,VoxelWater fromVoxel)>>spreadedFromNeighbourVoxel=new();
      readonly Dictionary<int,VoxelWater>[]voxels=new Dictionary<int,VoxelWater>[9];
       readonly Dictionary<int,VoxelWater>biomeVoxels=new Dictionary<int,VoxelWater>();
      readonly Dictionary<Vector3Int,(double absorb,VoxelWater fromVoxel)>absorbing=new();
@@ -442,60 +440,6 @@ namespace AKCondinoO.Voxels.Water{
          neighbourhoodAbsorbing[oftIdx1].Clear();
          ProcessSpreading(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,ref hadChanges);
          ProcessAbsorbing(oftIdx1,cCoord1,cnkRgn1,cnkIdx1,ref hadChanges);
-
-
-
-         //   }else{
-         //    //Log.DebugMessage("to spread:"+vCoord1);
-         //    if(spreading.TryGetValue(vCoord1,out var currentSpread)){
-         //     double spreadValueOld=currentSpread.spread;
-         //     double spreadValueNew=voxel.density-voxel.previousDensity;
-         //     if(spreadValueNew>spreadValueOld){
-         //       spreading[vCoord1]=(spreadValueNew,voxel);
-         //     }
-         //    }else{
-         //       spreading.Add(vCoord1,(voxel.density-voxel.previousDensity,voxel));
-         //    }
-         //   }
-         //  }
-         //  voxels[oftIdx1][vxlIdx1]=voxel;
-         // }else{
-         //  voxels[oftIdx1].Remove(vxlIdx1);
-         // }
-         //}}}
-         ////  calcular absorb e spread aqui
-         //foreach(var vCoordSpreadingPair in spreading){
-         // Vector3Int vCoord2=vCoordSpreadingPair.Key;
-         //        int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-         //     double spreadValue=vCoordSpreadingPair.Value.spread;
-         //   VoxelWater fromVoxel=vCoordSpreadingPair.Value.voxel;
-         // if(!fromVoxel.isCreated){continue;}
-         // Vector3Int vCoord3=new Vector3Int(vCoord2.x,vCoord2.y-1,vCoord2.z);
-         // bool waterfall=VerticalSpread();
-         // if(!waterfall){
-         //  vCoord3=new Vector3Int(vCoord2.x+1,vCoord2.y,vCoord2.z);
-         //  HorizontalSpread();
-         //  vCoord3=new Vector3Int(vCoord2.x-1,vCoord2.y,vCoord2.z);
-         //  HorizontalSpread();
-         //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z+1);
-         //  HorizontalSpread();
-         //  vCoord3=new Vector3Int(vCoord2.x,vCoord2.y,vCoord2.z-1);
-         //  HorizontalSpread();
-         // }
-         // bool VerticalSpread(){
-         //  if(!(vCoord3.y>=0)){
-         //   return false;
-         //  }else{
-         //   //Log.DebugMessage("VerticalSpread:"+vCoord3);
-         //   bool hasBlockage=HasBlockageAt(vCoord3);
-         //   int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
-         //   return   VerticalSpreadSetVoxel(fromVoxel,vxlIdx3,spreadValue,oftIdx1,cnkRgn1,hasBlockage,null);
-         //  }
-         // }
-         ////Log.Warning("TO DO:não repetir dados para o vizinho...");
-
-
-
          VoxelSystem.Concurrent.waterNeighbourhoodCache_rwl.EnterWriteLock();
          try{
           for(int x=-1;x<=1;x++){

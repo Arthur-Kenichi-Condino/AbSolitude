@@ -66,6 +66,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           blocked[type]=new bool[FlattenOffset];
          }
         }
+        protected override void Dispose(bool disposing){
+         if(disposed)return;
+         if(disposing){//  free managed resources here
+         }
+         //  free unmanaged resources here
+         base.Dispose(disposing);
+        }
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerMultithreaded:BaseMultithreaded<VoxelTerrainSurfaceSimObjectsPlacerContainer>{
      internal FileStream chunkStateFileStream;
@@ -2630,6 +2637,26 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
          }
         }
+     internal readonly HashSet<int>toClose=new();
+        void CloseSurfaceData(int cnkIdx){
+         VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+         try{
+          if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(cnkIdx,out Dictionary<Vector3Int,SpawnCandidateData>surfaceHasData)){
+           int surfaceDataOpen=--VoxelSystem.Concurrent.surfaceDataOpen[cnkIdx];
+           if(surfaceDataOpen<=0){
+            //
+            //container.hasData  [cnkIdx]=hasData  [cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [cnkIdx]=surfaceHasData=new();
+            //container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
+            //container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
+            //                                              VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
+           }
+          }
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+         }
+        }
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
@@ -2684,6 +2711,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            sw.Restart();
            //  TO DO: colocar em cleanup ao invés de execute e antes adicionar ao cache global como é feito com a água (em arquivos com binary writer e reader)
 
+
+
            //hasData.Clear();
            //hasNoData.Clear();
            //state.Clear();
@@ -2727,6 +2756,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             }
             Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
            }}
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+           try{
+            toClose.UnionWith(hasData.Keys);
+           }catch{
+            throw;
+           }finally{
+            VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
+           }
+           foreach(int cnkIdx in toClose){
+            CloseSurfaceData(cnkIdx);
+           }
+           toClose.Clear();
             //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             //if(cnkRgn1.x!=0||cnkRgn1.y!=0){
             // continue;
