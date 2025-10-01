@@ -24,7 +24,7 @@ namespace AKCondinoO.Sims.Actors{
       protected float onEnableNavMeshAgentProximityTimer=10f;
         void EnableNavMeshAgent(){
          if(!navMeshAgent.enabled){
-          if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height,navMeshQueryFilter)){
+          if(NavMesh.SamplePosition(transform.position,out NavMeshHit hitResult,Height+1,navMeshQueryFilter)){
            if(onEnableNavMeshAgentProximityTimer>0f){
             onEnableNavMeshAgentProximityTimer-=Time.deltaTime;
            }

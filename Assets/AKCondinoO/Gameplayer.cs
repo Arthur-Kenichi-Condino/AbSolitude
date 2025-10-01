@@ -167,7 +167,7 @@ namespace AKCondinoO{
         }
         void OnCoordinatesChanged(){
          cnkRgn=cCoordTocnkRgn(cCoord);
-         activeWorldBounds.center=new Vector3(cnkRgn.x,0,cnkRgn.y);
+         activeWorldBounds.center=new Vector3(cnkRgn.x,Height/2f,cnkRgn.y);
          worldBounds.center=activeWorldBounds.center;
          if(this==Gameplayer.main){
           VoxelSystem.singleton.generationRequests.Add(this);
