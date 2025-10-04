@@ -2719,7 +2719,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            Vector3 margin=Vector3.one*5;
            int layer=0;
            Vector2Int cnkRgn1=container.cnkRgn;
-           Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
+           Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
            for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
             int index1=vCoord1.z+vCoord1.x*Depth;
@@ -2732,13 +2732,33 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             int recursionCalls=0;
             int recursionDepth=0;
             bool recursionLimitReached=false;
+            bool success=false;
             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
-             Quaternion rotation=spawnCandidateData1.rotation;
-             container.testArray[index1]=(Color.green,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
-             if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-              container.testArray[index1]=(Color.cyan,new Bounds(Vector3.zero,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
+             if(!(container.gotGroundHits[index1]==null)){
+              RaycastHit floor=container.gotGroundHits[index1].Value;
+              Quaternion rotation=spawnCandidateData1.rotation;
+              rotation=rotation*Quaternion.SlerpUnclamped(
+               Quaternion.identity,
+               Quaternion.FromToRotation(
+                Vector3.up,
+                floor.normal
+               ),
+               spawnCandidateData1.simObjectSettings.inclination
+              );
+              Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";spawnCandidateData1.modifiers.scale.y:"+spawnCandidateData1.modifiers.scale.y);
+              Vector3 position=new Vector3(
+                floor.point.x,
+                floor.point.y,
+                floor.point.z
+               )+(rotation*Vector3.up)*((spawnCandidateData1.size.y*spawnCandidateData1.modifiers.scale.y)/2f);
+              container.testArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
+              if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+               container.testArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
+              }
+              success=true;
              }
-            }else{
+            }
+            if(!success){
              Vector2Int cCoord1=vecPosTocCoord(pos1);
              int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
              bool gotData;

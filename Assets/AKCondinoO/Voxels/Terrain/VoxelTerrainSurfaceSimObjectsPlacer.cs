@@ -160,7 +160,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn.y;
              Gizmos.color=testArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
-              Gizmos.matrix=Matrix4x4.TRS(pos1,testArray[index1].rotation,testArray[index1].scale);
+              Gizmos.matrix=Matrix4x4.TRS(testArray[index1].bounds.center,testArray[index1].rotation,testArray[index1].scale);
               Gizmos.DrawWireCube(Vector3.zero,testArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.identity;
              //}else{
