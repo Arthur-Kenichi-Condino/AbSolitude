@@ -2625,6 +2625,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
             container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
                                                           VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
+            VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.EnterReadLock();
+            try{
+             //  TO DO: read from file
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.ExitReadLock();
+            }
            }
           }catch{
            throw;
@@ -2644,11 +2652,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(cnkIdx,out Dictionary<Vector3Int,SpawnCandidateData>surfaceHasData)){
            int surfaceDataOpen=--VoxelSystem.Concurrent.surfaceDataOpen[cnkIdx];
            if(surfaceDataOpen<=0){
-            //
-            //container.hasData  [cnkIdx]=hasData  [cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [cnkIdx]=surfaceHasData=new();
-            //container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
-            //container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
-            //                                              VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
+            VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.EnterWriteLock();
+            try{
+             //  TO DO: write to file
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.ExitWriteLock();
+            }
+            VoxelSystem.Concurrent.surfaceHasData  .Remove(cnkIdx);container.hasData  .Remove(cnkIdx);hasData  .Remove(cnkIdx);surfaceHasData=null;
+            VoxelSystem.Concurrent.surfaceHasNoData.Remove(cnkIdx);container.hasNoData.Remove(cnkIdx);hasNoData.Remove(cnkIdx);
+            VoxelSystem.Concurrent.surfaceState    .Remove(cnkIdx);container.state    .Remove(cnkIdx);state    .Remove(cnkIdx);
+            VoxelSystem.Concurrent.surfaceDataOpen .Remove(cnkIdx);
            }
           }
          }catch{
@@ -2750,7 +2765,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 floor.point.x,
                 floor.point.y,
                 floor.point.z
-               )+(rotation*Vector3.up)*((spawnCandidateData1.size.y*spawnCandidateData1.modifiers.scale.y)/2f);
+               )+
+               (rotation*Vector3.up)*((spawnCandidateData1.size.y*spawnCandidateData1.modifiers.scale.y)/2f);
               container.testArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
               if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
                container.testArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),spawnCandidateData1.modifiers.scale,rotation);
