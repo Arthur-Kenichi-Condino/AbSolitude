@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -96,6 +97,44 @@ namespace AKCondinoO{
              Gizmos.DrawLine(p1+Vector3.forward*radius,p2+Vector3.forward*radius);
              Gizmos.DrawWireSphere(p2,radius);
          #endif
+        }
+    }
+    internal static class DictionaryAddRangeHelper{
+        internal enum DictionaryAddMethod:byte{
+         Override        =0,
+         NewOnly         =1,
+         SimpleThrowError=2,
+        }
+        ///<summary>
+        /// [https://stackoverflow.com/questions/6050633/why-doesnt-dictionary-have-addrange]
+        ///</summary>
+        ///<typeparam name="TKey"></typeparam>
+        ///<typeparam name="TValue"></typeparam>
+        ///<param name="dic"></param>
+        ///<param name="dicToAdd"></param>
+        ///<param name="method"></param>
+        internal static void AddRange<TKey,TValue>(this IDictionary<TKey,TValue>dic,IDictionary<TKey,TValue>dicToAdd,DictionaryAddMethod method){
+         if      (method==DictionaryAddMethod.Override        ){
+          dicToAdd.ForEachDo(x=>dic[x.Key]=x.Value);
+         }else if(method==DictionaryAddMethod.NewOnly         ){
+          dicToAdd.ForEachDo(x=>{if(!dic.ContainsKey(x.Key))dic.Add(x.Key,x.Value);});
+         }else if(method==DictionaryAddMethod.SimpleThrowError){
+          dicToAdd.ForEachDo(x=>dic.Add(x.Key,x.Value));
+         }
+        }
+        static void ForEachDo<T>(this IEnumerable<T>source,Action<T>action){
+         foreach(var item in source)action(item);
+        }
+        internal static bool ContainsKeys<TKey,TValue>(this IDictionary<TKey,TValue>dic,IEnumerable<TKey>keys){
+         bool result=false;
+         keys.ForEachIfThenBreak((x)=>{result=dic.ContainsKey(x);return result;});
+         return result;
+        }
+        static void ForEachIfThenBreak<T>(this IEnumerable<T>source,Func<T,bool>func){
+         foreach(var item in source){
+          bool result=func(item);
+          if(result)break;
+         }
         }
     }
 }

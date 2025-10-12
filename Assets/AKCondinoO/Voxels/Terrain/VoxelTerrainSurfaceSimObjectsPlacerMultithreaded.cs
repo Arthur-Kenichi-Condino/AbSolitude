@@ -2616,15 +2616,15 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
           try{
            if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(cnkIdx,out Dictionary<Vector3Int,SpawnCandidateData>surfaceHasData)){
-            container.hasData  [cnkIdx]=hasData  [cnkIdx]=surfaceHasData;
-            container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx];
-            container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx];
-                                                          VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]++;
+            hasData  [cnkIdx]=surfaceHasData;
+            hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx];
+            state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx];
+                              VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]++;
            }else{
-            container.hasData  [cnkIdx]=hasData  [cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [cnkIdx]=surfaceHasData=new();
-            container.hasNoData[cnkIdx]=hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
-            container.state    [cnkIdx]=state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
-                                                          VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
+            hasData  [cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [cnkIdx]=surfaceHasData=new();
+            hasNoData[cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[cnkIdx]               =new();
+            state    [cnkIdx]=VoxelSystem.Concurrent.surfaceState    [cnkIdx]               =new();
+                              VoxelSystem.Concurrent.surfaceDataOpen [cnkIdx]=1;
             VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.EnterReadLock();
             try{
              //  TO DO: read from file
@@ -2646,7 +2646,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }
         }
      internal readonly HashSet<int>toClose=new();
-        void CloseSurfaceData(int cnkIdx){
+        void CloseSurfaceData(int cnkIdx,bool keepInContainer=true){
          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
          try{
           if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(cnkIdx,out Dictionary<Vector3Int,SpawnCandidateData>surfaceHasData)){
@@ -2660,9 +2660,16 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             }finally{
              VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.ExitWriteLock();
             }
-            VoxelSystem.Concurrent.surfaceHasData  .Remove(cnkIdx);container.hasData  .Remove(cnkIdx);hasData  .Remove(cnkIdx);surfaceHasData=null;
-            VoxelSystem.Concurrent.surfaceHasNoData.Remove(cnkIdx);container.hasNoData.Remove(cnkIdx);hasNoData.Remove(cnkIdx);
-            VoxelSystem.Concurrent.surfaceState    .Remove(cnkIdx);container.state    .Remove(cnkIdx);state    .Remove(cnkIdx);
+            if(keepInContainer){
+             //  TO DO: clear and add to pool if exists
+             //  TO DO: get from pool
+             container.hasData  [cnkIdx]=new();container.hasData  [cnkIdx].AddRange (hasData  [cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.hasNoData[cnkIdx]=new();container.hasNoData[cnkIdx].UnionWith(hasNoData[cnkIdx]);
+             container.state    [cnkIdx]=new();container.state    [cnkIdx].AddRange (state    [cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+            }
+            VoxelSystem.Concurrent.surfaceHasData  .Remove(cnkIdx);hasData  .Remove(cnkIdx);surfaceHasData=null;
+            VoxelSystem.Concurrent.surfaceHasNoData.Remove(cnkIdx);hasNoData.Remove(cnkIdx);
+            VoxelSystem.Concurrent.surfaceState    .Remove(cnkIdx);state    .Remove(cnkIdx);
             VoxelSystem.Concurrent.surfaceDataOpen .Remove(cnkIdx);
            }
           }
@@ -2801,7 +2808,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
            }
            foreach(int cnkIdx in toClose){
-            CloseSurfaceData(cnkIdx);
+            CloseSurfaceData(cnkIdx,cnkIdx==container.cnkIdx);
            }
            toClose.Clear();
             //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
@@ -4168,7 +4175,24 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            break;
           }
           case Execution.FillSpawnData:{
-           //Log.DebugMessage("Execution.FillSpawnData");
+           Log.DebugMessage("Execution.FillSpawnData");
+           //
+           Vector3 margin=Vector3.one*5;
+           int layer=0;
+           Vector2Int cnkRgn1=container.cnkRgn;
+           Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+           for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+           for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+            int index1=vCoord1.z+vCoord1.x*Depth;
+           }}
+           toClose.UnionWith(container.hasData.Keys);
+           foreach(int cnkIdx in toClose){
+            //  TO DO: clear and add to pool
+            container.hasData  .Remove(cnkIdx);
+            container.hasNoData.Remove(cnkIdx);
+            container.state    .Remove(cnkIdx);
+           }
+           toClose.Clear();
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
