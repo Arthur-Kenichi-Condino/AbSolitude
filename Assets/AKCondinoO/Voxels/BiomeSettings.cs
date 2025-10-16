@@ -33,6 +33,7 @@ namespace AKCondinoO.Voxels.Biomes{
          public SpacingData[]maxSpacing;
          public SpawnedTypes[]blocksTypes;
          public SpawnedTypes[]isBlockedBy;
+         public Vector3 pivot;
         }
     }
 }

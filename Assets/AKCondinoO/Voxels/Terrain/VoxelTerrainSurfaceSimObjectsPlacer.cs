@@ -48,6 +48,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             //Log.DebugMessage("fillingSpawnData=false;");
                             surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                             SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
+                            Array.Copy(surfaceSimObjectsPlacerBG.testArray,testArray,surfaceSimObjectsPlacerBG.testArray.Length);
+                            testArrayReady=true;
                             spawning=true;
                             //Log.DebugMessage("spawning=true;");
                         }
@@ -56,8 +58,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                                 tryingReserveBounds=false;
                                 Log.DebugMessage("tryingReserveBounds=false;");
-                                Array.Copy(surfaceSimObjectsPlacerBG.testArray,testArray,surfaceSimObjectsPlacerBG.testArray.Length);
-                                testArrayReady=true;
                                 surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.FillSpawnData;
                                 fillingSpawnData=true;
                                 //Log.DebugMessage("fillingSpawnData=true;");
@@ -143,7 +143,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          isBusy=false;
         }
         bool testArrayReady=false;
-        readonly (Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
+        readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
         //[SerializeField]int seqSize1=3;
         //[SerializeField]int seqSize2=3;
         internal void OnDrawGizmos(){

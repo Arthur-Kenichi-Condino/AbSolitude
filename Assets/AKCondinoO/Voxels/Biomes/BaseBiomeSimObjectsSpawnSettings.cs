@@ -33,7 +33,8 @@ namespace AKCondinoO.Voxels.Biomes{
          internal readonly ReadOnlyDictionary<SpawnedTypes,Vector3>maxSpacing;
          internal readonly ReadOnlyCollection<SpawnedTypes>blocksTypes;
          internal readonly ReadOnlyCollection<SpawnedTypes>isBlockedBy;
-            internal SimObjectSettings(Vector3 size,float chance,int priority,float inclination,Vector3 assetScale,Vector3 minScale,Vector3 maxScale,Vector2 rotation,float depth,Dictionary<SpawnedTypes,Vector3>minSpacing,Dictionary<SpawnedTypes,Vector3>maxSpacing,SpawnedTypes[]blocksTypes,SpawnedTypes[]isBlockedBy){
+         public Vector3 pivot;
+            internal SimObjectSettings(Vector3 size,float chance,int priority,float inclination,Vector3 assetScale,Vector3 minScale,Vector3 maxScale,Vector2 rotation,float depth,Dictionary<SpawnedTypes,Vector3>minSpacing,Dictionary<SpawnedTypes,Vector3>maxSpacing,SpawnedTypes[]blocksTypes,SpawnedTypes[]isBlockedBy,Vector3 pivot){
              this.size=size;
              this.chance=chance;
              this.priority=priority;
@@ -47,6 +48,7 @@ namespace AKCondinoO.Voxels.Biomes{
              this.maxSpacing=new ReadOnlyDictionary<SpawnedTypes,Vector3>(maxSpacing);
              this.blocksTypes=new ReadOnlyCollection<SpawnedTypes>(blocksTypes);
              this.isBlockedBy=new ReadOnlyCollection<SpawnedTypes>(isBlockedBy);
+             this.pivot=pivot;
             }
         }
         internal struct SimObjectSpawnModifiers{
@@ -302,7 +304,8 @@ internal class ByChancePicker<T>
             minSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
             maxSpacing: surfaceSpawnSetting.minSpacing.ToDictionary(k=>k.spawnedType,v=>v.spacingDis),
             blocksTypes:surfaceSpawnSetting.blocksTypes,
-            isBlockedBy:surfaceSpawnSetting.isBlockedBy
+            isBlockedBy:surfaceSpawnSetting.isBlockedBy,
+            pivot:      surfaceSpawnSetting.pivot
            );
            ByChanceObject<(Type,SimObjectSettings)>byChanceSimObject=new();
            byChanceSimObject.value   =(simObjectType,simObjectSettings);

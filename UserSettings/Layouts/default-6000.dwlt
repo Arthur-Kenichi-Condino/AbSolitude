@@ -329,8 +329,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 432.6667
-    y: 78.66667
+    x: 1
+    y: 24
     width: 486.66666
     height: 326
   m_SerializedDataModeController:
@@ -775,7 +775,7 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -15.491674, y: 161.40959, z: -10.293231}
+    m_Target: {x: -0.2444563, y: 5.8662987, z: -1.4040111}
     speed: 2
     m_Value: {x: -15.491674, y: 161.40959, z: -10.293231}
   m_RenderMode: 0
@@ -823,11 +823,11 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.27771312, y: 0.008327157, z: -0.002443019, w: -0.9607064}
+    m_Target: {x: -0.018106097, y: 0.7233252, z: -0.01921452, w: -0.69015163}
     speed: 2
-    m_Value: {x: -0.27769136, y: 0.008326505, z: -0.0024428277, w: -0.9606312}
+    m_Value: {x: -0.27771312, y: 0.008327157, z: -0.002443019, w: -0.9607065}
   m_Size:
-    m_Target: 21.813755
+    m_Target: 6.277166
     speed: 2
     m_Value: 21.813755
   m_Ortho:
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 78.66667
+    y: 24
     width: 431.66666
     height: 224
   m_SerializedDataModeController:
@@ -899,7 +899,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 80ae0000
+      m_SelectedIDs: 
       m_LastClickedID: 0
       m_ExpandedIDs: ccfaffff
       m_RenameOverlay:
@@ -948,7 +948,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 328.6667
+    y: 274
     width: 431.66666
     height: 345.3333
   m_SerializedDataModeController:
@@ -992,7 +992,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 1178.6667}
     m_SelectedIDs: c8c70000
     m_LastClickedID: 51144
-    m_ExpandedIDs: 0000000030c3000032c3000034c3000036c3000038c300003ac300003cc300003ec3000040c3000042c3000044c3000046c3000048c300004ac300004cc300004ec3000050c3000052c3000054c3000056c3000058c300005ac300005cc300005ec3000060c3000062c3000064c3000066c3000068c300006ac300006cc300006ec3000070c3000072c3000074c3000076c3000078c300007ac300007cc300007ec3000080c3000082c3000084c3000086c3000088c300008ac300008cc300008ec3000090c3000092c3000094c3000096c3000098c300009ac300009cc300009ec30000a0c30000a2c30000a4c30000a6c30000a8c30000aac3000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000a4cb0000a6cb0000a8cb0000aacb0000accb0000aecb0000b0cb0000b2cb0000b4cb0000b6cb0000b8cb0000bacb0000bccb0000becb0000c0cb0000c2cb0000c4cb0000c6cb0000c8cb0000cacb0000cccb0000cecb0000d0cb0000d2cb0000d4cb0000d6cb0000d8cb0000dacb0000dccb0000decb0000e0cb0000e2cb0000e4cb0000e6cb0000e8cb0000eacb0000eccb0000eecb0000f0cb0000f2cb0000f4cb0000f6cb0000f8cb0000facb0000fccb0000fecb000000cc000002cc000004cc000006cc000008cc00000acc00000ccc00000ecc000010cc000012cc000014cc000016cc000018cc00001acc00001ccc00001ecc0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1021,7 +1021,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000030c3000032c3000034c3000036c3000038c300003ac300003cc300003ec3000040c3000042c3000044c3000046c3000048c300004ac300004cc300004ec3000050c3000052c3000054c3000056c3000058c300005ac300005cc300005ec3000060c3000062c3000064c3000066c3000068c300006ac300006cc300006ec3000070c3000072c3000074c3000076c3000078c300007ac300007cc300007ec3000080c3000082c3000084c3000086c3000088c300008ac300008cc300008ec3000090c3000092c3000094c3000096c3000098c300009ac300009cc300009ec30000a0c30000a2c30000a4c30000a6c30000a8c30000aac30000
+    m_ExpandedIDs: 00000000a4cb0000a6cb0000a8cb0000aacb0000accb0000aecb0000b0cb0000b2cb0000b4cb0000b6cb0000b8cb0000bacb0000bccb0000becb0000c0cb0000c2cb0000c4cb0000c6cb0000c8cb0000cacb0000cccb0000cecb0000d0cb0000d2cb0000d4cb0000d6cb0000d8cb0000dacb0000dccb0000decb0000e0cb0000e2cb0000e4cb0000e6cb0000e8cb0000eacb0000eccb0000eecb0000f0cb0000f2cb0000f4cb0000f6cb0000f8cb0000facb0000fccb0000fecb000000cc000002cc000004cc000006cc000008cc00000acc00000ccc00000ecc000010cc000012cc000014cc000016cc000018cc00001acc00001ccc00001ecc0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1323,8 +1323,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 432.6667
-    y: 430.6667
+    x: 1
+    y: 376
     width: 486.66666
     height: 243.33331
   m_SerializedDataModeController:
@@ -1359,8 +1359,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 921.3334
-    y: 78.66667
+    x: 922.3333
+    y: 24
     width: 357.6667
     height: 595.3333
   m_SerializedDataModeController:
