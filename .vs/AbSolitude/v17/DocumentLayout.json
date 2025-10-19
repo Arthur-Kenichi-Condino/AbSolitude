@@ -319,9 +319,9 @@
       "VerticalTabListWidth": 256,
       "FloatingWindowState": {
         "Id": "1c738ed0-68c7-484b-a378-efae40a99163",
-        "Display": 2,
-        "X": 390,
-        "Y": 0,
+        "Display": 0,
+        "X": -890,
+        "Y": 439,
         "Width": 648,
         "Height": 725,
         "WindowState": 0
