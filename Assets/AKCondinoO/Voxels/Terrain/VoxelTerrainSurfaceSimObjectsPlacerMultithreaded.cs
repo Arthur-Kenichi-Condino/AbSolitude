@@ -22,6 +22,7 @@ using System.Collections.Concurrent;
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal struct SpawnMapInfo{
      internal bool isBlocked;
+     public Vector3 center;
      internal SpawnedTypes type;
     }
     internal struct SpawnCandidateData{
@@ -39,8 +40,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      public int halfSeqSize;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
-     //internal Vector3 maxSpawnSize;
-     //internal Vector3 margin;
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
      internal        int cnkIdx;
@@ -80,231 +79,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
       internal StreamReader chunkStateFileStreamReader;
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
-     //readonly Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
+     Dictionary<int,SpawnMapInfo[]>spawnMaps;
         protected override void Cleanup(){
-         //spawnMaps.Clear();
         }
-        //bool TryReserveBoundsAt(Vector3 pos,int recursionDepth,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked,out double selectionValue){
-        // Vector3Int vCoord=vecPosTovCoord(pos,out Vector2Int cnkRgn);
-        // return TryReserveBoundsAt(vCoord,cnkRgn,pos,recursionDepth,out simObjectPicked,out selectionValue);
-        //}
-        //bool TryReserveBoundsAt(Vector3Int vCoord,Vector2Int cnkRgn,Vector3 pos,int recursionDepth,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked,out double selectionValue){
-        // Vector3Int noiseInput=vCoord;noiseInput.x+=cnkRgn.x;
-        //                              noiseInput.z+=cnkRgn.y;
-        // simObjectPicked=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput,out selectionValue);
-        // return TryReserveBoundsFor(
-        //  simObjectPicked,selectionValue,
-        //  noiseInput,
-        //  vCoord,cnkRgn,pos,
-        //  recursionDepth
-        // );
-        //}
-        //bool TryReserveBoundsFor((Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked,double selectionValue,Vector3Int noiseInput,Vector3Int vCoord,Vector2Int cnkRgn,Vector3 pos,int recursionDepth){
-        // if(simObjectPicked==null){
-        //  return false;
-        // }
-        // recursionDepth++;
-        // bool canSpawn=true;
-        // //  criar bounds para teste
-        // SimObjectSettings simObjectSettings=simObjectPicked.Value.simObjectSettings;
-        // Vector3 size=simObjectSettings.size;
-        // //  primeiro verifica se qualquer coisa iria spawn'ar diretamente dentro do tamanho do objeto (bounds), já descarta o objeto
-        // bool priorityOverWest =MathUtil.AlternatingSequence(vCoord.x+cnkRgn.x,container.maxSpawnSize.x,0)==0;
-        // bool priorityOverSouth=MathUtil.AlternatingSequence(vCoord.z+cnkRgn.y,container.maxSpawnSize.z,0)==0;
-        // Vector3Int coord=new Vector3Int(0,Height/2-1,0);
-        // for(
-        //  coord.x=priorityOverWest ?Mathf.CeilToInt(size.x):Mathf.FloorToInt(-size.x);
-        //  priorityOverWest ?(coord.x>0):(coord.x<0);
-        //  coord.x+=priorityOverWest ?-1:1
-        // ){
-        // for(
-        //  coord.z=priorityOverSouth?Mathf.CeilToInt(size.z):Mathf.FloorToInt(-size.z);
-        //  priorityOverSouth?(coord.z>0):(coord.z<0);
-        //  coord.z+=priorityOverSouth?-1:1
-        // ){
-        //  Vector3 otherPos=pos+new Vector3(coord.x,0,coord.z);
-        //  if(
-        //   TryReserveBoundsAt(
-        //    otherPos,recursionDepth,out(Type simObject,SimObjectSettings simObjectSettings)?otherSimObjectPicked,out double otherSelectionValue
-        //   )
-        //  ){
-        //   canSpawn=false;
-        //   goto _Break;
-        //  }
-        // }
-        // }
-        // _Break:{}
-        // return canSpawn;
-        //}
-        //bool TryReserveBoundsAt(Vector3Int vCoord1,Vector2Int cnkRgn1,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,out double selectionValue1){
-        // bool canSpawn=true;
-        // Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
-        //                                noiseInput1.z+=cnkRgn1.y;
-        // simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput1,out selectionValue1);
-        // if(simObjectPicked1==null){
-        //  return false;
-        // }
-        // //  criar bounds para teste
-        // SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
-        // Vector3 size1=simObjectSettings1.size;
-        // bool priorityOverWest1 =MathUtil.AlternatingSequence(vCoord1.x+cnkRgn1.x,container.maxSpawnSize.x,0)==0;
-        // bool priorityOverEast1 =!priorityOverWest1 ;
-        // bool priorityOverSouth1=MathUtil.AlternatingSequence(vCoord1.z+cnkRgn1.y,container.maxSpawnSize.z,0)==0;
-        // bool priorityOverNorth1=!priorityOverSouth1;
-        // Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
-        // for(coord2.x=Mathf.FloorToInt(-size1.x);coord2.x<Mathf.CeilToInt(size1.x);coord2.x++){
-        // for(coord2.z=Mathf.FloorToInt(-size1.z);coord2.z<Mathf.CeilToInt(size1.z);coord2.z++){
-        //  if(
-        //   coord2.x==0&&
-        //   coord2.z==0
-        //  ){
-        //   continue;
-        //  }
-        //  Log.DebugMessage("coord2:"+coord2,container.cnkRgn.x==0&&container.cnkRgn.y==0);
-        //  Vector3 pos2=noiseInput1+coord2;
-        //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
-        //  bool priorityOverWest2 =MathUtil.AlternatingSequence(vCoord2.x+cnkRgn2.x,container.maxSpawnSize.x,0)==0;
-        //  bool priorityOverEast2 =!priorityOverWest2 ;
-        //  bool priorityOverSouth2=MathUtil.AlternatingSequence(vCoord2.z+cnkRgn2.y,container.maxSpawnSize.z,0)==0;
-        //  bool priorityOverNorth2=!priorityOverSouth2;
-        //  bool trySimObject2=false;
-        //  if(coord2.x<0){
-        //   if(priorityOverEast2){
-        //    if(priorityOverEast1){
-        //     trySimObject2=true;
-        //    }
-        //    if(priorityOverWest1){
-        //    }
-        //   }
-        //   if(priorityOverWest2){
-        //    if(priorityOverEast1){
-        //     trySimObject2=true;
-        //    }
-        //    if(priorityOverWest1){
-        //    }
-        //   }
-        //  }
-        //  if(coord2.x>0){
-        //   if(priorityOverEast2){
-        //    if(priorityOverEast1){
-        //    }
-        //    if(priorityOverWest1){
-        //     trySimObject2=true;
-        //    }
-        //   }
-        //   if(priorityOverWest2){
-        //    if(priorityOverEast1){
-        //    }
-        //    if(priorityOverWest1){
-        //    }
-        //   }
-        //  }
-        //  if(trySimObject2){
-        //   canSpawn=!TryReserveBoundsAt(vCoord2,cnkRgn2,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked2,out double selectionValue2);
-        //   if(!canSpawn){
-        //    goto _Break;
-        //   }
-        //  }
-        //  //if(coord2.x>0){         //  
-        //  // if(priorityOverWest1){ //  
-        //  //  if(priorityOverWest2){
-        //  //   //canSpawn=false;
-        //  //   //goto _Break;
-        //  //  }
-        //  //  if(priorityOverEast2){
-        //  //  }
-        //  // }
-        //  // if(priorityOverEast1){
-        //  //  if(priorityOverWest2){
-        //  //  }
-        //  //  if(priorityOverEast2){
-        //  //  }
-        //  // }
-        //  //}
-        //  //if(coord2.x<0){
-        //  // if(priorityOverWest1){
-        //  //  if(priorityOverWest2){
-        //  //  }
-        //  //  if(priorityOverEast2){
-        //  //  }
-        //  // }
-        //  // if(priorityOverEast1){
-        //  //  if(priorityOverWest2){
-        //  //  }
-        //  //  if(priorityOverEast2){
-        //  //  }
-        //  // }
-        //  //}
-        // }}
-        // _Break:{}
-        // return canSpawn;
-        //}
-        //bool TryReserveBoundsAt(Vector3Int vCoord1,Vector2Int cnkRgn1,out(Type simObject,SimObjectSettings simObjectSettings)?simObjectPicked1,out double selectionValue1){
-        // bool canSpawn=true;
-        // Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
-        //                                noiseInput1.z+=cnkRgn1.y;
-        // simObjectPicked1=VoxelSystem.biome.biomeSpawnSettings.TryGetSettingsToSpawnSimObject(noiseInput1,out selectionValue1);
-        // if(simObjectPicked1==null){
-        //  return false;
-        // }
-        // SimObjectSettings simObjectSettings1=simObjectPicked1.Value.simObjectSettings;
-        // Vector3 size1=simObjectSettings1.size;
-        // bool priorityOverWest1 =MathUtil.AlternatingSequence(vCoord1.x+cnkRgn1.x,container.maxSpawnSize.x,0)==0;
-        // bool priorityOverEast1 =!priorityOverWest1 ;
-        // bool priorityOverSouth1=MathUtil.AlternatingSequence(vCoord1.z+cnkRgn1.y,container.maxSpawnSize.z,0)==0;
-        // bool priorityOverNorth1=!priorityOverSouth1;
-        // Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
-        // for(coord2.x=Mathf.FloorToInt(-size1.x);coord2.x<Mathf.CeilToInt(size1.x);coord2.x++){
-        // for(coord2.z=Mathf.FloorToInt(-size1.z);coord2.z<Mathf.CeilToInt(size1.z);coord2.z++){
-        //  if(
-        //   coord2.x==0&&
-        //   coord2.z==0
-        //  ){
-        //   continue;
-        //  }
-        //  Vector3 pos2=noiseInput1+coord2;
-        //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
-        //  bool priorityOverWest2 =MathUtil.AlternatingSequence(vCoord2.x+cnkRgn2.x,container.maxSpawnSize.x,0)==0;
-        //  bool priorityOverEast2 =!priorityOverWest2 ;
-        //  bool priorityOverSouth2=MathUtil.AlternatingSequence(vCoord2.z+cnkRgn2.y,container.maxSpawnSize.z,0)==0;
-        //  bool priorityOverNorth2=!priorityOverSouth2;
-        //  if(
-        //   Conflicts(coord2,
-        //    priorityOverWest1,priorityOverEast1,
-        //    priorityOverWest2,priorityOverEast2
-        //   )
-        //  ){
-        //   canSpawn=false;
-        //   goto _Break;
-        //  }
-        // }}
-        // _Break:{}
-        // return canSpawn;
-        //}
-        //bool Conflicts(Vector3Int coord2,
-        // bool priorityOverWest1,bool priorityOverEast1,
-        // bool priorityOverWest2,bool priorityOverEast2
-        //){
-        // if(coord2.x<0){
-        //  if(priorityOverWest1){
-        //   return true;
-        //  }
-        // }
-        // //if(coord2.x>0){
-        // // if(priorityOverEast1){
-        // //  if(priorityOverWest2){
-        // //   return false;
-        // //  }
-        // //  return true;
-        // // }
-        // //}
-        // return false;
-        // //if(priorityOverWest1&&coord2.x<0)return true;//  objeto vence / candidato perde
-        // //if(priorityOverEast1&&coord2.x>0)return true;//  objeto vence / candidato perde
-        // ////  Caso especial: prioridades opostas, permitir que um lado sempre vença
-        // //if(priorityOverEast1&&priorityOverWest2)return true;//  empate -> objeto vence / candidato perde
-        // //return false;//  objeto perde / candidato vence
-        //}
 //        void ResolveSpawnConflict(
 //         Vector3 size1,int priority1,
 //         Vector3 size2,int priority2,
