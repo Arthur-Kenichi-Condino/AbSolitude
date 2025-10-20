@@ -1,3 +1,16 @@
+spawn map 2D e 3D para não spawn'ar objetos um em cima do outro e depois no posicionamento final, prioridade de spawn por layer, tamanho ou posição em x e z e y, aí o de menor prioridade some pra dar espaço pro outro ou é reposicionado; objetos criados pelo jogador têm prioridade máxima e não somem
+
+--- mesa de trabalho / fazenda
+--- saara antartica arizona/canyon
+--- testar floresta densa
+--- otimização do polígono
+--- customização por último
+--- foca em terminar o terreno, depois disso pronto, focamos no personagem (inventario, coleta de itens, ataques básicos)
+arvore de habilidades vemos depois... pois teremos que fazer o balanceamento
+pode ser mecânica que uma vez coletado o item, vc pode colocar em baús, mas nunca mais no mundo, somente deletar ele. 
+
+
+
 não snipe se não tiver arma fallback to chase testar se está segurando arma não entrar no state
 causar dano com soco add hitbox to player jogador está sem hitibox e só estava testando com arma
 correr se estiver em combate; evitar andar
