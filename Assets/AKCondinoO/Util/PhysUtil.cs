@@ -506,12 +506,11 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
     return index;
 }
         //---  2D (X e Z somente)  ---
-internal static int GetCoordsInsideBoundsUsingParallelFor(
-    Bounds bounds, Vector3 scale, Quaternion rotation, Vector3 margin,
-    bool sorted, Vector3Int[] outputArray, HashSet<Vector3Int> ignored = null
-)
-{
-    Vector3 scaledExtents = Vector3.Scale(bounds.extents, scale);
+        internal static int GetCoordsInsideBoundsUsingParallelFor(
+         Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
+         bool sorted,Vector3Int[]outputArray,HashSet<Vector3Int>ignored=null
+        ){
+         Vector3 scaledExtents=Vector3.Scale(bounds.extents,scale);
     Vector3 finalExtents = scaledExtents + margin;
     Vector3 min = bounds.center - finalExtents;
     Vector3 max = bounds.center + finalExtents;

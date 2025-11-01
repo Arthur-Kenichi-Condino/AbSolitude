@@ -51,6 +51,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>state=new();
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>>hasData=new();
       internal Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>hasNoData=new();
+     internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
+     internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
      internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
         internal enum Execution{
@@ -79,7 +81,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
       internal StreamReader chunkStateFileStreamReader;
        readonly StringBuilder stringBuilder=new StringBuilder();
         readonly StringBuilder lineStringBuilder=new StringBuilder();
-     Dictionary<int,SpawnMapInfo[]>spawnMaps;
+     readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
+     readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
         protected override void Cleanup(){
         }
 //        void ResolveSpawnConflict(
@@ -2384,6 +2387,57 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          recursionDepth--;
          return result1;
         }
+        void OpenSpawnMapsData(int cnkIdx){
+         VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+         try{
+          if(spawnMaps.ContainsKey(cnkIdx)){
+           return;
+          }
+          VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+          try{
+           if(!VoxelSystem.Concurrent.spawnMaps.TryGetValue(cnkIdx,out SpawnMapInfo[]spawnMap)){
+               VoxelSystem.Concurrent.spawnMaps    [cnkIdx]=spawnMap=new SpawnMapInfo[FlattenOffset ];
+               VoxelSystem.Concurrent.spawnMaps3D  [cnkIdx]=new SpawnMapInfo[VoxelsPerChunk];
+               VoxelSystem.Concurrent.spawnMapsOpen[cnkIdx]=1;
+            VoxelSystem.Concurrent.spawnMapsFiles_rwl.EnterReadLock();
+            try{
+             //  TO DO: read from file
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.spawnMapsFiles_rwl.ExitReadLock();
+            }
+           }else{
+               VoxelSystem.Concurrent.spawnMapsOpen[cnkIdx]++;
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+          }
+          spawnMaps  [cnkIdx]=VoxelSystem.Concurrent.spawnMaps    [cnkIdx];
+          spawnMaps3D[cnkIdx]=VoxelSystem.Concurrent.spawnMaps3D  [cnkIdx];
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+         }
+        }
+        void CloseSpawnMapsData(int cnkIdx,bool keepInContainer=true){
+         if(keepInContainer){
+          //  TO DO: clear and add to pool if exists
+          //  TO DO: get from pool
+          container.spawnMaps  [cnkIdx]=new SpawnMapInfo[FlattenOffset ];//[cnkIdx]=spawnMaps  [cnkIdx];
+          container.spawnMaps3D[cnkIdx]=new SpawnMapInfo[VoxelsPerChunk];//[cnkIdx]=spawnMaps3D[cnkIdx];
+         }
+         VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+         try{
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+         }
+        }
         void OpenSurfaceData(int layer,int cnkIdx){
          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
          try{
@@ -2491,6 +2545,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
          }
         }
+     Vector3Int[]getCoordsOutputArray=new Vector3Int[0];
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
@@ -2569,8 +2624,38 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             bool success=false;
             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
              if(!(container.gotGroundHits[index1]==null)){
-              RaycastHit floor=container.gotGroundHits[index1].Value;
               success=true;
+              RaycastHit floor=container.gotGroundHits[index1].Value;
+              Type simObject=spawnCandidateData1.simObjectPicked.simObject;
+              SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
+              Quaternion rotation=spawnCandidateData1.rotation;
+              rotation=rotation*Quaternion.SlerpUnclamped(
+               Quaternion.identity,
+               Quaternion.FromToRotation(
+                Vector3.up,
+                floor.normal
+               ),
+               spawnCandidateData1.simObjectSettings.inclination
+              );
+              Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";modifiers.scale.y:"+modifiers.scale.y);
+              Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData1.simObjectSettings.assetScale);
+              Vector3 position=new Vector3(
+                floor.point.x,
+                floor.point.y,
+                floor.point.z
+               )+
+               (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
+               (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
+              int getCoordsOutputArraySize=PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,scale,margin);
+              if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
+               Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
+              }
+              PhysUtil.GetCoordsInsideBoundsUsingParallelFor(
+               bounds:spawnCandidateData1.bounds,scale,rotation,
+               margin,
+               sorted:false,
+               outputArray:getCoordsOutputArray
+              );
              }
             }
             if(!success){

@@ -1,5 +1,7 @@
 spawn map 2D e 3D para não spawn'ar objetos um em cima do outro e depois no posicionamento final, prioridade de spawn por layer, tamanho ou posição em x e z e y, aí o de menor prioridade some pra dar espaço pro outro ou é reposicionado; objetos criados pelo jogador têm prioridade máxima e não somem
 
+sistema de construção
+
 --- mesa de trabalho / fazenda
 --- saara antartica arizona/canyon
 --- testar floresta densa
