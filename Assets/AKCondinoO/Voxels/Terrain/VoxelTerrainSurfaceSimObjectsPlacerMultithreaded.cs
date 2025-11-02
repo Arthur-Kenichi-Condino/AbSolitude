@@ -2427,11 +2427,40 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          if(keepInContainer){
           //  TO DO: clear and add to pool if exists
           //  TO DO: get from pool
-          container.spawnMaps  [cnkIdx]=new SpawnMapInfo[FlattenOffset ];//[cnkIdx]=spawnMaps  [cnkIdx];
-          container.spawnMaps3D[cnkIdx]=new SpawnMapInfo[VoxelsPerChunk];//[cnkIdx]=spawnMaps3D[cnkIdx];
+          container.spawnMaps  [cnkIdx]=new SpawnMapInfo[FlattenOffset ];
+          container.spawnMaps3D[cnkIdx]=new SpawnMapInfo[VoxelsPerChunk];
          }
          VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
          try{
+          if(VoxelSystem.Concurrent.spawnMaps.TryGetValue(cnkIdx,out SpawnMapInfo[]spawnMap)){
+           if(keepInContainer){
+            Array.Copy(spawnMaps  [cnkIdx],container.spawnMaps  [cnkIdx],spawnMaps  [cnkIdx].Length);
+            Array.Copy(spawnMaps3D[cnkIdx],container.spawnMaps3D[cnkIdx],spawnMaps3D[cnkIdx].Length);
+           }
+           spawnMaps  .Remove(cnkIdx);
+           spawnMaps3D.Remove(cnkIdx);
+           VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+           try{
+            int spawnMapsOpen=--VoxelSystem.Concurrent.spawnMapsOpen[cnkIdx];
+            if(spawnMapsOpen<=0){
+             VoxelSystem.Concurrent.spawnMapsFiles_rwl.EnterWriteLock();
+             try{
+              //  TO DO: write to file
+             }catch{
+              throw;
+             }finally{
+              VoxelSystem.Concurrent.spawnMapsFiles_rwl.ExitWriteLock();
+             }
+             //  TO DO: add to pool
+             VoxelSystem.Concurrent.spawnMaps  .Remove(cnkIdx);spawnMap=null;
+             VoxelSystem.Concurrent.spawnMaps3D.Remove(cnkIdx);
+            }
+           }catch{
+            throw;
+           }finally{
+            VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+           }
+          }
          }catch{
           throw;
          }finally{
@@ -2650,12 +2679,20 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
                Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
               }
-              PhysUtil.GetCoordsInsideBoundsUsingParallelFor(
+              int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor(
                bounds:spawnCandidateData1.bounds,scale,rotation,
                margin,
                sorted:false,
                outputArray:getCoordsOutputArray
               );
+              for(int i=0;i<getCoordsOutputArrayLength;++i){
+               Vector3Int coord=getCoordsOutputArray[i];
+               Vector3Int vCoord2=vecPosTovCoord(coord,out Vector2Int cnkRgn2);
+               Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+               int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+               OpenSpawnMapsData(cnkIdx2);
+               int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+              }
              }
             }
             if(!success){
