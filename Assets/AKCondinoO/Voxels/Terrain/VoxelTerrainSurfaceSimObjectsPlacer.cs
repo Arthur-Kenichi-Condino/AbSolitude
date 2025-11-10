@@ -48,8 +48,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             //Log.DebugMessage("fillingSpawnData=false;");
                             surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                             SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
-                            Array.Copy(surfaceSimObjectsPlacerBG.testArray,testArray,surfaceSimObjectsPlacerBG.testArray.Length);
-                            testArrayReady=true;
+                            Array.Copy(surfaceSimObjectsPlacerBG.debugArray,debugArray,surfaceSimObjectsPlacerBG.debugArray.Length);
+                            Array.Copy(surfaceSimObjectsPlacerBG.debugSpawnMapArray,debugSpawnMapArray,surfaceSimObjectsPlacerBG.debugSpawnMapArray.Length);
+                            debugArrayReady=true;
                             spawning=true;
                             //Log.DebugMessage("spawning=true;");
                         }
@@ -142,15 +143,16 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          //Log.DebugMessage("OnPlacingFinished()");
          isBusy=false;
         }
-        bool testArrayReady=false;
-        readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
+        bool debugArrayReady=false;
+        readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
+        readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
         //[SerializeField]int seqSize1=3;
         //[SerializeField]int seqSize2=3;
         internal void OnDrawGizmos(){
          if(simObjectsPlacing.cnk.id!=null){
           Vector2Int cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
           if((true||(cnkRgn.x==0&&cnkRgn.y==0))&&!(cnkRgn.x==16&&cnkRgn.y==16)&&!(cnkRgn.x==-16&&cnkRgn.y==-16)){
-           if(true&&testArrayReady){
+           if(true&&debugArrayReady){
             Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
             for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
             for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
@@ -158,14 +160,26 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              Vector3 pos1=vCoord1;
              pos1.x+=cnkRgn.x;
              pos1.z+=cnkRgn.y;
-             Gizmos.color=testArray[index1].color;
+             Gizmos.color=debugArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
-              Gizmos.matrix=Matrix4x4.TRS(testArray[index1].bounds.center,testArray[index1].rotation,testArray[index1].scale);
-              Gizmos.DrawWireCube(Vector3.zero,testArray[index1].bounds.size);
+              Gizmos.matrix=Matrix4x4.TRS(debugArray[index1].bounds.center,debugArray[index1].rotation,debugArray[index1].scale);
+              Gizmos.DrawWireCube(Vector3.zero,debugArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.identity;
              //}else{
               //Gizmos.DrawCube(pos1,Vector3.one/2f);
              //}
+            }}
+            vCoord1=new Vector3Int(0,Height/2-1,0);
+            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+            for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+             int index1=vCoord1.z+vCoord1.x*Depth;
+             Vector3 pos1=vCoord1;
+             pos1.x+=cnkRgn.x;
+             pos1.z+=cnkRgn.y;
+             Gizmos.color=debugSpawnMapArray[index1];
+              Gizmos.matrix=Matrix4x4.TRS(pos1,Quaternion.identity,Vector3.one);
+              Gizmos.DrawWireCube(Vector3.zero,Vector3.one);
+              Gizmos.matrix=Matrix4x4.identity;
             }}
            }
            //if(testArray==null){

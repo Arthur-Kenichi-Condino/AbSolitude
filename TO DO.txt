@@ -1,3 +1,12 @@
+toClose
+Clear
+Add tudo em pools
+Foreach layer
+save to file
+spawn priority
+spawn map priority
+Spawn map for testing only: fill spawn map for layer objects which may big by testing max size around chunk so big objects not spawned still prevent next layer spawn
+
 spawn map 2D e 3D para não spawn'ar objetos um em cima do outro e depois no posicionamento final, prioridade de spawn por layer, tamanho ou posição em x e z e y, aí o de menor prioridade some pra dar espaço pro outro ou é reposicionado; objetos criados pelo jogador têm prioridade máxima e não somem
 
 sistema de construção

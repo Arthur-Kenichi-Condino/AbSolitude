@@ -23,7 +23,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal struct SpawnMapInfo{
      internal bool isBlocked;
      public Vector3 center;
-     internal SpawnedTypes type;
+     internal int layer;
     }
     internal struct SpawnCandidateData{
      public(Type simObject,SimObjectSettings simObjectSettings)simObjectPicked;
@@ -53,7 +53,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
       internal Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>hasNoData=new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
-     internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]testArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
+     internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
+     internal readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
      internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
         internal enum Execution{
          ReserveBounds,
@@ -2423,6 +2424,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
          }
         }
+     internal readonly HashSet<int>toCloseSpawnMapsData=new();
         void CloseSpawnMapsData(int cnkIdx,bool keepInContainer=true){
          if(keepInContainer){
           //  TO DO: clear and add to pool if exists
@@ -2517,7 +2519,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
          }
         }
-     internal readonly HashSet<int>toClose=new();
+     internal readonly HashSet<int>toCloseSurfaceSpawnData=new();
         void CloseSurfaceData(int layer,int cnkIdx,bool keepInContainer=true){
          if(keepInContainer){
           if(!container.hasData.TryGetValue(layer,out var containerHasData)){
@@ -2575,6 +2577,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }
         }
      Vector3Int[]getCoordsOutputArray=new Vector3Int[0];
+     readonly Dictionary<int,Dictionary<int,SpawnMapInfo>>spawnMapsPreviousInfo=new();
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
          switch(container.execution){
@@ -2646,7 +2649,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             pos1.z+=cnkRgn1.y;
             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                            noiseInput1.z+=cnkRgn1.y;
-            container.testArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+            container.debugArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
             int recursionCalls=0;
             int recursionDepth=0;
             bool recursionLimitReached=false;
@@ -2675,56 +2678,139 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                )+
                (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
                (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-              int getCoordsOutputArraySize=PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,scale,margin);
+              int getCoordsOutputArraySize=0;//PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,modifiers.scale,margin);
               if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
                Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
               }
+              //Log.DebugMessage("ReserveBounds:getCoordsOutputArraySize:"+getCoordsOutputArraySize);
+              //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor");
               int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor(
-               bounds:spawnCandidateData1.bounds,scale,rotation,
+               bounds:spawnCandidateData1.bounds,modifiers.scale,rotation,
                margin,
                sorted:false,
-               outputArray:getCoordsOutputArray
+               outputArray:ref getCoordsOutputArray
               );
+              //Log.DebugMessage("ReserveBounds:getCoordsOutputArrayLength:"+getCoordsOutputArrayLength);
               for(int i=0;i<getCoordsOutputArrayLength;++i){
-               Vector3Int coord=getCoordsOutputArray[i];
-               Vector3Int vCoord2=vecPosTovCoord(coord,out Vector2Int cnkRgn2);
-               Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
-               int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
-               OpenSpawnMapsData(cnkIdx2);
-               int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+               Vector3Int coord2=getCoordsOutputArray[i];
+               Log.DebugMessage("ReserveBounds:coord2:"+coord2);
               }
+              // Vector3Int coord2=getCoordsOutputArray[i];
+              // coord2+=pos1;
+              // Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+              // Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+              // int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+              // OpenSpawnMapsData(cnkIdx2);
+              // int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+              // if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
+              //  //  TO DO: get from pool
+              //  spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
+              // }
+              // VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+              // try{
+              //  if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+              //   if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
+              //    success=false;
+              //    goto _SpawnMapBlocked;
+              //   }
+              //   if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+              //    goto _Unchanged;
+              //   }
+              //  }
+              //  VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+              //  try{
+              //   spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
+              //   spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
+              //    isBlocked=true,
+              //    center=pos1,
+              //    layer=layer,
+              //   };
+              //   if(cnkIdx2==container.cnkIdx){
+              //    container.debugSpawnMapArray[vxlIdx2]=Color.blue;
+              //   }
+              //  }catch{
+              //   throw;
+              //  }finally{
+              //   VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+              //  }
+              //  _Unchanged:{}
+              //  _SpawnMapBlocked:{}
+              // }catch{
+              //  throw;
+              // }finally{
+              //  VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+              // }
+              // if(!success){
+              //  break;
+              // }
+              //}
+              //if(!success){
+              // foreach(var kvp1 in spawnMapsPreviousInfo){
+              //  var spawnMapPreviousInfo=kvp1.Value;
+              //  foreach(var kvp2 in spawnMapPreviousInfo){
+              //   spawnMaps[kvp1.Key][kvp2.Key]=kvp2.Value;
+              //  }
+              //  spawnMapPreviousInfo.Clear();
+              //  //  TO DO: add to pool
+              // }
+              //}
+              //spawnMapsPreviousInfo.Clear();
              }
             }
             if(!success){
              Vector2Int cCoord1=vecPosTocCoord(pos1);
              int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
              bool gotData;
-             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
              try{
               gotData=hasData[layer].TryGetValue(cnkIdx1,out var data)&&data.ContainsKey(pos1);
+              if(gotData){
+               VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+               try{
+                data.Remove(pos1);
+                hasNoData[layer][cnkIdx1].Add(pos1);
+                state    [layer][cnkIdx1][pos1]=false;
+               }catch{
+                throw;
+               }finally{
+                VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+               }
+              }
              }catch{
               throw;
              }finally{
-              VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
+              VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
              }
              if(gotData){
-              container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+              container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
              }
             }
             Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
            }}
            VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
            try{
-            toClose.UnionWith(hasData[layer].Keys);
+            toCloseSurfaceSpawnData.UnionWith(hasData[layer].Keys);
            }catch{
             throw;
            }finally{
             VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
            }
-           foreach(int cnkIdx in toClose){
+           foreach(int cnkIdx in toCloseSurfaceSpawnData){
             CloseSurfaceData(layer,cnkIdx,cnkIdx==container.cnkIdx);
            }
-           toClose.Clear();
+           toCloseSurfaceSpawnData.Clear();
+           VoxelSystem.Concurrent.spawnMapsData_rwl.EnterReadLock();
+           try{
+            toCloseSpawnMapsData.UnionWith(spawnMaps.Keys);
+           }catch{
+            throw;
+           }finally{
+            VoxelSystem.Concurrent.spawnMapsData_rwl.ExitReadLock();
+           }
+           foreach(int cnkIdx in toCloseSpawnMapsData){
+            CloseSpawnMapsData(cnkIdx,cnkIdx==container.cnkIdx);
+           }
+           toCloseSpawnMapsData.Clear();
             //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             //if(cnkRgn1.x!=0||cnkRgn1.y!=0){
             // continue;
@@ -4129,9 +4215,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                  )+
                  (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
                  (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-                container.testArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                container.debugArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
                 if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-                 container.testArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                 container.debugArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
                 }
                 Log.DebugMessage("set to be spawned:simObject:"+simObject);
                 container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));
@@ -4139,14 +4225,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               }
              }}
             }
-            toClose.UnionWith(candidatesBycnkIdx.Keys);
-            foreach(int cnkIdx in toClose){
+            toCloseSurfaceSpawnData.UnionWith(candidatesBycnkIdx.Keys);
+            foreach(int cnkIdx in toCloseSurfaceSpawnData){
              //  TO DO: clear and add to pool
              candidatesBycnkIdx        .Remove(cnkIdx);
              container.hasNoData[layer].Remove(cnkIdx);
              container.state    [layer].Remove(cnkIdx);
             }
-            toClose.Clear();
+            toCloseSurfaceSpawnData.Clear();
            }
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
