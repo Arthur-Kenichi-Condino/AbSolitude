@@ -953,6 +953,10 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
         //    int sizeZ = Mathf.CeilToInt(halfExtents.z * 2f);
         //    return sizeX * sizeZ;
         //}
+        static readonly ConcurrentBag<Vector3[]>       cornersPool=new();
+        static readonly ConcurrentBag<Vector2[]>     projectedPool=new();
+        static readonly ConcurrentBag<Vector2[]>projectedEdgesPool=new();
+        static readonly ConcurrentBag<  float[]>          distPool=new();
         internal static int GetCoordsInsideBoundsUsingParallelFor2D(
          Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
          bool sorted,ref Vector3Int[]outputArray,HashSet<Vector3Int>ignored=null
@@ -963,8 +967,14 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
          Vector3 scaledSize=Vector3.Scale(bounds.size,scale);//  aplica scale ao tamanho do bounds (sem margem ainda)
          //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:scaledSize:"+scaledSize);
          Vector3 half=scaledSize*0.5f;
-         Vector3[]corners=new Vector3[8];
-         Vector2[]projected=new Vector2[corners.Length];
+         Vector3[]corners;
+         if(!cornersPool.TryTake(out corners)){
+          corners=new Vector3[8];
+         }
+         Vector2[]projected;
+         if(!projectedPool.TryTake(out projected)){
+          projected=new Vector2[corners.Length];
+         }
          for(int i=0,sx=-1;sx<=1;sx+=2){
          for(int     sy=-1;sy<=1;sy+=2){
          for(int     sz=-1;sz<=1;sz+=2){//  gera os 8 cantos locais
@@ -979,8 +989,14 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
          }}}
          //  garante 4 pontos da base no plano X-Z
          Vector2 projectedCenter=new Vector2(bounds.center.x,bounds.center.z);
-         Vector2[]projectedEdges=new Vector2[4];
-         float[]dist={float.MinValue,float.MinValue,float.MinValue,float.MinValue};
+         Vector2[]projectedEdges;
+         if(!projectedEdgesPool.TryTake(out projectedEdges)){
+          projectedEdges=new Vector2[4];
+         }
+         float[]dist;
+         if(!distPool.TryTake(out dist)){
+          dist=new float[]{float.MinValue,float.MinValue,float.MinValue,float.MinValue};
+         }
          for(int i=0;i<projected.Length;i++){
           Vector2 p=projected[i];
           float d=(p-projectedCenter).sqrMagnitude;
@@ -998,11 +1014,11 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
            }
           }
          }
-Array.Sort(projectedEdges, (a, b) => {
-    float angleA = Mathf.Atan2(a.y - projectedCenter.y, a.x - projectedCenter.x);
-    float angleB = Mathf.Atan2(b.y - projectedCenter.y, b.x - projectedCenter.x);
-    return angleA.CompareTo(angleB);
-});
+         Array.Sort(projectedEdges,(a,b)=>{
+          float angleA=Mathf.Atan2(a.y-projectedCenter.y,a.x-projectedCenter.x);
+          float angleB=Mathf.Atan2(b.y-projectedCenter.y,b.x-projectedCenter.x);
+          return angleA.CompareTo(angleB);
+         });
          Vector2 min=new Vector2(float.PositiveInfinity,float.PositiveInfinity);
          Vector2 max=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
          for(int i=0;i<projected.Length;i++){
@@ -1017,7 +1033,7 @@ Array.Sort(projectedEdges, (a, b) => {
             float.IsNaN(min.x)||float.IsNaN(min.y)||
             float.IsNaN(max.x)||float.IsNaN(max.y)
          ){
-          return 0;
+          Pool();return 0;
          }
          int minX=Mathf.FloorToInt(min.x);
          int maxX=Mathf. CeilToInt(max.x);
@@ -1042,25 +1058,29 @@ Array.Sort(projectedEdges, (a, b) => {
           }
          });
             bool PointIn(Vector2 point){
-             bool inside = true;
-             for (int i = 0; i < 4; i++)
-             {
-                 Vector2 a = projectedEdges[i];
-                 Vector2 b = projectedEdges[(i + 1) % 4];
-                 Vector2 edge = b - a;
-                 Vector2 toPoint = point - a;
-                 float cross = edge.x * toPoint.y - edge.y * toPoint.x; // sinal do produto vetorial 2D
-
-                 if (cross < 0f)
-                 {
-                     inside = false;
-                     break;
-                 }
+             bool inside=true;
+             for(int i=0;i<4;i++){
+              Vector2 a=projectedEdges[i];
+              Vector2 b=projectedEdges[(i+1)%4];
+              Vector2 edge=b-a;
+              Vector2 toPoint=point-a;
+              float cross=edge.x*toPoint.y-edge.y*toPoint.x;//  sinal do produto vetorial 2D
+              if(cross<0f){
+               inside=false;
+               break;
+              }
              }
              return inside;
             }
          Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:length:"+length);
-         return length;
+         Pool();return length;
+         void Pool(){
+                 cornersPool.Add(corners       );
+               projectedPool.Add(projected     );
+          projectedEdgesPool.Add(projectedEdges);
+          for(int i=0;i<dist.Length;++i){dist[i]=float.MinValue;}
+                    distPool.Add(dist          );
+         }
             //// 1) Expande bounds pela margin (aplica antes dos calculos)
             //Bounds input = new Bounds(bounds.center, bounds.size);
             //input.Expand(margin * 2f);

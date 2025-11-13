@@ -2705,7 +2705,55 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 container.debugSpawnMapArray[vxlIdx2]=Color.blue;
                }
                OpenSpawnMapsData(cnkIdx2);
+               if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
+                //  TO DO: get from pool
+                spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
+               }
+               VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+               try{
+                if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+                 if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
+                  success=false;
+                  goto _Unchanged;
+                 }
+                 if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+                  goto _Unchanged;
+                 }
+                }
+                VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+                try{
+                 spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
+                 spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
+                  isBlocked=true,
+                  center=pos1,
+                  layer=layer,
+                 };
+                }catch{
+                 throw;
+                }finally{
+                 VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+                }
+                _Unchanged:{}
+               }catch{
+                throw;
+               }finally{
+                VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+               }
+               if(!success){
+                break;
+               }
               }
+              if(!success){
+               foreach(var kvp1 in spawnMapsPreviousInfo){
+                var spawnMapPreviousInfo=kvp1.Value;
+              //  foreach(var kvp2 in spawnMapPreviousInfo){
+              //   spawnMaps[kvp1.Key][kvp2.Key]=kvp2.Value;
+              //  }
+                spawnMapPreviousInfo.Clear();
+                //  TO DO: add to pool
+               }
+              }
+              spawnMapsPreviousInfo.Clear();
               // Vector3Int coord2=getCoordsOutputArray[i];
               // coord2+=pos1;
               // Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
@@ -2755,17 +2803,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               //  break;
               // }
               //}
-              //if(!success){
-              // foreach(var kvp1 in spawnMapsPreviousInfo){
-              //  var spawnMapPreviousInfo=kvp1.Value;
-              //  foreach(var kvp2 in spawnMapPreviousInfo){
-              //   spawnMaps[kvp1.Key][kvp2.Key]=kvp2.Value;
-              //  }
-              //  spawnMapPreviousInfo.Clear();
-              //  //  TO DO: add to pool
-              // }
-              //}
-              //spawnMapsPreviousInfo.Clear();
              }
             }
             if(!success){
