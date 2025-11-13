@@ -953,7 +953,7 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
         //    int sizeZ = Mathf.CeilToInt(halfExtents.z * 2f);
         //    return sizeX * sizeZ;
         //}
-        internal static int GetCoordsInsideBoundsUsingParallelFor(
+        internal static int GetCoordsInsideBoundsUsingParallelFor2D(
          Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
          bool sorted,ref Vector3Int[]outputArray,HashSet<Vector3Int>ignored=null
         ){
@@ -977,6 +977,32 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
           projected[i]=new Vector2(corners[i].x,corners[i].z);
           ++i;
          }}}
+         //  garante 4 pontos da base no plano X-Z
+         Vector2 projectedCenter=new Vector2(bounds.center.x,bounds.center.z);
+         Vector2[]projectedEdges=new Vector2[4];
+         float[]dist={float.MinValue,float.MinValue,float.MinValue,float.MinValue};
+         for(int i=0;i<projected.Length;i++){
+          Vector2 p=projected[i];
+          float d=(p-projectedCenter).sqrMagnitude;
+          for(int j=0;j<4;j++){//  testa se é maior que algum dos 4 armazenados
+           if(d>dist[j]){
+            //  desloca os menores pra frente
+            for(int k=3;k>j;k--){
+             dist[k]=dist[k-1];
+             projectedEdges[k]=projectedEdges[k-1];
+            }
+            dist[j]=d;
+            projectedEdges[j]=p;
+            Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:projectedEdges[j]:"+projectedEdges[j]);
+            break;
+           }
+          }
+         }
+Array.Sort(projectedEdges, (a, b) => {
+    float angleA = Mathf.Atan2(a.y - projectedCenter.y, a.x - projectedCenter.x);
+    float angleB = Mathf.Atan2(b.y - projectedCenter.y, b.x - projectedCenter.x);
+    return angleA.CompareTo(angleB);
+});
          Vector2 min=new Vector2(float.PositiveInfinity,float.PositiveInfinity);
          Vector2 max=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
          for(int i=0;i<projected.Length;i++){
@@ -1009,10 +1035,30 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
          Parallel.For(minX,maxX+1,x=>{
           for(int z=minZ;z<maxZ+1;z++){//  cada ponto (x,z) é uma célula do grid
            Vector3Int coord=new Vector3Int(x,0,z);
-           int i=Interlocked.Increment(ref length)-1;
-           output[i]=coord;
+           if(PointIn(new Vector2(coord.x,coord.z))){
+            int i=Interlocked.Increment(ref length)-1;
+            output[i]=coord;
+           }
           }
          });
+            bool PointIn(Vector2 point){
+             bool inside = true;
+             for (int i = 0; i < 4; i++)
+             {
+                 Vector2 a = projectedEdges[i];
+                 Vector2 b = projectedEdges[(i + 1) % 4];
+                 Vector2 edge = b - a;
+                 Vector2 toPoint = point - a;
+                 float cross = edge.x * toPoint.y - edge.y * toPoint.x; // sinal do produto vetorial 2D
+
+                 if (cross < 0f)
+                 {
+                     inside = false;
+                     break;
+                 }
+             }
+             return inside;
+            }
          Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:length:"+length);
          return length;
             //// 1) Expande bounds pela margin (aplica antes dos calculos)
@@ -1191,16 +1237,16 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
             //return added;
         }
 
-    // Comparer auxiliar para sort
-    private class Vector3IntComparer : IComparer<Vector3Int>
-    {
-        public int Compare(Vector3Int a, Vector3Int b)
-        {
-            int cmp = a.x.CompareTo(b.x);
-            if (cmp != 0) return cmp;
-            return a.z.CompareTo(b.z);
-        }
-    }
+    //// Comparer auxiliar para sort
+    //private class Vector3IntComparer : IComparer<Vector3Int>
+    //{
+    //    public int Compare(Vector3Int a, Vector3Int b)
+    //    {
+    //        int cmp = a.x.CompareTo(b.x);
+    //        if (cmp != 0) return cmp;
+    //        return a.z.CompareTo(b.z);
+    //    }
+    //}
 
     }
 }

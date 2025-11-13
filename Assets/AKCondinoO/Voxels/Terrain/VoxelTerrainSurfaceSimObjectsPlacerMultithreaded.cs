@@ -2678,13 +2678,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                )+
                (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
                (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-              int getCoordsOutputArraySize=0;//PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,modifiers.scale,margin);
-              if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
-               Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
-              }
+              //int getCoordsOutputArraySize=0;//PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,modifiers.scale,margin);
+              //if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
+              // Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
+              //}
               //Log.DebugMessage("ReserveBounds:getCoordsOutputArraySize:"+getCoordsOutputArraySize);
               //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor");
-              int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor(
+              int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
                bounds:spawnCandidateData1.bounds,modifiers.scale,rotation,
                margin,
                sorted:false,
@@ -2693,7 +2693,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               //Log.DebugMessage("ReserveBounds:getCoordsOutputArrayLength:"+getCoordsOutputArrayLength);
               for(int i=0;i<getCoordsOutputArrayLength;++i){
                Vector3Int coord2=getCoordsOutputArray[i];
-               Log.DebugMessage("ReserveBounds:coord2:"+coord2);
+               coord2.x+=pos1.x;
+               coord2.z+=pos1.z;
+               //Log.DebugMessage("ReserveBounds:coord2:"+coord2);
+               Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+               int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+               Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+               int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+               if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
+                Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
+                container.debugSpawnMapArray[vxlIdx2]=Color.blue;
+               }
+               OpenSpawnMapsData(cnkIdx2);
               }
               // Vector3Int coord2=getCoordsOutputArray[i];
               // coord2+=pos1;
