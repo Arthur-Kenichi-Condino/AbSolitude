@@ -2746,9 +2746,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               if(!success){
                foreach(var kvp1 in spawnMapsPreviousInfo){
                 var spawnMapPreviousInfo=kvp1.Value;
-              //  foreach(var kvp2 in spawnMapPreviousInfo){
+                foreach(var kvp2 in spawnMapPreviousInfo){
               //   spawnMaps[kvp1.Key][kvp2.Key]=kvp2.Value;
-              //  }
+                }
                 spawnMapPreviousInfo.Clear();
                 //  TO DO: add to pool
                }
