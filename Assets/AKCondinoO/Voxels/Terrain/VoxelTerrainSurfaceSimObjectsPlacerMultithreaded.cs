@@ -2633,232 +2633,262 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            //  TO DO: colocar em cleanup ao invés de execute e antes adicionar ao cache global como é feito com a água (em arquivos com binary writer e reader)
 
 
-
-           //hasData.Clear();
-           //hasNoData.Clear();
-           //state.Clear();
-           Vector3 margin=Vector3.one*5;
-           int layer=0;
-           Vector2Int cnkRgn1=container.cnkRgn;
-           Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
-           for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
-           for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
-            int index1=vCoord1.z+vCoord1.x*Depth;
-            Vector3Int pos1=vCoord1;
-            pos1.x+=cnkRgn1.x;
-            pos1.z+=cnkRgn1.y;
-            Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
-                                           noiseInput1.z+=cnkRgn1.y;
-            container.debugArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
-            int recursionCalls=0;
-            int recursionDepth=0;
-            bool recursionLimitReached=false;
-            bool success=false;
-            if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
-             if(!(container.gotGroundHits[index1]==null)){
-              success=true;
-              RaycastHit floor=container.gotGroundHits[index1].Value;
-              Type simObject=spawnCandidateData1.simObjectPicked.simObject;
-              SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
-              Quaternion rotation=spawnCandidateData1.rotation;
-              rotation=rotation*Quaternion.SlerpUnclamped(
-               Quaternion.identity,
-               Quaternion.FromToRotation(
-                Vector3.up,
-                floor.normal
-               ),
-               spawnCandidateData1.simObjectSettings.inclination
-              );
-              Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";modifiers.scale.y:"+modifiers.scale.y);
-              Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData1.simObjectSettings.assetScale);
-              Vector3 position=new Vector3(
-                floor.point.x,
-                floor.point.y,
-                floor.point.z
-               )+
-               (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
-               (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-              //int getCoordsOutputArraySize=0;//PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,modifiers.scale,margin);
-              //if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
-              // Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
-              //}
-              //Log.DebugMessage("ReserveBounds:getCoordsOutputArraySize:"+getCoordsOutputArraySize);
-              //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor");
-              int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
-               bounds:spawnCandidateData1.bounds,modifiers.scale,rotation,
-               margin,
-               sorted:false,
-               outputArray:ref getCoordsOutputArray
-              );
-              //Log.DebugMessage("ReserveBounds:getCoordsOutputArrayLength:"+getCoordsOutputArrayLength);
-              for(int i=0;i<getCoordsOutputArrayLength;++i){
-               Vector3Int coord2=getCoordsOutputArray[i];
-               coord2.x+=pos1.x;
-               coord2.z+=pos1.z;
-               //Log.DebugMessage("ReserveBounds:coord2:"+coord2);
-               Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
-               int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-               Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
-               int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
-               if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
-                Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
-                container.debugSpawnMapArray[vxlIdx2]=Color.blue;
-               }
-               OpenSpawnMapsData(cnkIdx2);
-               if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
-                //  TO DO: get from pool
-                spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
-               }
-               VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
-               try{
-                if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
-                 if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
-                  success=false;
-                  goto _Unchanged;
-                 }
-                 if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
-                  goto _Unchanged;
-                 }
+           for(int layer=VoxelSystem.biome.biomeSpawnSettings.minLayer;layer<=VoxelSystem.biome.biomeSpawnSettings.maxLayer;++layer){
+            //hasData.Clear();
+            //hasNoData.Clear();
+            //state.Clear();
+            Vector3 margin=Vector3.one*5;
+            Vector2Int cnkRgn1=container.cnkRgn;
+            Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+            for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+             int index1=vCoord1.z+vCoord1.x*Depth;
+             Vector3Int pos1=vCoord1;
+             pos1.x+=cnkRgn1.x;
+             pos1.z+=cnkRgn1.y;
+             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
+                                            noiseInput1.z+=cnkRgn1.y;
+             container.debugArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+             int recursionCalls=0;
+             int recursionDepth=0;
+             bool recursionLimitReached=false;
+             bool success=false;
+             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
+              if(!(container.gotGroundHits[index1]==null)){
+               success=true;
+               RaycastHit floor=container.gotGroundHits[index1].Value;
+               Type simObject=spawnCandidateData1.simObjectPicked.simObject;
+               SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
+               Quaternion rotation=spawnCandidateData1.rotation;
+               rotation=rotation*Quaternion.SlerpUnclamped(
+                Quaternion.identity,
+                Quaternion.FromToRotation(
+                 Vector3.up,
+                 floor.normal
+                ),
+                spawnCandidateData1.simObjectSettings.inclination
+               );
+               Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";modifiers.scale.y:"+modifiers.scale.y);
+               Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData1.simObjectSettings.assetScale);
+               Vector3 position=new Vector3(
+                 floor.point.x,
+                 floor.point.y,
+                 floor.point.z
+                )+
+                (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
+                (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
+               //int getCoordsOutputArraySize=0;//PhysUtil.GetCoordsInsideBoundsMinArraySize(spawnCandidateData1.bounds,modifiers.scale,margin);
+               //if(getCoordsOutputArraySize>getCoordsOutputArray.Length){
+               // Array.Resize(ref getCoordsOutputArray,getCoordsOutputArraySize);
+               //}
+               //Log.DebugMessage("ReserveBounds:getCoordsOutputArraySize:"+getCoordsOutputArraySize);
+               //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor");
+               int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
+                bounds:spawnCandidateData1.bounds,modifiers.scale,rotation,
+                margin,
+                sorted:false,
+                outputArray:ref getCoordsOutputArray
+               );
+               //Log.DebugMessage("ReserveBounds:getCoordsOutputArrayLength:"+getCoordsOutputArrayLength);
+               for(int i=0;i<getCoordsOutputArrayLength;++i){
+                Vector3Int coord2=getCoordsOutputArray[i];
+                coord2.x+=pos1.x;
+                coord2.z+=pos1.z;
+                //Log.DebugMessage("ReserveBounds:coord2:"+coord2);
+                Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+                int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+                Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+                int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+                if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
+                 Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
+                 container.debugSpawnMapArray[vxlIdx2]=Color.blue;
                 }
-                VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+                OpenSpawnMapsData(cnkIdx2);
+                if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
+                 //  TO DO: get from pool
+                 spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
+                }
+                VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
                 try{
-                 spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
-                 spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
-                  isBlocked=true,
-                  center=pos1,
-                  layer=layer,
-                 };
+                 if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+                  if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
+                   success=false;
+                   goto _Unchanged;
+                  }
+                  if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+                   goto _Unchanged;
+                  }
+                 }
+                 VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+                 try{
+                  spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
+                  spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
+                   isBlocked=true,
+                   center=pos1,
+                   layer=layer,
+                  };
+                 }catch{
+                  throw;
+                 }finally{
+                  VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+                 }
+                 _Unchanged:{}
                 }catch{
                  throw;
                 }finally{
-                 VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+                 VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
                 }
-                _Unchanged:{}
-               }catch{
-                throw;
-               }finally{
-                VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+                if(!success){
+                 break;
+                }
                }
                if(!success){
-                break;
-               }
-              }
-              if(!success){
-               foreach(var kvp1 in spawnMapsPreviousInfo){
-                var spawnMapPreviousInfo=kvp1.Value;
-                foreach(var kvp2 in spawnMapPreviousInfo){
-              //   spawnMaps[kvp1.Key][kvp2.Key]=kvp2.Value;
+                foreach(var kvp1 in spawnMapsPreviousInfo){
+                 int cnkIdx2=kvp1.Key;
+                 var spawnMapPreviousInfo=kvp1.Value;
+                 foreach(var kvp2 in spawnMapPreviousInfo){
+                  int vxlIdx2=kvp2.Key;
+                  SpawnMapInfo mapInfo=kvp2.Value;
+                  VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+                  try{
+                   if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+                    if(spawnMaps[cnkIdx2][vxlIdx2].layer>mapInfo.layer){
+                     goto _Unchanged;
+                    }
+                    if(mapInfo.center.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&mapInfo.center.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+                     goto _Unchanged;
+                    }
+                   }
+                   VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+                   try{
+                    spawnMaps[cnkIdx2][vxlIdx2]=mapInfo;
+                   }catch{
+                    throw;
+                   }finally{
+                    VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+                   }
+                   _Unchanged:{}
+                  }catch{
+                   throw;
+                  }finally{
+                   VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+                  }
+                 }
+                 spawnMapPreviousInfo.Clear();
+                 //  TO DO: add to pool
                 }
-                spawnMapPreviousInfo.Clear();
-                //  TO DO: add to pool
                }
+               spawnMapsPreviousInfo.Clear();
+               // Vector3Int coord2=getCoordsOutputArray[i];
+               // coord2+=pos1;
+               // Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+               // Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+               // int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+               // OpenSpawnMapsData(cnkIdx2);
+               // int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+               // if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
+               //  //  TO DO: get from pool
+               //  spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
+               // }
+               // VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+               // try{
+               //  if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+               //   if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
+               //    success=false;
+               //    goto _SpawnMapBlocked;
+               //   }
+               //   if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+               //    goto _Unchanged;
+               //   }
+               //  }
+               //  VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+               //  try{
+               //   spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
+               //   spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
+               //    isBlocked=true,
+               //    center=pos1,
+               //    layer=layer,
+               //   };
+               //   if(cnkIdx2==container.cnkIdx){
+               //    container.debugSpawnMapArray[vxlIdx2]=Color.blue;
+               //   }
+               //  }catch{
+               //   throw;
+               //  }finally{
+               //   VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+               //  }
+               //  _Unchanged:{}
+               //  _SpawnMapBlocked:{}
+               // }catch{
+               //  throw;
+               // }finally{
+               //  VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+               // }
+               // if(!success){
+               //  break;
+               // }
+               //}
               }
-              spawnMapsPreviousInfo.Clear();
-              // Vector3Int coord2=getCoordsOutputArray[i];
-              // coord2+=pos1;
-              // Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
-              // Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
-              // int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
-              // OpenSpawnMapsData(cnkIdx2);
-              // int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
-              // if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
-              //  //  TO DO: get from pool
-              //  spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
-              // }
-              // VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
-              // try{
-              //  if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
-              //   if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
-              //    success=false;
-              //    goto _SpawnMapBlocked;
-              //   }
-              //   if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
-              //    goto _Unchanged;
-              //   }
-              //  }
-              //  VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
-              //  try{
-              //   spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
-              //   spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
-              //    isBlocked=true,
-              //    center=pos1,
-              //    layer=layer,
-              //   };
-              //   if(cnkIdx2==container.cnkIdx){
-              //    container.debugSpawnMapArray[vxlIdx2]=Color.blue;
-              //   }
-              //  }catch{
-              //   throw;
-              //  }finally{
-              //   VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
-              //  }
-              //  _Unchanged:{}
-              //  _SpawnMapBlocked:{}
-              // }catch{
-              //  throw;
-              // }finally{
-              //  VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
-              // }
-              // if(!success){
-              //  break;
-              // }
-              //}
              }
-            }
-            if(!success){
-             Vector2Int cCoord1=vecPosTocCoord(pos1);
-             int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
-             bool gotData;
-             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
-             try{
-              gotData=hasData[layer].TryGetValue(cnkIdx1,out var data)&&data.ContainsKey(pos1);
+             if(!success){
+              Vector2Int cCoord1=vecPosTocCoord(pos1);
+              int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+              bool gotData;
+              VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
+              try{
+               gotData=hasData[layer].TryGetValue(cnkIdx1,out var data)&&data.ContainsKey(pos1);
+               if(gotData){
+                VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+                try{
+                 data.Remove(pos1);
+                 hasNoData[layer][cnkIdx1].Add(pos1);
+                 state    [layer][cnkIdx1][pos1]=false;
+                }catch{
+                 throw;
+                }finally{
+                 VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+                }
+               }
+              }catch{
+               throw;
+              }finally{
+               VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
+              }
               if(gotData){
-               VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
-               try{
-                data.Remove(pos1);
-                hasNoData[layer][cnkIdx1].Add(pos1);
-                state    [layer][cnkIdx1][pos1]=false;
-               }catch{
-                throw;
-               }finally{
-                VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
-               }
+               container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
               }
-             }catch{
-              throw;
-             }finally{
-              VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
              }
-             if(gotData){
-              container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
-             }
+             Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
+            }}
+            VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+            try{
+             toCloseSurfaceSpawnData.UnionWith(hasData[layer].Keys);
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
             }
-            Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
-           }}
-           VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
-           try{
-            toCloseSurfaceSpawnData.UnionWith(hasData[layer].Keys);
-           }catch{
-            throw;
-           }finally{
-            VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
+            foreach(int cnkIdx in toCloseSurfaceSpawnData){
+             CloseSurfaceData(layer,cnkIdx,cnkIdx==container.cnkIdx);
+            }
+            toCloseSurfaceSpawnData.Clear();
+            VoxelSystem.Concurrent.spawnMapsData_rwl.EnterReadLock();
+            try{
+             toCloseSpawnMapsData.UnionWith(spawnMaps.Keys);
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.spawnMapsData_rwl.ExitReadLock();
+            }
+            foreach(int cnkIdx in toCloseSpawnMapsData){
+             CloseSpawnMapsData(cnkIdx,cnkIdx==container.cnkIdx);
+            }
+            toCloseSpawnMapsData.Clear();
+            //  TO DO: close spawn map data and bring calculated data in container
            }
-           foreach(int cnkIdx in toCloseSurfaceSpawnData){
-            CloseSurfaceData(layer,cnkIdx,cnkIdx==container.cnkIdx);
-           }
-           toCloseSurfaceSpawnData.Clear();
-           VoxelSystem.Concurrent.spawnMapsData_rwl.EnterReadLock();
-           try{
-            toCloseSpawnMapsData.UnionWith(spawnMaps.Keys);
-           }catch{
-            throw;
-           }finally{
-            VoxelSystem.Concurrent.spawnMapsData_rwl.ExitReadLock();
-           }
-           foreach(int cnkIdx in toCloseSpawnMapsData){
-            CloseSpawnMapsData(cnkIdx,cnkIdx==container.cnkIdx);
-           }
-           toCloseSpawnMapsData.Clear();
+
+
+
             //container.testArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one);
             //if(cnkRgn1.x!=0||cnkRgn1.y!=0){
             // continue;
@@ -4224,64 +4254,70 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
           case Execution.FillSpawnData:{
            Log.DebugMessage("Execution.FillSpawnData");
-           Vector3 margin=Vector3.one*5;
-           int layer=0;
-           Vector2Int cnkRgn1=container.cnkRgn;
-           int        cnkIdx1=container.cnkIdx;
-           if(container.hasData.TryGetValue(layer,out var candidatesBycnkIdx)){
-            if(candidatesBycnkIdx.TryGetValue(cnkIdx1,out var candidates)){
-             Log.DebugMessage("Execution.FillSpawnData:layer:"+layer+";cnkIdx1:"+cnkIdx1);
-             Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
-             for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
-             for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
-              int index1=vCoord1.z+vCoord1.x*Depth;
-              Vector3Int pos1=vCoord1;
-              pos1.x+=cnkRgn1.x;
-              pos1.z+=cnkRgn1.y;
-              Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
-                                             noiseInput1.z+=cnkRgn1.y;
-              if(candidates.TryGetValue(pos1,out SpawnCandidateData spawnCandidateData1)){
-               if(!(container.gotGroundHits[index1]==null)){
-                RaycastHit floor=container.gotGroundHits[index1].Value;
-                Type simObject=spawnCandidateData1.simObjectPicked.simObject;
-                SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
-                Quaternion rotation=spawnCandidateData1.rotation;
-                rotation=rotation*Quaternion.SlerpUnclamped(
-                 Quaternion.identity,
-                 Quaternion.FromToRotation(
-                  Vector3.up,
-                  floor.normal
-                 ),
-                 spawnCandidateData1.simObjectSettings.inclination
-                );
-                Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";modifiers.scale.y:"+modifiers.scale.y);
-                Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData1.simObjectSettings.assetScale);
-                Vector3 position=new Vector3(
-                  floor.point.x,
-                  floor.point.y,
-                  floor.point.z
-                 )+
-                 (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
-                 (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-                container.debugArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
-                if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-                 container.debugArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+
+
+
+           for(int layer=VoxelSystem.biome.biomeSpawnSettings.minLayer;layer<=VoxelSystem.biome.biomeSpawnSettings.maxLayer;++layer){
+            Vector3 margin=Vector3.one*5;
+            Vector2Int cnkRgn1=container.cnkRgn;
+            int        cnkIdx1=container.cnkIdx;
+            if(container.hasData.TryGetValue(layer,out var candidatesBycnkIdx)){
+             if(candidatesBycnkIdx.TryGetValue(cnkIdx1,out var candidates)){
+              Log.DebugMessage("Execution.FillSpawnData:layer:"+layer+";cnkIdx1:"+cnkIdx1);
+              Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+              for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+              for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+               int index1=vCoord1.z+vCoord1.x*Depth;
+               Vector3Int pos1=vCoord1;
+               pos1.x+=cnkRgn1.x;
+               pos1.z+=cnkRgn1.y;
+               Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
+                                              noiseInput1.z+=cnkRgn1.y;
+               if(candidates.TryGetValue(pos1,out SpawnCandidateData spawnCandidateData1)){
+                if(!(container.gotGroundHits[index1]==null)){
+                 RaycastHit floor=container.gotGroundHits[index1].Value;
+                 Type simObject=spawnCandidateData1.simObjectPicked.simObject;
+                 SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
+                 Quaternion rotation=spawnCandidateData1.rotation;
+                 rotation=rotation*Quaternion.SlerpUnclamped(
+                  Quaternion.identity,
+                  Quaternion.FromToRotation(
+                   Vector3.up,
+                   floor.normal
+                  ),
+                  spawnCandidateData1.simObjectSettings.inclination
+                 );
+                 Log.DebugMessage("spawnCandidateData1.size.y:"+spawnCandidateData1.size.y+";modifiers.scale.y:"+modifiers.scale.y);
+                 Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData1.simObjectSettings.assetScale);
+                 Vector3 position=new Vector3(
+                   floor.point.x,
+                   floor.point.y,
+                   floor.point.z
+                  )+
+                  (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
+                  (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
+                 container.debugArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                 if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+                  container.debugArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                 }
+                 Log.DebugMessage("set to be spawned:simObject:"+simObject);
+                 container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));
                 }
-                Log.DebugMessage("set to be spawned:simObject:"+simObject);
-                container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));
                }
-              }
-             }}
+              }}
+             }
+             toCloseSurfaceSpawnData.UnionWith(candidatesBycnkIdx.Keys);
+             foreach(int cnkIdx in toCloseSurfaceSpawnData){
+              //  TO DO: clear and add to pool
+              candidatesBycnkIdx        .Remove(cnkIdx);
+              container.hasNoData[layer].Remove(cnkIdx);
+              container.state    [layer].Remove(cnkIdx);
+             }
+             toCloseSurfaceSpawnData.Clear();
             }
-            toCloseSurfaceSpawnData.UnionWith(candidatesBycnkIdx.Keys);
-            foreach(int cnkIdx in toCloseSurfaceSpawnData){
-             //  TO DO: clear and add to pool
-             candidatesBycnkIdx        .Remove(cnkIdx);
-             container.hasNoData[layer].Remove(cnkIdx);
-             container.state    [layer].Remove(cnkIdx);
-            }
-            toCloseSurfaceSpawnData.Clear();
            }
+
+
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){

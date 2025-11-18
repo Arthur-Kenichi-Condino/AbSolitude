@@ -235,6 +235,8 @@ namespace AKCondinoO.Voxels.Biomes{
      readonly BaseBiome biome;
      //internal static Vector3 maxSpawnSize=new Vector3(50f,256f,50f);
      //internal static Vector3 margin      =new Vector3(  1f,  1f,  1f);
+     internal int minLayer=int.MaxValue;
+     internal int maxLayer=int.MinValue;
         internal BaseBiomeSimObjectsSpawnSettings(BaseBiome biome){
          this.biome=biome;
         }
@@ -295,8 +297,16 @@ namespace AKCondinoO.Voxels.Biomes{
          }
          //Log.Warning("TO DO: rotacionar objeto para que não fique flutuando ao ser spawn'ado");
          //Log.Warning("TO DO: limitar tamanho de objetos aqui pelo tamanho máximo de spawn");
+         minLayer=int.MaxValue;
+         maxLayer=int.MinValue;
          foreach(var layerSpawnPickingPair in simObjectPickingByLayer){
           int layer=layerSpawnPickingPair.Key;
+          if(layer<minLayer){
+           minLayer=layer;
+          }
+          if(layer>maxLayer){
+           maxLayer=layer;
+          }
           SpawnPickingLayer pickingLayer=layerSpawnPickingPair.Value;
           foreach(var pickingItemsPair in pickingLayer.simObjectPickingItems){
            int picking=pickingItemsPair.Key;
