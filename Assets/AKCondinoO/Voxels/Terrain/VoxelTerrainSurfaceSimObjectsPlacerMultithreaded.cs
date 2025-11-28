@@ -40,9 +40,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      public int halfSeqSize;
     }
     internal class VoxelTerrainSurfaceSimObjectsPlacerContainer:BackgroundContainer{
-     internal Vector2Int cCoord;
-     internal Vector2Int cnkRgn;
-     internal        int cnkIdx;
+     internal Vector2Int?cCoord,lastcCoord;
+     internal Vector2Int?cnkRgn,lastcnkRgn;
+     internal        int?cnkIdx,lastcnkIdx;
+     internal bool hasChangedIndex;
      internal bool surfaceSimObjectsHadBeenAdded;
      internal NativeList<RaycastCommand>GetGroundRays;
      internal NativeList<RaycastHit    >GetGroundHits;
@@ -53,9 +54,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
       internal Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>hasNoData=new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
+     internal readonly Dictionary<int,(string fileName,FileStream stream,BinaryWriter writer,BinaryReader reader)>spawnMapsFiles=new();
+     internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
      internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      internal readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
-     internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
         internal enum Execution{
          ReserveBounds,
          GetGround,
@@ -2425,7 +2427,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }
         }
      internal readonly HashSet<int>toCloseSpawnMapsData=new();
-        void CloseSpawnMapsData(int cnkIdx,bool keepInContainer=true){
+        void CloseSpawnMapsData(Vector2Int cCoord,int cnkIdx,bool keepInContainer=true){
          if(keepInContainer){
           //  TO DO: clear and add to pool if exists
           //  TO DO: get from pool
@@ -2447,7 +2449,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(spawnMapsOpen<=0){
              VoxelSystem.Concurrent.spawnMapsFiles_rwl.EnterWriteLock();
              try{
-              //  TO DO: write to file
+              if(container.hasChangedIndex){
+               //  write to file
+               string fileName=string.Format(CultureInfoUtil.en_US,VoxelSystem.Concurrent.spawnMapsFileFormat,VoxelSystem.Concurrent.spawnMapsPath,cCoord.x,cCoord.y);
+              }
              }catch{
               throw;
              }finally{
@@ -2580,6 +2585,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      readonly Dictionary<int,Dictionary<int,SpawnMapInfo>>spawnMapsPreviousInfo=new();
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
         protected override void Execute(){
+         if(container.cnkIdx==null){
+          Log.DebugMessage("Execute:invalid cnkIdx:return");
+          return;
+         }
          switch(container.execution){
           case Execution.GetGround:{
            Log.DebugMessage("Execution.GetGround");
@@ -2615,13 +2624,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            if(container.surfaceSimObjectsHadBeenAdded){
             break;
            }
+           Vector2Int cnkRgn1=container.cnkRgn.Value;
            QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
            Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
            for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
            for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
             Vector3 from=vCoord1;
-                    from.x+=container.cnkRgn.x+.5f;
-                    from.z+=container.cnkRgn.y+.5f;
+                    from.x+=cnkRgn1.x+.5f;
+                    from.z+=cnkRgn1.y+.5f;
             container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
             container.GetGroundHits.AddNoResize(new RaycastHit    ()                                        );
            }}
@@ -2633,12 +2643,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            //  TO DO: colocar em cleanup ao invés de execute e antes adicionar ao cache global como é feito com a água (em arquivos com binary writer e reader)
 
 
+
            for(int layer=VoxelSystem.biome.biomeSpawnSettings.minLayer;layer<=VoxelSystem.biome.biomeSpawnSettings.maxLayer;++layer){
             //hasData.Clear();
             //hasNoData.Clear();
             //state.Clear();
             Vector3 margin=Vector3.one*5;
-            Vector2Int cnkRgn1=container.cnkRgn;
+            Vector2Int cnkRgn1=container.cnkRgn.Value;
             Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
             for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
             for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
@@ -2656,6 +2667,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
               if(!(container.gotGroundHits[index1]==null)){
                success=true;
+               //  TO DO: close spawn map data and bring calculated data in container
                RaycastHit floor=container.gotGroundHits[index1].Value;
                Type simObject=spawnCandidateData1.simObjectPicked.simObject;
                SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
@@ -2872,20 +2884,19 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              CloseSurfaceData(layer,cnkIdx,cnkIdx==container.cnkIdx);
             }
             toCloseSurfaceSpawnData.Clear();
-            VoxelSystem.Concurrent.spawnMapsData_rwl.EnterReadLock();
-            try{
-             toCloseSpawnMapsData.UnionWith(spawnMaps.Keys);
-            }catch{
-             throw;
-            }finally{
-             VoxelSystem.Concurrent.spawnMapsData_rwl.ExitReadLock();
-            }
-            foreach(int cnkIdx in toCloseSpawnMapsData){
-             CloseSpawnMapsData(cnkIdx,cnkIdx==container.cnkIdx);
-            }
-            toCloseSpawnMapsData.Clear();
-            //  TO DO: close spawn map data and bring calculated data in container
            }
+           VoxelSystem.Concurrent.spawnMapsData_rwl.EnterReadLock();
+           try{
+            toCloseSpawnMapsData.UnionWith(spawnMaps.Keys);
+           }catch{
+            throw;
+           }finally{
+            VoxelSystem.Concurrent.spawnMapsData_rwl.ExitReadLock();
+           }
+           foreach(int cnkIdx in toCloseSpawnMapsData){
+            CloseSpawnMapsData(GetcCoord[cnkIdx],cnkIdx,cnkIdx==container.cnkIdx);
+           }
+           toCloseSpawnMapsData.Clear();
 
 
 
@@ -4258,11 +4269,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
 
 
            for(int layer=VoxelSystem.biome.biomeSpawnSettings.minLayer;layer<=VoxelSystem.biome.biomeSpawnSettings.maxLayer;++layer){
-            Vector3 margin=Vector3.one*5;
-            Vector2Int cnkRgn1=container.cnkRgn;
-            int        cnkIdx1=container.cnkIdx;
             if(container.hasData.TryGetValue(layer,out var candidatesBycnkIdx)){
+             Vector3 margin=Vector3.one*5;
+             Vector2Int cnkRgn1=container.cnkRgn.Value;
+             int        cnkIdx1=container.cnkIdx.Value;
              if(candidatesBycnkIdx.TryGetValue(cnkIdx1,out var candidates)){
+              bool foundSpawnMap=container.spawnMaps.TryGetValue(cnkIdx1,out var spawnMap);
               Log.DebugMessage("Execution.FillSpawnData:layer:"+layer+";cnkIdx1:"+cnkIdx1);
               Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
               for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
@@ -4316,6 +4328,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              toCloseSurfaceSpawnData.Clear();
             }
            }
+           toCloseSpawnMapsData.UnionWith(container.spawnMaps.Keys);
+           foreach(int cnkIdx in toCloseSpawnMapsData){
+            //  TO DO: clear and add to pool
+            container.spawnMaps.Remove(cnkIdx);
+           }
+           toCloseSpawnMapsData.Clear();
+
+
 
 
            //Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);

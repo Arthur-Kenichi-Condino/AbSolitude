@@ -180,6 +180,8 @@ namespace AKCondinoO.Voxels{
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamWriter=new StreamWriter(fileStream);
                        surfaceSimObjectsPlacerBGThreads[i].chunkStateFileStreamReader=new StreamReader(fileStream);
           }
+          VoxelSystem.Concurrent.spawnMapsPath=string.Format("{0}{1}",chunkStatePath,"SpawnMaps/");
+          Directory.CreateDirectory(VoxelSystem.Concurrent.spawnMapsPath);
          }
          terrainSynchronization.Clear();
          terrain=new VoxelTerrainChunk[poolSize];

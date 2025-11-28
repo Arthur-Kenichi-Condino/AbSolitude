@@ -39,6 +39,9 @@ namespace AKCondinoO.Voxels{
          internal static ReaderWriterLockSlim   waterNeighbourhoodCache_rwl;
          internal static ReaderWriterLockSlim  spawnMapsData_rwl;
          internal static ReaderWriterLockSlim spawnMapsFiles_rwl;
+         internal static string spawnMapsPath;
+         internal static string spawnMapsFileFormat="{0}spawnMap.{1}.{2}.bin";
+         internal static readonly Dictionary<int,(string fileName,FileStream stream,BinaryWriter writer,BinaryReader reader)>spawnMapsFiles=new();
          internal static readonly Dictionary<int,int>spawnMapsOpen=new();
          internal static readonly Dictionary<int,SpawnMapInfo[]>spawnMaps=new();
          internal static readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
@@ -157,7 +160,7 @@ namespace AKCondinoO.Voxels{
             }
             //  TO DO: this:
             internal static void ReleaseCacheAndDispose(){
-             waterCache   .Clear();
+             waterCache   .Clear();//  disposed in container
              waterCacheIds.Clear();
              foreach(var kvp in editsFileCacheStream){
               kvp.Value                          .Dispose();

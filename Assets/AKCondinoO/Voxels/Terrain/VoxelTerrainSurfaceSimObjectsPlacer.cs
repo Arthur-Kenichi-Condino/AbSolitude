@@ -113,6 +113,15 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                                         }
                                     }
                                 }else{
+                                    if(surfaceSimObjectsPlacerBG.hasChangedIndex){
+                                     surfaceSimObjectsPlacerBG.lastcCoord=surfaceSimObjectsPlacerBG.cCoord;
+                                     surfaceSimObjectsPlacerBG.lastcnkRgn=surfaceSimObjectsPlacerBG.cnkRgn;
+                                     surfaceSimObjectsPlacerBG.lastcnkIdx=surfaceSimObjectsPlacerBG.cnkIdx;
+                                    }
+                                    surfaceSimObjectsPlacerBG.hasChangedIndex=false;
+                                    if(surfaceSimObjectsPlacerBG.lastcnkIdx==null||surfaceSimObjectsPlacerBG.cnkIdx.Value!=surfaceSimObjectsPlacerBG.lastcnkIdx.Value){
+                                     surfaceSimObjectsPlacerBG.hasChangedIndex=true;
+                                    }
                                     surfaceSimObjectsPlacerBG.cCoord=simObjectsPlacing.cnk.id.Value.cCoord;
                                     surfaceSimObjectsPlacerBG.cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
                                     surfaceSimObjectsPlacerBG.cnkIdx=simObjectsPlacing.cnk.id.Value.cnkIdx;
