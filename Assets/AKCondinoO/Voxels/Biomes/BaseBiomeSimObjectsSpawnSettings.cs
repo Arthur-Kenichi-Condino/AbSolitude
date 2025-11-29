@@ -170,7 +170,7 @@ namespace AKCondinoO.Voxels.Biomes{
          private readonly T[]lookupTable;
          private readonly float maxWeight;
          private readonly int resolution;
-            internal ByChancePicker(List<ByChanceObject<T>>items,int resolution=100_000){
+            internal ByChancePicker(List<ByChanceObject<T>>items,int resolution=100_000,bool fill=false){
              this.resolution=resolution;
              if(items==null||items.Count==0){
               lookupTable=new T[0];
@@ -194,7 +194,7 @@ namespace AKCondinoO.Voxels.Biomes{
              });
              //  Calcula soma total
              float total=0f;
-             foreach(var item in filteredItems)total+=item.chance;
+             if(fill){foreach(var item in filteredItems)total+=item.chance;}else{total=1f;}
              maxWeight=filteredItems[0].chance;
              //  Cria lookupTable
              lookupTable=new T[resolution];
@@ -353,9 +353,13 @@ namespace AKCondinoO.Voxels.Biomes{
            SimObjectSettings settings=result.settings;
            Vector3 size=settings.size;
            int max=Mathf.CeilToInt(Mathf.Max(size.x,size.z)*1.05f);
+           int spacing=max;
+           if(settings.minSpacing.TryGetValue(SpawnedTypes.All,out Vector3 minSpacingFromAll)){
+            spacing=Mathf.CeilToInt(Mathf.Max(spacing,Mathf.Max(minSpacingFromAll.x,minSpacingFromAll.z)));
+           }
            if(
-            noiseInputRounded.x%max==0&&
-            noiseInputRounded.z%max==0
+            noiseInputRounded.x%spacing==0&&
+            noiseInputRounded.z%spacing==0
            ){
             return result;
            }

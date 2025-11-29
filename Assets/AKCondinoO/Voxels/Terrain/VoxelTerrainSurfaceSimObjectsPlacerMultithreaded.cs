@@ -2713,7 +2713,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
                 if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
                  Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
-                 container.debugSpawnMapArray[vxlIdx2]=Color.blue;
+                 if(layer==0){container.debugSpawnMapArray[vxlIdx2]=Color.blue;}
                 }
                 OpenSpawnMapsData(cnkIdx2);
                 if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
@@ -2723,11 +2723,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
                 try{
                  if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
-                  if(spawnMaps[cnkIdx2][vxlIdx2].layer>layer){
+                  if(layer>spawnMaps[cnkIdx2][vxlIdx2].layer){
                    success=false;
                    goto _Unchanged;
                   }
                   if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+                   success=false;
                    goto _Unchanged;
                   }
                  }
@@ -2764,7 +2765,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                   VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
                   try{
                    if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
-                    if(spawnMaps[cnkIdx2][vxlIdx2].layer>mapInfo.layer){
+                    if(mapInfo.layer>spawnMaps[cnkIdx2][vxlIdx2].layer){
                      goto _Unchanged;
                     }
                     if(mapInfo.center.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&mapInfo.center.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
@@ -2852,6 +2853,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                if(gotData){
                 VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
                 try{
+                 Log.DebugMessage("'!success':data[pos1].simObjectPicked:"+data[pos1].simObjectPicked);
                  data.Remove(pos1);
                  hasNoData[layer][cnkIdx1].Add(pos1);
                  state    [layer][cnkIdx1][pos1]=false;
