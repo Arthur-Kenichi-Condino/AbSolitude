@@ -11,6 +11,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEngine;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal class VoxelTerrainSurfaceSimObjectsPlacer{
@@ -50,6 +51,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                             SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
                             Array.Copy(surfaceSimObjectsPlacerBG.debugArray,debugArray,surfaceSimObjectsPlacerBG.debugArray.Length);
                             Array.Copy(surfaceSimObjectsPlacerBG.debugSpawnMapArray,debugSpawnMapArray,surfaceSimObjectsPlacerBG.debugSpawnMapArray.Length);
+                            Array.Copy(surfaceSimObjectsPlacerBG.debugRaycastFromArray,debugRaycastFromArray,surfaceSimObjectsPlacerBG.debugRaycastFromArray.Length);
+                            debugMeshPrediction.AddRange(surfaceSimObjectsPlacerBG.debugMeshPrediction);surfaceSimObjectsPlacerBG.debugMeshPrediction.Clear();
                             debugArrayReady=true;
                             spawning=true;
                             //Log.DebugMessage("spawning=true;");
@@ -155,12 +158,14 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         bool debugArrayReady=false;
         readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
         readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
+        readonly(Vector3 from1,Vector3 from2)[]debugRaycastFromArray=new(Vector3,Vector3)[FlattenOffset];
+        readonly List<(Vector2Int cnkRgn,Vector3Int vCoord,List<Vertex>TempVer,List<UInt32>TempTri)>debugMeshPrediction=new();
         //[SerializeField]int seqSize1=3;
         //[SerializeField]int seqSize2=3;
         internal void OnDrawGizmos(){
          if(simObjectsPlacing.cnk.id!=null){
           Vector2Int cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
-          if((true||(cnkRgn.x==0&&cnkRgn.y==0))&&!(cnkRgn.x==16&&cnkRgn.y==16)&&!(cnkRgn.x==-16&&cnkRgn.y==-16)){
+          if(true||((true||(cnkRgn.x==0&&cnkRgn.y==0))&&!(cnkRgn.x==16&&cnkRgn.y==16)&&!(cnkRgn.x==-16&&cnkRgn.y==-16))){
            if(true&&debugArrayReady){
             Vector3Int vCoord1=new Vector3Int(0,Height/2-1,0);
             for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
@@ -172,7 +177,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              Gizmos.color=debugArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
               Gizmos.matrix=Matrix4x4.TRS(debugArray[index1].bounds.center,debugArray[index1].rotation,debugArray[index1].scale);
-              Gizmos.DrawWireCube(Vector3.zero,debugArray[index1].bounds.size);
+              //Gizmos.DrawWireCube(Vector3.zero,debugArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.identity;
              //}else{
               //Gizmos.DrawCube(pos1,Vector3.one/2f);
@@ -187,9 +192,27 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn.y;
              Gizmos.color=debugSpawnMapArray[index1];
               Gizmos.matrix=Matrix4x4.TRS(pos1,Quaternion.identity,Vector3.one);
-              Gizmos.DrawWireCube(Vector3.zero,Vector3.one);
+              //Gizmos.DrawWireCube(Vector3.zero,Vector3.one);
               Gizmos.matrix=Matrix4x4.identity;
             }}
+            for(vCoord1.x=0;vCoord1.x<Width;vCoord1.x++){
+            for(vCoord1.z=0;vCoord1.z<Depth;vCoord1.z++){
+             int index1=vCoord1.z+vCoord1.x*Depth;
+             var raycastDebugData=debugRaycastFromArray[index1];
+             Vector3 from1=raycastDebugData.from1;
+             Vector3 from2=raycastDebugData.from2;
+             Vector3 offset=new(cnkRgn.x,0-0.5f,cnkRgn.y);
+             Debug.DrawLine(from2+Vector3.up*1+offset,from2+Vector3.down*1+offset,Color.yellow);
+             //Debug.DrawLine(from2+Vector3.up*1+vCoord1,from2+Vector3.down*1,Color.yellow);
+             //Debug.DrawLine(from1,from1+Vector3.down*1,Color.green);
+            }}
+            foreach(var meshData in debugMeshPrediction){
+             Vector2Int cnkRgn2=meshData.cnkRgn;
+             Vector3Int vCoord2=meshData.vCoord;
+             DebugGizmos.DrawMeshWireframe(meshData.TempVer,meshData.TempTri,Color.white,
+              new Vector3(cnkRgn2.x,(Height/2.0f)-0.5f,cnkRgn2.y)
+             );
+            }
            }
            //if(testArray==null){
            // testArray=new SpawnMapInfo[FlattenOffset];

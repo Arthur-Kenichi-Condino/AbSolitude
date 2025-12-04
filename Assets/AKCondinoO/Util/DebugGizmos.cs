@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
 namespace AKCondinoO{
     internal static class DebugGizmos{
         //#if UNITY_EDITOR
@@ -26,6 +28,53 @@ namespace AKCondinoO{
              Debug.DrawLine(p2,p6,color,duration);
              Debug.DrawLine(p3,p7,color,duration);
              Debug.DrawLine(p4,p8,color,duration);
+            }
+    //  estrutura para comparar pares de vértices independentemente da ordem
+    private struct Edge
+    {
+        public int A, B;
+        public Edge(int a, int b)
+        {
+            // Garantir ordem consistente (menor primeiro)
+            if (a < b) { A = a; B = b; }
+            else { A = b; B = a; }
+        }
+    }
+
+    private static readonly HashSet<Edge> edgeSet = new();
+
+    public static void DrawMeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,Vector3 offset=default)
+    {
+        Gizmos.color = color;
+        edgeSet.Clear();
+
+        int triCount = triangles.Count / 3;
+
+        for (int t = 0; t < triCount; t++)
+        {
+            int i0 = (int)triangles[t * 3 + 0];
+            int i1 = (int)triangles[t * 3 + 1];
+            int i2 = (int)triangles[t * 3 + 2];
+
+            // 3 arestas do tri (evita duplicados por hash)
+            AddEdge(i0, i1);
+            AddEdge(i1, i2);
+            AddEdge(i2, i0);
+        }
+
+        // Desenhar linhas únicas já filtradas
+        foreach (var e in edgeSet)
+        {
+            Gizmos.DrawLine((Vector3)vertices[e.A].pos+offset,(Vector3)vertices[e.B].pos+offset);
+        }
+    }
+
+    private static void AddEdge(int a, int b)
+    {
+        edgeSet.Add(new Edge(a, b));
+    }
+            [System.Diagnostics.Conditional("ENABLE_DEBUG_GIZMOS")]
+            internal static void DrawMesh(){
             }
         //#endif
     }

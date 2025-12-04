@@ -227,7 +227,7 @@ namespace AKCondinoO.Voxels.Biomes{
          public readonly Dictionary<int,ByChancePicker<(Type simObject,SimObjectSettings settings)>>simObjectPicking=new();
           public readonly Dictionary<int,List<ByChanceObject<(Type,SimObjectSettings)>>>simObjectPickingItems=new();
         }
-     readonly protected Dictionary<int,SpawnPickingLayer>simObjectPickingByLayer=new();
+     internal readonly protected Dictionary<int,SpawnPickingLayer>simObjectPickingByLayer=new();
      //readonly protected Dictionary<int,ByChancePicker<(Type simObject,SimObjectSettings settings)>>simObjectPicking=new();
       //readonly Dictionary<int,List<ByChanceObject<(Type,SimObjectSettings)>>>simObjectPickingItems=new();
      readonly protected Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>allSettings=new Dictionary<Type,Dictionary<int,List<SimObjectSettings>>>();

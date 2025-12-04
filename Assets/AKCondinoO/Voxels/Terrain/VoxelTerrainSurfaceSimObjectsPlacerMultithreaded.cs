@@ -3,22 +3,24 @@
 #endif
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Biomes;
+using AKCondinoO.Voxels.Terrain.MarchingCubes;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using System.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
-using static AKCondinoO.Voxels.VoxelSystem;
-using static AKCondinoO.Voxels.Biomes.BaseBiomeSimObjectsSpawnSettings;
-using static AKCondinoO.Voxels.Terrain.SimObjectsPlacing.VoxelTerrainSurfaceSimObjectsPlacerContainer;
 using static AKCondinoO.Sims.SimObject;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-
+using static AKCondinoO.Voxels.Biomes.BaseBiomeSimObjectsSpawnSettings;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesBackgroundContainer;
+using static AKCondinoO.Voxels.Terrain.MarchingCubes.MarchingCubesTerrain;
+using static AKCondinoO.Voxels.Terrain.SimObjectsPlacing.VoxelTerrainSurfaceSimObjectsPlacerContainer;
+using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
     internal struct SpawnMapInfo{
      internal bool isBlocked;
@@ -58,6 +60,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
      internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      internal readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
+     internal readonly(Vector3 from1,Vector3 from2)[]debugRaycastFromArray=new(Vector3,Vector3)[FlattenOffset];
+     internal readonly List<(Vector2Int cnkRgn,Vector3Int vCoord,List<Vertex>TempVer,List<UInt32>TempTri)>debugMeshPrediction=new();
         internal enum Execution{
          ReserveBounds,
          GetGround,
@@ -2390,6 +2394,138 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          recursionDepth--;
          return result1;
         }
+        bool AddSpawnMapInfo(){
+         //int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
+         // bounds:spawnCandidateData1.bounds,modifiers.scale,rotation,
+         // margin,
+         // sorted:false,
+         // outputArray:ref getCoordsOutputArray
+         //);
+         ////Log.DebugMessage("ReserveBounds:getCoordsOutputArrayLength:"+getCoordsOutputArrayLength);
+         //for(int i=0;i<getCoordsOutputArrayLength;++i){
+         // Vector3Int coord2=getCoordsOutputArray[i];
+         // coord2.x+=pos1.x;
+         // coord2.z+=pos1.z;
+         // //Log.DebugMessage("ReserveBounds:coord2:"+coord2);
+         // Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+         // int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+         // Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+         // int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+         // if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
+         //  Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
+         //  if(layer==0){container.debugSpawnMapArray[vxlIdx2]=Color.blue;}
+         // }
+         // OpenSpawnMapsData(cnkIdx2);
+         // if(!spawnMapsPreviousInfo.TryGetValue(cnkIdx2,out var spawnMapPreviousInfo)){
+         //  //  TO DO: get from pool
+         //  spawnMapsPreviousInfo[cnkIdx2]=spawnMapPreviousInfo=new();
+         // }
+         // VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+         // try{
+         //  if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+         //   if(layer>spawnMaps[cnkIdx2][vxlIdx2].layer){
+         //    success=false;
+         //    goto _Unchanged;
+         //   }
+         //   if(pos1.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&pos1.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+         //    success=false;
+         //    goto _Unchanged;
+         //   }
+         //  }
+         //  VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+         //  try{
+         //   spawnMapPreviousInfo[vxlIdx2]=spawnMaps[cnkIdx2][vxlIdx2];
+         //   spawnMaps[cnkIdx2][vxlIdx2]=new SpawnMapInfo{
+         //    isBlocked=true,
+         //    center=pos1,
+         //    layer=layer,
+         //   };
+         //  }catch{
+         //   throw;
+         //  }finally{
+         //   VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+         //  }
+         //  _Unchanged:{}
+         // }catch{
+         //  throw;
+         // }finally{
+         //  VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+         // }
+         // if(!success){
+         //  break;
+         // }
+         //}
+         //if(!success){
+         // foreach(var kvp1 in spawnMapsPreviousInfo){
+         //  int cnkIdx2=kvp1.Key;
+         //  var spawnMapPreviousInfo=kvp1.Value;
+         //  foreach(var kvp2 in spawnMapPreviousInfo){
+         //   int vxlIdx2=kvp2.Key;
+         //   SpawnMapInfo mapInfo=kvp2.Value;
+         //   VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+         //   try{
+         //    if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+         //     if(mapInfo.layer>spawnMaps[cnkIdx2][vxlIdx2].layer){
+         //      goto _Unchanged;
+         //     }
+         //     if(mapInfo.center.x>spawnMaps[cnkIdx2][vxlIdx2].center.x&&mapInfo.center.z>spawnMaps[cnkIdx2][vxlIdx2].center.z){
+         //      goto _Unchanged;
+         //     }
+         //    }
+         //    VoxelSystem.Concurrent.spawnMapsData_rwl.EnterWriteLock();
+         //    try{
+         //     spawnMaps[cnkIdx2][vxlIdx2]=mapInfo;
+         //    }catch{
+         //     throw;
+         //    }finally{
+         //     VoxelSystem.Concurrent.spawnMapsData_rwl.ExitWriteLock();
+         //    }
+         //    _Unchanged:{}
+         //   }catch{
+         //    throw;
+         //   }finally{
+         //    VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+         //   }
+         //  }
+         //  spawnMapPreviousInfo.Clear();
+         //  //  TO DO: add to pool
+         // }
+         //}
+         //spawnMapsPreviousInfo.Clear();
+         return false;
+        }
+        bool RevertBoundsReservation(){
+         //if(!success){
+         // Vector2Int cCoord1=vecPosTocCoord(pos1);
+         // int        cnkIdx1=GetcnkIdx(cCoord1.x,cCoord1.y);
+         // bool gotData;
+         // VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
+         // try{
+         //  gotData=hasData[layer].TryGetValue(cnkIdx1,out var data)&&data.ContainsKey(pos1);
+         //  if(gotData){
+         //   VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+         //   try{
+         //    Log.DebugMessage("'!success':data[pos1].simObjectPicked:"+data[pos1].simObjectPicked);
+         //    data.Remove(pos1);
+         //    hasNoData[layer][cnkIdx1].Add(pos1);
+         //    state    [layer][cnkIdx1][pos1]=false;
+         //   }catch{
+         //    throw;
+         //   }finally{
+         //    VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+         //   }
+         //  }
+         // }catch{
+         //  throw;
+         // }finally{
+         //  VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
+         // }
+         // if(gotData){
+         //  container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+         // }
+         //}
+         return false;
+        }
         void OpenSpawnMapsData(int cnkIdx){
          VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
          try{
@@ -2557,6 +2693,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.EnterWriteLock();
               try{
                //  TO DO: write to file
+               if(
+                VoxelSystem.Concurrent.surfaceHasData.TryGetValue(layer,out var surfaceHasDataBycnkIdxToLog)&&
+                surfaceHasDataBycnkIdxToLog.TryGetValue(cnkIdx,out var surfaceHasDataToLog)
+               ){
+                Log.DebugMessage("layer:"+layer+";surfaceHasDataToLog.Count:"+surfaceHasDataToLog.Count);
+               }
               }catch{
                throw;
               }finally{
@@ -2581,6 +2723,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
          }
         }
+     readonly Voxel[]polygonCell=new Voxel[8];   
+      readonly    Vector3[] vertices=new    Vector3[12];
+      readonly MaterialId[]materials=new MaterialId[12];
+      readonly    Vector3[]  normals=new    Vector3[12];
+      readonly     double[] density=new     double[2];
+      readonly    Vector3[]  vertex=new    Vector3[2];
+      readonly MaterialId[]material=new MaterialId[2];
+      readonly      float[]distance=new      float[2];
+      readonly     int[]   idx=new     int[3];
+      readonly Vector3[]verPos=new Vector3[3];
+       readonly List<Vertex>TempVer=new();
+       readonly List<UInt32>TempTri=new();
      Vector3Int[]getCoordsOutputArray=new Vector3Int[0];
      readonly Dictionary<int,Dictionary<int,SpawnMapInfo>>spawnMapsPreviousInfo=new();
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
@@ -2625,16 +2779,49 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             break;
            }
            Vector2Int cnkRgn1=container.cnkRgn.Value;
-           QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
-           Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
-           for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
-           for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
-            Vector3 from=vCoord1;
-                    from.x+=cnkRgn1.x+.5f;
-                    from.z+=cnkRgn1.y+.5f;
-            container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
-            container.GetGroundHits.AddNoResize(new RaycastHit    ()                                        );
-           }}
+           for(int layer=VoxelSystem.biome.biomeSpawnSettings.minLayer;layer<=VoxelSystem.biome.biomeSpawnSettings.maxLayer;++layer){
+            if(!VoxelSystem.biome.biomeSpawnSettings.simObjectPickingByLayer.TryGetValue(layer,out SpawnPickingLayer pickingLayer)){
+             continue;
+            }
+            Vector3 margin=Vector3.one*5;
+            Vector3 maxDimensions=pickingLayer.maxDimensions;
+            int max=Mathf.CeilToInt(Mathf.Sqrt(Mathf.Pow(pickingLayer.maxDimensions.x,2)+Mathf.Pow(pickingLayer.maxDimensions.z,2)))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
+            //Log.DebugMessage("max:"+max);
+            Vector3Int coord1=new Vector3Int(0,Height+1,0);
+            int increment_x=1;
+            int increment_z=1;
+            for(coord1.x=-max-1;coord1.x<=max+1;coord1.x+=increment_x){
+            for(coord1.z=-max-1;coord1.z<=max+1;coord1.z+=increment_z){
+             Vector3Int pos1=coord1;
+             pos1.x+=cnkRgn1.x;
+             pos1.z+=cnkRgn1.y;
+             Vector3Int vCoord1=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
+             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn2.x;
+                                            noiseInput1.z+=cnkRgn2.y;
+             int recursionCalls=0;
+             int recursionDepth=0;
+             bool recursionLimitReached=false;
+             bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
+             if(success){
+              //Log.DebugMessage("'RecursivelyTryReserveBoundsAt success at pos1':"+pos1+";spawnCandidateData1.simObjectPicked.simObject:"+spawnCandidateData1.simObjectPicked.simObject);
+              //
+             }
+            }}
+           }
+           {
+            QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
+            Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+            for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+            for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+             Vector3 from=vCoord1;
+                     from.x+=cnkRgn1.x+.5f;
+                     from.z+=cnkRgn1.y+.5f;
+             container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
+             container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
+             int index1=vCoord1.z+vCoord1.x*Depth;
+             container.debugRaycastFromArray[index1]=(from,Vector3.zero);
+            }}
+           }
            break;
           }
           case Execution.ReserveBounds:{
@@ -2666,6 +2853,228 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              bool success=false;
              if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
               if(!(container.gotGroundHits[index1]==null)){
+               if(layer==0){
+                Log.DebugMessage("RecursivelyTryReserveBoundsAt:vCoord1:"+vCoord1);
+               }
+               {
+                TempVer.Clear();
+                TempTri.Clear();
+                UInt32 vertexCount=0;
+                Vector3Int vCoord3;
+                for(vCoord3=new Vector3Int();vCoord3.y<Height;vCoord3.y++){
+                for(vCoord3.x=0             ;vCoord3.x<3     ;vCoord3.x++){
+                for(vCoord3.z=0             ;vCoord3.z<3     ;vCoord3.z++){
+                 int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+                 int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                     corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                      void SetpolygonCellVoxel(){
+                       Vector2Int cnkRgn4=new Vector2Int();
+                       Vector2Int cCoord4=new Vector2Int();
+                       int oftIdx4=-1;
+                       int vxlIdx4=-1;
+                       /*  fora do mundo, baixo:  */
+                       if(vCoord4.y<=0){
+                        polygonCell[corner]=Voxel.bedrock;
+                       /*  fora do mundo, cima:  */
+                       }else if(vCoord4.y>=Height){
+                        polygonCell[corner]=Voxel.air;
+                       //  pegar valor do bioma:
+                       }else{
+                        if(vCoord4.x<0||vCoord4.x>=Width||
+                           vCoord4.z<0||vCoord4.z>=Depth
+                        ){
+                         ValidateCoord(ref cnkRgn4,ref vCoord4);
+                         cCoord4=cnkRgnTocCoord(cnkRgn4);
+                        }else{
+                        }
+                        oftIdx4=GetoftIdx(cCoord4-new Vector2Int());
+                        vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+                         Vector3Int vCoord5=vCoord4;
+                         vCoord5.x+=vCoord1.x;
+                         vCoord5.z+=vCoord1.z;
+                         vCoord5.x-=1;
+                         vCoord5.z-=1;
+                         Vector2Int cnkRgn5=cnkRgn4;
+                         Vector2Int cCoord5=cCoord4;
+                         int oftIdx5=-1;
+                         int vxlIdx5=-1;
+                         if(vCoord5.x<0||vCoord5.x>=Width||
+                            vCoord5.z<0||vCoord5.z>=Depth
+                         ){
+                          ValidateCoord(ref cnkRgn5,ref vCoord5);
+                          cCoord5=cnkRgnTocCoord(cnkRgn5);
+                         }else{
+                         }
+                         oftIdx5=GetoftIdx(cCoord5-cCoord4);
+                         vxlIdx5=GetvxlIdx(vCoord5.x,vCoord5.y,vCoord5.z);
+                         Vector3Int noiseInput=vCoord5;noiseInput.x+=cnkRgn5.x+cnkRgn4.x+cnkRgn1.x;
+                                                       noiseInput.z+=cnkRgn5.y+cnkRgn4.x+cnkRgn1.y;
+                         VoxelSystem.biome.Setvxl(
+                          noiseInput,
+                           null,
+                            null,
+                             oftIdx5,
+                              vCoord5.z+vCoord5.x*Depth,
+                               ref polygonCell[corner]
+                         );
+                       }
+                      }
+                 DoPredictionMarchingCubes(
+                  polygonCell,
+                   vCoord3,
+                    vertices,
+                     //verticesCache,
+                      materials,
+                       normals,
+                        density,
+                         vertex,
+                          material,
+                           distance,
+                            idx,
+                             verPos,
+                              ref vertexCount,
+                               TempVer,
+                               TempTri//,
+                                //vertexUV
+                 );
+                }}}
+                if(layer==0){
+                 Log.DebugMessage("TempVer.Count:"+TempVer.Count);
+                }
+                Vector3 from=vCoord1;
+                        from.x-=trianglePosAdj.x;
+                        from.z-=trianglePosAdj.z;
+                        //from.x+=.5f;
+                        //from.z+=.5f;
+                if(layer==0){
+                 container.debugRaycastFromArray[index1]=(container.debugRaycastFromArray[index1].from1,from);
+                 container.debugMeshPrediction.Add((cnkRgn1,vCoord1,new(TempVer),new(TempTri)));
+                }
+                if(TryGetSlopeHitNormalAtPoint(
+                 from,
+                 TempVer,
+                 TempTri,
+                 new Vector2Int(),
+                 out Vector3 normal
+                )){
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint:container.gotGroundHits[index1].Value.point:"+container.gotGroundHits[index1].Value.point+";from:"+from);
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint:container.gotGroundHits[index1].Value.normal:"+container.gotGroundHits[index1].Value.normal+";normal:"+normal);
+                }else{
+                 if(layer==0){
+                  Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);
+                  foreach(var v in TempVer){
+                   Log.DebugMessage("TryGetSlopeHitNormalAtPoint:v:"+v.pos);
+                  }
+                 }
+                }
+                //Vector3Int coord2=new Vector3Int(0,0,0);
+                //for(           ;coord2.y<Height;coord2.y++){
+                //for(coord2.x=-1;coord2.x<=+1   ;coord2.x++){
+                //for(coord2.z=-1;coord2.z<=+1   ;coord2.z++){
+                // int corner=0;Vector3Int coord3=coord2;                                    SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;                        SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;coord3.y+=1;            SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;            coord3.y+=1;            SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;                        coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;            coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;coord3.y+=1;coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;            coord3.y+=1;coord3.z+=1;SetpolygonCellVoxel();
+                // void SetpolygonCellVoxel(){
+                //  Vector3Int pos2=coord3;
+                //  pos2.x+=pos1.x;
+                //  pos2.z+=pos1.z;
+                //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+                //  /*  fora do mundo, baixo:  */
+                //  if(vCoord2.y<=0){
+                //   polygonCell[corner]=Voxel.bedrock;
+                //  /*  fora do mundo, cima:  */
+                //  }else if(vCoord2.y>=Height){
+                //   polygonCell[corner]=Voxel.air;
+                //  //  pegar valor do bioma:
+                //  }else{
+                //   Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+                //   Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                //                                  noiseInput2.z+=cnkRgn2.y;
+                //   VoxelSystem.biome.Setvxl(
+                //    noiseInput2,
+                //     null,
+                //      null,
+                //       0,
+                //        vCoord2.z+vCoord2.x*Depth,
+                //         ref polygonCell[corner]
+                //   );
+                //  }
+                // }
+                //}}}
+                // int corner=0;Vector3Int coord3=coord2;                                    SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;                        SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;coord3.y+=1;            SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;            coord3.y+=1;            SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;                        coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;            coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;coord3.x+=1;coord3.y+=1;coord3.z+=1;SetpolygonCellVoxel();
+                //     corner++;           coord3=coord2;            coord3.y+=1;coord3.z+=1;SetpolygonCellVoxel();
+                // void SetpolygonCellVoxel(){
+                //  Vector3Int pos2=coord3;
+                //  pos2.x+=pos1.x;
+                //  pos2.z+=pos1.z;
+                //  Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
+                //  /*  fora do mundo, baixo:  */
+                //  if(vCoord2.y<=0){
+                //   polygonCell[corner]=Voxel.bedrock;
+                //  /*  fora do mundo, cima:  */
+                //  }else if(vCoord2.y>=Height){
+                //   polygonCell[corner]=Voxel.air;
+                //  //  pegar valor do bioma:
+                //  }else{
+                //   Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+                //   Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                //                                  noiseInput2.z+=cnkRgn2.y;
+                //   VoxelSystem.biome.Setvxl(
+                //    noiseInput2,
+                //     null,
+                //      null,
+                //       0,
+                //        vCoord2.z+vCoord2.x*Depth,
+                //         ref polygonCell[corner]
+                //   );
+                //  }
+                // }
+                // DoPredictionMarchingCubes(
+                //  polygonCell,
+                //   coord2,
+                //    vertices,
+                //     //verticesCache,
+                //      materials,
+                //       normals,
+                //        density,
+                //         vertex,
+                //          material,
+                //           distance,
+                //            idx,
+                //             verPos,
+                //              ref vertexCount,
+                //               TempVer,
+                //               TempTri//,
+                //                //vertexUV
+                // );
+                //}}}
+                //if(TryGetSlopeHitNormalAtPoint(
+                // pos1,
+                // TempVer,
+                // TempTri,
+                // cnkRgn1,
+                // out Vector3 normal
+                //)){
+                // Log.DebugMessage("container.gotGroundHits[index1].Value.normal:"+container.gotGroundHits[index1].Value.normal+";normal:"+normal);
+                //}
+               }
                success=true;
                //  TO DO: close spawn map data and bring calculated data in container
                RaycastHit floor=container.gotGroundHits[index1].Value;
