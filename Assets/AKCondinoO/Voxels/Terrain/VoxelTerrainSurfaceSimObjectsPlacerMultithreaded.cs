@@ -2819,7 +2819,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
              container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
              int index1=vCoord1.z+vCoord1.x*Depth;
-             container.debugRaycastFromArray[index1]=(from,Vector3.zero);
+             container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
             }}
            }
            break;
@@ -2862,8 +2862,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 UInt32 vertexCount=0;
                 Vector3Int vCoord3;
                 for(vCoord3=new Vector3Int();vCoord3.y<Height;vCoord3.y++){
-                for(vCoord3.x=0             ;vCoord3.x<3     ;vCoord3.x++){
-                for(vCoord3.z=0             ;vCoord3.z<3     ;vCoord3.z++){
+                for(vCoord3.x=-1            ;vCoord3.x<2     ;vCoord3.x++){
+                for(vCoord3.z=-1            ;vCoord3.z<2     ;vCoord3.z++){
                  int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
                  int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
@@ -2898,8 +2898,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                          Vector3Int vCoord5=vCoord4;
                          vCoord5.x+=vCoord1.x;
                          vCoord5.z+=vCoord1.z;
-                         vCoord5.x-=1;
-                         vCoord5.z-=1;
+                         //vCoord5.x-=1;
+                         //vCoord5.z-=1;
                          Vector2Int cnkRgn5=cnkRgn4;
                          Vector2Int cCoord5=cCoord4;
                          int oftIdx5=-1;
@@ -2913,8 +2913,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                          }
                          oftIdx5=GetoftIdx(cCoord5-cCoord4);
                          vxlIdx5=GetvxlIdx(vCoord5.x,vCoord5.y,vCoord5.z);
-                         Vector3Int noiseInput=vCoord5;noiseInput.x+=cnkRgn5.x+cnkRgn4.x+cnkRgn1.x;
-                                                       noiseInput.z+=cnkRgn5.y+cnkRgn4.x+cnkRgn1.y;
+                         Vector3Int noiseInput=vCoord5;noiseInput.x+=cnkRgn5.x+cnkRgn1.x;
+                                                       noiseInput.z+=cnkRgn5.y+cnkRgn1.y;
                          VoxelSystem.biome.Setvxl(
                           noiseInput,
                            null,

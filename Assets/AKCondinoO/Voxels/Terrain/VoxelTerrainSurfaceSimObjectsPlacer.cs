@@ -201,16 +201,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              var raycastDebugData=debugRaycastFromArray[index1];
              Vector3 from1=raycastDebugData.from1;
              Vector3 from2=raycastDebugData.from2;
-             Vector3 offset=new(cnkRgn.x,0-0.5f,cnkRgn.y);
-             Debug.DrawLine(from2+Vector3.up*1+offset,from2+Vector3.down*1+offset,Color.yellow);
-             //Debug.DrawLine(from2+Vector3.up*1+vCoord1,from2+Vector3.down*1,Color.yellow);
+             Vector3 offset=new(cnkRgn.x+vCoord1.x,0-0.5f,cnkRgn.y+vCoord1.z);
+             if(from2.x!=float.NaN&&from2.y!=float.NaN&&from2.z!=float.NaN){
+              Debug.DrawLine(from2+Vector3.up*1+offset,from2+Vector3.down*(Height+1)+offset,Color.yellow);
+              //Debug.DrawLine(from2+Vector3.up*1+vCoord1,from2+Vector3.down*1,Color.yellow);
+             }
              //Debug.DrawLine(from1,from1+Vector3.down*1,Color.green);
             }}
             foreach(var meshData in debugMeshPrediction){
              Vector2Int cnkRgn2=meshData.cnkRgn;
              Vector3Int vCoord2=meshData.vCoord;
              DebugGizmos.DrawMeshWireframe(meshData.TempVer,meshData.TempTri,Color.white,
-              new Vector3(cnkRgn2.x,(Height/2.0f)-0.5f,cnkRgn2.y)
+              new Vector3(cnkRgn2.x+vCoord2.x,(Height/2.0f)-0.5f,cnkRgn2.y+vCoord2.z)
              );
             }
            }
