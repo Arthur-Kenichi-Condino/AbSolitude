@@ -372,8 +372,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
                     Vector3[]verPos,
                      ref UInt32 vertexCount,
                       List<Vertex>TempVer,
-                      List<UInt32>TempTri//,
+                      List<UInt32>TempTri,
                        //Dictionary<Vector3,List<Vector2>>vertexUV
+                        Vector3 posOffset
         ){
          int edgeIndex;
          /*
@@ -465,7 +466,9 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
            idx[0]=Tables.TriangleTable[edgeIndex][i  ];
            idx[1]=Tables.TriangleTable[edgeIndex][i+1];
            idx[2]=Tables.TriangleTable[edgeIndex][i+2];
-           Vector3 pos=vCoord1-trianglePosAdj;
+           Vector3 pos=vCoord1-trianglePosAdj;pos.x+=posOffset.x;
+                                              pos.z+=posOffset.z;
+                                              pos.y+=posOffset.y;
            Vector2 materialUV=AtlasHelper.uv[
             Mathf.Max(
              (int)materials[idx[0]],

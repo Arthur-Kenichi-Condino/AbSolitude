@@ -2860,11 +2860,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 TempVer.Clear();
                 TempTri.Clear();
                 UInt32 vertexCount=0;
+                Vector2Int cnkRgn3=cnkRgn1;
+                Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
                 Vector3Int vCoord3;
-                for(vCoord3=new Vector3Int();vCoord3.y<Height;vCoord3.y++){
-                for(vCoord3.x=-1            ;vCoord3.x<2     ;vCoord3.x++){
-                for(vCoord3.z=-1            ;vCoord3.z<2     ;vCoord3.z++){
-                 int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+                for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
+                for(vCoord3.x=vCoord1.x-2   ;vCoord3.x<=vCoord1.x+2;vCoord3.x++){
+                for(vCoord3.z=vCoord1.z-2   ;vCoord3.z<=vCoord1.z+2;vCoord3.z++){
                  int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
@@ -2874,8 +2875,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
                       void SetpolygonCellVoxel(){
-                       Vector2Int cnkRgn4=new Vector2Int();
-                       Vector2Int cCoord4=new Vector2Int();
+                       Vector2Int cnkRgn4=cnkRgn3;
+                       Vector2Int cCoord4=cCoord3;
                        int oftIdx4=-1;
                        int vxlIdx4=-1;
                        /*  fora do mundo, baixo:  */
@@ -2893,38 +2894,81 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                          cCoord4=cnkRgnTocCoord(cnkRgn4);
                         }else{
                         }
-                        oftIdx4=GetoftIdx(cCoord4-new Vector2Int());
+                        oftIdx4=GetoftIdx(cCoord4-cCoord3);
                         vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
-                         Vector3Int vCoord5=vCoord4;
-                         vCoord5.x+=vCoord1.x;
-                         vCoord5.z+=vCoord1.z;
-                         //vCoord5.x-=1;
-                         //vCoord5.z-=1;
-                         Vector2Int cnkRgn5=cnkRgn4;
-                         Vector2Int cCoord5=cCoord4;
-                         int oftIdx5=-1;
-                         int vxlIdx5=-1;
-                         if(vCoord5.x<0||vCoord5.x>=Width||
-                            vCoord5.z<0||vCoord5.z>=Depth
-                         ){
-                          ValidateCoord(ref cnkRgn5,ref vCoord5);
-                          cCoord5=cnkRgnTocCoord(cnkRgn5);
-                         }else{
-                         }
-                         oftIdx5=GetoftIdx(cCoord5-cCoord4);
-                         vxlIdx5=GetvxlIdx(vCoord5.x,vCoord5.y,vCoord5.z);
-                         Vector3Int noiseInput=vCoord5;noiseInput.x+=cnkRgn5.x+cnkRgn1.x;
-                                                       noiseInput.z+=cnkRgn5.y+cnkRgn1.y;
-                         VoxelSystem.biome.Setvxl(
-                          noiseInput,
+                        Vector3Int noiseInput=vCoord4;noiseInput.x+=cnkRgn4.x;
+                                                      noiseInput.z+=cnkRgn4.y;
+                        VoxelSystem.biome.Setvxl(
+                         noiseInput,
+                          null,
                            null,
-                            null,
-                             oftIdx5,
-                              vCoord5.z+vCoord5.x*Depth,
-                               ref polygonCell[corner]
-                         );
+                            oftIdx4,
+                             vCoord4.z+vCoord4.x*Depth,
+                              ref polygonCell[corner]
+                        );
                        }
                       }
+                 //int vxlIdx3=GetvxlIdx(vCoord3.x,vCoord3.y,vCoord3.z);
+                 //int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                 //    corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                 //     void SetpolygonCellVoxel(){
+                 //      Vector2Int cnkRgn4=new Vector2Int();
+                 //      Vector2Int cCoord4=new Vector2Int();
+                 //      int oftIdx4=-1;
+                 //      int vxlIdx4=-1;
+                 //      /*  fora do mundo, baixo:  */
+                 //      if(vCoord4.y<=0){
+                 //       polygonCell[corner]=Voxel.bedrock;
+                 //      /*  fora do mundo, cima:  */
+                 //      }else if(vCoord4.y>=Height){
+                 //       polygonCell[corner]=Voxel.air;
+                 //      //  pegar valor do bioma:
+                 //      }else{
+                 //       if(vCoord4.x<0||vCoord4.x>=Width||
+                 //          vCoord4.z<0||vCoord4.z>=Depth
+                 //       ){
+                 //        ValidateCoord(ref cnkRgn4,ref vCoord4);
+                 //        cCoord4=cnkRgnTocCoord(cnkRgn4);
+                 //       }else{
+                 //       }
+                 //       oftIdx4=GetoftIdx(cCoord4-new Vector2Int());
+                 //       vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+                 //        Vector3Int vCoord5=vCoord4;
+                 //        vCoord5.x+=vCoord1.x;
+                 //        vCoord5.z+=vCoord1.z;
+                 //        //vCoord5.x-=1;
+                 //        //vCoord5.z-=1;
+                 //        Vector2Int cnkRgn5=cnkRgn4;
+                 //        Vector2Int cCoord5=cCoord4;
+                 //        int oftIdx5=-1;
+                 //        int vxlIdx5=-1;
+                 //        if(vCoord5.x<0||vCoord5.x>=Width||
+                 //           vCoord5.z<0||vCoord5.z>=Depth
+                 //        ){
+                 //         ValidateCoord(ref cnkRgn5,ref vCoord5);
+                 //         cCoord5=cnkRgnTocCoord(cnkRgn5);
+                 //        }else{
+                 //        }
+                 //        oftIdx5=GetoftIdx(cCoord5-cCoord4);
+                 //        vxlIdx5=GetvxlIdx(vCoord5.x,vCoord5.y,vCoord5.z);
+                 //        Vector3Int noiseInput=vCoord5;noiseInput.x+=cnkRgn5.x+cnkRgn1.x;
+                 //                                      noiseInput.z+=cnkRgn5.y+cnkRgn1.y;
+                 //        VoxelSystem.biome.Setvxl(
+                 //         noiseInput,
+                 //          null,
+                 //           null,
+                 //            oftIdx5,
+                 //             vCoord5.z+vCoord5.x*Depth,
+                 //              ref polygonCell[corner]
+                 //        );
+                 //      }
+                 //     }
                  DoPredictionMarchingCubes(
                   polygonCell,
                    vCoord3,
@@ -2940,21 +2984,22 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                              verPos,
                               ref vertexCount,
                                TempVer,
-                               TempTri//,
-                                //vertexUV
+                               TempTri,
+                                //vertexUV,
+                                 trianglePosAdj+new Vector3(.5f,.5f,.5f)
                  );
                 }}}
                 if(layer==0){
                  Log.DebugMessage("TempVer.Count:"+TempVer.Count);
                 }
                 Vector3 from=vCoord1;
-                        from.x-=trianglePosAdj.x;
-                        from.z-=trianglePosAdj.z;
-                        //from.x+=.5f;
-                        //from.z+=.5f;
+                        //from.x+=cnkRgn1.x;
+                        //from.z+=cnkRgn1.y;
+                        from.x+=.5f;
+                        from.z+=.5f;
                 if(layer==0){
                  container.debugRaycastFromArray[index1]=(container.debugRaycastFromArray[index1].from1,from);
-                 container.debugMeshPrediction.Add((cnkRgn1,vCoord1,new(TempVer),new(TempTri)));
+                 container.debugMeshPrediction.Add((cnkRgn3,vCoord3,new(TempVer),new(TempTri)));
                 }
                 if(TryGetSlopeHitNormalAtPoint(
                  from,
