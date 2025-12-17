@@ -54,6 +54,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>state=new();
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>>hasData=new();
       internal Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>hasNoData=new();
+     internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,Vector3>>>normalsPredicted=new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
      internal readonly Dictionary<int,(string fileName,FileStream stream,BinaryWriter writer,BinaryReader reader)>spawnMapsFiles=new();
@@ -2200,6 +2201,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           candidateDescendingComparer//  ordem decrescente
          );
          if(result1){
+          PredictNormal(pos1,spawnCandidateData1,out Quaternion rotation1);
           Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
           for(coord2.x=-max;coord2.x<=max;coord2.x++){
           for(coord2.z=-max;coord2.z<=max;coord2.z++){if(coord2.x==0&&coord2.z==0){continue;}
@@ -2219,6 +2221,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(candidateDescendingComparer.Compare(size2,size1)>0){
              continue;
             }
+            PredictNormal(pos2,spawnCandidateData2,out Quaternion rotation2);
             Bounds bounds1=spawnCandidateData1.bounds;
             Bounds bounds2=spawnCandidateData2.bounds;
             Bounds worldBounds1=bounds1;worldBounds1.center=pos1;
@@ -2393,6 +2396,136 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }
          recursionDepth--;
          return result1;
+        }
+     readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,Vector3>>>normalsPredicted=new();
+     readonly Voxel[]polygonCell=new Voxel[8];   
+      readonly    Vector3[] vertices=new    Vector3[12];
+      readonly MaterialId[]materials=new MaterialId[12];
+      readonly    Vector3[]  normals=new    Vector3[12];
+      readonly     double[] density=new     double[2];
+      readonly    Vector3[]  vertex=new    Vector3[2];
+      readonly MaterialId[]material=new MaterialId[2];
+      readonly      float[]distance=new      float[2];
+      readonly     int[]   idx=new     int[3];
+      readonly Vector3[]verPos=new Vector3[3];
+       readonly List<Vertex>TempVer=new();
+       readonly List<UInt32>TempTri=new();
+        void PredictNormal(Vector3Int pos1,SpawnCandidateData spawnCandidateData1,out Quaternion rotation){
+         Vector3Int vCoord2=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
+                    vCoord2.y=Height+1;
+         int index2=vCoord2.z+vCoord2.x*Depth;
+         Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                        noiseInput2.z+=cnkRgn2.y;
+         TempVer.Clear();
+         TempTri.Clear();
+         UInt32 vertexCount=0;
+         Vector2Int cnkRgn3=cnkRgn2;
+         Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
+         Vector3Int vCoord3;
+         for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
+         for(vCoord3.x=vCoord2.x-1   ;vCoord3.x<=vCoord2.x+1;vCoord3.x++){
+         for(vCoord3.z=vCoord2.z-1   ;vCoord3.z<=vCoord2.z+1;vCoord3.z++){
+          int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+              corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+               void SetpolygonCellVoxel(){
+                Vector2Int cnkRgn4=cnkRgn3;
+                Vector2Int cCoord4=cCoord3;
+                int oftIdx4=-1;
+                int vxlIdx4=-1;
+                /*  fora do mundo, baixo:  */
+                if(vCoord4.y<=0){
+                 polygonCell[corner]=Voxel.bedrock;
+                /*  fora do mundo, cima:  */
+                }else if(vCoord4.y>=Height){
+                 polygonCell[corner]=Voxel.air;
+                //  pegar valor do bioma:
+                }else{
+                 if(vCoord4.x<0||vCoord4.x>=Width||
+                    vCoord4.z<0||vCoord4.z>=Depth
+                 ){
+                  ValidateCoord(ref cnkRgn4,ref vCoord4);
+                  cCoord4=cnkRgnTocCoord(cnkRgn4);
+                 }else{
+                 }
+                 oftIdx4=GetoftIdx(cCoord4-cCoord3);
+                 vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+                 Vector3Int noiseInput=vCoord4;noiseInput.x+=cnkRgn4.x;
+                                               noiseInput.z+=cnkRgn4.y;
+                 VoxelSystem.biome.Setvxl(
+                  noiseInput,
+                   null,
+                    null,
+                     oftIdx4,
+                      vCoord4.z+vCoord4.x*Depth,
+                       ref polygonCell[corner]
+                 );
+                }
+               }
+          DoPredictionMarchingCubes(
+           polygonCell,
+            vCoord3,
+             vertices,
+              //verticesCache,
+               materials,
+                normals,
+                 density,
+                  vertex,
+                   material,
+                    distance,
+                     idx,
+                      verPos,
+                       ref vertexCount,
+                        TempVer,
+                        TempTri,
+                         //vertexUV,
+                          trianglePosAdj+new Vector3(.5f,.5f,.5f)+new Vector3(cnkRgn3.x,0,cnkRgn3.y)
+          );
+         }}}
+         Vector3 from=vCoord2;
+                 from.x+=cnkRgn2.x;
+                 from.z+=cnkRgn2.y;
+                 from.x+=.5f;
+                 from.z+=.5f;
+         if(TryGetSlopeHitNormalAtPoint(
+          from,
+          TempVer,
+          TempTri,
+          new Vector2Int(),
+          out Vector3 normal
+         )){
+          //if(cnkRgn2==cnkRgn1){
+           //if(layer==0){
+            //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':from:"+from);
+            //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':normal:"+normal);
+           //}
+          //}
+         }else{
+          //if(layer==0){
+           //Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);
+           //foreach(var v in TempVer){
+           // Log.DebugMessage("TryGetSlopeHitNormalAtPoint:v:"+v.pos);
+           //}
+          //}
+         }
+         Type simObject=spawnCandidateData1.simObjectPicked.simObject;
+         SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
+         rotation=spawnCandidateData1.rotation;
+         rotation=rotation*Quaternion.SlerpUnclamped(
+          Quaternion.identity,
+          Quaternion.FromToRotation(
+           Vector3.up,
+           normal
+          ),
+          spawnCandidateData1.simObjectSettings.inclination
+         );
+        }
+        void GetSpawnMapData(){
         }
         bool AddSpawnMapInfo(){
          //int getCoordsOutputArrayLength=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
@@ -2618,23 +2751,26 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            return;
           }
           if(init){
-           hasData  [layer]=new();
-           hasNoData[layer]=new();
-           state    [layer]=new();
+           hasData         [layer]=new();
+           hasNoData       [layer]=new();
+           state           [layer]=new();
+           normalsPredicted[layer]=new();
           }
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
           try{
            if(!VoxelSystem.Concurrent.surfaceHasData.TryGetValue(layer,out var surfaceHasDataBycnkIdx)){
-               VoxelSystem.Concurrent.surfaceHasData  [layer]=surfaceHasDataBycnkIdx=new();
-               VoxelSystem.Concurrent.surfaceHasNoData[layer]=new();
-               VoxelSystem.Concurrent.surfaceState    [layer]=new();
-               VoxelSystem.Concurrent.surfaceDataOpen [layer]=new();
+               VoxelSystem.Concurrent.surfaceHasData         [layer]=surfaceHasDataBycnkIdx=new();
+               VoxelSystem.Concurrent.surfaceHasNoData       [layer]=new();
+               VoxelSystem.Concurrent.surfaceState           [layer]=new();
+               VoxelSystem.Concurrent.surfaceDataOpen        [layer]=new();
+               VoxelSystem.Concurrent.surfaceNormalsPredicted[layer]=new();
            }
            if(!surfaceHasDataBycnkIdx.TryGetValue(cnkIdx,out var surfaceHasData)){
-               VoxelSystem.Concurrent.surfaceHasData  [layer][cnkIdx]=surfaceHasData=new();
-               VoxelSystem.Concurrent.surfaceHasNoData[layer][cnkIdx]=new();
-               VoxelSystem.Concurrent.surfaceState    [layer][cnkIdx]=new();
-               VoxelSystem.Concurrent.surfaceDataOpen [layer][cnkIdx]=1;
+               VoxelSystem.Concurrent.surfaceHasData         [layer][cnkIdx]=surfaceHasData=new();
+               VoxelSystem.Concurrent.surfaceHasNoData       [layer][cnkIdx]=new();
+               VoxelSystem.Concurrent.surfaceState           [layer][cnkIdx]=new();
+               VoxelSystem.Concurrent.surfaceDataOpen        [layer][cnkIdx]=1;
+               VoxelSystem.Concurrent.surfaceNormalsPredicted[layer][cnkIdx]=new();
             VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.EnterReadLock();
             try{
              //  TO DO: read from file
@@ -2651,9 +2787,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }finally{
            VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
           }
-          hasData  [layer][cnkIdx]=VoxelSystem.Concurrent.surfaceHasData  [layer][cnkIdx];
-          hasNoData[layer][cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData[layer][cnkIdx];
-          state    [layer][cnkIdx]=VoxelSystem.Concurrent.surfaceState    [layer][cnkIdx];
+          hasData         [layer][cnkIdx]=VoxelSystem.Concurrent.surfaceHasData         [layer][cnkIdx];
+          hasNoData       [layer][cnkIdx]=VoxelSystem.Concurrent.surfaceHasNoData       [layer][cnkIdx];
+          state           [layer][cnkIdx]=VoxelSystem.Concurrent.surfaceState           [layer][cnkIdx];
+          normalsPredicted[layer][cnkIdx]=VoxelSystem.Concurrent.surfaceNormalsPredicted[layer][cnkIdx];
          }catch{
           throw;
          }finally{
@@ -2664,28 +2801,32 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         void CloseSurfaceData(int layer,int cnkIdx,bool keepInContainer=true){
          if(keepInContainer){
           if(!container.hasData.TryGetValue(layer,out var containerHasData)){
-              container.hasData  [layer]=containerHasData=new();
-              container.hasNoData[layer]=new();
-              container.state    [layer]=new();
+              container.hasData         [layer]=containerHasData=new();
+              container.hasNoData       [layer]=new();
+              container.state           [layer]=new();
+              container.normalsPredicted[layer]=new();
           }
           //  TO DO: clear and add to pool if exists
           //  TO DO: get from pool
-          containerHasData          [cnkIdx]=new();
-          container.hasNoData[layer][cnkIdx]=new();
-          container.state    [layer][cnkIdx]=new();
+          containerHasData                 [cnkIdx]=new();
+          container.hasNoData       [layer][cnkIdx]=new();
+          container.state           [layer][cnkIdx]=new();
+          container.normalsPredicted[layer][cnkIdx]=new();
          }
          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterUpgradeableReadLock();
          try{
           if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(layer,out var surfaceHasDataBycnkIdx)){
            if(surfaceHasDataBycnkIdx.TryGetValue(cnkIdx,out var surfaceHasData)){
             if(keepInContainer){
-             container.hasData  [layer][cnkIdx].AddRange (hasData  [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
-             container.hasNoData[layer][cnkIdx].UnionWith(hasNoData[layer][cnkIdx]);
-             container.state    [layer][cnkIdx].AddRange (state    [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.hasData         [layer][cnkIdx].AddRange (hasData         [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.hasNoData       [layer][cnkIdx].UnionWith(hasNoData       [layer][cnkIdx]);
+             container.state           [layer][cnkIdx].AddRange (state           [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.normalsPredicted[layer][cnkIdx].AddRange (normalsPredicted[layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
             }
-            hasData  [layer].Remove(cnkIdx);
-            hasNoData[layer].Remove(cnkIdx);
-            state    [layer].Remove(cnkIdx);
+            hasData         [layer].Remove(cnkIdx);
+            hasNoData       [layer].Remove(cnkIdx);
+            state           [layer].Remove(cnkIdx);
+            normalsPredicted[layer].Remove(cnkIdx);
             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
             try{
              int surfaceDataOpen=--VoxelSystem.Concurrent.surfaceDataOpen[layer][cnkIdx];
@@ -2705,10 +2846,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                VoxelSystem.Concurrent.surfaceSpawnFiles_rwl.ExitWriteLock();
               }
               //  TO DO: add to pool
-              VoxelSystem.Concurrent.surfaceHasData  [layer].Remove(cnkIdx);surfaceHasData=null;
-              VoxelSystem.Concurrent.surfaceHasNoData[layer].Remove(cnkIdx);
-              VoxelSystem.Concurrent.surfaceState    [layer].Remove(cnkIdx);
-              VoxelSystem.Concurrent.surfaceDataOpen [layer].Remove(cnkIdx);
+              VoxelSystem.Concurrent.surfaceHasData         [layer].Remove(cnkIdx);surfaceHasData=null;
+              VoxelSystem.Concurrent.surfaceHasNoData       [layer].Remove(cnkIdx);
+              VoxelSystem.Concurrent.surfaceState           [layer].Remove(cnkIdx);
+              VoxelSystem.Concurrent.surfaceDataOpen        [layer].Remove(cnkIdx);
+              VoxelSystem.Concurrent.surfaceNormalsPredicted[layer].Remove(cnkIdx);
              }
             }catch{
              throw;
@@ -2723,18 +2865,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
          }
         }
-     readonly Voxel[]polygonCell=new Voxel[8];   
-      readonly    Vector3[] vertices=new    Vector3[12];
-      readonly MaterialId[]materials=new MaterialId[12];
-      readonly    Vector3[]  normals=new    Vector3[12];
-      readonly     double[] density=new     double[2];
-      readonly    Vector3[]  vertex=new    Vector3[2];
-      readonly MaterialId[]material=new MaterialId[2];
-      readonly      float[]distance=new      float[2];
-      readonly     int[]   idx=new     int[3];
-      readonly Vector3[]verPos=new Vector3[3];
-       readonly List<Vertex>TempVer=new();
-       readonly List<UInt32>TempTri=new();
      Vector3Int[]getCoordsOutputArray=new Vector3Int[0];
      readonly Dictionary<int,Dictionary<int,SpawnMapInfo>>spawnMapsPreviousInfo=new();
      readonly System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
@@ -2795,15 +2925,125 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              Vector3Int pos1=coord1;
              pos1.x+=cnkRgn1.x;
              pos1.z+=cnkRgn1.y;
-             Vector3Int vCoord1=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
-             Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn2.x;
-                                            noiseInput1.z+=cnkRgn2.y;
+             Vector3Int vCoord2=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
+                        vCoord2.y=coord1.y;
+             int index2=vCoord2.z+vCoord2.x*Depth;
+             Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                            noiseInput2.z+=cnkRgn2.y;
              int recursionCalls=0;
              int recursionDepth=0;
              bool recursionLimitReached=false;
-             bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
+             bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput2,out SpawnCandidateData spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
              if(success){
-              //Log.DebugMessage("'RecursivelyTryReserveBoundsAt success at pos1':"+pos1+";spawnCandidateData1.simObjectPicked.simObject:"+spawnCandidateData1.simObjectPicked.simObject);
+              if(layer==0){
+               Log.DebugMessage("'RecursivelyTryReserveBoundsAt success at pos1':"+pos1+";(vCoord2:"+vCoord2+");spawnCandidateData2.simObjectPicked.simObject:"+spawnCandidateData2.simObjectPicked.simObject);
+              }
+              TempVer.Clear();
+              TempTri.Clear();
+              UInt32 vertexCount=0;
+              Vector2Int cnkRgn3=cnkRgn2;
+              Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
+              Vector3Int vCoord3;
+              for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
+              for(vCoord3.x=vCoord2.x-1   ;vCoord3.x<=vCoord2.x+1;vCoord3.x++){
+              for(vCoord3.z=vCoord2.z-1   ;vCoord3.z<=vCoord2.z+1;vCoord3.z++){
+               int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                   corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                    void SetpolygonCellVoxel(){
+                     Vector2Int cnkRgn4=cnkRgn3;
+                     Vector2Int cCoord4=cCoord3;
+                     int oftIdx4=-1;
+                     int vxlIdx4=-1;
+                     /*  fora do mundo, baixo:  */
+                     if(vCoord4.y<=0){
+                      polygonCell[corner]=Voxel.bedrock;
+                     /*  fora do mundo, cima:  */
+                     }else if(vCoord4.y>=Height){
+                      polygonCell[corner]=Voxel.air;
+                     //  pegar valor do bioma:
+                     }else{
+                      if(vCoord4.x<0||vCoord4.x>=Width||
+                         vCoord4.z<0||vCoord4.z>=Depth
+                      ){
+                       ValidateCoord(ref cnkRgn4,ref vCoord4);
+                       cCoord4=cnkRgnTocCoord(cnkRgn4);
+                      }else{
+                      }
+                      oftIdx4=GetoftIdx(cCoord4-cCoord3);
+                      vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+                      Vector3Int noiseInput=vCoord4;noiseInput.x+=cnkRgn4.x;
+                                                    noiseInput.z+=cnkRgn4.y;
+                      VoxelSystem.biome.Setvxl(
+                       noiseInput,
+                        null,
+                         null,
+                          oftIdx4,
+                           vCoord4.z+vCoord4.x*Depth,
+                            ref polygonCell[corner]
+                      );
+                     }
+                    }
+               DoPredictionMarchingCubes(
+                polygonCell,
+                 vCoord3,
+                  vertices,
+                   //verticesCache,
+                    materials,
+                     normals,
+                      density,
+                       vertex,
+                        material,
+                         distance,
+                          idx,
+                           verPos,
+                            ref vertexCount,
+                             TempVer,
+                             TempTri,
+                              //vertexUV,
+                               trianglePosAdj+new Vector3(.5f,.5f,.5f)+new Vector3(cnkRgn3.x,0,cnkRgn3.y)
+               );
+              }}}
+              if(layer==0){
+               Log.DebugMessage("TempVer.Count:"+TempVer.Count);
+              }
+              Vector3 from=vCoord2;
+                      from.x+=cnkRgn2.x;
+                      from.z+=cnkRgn2.y;
+                      from.x+=.5f;
+                      from.z+=.5f;
+              if(cnkRgn2==cnkRgn1){
+               if(layer==0){
+                container.debugRaycastFromArray[index2]=(container.debugRaycastFromArray[index2].from1,from);
+                container.debugMeshPrediction.Add((cnkRgn2,vCoord2,new(TempVer),new(TempTri)));
+               }
+              }
+              if(TryGetSlopeHitNormalAtPoint(
+               from,
+               TempVer,
+               TempTri,
+               new Vector2Int(),
+               out Vector3 normal
+              )){
+               //if(cnkRgn2==cnkRgn1){
+                if(layer==0){
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':from:"+from);
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':normal:"+normal);
+                }
+               //}
+              }else{
+               if(layer==0){
+                //Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);
+                //foreach(var v in TempVer){
+                // Log.DebugMessage("TryGetSlopeHitNormalAtPoint:v:"+v.pos);
+                //}
+               }
+              }
               //
              }
             }}
@@ -2819,7 +3059,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
              container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
              int index1=vCoord1.z+vCoord1.x*Depth;
-             container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
+             //container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
+             container.debugRaycastFromArray[index1]=(from,container.debugRaycastFromArray[index1].from2);
             }}
            }
            break;
@@ -2864,8 +3105,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
                 Vector3Int vCoord3;
                 for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
-                for(vCoord3.x=vCoord1.x-2   ;vCoord3.x<=vCoord1.x+2;vCoord3.x++){
-                for(vCoord3.z=vCoord1.z-2   ;vCoord3.z<=vCoord1.z+2;vCoord3.z++){
+                for(vCoord3.x=vCoord1.x-1   ;vCoord3.x<=vCoord1.x+1;vCoord3.x++){
+                for(vCoord3.z=vCoord1.z-1   ;vCoord3.z<=vCoord1.z+1;vCoord3.z++){
                  int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
                      corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
@@ -2998,8 +3239,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                         from.x+=.5f;
                         from.z+=.5f;
                 if(layer==0){
-                 container.debugRaycastFromArray[index1]=(container.debugRaycastFromArray[index1].from1,from);
-                 container.debugMeshPrediction.Add((cnkRgn3,vCoord3,new(TempVer),new(TempTri)));
+                 //container.debugRaycastFromArray[index1]=(container.debugRaycastFromArray[index1].from1,from);
+                 //container.debugMeshPrediction.Add((cnkRgn3,vCoord3,new(TempVer),new(TempTri)));
                 }
                 if(TryGetSlopeHitNormalAtPoint(
                  from,
@@ -3008,8 +3249,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                  new Vector2Int(),
                  out Vector3 normal
                 )){
-                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint:container.gotGroundHits[index1].Value.point:"+container.gotGroundHits[index1].Value.point+";from:"+from);
-                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint:container.gotGroundHits[index1].Value.normal:"+container.gotGroundHits[index1].Value.normal+";normal:"+normal);
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn1+")':container.gotGroundHits[index1].Value.point:"+container.gotGroundHits[index1].Value.point+";from:"+from);
+                 Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn1+")':container.gotGroundHits[index1].Value.normal:"+container.gotGroundHits[index1].Value.normal+";normal:"+normal);
                 }else{
                  if(layer==0){
                   Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);

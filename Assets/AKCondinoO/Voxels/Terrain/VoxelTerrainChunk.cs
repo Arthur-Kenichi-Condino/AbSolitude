@@ -227,6 +227,11 @@ namespace AKCondinoO.Voxels.Terrain{
         }
         #if UNITY_EDITOR
             void OnDrawGizmos(){
+             //Log.DebugMessage("worldBounds.center.y:"+worldBounds.center.y);
+             if(worldBounds.center.y==0){
+              //Log.DebugMessage("id:"+id+";expropriated:"+expropriated+";hasPhysMeshBaked:"+hasPhysMeshBaked);
+              return;
+             }
                 DebugGizmos.DrawBounds(worldBounds,Color.gray);
              if(simObjectsPlacing!=null){
               if(simObjectsPlacing.surface!=null){

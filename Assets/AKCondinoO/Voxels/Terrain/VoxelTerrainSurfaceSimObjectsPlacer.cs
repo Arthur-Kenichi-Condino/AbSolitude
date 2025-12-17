@@ -201,7 +201,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              var raycastDebugData=debugRaycastFromArray[index1];
              Vector3 from1=raycastDebugData.from1;
              Vector3 from2=raycastDebugData.from2;
-             Vector3 offset=new(cnkRgn.x,0,cnkRgn.y);
+             Vector3 offset=new();//new(cnkRgn.x,0,cnkRgn.y);
              if(from2.x!=float.NaN&&from2.y!=float.NaN&&from2.z!=float.NaN){
               Debug.DrawLine(from2+Vector3.up*1+offset,from2+Vector3.down*(Height+1)+offset,Color.yellow);
               //Debug.DrawLine(from2+Vector3.up*1+vCoord1,from2+Vector3.down*1,Color.yellow);
@@ -212,7 +212,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              Vector2Int cnkRgn2=meshData.cnkRgn;
              Vector3Int vCoord2=meshData.vCoord;
              DebugGizmos.DrawMeshWireframe(meshData.TempVer,meshData.TempTri,Color.white,
-              new Vector3(cnkRgn2.x,0,cnkRgn2.y)
+              new Vector3()//new Vector3(cnkRgn2.x,0,cnkRgn2.y)
              );
             }
            }
