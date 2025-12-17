@@ -2411,6 +2411,13 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
        readonly List<Vertex>TempVer=new();
        readonly List<UInt32>TempTri=new();
         void PredictNormal(Vector3Int pos1,SpawnCandidateData spawnCandidateData1,out Quaternion rotation){
+         VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
+         try{
+         }catch{
+          throw;
+         }finally{
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
+         }
          Vector3Int vCoord2=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
                     vCoord2.y=Height+1;
          int index2=vCoord2.z+vCoord2.x*Depth;
