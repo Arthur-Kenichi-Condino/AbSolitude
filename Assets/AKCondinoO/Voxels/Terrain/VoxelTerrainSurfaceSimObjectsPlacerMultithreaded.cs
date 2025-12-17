@@ -2413,6 +2413,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         void PredictNormal(Vector3Int pos1,SpawnCandidateData spawnCandidateData1,out Quaternion rotation){
          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
          try{
+          //normalsPredicted
          }catch{
           throw;
          }finally{

@@ -418,7 +418,7 @@
         "Y": 12,
         "Width": 1541,
         "Height": 845,
-        "WindowState": 2
+        "WindowState": 0
       },
       "DocumentGroups": [
         {
@@ -1006,7 +1006,7 @@
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ViewState": "AgIAAGQJAAAAAAAAAAAnwHIJAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAGQJAAAAAAAAAAAnwG8JAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-29T15:41:18.295Z",
               "EditorCaption": ""
