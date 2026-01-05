@@ -54,7 +54,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>state=new();
      internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>>hasData=new();
       internal Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>hasNoData=new();
-     internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,Vector3>>>normalsPredicted=new();
+     internal Dictionary<int,Dictionary<int,Dictionary<Vector3Int,(Vector3 hitPoint,Vector3 normal)>>>normalsPredicted=new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps  =new();
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
      internal readonly Dictionary<int,(string fileName,FileStream stream,BinaryWriter writer,BinaryReader reader)>spawnMapsFiles=new();
@@ -2201,7 +2201,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           candidateDescendingComparer//  ordem decrescente
          );
          if(result1){
-          PredictNormal(pos1,spawnCandidateData1,out Quaternion rotation1);
+          if(!PredictNormal(layer,cnkIdx1,pos1,spawnCandidateData1,out Vector3 hitPoint1,out Quaternion rotation1)){
+           result1=false;
+          }
+         }
+         if(result1){
           Vector3Int coord2=new Vector3Int(0,Height/2-1,0);
           for(coord2.x=-max;coord2.x<=max;coord2.x++){
           for(coord2.z=-max;coord2.z<=max;coord2.z++){if(coord2.x==0&&coord2.z==0){continue;}
@@ -2221,7 +2225,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(candidateDescendingComparer.Compare(size2,size1)>0){
              continue;
             }
-            PredictNormal(pos2,spawnCandidateData2,out Quaternion rotation2);
+            if(!PredictNormal(layer,cnkIdx2,pos2,spawnCandidateData2,out Vector3 hitPoint2,out Quaternion rotation2)){
+             continue;
+            }
             Bounds bounds1=spawnCandidateData1.bounds;
             Bounds bounds2=spawnCandidateData2.bounds;
             Bounds worldBounds1=bounds1;worldBounds1.center=pos1;
@@ -2397,7 +2403,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          recursionDepth--;
          return result1;
         }
-     readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,Vector3>>>normalsPredicted=new();
+     readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,(Vector3 hitPoint,Vector3 normal)>>>normalsPredicted=new();
      readonly Voxel[]polygonCell=new Voxel[8];   
       readonly    Vector3[] vertices=new    Vector3[12];
       readonly MaterialId[]materials=new MaterialId[12];
@@ -2410,128 +2416,165 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
       readonly Vector3[]verPos=new Vector3[3];
        readonly List<Vertex>TempVer=new();
        readonly List<UInt32>TempTri=new();
-        void PredictNormal(Vector3Int pos1,SpawnCandidateData spawnCandidateData1,out Quaternion rotation){
+        bool PredictNormal(int layer,int cnkIdx1,Vector3Int pos1,SpawnCandidateData spawnCandidateData1,out Vector3 hitPoint,out Quaternion rotation){
+         bool success=false;
+         hitPoint=Vector3.zero;
+         rotation=Quaternion.identity;
+         bool cached;
+         (Vector3 hitPoint,Vector3 normal)cachedValue;
+         Vector3 hitPoint1;
+         Vector3 normal1;
          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
          try{
-          //normalsPredicted
+          cached=normalsPredicted[layer][cnkIdx1].TryGetValue(pos1,out cachedValue);
          }catch{
           throw;
          }finally{
           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitReadLock();
          }
-         Vector3Int vCoord2=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
-                    vCoord2.y=Height+1;
-         int index2=vCoord2.z+vCoord2.x*Depth;
-         Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
-                                        noiseInput2.z+=cnkRgn2.y;
-         TempVer.Clear();
-         TempTri.Clear();
-         UInt32 vertexCount=0;
-         Vector2Int cnkRgn3=cnkRgn2;
-         Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
-         Vector3Int vCoord3;
-         for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
-         for(vCoord3.x=vCoord2.x-1   ;vCoord3.x<=vCoord2.x+1;vCoord3.x++){
-         for(vCoord3.z=vCoord2.z-1   ;vCoord3.z<=vCoord2.z+1;vCoord3.z++){
-          int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
-              corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
-               void SetpolygonCellVoxel(){
-                Vector2Int cnkRgn4=cnkRgn3;
-                Vector2Int cCoord4=cCoord3;
-                int oftIdx4=-1;
-                int vxlIdx4=-1;
-                /*  fora do mundo, baixo:  */
-                if(vCoord4.y<=0){
-                 polygonCell[corner]=Voxel.bedrock;
-                /*  fora do mundo, cima:  */
-                }else if(vCoord4.y>=Height){
-                 polygonCell[corner]=Voxel.air;
-                //  pegar valor do bioma:
-                }else{
-                 if(vCoord4.x<0||vCoord4.x>=Width||
-                    vCoord4.z<0||vCoord4.z>=Depth
-                 ){
-                  ValidateCoord(ref cnkRgn4,ref vCoord4);
-                  cCoord4=cnkRgnTocCoord(cnkRgn4);
-                 }else{
-                 }
-                 oftIdx4=GetoftIdx(cCoord4-cCoord3);
-                 vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
-                 Vector3Int noiseInput=vCoord4;noiseInput.x+=cnkRgn4.x;
-                                               noiseInput.z+=cnkRgn4.y;
-                 VoxelSystem.biome.Setvxl(
-                  noiseInput,
-                   null,
-                    null,
-                     oftIdx4,
-                      vCoord4.z+vCoord4.x*Depth,
-                       ref polygonCell[corner]
-                 );
-                }
-               }
-          DoPredictionMarchingCubes(
-           polygonCell,
-            vCoord3,
-             vertices,
-              //verticesCache,
-               materials,
-                normals,
-                 density,
-                  vertex,
-                   material,
-                    distance,
-                     idx,
-                      verPos,
-                       ref vertexCount,
-                        TempVer,
-                        TempTri,
-                         //vertexUV,
-                          trianglePosAdj+new Vector3(.5f,.5f,.5f)+new Vector3(cnkRgn3.x,0,cnkRgn3.y)
-          );
-         }}}
-         Vector3 from=vCoord2;
-                 from.x+=cnkRgn2.x;
-                 from.z+=cnkRgn2.y;
-                 from.x+=.5f;
-                 from.z+=.5f;
-         if(TryGetSlopeHitNormalAtPoint(
-          from,
-          TempVer,
-          TempTri,
-          new Vector2Int(),
-          out Vector3 normal
-         )){
-          //if(cnkRgn2==cnkRgn1){
-           //if(layer==0){
-            //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':from:"+from);
-            //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':normal:"+normal);
-           //}
-          //}
+         hitPoint1=cachedValue.hitPoint;
+         normal1=cachedValue.normal;
+         if(cached){
+          if(float.IsNaN(normal1.x)||float.IsNaN(normal1.y)||float.IsNaN(normal1.z)){
+           return success;
+          }else{
+           success=true;
+          }
          }else{
-          //if(layer==0){
-           //Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);
-           //foreach(var v in TempVer){
-           // Log.DebugMessage("TryGetSlopeHitNormalAtPoint:v:"+v.pos);
+          Vector3Int vCoord2=vecPosTovCoord(pos1,out Vector2Int cnkRgn2);
+                     vCoord2.y=Height+1;
+          int index2=vCoord2.z+vCoord2.x*Depth;
+          Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
+                                         noiseInput2.z+=cnkRgn2.y;
+          TempVer.Clear();
+          TempTri.Clear();
+          UInt32 vertexCount=0;
+          Vector2Int cnkRgn3=cnkRgn2;
+          Vector2Int cCoord3=cnkRgnTocCoord(cnkRgn3);
+          Vector3Int vCoord3;
+          for(vCoord3=new Vector3Int();vCoord3.y<Height      ;vCoord3.y++){
+          for(vCoord3.x=vCoord2.x-1   ;vCoord3.x<=vCoord2.x+1;vCoord3.x++){
+          for(vCoord3.z=vCoord2.z-1   ;vCoord3.z<=vCoord2.z+1;vCoord3.z++){
+           int corner=0;Vector3Int vCoord4=vCoord3;                                       SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;vCoord4.x+=1;                          SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;             SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;             vCoord4.y+=1;             SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;                          vCoord4.z+=1;SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;vCoord4.x+=1;             vCoord4.z+=1;SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;vCoord4.x+=1;vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+               corner++;           vCoord4=vCoord3;             vCoord4.y+=1;vCoord4.z+=1;SetpolygonCellVoxel();
+                void SetpolygonCellVoxel(){
+                 Vector2Int cnkRgn4=cnkRgn3;
+                 Vector2Int cCoord4=cCoord3;
+                 int oftIdx4=-1;
+                 int vxlIdx4=-1;
+                 /*  fora do mundo, baixo:  */
+                 if(vCoord4.y<=0){
+                  polygonCell[corner]=Voxel.bedrock;
+                 /*  fora do mundo, cima:  */
+                 }else if(vCoord4.y>=Height){
+                  polygonCell[corner]=Voxel.air;
+                 //  pegar valor do bioma:
+                 }else{
+                  if(vCoord4.x<0||vCoord4.x>=Width||
+                     vCoord4.z<0||vCoord4.z>=Depth
+                  ){
+                   ValidateCoord(ref cnkRgn4,ref vCoord4);
+                   cCoord4=cnkRgnTocCoord(cnkRgn4);
+                  }else{
+                  }
+                  oftIdx4=GetoftIdx(cCoord4-cCoord3);
+                  vxlIdx4=GetvxlIdx(vCoord4.x,vCoord4.y,vCoord4.z);
+                  Vector3Int noiseInput=vCoord4;noiseInput.x+=cnkRgn4.x;
+                                                noiseInput.z+=cnkRgn4.y;
+                  VoxelSystem.biome.Setvxl(
+                   noiseInput,
+                    null,
+                     null,
+                      oftIdx4,
+                       vCoord4.z+vCoord4.x*Depth,
+                        ref polygonCell[corner]
+                  );
+                 }
+                }
+           DoPredictionMarchingCubes(
+            polygonCell,
+             vCoord3,
+              vertices,
+               //verticesCache,
+                materials,
+                 normals,
+                  density,
+                   vertex,
+                    material,
+                     distance,
+                      idx,
+                       verPos,
+                        ref vertexCount,
+                         TempVer,
+                         TempTri,
+                          //vertexUV,
+                           trianglePosAdj+new Vector3(.5f,.5f,.5f)+new Vector3(cnkRgn3.x,0,cnkRgn3.y)
+           );
+          }}}
+          Vector3 from=vCoord2;
+                  from.x+=cnkRgn2.x;
+                  from.z+=cnkRgn2.y;
+                  from.x+=.5f;
+                  from.z+=.5f;
+          if(TryGetSlopeHitNormalAtPoint(
+           from,
+           TempVer,
+           TempTri,
+           new Vector2Int(),
+           out hitPoint1,
+           out normal1
+          )){
+           success=true;
+           //if(cnkRgn2==cnkRgn1){
+            //if(layer==0){
+             //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':from:"+from);
+             //Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn2+")':normal:"+normal);
+            //}
            //}
-          //}
+          }else{
+           //if(layer==0){
+            //Log.DebugMessage("TryGetSlopeHitNormalAtPoint:from:"+from);
+            //foreach(var v in TempVer){
+            // Log.DebugMessage("TryGetSlopeHitNormalAtPoint:v:"+v.pos);
+            //}
+           //}
+          }
          }
-         Type simObject=spawnCandidateData1.simObjectPicked.simObject;
-         SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
-         rotation=spawnCandidateData1.rotation;
-         rotation=rotation*Quaternion.SlerpUnclamped(
-          Quaternion.identity,
-          Quaternion.FromToRotation(
-           Vector3.up,
-           normal
-          ),
-          spawnCandidateData1.simObjectSettings.inclination
-         );
+         if(success){
+          Type simObject=spawnCandidateData1.simObjectPicked.simObject;
+          SimObjectSpawnModifiers modifiers=spawnCandidateData1.modifiers;
+          rotation=spawnCandidateData1.rotation;
+          rotation=rotation*Quaternion.SlerpUnclamped(
+           Quaternion.identity,
+           Quaternion.FromToRotation(
+            Vector3.up,
+            normal1
+           ),
+           spawnCandidateData1.simObjectSettings.inclination
+          );
+          hitPoint=hitPoint1;
+         }
+         if(!cached){
+          VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterWriteLock();
+          try{
+           if(success){
+            normalsPredicted[layer][cnkIdx1][pos1]=(hitPoint1,normal1);
+           }else{
+            normalsPredicted[layer][cnkIdx1][pos1]=(Vector3.zero,new Vector3(float.NaN,float.NaN,float.NaN));
+           }
+          }catch{
+           throw;
+          }finally{
+           VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitWriteLock();
+          }
+         }
+         return success;
         }
         void GetSpawnMapData(){
         }
@@ -3036,6 +3079,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                TempVer,
                TempTri,
                new Vector2Int(),
+               out Vector3 hitPoint,
                out Vector3 normal
               )){
                //if(cnkRgn2==cnkRgn1){
@@ -3255,6 +3299,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                  TempVer,
                  TempTri,
                  new Vector2Int(),
+                 out Vector3 hitPoint,
                  out Vector3 normal
                 )){
                  Log.DebugMessage("TryGetSlopeHitNormalAtPoint '(cnkRgn:"+cnkRgn1+")':container.gotGroundHits[index1].Value.point:"+container.gotGroundHits[index1].Value.point+";from:"+from);

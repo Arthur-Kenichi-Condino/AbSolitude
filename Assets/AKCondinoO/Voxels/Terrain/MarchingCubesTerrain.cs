@@ -515,8 +515,10 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          List<Vertex>TempVer,
          List<UInt32>TempTri,
          Vector2Int cnkRgn,
+         out Vector3 hitPoint,
          out Vector3 normal
         ){
+         hitPoint=worldPoint;
          normal=Vector3.up;//  fallback seguro
          //  convertemos o ponto para o espaço do chunk
          Vector3 localPoint=worldPoint;
@@ -524,6 +526,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
          localPoint.z-=cnkRgn.y;
          bool foundAny=false;
          float highestY=float.NegativeInfinity;
+         Vector3 bestHit=Vector3.zero;
          Vector3 bestNormal=Vector3.up;
          //  percorre todos os triângulos
          for(int i=0;i<TempTri.Count;i+=3){
@@ -540,6 +543,7 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
           //  mantém apenas o triângulo mais alto
           if(yHit>highestY){
            highestY=yHit;
+           bestHit=new Vector3(localPoint.x,yHit,localPoint.z);
            bestNormal=Vector3.Cross(b-a,c-a).normalized;
            foundAny=true;
           }
@@ -581,7 +585,13 @@ namespace AKCondinoO.Voxels.Terrain.MarchingCubes{
           yHit=a.y+t;
           return true;
          }
-         if(foundAny)normal=bestNormal;
+         if(foundAny){
+          //  Converter hitPoint de volta para world space
+          hitPoint=bestHit;
+          hitPoint.x+=cnkRgn.x;
+          hitPoint.z+=cnkRgn.y;
+          normal=bestNormal;
+         }
          return foundAny;
         }
     }

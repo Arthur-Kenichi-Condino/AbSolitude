@@ -49,7 +49,7 @@ namespace AKCondinoO.Voxels{
          internal static readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,SpawnCandidateData>>>surfaceHasData=new();
           internal static readonly Dictionary<int,Dictionary<int,HashSet<Vector3Int>>>surfaceHasNoData=new();
          internal static readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>surfaceState=new();
-         internal static readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,Vector3>>>surfaceNormalsPredicted=new();
+         internal static readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,(Vector3 hitPoint,Vector3 normal)>>>surfaceNormalsPredicted=new();
          internal static ReaderWriterLockSlim  surfaceSpawnData_rwl;
          internal static ReaderWriterLockSlim surfaceSpawnFiles_rwl;
          static readonly Dictionary<int,string      >editsFileCacheName        =new Dictionary<int,string      >();
