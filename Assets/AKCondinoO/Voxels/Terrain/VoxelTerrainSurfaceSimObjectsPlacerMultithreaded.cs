@@ -2200,8 +2200,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          var candidatesThatConflictBySize=new SortedDictionary<Vector2,Dictionary<Vector3Int,SpawnCandidateData>>(
           candidateDescendingComparer//  ordem decrescente
          );
+         Vector3 hitPoint1=Vector3.zero;
+         Quaternion rotation1=Quaternion.identity;
          if(result1){
-          if(!PredictNormal(layer,cnkIdx1,pos1,spawnCandidateData1,out Vector3 hitPoint1,out Quaternion rotation1)){
+          if(!PredictNormal(layer,cnkIdx1,pos1,spawnCandidateData1,out hitPoint1,out rotation1)){
            result1=false;
           }
          }
@@ -2234,8 +2236,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Bounds worldBounds2=bounds2;worldBounds2.center=pos2;
             //if(!worldBounds2.Intersects(worldBounds1)){
             if(!PhysUtil.BoundsIntersectsRotatedAndScaled(
-              worldBounds2,spawnCandidateData2.rotation,spawnCandidateData2.modifiers.scale,
-              worldBounds1,spawnCandidateData1.rotation,spawnCandidateData1.modifiers.scale
+              worldBounds2,rotation2,spawnCandidateData2.modifiers.scale,
+              worldBounds1,rotation1,spawnCandidateData1.modifiers.scale
              )
             ){
              continue;
@@ -2274,7 +2276,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }else if(candidateDescendingComparer.Compare(size2,size1)==0){
             if(candidatesThatConflictWithSameSize!=null){
                candidatesThatConflictWithSameSize.Clear();
-               //  TO DO: merge values and then clear ^
+               //  TO DO: merge values with kvp.Value and then clear ^
             }
                candidatesThatConflictWithSameSize=kvp.Value;
            }else{
@@ -2370,13 +2372,76 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
             candidatesThatConflictWithSameSize.Clear();
          }
+         HashSet<Vector3Int>getCoordsOutputHashSet1=new();
+         Vector3Int[]getCoordsOutputArray1=new Vector3Int[0];
+         int getCoordsOutputArrayLength1=0;
+         if(result1){
+          var modifiers1=spawnCandidateData1.modifiers;
+          getCoordsOutputArrayLength1=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
+           bounds:new(spawnCandidateData1.bounds.center+pos1,spawnCandidateData1.bounds.size),
+           modifiers1.scale,rotation1,
+           margin,
+           sorted:false,
+           outputArray:ref getCoordsOutputArray1,
+           outputHashSet:getCoordsOutputHashSet1
+          );
+          if(getCoordsOutputArrayLength1>0){
+           //OpenSpawnMapsData(cnkIdx1);
+           for(int i=0;i<getCoordsOutputArrayLength1;++i){
+            Vector3Int coord2=getCoordsOutputArray1[i];
+            Vector3Int vCoord2=vecPosTovCoord(coord2,out Vector2Int cnkRgn2);
+            int vxlIdx2=GetvxlIdx(vCoord2.x,vCoord2.y,vCoord2.z);
+            Vector2Int cCoord2=cnkRgnTocCoord(cnkRgn2);
+            int cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
+            if(cnkIdx2==container.cnkIdx&&vCoord2.y==0){
+             //Log.DebugMessage("ReserveBounds:debugSpawnMapArray:coord2:"+coord2);
+             //if(layer==0){container.debugSpawnMapArray[vxlIdx2]=Color.blue;}
+            }
+            OpenSpawnMapsData(cnkIdx2);
+            VoxelSystem.Concurrent.spawnMapsData_rwl.EnterUpgradeableReadLock();
+            try{
+             if(spawnMaps[cnkIdx2][vxlIdx2].isBlocked){
+              result1=false;
+              goto _Unchanged;
+             }
+             _Unchanged:{}
+            }catch{
+             throw;
+            }finally{
+             VoxelSystem.Concurrent.spawnMapsData_rwl.ExitUpgradeableReadLock();
+            }
+            if(!result1){break;}
+           }
+          }
+         }
          if(result1){
           foreach(var posSpawnCandidateDataPair2 in candidatesThatUltimatelyConflict){
            Vector3Int pos2=posSpawnCandidateDataPair2.Key;
            Vector3Int vCoord2=vecPosTovCoord(pos2,out Vector2Int cnkRgn2);
            Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
                                           noiseInput2.z+=cnkRgn2.y;
+           Vector2Int cCoord2=vecPosTocCoord(pos2);
+           int        cnkIdx2=GetcnkIdx(cCoord2.x,cCoord2.y);
            SpawnCandidateData spawnCandidateData2=posSpawnCandidateDataPair2.Value;
+           if(!PredictNormal(layer,cnkIdx2,pos2,spawnCandidateData2,out Vector3 hitPoint2,out Quaternion rotation2)){
+            continue;
+           }
+           HashSet<Vector3Int>getCoordsOutputHashSet2=new();
+           Vector3Int[]getCoordsOutputArray2=new Vector3Int[0];
+           int getCoordsOutputArrayLength2=0;
+           var modifiers2=spawnCandidateData2.modifiers;
+           getCoordsOutputArrayLength2=PhysUtil.GetCoordsInsideBoundsUsingParallelFor2D(
+            bounds:new(spawnCandidateData2.bounds.center+pos2,spawnCandidateData2.bounds.size),
+            modifiers2.scale,rotation2,
+            margin,
+            sorted:false,
+            outputArray:ref getCoordsOutputArray2,
+            outputHashSet:getCoordsOutputHashSet2
+           );
+           if(getCoordsOutputHashSet2.Overlaps(getCoordsOutputHashSet1)){
+            result1=false;
+            break;
+           }
            if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
             result1=false;
             break;

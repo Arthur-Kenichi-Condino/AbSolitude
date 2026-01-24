@@ -959,8 +959,9 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
         static readonly ConcurrentBag<  float[]>          distPool=new();
         internal static int GetCoordsInsideBoundsUsingParallelFor2D(
          Bounds bounds,Vector3 scale,Quaternion rotation,Vector3 margin,
-         bool sorted,ref Vector3Int[]outputArray,HashSet<Vector3Int>ignored=null
+         bool sorted,ref Vector3Int[]outputArray,HashSet<Vector3Int>outputHashSet=null,HashSet<Vector3Int>ignored=null
         ){
+         bool addToHashSet=(outputHashSet!=null);
          //  TO DO: use pool of arrays
          //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:bounds.size:"+bounds.size);
          //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:scale:"+scale);
@@ -1049,11 +1050,19 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
          Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:size:"+size);
          int length=0;
          Parallel.For(minX,maxX+1,x=>{
+          //  TO DO: use pool v
+          HashSet<Vector3Int>localHashSet=new();
           for(int z=minZ;z<maxZ+1;z++){//  cada ponto (x,z) é uma célula do grid
            Vector3Int coord=new Vector3Int(x,0,z);
            if(PointIn(new Vector2(coord.x,coord.z))){
             int i=Interlocked.Increment(ref length)-1;
             output[i]=coord;
+            localHashSet.Add(coord);
+           }
+          }
+          if(addToHashSet){
+           lock(outputHashSet){
+            outputHashSet.UnionWith(localHashSet);
            }
           }
          });
