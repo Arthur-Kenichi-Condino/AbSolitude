@@ -134,7 +134,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                                     surfaceSimObjectsPlacerBG.GetGroundRays.Clear();
                                     surfaceSimObjectsPlacerBG.GetGroundHits.Clear();
                                     surfaceSimObjectsPlacerBG.gotGroundHits.Clear();
-                                    surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.GetGround;
+                                    surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.GetGroundReserveBoundsFillSpawnData;
                                     settingGetGroundRays=true;
                                     Log.DebugMessage("settingGetGroundRays=true;");
                                     VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Schedule(surfaceSimObjectsPlacerBG);

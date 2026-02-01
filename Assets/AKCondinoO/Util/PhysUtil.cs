@@ -1010,7 +1010,7 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
             }
             dist[j]=d;
             projectedEdges[j]=p;
-            Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:projectedEdges[j]:"+projectedEdges[j]);
+            //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:projectedEdges[j]:"+projectedEdges[j]);
             break;
            }
           }
@@ -1047,7 +1047,7 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
           Array.Resize(ref outputArray,size);
          }
          var output=outputArray;
-         Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:size:"+size);
+         //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:size:"+size);
          int length=0;
          Parallel.For(minX,maxX+1,x=>{
           //  TO DO: use pool v
