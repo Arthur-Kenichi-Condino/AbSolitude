@@ -1650,7 +1650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6930058504557553217, guid: ccf50d55e02d3e84993442f72125dee3, type: 3}
       propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[0].inclination
-      value: 0.125
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6930058504557553217, guid: ccf50d55e02d3e84993442f72125dee3, type: 3}
       propertyPath: biomeSurfaceSpawnsByLayer.Array.data[0].biomeSurfaceSpawns.Array.data[1].inclination

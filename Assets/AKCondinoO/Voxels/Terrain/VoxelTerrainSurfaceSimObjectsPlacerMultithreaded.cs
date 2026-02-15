@@ -2146,8 +2146,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      readonly object sync_TryReserveBounds=new();
      readonly Stopwatch sw_TryReserveBounds=new();
         protected bool RecursivelyTryReserveBoundsAt(int layer,Vector3 margin,Vector3Int pos1,Vector3Int noiseInput1,
-         out SpawnCandidateData spawnCandidateData1,ref int recursionDepth,ref bool recursionLimitReached,ref int recursionCalls
+         out SpawnCandidateData spawnCandidateData1,out Vector3 hitPoint1,out Quaternion rotation1,
+         ref int recursionDepth,ref bool recursionLimitReached,ref int recursionCalls
         ){
+         hitPoint1=Vector3.zero;
+         rotation1=Quaternion.identity;
          HashSet<Vector3Int>getCoordsOutputHashSet1=null;
          Vector3Int[]getCoordsOutputArray1=null;
          int getCoordsOutputArrayLength1=0;
@@ -2181,6 +2184,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           if(cached){
            if(result1){
             GetCandidateData(layer,margin,pos1,cnkIdx1,noiseInput1,out spawnCandidateData1);
+            if(!PredictNormal(layer,cnkIdx1,pos1,spawnCandidateData1,out hitPoint1,out rotation1)){
+             spawnCandidateData1=default;
+             result1=false;
+            }
            }else{
             spawnCandidateData1=default;
            }
@@ -2210,8 +2217,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          var candidatesThatConflictBySize=new SortedDictionary<Vector2,Dictionary<Vector3Int,SpawnCandidateData>>(
           candidateDescendingComparer//  ordem decrescente
          );
-         Vector3 hitPoint1=Vector3.zero;
-         Quaternion rotation1=Quaternion.identity;
          if(result1){
           if(!PredictNormal(layer,cnkIdx1,pos1,spawnCandidateData1,out hitPoint1,out rotation1)){
            result1=false;
@@ -2276,7 +2281,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
               Vector3Int noiseInput2=vCoord2;noiseInput2.x+=cnkRgn2.x;
                                              noiseInput2.z+=cnkRgn2.y;
               SpawnCandidateData spawnCandidateData2=posSpawnCandidateDataPair2.Value;
-              if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
+              if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,out Vector3 hitPoint2,out Quaternion rotation2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
                result1=false;
                break;
               }
@@ -2472,7 +2477,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             outputHashSet:getCoordsOutputHashSet2
            );
            if(getCoordsOutputHashSet2.Overlaps(getCoordsOutputHashSet1)){
-            if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
+            if(RecursivelyTryReserveBoundsAt(layer,margin,pos2,noiseInput2,out spawnCandidateData2,out hitPoint2,out rotation2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
              //Log.DebugMessage("'result1=false':'getCoordsOutputHashSet2.Overlaps(getCoordsOutputHashSet1)'");
              result1=false;
              break;
@@ -3130,9 +3135,24 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              int recursionCalls=0;
              int recursionDepth=0;
              bool recursionLimitReached=false;
-             bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput2,out SpawnCandidateData spawnCandidateData2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
+             container.debugArray[index2]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+             bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput2,out SpawnCandidateData spawnCandidateData2,out Vector3 hitPoint2,out Quaternion rotation2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
              if(success){
-              Log.DebugMessage("Execution.GetGround:success:'RecursivelyTryReserveBoundsAt pos1':"+pos1);
+              Log.DebugMessage("Execution.GetGround:success:'RecursivelyTryReserveBoundsAt pos1':"+pos1+";rotation2:"+rotation2);
+              Type simObject=spawnCandidateData2.simObjectPicked.simObject;
+              SimObjectSpawnModifiers modifiers=spawnCandidateData2.modifiers;
+              Quaternion rotation=rotation2;
+              Vector3 position=hitPoint2+
+               (rotation*Vector3.up)*((spawnCandidateData2.size.y*modifiers.scale.y)/2f)+
+               (rotation*Vector3.Scale(spawnCandidateData2.simObjectSettings.pivot,modifiers.scale));
+              Log.DebugMessage("spawnCandidateData2.size.y:"+spawnCandidateData2.size.y+";modifiers.scale.y:"+modifiers.scale.y);
+              Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData2.simObjectSettings.assetScale);
+              container.debugArray[index2]=(Color.green,new Bounds(position,spawnCandidateData2.size),modifiers.scale,rotation);
+              if(spawnCandidateData2.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
+               container.debugArray[index2]=(Color.cyan,new Bounds(position,spawnCandidateData2.size),modifiers.scale,rotation);
+              }
+              Log.DebugMessage("set to be spawned:simObject:"+simObject);
+              container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));
              }
             }}
             VoxelSystem.Concurrent.surfaceSpawnData_rwl.EnterReadLock();
@@ -3161,19 +3181,19 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }
            toCloseSpawnMapsData.Clear();
            {
-            QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
-            Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
-            for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
-            for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
-             Vector3 from=vCoord1;
-                     from.x+=cnkRgn1.x+.5f;
-                     from.z+=cnkRgn1.y+.5f;
-             container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
-             container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
-             int index1=vCoord1.z+vCoord1.x*Depth;
+            //QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
+            //Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+             //Vector3 from=vCoord1;
+                     //from.x+=cnkRgn1.x+.5f;
+                     //from.z+=cnkRgn1.y+.5f;
+            // container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
+            // container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
+             //int index1=vCoord1.z+vCoord1.x*Depth;
              //container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
-             container.debugRaycastFromArray[index1]=(from,container.debugRaycastFromArray[index1].from2);
-            }}
+             //container.debugRaycastFromArray[index1]=(from,container.debugRaycastFromArray[index1].from2);
+            //}}
            }
            sw.Stop();
            Log.DebugMessage("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded Execute GetGround:cnkRgn:"+container.cnkRgn+":time:"+sw.ElapsedMilliseconds+" ms");
@@ -3207,7 +3227,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              bool recursionLimitReached=false;
              bool success=false;
              //Log.DebugMessage("'RecursivelyTryReserveBoundsAt pos1':"+pos1);
-             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
+             if(RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput1,out SpawnCandidateData spawnCandidateData1,out Vector3 hitPoint1,out Quaternion rotation1,ref recursionDepth,ref recursionLimitReached,ref recursionCalls)){
               if(!(container.gotGroundHits[index1]==null)){
                if(layer==0){
                 Log.DebugMessage("RecursivelyTryReserveBoundsAt:vCoord1:"+vCoord1);

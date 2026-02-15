@@ -46,6 +46,69 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                     if(fillingSpawnData){
                         if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
                             fillingSpawnData=false;
+                            Log.DebugMessage("fillingSpawnData=false;");
+                            if(surfaceSimObjectsPlacerBG.surfaceSimObjectsHadBeenAdded){
+                                OnPlacingFinished();
+                            }else{
+                                if(surfaceSimObjectsPlacerBG.spawnData.at.Count<=0){
+                                    OnSaveStateToFile();
+                                }else{
+                                    surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
+                                    SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
+                                    Array.Copy(surfaceSimObjectsPlacerBG.debugArray,debugArray,surfaceSimObjectsPlacerBG.debugArray.Length);
+                                    Array.Copy(surfaceSimObjectsPlacerBG.debugSpawnMapArray,debugSpawnMapArray,surfaceSimObjectsPlacerBG.debugSpawnMapArray.Length);
+                                    Array.Copy(surfaceSimObjectsPlacerBG.debugRaycastFromArray,debugRaycastFromArray,surfaceSimObjectsPlacerBG.debugRaycastFromArray.Length);
+                                    debugMeshPrediction.AddRange(surfaceSimObjectsPlacerBG.debugMeshPrediction);surfaceSimObjectsPlacerBG.debugMeshPrediction.Clear();
+                                    debugArrayReady=true;
+                                    spawning=true;
+                                    Log.DebugMessage("spawning=true;");
+                                }
+                            }
+                        }
+                    }else{
+                        if(surfaceSimObjectsPlacerBG.hasChangedIndex){
+                         surfaceSimObjectsPlacerBG.lastcCoord=surfaceSimObjectsPlacerBG.cCoord;
+                         surfaceSimObjectsPlacerBG.lastcnkRgn=surfaceSimObjectsPlacerBG.cnkRgn;
+                         surfaceSimObjectsPlacerBG.lastcnkIdx=surfaceSimObjectsPlacerBG.cnkIdx;
+                        }
+                        surfaceSimObjectsPlacerBG.hasChangedIndex=false;
+                        if(surfaceSimObjectsPlacerBG.lastcnkIdx==null||surfaceSimObjectsPlacerBG.cnkIdx.Value!=surfaceSimObjectsPlacerBG.lastcnkIdx.Value){
+                         surfaceSimObjectsPlacerBG.hasChangedIndex=true;
+                        }
+                        surfaceSimObjectsPlacerBG.cCoord=simObjectsPlacing.cnk.id.Value.cCoord;
+                        surfaceSimObjectsPlacerBG.cnkRgn=simObjectsPlacing.cnk.id.Value.cnkRgn;
+                        surfaceSimObjectsPlacerBG.cnkIdx=simObjectsPlacing.cnk.id.Value.cnkIdx;
+                        surfaceSimObjectsPlacerBG.surfaceSimObjectsHadBeenAdded=false;
+                        //surfaceSimObjectsPlacerBG.maxSpawnSize=BaseBiomeSimObjectsSpawnSettings.maxSpawnSize;
+                        //surfaceSimObjectsPlacerBG.margin      =BaseBiomeSimObjectsSpawnSettings.margin      ;
+                        surfaceSimObjectsPlacerBG.GetGroundRays.Clear();
+                        surfaceSimObjectsPlacerBG.GetGroundHits.Clear();
+                        surfaceSimObjectsPlacerBG.gotGroundHits.Clear();
+                        surfaceSimObjectsPlacerBG.execution=VoxelTerrainSurfaceSimObjectsPlacerContainer.Execution.GetGroundReserveBoundsFillSpawnData;
+                        fillingSpawnData=true;
+                        Log.DebugMessage("fillingSpawnData=true;");
+                        VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.Schedule(surfaceSimObjectsPlacerBG);
+                    }
+                }
+            }
+            return;
+            if(savingStateToFile){
+                if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
+                    savingStateToFile=false;
+                    Log.DebugMessage("savingStateToFile=false;");
+                    OnPlacingFinished();
+                }
+            }else{
+                if(spawning){
+                    if(surfaceSimObjectsPlacerBG.spawnData.dequeued){
+                        spawning=false;
+                        //Log.DebugMessage("spawning=false;");
+                        OnSaveStateToFile();
+                    }
+                }else{
+                    if(fillingSpawnData){
+                        if(surfaceSimObjectsPlacerBG.IsCompleted(VoxelSystem.singleton.surfaceSimObjectsPlacerBGThreads[0].IsRunning)){
+                            fillingSpawnData=false;
                             //Log.DebugMessage("fillingSpawnData=false;");
                             surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                             SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
@@ -176,8 +239,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn.y;
              Gizmos.color=debugArray[index1].color;
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
+              //Log.DebugMessage("debugArray[index1].bounds.center:"+debugArray[index1].bounds.center+";debugArray[index1].rotation:"+debugArray[index1].rotation+";debugArray[index1].scale:"+debugArray[index1].scale+";debugArray[index1].bounds.size:"+debugArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.TRS(debugArray[index1].bounds.center,debugArray[index1].rotation,debugArray[index1].scale);
-              //Gizmos.DrawWireCube(Vector3.zero,debugArray[index1].bounds.size);
+              Gizmos.DrawWireCube(Vector3.zero,debugArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.identity;
              //}else{
               //Gizmos.DrawCube(pos1,Vector3.one/2f);
