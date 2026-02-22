@@ -56,6 +56,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                                     surfaceSimObjectsPlacerBG.spawnData.dequeued=false;
                                     SimObjectSpawner.singleton.spawnQueue.Enqueue(surfaceSimObjectsPlacerBG.spawnData);
                                     Array.Copy(surfaceSimObjectsPlacerBG.debugArray,debugArray,surfaceSimObjectsPlacerBG.debugArray.Length);
+                                    if(surfaceSimObjectsPlacerBG.debugArray[0].color!=new Color(0,0,0,0)){
+                                     Log.DebugMessage("surfaceSimObjectsPlacerBG.debugArray[0]:"+surfaceSimObjectsPlacerBG.debugArray[0]);
+                                     Log.DebugMessage("debugArray[0]:"+debugArray[0]);
+                                    }
                                     Array.Copy(surfaceSimObjectsPlacerBG.debugSpawnMapArray,debugSpawnMapArray,surfaceSimObjectsPlacerBG.debugSpawnMapArray.Length);
                                     Array.Copy(surfaceSimObjectsPlacerBG.debugRaycastFromArray,debugRaycastFromArray,surfaceSimObjectsPlacerBG.debugRaycastFromArray.Length);
                                     debugMeshPrediction.AddRange(surfaceSimObjectsPlacerBG.debugMeshPrediction);surfaceSimObjectsPlacerBG.debugMeshPrediction.Clear();
@@ -238,6 +242,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.x+=cnkRgn.x;
              pos1.z+=cnkRgn.y;
              Gizmos.color=debugArray[index1].color;
+             if(debugArray[index1].color!=new Color(0,0,0,0)){
+              Log.DebugMessage("'has value'");
+             }
              //if(Gizmos.color==Color.cyan&&vCoord1.z==0){
               //Log.DebugMessage("debugArray[index1].bounds.center:"+debugArray[index1].bounds.center+";debugArray[index1].rotation:"+debugArray[index1].rotation+";debugArray[index1].scale:"+debugArray[index1].scale+";debugArray[index1].bounds.size:"+debugArray[index1].bounds.size);
               Gizmos.matrix=Matrix4x4.TRS(debugArray[index1].bounds.center,debugArray[index1].rotation,debugArray[index1].scale);

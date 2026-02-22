@@ -1084,11 +1084,13 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
          Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:length:"+length);
          Pool();return length;
          void Pool(){
-                 cornersPool.Add(corners       );
-               projectedPool.Add(projected     );
-          projectedEdgesPool.Add(projectedEdges);
-          for(int i=0;i<dist.Length;++i){dist[i]=float.MinValue;}
-                    distPool.Add(dist          );
+          if(corners       !=null){       cornersPool.Add(corners       );}
+          if(projected     !=null){     projectedPool.Add(projected     );}
+          if(projectedEdges!=null){projectedEdgesPool.Add(projectedEdges);}
+          if(dist          !=null){
+           for(int i=0;i<dist.Length;++i){dist[i]=float.MinValue;}
+                                             distPool.Add(dist          );
+          }
          }
             //// 1) Expande bounds pela margin (aplica antes dos calculos)
             //Bounds input = new Bounds(bounds.center, bounds.size);

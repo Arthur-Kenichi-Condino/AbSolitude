@@ -64,6 +64,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
      internal readonly Dictionary<int,SpawnMapInfo[]>spawnMaps3D=new();
      internal readonly Dictionary<int,(string fileName,FileStream stream,BinaryWriter writer,BinaryReader reader)>spawnMapsFiles=new();
      internal readonly SpawnData spawnData=new SpawnData(FlattenOffset);
+     internal int debugArrayLayer=0;
+     internal Color[]debugArrayLayerToColor=new Color[1]{Color.cyan,};
      internal readonly(Color color,Bounds bounds,Vector3 scale,Quaternion rotation)[]debugArray=new(Color,Bounds,Vector3,Quaternion)[FlattenOffset];
      internal readonly Color[]debugSpawnMapArray=new Color[FlattenOffset];
      internal readonly(Vector3 from1,Vector3 from2)[]debugRaycastFromArray=new(Vector3,Vector3)[FlattenOffset];
@@ -2142,6 +2144,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              return-a.GetHashCode().CompareTo(b.GetHashCode());
             }
         }
+     readonly ConcurrentBag<HashSet<Vector3Int>>getCoordsOutputHashSetPool=new();
+     readonly ConcurrentBag<Vector3Int[]>         getCoordsOutputArrayPool=new();
      readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>state=new();
      readonly object sync_TryReserveBounds=new();
      readonly Stopwatch sw_TryReserveBounds=new();
@@ -2191,7 +2195,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }else{
             spawnCandidateData1=default;
            }
-           return result1;
+           Pool();return result1;
           }
          }
          result1=true;
@@ -2387,9 +2391,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
             candidatesThatConflictWithSameSize.Clear();
          }
-         //  TO DO: use pool
-         getCoordsOutputHashSet1=new();
-         getCoordsOutputArray1=new Vector3Int[0];
+         if(!getCoordsOutputHashSetPool.TryTake(out getCoordsOutputHashSet1)){
+          getCoordsOutputHashSet1=new();
+         }
+         if(!  getCoordsOutputArrayPool.TryTake(out getCoordsOutputArray1  )){
+          getCoordsOutputArray1  =new Vector3Int[0];
+         }
          if(result1){
           sw_TryReserveBounds.Restart();
           var modifiers1=spawnCandidateData1.modifiers;
@@ -2551,7 +2558,11 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           }
          }
          recursionDepth--;
-         return result1;
+         Pool();return result1;
+         void Pool(){
+          if(getCoordsOutputHashSet1!=null){getCoordsOutputHashSet1.Clear();getCoordsOutputHashSetPool.Add(getCoordsOutputHashSet1);}
+          if(getCoordsOutputArray1  !=null){                                  getCoordsOutputArrayPool.Add(getCoordsOutputArray1  );}
+         }
         }
      readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,(Vector3 hitPoint,Vector3 normal)>>>normalsPredicted=new();
      readonly Voxel[]polygonCell=new Voxel[8];   
@@ -3076,7 +3087,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
          }
          switch(container.execution){
           case Execution.GetGroundReserveBoundsFillSpawnData:{
-           Log.DebugMessage("Execution.GetGround");
+           Log.DebugMessage("Execution.GetGroundReserveBoundsFillSpawnData");
            sw.Restart();
            foreach(var spawnedTypeBlockedArrayPair in container.blocked){
             Array.Clear(spawnedTypeBlockedArrayPair.Value,0,spawnedTypeBlockedArrayPair.Value.Length);
@@ -3118,7 +3129,8 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             Vector3 margin=Vector3.one*5;
             Vector3 maxDimensions=pickingLayer.maxDimensions;
             int max=Mathf.CeilToInt(Mathf.Sqrt(Mathf.Pow(pickingLayer.maxDimensions.x,2)+Mathf.Pow(pickingLayer.maxDimensions.z,2)))+Mathf.CeilToInt(Mathf.Max(margin.x,margin.z));
-            //Log.DebugMessage("max:"+max);
+            max=Mathf.Max(max,Width/2+1,Depth/2+1);
+            //Log.DebugMessage("'layer max':layer:"+layer+",max:"+max);
             Vector3Int coord1=new Vector3Int(0,Height+1,0);
             int increment_x=1;
             int increment_z=1;
@@ -3135,23 +3147,28 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              int recursionCalls=0;
              int recursionDepth=0;
              bool recursionLimitReached=false;
-             container.debugArray[index2]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+             if(cnkRgn2==cnkRgn1&&layer==container.debugArrayLayer){
+              container.debugArray[index2]=(Color.clear,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+              //Log.DebugMessage("Thread:"+System.Threading.Thread.CurrentThread.ManagedThreadId+":'container.debugArray[index2] was reset':index2:"+index2+",vCoord2:"+vCoord2);
+             }
              bool success=RecursivelyTryReserveBoundsAt(layer,margin,pos1,noiseInput2,out SpawnCandidateData spawnCandidateData2,out Vector3 hitPoint2,out Quaternion rotation2,ref recursionDepth,ref recursionLimitReached,ref recursionCalls);
              if(success){
-              Log.DebugMessage("Execution.GetGround:success:'RecursivelyTryReserveBoundsAt pos1':"+pos1+";rotation2:"+rotation2);
+              //Log.DebugMessage("Execution.GetGround:success:'RecursivelyTryReserveBoundsAt pos1':"+pos1+";rotation2:"+rotation2);
               Type simObject=spawnCandidateData2.simObjectPicked.simObject;
               SimObjectSpawnModifiers modifiers=spawnCandidateData2.modifiers;
               Quaternion rotation=rotation2;
               Vector3 position=hitPoint2+
                (rotation*Vector3.up)*((spawnCandidateData2.size.y*modifiers.scale.y)/2f)+
                (rotation*Vector3.Scale(spawnCandidateData2.simObjectSettings.pivot,modifiers.scale));
-              Log.DebugMessage("spawnCandidateData2.size.y:"+spawnCandidateData2.size.y+";modifiers.scale.y:"+modifiers.scale.y);
+              //Log.DebugMessage("spawnCandidateData2.size.y:"+spawnCandidateData2.size.y+";modifiers.scale.y:"+modifiers.scale.y);
               Vector3 scale=Vector3.Scale(modifiers.scale,spawnCandidateData2.simObjectSettings.assetScale);
-              container.debugArray[index2]=(Color.green,new Bounds(position,spawnCandidateData2.size),modifiers.scale,rotation);
-              if(spawnCandidateData2.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-               container.debugArray[index2]=(Color.cyan,new Bounds(position,spawnCandidateData2.size),modifiers.scale,rotation);
+              if(cnkRgn2==cnkRgn1&&layer==container.debugArrayLayer){
+               if(layer<container.debugArrayLayerToColor.Length&&container.debugArrayLayerToColor[layer]!=Color.clear){
+                container.debugArray[index2]=(container.debugArrayLayerToColor[layer],new Bounds(position,spawnCandidateData2.size),modifiers.scale,rotation);
+                //Log.DebugMessage("Thread:"+System.Threading.Thread.CurrentThread.ManagedThreadId+":'container.debugArray[index2] was set':index2:"+index2+":"+container.debugArray[index2].bounds.size+","+modifiers.scale+","+rotation);
+               }
               }
-              Log.DebugMessage("set to be spawned:simObject:"+simObject);
+              //Log.DebugMessage("set to be spawned:simObject:"+simObject);
               container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));
              }
             }}
@@ -3181,19 +3198,6 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }
            toCloseSpawnMapsData.Clear();
            {
-            //QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
-            //Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
-            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
-            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
-             //Vector3 from=vCoord1;
-                     //from.x+=cnkRgn1.x+.5f;
-                     //from.z+=cnkRgn1.y+.5f;
-            // container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
-            // container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
-             //int index1=vCoord1.z+vCoord1.x*Depth;
-             //container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
-             //container.debugRaycastFromArray[index1]=(from,container.debugRaycastFromArray[index1].from2);
-            //}}
            }
            sw.Stop();
            Log.DebugMessage("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded Execute GetGround:cnkRgn:"+container.cnkRgn+":time:"+sw.ElapsedMilliseconds+" ms");
@@ -3221,7 +3225,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
              pos1.z+=cnkRgn1.y;
              Vector3Int noiseInput1=vCoord1;noiseInput1.x+=cnkRgn1.x;
                                             noiseInput1.z+=cnkRgn1.y;
-             container.debugArray[index1]=(new Color(0,0,0,0),new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+             container.debugArray[index1]=(Color.clear,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
              int recursionCalls=0;
              int recursionDepth=0;
              bool recursionLimitReached=false;
@@ -3702,7 +3706,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                VoxelSystem.Concurrent.surfaceSpawnData_rwl.ExitUpgradeableReadLock();
               }
               if(gotData){
-               container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
+               //container.debugArray[index1]=(Color.gray,new Bounds(Vector3.zero,Vector3.one),Vector3.one,Quaternion.identity);
               }
              }
              Log.DebugMessage("recursionCalls:"+recursionCalls,container.cnkIdx==0||sw.ElapsedMilliseconds>=60000L);
@@ -5143,9 +5147,9 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                   )+
                   (rotation*Vector3.up)*((spawnCandidateData1.size.y*modifiers.scale.y)/2f)+
                   (rotation*Vector3.Scale(spawnCandidateData1.simObjectSettings.pivot,modifiers.scale));
-                 container.debugArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                 //container.debugArray[index1]=(Color.green,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
                  if(spawnCandidateData1.simObjectPicked.simObject==typeof(Sims.Rocks.RockBig_Desert_HighTower)){
-                  container.debugArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
+                  //container.debugArray[index1]=(Color.cyan,new Bounds(position,spawnCandidateData1.size),modifiers.scale,rotation);
                  }
                  Log.DebugMessage("set to be spawned:simObject:"+simObject);
                  container.spawnData.at.Add((position,rotation.eulerAngles,scale,simObject,null,new SimObject.PersistentData()));

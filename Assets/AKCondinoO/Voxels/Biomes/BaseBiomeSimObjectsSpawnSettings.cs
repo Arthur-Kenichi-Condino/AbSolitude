@@ -282,6 +282,11 @@ namespace AKCondinoO.Voxels.Biomes{
             isBlockedBy:surfaceSpawnSetting.isBlockedBy,
             pivot:      surfaceSpawnSetting.pivot
            );
+           if(simObjectSettings.minSpacing.TryGetValue(SpawnedTypes.All,out Vector3 minSpacingFromAll)){
+            maxDimensions.x=Mathf.Max(minSpacingFromAll.x,maxDimensions.x);
+            maxDimensions.y=Mathf.Max(minSpacingFromAll.y,maxDimensions.y);
+            maxDimensions.z=Mathf.Max(minSpacingFromAll.z,maxDimensions.z);
+           }
            ByChanceObject<(Type,SimObjectSettings)>byChanceSimObject=new();
            byChanceSimObject.value   =(simObjectType,simObjectSettings);
            byChanceSimObject.chance  =simObjectSettings.chance;

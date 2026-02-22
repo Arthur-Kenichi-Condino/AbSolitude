@@ -276,6 +276,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.ExperiencePoints.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
+    <Compile Include="Assets\AKCondinoO\Util\ObjectPool.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticle.cs" />
     <Compile Include="Assets\AKCondinoO\Log.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Server.cs" />

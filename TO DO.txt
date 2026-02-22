@@ -41,3 +41,21 @@ cabeça, rotação limites está com bug
 salvar com binary writer
 
 wake top
+
+
+
+dead code for reviewing:
+
+            //QueryParameters queryParameters=new QueryParameters(VoxelSystem.voxelTerrainLayer);
+            //Vector3Int vCoord1=new Vector3Int(0,Height+1,0);
+            //for(vCoord1.x=0             ;vCoord1.x<Width;vCoord1.x++){
+            //for(vCoord1.z=0             ;vCoord1.z<Depth;vCoord1.z++){
+             //Vector3 from=vCoord1;
+                     //from.x+=cnkRgn1.x+.5f;
+                     //from.z+=cnkRgn1.y+.5f;
+            // container.GetGroundRays.AddNoResize(new RaycastCommand(from,Vector3.down,queryParameters,Height+1));
+            // container.GetGroundHits.AddNoResize(new RaycastHit    ()                                          );
+             //int index1=vCoord1.z+vCoord1.x*Depth;
+             //container.debugRaycastFromArray[index1]=(from,new Vector3(float.NaN,float.NaN,float.NaN));
+             //container.debugRaycastFromArray[index1]=(from,container.debugRaycastFromArray[index1].from2);
+            //}}
