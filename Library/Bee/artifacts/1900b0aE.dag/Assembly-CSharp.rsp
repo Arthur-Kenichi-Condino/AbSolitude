@@ -126,6 +126,7 @@
 -define:UNITY_POST_PROCESSING_STACK_V2
 -define:UMA_ADDRESSABLES
 -define:STEAMWORKS_NET
+-define:ENABLE_LOG_DEBUG
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"C:/Unity/Hub/Editor/6000.0.26f1/Editor/Data/Managed/UnityEngine/UnityEditor.AccessibilityModule.dll"
@@ -470,9 +471,11 @@
 -analyzer:"C:/Unity/Hub/Editor/6000.0.26f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/6000.0.26f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport/Analyzers/Unity.Transport.Analyzers.dll"
-"Assets/AKCondinoO.Main/Log.cs"
-"Assets/AKCondinoO.Main/Main.cs"
-"Assets/AKCondinoO.Main/Main.Multithreaded.cs"
+"Assets/AKCondinoO.Bootstrap/Log.cs"
+"Assets/AKCondinoO.Bootstrap/Main.cs"
+"Assets/AKCondinoO.Bootstrap/Multithreaded.cs"
+"Assets/AKCondinoO.Bootstrap/Singleton.cs"
+"Assets/AKCondinoO.SimObjects/SimObjectManager.cs"
 "Assets/AKCondinoO/Ambience/AmbientLightIntensity.cs"
 "Assets/AKCondinoO/Ambience/CloudParticle.cs"
 "Assets/AKCondinoO/Ambience/CloudParticleSystem.cs"
