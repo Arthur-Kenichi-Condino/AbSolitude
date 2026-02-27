@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
     #define ENABLE_LOG_DEBUG
 #endif
+using AKCondinoO.PoolUtil;
 using AKCondinoO.Sims;
 using AKCondinoO.Voxels.Biomes;
 using AKCondinoO.Voxels.Terrain.MarchingCubes;
@@ -2146,6 +2147,12 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
         }
      readonly ConcurrentBag<HashSet<Vector3Int>>getCoordsOutputHashSetPool=new();
      readonly ConcurrentBag<Vector3Int[]>         getCoordsOutputArrayPool=new();
+     static readonly ObjectPool<Dictionary<Vector3Int,SpawnCandidateData>>candidatesThatConflictDictionaryPool=
+      Pool.GetPool<Dictionary<Vector3Int,SpawnCandidateData>>(
+       "",
+       ()=>new(),
+       (Dictionary<Vector3Int,SpawnCandidateData>item)=>item.Clear()
+      );
      readonly Dictionary<int,Dictionary<int,Dictionary<Vector3Int,bool>>>state=new();
      readonly object sync_TryReserveBounds=new();
      readonly Stopwatch sw_TryReserveBounds=new();
@@ -2264,7 +2271,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
             if(
              !candidatesThatConflictBySize.TryGetValue(size2,out var candidatesThatConflict)
             ){
-             candidatesThatConflictBySize.Add(size2,candidatesThatConflict=new());
+             candidatesThatConflictBySize.Add(size2,candidatesThatConflict=candidatesThatConflictDictionaryPool.Rent());
             }
             candidatesThatConflict.Add(pos2,spawnCandidateData2);
            }
@@ -2294,13 +2301,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 candidatesThatConflict.Clear();
            }else if(candidateDescendingComparer.Compare(size2,size1)==0){
             if(candidatesThatConflictWithSameSize!=null){
+               kvp.Value.AddRange(candidatesThatConflictWithSameSize,DictionaryAddRangeHelper.DictionaryAddMethod.Override);
                candidatesThatConflictWithSameSize.Clear();
-               //  TO DO: merge values with kvp.Value and then clear ^
             }
                candidatesThatConflictWithSameSize=kvp.Value;
            }else{
             kvp.Value.Clear();
            }
+          }
+         }
+         foreach(var kvp in candidatesThatConflictBySize){
+          if(kvp.Value!=candidatesThatConflictWithSameSize){
+           candidatesThatConflictDictionaryPool.Return(kvp.Value);
           }
          }
          Dictionary<Vector3Int,SpawnCandidateData>candidatesThatUltimatelyConflict=new();
@@ -2390,6 +2402,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }
           }
             candidatesThatConflictWithSameSize.Clear();
+            
          }
          if(!getCoordsOutputHashSetPool.TryTake(out getCoordsOutputHashSet1)){
           getCoordsOutputHashSet1=new();
@@ -3200,7 +3213,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            {
            }
            sw.Stop();
-           Log.DebugMessage("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded Execute GetGround:cnkRgn:"+container.cnkRgn+":time:"+sw.ElapsedMilliseconds+" ms");
+           //Log.DebugMessage("VoxelTerrainSurfaceSimObjectsPlacerMultithreaded Execute GetGroundReserveBoundsFillSpawnData:cnkRgn:"+container.cnkRgn+":time:"+sw.ElapsedMilliseconds+" ms");
            break;
           }
           case Execution.ReserveBounds:{

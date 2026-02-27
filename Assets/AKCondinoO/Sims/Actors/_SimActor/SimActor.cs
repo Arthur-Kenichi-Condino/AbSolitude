@@ -39,7 +39,7 @@ namespace AKCondinoO.Sims.Actors{
      internal readonly Dictionary<string,Transform>nameToBodyPart=new Dictionary<string,Transform>();
         protected virtual void OnUMACharacterUpdated(UMAData simUMAData){
         }
-        public override void OnDestroy(){
+        protected override void OnDestroy(){
          if(simUMA!=null){
           DestroyImmediate(simUMA.gameObject);
          }
@@ -59,8 +59,8 @@ namespace AKCondinoO.Sims.Actors{
         internal override void OnLoadingPool(){
          base.OnLoadingPool();
         }
-        internal override void OnActivated(){
-         base.OnActivated();
+        internal override void OnActivated(bool IsOwner=false){
+         base.OnActivated(IsOwner);
         }
         internal override void OnDeactivated(){
          base.OnDeactivated();

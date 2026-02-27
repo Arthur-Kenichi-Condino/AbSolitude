@@ -1081,7 +1081,7 @@ internal static int GetCoords3DInsideBoundsUsingParallelFor(
              }
              return inside;
             }
-         Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:length:"+length);
+         //Log.DebugMessage("GetCoordsInsideBoundsUsingParallelFor:length:"+length);
          Pool();return length;
          void Pool(){
           if(corners       !=null){       cornersPool.Add(corners       );}

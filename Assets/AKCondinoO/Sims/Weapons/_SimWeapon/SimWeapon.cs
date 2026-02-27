@@ -23,8 +23,8 @@ namespace AKCondinoO.Sims.Weapons{
           simWeaponVisualEffect=muzzle.GetComponent<SimWeaponOnShootVisualEffect>();
          }
         }
-        internal override void OnActivated(){
-         base.OnActivated();
+        internal override void OnActivated(bool IsOwner=false){
+         base.OnActivated(IsOwner);
          ammo=startingAmmo;
         }
         internal bool TryStartReloadingAction(SimObject simAiming){

@@ -14,7 +14,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
         protected override void Awake(){
          base.Awake();
         }
-        internal override void OnActivated(){
+        internal override void OnActivated(bool IsOwner=false){
          requiredSkills.Clear();
          requiredSkills.Add(typeof(GenerateHomunculus),new SkillData(){skill=typeof(GenerateHomunculus),level=10,});
          requiredSkills.Add(typeof(CallHomunculus    ),new SkillData(){skill=typeof(CallHomunculus    ),level=10,});
@@ -25,7 +25,7 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human.ArthurCondino{
            new SlaveData(){simObjectType=typeof(ArquimedesAI),},
           }
          );
-         base.OnActivated();
+         base.OnActivated(IsOwner);
         }
         //protected override void OnIDLE_ST_Routine(){
         // base.OnIDLE_ST_Routine();

@@ -20,7 +20,7 @@ using UnityEngine.AI;
 using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal partial class SimObject:NetworkBehaviour,Interactable{
+    internal partial class SimObject:MonoBehaviour,Interactable{
      [NonSerialized]internal static System.Random seedGenerator;
      [NonSerialized]protected System.Random math_random;
      #region networking
@@ -55,7 +55,6 @@ namespace AKCondinoO.Sims{
      [NonSerialized]internal ParentConstraint parentConstraint;
         protected virtual void Awake(){
          math_random=new System.Random(seedGenerator.Next());
-         netObj=GetComponent<NetworkObject>();
          hasRigidbody=transform.root.GetComponent<Rigidbody>();
          if(createVolumeCollider){
           CreateVolumeCollider();
@@ -113,7 +112,7 @@ namespace AKCondinoO.Sims{
          if(volumeCreationPrefab!=null){
          }
         }
-        public override void OnDestroy(){
+        protected virtual void OnDestroy(){
          foreach(var kvp1 in derivedMaterials){
           foreach(var kvp2 in kvp1.Value){
            foreach(var kvp3 in kvp2.Value){
@@ -121,7 +120,6 @@ namespace AKCondinoO.Sims{
            }
           }
          }
-         base.OnDestroy();
         }
         internal virtual void OnLoadingPool(){
          DisableInteractions();
@@ -132,7 +130,7 @@ namespace AKCondinoO.Sims{
         internal virtual void OnDespawned(){
          ReleaseStats();
         }
-        internal virtual void OnActivated(){
+        internal virtual void OnActivated(bool IsOwner=false){
          //Log.DebugMessage("SimObject:OnActivated:id:"+id);
          this.name=id.ToString();
          inventoryItemsToSpawn.Clear();
@@ -154,22 +152,8 @@ namespace AKCondinoO.Sims{
          persistentData.UpdateData(this);
             transform.hasChanged=false;
          EnableInteractions();
-         if(Core.singleton.isServer){
-          if(!netObj.IsSpawned){
-           //Log.DebugMessage("SimObject:OnActivated:'netObj should be spawned now'");
-           try{
-            netObj.Spawn(destroyWithScene:false);
-           }catch(Exception e){
-            Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-           }
-           netObj.DontDestroyWithOwner=true;
-          }else if(IsOwner){
-           //Log.DebugMessage("SimObject:OnActivated:'IsOwner, so set net variables'");
-           netPosition.Value=persistentData.position  ;
-           netRotation.Value=persistentData.rotation  ;
-           netScale   .Value=persistentData.localScale;
-          }
-         }
+         //  TO DO:
+         //DoNetSpawn();
          if(updateSafePositionCoroutine!=null){
           StopCoroutine(updateSafePositionCoroutine);updateSafePositionCoroutine=null;
          }
@@ -215,6 +199,14 @@ namespace AKCondinoO.Sims{
           simCollisions.Activate();
          }
          EnableRenderers();
+         
+         
+         
+         //  TO DO:
+         DisableRenderers();
+         
+         
+         
          if(actingAsInventoryItem){
           OnActAsInventoryItem();
          }
@@ -254,7 +246,7 @@ namespace AKCondinoO.Sims{
      [NonSerialized]float timerDeadToDespawn;
      [NonSerialized]bool checkIfOutOfSight;
      [NonSerialized]bool poolRequested;
-        internal virtual int ManualUpdate(bool doValidationChecks){
+        internal virtual int ManualUpdate(bool doValidationChecks,bool IsOwner=false,NetworkManager NetworkManager=null){
          if(initManualUpdate){
           hadCollision=false;
           flaggedAsOverlapping=false;
@@ -301,19 +293,8 @@ namespace AKCondinoO.Sims{
          if(transform.hasChanged){
           TransformBoundsVertices();
           persistentData.UpdateData(this);
-          if(Core.singleton.isServer){
-           if(IsOwner){
-            if(NetworkManager!=null){
-             try{
-              netPosition.Value=persistentData.position  ;
-              netRotation.Value=persistentData.rotation  ;
-              netScale   .Value=persistentData.localScale;
-             }catch(Exception e){
-              Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-             }
-            }
-           }
-          }
+          //  TO DO:
+          //DoNetTransformUpdate();
             transform.hasChanged=false;
           overlapState=IsOverlappingOrOverlapped();
           foreach(var gameplayer in GameplayerManagement.singleton.all){
@@ -337,10 +318,8 @@ namespace AKCondinoO.Sims{
             unplaceRequested=false;
              if(Core.singleton.isServer){
               DisableInteractions();
-              if(netObj.IsSpawned){
-               netObj.DontDestroyWithOwner=true;
-               netObj.Despawn(destroy:false);
-              }
+              //  TO DO:
+              //DoNetDespawn();
               SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
               result=2;
              }
@@ -354,12 +333,10 @@ namespace AKCondinoO.Sims{
                    returnedToSafePos=!IsOverlappingOrOverlapped(instantCheck:true).overlapping;
                   }
                   if(!returnedToSafePos){
-                   Log.DebugMessage("'failed to return to safe pos:simObject is overlapping':id:"+id,this);
+                   //Log.DebugMessage("'failed to return to safe pos:simObject is overlapping':id:"+id,this);
                    DisableInteractions();
-                   if(netObj.IsSpawned){
-                    netObj.DontDestroyWithOwner=true;
-                    netObj.Despawn(destroy:false);
-                   }
+                   //  TO DO:
+                   //DoNetDespawn();
                    SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
                    result=2;
                   }else{
@@ -375,10 +352,8 @@ namespace AKCondinoO.Sims{
                         timerDeadToDespawn=0f;
                         Log.DebugMessage("despawn dead corpse");
                         DisableInteractions();
-                        if(netObj.IsSpawned){
-                         netObj.DontDestroyWithOwner=true;
-                         netObj.Despawn(destroy:false);
-                        }
+                        //  TO DO:
+                        //DoNetDespawn();
                         SimObjectManager.singleton.deactivateAndReleaseIdQueue.Enqueue(this);
                         result=2;
                        }else{
@@ -399,8 +374,8 @@ namespace AKCondinoO.Sims{
                                 //Log.DebugMessage("'should the ownership be changed to client id?':clientId:"+clientId);
                                 if(gameplayer.Value!=Gameplayer.main&&IsInPlayerWorldBounds(gameplayer.Value)){
                                  Log.DebugMessage("'change ownership to client id':clientId:"+clientId);
-                                 netObj.ChangeOwnership(clientId);
-                                 netObj.DontDestroyWithOwner=true;
+                                 //  TO DO:
+                                 //DoNetOwnershipChange(clientId);
                                  ownershipChanged=true;
                                  break;
                                 }
@@ -408,10 +383,8 @@ namespace AKCondinoO.Sims{
                                if(!ownershipChanged){
                                 //Log.DebugMessage("'sim object is out of sight (IsOutOfSight)':id:"+id);
                                 DisableInteractions();
-                                if(netObj.IsSpawned){
-                                 netObj.DontDestroyWithOwner=true;
-                                 netObj.Despawn(destroy:false);
-                                }
+                                //  TO DO:
+                                //DoNetDespawn();
                                 SimObjectManager.singleton.deactivateQueue.Enqueue(this);
                                 result=1;
                                }
@@ -423,10 +396,8 @@ namespace AKCondinoO.Sims{
                             poolRequested=false;
                              if(Core.singleton.isServer){
                               DisableInteractions();
-                              if(netObj.IsSpawned){
-                               netObj.DontDestroyWithOwner=true;
-                               netObj.Despawn(destroy:false);
-                              }
+                              //  TO DO:
+                              //DoNetDespawn();
                               SimObjectManager.singleton.deactivateQueue.Enqueue(this);
                               result=1;
                              }
@@ -437,6 +408,16 @@ namespace AKCondinoO.Sims{
          }
          if(result==0){
          }
+
+
+
+         //  TO DO:
+         if(updateSafePositionCoroutine!=null){
+          StopCoroutine(updateSafePositionCoroutine);updateSafePositionCoroutine=null;
+         }
+
+
+
          return result;
         }
         internal virtual int ManualUpdateAsClient(bool doValidationChecks){
@@ -566,7 +547,8 @@ namespace AKCondinoO.Sims{
            }
           }
          }
-         goto Loop;
+         //  TO DO:
+         //goto Loop;
         }
         internal virtual void ManualLateUpdate(){
          UpdateRenderers();

@@ -16,11 +16,11 @@ namespace AKCondinoO.Sims.Actors.Homunculi.Vanilmirth{
          SetBodyPart("body","bodyBase",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
-        internal override void OnActivated(){
+        internal override void OnActivated(bool IsOwner=false){
          //Log.DebugMessage("VanilmirthAI:OnActivated():masterId:"+masterId);
          requiredSkills.Clear();
          requiredSkills.Add(typeof(ChaoticBlessing),new SkillData(){skill=typeof(ChaoticBlessing),level=10,});
-         base.OnActivated();
+         base.OnActivated(IsOwner);
          attackRange=new Vector3(0.5f,0.5f,.5f);
         }
         //protected override void OnIDLE_ST_Routine(){

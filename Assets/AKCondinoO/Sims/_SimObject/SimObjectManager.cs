@@ -79,9 +79,18 @@ namespace AKCondinoO.Sims{
          }
          BaseAI.animatorClipNameToActorMotion.Clear();
          BaseAI.animatorClipNameToActorWeaponLayerMotion.Clear();
+         if(processInLotsCoroutine!=null){
+          StopCoroutine(processInLotsCoroutine);processInLotsCoroutine=null;
+         }
+         processInLotsCoroutine=StartCoroutine(ProcessInLots());
         }
      readonly List<(Type buffType,SkillBuff skillBuff)>buffsToPool=new List<(Type,SkillBuff)>();
         public void OnDestroyingCoreEvent(object sender,EventArgs e){
+         if(this!=null){
+          if(processInLotsCoroutine!=null){
+           StopCoroutine(processInLotsCoroutine);processInLotsCoroutine=null;
+          }
+         }
          //Log.DebugMessage("SimObjectManager:OnDestroyingCoreEvent");
          #region PersistentDataLoadingMultithreaded
           persistentDataLoadingBG.IsCompleted(persistentDataLoadingBGThread.IsRunning,-1);
@@ -258,19 +267,37 @@ namespace AKCondinoO.Sims{
            }
           }
          }
-         //Log.DebugMessage("active.Count:"+active.Count);
-         foreach(var a in active){
-          var simObject=a.Value;
-          if(simObject==null||simObject.gameObject==null){continue;}
-          simObject.ManualUpdate(terrainMovedFlag);
-         }
+         //foreach(var a in active){
+         //}
          while(deactivateQueue.Count>0){var toDeactivate=deactivateQueue.Dequeue();
           OnDeactivate(toDeactivate);
          }
          while(deactivateAndReleaseIdQueue.Count>0){var toDeactivateAndReleaseId=deactivateAndReleaseIdQueue.Dequeue();
           OnDeactivateAndReleaseId(toDeactivateAndReleaseId);
          }
-         terrainMovedFlag=false;
+        }
+     internal Coroutine processInLotsCoroutine=null;
+     internal readonly List<SimObject>activeSnapshot=new List<SimObject>();
+        IEnumerator ProcessInLots(){
+         Loop:{
+          yield return null;
+          Log.DebugMessage("active.Count:"+active.Count);
+          activeSnapshot.AddRange(active.Values);
+          bool terrainMovedFlag=this.terrainMovedFlag;
+          this.terrainMovedFlag=false;
+          int processed=0;
+          foreach(var simObject in activeSnapshot){
+           if(simObject==null||simObject.gameObject==null){continue;}
+           simObject.ManualUpdate(terrainMovedFlag);
+           processed++;
+           if(processed>=20){
+            processed=0;
+            yield return null;
+           }
+          }
+          activeSnapshot.Clear();
+         }
+         goto Loop;
         }
         void OnDeactivate(SimObject simObject){
          active     .Remove(simObject.id.Value);
@@ -285,14 +312,22 @@ namespace AKCondinoO.Sims{
          simObject.OnDeactivated();
         }
         private void LateUpdate(){
-         foreach(var a in active){
-          var simObject=a.Value;
-          if(simObject==null||simObject.gameObject==null){continue;}
-          simObject.ManualLateUpdate();
+         //foreach(var a in active){
+          //var simObject=a.Value;
+          //if(simObject==null||simObject.gameObject==null){continue;}
+          //simObject.ManualLateUpdate();
+         //}
+         //foreach(var nA in netActive){
+          //nA.ManualLateUpdate();
+         //}
+        }
+     internal Coroutine lateProcessInLotsCoroutine=null;
+     internal readonly List<SimObject>lateActiveSnapshot=new List<SimObject>();
+        IEnumerator LateProcessInLots(){
+         Loop:{
+          yield return null;
          }
-         foreach(var nA in netActive){
-          nA.ManualLateUpdate();
-         }
+         goto Loop;
         }
     }
 }

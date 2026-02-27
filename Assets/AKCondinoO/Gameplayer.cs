@@ -116,7 +116,7 @@ namespace AKCondinoO{
          OnNavMeshShouldUpdate(simObject,layer);
         }
         internal void OnSimObjectDisabled(SimObject simObject,int layer){
-         Log.DebugMessage("OnSimObjectDisabled:layer:"+layer);
+         //Log.DebugMessage("OnSimObjectDisabled:layer:"+layer);
          OnNavMeshShouldUpdate(simObject,layer);
         }
         void OnNavMeshShouldUpdate(SimObject simObject,int layer){

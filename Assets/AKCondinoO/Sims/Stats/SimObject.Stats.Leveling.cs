@@ -471,7 +471,7 @@ namespace AKCondinoO.Sims{
                 curLevel=nextLevel;
                }
                simLevel_value=curLevel;
-               Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value+":experience_value:"+experience_value+":simExpAtNextLevel:"+simExpAtNextLevel);
+               //Log.DebugMessage("statsSim:"+statsSim+":simLevel_value:"+simLevel_value+":experience_value:"+experience_value+":simExpAtNextLevel:"+simExpAtNextLevel);
                totalStatPoints_value=AddStatPointsFrom201To260(simLevel_value,isTranscendent_value);
                //Log.DebugMessage("statsSim:"+statsSim+":totalStatPoints_value:"+totalStatPoints_value);
                refreshedSimLevel=true;

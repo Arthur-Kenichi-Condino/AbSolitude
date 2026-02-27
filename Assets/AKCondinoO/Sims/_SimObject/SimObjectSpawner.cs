@@ -246,7 +246,7 @@ namespace AKCondinoO.Sims{
              while(spawnQueue.Count>0){SpawnData toSpawn=spawnQueue.Dequeue();
               int index=0;
               foreach(var at in toSpawn.at){
-               Log.DebugMessage("at.simObjectType:"+at.simObjectType);
+               //Log.DebugMessage("at.simObjectType:"+at.simObjectType);
                SimObject.PersistentStats?persistentStats=null;
                if(toSpawn.statsData.TryGetValue(index,out var persistentStatsValue)){
                 persistentStats=persistentStatsValue;
@@ -515,7 +515,7 @@ namespace AKCondinoO.Sims{
          void SetSimObjectIdToBeReleased(Type simObjectType,ulong simObjectIdNumber){
           if(!SimObjectManager.singleton.persistentDataSavingBG.onSavedReleasedIds[simObjectType].Contains(simObjectIdNumber)&&!SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectType].Contains(simObjectIdNumber)){
            SimObjectManager.singleton.persistentDataSavingBG.idsToRelease[simObjectType].Add(simObjectIdNumber);
-           Log.DebugMessage("release sim object id and remove all related save data during save:"+simObjectType+";idNumber:"+simObjectIdNumber);
+           //Log.DebugMessage("release sim object id and remove all related save data during save:"+simObjectType+";idNumber:"+simObjectIdNumber);
           }else{
            Log.DebugMessage("sim object id was already released in the previous save, so don't duplicate the released id in the save file:"+simObjectType+";idNumber:"+simObjectIdNumber);
           }

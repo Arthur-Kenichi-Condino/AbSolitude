@@ -21,7 +21,8 @@ namespace AKCondinoO.Voxels.Terrain.Networking{
             internal partial void OnInstantiated(){
             }
             internal partial void OnSpawn(){
-             serverSideSendVoxelTerrainChunkEditDataFileCoroutine=VoxelSystem.singleton.StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
+             //  TO DO:
+             //serverSideSendVoxelTerrainChunkEditDataFileCoroutine=VoxelSystem.singleton.StartCoroutine(ServerSideSendVoxelTerrainChunkEditDataFileCoroutine());
             }
             internal partial void NetServerSideOnDestroyingCore(){
              Log.DebugMessage("NetServerSideOnDestroyingCore");

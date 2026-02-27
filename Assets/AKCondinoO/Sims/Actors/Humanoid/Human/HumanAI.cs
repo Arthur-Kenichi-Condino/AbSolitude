@@ -36,13 +36,13 @@ namespace AKCondinoO.Sims.Actors.Humanoid.Human{
          SetBodyPart("neck","neckUpper",out _);
          base.OnUMACharacterUpdated(simUMAData);
         }
-        internal override void OnActivated(){
+        internal override void OnActivated(bool IsOwner=false){
          if(Core.singleton.isServer){
           if(!inventory.ContainsKey(typeof(SimHands))||inventory[typeof(SimHands)].Count<=0){
            SimInventoryManager.singleton.AddInventoryTo(this,typeof(SimHands));
           }
          }
-         base.OnActivated();
+         base.OnActivated(IsOwner);
         }
     }
 }

@@ -11,10 +11,11 @@ namespace AKCondinoO.Sims{
     internal partial class SimObject{
      [NonSerialized]internal Renderer[]renderers;
       [NonSerialized]internal readonly Dictionary<Material,Shader>materialShader=new();
-        protected virtual void EnableRenderers(){
-         updateRenderersFlag=true;
+        internal virtual void EnableRenderers(){
+         //  TO DO:
+         //updateRenderersFlag=true;
         }
-        protected virtual void DisableRenderers(){
+        internal virtual void DisableRenderers(){
          foreach(Renderer renderer in renderers){
           renderer.enabled=false;
          }
@@ -25,7 +26,15 @@ namespace AKCondinoO.Sims{
        [NonSerialized]protected readonly Dictionary<Renderer,List<Material>>derivedMaterialsBlendModeFade  =new Dictionary<Renderer,List<Material>>();
         [NonSerialized]protected int usingDerivedMaterialsBlendMode=0;
      [SerializeField]internal bool autoSetMaterialsToFade=true;
-        protected virtual void UpdateRenderers(){
+        protected virtual void UpdateRenderers(bool IsOwner=false){
+
+
+
+         //  TO DO:
+         return;
+
+
+
          if(updateRenderersFlag){
           if((Core.singleton.currentRenderingTargetCamera!=null)||Core.singleton.currentRenderingTargetCamera==Camera.main){
            //Log.DebugMessage("UpdateRenderers:'update'");

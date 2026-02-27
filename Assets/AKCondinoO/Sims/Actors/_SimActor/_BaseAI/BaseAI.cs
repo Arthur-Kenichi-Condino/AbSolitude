@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using UMA;
 using UMA.CharacterSystem;
 using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.GameMode;
@@ -100,8 +101,8 @@ namespace AKCondinoO.Sims.Actors{
         protected bool isAllPassiveSkillsInEffectFlag;
      internal readonly Dictionary<Type,List<SlaveData>>requiredSlaves=new Dictionary<Type,List<SlaveData>>();
       internal readonly HashSet<(Type simObjectType,ulong idNumber)>slaves=new HashSet<(Type,ulong)>();
-        internal override void OnActivated(){
-         base.OnActivated();
+        internal override void OnActivated(bool IsOwner=false){
+         base.OnActivated(IsOwner);
          attackRange=new Vector3(0.125f/8f,0.125f/8f,0.0625f/8f);
          requiredSkills.Add(typeof(AskHelpFromAllies),new SkillData(){skill=typeof(AskHelpFromAllies),level=10,});
          requiredSkills.Add(typeof(OnHitGracePeriod ),new SkillData(){skill=typeof(OnHitGracePeriod ),level=10,});
@@ -212,9 +213,9 @@ namespace AKCondinoO.Sims.Actors{
      [SerializeField]float AFKTimeToUseAI=5f;
       float AFKTimerToUseAI;
      bool?wasCrouchingBeforeShouldCrouch;
-        internal override int ManualUpdate(bool doValidationChecks){
+        internal override int ManualUpdate(bool doValidationChecks,bool IsOwner=false,NetworkManager NetworkManager=null){
          int result=0;
-         if((result=base.ManualUpdate(doValidationChecks))!=0){
+         if((result=base.ManualUpdate(doValidationChecks,IsOwner,NetworkManager))!=0){
           DisableNavMeshAgent();
           return result;
          }

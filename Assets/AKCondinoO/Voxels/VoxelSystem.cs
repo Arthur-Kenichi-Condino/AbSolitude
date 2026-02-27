@@ -278,7 +278,8 @@ namespace AKCondinoO.Voxels{
           cnk.ManualUpdate();
          }
          //  Sync data in network
-         NetUpdate();
+         //  TO DO:
+         //NetUpdate();
         }
      Coroutine proceduralGenerationCoroutine;
      internal readonly HashSet<Gameplayer>generationRequests=new HashSet<Gameplayer>();

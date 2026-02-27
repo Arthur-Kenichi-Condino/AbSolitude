@@ -25,7 +25,8 @@ namespace AKCondinoO.Voxels{
               1
              );
              netVoxelArraysMaxCount=poolSize;
-             serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=VoxelSystem.singleton.StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
+             //  TO DO:
+             //serverSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine=VoxelSystem.singleton.StartCoroutine(ServerSideVoxelTerrainChunkUnnamedMessageHandlerAssignerCoroutine());
             }
             internal partial void NetServerSideOnDestroyingCoreNetworkDestroy(){
              if(Core.singleton.netManager.CustomMessagingManager!=null){

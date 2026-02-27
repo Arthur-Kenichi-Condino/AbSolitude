@@ -18,17 +18,16 @@ using UnityEngine.AI;
 using UnityEngine.Animations;
 using static AKCondinoO.Voxels.VoxelSystem;
 namespace AKCondinoO.Sims{
-    internal partial class SimObject{
-     [NonSerialized]internal NetworkObject netObj;
+    internal partial class NetworkSimObject{
         public override void OnNetworkSpawn(){
          base.OnNetworkSpawn();
          if(Core.singleton.isServer){
           //Log.DebugMessage("SimObject:OnNetworkSpawn:'isServer'");
           if(IsOwner){
            //Log.DebugMessage("SimObject:OnNetworkSpawn:'IsOwner':'init net variables'");
-           netPosition.Value=persistentData.position  ;
-           netRotation.Value=persistentData.rotation  ;
-           netScale   .Value=persistentData.localScale;
+           netPosition.Value=sim.persistentData.position  ;
+           netRotation.Value=sim.persistentData.rotation  ;
+           netScale   .Value=sim.persistentData.localScale;
           }
           OnServerSideNetPositionValueChanged(transform.position  ,netPosition.Value);//  update on spawn
           netPosition.OnValueChanged+=OnServerSideNetPositionValueChanged;
@@ -46,8 +45,8 @@ namespace AKCondinoO.Sims{
           OnClientSideNetScaleValueChanged   (transform.localScale,netScale   .Value);//  update on spawn
           netScale   .OnValueChanged+=OnClientSideNetScaleValueChanged   ;
           if(!IsOwner){
-           SimObjectManager.singleton.netActive.Add(this);
-           EnableRenderers();
+           SimObjectManager.singleton.netActive.Add(sim);
+           sim.EnableRenderers();
           }
          }
         }
@@ -64,8 +63,8 @@ namespace AKCondinoO.Sims{
           netRotation.OnValueChanged-=OnClientSideNetRotationValueChanged;
           netScale   .OnValueChanged-=OnClientSideNetScaleValueChanged   ;
           if(!IsOwner){
-           DisableRenderers();
-           SimObjectManager.singleton.netActive.Remove(this);
+           sim.DisableRenderers();
+           SimObjectManager.singleton.netActive.Remove(sim);
           }
          }
          base.OnNetworkDespawn();
@@ -124,5 +123,7 @@ namespace AKCondinoO.Sims{
          }
         }
        }
+    }
+    internal partial class SimObject{
     }
 }

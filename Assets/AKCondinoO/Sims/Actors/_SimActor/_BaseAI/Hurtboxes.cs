@@ -13,6 +13,7 @@ namespace AKCondinoO.Sims.Actors.Combat{
      internal Rigidbody kinematicRigidbody;
      internal BaseAI actor;
         internal void OnTriggerStay(Collider other){
+         //Log.DebugMessage("'OnTriggerStay':other:"+other);
         }
         internal bool OnTakeDamage(Hitboxes fromHitbox){
          if(fromHitbox.actor==actor){

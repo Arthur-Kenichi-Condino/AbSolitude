@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations;
 namespace AKCondinoO.Sims{
@@ -20,13 +21,13 @@ namespace AKCondinoO.Sims{
         }
         internal virtual void GetSnappingRays(Collider collider,Dictionary<Collider,Ray[]>snappingRays){
         }
-        internal override int ManualUpdate(bool doValidationChecks){
+        internal override int ManualUpdate(bool doValidationChecks,bool IsOwner=false,NetworkManager NetworkManager=null){
          int result=0;
          if(transform.hasChanged){
           if(!SimObjectManager.singleton.disableSnappingToSlots){
           }
          }
-         if((result=base.ManualUpdate(doValidationChecks))!=0){
+         if((result=base.ManualUpdate(doValidationChecks,IsOwner,NetworkManager))!=0){
           return result;
          }
          return result;

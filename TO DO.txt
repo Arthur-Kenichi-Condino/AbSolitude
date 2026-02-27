@@ -1,3 +1,8 @@
+TO DO:
+arrumar SimObject, e manager e spawner;
+arrumar Voxel System e network.
+
+
 toClose
 Clear
 Add tudo em pools

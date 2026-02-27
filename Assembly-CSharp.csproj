@@ -116,6 +116,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.OnSkillUsed.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\_SimObject\NetworkSimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayerManagement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\Floor10x10x10\Floor10x10x10.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.cs" />
+    <Compile Include="Assets\AKCondinoO.Main\Main.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DepthOfFieldEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillsManager.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculiAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
+    <Compile Include="Assets\AKCondinoO.Main\Main.Multithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Pooling.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FloatLerpHelper.cs" />
