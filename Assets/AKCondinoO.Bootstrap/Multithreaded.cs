@@ -63,7 +63,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.BackgroundExecute();
           }catch(Exception e){
-           Log.Message(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source,Log.LogType.Error);
+           Log.Message(Log.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
           completed.Enqueue(job);
           Interlocked.Decrement(ref activeJobs);
@@ -96,7 +96,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.OnCompletedDoAtMainThread();
           }catch(Exception e){
-           Log.Message(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source,Log.LogType.Error);
+           Log.Message(Log.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
          }
         }

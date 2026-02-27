@@ -121,6 +121,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayerManagement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\ObjectPool.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildBuyEditModeUIContent.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Client.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Context\ContextMenuUI.cs" />

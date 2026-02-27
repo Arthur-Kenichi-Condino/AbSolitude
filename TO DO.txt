@@ -2,6 +2,43 @@ TO DO:
 arrumar SimObject, e manager e spawner;
 arrumar Voxel System e network.
 
+#if UNITY_EDITOR
+if (debugAutoSpawn)
+{
+    Spawn(debugSpawnCount);
+}
+#endif
+
+public class ChunkMeshJob : IThreadJob
+{
+    private Chunk target;
+    private ChunkMeshBuffer buffer;
+
+    public ChunkMeshJob(Chunk target, ChunkMeshBuffer buffer)
+    {
+        this.target = target;
+        this.buffer = buffer;
+    }
+
+    public void Execute()
+    {
+        MarchingCubes.Calculate(target.Data, buffer);
+    }
+
+    public void OnMainThreadComplete()
+    {
+        target.ApplyMesh(buffer);
+    }
+}
+
+No Update global:
+ThreadDispatcher.FlushCompleted();
+
+void Update()
+{
+    foreach (var s in singletons)
+        s.Tick(Time.deltaTime);
+}
 
 toClose
 Clear

@@ -15,7 +15,7 @@ namespace AKCondinoO.Bootstrap{
         internal static void Enable (string className)=>enabledAt.Add   (className);
         internal static void Disable(string className)=>enabledAt.Remove(className);
         [HideInCallstack]
-        internal static void Message(string logMsg,LogType logType,Object context=null,
+        internal static void Message(LogType logType,string logMsg,Object context=null,
          [CallerFilePath]string file="",
          [CallerMemberName]string member=""
         ){
