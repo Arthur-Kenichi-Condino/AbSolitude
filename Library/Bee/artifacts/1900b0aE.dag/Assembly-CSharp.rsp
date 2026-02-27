@@ -470,6 +470,7 @@
 -analyzer:"C:/Unity/Hub/Editor/6000.0.26f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Unity/Hub/Editor/6000.0.26f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 -analyzer:"Library/PackageCache/com.unity.transport/Analyzers/Unity.Transport.Analyzers.dll"
+"Assets/AKCondinoO.Main/Log.cs"
 "Assets/AKCondinoO.Main/Main.cs"
 "Assets/AKCondinoO.Main/Main.Multithreaded.cs"
 "Assets/AKCondinoO/Ambience/AmbientLightIntensity.cs"

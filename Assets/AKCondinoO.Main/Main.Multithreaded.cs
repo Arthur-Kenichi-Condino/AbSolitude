@@ -4,7 +4,7 @@ using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Main{
     internal interface MultithreadedContainerJob{
-        void ExecuteOnBackground();
+        void BackgroundExecute();
         void OnCompletedDoAtMainThread();
     }
     internal static class ThreadDispatcher{
@@ -61,7 +61,7 @@ namespace AKCondinoO.Main{
           }
           spin.Reset();
           try{
-           job.ExecuteOnBackground();
+           job.BackgroundExecute();
           }catch(Exception e){
            //  TO DO: usar sistema de Log
            //Log.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);

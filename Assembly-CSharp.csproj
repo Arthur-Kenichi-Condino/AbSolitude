@@ -167,6 +167,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.PersistentSimActorData.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ListWrapper.cs" />
     <Compile Include="Assets\AKCondinoO\Util\AnimatorUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.Main\Log.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\VolumeCreationPrefab.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillAoE.cs" />
