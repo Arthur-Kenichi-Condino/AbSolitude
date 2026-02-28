@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     [DefaultExecutionOrder(-100000)]
-    internal class Main:Singleton<Main>{
+    internal class Main:MonoSingleton<Main>{
      public override int initOrder{get{return 0;}}
         protected override void Awake(){
          base.Awake();
@@ -22,7 +22,7 @@ namespace AKCondinoO.Bootstrap{
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
-          Log.Message(Log.LogType.Debug,"...hello, World!");
+          Logs.Message(Logs.LogType.Debug,"...hello, World!");
           ThreadDispatcher.Initialize();
          }
         }
@@ -30,9 +30,13 @@ namespace AKCondinoO.Bootstrap{
          if(this!=null){
           ThreadDispatcher.Shutdown();
           ThreadDispatcher.FlushCompleted();
-          Log.Message(Log.LogType.Debug,"...good night, World. :)");
+          Logs.Message(Logs.LogType.Debug,"...good night, World. :)");
          }
          base.Shutdown();
+        }
+        void Update(){
+         ThreadDispatcher.FlushCompleted();
+         SingletonManager.ManualUpdateAll();
         }
     }
 }

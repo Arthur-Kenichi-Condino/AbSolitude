@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d9d3edda4efd84ab81d8ec5b01a3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabsRegistry: {fileID: 11400000, guid: 4419dd6a8f2cc7f4c8f5c83811d7cfd2, type: 2}
+  debugMassiveSpawnTest: 0
+  debugMassiveSpawnType: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  debugMassiveSpawnCount: 50000

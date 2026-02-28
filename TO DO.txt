@@ -31,14 +31,38 @@ public class ChunkMeshJob : IThreadJob
     }
 }
 
-No Update global:
-ThreadDispatcher.FlushCompleted();
+          item.gameObject.SetActive(true);
+         item.gameObject.SetActive(false);
 
-void Update()
+class SimObjectFactory
 {
-    foreach (var s in singletons)
-        s.Tick(Time.deltaTime);
+    private readonly MonoPool<SimObject> pool;
+
+    public SimObjectFactory(SimObject prefab)
+    {
+        pool = new MonoPool<SimObject>(prefab);
+    }
+
+    public SimObject Spawn()
+    {
+        return pool.Get();
+    }
+
+    public void Despawn(SimObject obj)
+    {
+        pool.Release(obj);
+    }
 }
+
+public ushort prefabId;
+Dictionary<ushort, PrefabDefinition>
+
+Dictionary<ushort, uint> nextId;
+Dictionary<ushort, Stack<uint>> recycledIds;
+
+byte version;
+if(version == 1) { ler antigo }
+if(version == 2) { ler novo }
 
 toClose
 Clear

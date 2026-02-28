@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal interface MultithreadedContainerJob{
+        void SetContainerDataAtMainThread();
         void BackgroundExecute();
         void OnCompletedDoAtMainThread();
     }
@@ -63,7 +64,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.BackgroundExecute();
           }catch(Exception e){
-           Log.Message(Log.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
           completed.Enqueue(job);
           Interlocked.Decrement(ref activeJobs);
@@ -84,9 +85,10 @@ namespace AKCondinoO.Bootstrap{
            return true;
          return false;
         }
-        internal static bool TrySchedule(MultithreadedContainerJob job,int priority){
+        internal static bool TrySchedule(MultithreadedContainerJob job,int priority=0){
          if(!acceptingJobs)return false;
          if(!running)return false;
+         job.SetContainerDataAtMainThread();
          priority=Math.Clamp(priority,0,scheduledByPriority.Length-1);
          scheduledByPriority[priority].Enqueue(job);
          return true;
@@ -96,7 +98,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.OnCompletedDoAtMainThread();
           }catch(Exception e){
-           Log.Message(Log.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
          }
         }
