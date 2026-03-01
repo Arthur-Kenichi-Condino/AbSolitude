@@ -20,7 +20,7 @@ namespace AKCondinoO.Bootstrap{
         protected override void OnDestroy(){
          if(singleton==this){
           ThreadDispatcher.Shutdown();
-          ThreadDispatcher.FlushCompleted();
+          ThreadDispatcher.FlushCompleted(true);
           SingletonManager.ShutdownAll();
           ActiveZone.Shutdown();
          }

@@ -97,13 +97,28 @@ namespace AKCondinoO.Bootstrap{
          scheduledByPriority[priority].Enqueue(job);
          return true;
         }
-        internal static void FlushCompleted(){
+        internal static void FlushCompleted(bool shutdown=false){
+         const double maxTimePerFrame=0.001d;//  ...unidade: em segundos
+         double startTime=Time.realtimeSinceStartupAsDouble;
          while(completed.TryDequeue(out var job)){
           try{
            job.OnCompletedDoAtMainThread();
           }catch(Exception e){
            Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
+          if(ShouldYield()){
+           break;
+          }
+         }
+         bool ShouldYield(){
+          if(shutdown){
+           return false;
+          }
+          if(Time.realtimeSinceStartupAsDouble-startTime>=maxTimePerFrame){
+           startTime=Time.realtimeSinceStartupAsDouble;
+           return true;
+          }
+          return false;
          }
         }
     }

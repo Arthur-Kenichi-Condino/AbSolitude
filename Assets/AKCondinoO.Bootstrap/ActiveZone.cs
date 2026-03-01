@@ -24,6 +24,10 @@ namespace AKCondinoO.Bootstrap{
         }
         internal static void Shutdown(){
          main=null;
+         foreach(var kvp in zones){
+          var zone=kvp.Value;
+          Destroy(zone);
+         }
          zones.Clear();
         }
         internal static void ManualUpdateTransformAll(){
