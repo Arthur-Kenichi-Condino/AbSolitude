@@ -4,12 +4,10 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
+     private static bool enableAll=true;
      private static readonly HashSet<string>enabledAt=new(){
-      "ActiveZone",
+      //"ActiveZone",
       "Main",
-      "SimObjectManager",
-      "ThreadDispatcher",
-      "VoxelSystem",
      };
      internal enum LogType{
       Debug,
@@ -23,8 +21,10 @@ namespace AKCondinoO.Bootstrap{
          [CallerMemberName]string member=""
         ){
          string className=System.IO.Path.GetFileNameWithoutExtension(file);
-         if(enabledAt.Count>0&&!enabledAt.Contains(className))
-          return;
+         if(logType!=LogType.Error){
+          if(!enableAll&&enabledAt.Count>0&&!enabledAt.Contains(className))
+           return;
+         }
          string message=$"[{className}.{member}]:{logMsg}";
          switch(logType){
           case(LogType.Debug):{

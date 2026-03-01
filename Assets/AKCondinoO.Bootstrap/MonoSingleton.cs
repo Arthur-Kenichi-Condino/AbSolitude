@@ -14,8 +14,10 @@ namespace AKCondinoO.Bootstrap{
           return;
          }
          singletons.Add(singleton);
+         Logs.Message(Logs.LogType.Debug,$"singletons.Count:{singletons.Count}");
         }
-        internal static void Unregister(ISingleton singleton){
+        private static void Unregister(ISingleton singleton){
+         GameObject.Destroy((MonoBehaviour)singleton);
          singletons.Remove(singleton);
         }
         internal static void InitializeAll(){
@@ -23,7 +25,12 @@ namespace AKCondinoO.Bootstrap{
          foreach(var s in singletons)s.Initialize();
         }
         internal static void ShutdownAll(){
-         for(int i=singletons.Count-1;i>=0;i--)singletons[i].Shutdown();
+         for(int i=singletons.Count-1;i>=0;i--){
+          var s=singletons[i];
+          s.Shutdown();
+          Unregister(s);
+         }
+         singletons.Clear();
         }
         internal static void ManualUpdateAll(){
          foreach(var s in singletons)s.ManualUpdate();
@@ -49,7 +56,6 @@ namespace AKCondinoO.Bootstrap{
         }
         protected virtual void OnDestroy(){
          if(singleton==this){
-          SingletonManager.Unregister(this);
           singleton=null;
          }
         }

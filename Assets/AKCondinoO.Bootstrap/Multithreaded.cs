@@ -88,7 +88,11 @@ namespace AKCondinoO.Bootstrap{
         internal static bool TrySchedule(MultithreadedContainerJob job,int priority=0){
          if(!acceptingJobs)return false;
          if(!running)return false;
-         job.SetContainerDataAtMainThread();
+         try{
+          job.SetContainerDataAtMainThread();
+         }catch(Exception e){
+          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+         }
          priority=Math.Clamp(priority,0,scheduledByPriority.Length-1);
          scheduledByPriority[priority].Enqueue(job);
          return true;

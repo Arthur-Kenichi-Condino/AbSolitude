@@ -11,29 +11,30 @@ namespace AKCondinoO.Bootstrap{
         }
         void Start(){
          if(singleton==this){
+          Logs.Message(Logs.LogType.Debug,"...hello, World!");
+          ThreadDispatcher.Initialize();
+          ActiveZone.EnsureExists(activeZonePrefab);
           SingletonManager.InitializeAll();
          }
         }
         protected override void OnDestroy(){
          if(singleton==this){
+          ThreadDispatcher.Shutdown();
+          ThreadDispatcher.FlushCompleted();
           SingletonManager.ShutdownAll();
+          ActiveZone.Shutdown();
          }
          base.OnDestroy();
         }
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
-          Logs.Message(Logs.LogType.Debug,"...hello, World!");
-          ThreadDispatcher.Initialize();
-          ActiveZone.EnsureExists(activeZonePrefab);
          }
         }
         public override void Shutdown(){
          if(this!=null){
-          ThreadDispatcher.Shutdown();
-          ThreadDispatcher.FlushCompleted();
-          Logs.Message(Logs.LogType.Debug,"...good night, World. :)");
          }
+         Logs.Message(Logs.LogType.Debug,"...good night, World. :)");
          base.Shutdown();
         }
         void Update(){

@@ -178,6 +178,7 @@ void ProcessDiff(HashSet<int> oldSet, HashSet<int> newSet)
         }
     }
 
+spawnlist on destroy return all in spawnqueue to pool
 
 toClose
 Clear
