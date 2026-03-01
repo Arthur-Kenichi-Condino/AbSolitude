@@ -6,11 +6,11 @@ namespace AKCondinoO.Bootstrap{
      private static readonly List<ISingleton>singletons=new();
         internal static void Register(ISingleton singleton){
          if(singleton==null||singletons.Contains(singleton)){
-          Logs.Message(Logs.LogType.Error,$"duplicate singleton:{singleton}");
+          Logs.Message(Logs.LogType.Error,$"invalid or duplicate singleton:{singleton}");
           return;
          }
          if(singletons.Any(s=>s.initOrder==singleton.initOrder)){
-          Logs.Message(Logs.LogType.Error,$"duplicate initOrder:{singleton.initOrder}");
+          Logs.Message(Logs.LogType.Error,$"invalid or duplicate initOrder:{singleton.initOrder}");
           return;
          }
          singletons.Add(singleton);

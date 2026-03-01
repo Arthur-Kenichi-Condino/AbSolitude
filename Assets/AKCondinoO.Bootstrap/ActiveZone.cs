@@ -11,7 +11,7 @@ namespace AKCondinoO.Bootstrap{
          OnAddZoneFor(0,activeZonePrefab);
         }
         private static void OnAddZoneFor(ulong clientId,ActiveZone activeZonePrefab){
-         if(zones.TryGetValue(clientId,out var zone)){
+         if(zones.TryGetValue(clientId,out var zone)&&zone!=null){
           return;
          }
          zone=Instantiate(activeZonePrefab);
@@ -20,7 +20,7 @@ namespace AKCondinoO.Bootstrap{
          if(clientId==0){
           main=zone;
          }
-         zones.Add(clientId,zone);
+         zones[clientId]=zone;
         }
         internal static void ManualUpdateTransformAll(){
          foreach(var kvp in zones){
