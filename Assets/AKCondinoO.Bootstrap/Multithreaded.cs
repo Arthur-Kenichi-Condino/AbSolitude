@@ -27,13 +27,13 @@ namespace AKCondinoO.Bootstrap{
          workerCount=setWorkerCount??Math.Max(1,cpu-2);
          maxConcurrentJobs=workerCount*2;
          workers=new Thread[workerCount];
+         running=true;
          for(int i=0;i<workerCount;i++){
           workers[i]=new Thread(WorkerLoop);
           workers[i].IsBackground=false;
           workers[i].Priority=System.Threading.ThreadPriority.BelowNormal;
           workers[i].Start();
          }
-         running=true;
         }
         internal static void Shutdown(){
          running=false;
