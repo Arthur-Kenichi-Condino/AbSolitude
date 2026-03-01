@@ -16,13 +16,14 @@ namespace AKCondinoO.Bootstrap{
          singletons.Add(singleton);
          Logs.Message(Logs.LogType.Debug,$"singletons.Count:{singletons.Count}");
         }
-        private static void Unregister(ISingleton singleton){
-         var mono=singleton as MonoBehaviour;
+        private static void UnregisterAt(int i){
+         var s=singletons[i];
+         var mono=s as MonoBehaviour;
          if(mono!=null){
-          GameObject.Destroy(mono.gameObject);
+          GameObject.DestroyImmediate(mono.gameObject);
          }
-         singleton.ClearStaticInstance();
-         singletons.Remove(singleton);
+         s.ClearStaticInstance();
+         singletons.RemoveAt(i);
         }
         internal static void InitializeAll(){
          singletons.Sort((a,b)=>a.initOrder.CompareTo(b.initOrder));
@@ -32,7 +33,7 @@ namespace AKCondinoO.Bootstrap{
          for(int i=singletons.Count-1;i>=0;i--){
           var s=singletons[i];
           s.Shutdown();
-          Unregister(s);
+          UnregisterAt(i);
          }
          singletons.Clear();
         }
@@ -55,7 +56,7 @@ namespace AKCondinoO.Bootstrap{
      public abstract int initOrder{get;}
         protected virtual void Awake(){
          if(singleton!=null&&singleton!=this){
-          Destroy(gameObject);
+          DestroyImmediate(gameObject);
           return;
          }
          singleton=this as T;
