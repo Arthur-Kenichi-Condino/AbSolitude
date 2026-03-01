@@ -26,7 +26,7 @@ namespace AKCondinoO.Bootstrap{
          main=null;
          foreach(var kvp in zones){
           var zone=kvp.Value;
-          DestroyImmediate(zone);
+          Destroy(zone);
          }
          zones.Clear();
         }

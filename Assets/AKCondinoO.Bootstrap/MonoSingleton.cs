@@ -20,7 +20,7 @@ namespace AKCondinoO.Bootstrap{
          var s=singletons[i];
          var mono=s as MonoBehaviour;
          if(mono!=null){
-          GameObject.DestroyImmediate(mono.gameObject);
+          GameObject.Destroy(mono.gameObject);
          }
          s.ClearStaticInstance();
          singletons.RemoveAt(i);
