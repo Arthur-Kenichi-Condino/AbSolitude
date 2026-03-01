@@ -289,6 +289,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ObjectPool.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticle.cs" />
+    <Compile Include="Assets\AKCondinoO.Terrain\VoxelSystemConst.cs" />
     <Compile Include="Assets\AKCondinoO\Log.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAnimatorController.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Pooling.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FloatLerpHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitSkill.cs" />

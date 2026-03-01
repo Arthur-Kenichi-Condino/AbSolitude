@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
-     public override int initOrder{get{return 2;}}
+     public override int initOrder{get{return 15;}}
      [SerializeField]private SimObjectPrefabs prefabsRegistry;
      [SerializeField]private bool      debugMassiveSpawnTest=false;
      [SerializeField]private SimObject debugMassiveSpawnType=null;

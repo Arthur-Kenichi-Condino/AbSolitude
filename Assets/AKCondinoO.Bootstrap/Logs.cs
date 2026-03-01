@@ -5,9 +5,11 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
      private static readonly HashSet<string>enabledAt=new(){
+      "ActiveZone",
       "Main",
-      "ThreadDispatcher",
       "SimObjectManager",
+      "ThreadDispatcher",
+      "VoxelSystem",
      };
      internal enum LogType{
       Debug,

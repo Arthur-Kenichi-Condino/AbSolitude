@@ -60,9 +60,124 @@ Dictionary<ushort, PrefabDefinition>
 Dictionary<ushort, uint> nextId;
 Dictionary<ushort, Stack<uint>> recycledIds;
 
+class MonoPool<T> where T : MonoBehaviour
+{
+    private readonly Stack<T> pool = new();
+    private readonly T prefab;
+    private readonly Transform parent;
+
+    public MonoPool(T prefab, Transform parent = null)
+    {
+        this.prefab = prefab;
+        this.parent = parent;
+    }
+
+    public T Get()
+    {
+        if (pool.Count > 0)
+        {
+            var item = pool.Pop();
+            item.gameObject.SetActive(true);
+            return item;
+        }
+
+        return GameObject.Instantiate(prefab, parent);
+    }
+
+    public void Release(T item)
+    {
+        item.gameObject.SetActive(false);
+        pool.Push(item);
+    }
+}
+
 byte version;
 if(version == 1) { ler antigo }
 if(version == 2) { ler novo }
+
+void OnRemotePlayerCreated(Gameplayer player)
+{
+    GameObject go = new GameObject("ActiveZone_" + player.Id);
+    var zone = go.AddComponent<ActiveZone>();
+
+    zone.Initialize(player);
+
+    zones.Add(player.Id, zone);
+}
+
+private HashSet<int> activeChunks = new();
+private HashSet<int> bufferChunks = new();
+
+CalculateChunkSet(HashSet<int> output)
+    output.Clear();
+
+    Vector3 pos = transform.position;
+
+    int centerX = WorldToChunkX(pos.x);
+    int centerY = WorldToChunkY(pos.z);
+
+    for(int y = -instY; y <= instY; y++)
+    {
+        int cy = centerY + y;
+        if(Mathf.Abs(cy) >= MaxcCoordy)
+            continue;
+
+        for(int x = -instX; x <= instX; x++)
+        {
+            int cx = centerX + x;
+            if(Mathf.Abs(cx) >= MaxcCoordx)
+                continue;
+
+            int chunkId = GetChunkId(cx, cy);
+            output.Add(chunkId);
+        }
+    }
+
+void ProcessDiff(HashSet<int> oldSet, HashSet<int> newSet)
+{
+    // Ativa novos
+    foreach(var chunk in newSet)
+    {
+        if(!oldSet.Contains(chunk))
+        {
+            ChunkManager.RequestActivate(chunk);
+        }
+    }
+
+    // Desativa removidos
+    foreach(var chunk in oldSet)
+    {
+        if(!newSet.Contains(chunk))
+        {
+            ChunkManager.RequestDeactivate(chunk);
+        }
+    }
+}
+
+    var oldSet = playerActiveChunks[player];
+    var newSet = CalculateChunkSet(player);
+
+    foreach(var chunk in newSet)
+    {
+        if(!oldSet.Contains(chunk))
+        {
+            if(chunkRefCount[chunk] == 0)
+                Activate(chunk);
+
+            chunkRefCount[chunk]++;
+        }
+    }
+
+    foreach(var chunk in oldSet)
+    {
+        if(!newSet.Contains(chunk))
+        {
+            chunkRefCount[chunk]--;
+            if(chunkRefCount[chunk] == 0)
+                Deactivate(chunk);
+        }
+    }
+
 
 toClose
 Clear

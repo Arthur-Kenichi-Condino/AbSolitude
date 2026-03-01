@@ -3,6 +3,7 @@ namespace AKCondinoO.Bootstrap{
     [DefaultExecutionOrder(-100000)]
     internal class Main:MonoSingleton<Main>{
      public override int initOrder{get{return 0;}}
+     [SerializeField]ActiveZone activeZonePrefab;
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -24,6 +25,7 @@ namespace AKCondinoO.Bootstrap{
          if(this!=null){
           Logs.Message(Logs.LogType.Debug,"...hello, World!");
           ThreadDispatcher.Initialize();
+          ActiveZone.EnsureExists(activeZonePrefab);
          }
         }
         public override void Shutdown(){
@@ -36,6 +38,7 @@ namespace AKCondinoO.Bootstrap{
         }
         void Update(){
          ThreadDispatcher.FlushCompleted();
+         ActiveZone.ManualUpdateTransformAll();
          SingletonManager.ManualUpdateAll();
         }
     }
