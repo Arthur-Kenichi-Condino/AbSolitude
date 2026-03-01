@@ -17,7 +17,11 @@ namespace AKCondinoO.Bootstrap{
          Logs.Message(Logs.LogType.Debug,$"singletons.Count:{singletons.Count}");
         }
         private static void Unregister(ISingleton singleton){
-         GameObject.Destroy((MonoBehaviour)singleton);
+         var mono=singleton as MonoBehaviour;
+         if(mono!=null){
+          GameObject.Destroy(mono.gameObject);
+         }
+         singleton.ClearStaticInstance();
          singletons.Remove(singleton);
         }
         internal static void InitializeAll(){
@@ -38,12 +42,16 @@ namespace AKCondinoO.Bootstrap{
     }
     internal interface ISingleton{
      int initOrder{get;}
+        void ClearStaticInstance();
         void Initialize();
         void Shutdown();
         void ManualUpdate();
     }
     internal abstract class MonoSingleton<T>:MonoBehaviour,ISingleton where T:MonoBehaviour{
      public static T singleton{get;protected set;}
+        public void ClearStaticInstance(){
+         singleton=null;
+        }
      public abstract int initOrder{get;}
         protected virtual void Awake(){
          if(singleton!=null&&singleton!=this){
@@ -56,7 +64,6 @@ namespace AKCondinoO.Bootstrap{
         }
         protected virtual void OnDestroy(){
          if(singleton==this){
-          singleton=null;
          }
         }
         public virtual void Initialize(){

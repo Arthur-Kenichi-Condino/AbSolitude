@@ -39,6 +39,11 @@ namespace AKCondinoO.SimObjects{
            StopCoroutine(spawnCoroutine);
           }
          }
+         if(spawnQueue.Count>0){
+          while(spawnQueue.Count>0){
+           spawnListPool.Return(spawnQueue.Dequeue());
+          }
+         }
          base.Shutdown();
         }
      static readonly ObjectPool<SpawnList>spawnListPool=
