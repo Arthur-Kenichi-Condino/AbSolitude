@@ -10,7 +10,6 @@ namespace AKCondinoO.Bootstrap{
     }
     internal static class ThreadDispatcher{
      private static volatile bool running;
-     private static volatile bool acceptingJobs;
      private static Thread[]workers;
      private static readonly ConcurrentQueue<MultithreadedContainerJob>[]scheduledByPriority={
       new(),//  ...max priority
@@ -28,17 +27,15 @@ namespace AKCondinoO.Bootstrap{
          workerCount=setWorkerCount??Math.Max(1,cpu-2);
          maxConcurrentJobs=workerCount*2;
          workers=new Thread[workerCount];
-         running=true;
          for(int i=0;i<workerCount;i++){
           workers[i]=new Thread(WorkerLoop);
           workers[i].IsBackground=false;
           workers[i].Priority=System.Threading.ThreadPriority.BelowNormal;
           workers[i].Start();
          }
-         acceptingJobs=true;
+         running=true;
         }
         internal static void Shutdown(){
-         acceptingJobs=false;
          running=false;
          if(workers==null)return;
          for(int i=0;i<workers.Length;i++){
@@ -49,13 +46,17 @@ namespace AKCondinoO.Bootstrap{
         private static void WorkerLoop(){
          SpinWait spin=new SpinWait();
          while(running||HasPendingWork()){
+          int jobs=Volatile.Read(ref activeJobs);
+          if(jobs>=maxConcurrentJobs){
+           spin.SpinOnce();
+           continue;
+          }
           MultithreadedContainerJob job=Dequeue(out int priority);
           if(job==null){
            spin.SpinOnce();
            continue;
           }
-          if(Interlocked.Increment(ref activeJobs)>maxConcurrentJobs){
-           Interlocked.Decrement(ref activeJobs);
+          if(Interlocked.CompareExchange(ref activeJobs,jobs+1,jobs)!=jobs){
            scheduledByPriority[priority].Enqueue(job);
            spin.SpinOnce();
            continue;
@@ -86,7 +87,6 @@ namespace AKCondinoO.Bootstrap{
          return false;
         }
         internal static bool TrySchedule(MultithreadedContainerJob job,int priority=0){
-         if(!acceptingJobs)return false;
          if(!running)return false;
          try{
           job.SetContainerDataAtMainThread();

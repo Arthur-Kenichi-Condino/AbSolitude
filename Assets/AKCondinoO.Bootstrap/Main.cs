@@ -1,5 +1,12 @@
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
+    ///<summary>
+    ///  - Entry point real do runtime
+    ///  - Responsável por inicializar sistemas globais
+    ///  - Controla ciclo de vida de threads
+    ///  - Coordena Singletons
+    ///  - Atualiza manualmente sistemas no Update
+    ///</summary>
     [DefaultExecutionOrder(-100000)]
     internal class Main:MonoSingleton<Main>{
      public override int initOrder{get{return 0;}}
