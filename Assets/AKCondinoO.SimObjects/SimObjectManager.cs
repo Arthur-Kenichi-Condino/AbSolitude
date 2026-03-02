@@ -22,13 +22,14 @@ namespace AKCondinoO.SimObjects{
          }
          base.OnDestroy();
         }
-     private readonly Dictionary<Type,SimObject>simObjectPrefabs=new();
+     private readonly Dictionary<Type,SimObjectFactory<SimObject>>simObjectPrefabs=new();
      private Coroutine spawnCoroutine;
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
           foreach(var prefab in prefabsRegistry.list){
-           simObjectPrefabs[prefab.GetType()]=prefab;
+           var type=prefab.simObject.GetType();
+           simObjectPrefabs[type]=new(prefab.simObject);
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
@@ -38,6 +39,10 @@ namespace AKCondinoO.SimObjects{
           if(spawnCoroutine!=null){
            StopCoroutine(spawnCoroutine);
           }
+         }
+         foreach(var kvp in simObjectPrefabs){
+          var factory=kvp.Value;
+          factory.Destroy(false);
          }
          if(spawnQueue.Count>0){
           while(spawnQueue.Count>0){
@@ -141,7 +146,7 @@ namespace AKCondinoO.SimObjects{
          currentIndex=0;
          dequeued=true;
         }
-        internal bool SpawnNext(Dictionary<Type,SimObject>simObjectPrefabs){
+        internal bool SpawnNext(Dictionary<Type,SimObjectFactory<SimObject>>simObjectPrefabs){
          if(currentIndex>=data.Count){
           dequeued=true;
           return false;
@@ -149,11 +154,8 @@ namespace AKCondinoO.SimObjects{
          SimObjectSpawn item=data[currentIndex];
          currentIndex++;
          Logs.Message(Logs.LogType.Debug,"SpawnNext");
-         if(simObjectPrefabs.TryGetValue(item.simObjectType,out SimObject prefab)){
-          GameObject gameObject;
-           SimObject  simObject;
-           simObject=GameObject.Instantiate(prefab);
-          gameObject=simObject.gameObject;
+         if(simObjectPrefabs.TryGetValue(item.simObjectType,out var factory)){
+          SimObject simObject=factory.Spawn(item);
          }
          return true;
         }

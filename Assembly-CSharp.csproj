@@ -187,6 +187,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\PassiveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
@@ -345,6 +346,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\AtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Interactions\GoHere.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FindNextSelectableSim\FixedUI.InteractMode.ButtonPressEvents.FindNextSelectableSim.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
@@ -379,6 +381,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRenderer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Doppelgänger\Doppelganger.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\paulbourke\MarchingCubes\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimCollisions.cs" />

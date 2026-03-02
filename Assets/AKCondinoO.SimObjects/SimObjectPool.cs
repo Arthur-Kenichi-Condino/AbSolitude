@@ -19,5 +19,14 @@ namespace AKCondinoO.SimObjects{
         internal void Return(T item){
          pool.Push(item);
         }
+        internal void Destroy(bool destroy=false){
+         if(destroy){
+          while(pool.Count>0){
+           T item=pool.Pop();
+           GameObject.Destroy(item.gameObject);
+          }
+         }
+         pool.Clear();
+        }
     }
 }
