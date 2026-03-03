@@ -468,10 +468,10 @@
         "Id": "a6f5e78d-3054-4007-948d-9ed291e65d49",
         "Display": 0,
         "X": -6,
-        "Y": -6,
+        "Y": 0,
         "Width": 1550,
         "Height": 878,
-        "WindowState": 0
+        "WindowState": 2
       },
       "DocumentGroups": [
         {

@@ -346,7 +346,7 @@ PrefabInstance:
       objectReference: {fileID: 7263138527205009167, guid: 3b02bbb1a5a515640ab873ba86f14c9c, type: 3}
     - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: debugMassiveSpawnCount
-      value: 1000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6423607067738340504, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: m_LocalPosition.x
