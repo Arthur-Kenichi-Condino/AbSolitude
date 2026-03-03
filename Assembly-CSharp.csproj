@@ -148,6 +148,7 @@
     <Compile Include="Assets\AKCondinoO\InputHandler.Enabled.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.HandsUsage.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.OnRefresh.cs" />
@@ -351,8 +352,8 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FindNextSelectableSim\FixedUI.InteractMode.ButtonPressEvents.FindNextSelectableSim.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Main.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />

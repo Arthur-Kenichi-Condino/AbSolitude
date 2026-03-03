@@ -481,6 +481,7 @@
 "Assets/AKCondinoO.SimObjects/SimObject.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectFactory.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectInstancedRenderer.cs"
+"Assets/AKCondinoO.SimObjects/SimObjectInstancedRendering.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectManager.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPool.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPrefabs.cs"

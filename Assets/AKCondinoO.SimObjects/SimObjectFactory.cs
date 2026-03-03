@@ -11,6 +11,8 @@ namespace AKCondinoO.SimObjects{
         internal virtual SimObject Spawn(SimObjectSpawn item){
          SimObject simObject=pool.Rent();
          GameObject gameObject=simObject.gameObject;
+         Matrix4x4 matrix=gameObject.transform.localToWorldMatrix;
+         SimObjectManager.singleton.instancedRendering.AddInstance(item.simObjectType,matrix);
          return simObject;
         }
         internal virtual void Despawn(T simObject){

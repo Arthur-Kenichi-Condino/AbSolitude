@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
      public override int initOrder{get{return 15;}}
@@ -12,6 +13,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]private bool      debugMassiveSpawnTest=false;
      [SerializeField]private SimObject debugMassiveSpawnType=null;
      [SerializeField]private int       debugMassiveSpawnCount=50000;
+     internal SimObjectInstancedRendering instancedRendering;
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -27,14 +29,26 @@ namespace AKCondinoO.SimObjects{
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
+          instancedRendering=new();
           foreach(var prefab in prefabsRegistry.list){
            var type=prefab.simObject.GetType();
+           if(prefab.useInstancedRendering){
+            MeshRenderer meshRenderer=prefab.meshObject.GetComponentInChildren<MeshRenderer>();
+            MeshFilter   meshFilter  =prefab.meshObject.GetComponentInChildren<MeshFilter  >();
+            Mesh mesh;
+            if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
+             Logs.Message(Logs.LogType.Debug,"mesh.name:"+mesh.name);
+             instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.meshObject.layer);
+            }
+           }
            simObjectPrefabs[type]=new(prefab.simObject);
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
          }
+         Camera.onPreCull+=RenderInstanced;
         }
         public override void Shutdown(){
+         Camera.onPreCull-=RenderInstanced;
          if(this!=null){
           if(spawnCoroutine!=null){
            StopCoroutine(spawnCoroutine);
@@ -51,7 +65,7 @@ namespace AKCondinoO.SimObjects{
          }
          base.Shutdown();
         }
-     static readonly ObjectPool<SpawnList>spawnListPool=
+     static readonly Utilities.ObjectPool<SpawnList>spawnListPool=
       Pool.GetPool<SpawnList>(
        "",
        ()=>new(),
@@ -96,7 +110,11 @@ namespace AKCondinoO.SimObjects{
           Logs.Message(Logs.LogType.Debug,"'depois de return':debugMassiveSpawnJobPool.count:"+debugMassiveSpawnJobPool.count);
          }
         }
-     static readonly ObjectPool<DebugMassiveSpawnJob>debugMassiveSpawnJobPool=
+        void RenderInstanced(Camera camera){
+         if(camera.cameraType!=CameraType.Game){return;}
+         if(instancedRendering!=null)instancedRendering.DrawAll();
+        }
+     static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>debugMassiveSpawnJobPool=
       Pool.GetPool<DebugMassiveSpawnJob>(
        "",
        ()=>new(),

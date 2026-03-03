@@ -105,80 +105,105 @@ void OnRemotePlayerCreated(Gameplayer player)
     zones.Add(player.Id, zone);
 }
 
-private HashSet<int> activeChunks = new();
-private HashSet<int> bufferChunks = new();
-
-CalculateChunkSet(HashSet<int> output)
-    output.Clear();
-
-    Vector3 pos = transform.position;
-
-    int centerX = WorldToChunkX(pos.x);
-    int centerY = WorldToChunkY(pos.z);
-
-    for(int y = -instY; y <= instY; y++)
-    {
-        int cy = centerY + y;
-        if(Mathf.Abs(cy) >= MaxcCoordy)
-            continue;
-
-        for(int x = -instX; x <= instX; x++)
-        {
-            int cx = centerX + x;
-            if(Mathf.Abs(cx) >= MaxcCoordx)
-                continue;
-
-            int chunkId = GetChunkId(cx, cy);
-            output.Add(chunkId);
-        }
-    }
-
-void ProcessDiff(HashSet<int> oldSet, HashSet<int> newSet)
+internal class InstancedBatch
 {
-    // Ativa novos
-    foreach(var chunk in newSet)
+    public readonly Mesh mesh;
+    public readonly Material material;
+    public readonly int layer;
+
+    private readonly Matrix4x4[] matrices;
+    private int count;
+
+    public InstancedBatch(Mesh mesh, Material material, int layer, int capacity)
     {
-        if(!oldSet.Contains(chunk))
-        {
-            ChunkManager.RequestActivate(chunk);
-        }
+        this.mesh = mesh;
+        this.material = material;
+        this.layer = layer;
+        matrices = new Matrix4x4[capacity];
+        count = 0;
     }
 
-    // Desativa removidos
-    foreach(var chunk in oldSet)
+    public int Add(Matrix4x4 matrix)
     {
-        if(!newSet.Contains(chunk))
+        int index = count;
+        matrices[count++] = matrix;
+        return index;
+    }
+
+    public void RemoveAtSwapBack(int index)
+    {
+        count--;
+        matrices[index] = matrices[count];
+    }
+
+    public void Clear()
+    {
+        count = 0;
+    }
+
+    public void Draw()
+    {
+        const int batchSize = 1023;
+
+        for (int i = 0; i < count; i += batchSize)
         {
-            ChunkManager.RequestDeactivate(chunk);
+            int size = Mathf.Min(batchSize, count - i);
+
+            Graphics.DrawMeshInstanced(
+                mesh,
+                0,
+                material,
+                matrices,
+                size,
+                null,
+                UnityEngine.Rendering.ShadowCastingMode.On,
+                true,
+                layer
+            );
         }
     }
 }
 
-    var oldSet = playerActiveChunks[player];
-    var newSet = CalculateChunkSet(player);
+internal class InstancedRenderSystem
+{
+    private readonly Dictionary<int, InstancedBatch> batches = new();
 
-    foreach(var chunk in newSet)
+    public void RegisterType(int typeId, Mesh mesh, Material material, int layer, int capacity)
     {
-        if(!oldSet.Contains(chunk))
-        {
-            if(chunkRefCount[chunk] == 0)
-                Activate(chunk);
-
-            chunkRefCount[chunk]++;
-        }
+        batches[typeId] = new InstancedBatch(mesh, material, layer, capacity);
     }
 
-    foreach(var chunk in oldSet)
+    public int AddInstance(int typeId, Matrix4x4 matrix)
     {
-        if(!newSet.Contains(chunk))
-        {
-            chunkRefCount[chunk]--;
-            if(chunkRefCount[chunk] == 0)
-                Deactivate(chunk);
-        }
+        return batches[typeId].Add(matrix);
     }
+
+    public void RemoveInstance(int typeId, int index)
+    {
+        batches[typeId].RemoveAtSwapBack(index);
+    }
+
+    public void Clear()
+    {
+        foreach (var batch in batches.Values)
+            batch.Clear();
+    }
+
+    public void DrawAll()
+    {
+        foreach (var batch in batches.Values)
+            batch.Draw();
+    }
+}
 
 spawnlist on destroy return all in spawnqueue to pool
+
+DebugMassiveSpawnJob return to pool
+
+singletons clear
+
+zones clear
+
 
 toClose
 Clear
