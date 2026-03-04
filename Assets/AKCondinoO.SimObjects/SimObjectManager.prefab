@@ -47,4 +47,4 @@ MonoBehaviour:
   prefabsRegistry: {fileID: 11400000, guid: 4419dd6a8f2cc7f4c8f5c83811d7cfd2, type: 2}
   debugMassiveSpawnTest: 0
   debugMassiveSpawnType: {fileID: 7263138527205009167, guid: 3b02bbb1a5a515640ab873ba86f14c9c, type: 3}
-  debugMassiveSpawnCount: 1000
+  debugMassiveSpawnCount: 2000

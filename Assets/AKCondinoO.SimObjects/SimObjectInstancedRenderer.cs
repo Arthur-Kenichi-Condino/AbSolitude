@@ -21,7 +21,6 @@ namespace AKCondinoO.SimObjects{
           rParams.layer=layer;
           rParams.shadowCastingMode=ShadowCastingMode.On;
           rParams.receiveShadows=true;
-          rParams.worldBounds=new Bounds(new(),new(100000,100000,100000));
           renderParams[i]=rParams;
          }
          matrices=new Matrix4x4[preallocate];

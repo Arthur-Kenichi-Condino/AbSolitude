@@ -9,7 +9,5 @@ namespace AKCondinoO.SimObjects{
     [Serializable]
     internal struct SimObjectPrefabData{
      public SimObject simObject;
-     public GameObject meshObject;
-     public bool useInstancedRendering;
     }
 }

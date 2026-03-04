@@ -1,6 +1,6 @@
 using UnityEngine;
-namespace AKCondinoO.Terrain{
-    internal static class VoxelSystemConst{
+namespace AKCondinoO.World{
+    internal static class WorldChunkManagerConst{
      internal const int MaxcCoordx=312;
      internal const int MaxcCoordy=312;
      internal const ushort Height=(256);
@@ -8,6 +8,9 @@ namespace AKCondinoO.Terrain{
      internal const ushort Depth=(16);
      internal const ushort FlattenOffset=(Width*Depth);
      internal const int VoxelsPerChunk=(FlattenOffset*Height);
+        internal static Vector2Int cCoordTocnkRgn(Vector2Int cCoord){
+         return new Vector2Int(cCoord.x*Width,cCoord.y*Depth);
+        }
         internal static Vector2Int vecPosTocCoord(Vector3 pos){
          pos.x/=(float)Width;
          pos.z/=(float)Depth;

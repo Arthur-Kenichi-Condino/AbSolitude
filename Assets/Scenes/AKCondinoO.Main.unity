@@ -332,22 +332,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: _mat
-      value: 
-      objectReference: {fileID: 2100000, guid: 889091319398eff4b8ec358300209e23, type: 2}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnTest
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnType
-      value: 
-      objectReference: {fileID: 7263138527205009167, guid: 3b02bbb1a5a515640ab873ba86f14c9c, type: 3}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnCount
-      value: 2000
-      objectReference: {fileID: 0}
     - target: {fileID: 6423607067738340504, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -504,7 +488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5174249776176356932, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: m_Name
-      value: VoxelSystem
+      value: WorldChunkManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -529,7 +513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalPosition.z

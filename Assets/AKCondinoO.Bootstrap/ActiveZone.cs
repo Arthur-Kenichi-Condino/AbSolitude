@@ -1,11 +1,13 @@
-using AKCondinoO.Terrain;
+using AKCondinoO.World;
+using AKCondinoO.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
-using static AKCondinoO.Terrain.VoxelSystemConst;
+using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.Bootstrap{
     internal class ActiveZone:MonoBehaviour{
      private static readonly Dictionary<ulong,ActiveZone>zones=new();
      internal static ActiveZone main;
+     internal Bounds bounds;
         internal static void EnsureExists(ActiveZone activeZonePrefab){
          if(main!=null)return;
          OnAddZoneFor(0,activeZonePrefab);
@@ -22,7 +24,21 @@ namespace AKCondinoO.Bootstrap{
          }
          zones[clientId]=zone;
         }
-        internal static void Shutdown(){
+        internal static void InitializeAny(){
+         foreach(var kvp in zones){
+          var zone=kvp.Value;
+          zone.Initialize();
+         }
+        }
+        internal void Initialize(){
+         Vector3 size=new(
+          (WorldChunkManager.singleton.instantiationDistance.x*2+1)*Width,
+          Height,
+          (WorldChunkManager.singleton.instantiationDistance.y*2+1)*Depth
+         );
+         bounds=new(new(),size);
+        }
+        internal static void ShutdownAny(){
          main=null;
          foreach(var kvp in zones){
           var zone=kvp.Value;
@@ -43,6 +59,7 @@ namespace AKCondinoO.Bootstrap{
           transform.position=MainCamera.singleton.transform.position;
          }
          pos=transform.position;
+         bounds.center=pos;
          CalculateChunks();
         }
      private HashSet<Vector2Int>currChunks=new();
@@ -54,8 +71,8 @@ namespace AKCondinoO.Bootstrap{
          cCoord=vecPosTocCoord(pos);
          if(!hasLastcCoord||cCoord!=lastcCoord){
           nextChunks.Clear();
-          Vector2Int instDis=VoxelSystem.singleton.instantiationDistance;
-          Vector2Int exprDis=VoxelSystem.singleton.expropriationDistance;
+          Vector2Int instDis=WorldChunkManager.singleton.instantiationDistance;
+          Vector2Int exprDis=WorldChunkManager.singleton.expropriationDistance;
           for(int y=-exprDis.y;y<=exprDis.y;y++){
            int cy=cCoord.y+y;
            if(Mathf.Abs(cy)>=MaxcCoordy)continue;
@@ -66,16 +83,16 @@ namespace AKCondinoO.Bootstrap{
             bool hasRef=currChunks.Contains(coord);
             nextChunks.Add(coord);
             if(!hasRef){
-             VoxelSystem.singleton.AddRef(coord);
+             WorldChunkManager.singleton.AddRef(coord);
             }
             if(Mathf.Abs(x)<=instDis.x&&Mathf.Abs(y)<=instDis.y){
-             VoxelSystem.singleton.EnsureExists(coord);
+             WorldChunkManager.singleton.EnsureExists(coord);
             }
            }
           }
           foreach(var coord in currChunks){
            if(!nextChunks.Contains(coord)){
-            VoxelSystem.singleton.RemoveRef(coord);
+            WorldChunkManager.singleton.RemoveRef(coord);
            }
           }
           var temp=currChunks;
@@ -84,6 +101,11 @@ namespace AKCondinoO.Bootstrap{
           lastcCoord=cCoord;
           hasLastcCoord=true;
          }
+        }
+        void OnDrawGizmos(){
+         #if UNITY_EDITOR
+          DrawGizmos.Bounds(bounds,Color.blue);
+         #endif
         }
     }
 }

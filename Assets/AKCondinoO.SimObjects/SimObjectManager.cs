@@ -26,19 +26,20 @@ namespace AKCondinoO.SimObjects{
         }
      private readonly Dictionary<Type,SimObjectFactory<SimObject>>simObjectPrefabs=new();
      private Coroutine spawnCoroutine;
+     private Coroutine simObjectManualUpdateInLotsCoroutine;
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
           instancedRendering=new();
           foreach(var prefab in prefabsRegistry.list){
            var type=prefab.simObject.GetType();
-           if(prefab.useInstancedRendering){
-            MeshRenderer meshRenderer=prefab.meshObject.GetComponentInChildren<MeshRenderer>();
-            MeshFilter   meshFilter  =prefab.meshObject.GetComponentInChildren<MeshFilter  >();
+           if(prefab.simObject.useInstancedRendering){
+            MeshRenderer meshRenderer=prefab.simObject.meshObject.GetComponentInChildren<MeshRenderer>();
+            MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
             Mesh mesh;
             if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
              Logs.Message(Logs.LogType.Debug,"mesh.name:"+mesh.name);
-             instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.meshObject.layer);
+             instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
             }
            }
            simObjectPrefabs[type]=new(prefab.simObject);
@@ -96,6 +97,11 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
+        IEnumerator SimObjectManualUpdateInLotsCoroutine(){
+         while(true){
+          yield return null;
+         }
+        }
         public override void ManualUpdate(){
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
@@ -111,7 +117,12 @@ namespace AKCondinoO.SimObjects{
          }
         }
         void RenderInstanced(Camera camera){
-         if(camera.cameraType!=CameraType.Game){return;}
+         if(camera.cameraType!=CameraType.Game&&camera.cameraType!=CameraType.SceneView){return;}
+          #if UNITY_EDITOR
+           if(camera.cameraType==CameraType.SceneView&&(UnityEditor.SceneView.lastActiveSceneView==null||camera!=UnityEditor.SceneView.lastActiveSceneView.camera)){
+            return;
+           }
+          #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
      static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>debugMassiveSpawnJobPool=

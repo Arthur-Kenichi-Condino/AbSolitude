@@ -1,32 +1,25 @@
+using AKCondinoO.Bootstrap;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectPool<T>where T:SimObject{
-     private readonly Stack<T>pool=new();
+     private readonly MonoPool<T>pool;
      private readonly T prefab;
      private readonly Transform parent;
         internal SimObjectPool(T prefab,Transform parent=null){
          this.prefab=prefab;
          this.parent=parent;
+         pool=new(prefab,parent);
         }
         internal T Rent(){
-         if(pool.Count>0){
-          T item=pool.Pop();
-          return item;
-         }
-         return GameObject.Instantiate(prefab,parent);
+         T item=pool.Rent();
+         return item;
         }
         internal void Return(T item){
-         pool.Push(item);
+         pool.Return(item);
         }
         internal void Destroy(bool destroy=false){
-         if(destroy){
-          while(pool.Count>0){
-           T item=pool.Pop();
-           GameObject.Destroy(item.gameObject);
-          }
-         }
-         pool.Clear();
+         pool.Destroy(destroy);
         }
     }
 }

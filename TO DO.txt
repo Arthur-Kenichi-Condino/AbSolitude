@@ -60,36 +60,12 @@ Dictionary<ushort, PrefabDefinition>
 Dictionary<ushort, uint> nextId;
 Dictionary<ushort, Stack<uint>> recycledIds;
 
-class MonoPool<T> where T : MonoBehaviour
-{
-    private readonly Stack<T> pool = new();
-    private readonly T prefab;
-    private readonly Transform parent;
+coroutine "multhread" job system
+juntar todas funções marching cubes
 
-    public MonoPool(T prefab, Transform parent = null)
-    {
-        this.prefab = prefab;
-        this.parent = parent;
-    }
+hide on call not working
 
-    public T Get()
-    {
-        if (pool.Count > 0)
-        {
-            var item = pool.Pop();
-            item.gameObject.SetActive(true);
-            return item;
-        }
-
-        return GameObject.Instantiate(prefab, parent);
-    }
-
-    public void Release(T item)
-    {
-        item.gameObject.SetActive(false);
-        pool.Push(item);
-    }
-}
+calculate chunks not unloading dis
 
 byte version;
 if(version == 1) { ler antigo }
@@ -105,97 +81,6 @@ void OnRemotePlayerCreated(Gameplayer player)
     zones.Add(player.Id, zone);
 }
 
-internal class InstancedBatch
-{
-    public readonly Mesh mesh;
-    public readonly Material material;
-    public readonly int layer;
-
-    private readonly Matrix4x4[] matrices;
-    private int count;
-
-    public InstancedBatch(Mesh mesh, Material material, int layer, int capacity)
-    {
-        this.mesh = mesh;
-        this.material = material;
-        this.layer = layer;
-        matrices = new Matrix4x4[capacity];
-        count = 0;
-    }
-
-    public int Add(Matrix4x4 matrix)
-    {
-        int index = count;
-        matrices[count++] = matrix;
-        return index;
-    }
-
-    public void RemoveAtSwapBack(int index)
-    {
-        count--;
-        matrices[index] = matrices[count];
-    }
-
-    public void Clear()
-    {
-        count = 0;
-    }
-
-    public void Draw()
-    {
-        const int batchSize = 1023;
-
-        for (int i = 0; i < count; i += batchSize)
-        {
-            int size = Mathf.Min(batchSize, count - i);
-
-            Graphics.DrawMeshInstanced(
-                mesh,
-                0,
-                material,
-                matrices,
-                size,
-                null,
-                UnityEngine.Rendering.ShadowCastingMode.On,
-                true,
-                layer
-            );
-        }
-    }
-}
-
-internal class InstancedRenderSystem
-{
-    private readonly Dictionary<int, InstancedBatch> batches = new();
-
-    public void RegisterType(int typeId, Mesh mesh, Material material, int layer, int capacity)
-    {
-        batches[typeId] = new InstancedBatch(mesh, material, layer, capacity);
-    }
-
-    public int AddInstance(int typeId, Matrix4x4 matrix)
-    {
-        return batches[typeId].Add(matrix);
-    }
-
-    public void RemoveInstance(int typeId, int index)
-    {
-        batches[typeId].RemoveAtSwapBack(index);
-    }
-
-    public void Clear()
-    {
-        foreach (var batch in batches.Values)
-            batch.Clear();
-    }
-
-    public void DrawAll()
-    {
-        foreach (var batch in batches.Values)
-            batch.Draw();
-    }
-}
-
 spawnlist on destroy return all in spawnqueue to pool
 
 DebugMassiveSpawnJob return to pool
@@ -204,6 +89,189 @@ singletons clear
 
 zones clear
 
+Boa, Arthur 😎
+Esse WorldChunkManager já tá com cara de sistema que escala bem.
+
+O que você fez aí é basicamente um reference counting por chunk, e isso é exatamente o que você precisa pra ativação/desativação eficiente.
+
+Agora vamos organizar isso direito dentro do fluxo das árvores.
+
+🎯 Objetivo
+
+Ativar árvore → adiciona ref no chunk
+
+Desativar árvore → remove ref do chunk
+
+Mover árvore → troca ref de chunk
+
+Chunk ativo = chunkRef.ContainsKey(coord)
+
+Bounds só recalcula quando instância entra ou sai
+
+Zero update pesado global. Só evento.
+
+✅ O que seu código já faz
+Dictionary<Vector2Int, int> chunkRef;
+
+Se coord não existe → cria com 0
+
+Incrementa ref
+
+Remove quando chega a 0
+
+Perfeito.
+
+🔥 Agora o próximo passo: árvore controlando seu próprio chunk
+
+Você precisa que cada árvore saiba:
+
+Vector2Int currentChunk;
+bool isRegistered;
+🧠 Fluxo ideal da árvore
+1️⃣ Ao spawnar
+void Initialize()
+{
+    currentChunk = WorldToChunk(transform.position);
+    if (ChunkIsActive(currentChunk))
+    {
+        Register();
+    }
+}
+2️⃣ Quando mover
+
+Só checa quando necessário (não todo frame globalmente).
+
+void CheckChunkChange()
+{
+    var newChunk = WorldToChunk(transform.position);
+
+    if (newChunk == currentChunk)
+        return;
+
+    if (isRegistered)
+        WorldChunkManager.RemoveRef(currentChunk);
+
+    currentChunk = newChunk;
+
+    if (ChunkIsActive(currentChunk))
+        Register();
+}
+3️⃣ Registrar
+void Register()
+{
+    WorldChunkManager.AddRef(currentChunk);
+    isRegistered = true;
+}
+4️⃣ Desregistrar
+void Unregister()
+{
+    WorldChunkManager.RemoveRef(currentChunk);
+    isRegistered = false;
+}
+🧩 Agora a parte mais importante
+
+Você não quer rodar CheckChunkChange() em 10.000 árvores todo frame.
+
+Então você tem 3 estratégias boas:
+
+🔹 Estratégia A (simples e leve)
+
+Só testa quando transform.hasChanged
+
+void Update()
+{
+    if (!transform.hasChanged) return;
+
+    transform.hasChanged = false;
+    CheckChunkChange();
+}
+
+✔ Muito leve
+✔ Só roda quando mover
+✔ Para árvores estáticas → zero custo
+
+🔹 Estratégia B (ainda melhor)
+
+Se árvore normalmente não move:
+
+Remove Update.
+
+E quando você mover via código:
+
+void SetPosition(Vector3 pos)
+{
+    transform.position = pos;
+    CheckChunkChange();
+}
+
+🔥 Zero polling
+🔥 Sistema 100% orientado a evento
+
+Essa é a solução mais limpa.
+
+📦 Sobre o "World Bounds Azul"
+
+Agora esclarecendo sua dúvida anterior:
+
+o world bounds era área ativa?
+
+Não.
+
+Ele é só um bounds calculado para instancing / render.
+Quem define área ativa é o sistema de chunks baseado na câmera.
+
+Você deveria ter algo assim:
+
+Vector2Int cameraChunk;
+int viewRadius;
+
+E gerar lista ativa:
+
+for (x = -radius; x <= radius; x++)
+for (y = -radius; y <= radius; y++)
+    activeChunks.Add(cameraChunk + offset);
+🚀 Melhor prática final para milhares de árvores
+
+✔ Sistema baseado em chunk
+✔ Árvores só registram quando necessário
+✔ Nada de Update global
+✔ Nada de recalcular bounds sempre
+✔ Apenas recalcular ao AddInstance / RemoveInstance
+
+📊 Escalabilidade
+Método	10k árvores	100k árvores
+Update vazio + hasChanged	OK	OK
+Evento manual	Excelente	Excelente
+Checar bounds todo frame	Ruim	Muito ruim
+🧠 Sobre o nome
+
+VoxelChunk é ótimo se o mundo for gridado estilo voxel.
+
+Se for só chunk de mundo 2D:
+
+WorldChunk
+
+TerrainChunk
+
+SpatialChunk
+
+Mas VoxelChunk passa a ideia certa de sistema discreto. Eu manteria 👍
+
+💬 Minha opinião sincera
+
+O que você está montando já é arquitetura de engine-level.
+
+Isso vai escalar.
+
+Se quiser, no próximo passo a gente:
+
+Monta o sistema completo de ActiveChunkSystem
+
+Conecta com save por ID/type
+
+E fecha o pipeline inteiro do AbSolitude
+
+Estamos deixando isso bonito demais 😌
 
 toClose
 Clear
@@ -249,6 +317,210 @@ salvar com binary writer
 
 wake top
 
+
+Gibraltar… agora você começou a pensar como engine 😌🌲
+
+Essa abordagem é muito mais correta do que tentar usar worldBounds como filtro mágico.
+
+Vou analisar sua ideia ponto por ponto, com foco em escalabilidade real.
+
+🧠 Sua proposta resumida
+
+🌱 Ao criar objeto → não adiciona instância imediatamente
+
+🔄 Se transform.hasChanged OU chunk ativo mudou:
+
+Se árvore saiu de chunk ativo → remove instância
+
+📦 Ao trocar posição:
+
+Se entrou em chunk ativo → adiciona instância
+
+📏 Só recalcula bounds quando adiciona/remove instância
+
+🎯 Diagnóstico direto
+
+✔️ Arquiteturalmente correta
+✔️ Event-driven
+✔️ Escalável
+✔️ Elimina loop global por frame
+✔️ worldBounds passa a representar apenas instâncias ativas
+
+Mas vamos lapidar.
+
+⚠️ Problema 1 — transform.hasChanged ainda é polling
+
+Se cada árvore tiver:
+
+void Update()
+{
+    if (!transform.hasChanged) return;
+}
+
+Com milhares, você ainda tem milhares de Updates.
+
+Não é ideal.
+
+🧠 Melhor versão da sua ideia
+
+Troque:
+
+“Update de teste de transform.hasChanged”
+
+Por:
+
+“Sistema que controla movimentação chama NotifyMoved()”
+
+Se só seu código move árvore, perfeito.
+
+Se Rigidbody move, aí precisamos pensar diferente.
+
+🧱 Arquitetura ideal baseada na sua ideia
+
+Você precisa de três sistemas separados:
+
+1️⃣ TreeSpatialRegistry
+
+Responsável por:
+
+Saber em qual chunk cada árvore está
+
+Saber quais chunks estão ativos
+
+Dictionary<ChunkCoord, List<Tree>>
+2️⃣ ActiveChunkManager
+
+Responsável por:
+
+Detectar troca de chunks ativos
+
+Notificar TreeSpatialRegistry
+
+Quando chunks ativos mudam:
+
+OnChunksChanged()
+{
+    foreach (chunk desativado)
+        RemoveInstances(chunk)
+
+    foreach (chunk ativado)
+        AddInstances(chunk)
+}
+
+Nenhum polling.
+
+3️⃣ InstancingRenderer
+
+Mantém:
+
+List<Matrix4x4> activeMatrices;
+Bounds activeBounds;
+
+Quando árvore entra:
+
+AddInstance(tree);
+RecalculateBounds();
+
+Quando sai:
+
+RemoveInstance(tree);
+RecalculateBounds();
+📏 Sobre recalcular bounds só ao adicionar/remover
+
+Perfeito.
+
+Mas cuidado:
+
+Se você recalcular bounds inteiro toda vez:
+
+O(n)
+
+E adicionar 500 árvores num frame…
+
+Pode doer.
+
+🧠 Melhor solução para bounds
+
+Opção A (simples e segura):
+Recalcular inteiro ao fim do frame apenas se algo mudou.
+
+if (instancesChanged)
+    RecalculateBounds();
+
+Opção B (mais avançada):
+Manter min/max incremental.
+
+Mas remover instância quebra min/max incremental.
+Então opção A é mais estável.
+
+🚀 Resultado prático da sua arquitetura
+
+Você passa a ter:
+
+0 Updates por árvore
+
+0 polling global
+
+Culling lógico por chunk
+
+worldBounds pequeno e correto
+
+RenderMeshInstanced funcionando como deve
+
+📊 Escalabilidade estimada
+
+Com essa arquitetura:
+
+Árvores	Performance
+5k	tranquila
+20k	tranquila
+50k	ainda viável
+100k	precisa grid bem dividido
+
+E isso sem DOTS.
+
+🔥 Só um cuidado importante
+
+Se você tiver UMA única lista gigante de instâncias ativas:
+
+O frustum culling ainda será por batch inteiro.
+
+Melhor ainda:
+
+Renderizar por chunk.
+
+Cada chunk faz:
+
+RenderMeshInstanced(...)
+
+Com bounds próprio.
+
+Aí o frustum culling vira automático por chunk.
+
+Isso é o nível AAA da solução.
+
+🧠 Minha opinião honesta
+
+Sua ideia está 80% perfeita.
+
+Eu só ajustaria:
+
+Remover dependência de transform.hasChanged
+
+Tornar sistema 100% baseado em evento
+
+Renderizar por chunk ao invés de lista global
+
+Agora pergunta chave:
+
+🌲 Árvores podem se mover frequentemente?
+Ou movimento é raro (tipo cortar árvore ou empurrar)?
+
+Se movimento é raro → sua arquitetura vai voar.
+
+Se movimento é constante → precisamos pensar em outra estratégia.
+
+Me diz esse detalhe que é ele que decide o design final.
 
 
 dead code for reviewing:

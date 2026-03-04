@@ -22,6 +22,7 @@ namespace AKCondinoO.Bootstrap{
           ThreadDispatcher.Initialize();
           ActiveZone.EnsureExists(activeZonePrefab);
           SingletonManager.InitializeAll();
+          ActiveZone.InitializeAny();
          }
         }
         protected override void OnDestroy(){
@@ -29,7 +30,7 @@ namespace AKCondinoO.Bootstrap{
           ThreadDispatcher.Shutdown();
           ThreadDispatcher.FlushCompleted(true);
           SingletonManager.ShutdownAll();
-          ActiveZone.Shutdown();
+          ActiveZone.ShutdownAny();
          }
          base.OnDestroy();
         }
