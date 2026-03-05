@@ -1,6 +1,9 @@
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     ///<summary>
+    ///  AI: software não é uma escultura em pedra. É mais parecido com:
+    /// um jardim que você mantém ao longo do tempo. Você poda, ajusta, melhora.
+    ///  Main:
     ///  - Entry point real do runtime
     ///  - Responsável por inicializar sistemas globais
     ///  - Controla ciclo de vida de threads
@@ -9,7 +12,7 @@ namespace AKCondinoO.Bootstrap{
     ///</summary>
     [DefaultExecutionOrder(-100000)]
     internal class Main:MonoSingleton<Main>{
-     public override int initOrder{get{return 0;}}
+     public override int initOrder{get{return 1;}}
      [SerializeField]ActiveZone activeZonePrefab;
         protected override void Awake(){
          base.Awake();

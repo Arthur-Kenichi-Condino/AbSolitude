@@ -478,6 +478,7 @@
 "Assets/AKCondinoO.Bootstrap/MonoPool.cs"
 "Assets/AKCondinoO.Bootstrap/MonoSingleton.cs"
 "Assets/AKCondinoO.Bootstrap/Multithreaded.cs"
+"Assets/AKCondinoO.Bootstrap/SharedCoroutines.cs"
 "Assets/AKCondinoO.SimObjects/Pinus_elliottii_1.cs"
 "Assets/AKCondinoO.SimObjects/SimObject.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectFactory.cs"

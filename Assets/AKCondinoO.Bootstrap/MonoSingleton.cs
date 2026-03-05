@@ -14,7 +14,7 @@ namespace AKCondinoO.Bootstrap{
           return;
          }
          singletons.Add(singleton);
-         Logs.Message(Logs.LogType.Debug,"'added singleton':"+singleton+$";singletons.Count:{singletons.Count}");
+         Logs.Message(Logs.LogType.Debug,"'added singleton':"+$"(singleton.initOrder:{singleton.initOrder}):"+singleton+$";singletons.Count:{singletons.Count}");
         }
         private static void UnregisterAt(int i){
          var s=singletons[i];
@@ -33,14 +33,15 @@ namespace AKCondinoO.Bootstrap{
          }
         }
         internal static void PreShutdownAll(){
-         for(int i=singletons.Count-1;i>=0;i--){
-          var s=singletons[i];
+         foreach(var s in singletons){
+          Logs.Message(Logs.LogType.Debug,"'singleton pre-shutdown':"+s);
           s.PreShutdown();
          }
         }
         internal static void ShutdownAll(){
          for(int i=singletons.Count-1;i>=0;i--){
           var s=singletons[i];
+          Logs.Message(Logs.LogType.Debug,"'singleton shutdown':"+s);
           s.Shutdown();
           UnregisterAt(i);
          }
