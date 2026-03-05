@@ -11,7 +11,7 @@ namespace AKCondinoO.Bootstrap{
         }
      static readonly Queue<SharedCoroutineContainerJob>scheduledJobs=new();
      static readonly HashSet<SharedCoroutineContainerJob>runningJobs=new();
-     private int workerCount=8;
+     [SerializeField]private int workerCount=8;
      private readonly List<Coroutine>coroutines=new();
         public override void Initialize(){
          base.Initialize();
@@ -26,15 +26,26 @@ namespace AKCondinoO.Bootstrap{
           }
          }
          coroutines.Clear();
+         foreach(var job in runningJobs){
+          while(!job.ExecuteInLots(true)){}
+          job.OnCompletedDoAtEnd();
+         }
+         runningJobs.Clear();
+         while(scheduledJobs.Count>0){
+          var job=scheduledJobs.Dequeue();
+          job.SetContainerDataOnBegin();
+          while(!job.ExecuteInLots(true)){}
+          job.OnCompletedDoAtEnd();
+         }
          base.PreShutdown();
         }
         public override void Shutdown(){
          base.Shutdown();
         }
         IEnumerator Worker(){
-         WaitUntil waitUntil=new(()=>scheduledJobs.Count>0);
+         WaitUntil waitForJob=new(()=>scheduledJobs.Count>0);
          while(true){
-          yield return waitUntil;
+          yield return waitForJob;
           var job=scheduledJobs.Dequeue();
           runningJobs.Add(job);
           job.SetContainerDataOnBegin();
