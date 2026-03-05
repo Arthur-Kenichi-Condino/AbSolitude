@@ -1,15 +1,17 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.Utilities;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectInstancedRenderer{
-     private readonly Mesh mesh;
+     private Mesh mesh;
      private readonly int subMeshCount;
      private readonly RenderParams[]renderParams;
      private Matrix4x4[]matrices;
      private int count;
+     private readonly Dictionary<int,SimObject>simObjects=new();//  TO DO: usar array pois o índice é conhecido
         internal SimObjectInstancedRenderer(Mesh mesh,Material[]materials,int layer,int preallocate=0){
          this.mesh=mesh;
          subMeshCount=mesh.subMeshCount;
@@ -26,21 +28,34 @@ namespace AKCondinoO.SimObjects{
          matrices=new Matrix4x4[preallocate];
          count=0;
         }
-        internal int AddInstance(Matrix4x4 matrix){
-         int index=count;
+        internal int AddInstance(SimObject simObject){
+         int index=count++;
          if(matrices.Length<=index){
           int newSize=matrices.Length==0?4:matrices.Length*2;
           Array.Resize(ref matrices,newSize);
          }
-         matrices[count++]=matrix;
+         Matrix4x4 matrix=simObject.transform.localToWorldMatrix;
+         matrices[index]=matrix;
+         simObject.instancedRenderingIndex=index;
+         simObjects[index]=simObject;
          return index;
         }
         internal void RemoveAtSwapBack(int index){
+         simObjects.Remove(index,out SimObject simObject);
+         simObject.instancedRenderingIndex=-1;
          count--;
-         matrices[index]=matrices[count];
+         if(simObjects.Remove(count,out simObject)){
+          matrices[index]=matrices[count];
+          simObject.instancedRenderingIndex=index;
+          simObjects[index]=simObject;
+         }
         }
-        internal void Clear(){
+        internal void Clear(bool destroy=false){
          count=0;
+         if(destroy){
+          this.mesh=null;
+         }
+         simObjects.Clear();
         }
         internal void DrawAll(){
          //Logs.Message(Logs.LogType.Debug,"mesh.name:"+mesh.name+";subMeshCount:"+subMeshCount);

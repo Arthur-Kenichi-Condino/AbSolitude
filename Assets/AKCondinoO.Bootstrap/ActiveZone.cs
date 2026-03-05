@@ -42,9 +42,24 @@ namespace AKCondinoO.Bootstrap{
          main=null;
          foreach(var kvp in zones){
           var zone=kvp.Value;
-          Destroy(zone);
+          zone.Shutdown();
+          if(zone!=null){
+           Destroy(zone.gameObject);
+          }
          }
          zones.Clear();
+        }
+        internal void Shutdown(){
+         if(!object.ReferenceEquals(WorldChunkManager.singleton,null)){
+          foreach(var coord in currChunks){
+           WorldChunkManager.singleton.RemoveRef(coord);
+          }
+         }
+         currChunks.Clear();
+         nextChunks.Clear();
+         cCoord=default;
+         lastcCoord=default;
+         hasLastcCoord=false;
         }
         internal static void ManualUpdateTransformAll(){
          foreach(var kvp in zones){
@@ -58,9 +73,14 @@ namespace AKCondinoO.Bootstrap{
          if(clientId==0){
           transform.position=MainCamera.singleton.transform.position;
          }
+         if(!transform.hasChanged){
+          return;
+         }
+         //Logs.Message(Logs.LogType.Debug,"transform.hasChanged:"+transform.hasChanged);
          pos=transform.position;
          bounds.center=pos;
          CalculateChunks();
+         transform.hasChanged=false;
         }
      private HashSet<Vector2Int>currChunks=new();
      private HashSet<Vector2Int>nextChunks=new();

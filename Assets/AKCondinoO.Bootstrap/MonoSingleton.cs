@@ -14,7 +14,7 @@ namespace AKCondinoO.Bootstrap{
           return;
          }
          singletons.Add(singleton);
-         Logs.Message(Logs.LogType.Debug,$"singletons.Count:{singletons.Count}");
+         Logs.Message(Logs.LogType.Debug,"'added singleton':"+singleton+$";singletons.Count:{singletons.Count}");
         }
         private static void UnregisterAt(int i){
          var s=singletons[i];
@@ -27,7 +27,16 @@ namespace AKCondinoO.Bootstrap{
         }
         internal static void InitializeAll(){
          singletons.Sort((a,b)=>a.initOrder.CompareTo(b.initOrder));
-         foreach(var s in singletons)s.Initialize();
+         foreach(var s in singletons){
+          Logs.Message(Logs.LogType.Debug,"'init singleton':"+s);
+          s.Initialize();
+         }
+        }
+        internal static void PreShutdownAll(){
+         for(int i=singletons.Count-1;i>=0;i--){
+          var s=singletons[i];
+          s.PreShutdown();
+         }
         }
         internal static void ShutdownAll(){
          for(int i=singletons.Count-1;i>=0;i--){
@@ -45,6 +54,7 @@ namespace AKCondinoO.Bootstrap{
      int initOrder{get;}
         void ClearStaticInstance();
         void Initialize();
+        void PreShutdown();
         void Shutdown();
         void ManualUpdate();
     }
@@ -55,7 +65,7 @@ namespace AKCondinoO.Bootstrap{
         }
      public abstract int initOrder{get;}
         protected virtual void Awake(){
-         if(singleton!=null&&singleton!=this){
+         if(!object.ReferenceEquals(singleton,null)&&singleton!=this){
           DestroyImmediate(gameObject);
           return;
          }
@@ -68,6 +78,8 @@ namespace AKCondinoO.Bootstrap{
          }
         }
         public virtual void Initialize(){
+        }
+        public virtual void PreShutdown(){
         }
         public virtual void Shutdown(){
         }

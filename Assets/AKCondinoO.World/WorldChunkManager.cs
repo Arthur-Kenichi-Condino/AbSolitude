@@ -1,7 +1,9 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimObjects;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunkManager:MonoSingleton<WorldChunkManager>{
      public override int initOrder{get{return 9;}}
@@ -17,38 +19,56 @@ namespace AKCondinoO.World{
          if(this!=null){
          }
         }
+        public override void PreShutdown(){
+         foreach(var kvp in chunks){
+          var cnk=kvp.Value;
+          cnk.OnPool();
+         }
+         chunkRef.Clear();
+         chunks  .Clear();
+         base.PreShutdown();
+        }
         public override void Shutdown(){
          if(this!=null){
          }
          chunkPool.Destroy();
          base.Shutdown();
         }
-        internal void AddRef(Vector2Int coord){
-         //Logs.Message(Logs.LogType.Debug,"coord:"+coord);
-         if(!chunkRef.TryGetValue(coord,out var cRef)){
-          chunkRef.Add(coord,cRef=0);
+        internal void AddRef(Vector2Int cCoord){
+         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
+         if(!chunkRef.TryGetValue(cCoord,out var cRef)){
+          chunkRef.Add(cCoord,cRef=0);
          }
-         chunkRef[coord]=cRef+1;
+         chunkRef[cCoord]=cRef+1;
         }
-        internal void RemoveRef(Vector2Int coord){
-         //Logs.Message(Logs.LogType.Debug,"coord:"+coord);
-         if(chunkRef.TryGetValue(coord,out var cRef)){
+        internal void RemoveRef(Vector2Int cCoord){
+         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
+         if(chunkRef.TryGetValue(cCoord,out var cRef)){
           cRef--;
           if(cRef<=0){
-           chunkRef.Remove(coord);
-           if(chunks.Remove(coord,out var cnk)){
+           chunkRef.Remove(cCoord);
+           if(chunks.Remove(cCoord,out var cnk)){
+            cnk.OnPool();
             chunkPool.Return(cnk);
            }
           }
          }
         }
-        internal void EnsureExists(Vector2Int coord){
-         //Logs.Message(Logs.LogType.Debug,"coord:"+coord);
-         if(!chunks.TryGetValue(coord,out var cnk)){
-          chunks.Add(coord,cnk=chunkPool.Rent());
+        internal void EnsureExists(Vector2Int cCoord){
+         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
+         if(!chunks.TryGetValue(cCoord,out var cnk)){
+          chunks.Add(cCoord,cnk=chunkPool.Rent());
           cnk.Initialize();
          }
-         cnk.OnEnsureExists(coord);
+         cnk.OnEnsureExists(cCoord);
+        }
+        internal bool OnAddSimObjectAt(Vector3 pos,SimObject simObject){
+         Vector2Int cCoord=vecPosTocCoord(pos);
+         if(chunks.TryGetValue(cCoord,out var cnk)){
+          cnk.AddSimObject(simObject);
+          return true;
+         }
+         return false;
         }
     }
 }

@@ -7,17 +7,21 @@ namespace AKCondinoO.SimObjects{
         internal void RegisterType(Type type,Mesh mesh,Material[]materials,int layer,int preallocate=0){
          renderers[type]=new(mesh,materials,layer,preallocate);
         }
-        internal int AddInstance(Type type,Matrix4x4 matrix){
+        internal int AddInstance(Type type,SimObject simObject){
          if(renderers.TryGetValue(type,out var renderer)){
-          return renderer.AddInstance(matrix);
+          return renderer.AddInstance(simObject);
          }
          return -1;
         }
         internal void RemoveInstance(Type type,int index){
+         if(index<0){return;}
          renderers[type].RemoveAtSwapBack(index);
         }
-        internal void Clear(){
-         foreach(var renderer in renderers.Values)renderer.Clear();
+        internal void Clear(bool destroy=false){
+         foreach(var renderer in renderers.Values)renderer.Clear(destroy);
+         if(destroy){
+          renderers.Clear();
+         }
         }
         internal void DrawAll(){
          foreach(var renderer in renderers.Values)renderer.DrawAll();

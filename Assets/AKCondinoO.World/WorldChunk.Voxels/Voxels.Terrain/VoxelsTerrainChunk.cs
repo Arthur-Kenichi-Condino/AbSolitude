@@ -32,13 +32,16 @@ namespace AKCondinoO.World.Voxels.Terrain{
              Logs.Message(Logs.LogType.Debug,"DoMarchingCubesJob.BackgroundExecute");
             }
             public void OnCompletedDoAtMainThread(){
-             if(cCoord==chunk.cCoord){
-              chunk.bounds.center=chunk.transform.position=new Vector3(
-               cnkRgn.x+(Width/2f),
-               Height/2f,
-               cnkRgn.y+(Depth/2f)
-              );
+             if(chunk!=null){
+              if(cCoord==chunk.cCoord){
+               chunk.bounds.center=chunk.transform.position=new Vector3(
+                cnkRgn.x+(Width/2f),
+                Height/2f,
+                cnkRgn.y+(Depth/2f)
+               );
+              }
              }
+             doMarchingCubesJobPool.Return(this);
             }
         }
     }

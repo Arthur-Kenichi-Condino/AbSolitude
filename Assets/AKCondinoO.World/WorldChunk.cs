@@ -1,11 +1,14 @@
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using AKCondinoO.World.Voxels.Terrain;
+using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
      internal Bounds bounds;
      private VoxelTerrainChunk voxelsTerrain;
+     internal readonly HashSet<SimObject>simObjects=new();
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
          voxelsTerrain=new(this);
@@ -21,6 +24,14 @@ namespace AKCondinoO.World{
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
           voxelsTerrain.DoMarchingCubes();
+         }
+        }
+        internal void AddSimObject(SimObject simObject){
+         simObjects.Add(simObject);
+        }
+        internal void OnPool(){
+         foreach(var simObject in simObjects){
+          simObject.OnChunkPooled();
          }
         }
         void OnDrawGizmos(){

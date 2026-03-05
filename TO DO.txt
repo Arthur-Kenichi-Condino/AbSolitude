@@ -9,6 +9,22 @@ if (debugAutoSpawn)
 }
 #endif
 
+phys mesh shared mesh
+
+pre shutdown:
+sim object manager despawn all
+chunk pool all
+
+destroy above after
+
+
+on pos changed remove from previous chunk and save current coord
+despawn reset sim object data
+simobject e simobjectfactory spawn e despawn
+simobject state change
+worldchunk state change sim object
+
+
 public class ChunkMeshJob : IThreadJob
 {
     private Chunk target;

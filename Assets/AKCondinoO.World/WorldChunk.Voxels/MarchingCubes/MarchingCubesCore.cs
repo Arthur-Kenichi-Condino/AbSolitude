@@ -1,3 +1,4 @@
+using AKCondinoO.World.Voxels.MarchingCubes.paulbourke;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -5,6 +6,7 @@ using Unity.Collections;
 using UnityEngine;
 namespace AKCondinoO.World.Voxels.MarchingCubes{
     internal struct Voxel{
+     internal float density;
     }
     [StructLayout(LayoutKind.Sequential)]
     internal struct Vertex{
@@ -21,20 +23,17 @@ namespace AKCondinoO.World.Voxels.MarchingCubes{
      internal Vector4 texCoord6;
      internal Vector4 texCoord7;
         internal Vertex(Vector3 p,Vector3 n,Vector2 uv0){
-         pos=p;
-         pos.w=1f;
+         pos=p;pos.w=1f;
          normal=n;
-         color=new Color(0f,0f,0f,0f);
-         texCoord0=emptyUV;
-         texCoord0.x=uv0.x;
-         texCoord0.y=uv0.y;
+         color=new(0f,0f,0f,0f);
+         texCoord0=emptyUV;texCoord0.x=uv0.x;texCoord0.y=uv0.y;
          texCoord1=emptyUV;
          texCoord2=emptyUV;
          texCoord3=emptyUV;
          texCoord4=emptyUV;
          texCoord5=emptyUV;
-         texCoord6=new Vector4(1f,0f,0f,0f);
-         texCoord7=new Vector4(0f,0f,0f,0f);
+         texCoord6=new(1f,0f,0f,0f);
+         texCoord7=new(0f,0f,0f,0f);
         }
     }
     internal struct MarchingCubesContext{
@@ -49,9 +48,26 @@ namespace AKCondinoO.World.Voxels.MarchingCubes{
     }
     internal static class MarchingCubesCore{
         internal static void ProcessCell(
-         ref Voxel[]polygonCell,Vector3Int coord,in MarchingCubesFlags flags,ref MarchingCubesContext context
+         ref Voxel[]polygonCell,Vector3Int coord,in MarchingCubesFlags flags,ref MarchingCubesContext context,
+         float isoLevel=-50.0f
         ){
-         
+         int edgeIndex;
+         /*
+              Determine the index into the edge table which
+             tells us which vertices are inside of the surface
+         */
+                                             edgeIndex =  0;
+         if(-polygonCell[0].density<isoLevel)edgeIndex|=  1;
+         if(-polygonCell[1].density<isoLevel)edgeIndex|=  2;
+         if(-polygonCell[2].density<isoLevel)edgeIndex|=  4;
+         if(-polygonCell[3].density<isoLevel)edgeIndex|=  8;
+         if(-polygonCell[4].density<isoLevel)edgeIndex|= 16;
+         if(-polygonCell[5].density<isoLevel)edgeIndex|= 32;
+         if(-polygonCell[6].density<isoLevel)edgeIndex|= 64;
+         if(-polygonCell[7].density<isoLevel)edgeIndex|=128;
+         if(Tables.edgeTable[edgeIndex]!=0){
+          Vector3[]vertices;
+         }
         }
     }
 }

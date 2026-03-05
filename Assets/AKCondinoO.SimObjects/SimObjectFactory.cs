@@ -9,13 +9,18 @@ namespace AKCondinoO.SimObjects{
          pool.Destroy(destroy);
         }
         internal virtual SimObject Spawn(SimObjectSpawn item){
-         SimObject simObject=pool.Rent();
-         GameObject gameObject=simObject.gameObject;
-         Matrix4x4 matrix=gameObject.transform.localToWorldMatrix;
-         simObject.instancedRenderingIndex=SimObjectManager.singleton.instancedRendering.AddInstance(item.simObjectType,matrix);
+         T simObject=pool.Rent();
+         simObject.simObjectType=item.simObjectType;
+         SimObjectManager.singleton.instancedRendering.AddInstance(simObject.simObjectType,simObject);
+         simObject.OnPositionChanged(out bool outOfBounds);
+         if(outOfBounds){
+          Despawn(simObject);
+          simObject=null;
+         }
          return simObject;
         }
         internal virtual void Despawn(T simObject){
+         SimObjectManager.singleton.instancedRendering.RemoveInstance(simObject.simObjectType,simObject.instancedRenderingIndex);
          pool.Return(simObject);
         }
     }
