@@ -105,6 +105,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\GetVoxelMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Multithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.AStarPathfinding.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Concurrent.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataLoadingMultithreaded.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomeBehaviour.cs" />
-    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Voxels\Voxels.Terrain\VoxelsTerrainChunk.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\Floor10x10x10\Floor10x10x10.cs" />
@@ -191,7 +191,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\SimUMATransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
-    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Voxels\MarchingCubes\paulbourke\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\PassiveSkill.cs" />
@@ -218,6 +217,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Betula_occidentalis_1\Betula_occidentalis_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnSkillUsed.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\HealingSkill.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\paulbourke\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
@@ -228,7 +228,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffectsManager.cs" />
     <Compile Include="Assets\AKCondinoO\CoreDataSync.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditingMultithreaded.cs" />
-    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Voxels\MarchingCubes\MarchingCubesCore.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AISignal.cs" />
@@ -242,6 +241,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.Wasteland.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\Vertex.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.UpdateMotion.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.cs" />
@@ -281,6 +281,7 @@
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\SimObjectInfo\SimObjectInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\UnnamedMessageTypes.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.ProcessCommand.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\MarchingCubesCore.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3Util.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\TerrainChunk.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.ExperiencePoints.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriod.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitudeSkillBuff.cs" />
@@ -346,6 +348,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Skill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AutonomyCore.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSimObjectsPlacing.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesConfigurationSnapshot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\StatsTable.cs" />
     <Compile Include="Assets\AKCondinoO\MemoryManagement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.cs" />
@@ -377,8 +380,10 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Allies.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\Voxel.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\_SimFloor\SimFloor.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\RemingtonModel700BDL\RemingtonModel700BDL.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\MaterialId.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.cs" />

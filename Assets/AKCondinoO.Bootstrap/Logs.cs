@@ -16,10 +16,11 @@ namespace AKCondinoO.Bootstrap{
         internal static void Enable (string className)=>enabledAt.Add   (className);
         internal static void Disable(string className)=>enabledAt.Remove(className);
         [HideInCallstack]
-        internal static void Message(LogType logType,string logMsg,Object context=null,
+        internal static void Message(LogType logType,string logMsg,Object context=null,bool condition=true,
          [CallerFilePath]string file="",
          [CallerMemberName]string member=""
         ){
+         if(!condition){return;}
          string className=System.IO.Path.GetFileNameWithoutExtension(file);
          if(logType!=LogType.Error){
           if(!enableAll&&enabledAt.Count>0&&!enabledAt.Contains(className))
