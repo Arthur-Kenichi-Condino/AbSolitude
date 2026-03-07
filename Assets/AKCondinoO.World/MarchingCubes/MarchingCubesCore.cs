@@ -209,7 +209,8 @@ namespace AKCondinoO.World.MarchingCubes{
          MarchingCubesContext context,
          float isoLevel=-50.0f
         ){
-         Vector3 polygonPos=polygonvCoord+new Vector3(0.5f,0.5f,0.5f);
+         Vector2Int cnkRgn=cCoordTocnkRgn(polygoncCoord);
+         Vector3 polygonPos=polygonvCoord+new Vector3(0.5f,0.5f,0.5f)+new Vector3(cnkRgn.x,0,cnkRgn.y);
          Voxel[]polygonCell=context.polygonCell;
          int edgeIndex;
          /*

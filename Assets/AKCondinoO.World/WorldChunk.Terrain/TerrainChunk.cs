@@ -73,7 +73,7 @@ namespace AKCondinoO.World.Terrain{
         internal void Gizmos(){
          #if UNITY_EDITOR
           if(chunk.debugDrawMeshWireframe){
-           DrawGizmos.DrawMeshWireframe(debugDrawMeshWireframeVer,debugDrawMeshWireframeTri,Color.green,new(chunk.cnkRgn.x,0,chunk.cnkRgn.y));
+           DrawGizmos.DrawMeshWireframe(debugDrawMeshWireframeVer,debugDrawMeshWireframeTri,Color.green);
           }
          #endif
         }
