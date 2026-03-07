@@ -1,3 +1,6 @@
+using AKCondinoO.World.MarchingCubes;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Utilities{
     internal static class DrawGizmos{
@@ -28,6 +31,32 @@ namespace AKCondinoO.Utilities{
          UnityEngine.Debug.DrawLine(p2,p6,color,duration);
          UnityEngine.Debug.DrawLine(p3,p7,color,duration);
          UnityEngine.Debug.DrawLine(p4,p8,color,duration);
+        }
+     private static readonly HashSet<Edge>edgeSet=new();
+        private struct Edge{
+         public int A,B;
+            public Edge(int a,int b){
+             if(a<b){A=a;B=b;}else{A=b;B=a;}
+            }
+        }
+        internal static void DrawMeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,Vector3 offset=default){
+         Gizmos.color=color;
+         edgeSet.Clear();
+         int triCount=triangles.Count/3;
+         for(int t=0;t<triCount;t++){
+          int i0=(int)triangles[t*3+0];
+          int i1=(int)triangles[t*3+1];
+          int i2=(int)triangles[t*3+2];
+          AddEdge(i0,i1);
+          AddEdge(i1,i2);
+          AddEdge(i2,i0);
+         }
+         foreach(var e in edgeSet){
+          Gizmos.DrawLine((Vector3)vertices[e.A].pos+offset,(Vector3)vertices[e.B].pos+offset);
+         }
+            static void AddEdge(int a,int b){
+             edgeSet.Add(new(a,b));
+            }
         }
     }
 }

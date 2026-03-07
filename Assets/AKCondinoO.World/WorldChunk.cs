@@ -7,11 +7,15 @@ using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
      internal Bounds bounds;
-     private TerrainChunk terrain;
+     internal TerrainChunk terrain;
      internal readonly HashSet<SimObject>simObjects=new();
+     [SerializeField]internal bool debugDrawMeshWireframe=false;
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
          terrain=new(this);
+        }
+        internal void ManualDestroy(){
+         terrain.Destroy();
         }
      private bool firstCall;
         internal void Initialize(){
@@ -34,10 +38,11 @@ namespace AKCondinoO.World{
           simObject.OnChunkPooled();
          }
         }
-        void OnDrawGizmos(){
+        void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.gray);
          #endif
+         terrain.Gizmos();
         }
     }
 }

@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd51e00e429acf447901f0dc52952cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugDrawMeshWireframe: 1

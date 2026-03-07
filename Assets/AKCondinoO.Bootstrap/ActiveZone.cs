@@ -122,7 +122,7 @@ namespace AKCondinoO.Bootstrap{
           hasLastcCoord=true;
          }
         }
-        void OnDrawGizmos(){
+        void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.blue);
          #endif

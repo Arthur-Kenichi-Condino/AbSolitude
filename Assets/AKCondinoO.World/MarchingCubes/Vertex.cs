@@ -18,7 +18,9 @@ namespace AKCondinoO.World.MarchingCubes{
          pos=p;pos.w=1f;
          normal=n;
          color=new(0f,0f,0f,0f);
-         texCoord0=emptyUV;texCoord0.x=uv0.x;texCoord0.y=uv0.y;
+         texCoord0=emptyUV;
+         texCoord0.x=uv0.x;
+         texCoord0.y=uv0.y;
          texCoord1=emptyUV;
          texCoord2=emptyUV;
          texCoord3=emptyUV;
@@ -27,6 +29,6 @@ namespace AKCondinoO.World.MarchingCubes{
          texCoord6=new(1f,0f,0f,0f);
          texCoord7=new(0f,0f,0f,0f);
         }
-     internal static Vector4 emptyUV{get;}=new Vector4(-1f,-1f,-1f,-1f);
+     internal static Vector4 emptyUV{get;}=new(-1f,-1f,-1f,-1f);
     }
 }

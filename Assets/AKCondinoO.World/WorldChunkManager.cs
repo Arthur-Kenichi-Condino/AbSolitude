@@ -19,11 +19,13 @@ namespace AKCondinoO.World{
          if(this!=null){
          }
         }
+     private readonly List<WorldChunk>toDestroyModules=new();
         public override void PreShutdown(){
          foreach(var kvp in chunks){
           var cnk=kvp.Value;
           cnk.OnPool();
          }
+         toDestroyModules.AddRange(chunks.Values);
          chunkRef.Clear();
          chunks  .Clear();
          base.PreShutdown();
@@ -31,6 +33,10 @@ namespace AKCondinoO.World{
         public override void Shutdown(){
          if(this!=null){
          }
+         foreach(var chunk in toDestroyModules){
+          chunk.ManualDestroy();
+         }
+         toDestroyModules.Clear();
          chunkPool.Destroy();
          base.Shutdown();
         }
