@@ -27,7 +27,7 @@ namespace AKCondinoO.World{
          if(firstCall||cCoord!=this.cCoord){
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
-          terrain.DoMarchingCubes();
+          terrain.DoUpdateJob();
          }
         }
         internal void AddSimObject(SimObject simObject){

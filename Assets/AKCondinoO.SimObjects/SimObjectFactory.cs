@@ -14,7 +14,6 @@ namespace AKCondinoO.SimObjects{
          SimObjectManager.singleton.instancedRendering.AddInstance(simObject.simObjectType,simObject);
          simObject.OnPositionChanged(out bool outOfBounds);
          if(outOfBounds){
-          Despawn(simObject);
           simObject=null;
          }
          return simObject;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using UnityEngine;
+using static AKCondinoO.Bootstrap.SharedCoroutines;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.Terrain{
     internal class TerrainChunk{
@@ -19,26 +20,90 @@ namespace AKCondinoO.World.Terrain{
          tempTri=new NativeList<UInt32>(Allocator.Persistent);
         }
         internal void Destroy(){
+                updateJob=null;
+         runningUpdateJob=null;
          if(tempVer.IsCreated)tempVer.Dispose();
          if(tempTri.IsCreated)tempTri.Dispose();
         }
-        internal void DoMarchingCubes(){
-         DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
-         doMarchingCubesJob.chunk=this.chunk;
-         bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
+     internal UpdateJob        updateJob;
+     internal UpdateJob runningUpdateJob;
+        internal void DoUpdateJob(){
+         //Logs.Message(Logs.LogType.Debug,"'schedule updateJob'");
+         updateJob=updateJobPool.Rent();
+         updateJob.chunk=this.chunk;
+         SharedCoroutines.Schedule(updateJob);
+        }
+        internal bool ValidJob(UpdateJob updateJob){
+         if(this.chunk==null){return false;}
+         if(this.updateJob!=updateJob){return false;}
+         if(this.chunk.cCoord!=updateJob.cCoord){return false;}
+         if(this.chunk!=updateJob.chunk){return false;}
+         if(this.chunk.terrain!=updateJob.chunk.terrain){return false;}
+         return true;
+        }
+     static readonly Utilities.ObjectPool<UpdateJob>updateJobPool=
+      Pool.GetPool<UpdateJob>(
+       "",
+       ()=>new(),
+       (UpdateJob item)=>{
+        item.chunk=null;
+        item.waitingMarchingCubes=false;
+       }
+      );
+        internal class UpdateJob:SharedCoroutineContainerJob{
+         internal WorldChunk chunk;
+         internal Vector2Int cCoord;
+         internal Vector2Int cnkRgn;
+         internal bool waitingMarchingCubes;
+         internal bool pendingMarchingCubes;
+            public void SetContainerDataOnBegin(){
+             cCoord=chunk.cCoord;
+             cnkRgn=chunk.cnkRgn;
+             pendingMarchingCubes=true;
+            }
+            public bool LoopExecuteStep(bool flush=false){
+             if(!chunk.terrain.ValidJob(this)){return false;}
+             if(chunk.terrain.runningUpdateJob==null){chunk.terrain.runningUpdateJob=this;}
+             if(chunk.terrain.runningUpdateJob!=this){return true;}
+             if(waitingMarchingCubes){return true;}
+             if(pendingMarchingCubes){
+              DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
+              doMarchingCubesJob.updateJob=this;
+              bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
+              if(!scheduled){
+               doMarchingCubesJobPool.Return(doMarchingCubesJob);
+               return(false);
+              }
+              waitingMarchingCubes=true;
+              pendingMarchingCubes=false;
+              return true;
+             }
+             return false;
+            }
+            public void OnCompletedDoAtEnd(){
+             if(chunk.terrain.ValidJob(this)){
+              if(chunk.terrain.runningUpdateJob==this){chunk.terrain.runningUpdateJob=null;}
+             }
+             updateJobPool.Return(this);
+            }
         }
      static readonly Utilities.ObjectPool<DoMarchingCubesJob>doMarchingCubesJobPool=
       Pool.GetPool<DoMarchingCubesJob>(
        "",
        ()=>new(),
-       (DoMarchingCubesJob item)=>{}
+       (DoMarchingCubesJob item)=>{
+        item.updateJob=null;
+        item.chunk=null;
+       }
       );
         internal class DoMarchingCubesJob:MultithreadedContainerJob{
+         internal UpdateJob updateJob;
          internal WorldChunk chunk;
-         private Vector2Int cCoord;
-         private Vector2Int cnkRgn;
+         internal Vector2Int cCoord;
+         internal Vector2Int cnkRgn;
          private MarchingCubesContext context;
             public void SetContainerDataAtMainThread(){
+             chunk=updateJob.chunk;
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
              context=MarchingCubesCore.marchingCubesContextPool.Rent();
@@ -52,19 +117,19 @@ namespace AKCondinoO.World.Terrain{
              MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
             }
             public void OnCompletedDoAtMainThread(){
-             if(chunk!=null){
-              if(cCoord==chunk.cCoord){
-               chunk.bounds.center=chunk.transform.position=new Vector3(
-                cnkRgn.x+(Width/2f),
-                Height/2f,
-                cnkRgn.y+(Depth/2f)
-               );
-               Logs.Message(Logs.LogType.Debug,"context.tempVer.Length:"+context.tempVer.Length);
-               chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<context.tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(context.tempVer[i]);}
-               chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<context.tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(context.tempTri[i]);}
-              }
+             if(chunk.terrain.ValidJob(updateJob)){
+              chunk.transform.position=chunk.bounds.center=new Vector3(
+               cnkRgn.x+(Width/2f),
+               Height/2f,
+               cnkRgn.y+(Depth/2f)
+              );
+              Logs.Message(Logs.LogType.Debug,"context.tempVer.Length:"+context.tempVer.Length);
+              chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<context.tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(context.tempVer[i]);}
+              chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<context.tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(context.tempTri[i]);}
              }
              MarchingCubesCore.marchingCubesContextPool.Return(context);
+             context=null;
+             updateJob.waitingMarchingCubes=false;
              doMarchingCubesJobPool.Return(this);
             }
         }

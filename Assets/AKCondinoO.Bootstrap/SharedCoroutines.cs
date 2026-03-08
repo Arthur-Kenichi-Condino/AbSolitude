@@ -6,7 +6,7 @@ namespace AKCondinoO.Bootstrap{
      public override int initOrder{get{return 0;}}
         internal interface SharedCoroutineContainerJob{
             void SetContainerDataOnBegin();
-            bool ExecuteInLots(bool flush=false);
+            bool LoopExecuteStep(bool flush=false);
             void OnCompletedDoAtEnd();
         }
      static readonly Queue<SharedCoroutineContainerJob>scheduledJobs=new();
@@ -27,14 +27,14 @@ namespace AKCondinoO.Bootstrap{
          }
          coroutines.Clear();
          foreach(var job in runningJobs){
-          while(!job.ExecuteInLots(true)){}
+          while(job.LoopExecuteStep(true)){}
           job.OnCompletedDoAtEnd();
          }
          runningJobs.Clear();
          while(scheduledJobs.Count>0){
           var job=scheduledJobs.Dequeue();
           job.SetContainerDataOnBegin();
-          while(!job.ExecuteInLots(true)){}
+          while(job.LoopExecuteStep(true)){}
           job.OnCompletedDoAtEnd();
          }
          base.PreShutdown();
@@ -43,18 +43,23 @@ namespace AKCondinoO.Bootstrap{
          base.Shutdown();
         }
         IEnumerator Worker(){
-         WaitUntil waitForJob=new(()=>scheduledJobs.Count>0);
          while(true){
-          yield return waitForJob;
+          yield return null;
+          while(scheduledJobs.Count<=0){
+           yield return null;
+          }
           var job=scheduledJobs.Dequeue();
           runningJobs.Add(job);
           job.SetContainerDataOnBegin();
-          while(!job.ExecuteInLots()){
+          while(job.LoopExecuteStep()){
            yield return null;
           }
           job.OnCompletedDoAtEnd();
           runningJobs.Remove(job);
          }
+        }
+        internal static void Schedule(SharedCoroutineContainerJob job){
+         scheduledJobs.Enqueue(job);
         }
     }
 }

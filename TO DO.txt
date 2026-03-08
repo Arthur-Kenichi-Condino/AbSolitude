@@ -17,12 +17,137 @@ chunk pool all
 
 destroy above after
 
+    public static void AddJob(ICoroutineJob job)
+    {
+        jobs.Enqueue(job);
+        hasJob = true;
+    }
 
 on pos changed remove from previous chunk and save current coord
 despawn reset sim object data
 simobject e simobjectfactory spawn e despawn
 simobject state change
 worldchunk state change sim object
+
+class TreeUpdateJob : ICoroutineJob
+{
+    int index;
+
+    public void OnStart()
+    {
+        index = 0;
+    }
+
+    public bool ExecuteBatch()
+    {
+        int end = Mathf.Min(index + 32, trees.Count);
+
+        for(; index < end; index++)
+        {
+            trees[index].UpdatePosition();
+        }
+
+        return index >= trees.Count;
+    }
+
+    public void OnComplete()
+    {
+        Debug.Log("Tree update done");
+    }
+}
+
+public static class VoxelResolver
+{
+    public static Voxel ResolveVoxel(
+        Vector3Int vCoord,
+        ref Vector2Int cnkRgn,
+        Dictionary<int,Voxel>[] voxels,
+        Container container
+    )
+    {
+        if(vCoord.y<=0)
+            return Voxel.bedrock;
+
+        if(vCoord.y>=Height)
+            return Voxel.air;
+
+        int oftIdx = GetoftIdx(...);
+        int vxlIdx = GetvxlIdx(...);
+
+        if(voxels[oftIdx].TryGetValue(vxlIdx,out var v))
+            return v;
+
+        return GenerateBiomeVoxel(...);
+    }
+}
+
+public static class PolygonCellBuilder
+{
+    public static void Build(
+        Vector3Int vCoord,
+        Voxel[] polygonCell,
+        Func<Vector3Int,Voxel> voxelGetter
+    )
+    {
+        polygonCell[0] = voxelGetter(vCoord);
+
+        polygonCell[1] = voxelGetter(
+            new Vector3Int(vCoord.x+1,vCoord.y,vCoord.z));
+
+        polygonCell[2] = voxelGetter(
+            new Vector3Int(vCoord.x+1,vCoord.y+1,vCoord.z));
+
+        polygonCell[3] = voxelGetter(
+            new Vector3Int(vCoord.x,vCoord.y+1,vCoord.z));
+
+        polygonCell[4] = voxelGetter(
+            new Vector3Int(vCoord.x,vCoord.y,vCoord.z+1));
+
+        polygonCell[5] = voxelGetter(
+            new Vector3Int(vCoord.x+1,vCoord.y,vCoord.z+1));
+
+        polygonCell[6] = voxelGetter(
+            new Vector3Int(vCoord.x+1,vCoord.y+1,vCoord.z+1));
+
+        polygonCell[7] = voxelGetter(
+            new Vector3Int(vCoord.x,vCoord.y+1,vCoord.z+1));
+    }
+}
+
+
+i++ qual tem mais prioridade? O que saiu depois, mas ele fica com qual i? Maior ou menor? faço i--?
+colocar cnk rgn como offset pra posição correta e edges
+
+
+
+protected override void Execute()
+{
+    sw.Restart();
+
+    container.TempVer.Clear();
+    container.TempTri.Clear();
+
+    TerrainEditLoader.LoadEditsAroundChunk(container,voxels);
+
+    Vector3Int vCoord = new Vector3Int();
+
+    for(vCoord.y=0; vCoord.y<Height; vCoord.y++)
+    for(vCoord.x=0; vCoord.x<Width;  vCoord.x++)
+    for(vCoord.z=0; vCoord.z<Depth;  vCoord.z++)
+    {
+        PolygonCellBuilder.Build(
+            vCoord,
+            polygonCell,
+            ResolveVoxel
+        );
+
+        MarchingCubesCore.ProcessCell(
+            polygonCell,
+            vCoord,
+            container
+        );
+    }
+}
 
 
 public class ChunkMeshJob : IThreadJob
