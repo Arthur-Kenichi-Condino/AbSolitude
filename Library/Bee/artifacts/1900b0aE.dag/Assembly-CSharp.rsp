@@ -490,6 +490,7 @@
 "Assets/AKCondinoO.SimObjects/SimTree.cs"
 "Assets/AKCondinoO.Utilities/DrawGizmos.cs"
 "Assets/AKCondinoO.Utilities/ObjectPool.cs"
+"Assets/AKCondinoO.World/Biomes/NoiseNode.cs"
 "Assets/AKCondinoO.World/BiomesConfigurationSnapshot.cs"
 "Assets/AKCondinoO.World/BiomesSystem.cs"
 "Assets/AKCondinoO.World/MarchingCubes/MarchingCubesCore.cs"

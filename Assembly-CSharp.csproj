@@ -276,6 +276,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO.World\Biomes\NoiseNode.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.cs" />
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\SimObjectInfo\SimObjectInfo.cs" />
