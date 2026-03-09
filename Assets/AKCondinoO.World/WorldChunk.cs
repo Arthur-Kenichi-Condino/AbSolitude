@@ -10,6 +10,7 @@ namespace AKCondinoO.World{
      internal TerrainChunk terrain;
      internal readonly HashSet<SimObject>simObjects=new();
      [SerializeField]internal bool debugDrawMeshWireframe=false;
+     [SerializeField]internal bool debugDrawMeshWireframeWhenSelectedOnly=true;
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
          terrain=new(this);
@@ -27,8 +28,11 @@ namespace AKCondinoO.World{
          if(firstCall||cCoord!=this.cCoord){
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
-          terrain.DoUpdateJob();
+          Generate();
          }
+        }
+        internal void Generate(){
+         terrain.DoUpdateJob();
         }
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);
@@ -38,11 +42,14 @@ namespace AKCondinoO.World{
           simObject.OnChunkPooled();
          }
         }
+        void OnDrawGizmos(){
+         terrain.GizmosSelected(false);
+        }
         void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.gray);
          #endif
-         terrain.Gizmos();
+         terrain.GizmosSelected(true);
         }
     }
 }

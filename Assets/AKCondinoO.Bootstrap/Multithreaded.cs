@@ -4,8 +4,8 @@ using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal interface MultithreadedContainerJob{
-        void SetContainerDataAtMainThread();
-        void BackgroundExecute();
+        void OnScheduleSetContainerDataAtMainThread();
+        void ExecuteAtBackgroundThread();
         void OnCompletedDoAtMainThread();
     }
     internal static class ThreadDispatcher{
@@ -63,7 +63,7 @@ namespace AKCondinoO.Bootstrap{
           }
           spin.Reset();
           try{
-           job.BackgroundExecute();
+           job.ExecuteAtBackgroundThread();
           }catch(Exception e){
            Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
@@ -89,7 +89,7 @@ namespace AKCondinoO.Bootstrap{
         internal static bool TrySchedule(MultithreadedContainerJob job,int priority=0){
          if(!running)return false;
          try{
-          job.SetContainerDataAtMainThread();
+          job.OnScheduleSetContainerDataAtMainThread();
          }catch(Exception e){
           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }

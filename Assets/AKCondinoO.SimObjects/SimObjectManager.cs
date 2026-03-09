@@ -103,9 +103,9 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
-        IEnumerator SimObjectManualUpdateInLotsCoroutine(){
-         while(true){
-          yield return null;
+        internal void Despawn(SimObject simObject){
+         if(simObjectFactories.TryGetValue(simObject.simObjectType,out var factory)){
+          factory.Despawn(simObject);
          }
         }
         public override void ManualUpdate(){
@@ -122,9 +122,9 @@ namespace AKCondinoO.SimObjects{
           Logs.Message(Logs.LogType.Debug,"'depois de return':debugMassiveSpawnJobPool.count:"+debugMassiveSpawnJobPool.count);
          }
         }
-        internal void Despawn(SimObject simObject){
-         if(simObjectFactories.TryGetValue(simObject.simObjectType,out var factory)){
-          factory.Despawn(simObject);
+        IEnumerator SimObjectManualUpdateInLotsCoroutine(){
+         while(true){
+          yield return null;
          }
         }
         void RenderInstanced(Camera camera){
@@ -146,11 +146,11 @@ namespace AKCondinoO.SimObjects{
          private Type debugMassiveSpawnType;
          private int  debugMassiveSpawnCount;
          private SpawnList spawnList;
-            public void SetContainerDataAtMainThread(){
+            public void OnScheduleSetContainerDataAtMainThread(){
              debugMassiveSpawnType =singleton.debugMassiveSpawnType.GetType();
              debugMassiveSpawnCount=singleton.debugMassiveSpawnCount;
             }
-            public void BackgroundExecute(){
+            public void ExecuteAtBackgroundThread(){
              Logs.Message(Logs.LogType.Debug,"DebugMassiveSpawnJob.BackgroundExecute");
              spawnList=spawnListPool.Rent();
              for(int i=0;i<debugMassiveSpawnCount;i++){

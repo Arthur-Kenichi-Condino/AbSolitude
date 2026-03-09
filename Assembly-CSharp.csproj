@@ -79,6 +79,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbsoluteFrenzy.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\ConstNode.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\NetworkCommandLine.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudsCamera.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSendEditDataToServerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Command.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\PerlinNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\_SimConstruction\SimConstruction.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.OnSkillUsed.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffectsManager.cs" />
     <Compile Include="Assets\AKCondinoO\CoreDataSync.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\TurbulenceNode.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainEditingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.cs" />
@@ -276,7 +279,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.Stats.cs" />
-    <Compile Include="Assets\AKCondinoO.World\Biomes\NoiseNode.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.cs" />
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\SimObjectInfo\SimObjectInfo.cs" />
@@ -335,6 +337,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\RidgedMultifractalNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Pooling.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FloatLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.cs" />
@@ -365,6 +368,7 @@
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Main.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\ScaleBiasNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
@@ -394,6 +398,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
     <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\NoiseNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRenderer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Doppelgänger\Doppelganger.cs" />

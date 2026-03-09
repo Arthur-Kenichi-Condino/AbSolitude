@@ -13,6 +13,7 @@ namespace AKCondinoO.World{
      [SerializeField]internal Vector2Int instantiationDistance=new Vector2Int(6,6);
      private readonly Dictionary<Vector2Int,int       >chunkRef=new();
      private readonly Dictionary<Vector2Int,WorldChunk>chunks  =new();
+     [SerializeField]internal bool debugForceRegenerate=false;
         public override void Initialize(){
          base.Initialize();
          chunkPool=new(chunkPrefab);
@@ -75,6 +76,16 @@ namespace AKCondinoO.World{
           return true;
          }
          return false;
+        }
+        public override void ManualUpdate(){
+         base.ManualUpdate();
+         if(debugForceRegenerate){
+          debugForceRegenerate=false;
+          foreach(var kvp in chunks){
+           var cnk=kvp.Value;
+           cnk.Generate();
+          }
+         }
         }
     }
 }

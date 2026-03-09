@@ -100,7 +100,7 @@ namespace AKCondinoO.World.MarchingCubes{
          return false;
         }
      public readonly    Vector3[]vertices =new    Vector3[12];
-     public readonly       bool[]hasVertex=new       bool[12];
+     public readonly       bool[]isCached =new       bool[12];
      public readonly MaterialId[]materials=new MaterialId[12];
      public readonly    Vector3[]normals  =new    Vector3[12];
      public readonly    Vector3[]vertex  =new    Vector3[2];
@@ -228,13 +228,13 @@ namespace AKCondinoO.World.MarchingCubes{
          if(-polygonCell[7].density<isoLevel)edgeIndex|=128;
          if(Tables.edgeTable[edgeIndex]!=0){
              Vector3[]vertices =context.vertices;
-                bool[]hasVertex=context.hasVertex;
+                bool[]isCached =context.isCached;
           MaterialId[]materials=context.materials;
              Vector3[]normals  =context.normals;
           for(int i=0;i<12;i++){
-           if(0!=(Tables.edgeTable[edgeIndex]&interpMask[i])){VertexInterp(interpCorners[i,0],interpCorners[i,1],ref vertices[i],ref hasVertex[i],ref materials[i],ref normals[i]);}
+           if(0!=(Tables.edgeTable[edgeIndex]&interpMask[i])){VertexInterp(interpCorners[i,0],interpCorners[i,1],ref vertices[i],ref isCached[i],ref materials[i],ref normals[i]);}
           }
-          void VertexInterp(int c0,int c1,ref Vector3 p,ref bool hasValue,ref MaterialId m,ref Vector3 n){
+          void VertexInterp(int c0,int c1,ref Vector3 p,ref bool isCached,ref MaterialId m,ref Vector3 n){
               Vector3[]vertex  =context.vertex;
                 float[]density =context.density;
            MaterialId[]material=context.material;

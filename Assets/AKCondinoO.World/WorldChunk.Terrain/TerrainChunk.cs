@@ -29,9 +29,13 @@ namespace AKCondinoO.World.Terrain{
      internal UpdateJob runningUpdateJob;
         internal void DoUpdateJob(){
          //Logs.Message(Logs.LogType.Debug,"'schedule updateJob'");
+         debugDrawMeshWireframeVer.Clear();
+         debugDrawMeshWireframeTri.Clear();
          updateJob=updateJobPool.Rent();
          updateJob.chunk=this.chunk;
-         SharedCoroutines.Schedule(updateJob);
+         if(!SharedCoroutines.TrySchedule(updateJob)){
+          updateJobPool.Return(updateJob);
+         }
         }
         internal bool ValidJob(UpdateJob updateJob){
          if(this.chunk==null){return false;}
@@ -56,31 +60,33 @@ namespace AKCondinoO.World.Terrain{
          internal Vector2Int cnkRgn;
          internal bool waitingMarchingCubes;
          internal bool pendingMarchingCubes;
-            public void SetContainerDataOnBegin(){
+            public void OnScheduleSetContainerData(){
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
              pendingMarchingCubes=true;
             }
-            public bool LoopExecuteStep(bool flush=false){
+            public bool OnLoopExecuteStep(bool flush=false){
              if(!chunk.terrain.ValidJob(this)){return false;}
              if(chunk.terrain.runningUpdateJob==null){chunk.terrain.runningUpdateJob=this;}
-             if(chunk.terrain.runningUpdateJob!=this){return true;}
-             if(waitingMarchingCubes){return true;}
-             if(pendingMarchingCubes){
-              DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
-              doMarchingCubesJob.updateJob=this;
-              bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
-              if(!scheduled){
-               doMarchingCubesJobPool.Return(doMarchingCubesJob);
-               return(false);
+             if(chunk.terrain.runningUpdateJob!=this){if(flush){return false;}return true;}
+             if(waitingMarchingCubes){if(flush){return false;}return true;}
+             if(!flush){
+              if(pendingMarchingCubes){
+               DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
+               doMarchingCubesJob.updateJob=this;
+               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
+               if(!scheduled){
+                doMarchingCubesJobPool.Return(doMarchingCubesJob);
+                return false;
+               }
+               waitingMarchingCubes=true;//  ...job is scheduled
+               pendingMarchingCubes=false;
+               return true;
               }
-              waitingMarchingCubes=true;
-              pendingMarchingCubes=false;
-              return true;
              }
-             return false;
+             return false;//  ...end
             }
-            public void OnCompletedDoAtEnd(){
+            public void OnLoopCompleted(){
              if(chunk.terrain.ValidJob(this)){
               if(chunk.terrain.runningUpdateJob==this){chunk.terrain.runningUpdateJob=null;}
              }
@@ -102,7 +108,7 @@ namespace AKCondinoO.World.Terrain{
          internal Vector2Int cCoord;
          internal Vector2Int cnkRgn;
          private MarchingCubesContext context;
-            public void SetContainerDataAtMainThread(){
+            public void OnScheduleSetContainerDataAtMainThread(){
              chunk=updateJob.chunk;
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
@@ -110,7 +116,7 @@ namespace AKCondinoO.World.Terrain{
              context.tempVer=chunk.terrain.tempVer;
              context.tempTri=chunk.terrain.tempTri;
             }
-            public void BackgroundExecute(){
+            public void ExecuteAtBackgroundThread(){
              context.tempVer.Clear();
              context.tempTri.Clear();
              //Logs.Message(Logs.LogType.Debug,"DoMarchingCubesJob.BackgroundExecute");
@@ -135,11 +141,13 @@ namespace AKCondinoO.World.Terrain{
         }
      private readonly List<Vertex>debugDrawMeshWireframeVer=new();
      private readonly List<UInt32>debugDrawMeshWireframeTri=new();
-        internal void Gizmos(){
+        internal void GizmosSelected(bool selected){
          #if UNITY_EDITOR
-          if(chunk.debugDrawMeshWireframe){
-           DrawGizmos.DrawMeshWireframe(debugDrawMeshWireframeVer,debugDrawMeshWireframeTri,Color.green);
+         if(chunk.debugDrawMeshWireframe){
+          if(!chunk.debugDrawMeshWireframeWhenSelectedOnly||(chunk.debugDrawMeshWireframeWhenSelectedOnly&&selected)){
+           DrawGizmos.DrawMeshWireframe(debugDrawMeshWireframeVer,debugDrawMeshWireframeTri,Color.gray);
           }
+         }
          #endif
         }
     }
