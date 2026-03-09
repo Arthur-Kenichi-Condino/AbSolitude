@@ -208,6 +208,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\_SimConstruction\SimConstruction.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnLayers\BiomeSpawnLayer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
@@ -321,6 +322,7 @@
     <Compile Include="Assets\AKCondinoO\Ambience\SunTransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnFOLLOW_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Util\IdSortedList.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnLayers\BiomeSpawnEntry.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\ActiveZone.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SimTime.cs" />
     <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\SimObjectScreenshotHelper.cs" />
