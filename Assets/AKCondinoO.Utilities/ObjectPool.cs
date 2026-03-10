@@ -9,7 +9,7 @@ namespace AKCondinoO.Utilities{
     ///  Object pool genérico, thread-safe. Use GetPool{T} para obter um pool singleton por tipo.
     /// Você pode fornecer factory e action de reset (limpeza) para cada tipo.
     ///</summary>
-    internal sealed class ObjectPool<T>{
+    internal sealed class ObjectPool<T>:ObjectPoolBase{
      readonly ConcurrentQueue<T>bag=new();
      internal readonly Func<T>    factory;
      internal readonly MethodInfo factoryMethod;
@@ -32,12 +32,21 @@ namespace AKCondinoO.Utilities{
          }
          return factory();
         }
+        internal override object ObjectRent(){
+         return Rent();
+        }
         internal void Return(T item){
          if(item is null)return;
          reset?.Invoke(item);
          bag.Enqueue(item);
         }
+        internal override void ObjectReturn(object item){
+         Return((T)item);
+        }
      internal int count=>bag.Count;
+    }
+    internal abstract class ObjectPoolBase{
+        internal abstract object ObjectRent();internal abstract void ObjectReturn(object item);
     }
     ///<summary>
     ///  Gerenciador de pools por tipo.

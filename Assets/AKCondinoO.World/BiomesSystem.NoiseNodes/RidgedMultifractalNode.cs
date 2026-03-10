@@ -8,7 +8,7 @@ namespace AKCondinoO.World.Biomes{
      public double lacunarity;
      public int octaves;
      public QualityMode quality;
-        public override ModuleBase Build(int worldSeed){
+        protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          return new RidgedMultifractal(
           frequency,
           lacunarity,

@@ -22,6 +22,7 @@ namespace AKCondinoO.World{
         public override void Shutdown(){
          if(this!=null){
          }
+         BiomesConfigurationSnapshot.DisposeAll();
          base.Shutdown();
         }
         internal void BuildConfiguration(){

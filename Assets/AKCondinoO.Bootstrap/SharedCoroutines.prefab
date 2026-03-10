@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e56b4ab5c43d494eafc3a22b1012dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workerCount: 8
+  workerCount: -1

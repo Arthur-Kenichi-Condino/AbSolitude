@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace AKCondinoO.Bootstrap{
      static readonly HashSet<SharedCoroutineContainerJob>runningJobs=new();
         public override void Initialize(){
          base.Initialize();
+         int cpu=Environment.ProcessorCount;
+         int workerCount=this.workerCount<=0?Math.Max(1,cpu-2):this.workerCount;
          if(this!=null){
           running=true;
           for(int i=0;i<workerCount;i++){

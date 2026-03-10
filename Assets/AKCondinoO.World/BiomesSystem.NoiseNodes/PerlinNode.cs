@@ -9,7 +9,7 @@ namespace AKCondinoO.World.Biomes{
      public double persistence;
      public int octaves;
      public QualityMode quality;
-        public override ModuleBase Build(int worldSeed){
+        protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          return new Perlin(
           frequency,
           lacunarity,

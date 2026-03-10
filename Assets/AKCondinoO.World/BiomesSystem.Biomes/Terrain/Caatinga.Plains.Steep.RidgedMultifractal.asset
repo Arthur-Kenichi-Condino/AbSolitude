@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Caatinga.Plains.Steep.RidgedMultifractal
   m_EditorClassIdentifier: 
   seedOffset: 1
+  spawnTables: []
   frequency: 0.012
   lacunarity: 2
   octaves: 6

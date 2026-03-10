@@ -13,6 +13,7 @@ namespace AKCondinoO.Bootstrap{
     [DefaultExecutionOrder(-100000)]
     internal class Main:MonoSingleton<Main>{
      public override int initOrder{get{return 1;}}
+     [SerializeField]private int workerCount=8;
      [SerializeField]ActiveZone activeZonePrefab;
         protected override void Awake(){
          base.Awake();
@@ -22,7 +23,7 @@ namespace AKCondinoO.Bootstrap{
         void Start(){
          if(singleton==this){
           Logs.Message(Logs.LogType.Debug,"...hello, World!");
-          ThreadDispatcher.Initialize();
+          ThreadDispatcher.Initialize(workerCount<=0?null:workerCount);
           ActiveZone.EnsureExists(activeZonePrefab);
           SingletonManager.InitializeAll();
           ActiveZone.InitializeAny();
