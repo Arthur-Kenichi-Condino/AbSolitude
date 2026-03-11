@@ -9,7 +9,7 @@ namespace AKCondinoO.World.Biomes{
      public double scale;
      public double bias;
         protected override NoiseNodesSnapshot CreateSnapshot(){
-         NoiseNodesSnapshotOperator snapshot=(NoiseNodesSnapshotOperator)NoiseNodesSnapshot.Rent((typeof(NoiseNodesSnapshotOperator),""));
+         NoiseNodesSnapshotOperator snapshot=(NoiseNodesSnapshotOperator)NoiseNodesSnapshot.Rent(typeof(NoiseNodesSnapshotOperator));
          return snapshot;
         }
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){

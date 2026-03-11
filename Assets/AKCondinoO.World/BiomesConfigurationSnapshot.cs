@@ -9,7 +9,39 @@ using System.Threading;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
+    internal class BiomesConfigurationContext{
+     internal int depth;
+     internal Vector3Int coord;
+     internal bool[]hasTerrainHeightNoiseCache;
+     internal double[]terrainHeightNoiseCache;
+        internal int TerrainHeightNoiseCacheIndex(){
+         return coord.z+coord.x*depth;
+        }
+        internal void UpdatePolygonCellCache(double noiseValue){
+         int index=TerrainHeightNoiseCacheIndex();
+         terrainHeightNoiseCache[index]=noiseValue;
+         hasTerrainHeightNoiseCache[index]=true;
+        }
+        internal bool TryUseTerrainHeightNoiseCache(out double noiseValue){
+         noiseValue=-1d;
+         int index=TerrainHeightNoiseCacheIndex();
+         if(hasTerrainHeightNoiseCache[index]){
+          noiseValue=terrainHeightNoiseCache[index];
+          return true;
+         }
+         return false;
+        }
+    }
     internal static class BiomesConfigurationSnapshot{
+     internal static readonly Utilities.ObjectPool<BiomesConfigurationContext>biomesConfigurationContextPool=
+      Pool.GetPool<BiomesConfigurationContext>(
+       "",
+       ()=>new(),
+       (BiomesConfigurationContext item)=>{
+        Pool.ReturnArray<bool  >(item.hasTerrainHeightNoiseCache,true);item.hasTerrainHeightNoiseCache=null;
+        Pool.ReturnArray<double>(item.   terrainHeightNoiseCache,true);item.   terrainHeightNoiseCache=null;
+       }
+      );
      private static readonly ReaderWriterLockSlim rwl=new(LockRecursionPolicy.SupportsRecursion);
      private static float terrainSmoothingHeight;
      private static ModuleBase terrainModule;
@@ -29,8 +61,11 @@ namespace AKCondinoO.World{
         }
         internal static void DisposeAll(){
          if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
+         if(terrainNodesSnapshot!=null){
+          NoiseNodesSnapshot.Return(terrainNodesSnapshot.GetType(),terrainNodesSnapshot);terrainNodesSnapshot=null;
+         }
         }
-        internal static void Setvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord){
+        internal static void Setvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord,BiomesConfigurationContext context){
          /*  fora do mundo, baixo:  */
          if(vCoord.y<=0){
           vxl=Voxel.bedrock;
@@ -44,14 +79,17 @@ namespace AKCondinoO.World{
          Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
          Vector3Int noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
          Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
-         double heightValue=-1d;
-         rwl.EnterReadLock();
-         try{
-          heightValue=terrainModule.GetValue(noiseInput.z,noiseInput.x,0);
-         }catch(Exception e){
-          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-         }finally{
-          rwl.ExitReadLock();
+         double heightValue;
+         if(!context.TryUseTerrainHeightNoiseCache(out heightValue)){
+          rwl.EnterReadLock();
+          try{
+           heightValue=terrainModule.GetValue(noiseInput.z,noiseInput.x,0);
+          }catch(Exception e){
+           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          }finally{
+           rwl.ExitReadLock();
+          }
+          context.UpdatePolygonCellCache(heightValue);
          }
          if(heightValue>=0d){
           if(noiseInputRounded.y<=heightValue+terrainSmoothingHeight){
@@ -76,8 +114,11 @@ namespace AKCondinoO.World{
       {(typeof(NoiseNodesSnapshot        ),""),Pool.GetPool<NoiseNodesSnapshot        >("",()=>new(),(NoiseNodesSnapshot         item)=>{item.Reset();})},
       {(typeof(NoiseNodesSnapshotOperator),""),Pool.GetPool<NoiseNodesSnapshotOperator>("",()=>new(),(NoiseNodesSnapshotOperator item)=>{item.Reset();})},
      };
-        internal static NoiseNodesSnapshot Rent((Type,string)poolId){
-         return(NoiseNodesSnapshot)noiseNodesSnapshotPool[poolId].ObjectRent();
+        internal static NoiseNodesSnapshot Rent(Type poolId){
+         return(NoiseNodesSnapshot)noiseNodesSnapshotPool[(poolId,"")].ObjectRent();
+        }
+        internal static void Return(Type poolId,NoiseNodesSnapshot nodesSnapshot){
+         noiseNodesSnapshotPool[(poolId,"")].ObjectReturn(nodesSnapshot);
         }
      internal NoiseNodesSnapshot root{get;private set;}
      protected NoiseNodesSnapshot parent;
@@ -93,22 +134,33 @@ namespace AKCondinoO.World{
           tempSpawnTables.AddRange(noiseNode.spawnTables);
          }
         }
+        internal virtual void Reset(){
+         parent=null;
+         root=null;
+         tempSpawnTables.Clear();
+         module=null;
+         if(table!=null){
+          BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Return(table);table=null;
+         }
+        }
      protected ModuleBase module;
         internal virtual void SetModule(ModuleBase module){
          this.module=module;
         }
-        internal virtual void Reset(){
-        }
      protected BiomeSpawnTablesSnapshot table;
         internal virtual void MergeSpawnTables(){
          if(tempSpawnTables.Count>0){
-          table=new();
+          table=BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Rent();
           table.DoSnapshot(tempSpawnTables);
          }
          tempSpawnTables.Clear();
         }
     }
     internal class NoiseNodesSnapshotOperator:NoiseNodesSnapshot{
+        internal override void Reset(){
+         NoiseNodesSnapshot.Return(input.GetType(),input);input=null;
+         base.Reset();
+        }
      protected NoiseNodesSnapshot input;
         internal virtual void SetInput(NoiseNodesSnapshot input){
          this.input=input;
@@ -119,6 +171,14 @@ namespace AKCondinoO.World{
         }
     }
     internal class BiomeSpawnTablesSnapshot{
+     internal static readonly Utilities.ObjectPool<BiomeSpawnTablesSnapshot>biomeSpawnTablesSnapshotPool=
+      Pool.GetPool<BiomeSpawnTablesSnapshot>(
+       "",
+       ()=>new(),
+       (BiomeSpawnTablesSnapshot item)=>{
+        item.Reset();
+       }
+      );
         internal virtual void DoSnapshot(List<BiomeSpawnTable>tempSpawnTables){
          foreach(var spawnTable in tempSpawnTables){
          }

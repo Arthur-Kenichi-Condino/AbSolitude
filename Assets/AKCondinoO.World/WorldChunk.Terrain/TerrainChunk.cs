@@ -115,6 +115,7 @@ namespace AKCondinoO.World.Terrain{
              context=MarchingCubesCore.marchingCubesContextPool.Rent();
              context.tempVer=chunk.terrain.tempVer;
              context.tempTri=chunk.terrain.tempTri;
+             context.biomeContext=BiomesConfigurationSnapshot.biomesConfigurationContextPool.Rent();
             }
             public void ExecuteAtBackgroundThread(){
              context.tempVer.Clear();
@@ -133,6 +134,8 @@ namespace AKCondinoO.World.Terrain{
               chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<context.tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(context.tempVer[i]);}
               chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<context.tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(context.tempTri[i]);}
              }
+             BiomesConfigurationSnapshot.biomesConfigurationContextPool.Return(context.biomeContext);
+             context.biomeContext=null;
              MarchingCubesCore.marchingCubesContextPool.Return(context);
              context=null;
              updateJob.waitingMarchingCubes=false;

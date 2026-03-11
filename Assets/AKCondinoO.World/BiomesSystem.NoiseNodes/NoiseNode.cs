@@ -19,7 +19,7 @@ namespace AKCondinoO.World.Biomes{
          return module;
         }
         protected virtual NoiseNodesSnapshot CreateSnapshot(){
-         NoiseNodesSnapshot snapshot=NoiseNodesSnapshot.Rent((typeof(NoiseNodesSnapshot),""));
+         NoiseNodesSnapshot snapshot=NoiseNodesSnapshot.Rent(typeof(NoiseNodesSnapshot));
          return snapshot;
         }
         protected abstract ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot);

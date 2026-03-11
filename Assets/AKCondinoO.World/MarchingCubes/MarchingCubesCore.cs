@@ -16,49 +16,13 @@ namespace AKCondinoO.World.MarchingCubes{
      public bool CollectUV;
     }
     internal class MarchingCubesContext{
+     public BiomesConfigurationContext biomeContext;
      public NativeList<Vertex>tempVer;
      public NativeList<UInt32>tempTri;
      public UInt32 vertexCount;
      public readonly Dictionary<int,List<Vector2>>vertexUV=new();//  ...para CollectUV
      public readonly Voxel[]polygonCell=new Voxel[8];
-     internal static readonly Vector3Int[]polygonCellCornerOffset={
-      new(0,0,0),
-      new(1,0,0),
-      new(1,1,0),
-      new(0,1,0),
-      new(0,0,1),
-      new(1,0,1),
-      new(1,1,1),
-      new(0,1,1),
-     };
      public Voxel[]polygonCellCache;
-     internal static readonly byte[]polygonCellCacheCornerMask={
-      0b111,
-      0b101,
-      0b001,
-      0b011,
-      0b110,
-      0b100,
-      0b000,
-      0b010,
-     };
-     internal static readonly int[,]polygonCellCacheCornerMap={
-      {0, 1, 2, 3,-1,-1,-1,-1,},
-      {0,-1,-1, 1, 2,-1,-1, 3,},
-      {0, 1,-1,-1, 2, 3,-1,-1,},
-     };
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int PolygonCellCacheIndex(int i){
-         return i;
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int PolygonCellCacheIndex(int z,int i){
-         return 4+z*4+i;
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int PolygonCellCacheIndex(int depth,int x,int z,int i){
-         return 4+depth*4+(z+x*depth)*4+i;
-        }
         internal void UpdatePolygonCellCache(int depth,Vector3Int polygonCoord){
          polygonCellCache[PolygonCellCacheIndex(0)]=polygonCell[4];
          polygonCellCache[PolygonCellCacheIndex(1)]=polygonCell[5];
@@ -99,6 +63,27 @@ namespace AKCondinoO.World.MarchingCubes{
          }
          return false;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int PolygonCellCacheIndex(int i){
+         return i;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int PolygonCellCacheIndex(int z,int i){
+         return 4+z*4+i;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int PolygonCellCacheIndex(int depth,int x,int z,int i){
+         return 4+depth*4+(z+x*depth)*4+i;
+        }
+     internal static readonly byte[]polygonCellCacheCornerMask={
+      0b111,0b101,0b001,0b011,
+      0b110,0b100,0b000,0b010,
+     };
+     internal static readonly int[,]polygonCellCacheCornerMap={
+      {0, 1, 2, 3,-1,-1,-1,-1,},
+      {0,-1,-1, 1, 2,-1,-1, 3,},
+      {0, 1,-1,-1, 2, 3,-1,-1,},
+     };
      public readonly    Vector3[]vertices =new    Vector3[12];
      public readonly       bool[]isCached =new       bool[12];
      public readonly MaterialId[]materials=new MaterialId[12];
@@ -109,6 +94,10 @@ namespace AKCondinoO.World.MarchingCubes{
      public readonly      float[]distance=new      float[2];
      public readonly     int[]idx   =new     int[3];
      public readonly Vector3[]verPos=new Vector3[3];
+     internal static readonly Vector3Int[]polygonCellCornerOffset={
+      new(0,0,0),new(1,0,0),new(1,1,0),new(0,1,0),
+      new(0,0,1),new(1,0,1),new(1,1,1),new(0,1,1),
+     };
     }
     internal static class MarchingCubesCore{
      static readonly Utilities.ObjectPool<List<Vector2>>vector2ListPool=
@@ -142,6 +131,9 @@ namespace AKCondinoO.World.MarchingCubes{
          int width =(max.x-min.x)+1;
          int height=(max.y-min.y)+1;
          int depth =(max.z-min.z)+1;
+         context.biomeContext.depth=depth;
+         context.biomeContext.hasTerrainHeightNoiseCache=Pool.RentArray<bool  >(width*depth);
+         context.biomeContext.   terrainHeightNoiseCache=Pool.RentArray<double>(width*depth);
          context.polygonCellCache=Pool.RentArray<Voxel>(4+depth*4+width*depth*4);
          Vector3Int polygonCoord;
          Vector3Int coord;
@@ -171,7 +163,8 @@ namespace AKCondinoO.World.MarchingCubes{
           Vector3Int offset=MarchingCubesContext.polygonCellCornerOffset[corner];
           Vector3Int polygonCellCoord =polygonCoord +offset;
           Vector3Int polygonCellvCoord=polygonvCoord+offset;
-          BiomesConfigurationSnapshot.Setvxl(ref context.polygonCell[corner],polygonCellvCoord,polygoncCoord);
+          context.biomeContext.coord=polygonCellCoord;
+          BiomesConfigurationSnapshot.Setvxl(ref context.polygonCell[corner],polygonCellvCoord,polygoncCoord,context.biomeContext);
          }
         }
      private static readonly Vector3[]corners=new Vector3[8]{
