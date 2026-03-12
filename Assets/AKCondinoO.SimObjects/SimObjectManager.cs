@@ -1,5 +1,6 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.Utilities;
+using AKCondinoO.World.Spawning;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,12 +26,14 @@ namespace AKCondinoO.SimObjects{
          base.OnDestroy();
         }
      internal SimObjectInstancedRendering instancedRendering;
+     internal BiomesSimObjectSpawningSystem biomesSpawningSystem;
      private readonly Dictionary<Type,SimObjectFactory<SimObject>>simObjectFactories=new();
      private Coroutine spawnCoroutine;
      private Coroutine simObjectManualUpdateInLotsCoroutine;
         public override void Initialize(){
          base.Initialize();
          instancedRendering=new();
+         biomesSpawningSystem=new();
          if(this!=null){
           foreach(var prefab in prefabsRegistry.list){
            var type=prefab.simObject.GetType();

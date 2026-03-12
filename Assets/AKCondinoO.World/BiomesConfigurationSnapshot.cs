@@ -15,7 +15,7 @@ namespace AKCondinoO.World{
      internal bool[]hasTerrainHeightNoiseCache;
      internal double[]terrainHeightNoiseCache;
         internal int TerrainHeightNoiseCacheIndex(){
-         return coord.z+coord.x*depth;
+         return coord.z+coord.x*(depth+1);
         }
         internal void UpdatePolygonCellCache(double noiseValue){
          int index=TerrainHeightNoiseCacheIndex();
@@ -63,6 +63,17 @@ namespace AKCondinoO.World{
          if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
          if(terrainNodesSnapshot!=null){
           NoiseNodesSnapshot.Return(terrainNodesSnapshot.GetType(),terrainNodesSnapshot);terrainNodesSnapshot=null;
+         }
+        }
+        internal static void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
+         table=null;
+         rwl.EnterReadLock();
+         try{
+          terrainNodesSnapshot.Resolve(noiseInput,out table);
+         }catch(Exception e){
+          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+         }finally{
+          rwl.ExitReadLock();
          }
         }
         internal static void Setvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord,BiomesConfigurationContext context){
@@ -155,6 +166,9 @@ namespace AKCondinoO.World{
          }
          tempSpawnTables.Clear();
         }
+        internal virtual void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
+         table=this.table;
+        }
     }
     internal class NoiseNodesSnapshotOperator:NoiseNodesSnapshot{
         internal override void Reset(){
@@ -168,6 +182,9 @@ namespace AKCondinoO.World{
         }
         internal override void MergeSpawnTables(){
          input.MergeSpawnTables();
+        }
+        internal override void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
+         input.Resolve(noiseInput,out table);
         }
     }
     internal class BiomeSpawnTablesSnapshot{

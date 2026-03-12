@@ -86,6 +86,77 @@ namespace AKCondinoO.World.MarchingCubes{
      };
      public readonly    Vector3[]vertices =new    Vector3[12];
      public readonly       bool[]isCached =new       bool[12];
+     public Vector3[]verticesCache;
+        internal void UpdateVerticesCache(int depth,Vector3Int coord){
+         verticesCache[0]=vertices[ 4]+Vector3.back;
+         verticesCache[1]=vertices[ 5]+Vector3.back;
+         verticesCache[2]=vertices[ 6]+Vector3.back;
+         verticesCache[3]=vertices[ 7]+Vector3.back;
+         verticesCache[4+coord.z*4+0]=vertices[ 1]+Vector3.left;
+         verticesCache[4+coord.z*4+1]=vertices[ 5]+Vector3.left;
+         verticesCache[4+coord.z*4+2]=vertices[ 9]+Vector3.left;
+         verticesCache[4+coord.z*4+3]=vertices[10]+Vector3.left;
+         verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+0]=vertices[ 2]+Vector3.down;
+         verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+1]=vertices[ 6]+Vector3.down;
+         verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+2]=vertices[10]+Vector3.down;
+         verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+3]=vertices[11]+Vector3.down;
+        }
+        internal void TryUseVerticesCache(int depth,Vector3Int coord){
+         isCached[ 0]=false;
+         if      (coord.z>0){
+          vertices[ 0]=verticesCache[0];
+          isCached[ 0]=true;
+         }else if(coord.y>0){
+          vertices[ 0]=verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+0];
+          isCached[ 0]=true;
+         }
+         isCached[ 1]=false;
+         if      (coord.z>0){
+          vertices[ 1]=verticesCache[1];
+          isCached[ 1]=true;
+         }
+         isCached[ 2]=false;
+         if      (coord.z>0){
+          vertices[ 2]=verticesCache[2];
+          isCached[ 2]=true;
+         }
+         isCached[ 3]=false;
+         if      (coord.z>0){
+          vertices[ 3]=verticesCache[3];
+          isCached[ 3]=true;
+         }else if(coord.x>0){
+          vertices[ 3]=verticesCache[4+coord.z*4+0];
+          isCached[ 3]=true;
+         }
+         isCached[ 4]=false;
+         if      (coord.y>0){
+          vertices[ 4]=verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+1];
+          isCached[ 4]=true;
+         }
+         isCached[ 7]=false;
+         if      (coord.x>0){
+          vertices[ 7]=verticesCache[4+coord.z*4+1];
+          isCached[ 7]=true;
+         }
+         isCached[ 8]=false;
+         if      (coord.x>0){
+          vertices[ 8]=verticesCache[4+coord.z*4+2];
+          isCached[ 8]=true;
+         }else if(coord.y>0){
+          vertices[ 8]=verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+3];
+          isCached[ 8]=true;
+         }
+         isCached[ 9]=false;
+         if      (coord.y>0){
+          vertices[ 9]=verticesCache[4+depth*4+(coord.z+coord.x*depth)*4+2];
+          isCached[ 9]=true;
+         }
+         isCached[11]=false;
+         if      (coord.x>0){
+          vertices[11]=verticesCache[4+coord.z*4+3];
+          isCached[11]=true;
+         }
+        }
      public readonly MaterialId[]materials=new MaterialId[12];
      public readonly    Vector3[]normals  =new    Vector3[12];
      public readonly    Vector3[]vertex  =new    Vector3[2];
@@ -121,8 +192,10 @@ namespace AKCondinoO.World.MarchingCubes{
          vector2ListPool.Return(list);
         }
         item.vertexUV.Clear();
-        Pool.ReturnArray<Voxel>(item.polygonCellCache,true);
+        Pool.ReturnArray<Voxel  >(item.polygonCellCache,true);
         item.polygonCellCache=null;
+        Pool.ReturnArray<Vector3>(item.   verticesCache,true);
+        item.   verticesCache=null;
         Array.Clear(item.polygonCell,0,item.polygonCell.Length);
        }
       );
@@ -134,7 +207,8 @@ namespace AKCondinoO.World.MarchingCubes{
          context.biomeContext.depth=depth;
          context.biomeContext.hasTerrainHeightNoiseCache=Pool.RentArray<bool  >(width*depth);
          context.biomeContext.   terrainHeightNoiseCache=Pool.RentArray<double>(width*depth);
-         context.polygonCellCache=Pool.RentArray<Voxel>(4+depth*4+width*depth*4);
+         context.polygonCellCache=Pool.RentArray<Voxel  >(4+depth*4+width*depth*4);
+         context.   verticesCache=Pool.RentArray<Vector3>(4+depth*4+width*depth*4);
          Vector3Int polygonCoord;
          Vector3Int coord;
          for(coord=new Vector3Int(0,min.y,0),polygonCoord=new();coord.y<=max.y;coord.y++,polygonCoord.y++){
@@ -220,17 +294,19 @@ namespace AKCondinoO.World.MarchingCubes{
          if(-polygonCell[6].density<isoLevel)edgeIndex|= 64;
          if(-polygonCell[7].density<isoLevel)edgeIndex|=128;
          if(Tables.edgeTable[edgeIndex]!=0){
+          context.TryUseVerticesCache(depth,polygonCoord);
              Vector3[]vertices =context.vertices;
                 bool[]isCached =context.isCached;
           MaterialId[]materials=context.materials;
              Vector3[]normals  =context.normals;
           for(int i=0;i<12;i++){
-           if(0!=(Tables.edgeTable[edgeIndex]&interpMask[i])){VertexInterp(interpCorners[i,0],interpCorners[i,1],ref vertices[i],ref isCached[i],ref materials[i],ref normals[i]);}
+           if(0!=(Tables.edgeTable[edgeIndex]&interpMask[i])){VertexInterp(interpCorners[i,0],interpCorners[i,1],ref vertices[i],isCached[i],ref materials[i],ref normals[i]);}
           }
-          void VertexInterp(int c0,int c1,ref Vector3 p,ref bool isCached,ref MaterialId m,ref Vector3 n){
+          void VertexInterp(int c0,int c1,ref Vector3 p,bool isCached,ref MaterialId m,ref Vector3 n){
               Vector3[]vertex  =context.vertex;
                 float[]density =context.density;
            MaterialId[]material=context.material;
+           if(isCached){goto _Material;}
            vertex[0]=corners[c0];density[0]=-polygonCell[c0].density;material[0]=polygonCell[c0].material;
            vertex[1]=corners[c1];density[1]=-polygonCell[c1].density;material[1]=polygonCell[c1].material;
            if(Math.Abs(isoLevel  -density[0])<float.Epsilon){p=vertex[0];goto _Material;}
@@ -251,6 +327,7 @@ namespace AKCondinoO.World.MarchingCubes{
            goto _Normal;
            _Normal:{}
           }
+          context.UpdateVerticesCache(depth,polygonCoord);
           /*  Create the triangle  */
               int[]idx   =context.idx;
           Vector3[]verPos=context.verPos;

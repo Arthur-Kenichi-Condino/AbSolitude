@@ -1,7 +1,7 @@
 TO DO:
 arrumar SimObject, e manager e spawner;
 arrumar Voxel System e network.
-
+NoiseNodeSnapshot
 #if UNITY_EDITOR
 if (debugAutoSpawn)
 {
@@ -16,6 +16,48 @@ sim object manager despawn all
 chunk pool all
 
 destroy above after
+
+float noise = perlin.GetValue(x,z,0);
+
+if(picker.Get(noise,out var obj))
+{
+    Spawn(obj);
+}
+
+class BiomeObjectEntry
+{
+    GameObject prefab;
+
+    float chance;
+
+    NoiseNode distributionNoise;
+
+    Vector2 scaleRange;
+
+    int priority;
+}
+
+[Serializable]
+public class BiomeObjectEntry
+{
+    public GameObject prefab;
+
+    public float chance;
+
+    public NoiseNode placementNoise;
+
+    public Vector2 scaleRange = new Vector2(1,1);
+
+    public bool alignToSurface = true;
+}
+
+[CreateAssetMenu(menuName="Voxel/Biome/SpawnTable")]
+public class BiomeSpawnTable : ScriptableObject
+{
+    public List<BiomeObjectEntry> objects;
+}
+
+public BiomeSpawnTable spawnTable;
 
     public static void AddJob(ICoroutineJob job)
     {
