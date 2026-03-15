@@ -1,7 +1,9 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using AKCondinoO.World.Biomes;
 using AKCondinoO.World.MarchingCubes;
+using AKCondinoO.World.Spawning;
 using LibNoise;
 using System;
 using System.Collections.Generic;
@@ -10,14 +12,17 @@ using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class BiomesConfigurationContext{
+     internal int width;
+     internal int height;
      internal int depth;
      internal Vector3Int coord;
+     internal Vector3Int terrainHeightNoiseCachePadding;
      internal bool[]hasTerrainHeightNoiseCache;
      internal double[]terrainHeightNoiseCache;
         internal int TerrainHeightNoiseCacheIndex(){
-         return coord.z+coord.x*(depth+1);
+         return(coord.z+terrainHeightNoiseCachePadding.z)+(coord.x+terrainHeightNoiseCachePadding.x)*depth;
         }
-        internal void UpdatePolygonCellCache(double noiseValue){
+        internal void UpdateTerrainHeightNoiseCache(double noiseValue){
          int index=TerrainHeightNoiseCacheIndex();
          terrainHeightNoiseCache[index]=noiseValue;
          hasTerrainHeightNoiseCache[index]=true;
@@ -90,7 +95,7 @@ namespace AKCondinoO.World{
          Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
          Vector3Int noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
          Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
-         double heightValue;
+         double heightValue=-1d;
          if(!context.TryUseTerrainHeightNoiseCache(out heightValue)){
           rwl.EnterReadLock();
           try{
@@ -100,7 +105,7 @@ namespace AKCondinoO.World{
           }finally{
            rwl.ExitReadLock();
           }
-          context.UpdatePolygonCellCache(heightValue);
+          context.UpdateTerrainHeightNoiseCache(heightValue);
          }
          if(heightValue>=0d){
           if(noiseInputRounded.y<=heightValue+terrainSmoothingHeight){
@@ -196,11 +201,34 @@ namespace AKCondinoO.World{
         item.Reset();
        }
       );
+     internal readonly Dictionary<int,
+      ByChancePicker<SimObject>
+     >pickerByLayer=new();
         internal virtual void DoSnapshot(List<BiomeSpawnTable>tempSpawnTables){
          foreach(var spawnTable in tempSpawnTables){
+          foreach(var spawnTableLayer in spawnTable.layers){
+           if(!pickerByLayer.TryGetValue(spawnTableLayer.layer,out var picker)){
+            pickerByLayer.Add(spawnTableLayer.layer,picker=new());
+           }
+           foreach(var entry in spawnTableLayer.entries){
+            Logs.Message(Logs.LogType.Debug,"'spawnTable entry':"+entry.prefab.name);
+            ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChancePicker<SimObject>.entryPool.Rent();
+            pickerEntry.prefab=entry.prefab;
+            pickerEntry.chance=entry.chance;
+            picker.items.Add(pickerEntry);
+           }
+          }
+         }
+         foreach(var kvp in pickerByLayer){
+          var picker=kvp.Value;
+          picker.Build();
          }
         }
         internal virtual void Reset(){
+         foreach(var kvp in pickerByLayer){
+          var picker=kvp.Value;
+          picker.Clear();
+         }
         }
     }
 }

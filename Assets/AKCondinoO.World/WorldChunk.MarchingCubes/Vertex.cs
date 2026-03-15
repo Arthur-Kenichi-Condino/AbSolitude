@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 namespace AKCondinoO.World.MarchingCubes{
     [StructLayout(LayoutKind.Sequential)]
     internal struct Vertex{
@@ -30,5 +31,18 @@ namespace AKCondinoO.World.MarchingCubes{
          texCoord7=new(0f,0f,0f,0f);
         }
      internal static Vector4 emptyUV{get;}=new(-1f,-1f,-1f,-1f);
+     internal static readonly VertexAttributeDescriptor[]layout=new VertexAttributeDescriptor[]{
+      new(VertexAttribute.Position ,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.Normal   ,VertexAttributeFormat.Float32,3),
+      new(VertexAttribute.Color    ,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord0,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord1,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord2,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord3,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord4,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord5,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord6,VertexAttributeFormat.Float32,4),
+      new(VertexAttribute.TexCoord7,VertexAttributeFormat.Float32,4),
+     };
     }
 }

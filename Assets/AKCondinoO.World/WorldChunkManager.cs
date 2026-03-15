@@ -16,6 +16,7 @@ namespace AKCondinoO.World{
      [SerializeField]internal bool debugForceRegenerate=false;
         public override void Initialize(){
          base.Initialize();
+         MaterialAtlasHelper.SetAtlasData();
          chunkPool=new(chunkPrefab);
          if(this!=null){
          }

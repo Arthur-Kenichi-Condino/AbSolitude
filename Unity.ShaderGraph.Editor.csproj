@@ -66,8 +66,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Interfaces\IMayRequireVertexID.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Advanced\AbsoluteNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Util\SerializationHelper.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Artistic\Adjustment\InvertColorsNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Descriptors\KeywordDescriptor.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Artistic\Adjustment\InvertColorsNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Derivative\DDXYNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Enumerations\Precision.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Util\PropertyUtil.cs" />

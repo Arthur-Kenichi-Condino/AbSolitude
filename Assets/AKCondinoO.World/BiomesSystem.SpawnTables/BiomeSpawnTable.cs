@@ -4,6 +4,6 @@ using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/SpawnTable")]
     internal class BiomeSpawnTable:ScriptableObject{
-     public List<BiomeSpawnLayer>entries;
+     public List<BiomeSpawnLayer>layers;
     }
 }

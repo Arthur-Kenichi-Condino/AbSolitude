@@ -32,21 +32,24 @@ namespace AKCondinoO.Utilities{
          UnityEngine.Debug.DrawLine(p3,p7,color,duration);
          UnityEngine.Debug.DrawLine(p4,p8,color,duration);
         }
-        internal static void DrawMeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,Vector3 offset=default){
+        internal static void DrawMeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,bool drawTriangles,bool drawNormals,Vector3 offset=default){
          Gizmos.color=color;
          int triCount=triangles.Count/3;
          for(int t=0;t<triCount;t++){
           int i0=(int)triangles[t*3+0];
           int i1=(int)triangles[t*3+1];
           int i2=(int)triangles[t*3+2];
-          Draw(i0,i1);
-          Draw(i1,i2);
-          Draw(i2,i0);
+          DrawTriangleEdge(i0,i1);DrawNormal(i0);
+          DrawTriangleEdge(i1,i2);DrawNormal(i1);
+          DrawTriangleEdge(i2,i0);DrawNormal(i2);
          }
-            void Draw(int a,int b){
+            void DrawTriangleEdge(int a,int b){
              int A,B;
              if(a<b){A=a;B=b;}else{A=b;B=a;}
-             Gizmos.DrawLine((Vector3)vertices[A].pos+offset,(Vector3)vertices[B].pos+offset);
+             if(drawTriangles)Gizmos.DrawLine((Vector3)vertices[A].pos+offset,(Vector3)vertices[B].pos+offset);
+            }
+            void DrawNormal(int a){
+             if(drawNormals)Gizmos.DrawLine((Vector3)vertices[a].pos+offset,(Vector3)vertices[a].pos+offset+(Vector3)vertices[a].normal);
             }
         }
     }

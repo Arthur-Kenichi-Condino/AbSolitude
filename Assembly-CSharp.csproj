@@ -154,6 +154,7 @@
     <Compile Include="Assets\AKCondinoO\InputHandler.Enabled.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.HandsUsage.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\Voxel.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
@@ -202,8 +203,11 @@
     <Compile Include="Assets\AKCondinoO\Util\QuaternionRotLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FileUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallHomunculus\CallHomunculus.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\paulbourke\Tables.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.Spawning\ByChancePicker.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.Spawning\BiomesSimObjectSpawningSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSendEditDataToServerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Command.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\PerlinNode.cs" />
@@ -215,14 +219,14 @@
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosLerpHelper.cs" />
-    <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\MarchingCubesCore.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnTables\BiomeSpawnLayer.cs" />
+    <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAI.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Betula_occidentalis_1\Betula_occidentalis_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnSkillUsed.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\HealingSkill.cs" />
-    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\paulbourke\Tables.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
@@ -248,7 +252,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimsMachine.Wasteland.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAnimatorControllerMotionUpdater.cs" />
-    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\Vertex.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.UpdateMotion.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.cs" />
@@ -279,6 +282,7 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfinding.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MaterialId.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Rendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesMultithreaded.cs" />
@@ -288,7 +292,6 @@
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\SimObjectInfo\SimObjectInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\UnnamedMessageTypes.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.ProcessCommand.cs" />
-    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\MarchingCubesCore.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3Util.cs" />
@@ -298,6 +301,7 @@
     <Compile Include="Assets\AKCondinoO\Util\ReflectionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DebugGizmos.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\Vertex.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
@@ -333,7 +337,6 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.cs" />
-    <Compile Include="Assets\AKCondinoO.World\Spawning\ByChancePicker.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Buff\BuffSkill.cs" />
@@ -380,6 +383,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\rlabrecque\SteamManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />
+    <Compile Include="Assets\AKCondinoO.World\MaterialAtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
@@ -392,9 +396,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Allies.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnTables\BiomeSpawnEntry.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />
-    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\Voxel.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\_SimFloor\SimFloor.cs" />
-    <Compile Include="Assets\AKCondinoO.World\MarchingCubes\MaterialId.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\RemingtonModel700BDL\RemingtonModel700BDL.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
@@ -415,7 +417,6 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\FixedUI.BuildBuyEditMode.cs" />
-    <Compile Include="Assets\AKCondinoO.World\Spawning\BiomesSimObjectSpawningSystem.cs" />
     <Compile Include="Assets\AKCondinoO\UI\PlaceholderObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Vanilmirth\ChaoticBlessing\ChaoticBlessing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.cs" />

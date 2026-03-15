@@ -8,14 +8,23 @@ namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
      internal Bounds bounds;
      internal TerrainChunk terrain;
+     [SerializeField]internal GameObject terrainObject;
+     MeshFilter terrainFilter;
      internal readonly HashSet<SimObject>simObjects=new();
      [SerializeField]internal bool debugDrawMeshWireframe=false;
      [SerializeField]internal bool debugDrawMeshWireframeWhenSelectedOnly=true;
+     [SerializeField]internal bool debugDrawMeshWireframeDrawTriangles=true;
+     [SerializeField]internal bool debugDrawMeshWireframeDrawNormals=true;
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
          terrain=new(this);
+         terrainFilter=terrainObject.GetComponent<MeshFilter>();
+         terrainFilter.mesh=terrain.mesh;
         }
         internal void ManualDestroy(){
+         if(terrainFilter!=null){
+          terrainFilter.mesh=null;
+         }
          terrain.Destroy();
         }
      private bool firstCall;
@@ -43,13 +52,13 @@ namespace AKCondinoO.World{
          }
         }
         void OnDrawGizmos(){
-         terrain.GizmosSelected(false);
+         terrain?.GizmosSelected(false);
         }
         void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.gray);
          #endif
-         terrain.GizmosSelected(true);
+         terrain?.GizmosSelected(true);
         }
     }
 }
