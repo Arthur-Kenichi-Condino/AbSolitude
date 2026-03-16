@@ -320,6 +320,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Substats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NodeMaterials\NodeMaterial.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />

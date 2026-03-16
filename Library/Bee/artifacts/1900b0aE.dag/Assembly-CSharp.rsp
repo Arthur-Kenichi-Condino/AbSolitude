@@ -494,6 +494,7 @@
 "Assets/AKCondinoO.Utilities/ObjectPool.cs"
 "Assets/AKCondinoO.World/BiomesConfigurationSnapshot.cs"
 "Assets/AKCondinoO.World/BiomesSystem.cs"
+"Assets/AKCondinoO.World/BiomesSystem.NodeMaterials/NodeMaterial.cs"
 "Assets/AKCondinoO.World/BiomesSystem.NoiseNodes/ConstNode.cs"
 "Assets/AKCondinoO.World/BiomesSystem.NoiseNodes/NoiseNode.cs"
 "Assets/AKCondinoO.World/BiomesSystem.NoiseNodes/PerlinNode.cs"

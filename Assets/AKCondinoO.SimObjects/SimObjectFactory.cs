@@ -11,9 +11,10 @@ namespace AKCondinoO.SimObjects{
         internal virtual SimObject Spawn(SimObjectSpawn item){
          T simObject=pool.Rent();
          simObject.simObjectType=item.simObjectType;
-         SimObjectManager.singleton.instancedRendering.AddInstance(simObject.simObjectType,simObject);
          simObject.OnPositionChanged(out bool outOfBounds);
-         if(outOfBounds){
+         if(!outOfBounds){
+          SimObjectManager.singleton.instancedRendering.AddInstance(simObject.simObjectType,simObject);
+         }else{
           simObject=null;
          }
          return simObject;
