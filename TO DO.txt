@@ -24,6 +24,334 @@ if(picker.Get(noise,out var obj))
     Spawn(obj);
 }
 
+for(int s=0;s<8;s++)
+{
+    if(GetSlot(v,s)==uv)
+    {
+        weight[s]+=count;
+        return;
+    }
+}
+
+for(int s=0;s<8;s++)
+{
+    if(GetSlot(v,s)==emptyUV)
+    {
+        SetSlot(ref v,s,uv);
+        weight[s]+=count;
+        return;
+    }
+}
+
+foreach(uint vi in counter.vertexIndices)
+{
+    int triangle = (int)(vi / 3);
+
+    if(!processedTriangles.Add(triangle))
+        continue;
+
+    int baseIndex = triangle * 3;
+
+    for(int k=0;k<3;k++)
+    {
+        int idx = baseIndex + k;
+
+        var v = vertices[idx];
+
+        var t6 = v.texCoord6;
+        var t7 = v.texCoord7;
+
+        t6.x=w0;
+        t6.y=w1;
+        t6.z=w2;
+        t6.w=w3;
+
+        t7.x=w4;
+        t7.y=w5;
+        t7.z=w6;
+        t7.w=w7;
+
+        v.texCoord6 = t6;
+        v.texCoord7 = t7;
+
+        vertices[idx] = v;
+    }
+}
+
+foreach(uint vi in counter.vertexIndices)
+{
+    int tri = (int)(vi / 3);
+    int baseIndex = tri * 3;
+
+    for(int k=0;k<3;k++)
+    {
+        int idx = baseIndex + k;
+        var v = vertices[idx];
+
+        Vector4 t0=v.texCoord0;
+        Vector4 t1=v.texCoord1;
+        Vector4 t2=v.texCoord2;
+        Vector4 t3=v.texCoord3;
+
+        Vector4 w0=v.texCoord6;
+        Vector4 w1=v.texCoord7;
+
+        for(int m=0;m<mcount && m<8;m++)
+        {
+            uint mat = mats[m].id;
+            float weight = mats[m].count/(float)total;
+
+            Vector2 uv = MaterialAtlasHelper.GetCoord(mat);
+
+            switch(m)
+            {
+                case 0:
+                    t0.x=uv.x; t0.y=uv.y;
+                    w0.x=weight;
+                    break;
+
+                case 1:
+                    t0.z=uv.x; t0.w=uv.y;
+                    w0.y=weight;
+                    break;
+
+                case 2:
+                    t1.x=uv.x; t1.y=uv.y;
+                    w0.z=weight;
+                    break;
+
+                case 3:
+                    t1.z=uv.x; t1.w=uv.y;
+                    w0.w=weight;
+                    break;
+
+                case 4:
+                    t2.x=uv.x; t2.y=uv.y;
+                    w1.x=weight;
+                    break;
+
+                case 5:
+                    t2.z=uv.x; t2.w=uv.y;
+                    w1.y=weight;
+                    break;
+
+                case 6:
+                    t3.x=uv.x; t3.y=uv.y;
+                    w1.z=weight;
+                    break;
+
+                case 7:
+                    t3.z=uv.x; t3.w=uv.y;
+                    w1.w=weight;
+                    break;
+            }
+        }
+
+        v.texCoord0=t0;
+        v.texCoord1=t1;
+        v.texCoord2=t2;
+        v.texCoord3=t3;
+        v.texCoord6=w0;
+        v.texCoord7=w1;
+
+        vertices[idx]=v;
+    }
+}
+Span<uint> mats = stackalloc uint[8];
+Span<int> counts = stackalloc int[8];
+
+int mcount = 0;
+
+for(int i=0;i<counter.length;i++)
+{
+    int c = counter.c[i];
+    if(c == 0)
+        continue;
+
+    mats[mcount] = counter.id[i];
+    counts[mcount] = c;
+    mcount++;
+
+    if(mcount == 8)
+        break;
+}
+for(int i=1;i<mcount;i++)
+{
+    int c = counts[i];
+    uint m = mats[i];
+
+    int j = i - 1;
+
+    while(j >= 0 && counts[j] < c)
+    {
+        counts[j + 1] = counts[j];
+        mats[j + 1] = mats[j];
+        j--;
+    }
+
+    counts[j + 1] = c;
+    mats[j + 1] = m;
+}
+foreach(uint vi in counter.vertexIndices)
+{
+    int tri = (int)(vi / 3);
+    int baseIndex = tri * 3;
+
+    for(int k=0;k<3;k++)
+    {
+        int idx = baseIndex + k;
+        var v = vertices[idx];
+
+        Vector4 t0=v.texCoord0;
+        Vector4 t1=v.texCoord1;
+        Vector4 t2=v.texCoord2;
+        Vector4 t3=v.texCoord3;
+
+        Vector4 w0=v.texCoord6;
+        Vector4 w1=v.texCoord7;
+
+        for(int m=0;m<mcount && m<8;m++)
+        {
+            uint mat = mats[m].id;
+            float weight = mats[m].count/(float)total;
+
+            Vector2 uv = MaterialAtlasHelper.GetCoord(mat);
+
+            switch(m)
+            {
+                case 0:
+                    t0.x=uv.x; t0.y=uv.y;
+                    w0.x=weight;
+                    break;
+
+                case 1:
+                    t0.z=uv.x; t0.w=uv.y;
+                    w0.y=weight;
+                    break;
+
+                case 2:
+                    t1.x=uv.x; t1.y=uv.y;
+                    w0.z=weight;
+                    break;
+
+                case 3:
+                    t1.z=uv.x; t1.w=uv.y;
+                    w0.w=weight;
+                    break;
+
+                case 4:
+                    t2.x=uv.x; t2.y=uv.y;
+                    w1.x=weight;
+                    break;
+
+                case 5:
+                    t2.z=uv.x; t2.w=uv.y;
+                    w1.y=weight;
+                    break;
+
+                case 6:
+                    t3.x=uv.x; t3.y=uv.y;
+                    w1.z=weight;
+                    break;
+
+                case 7:
+                    t3.z=uv.x; t3.w=uv.y;
+                    w1.w=weight;
+                    break;
+            }
+        }
+
+        v.texCoord0=t0;
+        v.texCoord1=t1;
+        v.texCoord2=t2;
+        v.texCoord3=t3;
+        v.texCoord6=w0;
+        v.texCoord7=w1;
+
+        vertices[idx]=v;
+    }
+}
+
+foreach(var pair in vertexMaterials)
+{
+    var data = pair.Value;
+    var counter = data.counter;
+
+    int vertexIndex = data.vertexIndex;
+    var vertex = container.TempVer[vertexIndex];
+
+    int total = 0;
+
+    for(int i=0;i<counter.length;i++)
+        if(counter.c[i] != 0)
+            total += counter.c[i];
+
+    if(total == 0)
+        continue;
+
+    Vector4 tex6 = vertex.texCoord6;
+    Vector4 tex7 = vertex.texCoord7;
+
+    int w = 0;
+
+    for(int i=0;i<counter.length && w < 8;i++)
+    {
+        if(counter.c[i] == 0)
+            continue;
+
+        float weight = counter.c[i] / (float)total;
+
+        switch(w)
+        {
+            case 0: tex6.x = weight; break;
+            case 1: tex6.y = weight; break;
+            case 2: tex6.z = weight; break;
+            case 3: tex6.w = weight; break;
+            case 4: tex7.x = weight; break;
+            case 5: tex7.y = weight; break;
+            case 6: tex7.z = weight; break;
+            case 7: tex7.w = weight; break;
+        }
+
+        w++;
+    }
+
+    vertex.texCoord6 = tex6;
+    vertex.texCoord7 = tex7;
+
+    container.TempVer[vertexIndex] = vertex;
+}
+
+ulong key = GetKey(polygonCoord, edge);
+
+if(!vertexMaterials.TryGetValue(key, out var data))
+{
+    data.vertexIndex = vertices.Count;
+
+    data.counter = materialCounterPool.Rent();
+    data.counter.Create(16);
+
+    vertexMaterials.Add(key, data);
+
+    vertices.Add(vertexPos);
+}
+
+data.counter.Add(materialId);
+
+struct VertexMaterialData
+{
+    public int vertexIndex;
+    public MaterialCounter counter;
+}
+
+int total=0;
+
+for(int i=0;i<MAX;i++)
+    total += bestCount[i];
+
+for(int i=0;i<MAX;i++)
+    weight[i] = bestCount[i] / (float)total;
+
 class BiomeObjectEntry
 {
     GameObject prefab;

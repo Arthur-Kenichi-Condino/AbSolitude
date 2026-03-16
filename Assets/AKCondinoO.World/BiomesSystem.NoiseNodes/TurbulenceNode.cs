@@ -4,16 +4,12 @@ using LibNoise.Operator;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/Turbulence")]
-    internal class TurbulenceNode:NoiseNode{
+    internal class TurbulenceNode:OperatorNoiseNode{
      public NoiseNode input;
      public double frequency;
      public double power;
-        protected override NoiseNodesSnapshot CreateSnapshot(){
-         NoiseNodesSnapshotOperator snapshot=(NoiseNodesSnapshotOperator)NoiseNodesSnapshot.Rent(typeof(NoiseNodesSnapshotOperator));
-         return snapshot;
-        }
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
-         var operatorSnapshot=(NoiseNodesSnapshotOperator)snapshot;
+         var operatorSnapshot=(OperatorNoiseNodesSnapshot)snapshot;
          var inputModule=input.Build(
           worldSeed,
           operatorSnapshot,

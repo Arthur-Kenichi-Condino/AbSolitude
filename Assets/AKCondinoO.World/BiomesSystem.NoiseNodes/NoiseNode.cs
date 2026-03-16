@@ -32,4 +32,10 @@ namespace AKCondinoO.World.Biomes{
          }
         }
     }
+    internal abstract class OperatorNoiseNode:NoiseNode{
+        protected override NoiseNodesSnapshot CreateSnapshot(){
+         OperatorNoiseNodesSnapshot snapshot=(OperatorNoiseNodesSnapshot)NoiseNodesSnapshot.Rent(typeof(OperatorNoiseNodesSnapshot));
+         return snapshot;
+        }
+    }
 }

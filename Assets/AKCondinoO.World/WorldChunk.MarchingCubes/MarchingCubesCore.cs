@@ -53,6 +53,7 @@ namespace AKCondinoO.World.MarchingCubes{
           };
           ProcessPolygonCell(cnkRgn,polygonCoord,polygonvCoord,polygoncCoord,in flags,context);
          }}}
+         BlendMaterials(context);
         }
         private static void BuildPolygonCell(Vector3Int polygonCoord,Vector3Int polygonvCoord,Vector2Int polygoncCoord,MarchingCubesContext context){
          for(int corner=0;corner<8;corner++){
@@ -201,23 +202,24 @@ namespace AKCondinoO.World.MarchingCubes{
            verPos[0]=polygonPos+vertices[idx[0]];
            verPos[1]=polygonPos+vertices[idx[1]];
            verPos[2]=polygonPos+vertices[idx[2]];
-           Vector2 materialUV=MaterialAtlasHelper.GetCoord(
-            Math.Max(Math.Max((uint)materials[idx[0]],(uint)materials[idx[1]]),(uint)materials[idx[2]])
-           );
+           var mat=Math.Max(Math.Max((uint)materials[idx[0]],(uint)materials[idx[1]]),(uint)materials[idx[2]]);
+           Vector2 matUV=MaterialAtlasHelper.GetCoord(mat);
+           bool addedVertexes=false;
            if(!flags.StitchEdges){
-            context.tempVer.Add(new Vertex(verPos[0],normals[idx[0]],materialUV));
-            context.tempVer.Add(new Vertex(verPos[1],normals[idx[1]],materialUV));
-            context.tempVer.Add(new Vertex(verPos[2],normals[idx[2]],materialUV));
+            context.tempVer.Add(new Vertex(verPos[0],normals[idx[0]],matUV));
+            context.tempVer.Add(new Vertex(verPos[1],normals[idx[1]],matUV));
+            context.tempVer.Add(new Vertex(verPos[2],normals[idx[2]],matUV));
             context.tempTri.Add(context.vertexCount+2u);
             context.tempTri.Add(context.vertexCount+1u);
             context.tempTri.Add(context.vertexCount   );
                                 context.vertexCount+=3u;
+            addedVertexes=true;
            }
            if(flags.CollectMaterials){
             var vertexMaterials=context.vertexMaterials;
-            ulong key=GetKey(polygonCoord,idx[0]);if(!vertexMaterials.ContainsKey(key)){var materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}
-                  key=GetKey(polygonCoord,idx[1]);if(!vertexMaterials.ContainsKey(key)){var materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}
-                  key=GetKey(polygonCoord,idx[2]);if(!vertexMaterials.ContainsKey(key)){var materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}
+            ulong key=GetKey(polygonCoord,idx[0]);if(!vertexMaterials.TryGetValue(key,out var materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){materialCounter.vertexIndices.Add(context.vertexCount-3u);}
+                  key=GetKey(polygonCoord,idx[1]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){materialCounter.vertexIndices.Add(context.vertexCount-2u);}
+                  key=GetKey(polygonCoord,idx[2]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(16);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){materialCounter.vertexIndices.Add(context.vertexCount-1u);}
                static ulong GetKey(Vector3Int coord,int edge){
                 EdgeToGrid(
                  coord.x,coord.y,coord.z,edge,
@@ -252,6 +254,33 @@ namespace AKCondinoO.World.MarchingCubes{
           }
          }
         }
+        internal static void BlendMaterials(MarchingCubesContext context){
+         foreach(var kvp in context.vertexMaterials){
+          var materialCounter=kvp.Value;
+          int total=0;
+          for(int i=0;i<materialCounter.length;i++)
+           if(materialCounter.c[i]>0)
+            total+=materialCounter.c[i];
+          if(total==0)
+           continue;
+          int wIndex=0;
+          for(int i=0;i<materialCounter.length&&wIndex<context.weights.Length;i++){
+           if(materialCounter.c[i]==0)
+            continue;
+           float w=materialCounter.c[i]/(float)total;
+           context.weights[i]=w;
+          }
+          foreach(var vertexIndex in materialCounter.vertexIndices){
+           int triangleIndex=(int)vertexIndex/3;
+           if(!context.materialBlendingProcessedTriangles.Add(triangleIndex))
+            continue;
+           int baseIndex=triangleIndex*3;
+           for(int j=0;j<3;j++){
+           }
+          }
+          Array.Clear(context.weights,0,context.weights.Length);
+         }
+        }
      internal static readonly Utilities.ObjectPool<MarchingCubesContext>marchingCubesContextPool=
       Pool.GetPool<MarchingCubesContext>(
        "",
@@ -272,6 +301,7 @@ namespace AKCondinoO.World.MarchingCubes{
         Pool.ReturnArray<Voxel  >(item.normalOffsetVoxelsCache,true);
         item.normalOffsetVoxelsCache=null;
         Array.Clear(item.polygonCell,0,item.polygonCell.Length);
+        item.materialBlendingProcessedTriangles.Clear();
        }
       );
      static readonly Utilities.ObjectPool<MaterialCounter>materialCounterPool=
@@ -476,11 +506,14 @@ namespace AKCondinoO.World.MarchingCubes{
       new(0,0,0),new(1,0,0),new(1,1,0),new(0,1,0),
       new(0,0,1),new(1,0,1),new(1,1,1),new(0,1,1),
      };
+     public readonly HashSet<int>materialBlendingProcessedTriangles=new();
+     public readonly float[]weights=new float[8];
     }
     internal class MaterialCounter{
      public int length;
      public uint[]id;
      public  int[]c;
+     public readonly HashSet<uint>vertexIndices=new();
         internal void Create(int length){
          this.length=length;
          id=Pool.RentArray<uint>(length);
@@ -489,6 +522,10 @@ namespace AKCondinoO.World.MarchingCubes{
         internal void Clear(){
          Pool.ReturnArray<uint>(id);id=null;
          Pool.ReturnArray< int>(c );c =null;
+         vertexIndices.Clear();
+        }
+        internal void Add(MaterialId mat){
+         Add((uint)mat);
         }
         internal void Add(uint mat){
          for(int i=0;i<length;i++){
@@ -513,6 +550,13 @@ namespace AKCondinoO.World.MarchingCubes{
           id[min]=mat;
           c[min]=1;
          }
+        }
+     public int sortedLength;
+     public uint[]sortedId;
+     public  int[]sortedC;
+        internal int Sort(int length){
+         int mcount=0;
+         return mcount;
         }
     }
 }

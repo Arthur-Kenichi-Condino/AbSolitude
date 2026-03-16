@@ -128,7 +128,7 @@ namespace AKCondinoO.World{
     internal class NoiseNodesSnapshot{
      static readonly Dictionary<(Type,string),ObjectPoolBase>noiseNodesSnapshotPool=new(){
       {(typeof(NoiseNodesSnapshot        ),""),Pool.GetPool<NoiseNodesSnapshot        >("",()=>new(),(NoiseNodesSnapshot         item)=>{item.Reset();})},
-      {(typeof(NoiseNodesSnapshotOperator),""),Pool.GetPool<NoiseNodesSnapshotOperator>("",()=>new(),(NoiseNodesSnapshotOperator item)=>{item.Reset();})},
+      {(typeof(OperatorNoiseNodesSnapshot),""),Pool.GetPool<OperatorNoiseNodesSnapshot>("",()=>new(),(OperatorNoiseNodesSnapshot item)=>{item.Reset();})},
      };
         internal static NoiseNodesSnapshot Rent(Type poolId){
          return(NoiseNodesSnapshot)noiseNodesSnapshotPool[(poolId,"")].ObjectRent();
@@ -175,7 +175,7 @@ namespace AKCondinoO.World{
          table=this.table;
         }
     }
-    internal class NoiseNodesSnapshotOperator:NoiseNodesSnapshot{
+    internal class OperatorNoiseNodesSnapshot:NoiseNodesSnapshot{
         internal override void Reset(){
          NoiseNodesSnapshot.Return(input.GetType(),input);input=null;
          base.Reset();
@@ -191,6 +191,8 @@ namespace AKCondinoO.World{
         internal override void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
          input.Resolve(noiseInput,out table);
         }
+    }
+    internal class SelectorNoiseNodesSnapshot:NoiseNodesSnapshot{
     }
     internal class BiomeSpawnTablesSnapshot{
      internal static readonly Utilities.ObjectPool<BiomeSpawnTablesSnapshot>biomeSpawnTablesSnapshotPool=
