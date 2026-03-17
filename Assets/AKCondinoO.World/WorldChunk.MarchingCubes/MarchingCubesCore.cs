@@ -220,9 +220,9 @@ namespace AKCondinoO.World.MarchingCubes{
            }
            if(flags.CollectMaterials){
             var vertexMaterials=context.vertexMaterials;
-            ulong key=GetKey(polygonCoord,idx[0]);if(!vertexMaterials.TryGetValue(key,out var materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-3u;context.vertexToCounter[vertexIndex]=materialCounter;}
-                  key=GetKey(polygonCoord,idx[1]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-2u;context.vertexToCounter[vertexIndex]=materialCounter;}
-                  key=GetKey(polygonCoord,idx[2]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=materialCounterPool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-1u;context.vertexToCounter[vertexIndex]=materialCounter;}
+            ulong key=GetKey(polygonCoord,idx[0]);if(!vertexMaterials.TryGetValue(key,out var materialCounter)){materialCounter=MaterialCounter.pool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-3u;context.vertexToCounter[vertexIndex]=materialCounter;}
+                  key=GetKey(polygonCoord,idx[1]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=MaterialCounter.pool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-2u;context.vertexToCounter[vertexIndex]=materialCounter;}
+                  key=GetKey(polygonCoord,idx[2]);if(!vertexMaterials.TryGetValue(key,out     materialCounter)){materialCounter=MaterialCounter.pool.Rent();materialCounter.Create(8);vertexMaterials.Add(key,materialCounter);}materialCounter.Add(mat);if(addedVertexes){uint vertexIndex=context.vertexCount-1u;context.vertexToCounter[vertexIndex]=materialCounter;}
                static ulong GetKey(Vector3Int coord,int edge){
                 EdgeToGrid(
                  coord.x,coord.y,coord.z,edge,
@@ -259,7 +259,7 @@ namespace AKCondinoO.World.MarchingCubes{
         }
         internal static void BlendMaterials(MarchingCubesContext context){
          if(context.vertexToCounter.Count<=0){return;}
-         var dest=materialCounterPool.Rent();
+         var dest=MaterialCounter.pool.Rent();
          dest.Create(8);
          ref var tempVer=ref context.meshData.tempVer;
          for(int i=0;i<tempVer.Length/3;i++){
@@ -318,17 +318,20 @@ namespace AKCondinoO.World.MarchingCubes{
           dest.Reset();
           Array.Clear(context.weights,0,context.weights.Length);
          }
-         materialCounterPool.Return(dest);
+         MaterialCounter.pool.Return(dest);
         }
-     internal static readonly Utilities.ObjectPool<MarchingCubesContext>marchingCubesContextPool=
+    }
+    internal class MarchingCubesContext{
+     internal static readonly Utilities.ObjectPool<MarchingCubesContext>pool=
       Pool.GetPool<MarchingCubesContext>(
        "",
        ()=>new(),
        (MarchingCubesContext item)=>{
+        item.meshData=null;
         item.vertexCount=0;
         foreach(var kvp in item.vertexMaterials){
          var materialCounter=kvp.Value;
-         materialCounterPool.Return(materialCounter);
+         MaterialCounter.pool.Return(materialCounter);
         }
         item.vertexMaterials.Clear();
         item.vertexToCounter.Clear();
@@ -341,16 +344,6 @@ namespace AKCondinoO.World.MarchingCubes{
         Array.Clear(item.polygonCell,0,item.polygonCell.Length);
        }
       );
-     static readonly Utilities.ObjectPool<MaterialCounter>materialCounterPool=
-      Pool.GetPool<MaterialCounter>(
-       "",
-       ()=>new(),
-       (MaterialCounter item)=>{
-        item.Clear();
-       }
-      );
-    }
-    internal class MarchingCubesContext{
      public MeshData meshData;
      public BiomesConfigurationContext biomeContext;
      internal int width;
@@ -546,6 +539,14 @@ namespace AKCondinoO.World.MarchingCubes{
      public readonly float[]weights=new float[8];
     }
     internal class MaterialCounter{
+     internal static readonly Utilities.ObjectPool<MaterialCounter>pool=
+      Pool.GetPool<MaterialCounter>(
+       "",
+       ()=>new(),
+       (MaterialCounter item)=>{
+        item.Clear();
+       }
+      );
      public int length;
      public uint[]id;
      public  int[]c;

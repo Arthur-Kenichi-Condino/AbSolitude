@@ -65,7 +65,10 @@ namespace AKCondinoO.World.Terrain{
        ()=>new(),
        (UpdateJob item)=>{
         item.chunk=null;
+        item.pendingMarchingCubes=false;
         item.waitingMarchingCubes=false;
+        item.pendingBakeJob      =false;
+        item.waitingBakeJob      =false;
        }
       );
         internal class UpdateJob:SharedCoroutineContainerJob{
@@ -160,9 +163,9 @@ namespace AKCondinoO.World.Terrain{
              chunk=updateJob.chunk;
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
-             context=MarchingCubesCore.marchingCubesContextPool.Rent();
+             context=MarchingCubesContext.pool.Rent();
              context.meshData=chunk.terrain.meshData;
-             context.biomeContext=BiomesConfigurationSnapshot.biomesConfigurationContextPool.Rent();
+             context.biomeContext=BiomesConfigurationContext.pool.Rent();
             }
          readonly System.Diagnostics.Stopwatch sw=new();
             public void ExecuteAtBackgroundThread(){
@@ -196,9 +199,9 @@ namespace AKCondinoO.World.Terrain{
                chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(tempTri[i]);}
               }
              }
-             BiomesConfigurationSnapshot.biomesConfigurationContextPool.Return(context.biomeContext);
+             BiomesConfigurationContext.pool.Return(context.biomeContext);
              context.biomeContext=null;
-             MarchingCubesCore.marchingCubesContextPool.Return(context);
+             MarchingCubesContext.pool.Return(context);
              context=null;
              updateJob.waitingMarchingCubes=false;
              doMarchingCubesJobPool.Return(this);

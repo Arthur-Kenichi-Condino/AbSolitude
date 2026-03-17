@@ -4,12 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.World.Spawning{
     internal class ByChanceObjectSpawnEntry<T>where T:class{
-     internal T prefab;
-     internal float chance;
-     internal int priority;
-    }
-    internal class ByChancePicker<T>where T:class{
-     internal static readonly Utilities.ObjectPool<ByChanceObjectSpawnEntry<T>>entryPool=
+     internal static readonly Utilities.ObjectPool<ByChanceObjectSpawnEntry<T>>pool=
       Pool.GetPool<ByChanceObjectSpawnEntry<T>>(
        "",
        ()=>new(),
@@ -17,6 +12,11 @@ namespace AKCondinoO.World.Spawning{
         item.prefab=null;
        }
       );
+     internal T prefab;
+     internal float chance;
+     internal int priority;
+    }
+    internal class ByChancePicker<T>where T:class{
      internal readonly List<ByChanceObjectSpawnEntry<T>>items=new();
      private readonly List<ByChanceObjectSpawnEntry<T>>filteredItems=new();
      private ByChanceObjectSpawnEntry<T>[]lookupTable;
@@ -57,7 +57,7 @@ namespace AKCondinoO.World.Spawning{
          Pool.ReturnArray(lookupTable,true);
          lookupTable=null;
          foreach(var item in items){
-          entryPool.Return(item);
+          ByChanceObjectSpawnEntry<T>.pool.Return(item);
          }
          items.Clear();
          filteredItems.Clear();

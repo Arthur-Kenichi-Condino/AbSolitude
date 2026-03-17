@@ -69,18 +69,12 @@ namespace AKCondinoO.SimObjects{
          simObjectFactories.Clear();
          if(spawnQueue.Count>0){
           while(spawnQueue.Count>0){
-           spawnListPool.Return(spawnQueue.Dequeue());
+           SpawnList.pool.Return(spawnQueue.Dequeue());
           }
          }
          instancedRendering.Clear(true);
          base.Shutdown();
         }
-     static readonly Utilities.ObjectPool<SpawnList>spawnListPool=
-      Pool.GetPool<SpawnList>(
-       "",
-       ()=>new(),
-       (SpawnList item)=>{item.Clear();}
-      );
      internal readonly Queue<SpawnList>spawnQueue=new();
         IEnumerator SpawnCoroutine(){
          const double maxTimePerFrame=0.001d;//  ...unidade: em segundos
@@ -93,7 +87,7 @@ namespace AKCondinoO.SimObjects{
             while(spawnList.SpawnNext(simObjectFactories)){
              if(ShouldYield())yield return null;
             }
-            spawnListPool.Return(spawnList);
+            SpawnList.pool.Return(spawnList);
             if(ShouldYield())yield return null;
            }
            bool ShouldYield(){
@@ -115,14 +109,14 @@ namespace AKCondinoO.SimObjects{
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
           debugMassiveSpawnTest=false;
-          Logs.Message(Logs.LogType.Debug,"'antes de rent':debugMassiveSpawnJobPool.count:"+debugMassiveSpawnJobPool.count);
-          DebugMassiveSpawnJob debugMassiveSpawnJob=debugMassiveSpawnJobPool.Rent();
+          Logs.Message(Logs.LogType.Debug,"'antes de rent':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
+          DebugMassiveSpawnJob debugMassiveSpawnJob=DebugMassiveSpawnJob.pool.Rent();
           bool scheduled=ThreadDispatcher.TrySchedule(debugMassiveSpawnJob);
           Logs.Message(Logs.LogType.Debug,"scheduled:"+scheduled);
           if(!scheduled){
-           debugMassiveSpawnJobPool.Return(debugMassiveSpawnJob);
+           DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
           }
-          Logs.Message(Logs.LogType.Debug,"'depois de return':debugMassiveSpawnJobPool.count:"+debugMassiveSpawnJobPool.count);
+          Logs.Message(Logs.LogType.Debug,"'depois de return':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
          }
         }
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
@@ -139,13 +133,13 @@ namespace AKCondinoO.SimObjects{
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
-     static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>debugMassiveSpawnJobPool=
-      Pool.GetPool<DebugMassiveSpawnJob>(
-       "",
-       ()=>new(),
-       (DebugMassiveSpawnJob item)=>{}
-      );
         internal class DebugMassiveSpawnJob:MultithreadedContainerJob{
+         internal static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>pool=
+          Pool.GetPool<DebugMassiveSpawnJob>(
+           "",
+           ()=>new(),
+           (DebugMassiveSpawnJob item)=>{}
+          );
          private Type debugMassiveSpawnType;
          private int  debugMassiveSpawnCount;
          private SpawnList spawnList;
@@ -155,7 +149,7 @@ namespace AKCondinoO.SimObjects{
             }
             public void ExecuteAtBackgroundThread(){
              Logs.Message(Logs.LogType.Debug,"DebugMassiveSpawnJob.BackgroundExecute");
-             spawnList=spawnListPool.Rent();
+             spawnList=SpawnList.pool.Rent();
              for(int i=0;i<debugMassiveSpawnCount;i++){
               spawnList.Add(
                new(debugMassiveSpawnType)
@@ -166,14 +160,20 @@ namespace AKCondinoO.SimObjects{
              if(!object.ReferenceEquals(singleton,null)){
               singleton.spawnQueue.Enqueue(spawnList);
              }else{
-              spawnListPool.Return(spawnList);
+              SpawnList.pool.Return(spawnList);
              }
              spawnList=null;
-             debugMassiveSpawnJobPool.Return(this);
+             DebugMassiveSpawnJob.pool.Return(this);
             }
         }
     }
     internal class SpawnList{
+     internal static readonly Utilities.ObjectPool<SpawnList>pool=
+      Pool.GetPool<SpawnList>(
+       "",
+       ()=>new(),
+       (SpawnList item)=>{item.Clear();}
+      );
      internal bool dequeued{get;private set;}
      private readonly List<SimObjectSpawn>data;
      private int currentIndex;

@@ -13,6 +13,15 @@ using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class BiomesConfigurationContext{
+     internal static readonly Utilities.ObjectPool<BiomesConfigurationContext>pool=
+      Pool.GetPool<BiomesConfigurationContext>(
+       "",
+       ()=>new(),
+       (BiomesConfigurationContext item)=>{
+        Pool.ReturnArray<bool  >(item.hasTerrainHeightNoiseCache,true);item.hasTerrainHeightNoiseCache=null;
+        Pool.ReturnArray<double>(item.   terrainHeightNoiseCache,true);item.   terrainHeightNoiseCache=null;
+       }
+      );
      internal int width;
      internal int height;
      internal int depth;
@@ -39,15 +48,6 @@ namespace AKCondinoO.World{
         }
     }
     internal static class BiomesConfigurationSnapshot{
-     internal static readonly Utilities.ObjectPool<BiomesConfigurationContext>biomesConfigurationContextPool=
-      Pool.GetPool<BiomesConfigurationContext>(
-       "",
-       ()=>new(),
-       (BiomesConfigurationContext item)=>{
-        Pool.ReturnArray<bool  >(item.hasTerrainHeightNoiseCache,true);item.hasTerrainHeightNoiseCache=null;
-        Pool.ReturnArray<double>(item.   terrainHeightNoiseCache,true);item.   terrainHeightNoiseCache=null;
-       }
-      );
      private static readonly ReaderWriterLockSlim rwl=new(LockRecursionPolicy.SupportsRecursion);
         internal static void IsReading(){
          rwl.EnterReadLock();
@@ -57,6 +57,12 @@ namespace AKCondinoO.World{
         }
      private static Snapshot snapshot;
         private class Snapshot{
+         internal static readonly Utilities.ObjectPool<Snapshot>pool=
+          Pool.GetPool<Snapshot>(
+           "",
+           ()=>new(),
+           (Snapshot item)=>{item.Dispose();}
+          );
          internal float terrainSmoothingHeight;
          internal ModuleBase terrainModule;
          internal NoiseNodesSnapshot terrainNodesSnapshot;
@@ -72,14 +78,8 @@ namespace AKCondinoO.World{
              }
             }
         }
-     private static readonly Utilities.ObjectPool<Snapshot>snapshotPool=
-      Pool.GetPool<Snapshot>(
-       "",
-       ()=>new(),
-       (Snapshot item)=>{item.Dispose();}
-      );
         internal static void Build(){
-         Snapshot newSnapshot=snapshotPool.Rent();
+         Snapshot newSnapshot=Snapshot.pool.Rent();
          newSnapshot.DoSnapshot();
          var oldSnapshot=snapshot;
          rwl.EnterWriteLock();
@@ -90,10 +90,10 @@ namespace AKCondinoO.World{
          }finally{
           rwl.ExitWriteLock();
          }
-         snapshotPool.Return(oldSnapshot);
+         Snapshot.pool.Return(oldSnapshot);
         }
         internal static void DisposeAll(){
-         snapshotPool.Return(snapshot);snapshot=null;
+         Snapshot.pool.Return(snapshot);snapshot=null;
         }
         internal static void Setvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord,BiomesConfigurationContext context){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
@@ -159,25 +159,27 @@ namespace AKCondinoO.World{
         }
      internal NoiseNodesSnapshot root{get;private set;}
      protected NoiseNodesSnapshot parent;
+     protected readonly List<NodeMaterialTable>tempMaterialTables=new();
      protected readonly List<BiomeSpawnTable>tempSpawnTables=new();
         internal virtual void SetFrom(NoiseNode noiseNode,NoiseNodesSnapshot parent){
          if(parent!=null){
           this.parent=parent;
           root=parent.root;
-          tempSpawnTables.AddRange(parent.tempSpawnTables);
+          tempMaterialTables.AddRange(parent.tempMaterialTables);
+          tempSpawnTables   .AddRange(parent.tempSpawnTables   );
          }
          if(root==null){root=this;}
-         if(noiseNode.spawnTables!=null){
-          tempSpawnTables.AddRange(noiseNode.spawnTables);
-         }
+         if(noiseNode.materialTables!=null){tempMaterialTables.AddRange(noiseNode.materialTables);}
+         if(noiseNode.spawnTables   !=null){tempSpawnTables   .AddRange(noiseNode.spawnTables   );}
         }
         internal virtual void Reset(){
          parent=null;
          root=null;
-         ClearTempSpawnTables();
+         ClearTempMaterialTables();
+         ClearTempSpawnTables   ();
          module=null;
          if(spawnTable!=null){
-          BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Return(spawnTable);spawnTable=null;
+          BiomeSpawnTablesSnapshot.pool.Return(spawnTable);spawnTable=null;
          }
         }
      protected ModuleBase module;
@@ -187,13 +189,16 @@ namespace AKCondinoO.World{
         internal virtual double GetValue(Vector3 noiseInput){
          return this.module.GetValue(noiseInput.x,noiseInput.y,noiseInput.z);
         }
+        internal virtual void ClearTempMaterialTables(){
+         tempMaterialTables.Clear();
+        }
         internal virtual void ClearTempSpawnTables(){
          tempSpawnTables.Clear();
         }
      protected BiomeSpawnTablesSnapshot spawnTable;
         internal virtual void MergeSpawnTables(){
          if(tempSpawnTables.Count>0){
-          spawnTable=BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Rent();
+          spawnTable=BiomeSpawnTablesSnapshot.pool.Rent();
           spawnTable.DoSnapshot(tempSpawnTables);
          }
          ClearTempSpawnTables();
@@ -298,7 +303,7 @@ namespace AKCondinoO.World{
         }
     }
     internal class BiomeSpawnTablesSnapshot{
-     internal static readonly Utilities.ObjectPool<BiomeSpawnTablesSnapshot>biomeSpawnTablesSnapshotPool=
+     internal static readonly Utilities.ObjectPool<BiomeSpawnTablesSnapshot>pool=
       Pool.GetPool<BiomeSpawnTablesSnapshot>(
        "",
        ()=>new(),
@@ -317,7 +322,7 @@ namespace AKCondinoO.World{
            }
            foreach(var entry in spawnTableLayer.entries){
             Logs.Message(Logs.LogType.Debug,"'spawnTable entry':"+entry.prefab.name);
-            ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChancePicker<SimObject>.entryPool.Rent();
+            ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChanceObjectSpawnEntry<SimObject>.pool.Rent();
             pickerEntry.prefab=entry.prefab;
             pickerEntry.chance=entry.chance;
             picker.items.Add(pickerEntry);

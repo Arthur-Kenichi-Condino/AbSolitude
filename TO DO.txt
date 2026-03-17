@@ -157,6 +157,10 @@ foreach(uint vi in counter.vertexIndices)
         vertices[idx]=v;
     }
 }
+
+TO DO: debug log toggle add remove class file
+fade dis disable when scene camera
+
 Span<uint> mats = stackalloc uint[8];
 Span<int> counts = stackalloc int[8];
 
