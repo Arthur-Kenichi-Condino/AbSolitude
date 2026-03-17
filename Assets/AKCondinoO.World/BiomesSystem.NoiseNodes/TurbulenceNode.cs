@@ -5,7 +5,6 @@ using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/Turbulence")]
     internal class TurbulenceNode:OperatorNoiseNode{
-     public NoiseNode input;
      public double frequency;
      public double power;
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){

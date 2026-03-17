@@ -6,6 +6,7 @@ namespace AKCondinoO.Bootstrap{
     internal class SharedCoroutines:MonoSingleton<SharedCoroutines>{
      public override int initOrder{get{return 0;}}
         internal interface SharedCoroutineContainerJob{
+            SharedCoroutineContainerJob dependency{get;set;}
             void OnScheduleSetContainerData();
             bool OnLoopExecuteStep(bool flush=false);
             void OnLoopCompleted();
@@ -13,7 +14,8 @@ namespace AKCondinoO.Bootstrap{
      private static volatile bool running;
      [SerializeField]private int workerCount=8;
      private readonly List<Coroutine>coroutines=new();
-     static readonly Queue<SharedCoroutineContainerJob>scheduledJobs=new();
+     static readonly Queue<SharedCoroutineContainerJob>readyJobs=new();
+     static readonly List<SharedCoroutineContainerJob>blockedJobs=new();
      static readonly HashSet<SharedCoroutineContainerJob>runningJobs=new();
         public override void Initialize(){
          base.Initialize();
@@ -39,11 +41,25 @@ namespace AKCondinoO.Bootstrap{
           job.OnLoopCompleted();
          }
          runningJobs.Clear();
-         while(scheduledJobs.Count>0){
-          var job=scheduledJobs.Dequeue();
-          while(job.OnLoopExecuteStep(true)){}
-          job.OnLoopCompleted();
+         while(readyJobs.Count>0||blockedJobs.Count>0){
+          while(readyJobs.Count>0){
+           var job=readyJobs.Dequeue();
+           while(job.OnLoopExecuteStep(true)){}
+           job.OnLoopCompleted();
+           PromoteBlockedJobs(job);
+          }
+          bool promoted=false;
+          for(int i=blockedJobs.Count-1;i>=0;i--){
+           var job=blockedJobs[i];
+           if(job.dependency==null||!DependencyStillAlive(job.dependency)){
+            blockedJobs.RemoveAt(i);
+            readyJobs.Enqueue(job);
+            promoted=true;
+           }
+          }
+          if(!promoted)break;
          }
+         blockedJobs.Clear();
          base.PreShutdown();
         }
         public override void Shutdown(){
@@ -51,24 +67,50 @@ namespace AKCondinoO.Bootstrap{
         }
         IEnumerator Worker(){
          while(true){
-          yield return null;
-          while(scheduledJobs.Count<=0){
+          while(readyJobs.Count<=0){
            yield return null;
           }
-          var job=scheduledJobs.Dequeue();
+          var job=readyJobs.Dequeue();
           runningJobs.Add(job);
           while(job.OnLoopExecuteStep()){
            yield return null;
           }
           job.OnLoopCompleted();
           runningJobs.Remove(job);
+          PromoteBlockedJobs(job);
+          job.dependency=null;
+         }
+        }
+        static void PromoteBlockedJobs(SharedCoroutineContainerJob completed){
+         for(int i=blockedJobs.Count-1;i>=0;i--){
+          var job=blockedJobs[i];
+          if(job.dependency==completed||!DependencyStillAlive(job.dependency)){
+           job.dependency=null;
+           blockedJobs.RemoveAt(i);
+           readyJobs.Enqueue(job);
+          }
          }
         }
         internal static bool TrySchedule(SharedCoroutineContainerJob job){
          if(!running){return false;}
          job.OnScheduleSetContainerData();
-         scheduledJobs.Enqueue(job);
+         if(job.dependency==null||!DependencyStillAlive(job.dependency)){
+          job.dependency=null;
+          readyJobs.Enqueue(job);
+         }else{
+          blockedJobs.Add(job);
+         }
          return true;
+        }
+        static bool DependencyStillAlive(SharedCoroutineContainerJob dependency){
+         if(dependency==null)return false;
+         if(runningJobs.Contains(dependency))return true;
+         if(readyJobs  .Contains(dependency))return true;
+         for(int i=0;i<blockedJobs.Count;i++){
+          if(blockedJobs[i]==dependency)
+           return true;
+         }
+         return false;
         }
     }
 }

@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a1f5d718573a34d9c13e82a482c7cd, type: 3}
   m_Name: Caatinga.Plains.Multiply.Const
   m_EditorClassIdentifier: 
-  value: 5
+  seedOffset: 9
+  materialTables: []
+  spawnTables: []
+  value: 1

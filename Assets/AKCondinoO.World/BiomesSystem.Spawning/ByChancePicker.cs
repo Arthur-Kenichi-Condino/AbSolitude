@@ -20,13 +20,11 @@ namespace AKCondinoO.World.Spawning{
      internal readonly List<ByChanceObjectSpawnEntry<T>>items=new();
      private readonly List<ByChanceObjectSpawnEntry<T>>filteredItems=new();
      private ByChanceObjectSpawnEntry<T>[]lookupTable;
-     private float maxWeight;
      private int resolution;
         internal void Build(int resolution=100_000,bool fill=false){
          this.resolution=resolution;
          if(items.Count<=0){
           lookupTable=Pool.RentArray<ByChanceObjectSpawnEntry<T>>(0);
-          maxWeight=0f;
           return;
          }
          filteredItems.Clear();
@@ -35,7 +33,6 @@ namespace AKCondinoO.World.Spawning{
          }
          if(filteredItems.Count<=0){
           lookupTable=Pool.RentArray<ByChanceObjectSpawnEntry<T>>(0);
-          maxWeight=0f;
           return;
          }
          filteredItems.Sort((a,b)=>{
@@ -44,7 +41,6 @@ namespace AKCondinoO.World.Spawning{
          });
          float total=0f;
          if(fill){foreach(var item in filteredItems)total+=item.chance;}else{total=1f;}
-         maxWeight=filteredItems[0].chance;
          lookupTable=Pool.RentArray<ByChanceObjectSpawnEntry<T>>(resolution);
          float cumulative=0f;
          for(int i=0;i<filteredItems.Count;i++){

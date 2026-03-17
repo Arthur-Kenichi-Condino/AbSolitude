@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Caatinga.Plains.Steep.Turbulence
   m_EditorClassIdentifier: 
   seedOffset: 2
+  spawnTables: []
   input: {fileID: 11400000, guid: 4734ff1c64d2d65448d3db84fc2ef7c1, type: 2}
   frequency: 0.25
   power: 1

@@ -202,6 +202,7 @@
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionRotLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FileUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NodeMaterials\NodeMaterialTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallHomunculus\CallHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\paulbourke\Tables.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.Spawning\ByChancePicker.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FixedUI.InteractMode.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayPersistentDataSavingMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\SelectNode.cs" />
     <Compile Include="Assets\AKCondinoO\Util\DictionaryWrapper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\HellsGreekFire.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindZoneControl.cs" />
@@ -378,6 +380,7 @@
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Main.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\BillowNode.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\ScaleBiasNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
@@ -403,6 +406,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\TheSims3CameraModeButton\FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\MultiplyNode.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FollowerCameraModeButton\FixedUI.ButtonPressEvents.FollowerCameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Luck.cs" />

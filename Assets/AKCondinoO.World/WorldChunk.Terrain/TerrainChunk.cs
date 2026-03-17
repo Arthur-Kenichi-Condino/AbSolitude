@@ -4,6 +4,7 @@ using AKCondinoO.World.MarchingCubes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,8 +13,11 @@ using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.Terrain{
     internal class TerrainChunk{
      private readonly WorldChunk chunk;
-     private NativeList<Vertex>tempVer;
-     private NativeList<UInt32>tempTri;
+     private readonly MeshData meshData=new();
+        internal class MeshData{
+         internal NativeList<Vertex>tempVer;
+         internal NativeList<UInt32>tempTri;
+        }
      internal Mesh mesh;
      private MeshUpdateFlags meshFlags=
       MeshUpdateFlags.DontValidateIndices|
@@ -22,37 +26,36 @@ namespace AKCondinoO.World.Terrain{
       MeshUpdateFlags.DontResetBoneBounds;
         internal TerrainChunk(WorldChunk chunk){
          this.chunk=chunk;
-         tempVer=new NativeList<Vertex>(Allocator.Persistent);
-         tempTri=new NativeList<UInt32>(Allocator.Persistent);
+         meshData.tempVer=new NativeList<Vertex>(Allocator.Persistent);
+         meshData.tempTri=new NativeList<UInt32>(Allocator.Persistent);
          mesh=new Mesh(){
           bounds=chunk.bounds,
          };
         }
         internal void Destroy(){
-                updateJob=null;
-         runningUpdateJob=null;
+         updateJob=null;
          GameObject.Destroy(mesh);
          mesh=null;
-         if(tempVer.IsCreated)tempVer.Dispose();
-         if(tempTri.IsCreated)tempTri.Dispose();
+         if(meshData.tempVer.IsCreated)meshData.tempVer.Dispose();
+         if(meshData.tempTri.IsCreated)meshData.tempTri.Dispose();
         }
-     internal UpdateJob        updateJob;
-     internal UpdateJob runningUpdateJob;
+     internal UpdateJob updateJob;
         internal void DoUpdateJob(){
          //Logs.Message(Logs.LogType.Debug,"'schedule updateJob'");
          debugDrawMeshWireframeVer.Clear();
          debugDrawMeshWireframeTri.Clear();
-         updateJob=updateJobPool.Rent();
+         var updateJob=updateJobPool.Rent();
+         updateJob.dependency=this.updateJob;
          updateJob.chunk=this.chunk;
          if(!SharedCoroutines.TrySchedule(updateJob)){
           updateJobPool.Return(updateJob);
          }
+         this.updateJob=updateJob;
         }
         internal bool ValidJob(UpdateJob updateJob){
          if(this.chunk==null){return false;}
-         if(this.updateJob!=updateJob){return false;}
-         if(this.chunk.cCoord!=updateJob.cCoord){return false;}
          if(this.chunk!=updateJob.chunk){return false;}
+         if(this.chunk.cCoord!=updateJob.cCoord){return false;}
          if(this.chunk.terrain!=updateJob.chunk.terrain){return false;}
          return true;
         }
@@ -66,6 +69,10 @@ namespace AKCondinoO.World.Terrain{
        }
       );
         internal class UpdateJob:SharedCoroutineContainerJob{
+         public SharedCoroutineContainerJob dependency{
+          get{return doFirst;}set{doFirst=value;}
+         }
+         private SharedCoroutineContainerJob doFirst;
          internal WorldChunk chunk;
          internal Vector2Int cCoord;
          internal Vector2Int cnkRgn;
@@ -73,7 +80,9 @@ namespace AKCondinoO.World.Terrain{
          internal bool pendingMarchingCubes;
          internal bool waitingBakeJob;
          internal bool pendingBakeJob;
+         readonly System.Diagnostics.Stopwatch sw=new();
             public void OnScheduleSetContainerData(){
+             sw.Restart();
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
              pendingMarchingCubes=true;
@@ -82,9 +91,6 @@ namespace AKCondinoO.World.Terrain{
              waitingBakeJob      =false;
             }
             public bool OnLoopExecuteStep(bool flush=false){
-             if(!chunk.terrain.ValidJob(this)){return false;}
-             if(chunk.terrain.runningUpdateJob==null){chunk.terrain.runningUpdateJob=this;}
-             if(chunk.terrain.runningUpdateJob!=this){if(flush){return false;}return true;}
              if(waitingMarchingCubes){if(flush){return false;}return true;}
              if(waitingBakeJob){
               if(flush){
@@ -92,6 +98,7 @@ namespace AKCondinoO.World.Terrain{
               }
               waitingBakeJob=false;
              }
+             if(!chunk.terrain.ValidJob(this)){return false;}
              if(!flush){
               if(pendingMarchingCubes){
                DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
@@ -106,8 +113,8 @@ namespace AKCondinoO.World.Terrain{
                return true;
               }
               if(pendingBakeJob){
-               var tempVer=chunk.terrain.tempVer;
-               var tempTri=chunk.terrain.tempTri;
+               ref var tempVer=ref chunk.terrain.meshData.tempVer;
+               ref var tempTri=ref chunk.terrain.meshData.tempTri;
                var mesh=chunk.terrain.mesh;
                var meshFlags=chunk.terrain.meshFlags;
                bool resize;
@@ -129,9 +136,8 @@ namespace AKCondinoO.World.Terrain{
              return false;//  ...end
             }
             public void OnLoopCompleted(){
-             if(chunk.terrain.ValidJob(this)){
-              if(chunk.terrain.runningUpdateJob==this){chunk.terrain.runningUpdateJob=null;}
-             }
+             sw.Stop();
+             Logs.Message(Logs.LogType.Debug,"'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
              updateJobPool.Return(this);
             }
         }
@@ -155,15 +161,25 @@ namespace AKCondinoO.World.Terrain{
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
              context=MarchingCubesCore.marchingCubesContextPool.Rent();
-             context.tempVer=chunk.terrain.tempVer;
-             context.tempTri=chunk.terrain.tempTri;
+             context.meshData=chunk.terrain.meshData;
              context.biomeContext=BiomesConfigurationSnapshot.biomesConfigurationContextPool.Rent();
             }
+         readonly System.Diagnostics.Stopwatch sw=new();
             public void ExecuteAtBackgroundThread(){
-             context.tempVer.Clear();
-             context.tempTri.Clear();
-             //Logs.Message(Logs.LogType.Debug,"DoMarchingCubesJob.BackgroundExecute");
-             MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
+             sw.Restart();
+             BiomesConfigurationSnapshot.IsReading();
+             try{
+              context.meshData.tempVer.Clear();
+              context.meshData.tempTri.Clear();
+              //Logs.Message(Logs.LogType.Debug,"DoMarchingCubesJob.BackgroundExecute");
+              MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
+             }catch(Exception e){
+              Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+             }finally{
+              BiomesConfigurationSnapshot.StoppedReading();
+             }
+             sw.Stop();
+             Logs.Message(Logs.LogType.Debug,"'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
              if(chunk.terrain.ValidJob(updateJob)){
@@ -174,8 +190,10 @@ namespace AKCondinoO.World.Terrain{
               );
               //Logs.Message(Logs.LogType.Debug,"context.tempVer.Length:"+context.tempVer.Length);
               if(chunk.debugDrawMeshWireframe){
-               chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<context.tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(context.tempVer[i]);}
-               chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<context.tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(context.tempTri[i]);}
+               ref var tempVer=ref context.meshData.tempVer;
+               ref var tempTri=ref context.meshData.tempTri;
+               chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(tempVer[i]);}
+               chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(tempTri[i]);}
               }
              }
              BiomesConfigurationSnapshot.biomesConfigurationContextPool.Return(context.biomeContext);

@@ -5,7 +5,6 @@ using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/ScaleBias")]
     internal class ScaleBiasNode:OperatorNoiseNode{
-     public NoiseNode input;
      public double scale;
      public double bias;
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){

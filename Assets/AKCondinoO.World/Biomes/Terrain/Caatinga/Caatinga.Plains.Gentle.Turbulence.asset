@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4550c93c155da3a4ea0d84f0960b8527, type: 3}
+  m_Name: Caatinga.Plains.Gentle.Turbulence
+  m_EditorClassIdentifier: 
+  seedOffset: 5
+  spawnTables: []
+  input: {fileID: 11400000, guid: 8a01df05779951f46a2b94207d08c718, type: 2}
+  frequency: 0.25
+  power: 1

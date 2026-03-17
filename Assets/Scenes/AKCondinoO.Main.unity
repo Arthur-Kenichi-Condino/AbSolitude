@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8497116176115511129, guid: 2b577f04e216d3542a06d3b8541516a8, type: 3}
+      propertyPath: terrain
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a01df05779951f46a2b94207d08c718, type: 2}
     - target: {fileID: 5897963981768378988, guid: 2b577f04e216d3542a06d3b8541516a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -230,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8248736934042016668, guid: e2285b631fdb3c44aa94faf952e16573, type: 3}
       propertyPath: workerCount
-      value: 169
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -409,7 +413,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: workerCount
-      value: 169
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: m_LocalPosition.x

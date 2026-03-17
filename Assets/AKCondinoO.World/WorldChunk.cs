@@ -35,6 +35,7 @@ namespace AKCondinoO.World{
      internal Vector2Int cnkRgn;
         internal void OnEnsureExists(Vector2Int cCoord){
          if(firstCall||cCoord!=this.cCoord){
+          firstCall=false;
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
           Generate();

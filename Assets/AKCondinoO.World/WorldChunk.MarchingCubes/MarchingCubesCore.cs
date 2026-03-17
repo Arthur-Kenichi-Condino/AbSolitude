@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using UnityEngine;
+using static AKCondinoO.World.Terrain.TerrainChunk;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.MarchingCubes{
     internal struct MarchingCubesFlags{
@@ -206,12 +207,14 @@ namespace AKCondinoO.World.MarchingCubes{
            Vector2 matUV=MaterialAtlasHelper.GetCoord(mat);
            bool addedVertexes=false;
            if(!flags.StitchEdges){
-            context.tempVer.Add(new Vertex(verPos[0],normals[idx[0]],matUV));
-            context.tempVer.Add(new Vertex(verPos[1],normals[idx[1]],matUV));
-            context.tempVer.Add(new Vertex(verPos[2],normals[idx[2]],matUV));
-            context.tempTri.Add(context.vertexCount+2u);
-            context.tempTri.Add(context.vertexCount+1u);
-            context.tempTri.Add(context.vertexCount   );
+            ref var tempVer=ref context.meshData.tempVer;
+            ref var tempTri=ref context.meshData.tempTri;
+            tempVer.Add(new Vertex(verPos[0],normals[idx[0]],matUV));
+            tempVer.Add(new Vertex(verPos[1],normals[idx[1]],matUV));
+            tempVer.Add(new Vertex(verPos[2],normals[idx[2]],matUV));
+            tempTri.Add(context.vertexCount+2u);
+            tempTri.Add(context.vertexCount+1u);
+            tempTri.Add(context.vertexCount   );
                                 context.vertexCount+=3u;
             addedVertexes=true;
            }
@@ -255,9 +258,11 @@ namespace AKCondinoO.World.MarchingCubes{
          }
         }
         internal static void BlendMaterials(MarchingCubesContext context){
+         if(context.vertexToCounter.Count<=0){return;}
          var dest=materialCounterPool.Rent();
          dest.Create(8);
-         for(int i=0;i<context.tempVer.Length/3;i++){
+         ref var tempVer=ref context.meshData.tempVer;
+         for(int i=0;i<tempVer.Length/3;i++){
           int v0=i*3;
           int v1=i*3+1;
           int v2=i*3+2;
@@ -279,7 +284,8 @@ namespace AKCondinoO.World.MarchingCubes{
           SetVertex(v1);
           SetVertex(v2);
           void SetVertex(int vidx){
-           var v=context.tempVer[vidx];
+           ref var tempVer=ref context.meshData.tempVer;
+           var v=tempVer[vidx];
            Vector4 t0=v.texCoord0;
            Vector4 t1=v.texCoord1;
            Vector4 t2=v.texCoord2;
@@ -307,7 +313,7 @@ namespace AKCondinoO.World.MarchingCubes{
            v.texCoord3=t3;
            v.texCoord6=w0;
            v.texCoord7=w1;
-           context.tempVer[vidx]=v;
+           tempVer[vidx]=v;
           }
           dest.Reset();
           Array.Clear(context.weights,0,context.weights.Length);
@@ -319,8 +325,6 @@ namespace AKCondinoO.World.MarchingCubes{
        "",
        ()=>new(),
        (MarchingCubesContext item)=>{
-        item.tempVer=default;
-        item.tempTri=default;
         item.vertexCount=0;
         foreach(var kvp in item.vertexMaterials){
          var materialCounter=kvp.Value;
@@ -347,12 +351,11 @@ namespace AKCondinoO.World.MarchingCubes{
       );
     }
     internal class MarchingCubesContext{
+     public MeshData meshData;
      public BiomesConfigurationContext biomeContext;
      internal int width;
      internal int height;
      internal int depth;
-     public NativeList<Vertex>tempVer;
-     public NativeList<UInt32>tempTri;
      public UInt32 vertexCount;
      public readonly Dictionary<ulong,MaterialCounter>vertexMaterials=new();//  ...para CollectMaterials
      public readonly Dictionary<uint ,MaterialCounter>vertexToCounter=new();

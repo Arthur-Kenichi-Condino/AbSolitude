@@ -6,6 +6,7 @@ using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     internal abstract class NoiseNode:ScriptableObject{
      public int seedOffset;
+     public NodeMaterialTable[]materialTables;
      public BiomeSpawnTable[]spawnTables;
         public virtual ModuleBase Build(int worldSeed,
          NoiseNodesSnapshot inherited,out NoiseNodesSnapshot snapshot,
@@ -33,8 +34,26 @@ namespace AKCondinoO.World.Biomes{
         }
     }
     internal abstract class OperatorNoiseNode:NoiseNode{
+     public NoiseNode input;
         protected override NoiseNodesSnapshot CreateSnapshot(){
          OperatorNoiseNodesSnapshot snapshot=(OperatorNoiseNodesSnapshot)NoiseNodesSnapshot.Rent(typeof(OperatorNoiseNodesSnapshot));
+         return snapshot;
+        }
+    }
+    internal abstract class SelectorNoiseNode:NoiseNode{
+     public NoiseNode inputA;
+     public NoiseNode inputB;
+     public NoiseNode controller;
+        protected override NoiseNodesSnapshot CreateSnapshot(){
+         SelectorNoiseNodesSnapshot snapshot=(SelectorNoiseNodesSnapshot)NoiseNodesSnapshot.Rent(typeof(SelectorNoiseNodesSnapshot));
+         return snapshot;
+        }
+    }
+    internal abstract class MultiplierNoiseNode:NoiseNode{
+     public NoiseNode lhs;
+     public NoiseNode rhs;
+        protected override NoiseNodesSnapshot CreateSnapshot(){
+         MultiplierNoiseNodesSnapshot snapshot=(MultiplierNoiseNodesSnapshot)NoiseNodesSnapshot.Rent(typeof(MultiplierNoiseNodesSnapshot));
          return snapshot;
         }
     }

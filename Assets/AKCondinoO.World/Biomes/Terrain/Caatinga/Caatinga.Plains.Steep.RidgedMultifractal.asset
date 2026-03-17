@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Caatinga.Plains.Steep.RidgedMultifractal
   m_EditorClassIdentifier: 
   seedOffset: 1
+  materialTables:
+  - {fileID: 11400000, guid: 42ef61077507d4142bd7dbdc3d4552b2, type: 2}
   spawnTables:
   - {fileID: 11400000, guid: 0ec97b30ded09444182c8ce35a624fe5, type: 2}
   frequency: 0.048

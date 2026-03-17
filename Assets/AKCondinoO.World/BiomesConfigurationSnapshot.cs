@@ -5,6 +5,7 @@ using AKCondinoO.World.Biomes;
 using AKCondinoO.World.MarchingCubes;
 using AKCondinoO.World.Spawning;
 using LibNoise;
+using LibNoise.Operator;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -48,40 +49,54 @@ namespace AKCondinoO.World{
        }
       );
      private static readonly ReaderWriterLockSlim rwl=new(LockRecursionPolicy.SupportsRecursion);
-     private static float terrainSmoothingHeight;
-     private static ModuleBase terrainModule;
-     private static NoiseNodesSnapshot terrainNodesSnapshot;
+        internal static void IsReading(){
+         rwl.EnterReadLock();
+        }
+        internal static void StoppedReading(){
+         rwl. ExitReadLock();
+        }
+     private static Snapshot snapshot;
+        private class Snapshot{
+         internal float terrainSmoothingHeight;
+         internal ModuleBase terrainModule;
+         internal NoiseNodesSnapshot terrainNodesSnapshot;
+            internal void DoSnapshot(){
+             terrainSmoothingHeight=BiomesSystem.singleton.terrainSmoothingHeight;
+             terrainModule=BiomesSystem.singleton.terrain.Build(BiomesSystem.singleton.seed,null,out _,out terrainNodesSnapshot);
+             terrainNodesSnapshot.MergeSpawnTables();
+            }
+            internal void Dispose(){
+             if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
+             if(terrainNodesSnapshot!=null){
+              NoiseNodesSnapshot.Return(terrainNodesSnapshot.GetType(),terrainNodesSnapshot);terrainNodesSnapshot=null;
+             }
+            }
+        }
+     private static readonly Utilities.ObjectPool<Snapshot>snapshotPool=
+      Pool.GetPool<Snapshot>(
+       "",
+       ()=>new(),
+       (Snapshot item)=>{item.Dispose();}
+      );
         internal static void Build(){
+         Snapshot newSnapshot=snapshotPool.Rent();
+         newSnapshot.DoSnapshot();
+         var oldSnapshot=snapshot;
          rwl.EnterWriteLock();
          try{
-          DisposeAll();
-          BiomesConfigurationSnapshot.terrainSmoothingHeight=BiomesSystem.singleton.terrainSmoothingHeight;
-          terrainModule=BiomesSystem.singleton.terrain.Build(BiomesSystem.singleton.seed,null,out _,out terrainNodesSnapshot);
-          terrainNodesSnapshot.MergeSpawnTables();
+         snapshot=newSnapshot;
          }catch(Exception e){
           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }finally{
           rwl.ExitWriteLock();
          }
+         snapshotPool.Return(oldSnapshot);
         }
         internal static void DisposeAll(){
-         if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
-         if(terrainNodesSnapshot!=null){
-          NoiseNodesSnapshot.Return(terrainNodesSnapshot.GetType(),terrainNodesSnapshot);terrainNodesSnapshot=null;
-         }
-        }
-        internal static void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
-         table=null;
-         rwl.EnterReadLock();
-         try{
-          terrainNodesSnapshot.Resolve(noiseInput,out table);
-         }catch(Exception e){
-          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-         }finally{
-          rwl.ExitReadLock();
-         }
+         snapshotPool.Return(snapshot);snapshot=null;
         }
         internal static void Setvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord,BiomesConfigurationContext context){
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
          /*  fora do mundo, baixo:  */
          if(vCoord.y<=0){
           vxl=Voxel.bedrock;
@@ -97,21 +112,15 @@ namespace AKCondinoO.World{
          Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
          double heightValue=-1d;
          if(!context.TryUseTerrainHeightNoiseCache(out heightValue)){
-          rwl.EnterReadLock();
-          try{
-           heightValue=terrainModule.GetValue(noiseInput.z,noiseInput.x,0);
-          }catch(Exception e){
-           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-          }finally{
-           rwl.ExitReadLock();
-          }
+          heightValue=snapshot.terrainModule.GetValue(noiseInput.z,noiseInput.x,0);
           context.UpdateTerrainHeightNoiseCache(heightValue);
          }
          if(heightValue>=0d){
-          if(noiseInputRounded.y<=heightValue+terrainSmoothingHeight){
+          Resolve(new(noiseInput.z,noiseInput.x,0),out MaterialTablesSnapshot materialTable);
+          if(noiseInputRounded.y<=heightValue+snapshot.terrainSmoothingHeight){
            float density=100.0f;
            float delta=(float)heightValue-noiseInputRounded.y;
-           float smoothingValue=(terrainSmoothingHeight-delta)/terrainSmoothingHeight;
+           float smoothingValue=(snapshot.terrainSmoothingHeight-delta)/snapshot.terrainSmoothingHeight;
            density*=1f-smoothingValue;
            density=Mathf.Clamp(density,0f,100.0f);
            vxl=new(
@@ -124,11 +133,23 @@ namespace AKCondinoO.World{
          }
          vxl=Voxel.air;
         }
+        private static void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
+         table=null;
+         snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
+        }
+        private static void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
+         table=null;
+         snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
+        }
     }
     internal class NoiseNodesSnapshot{
      static readonly Dictionary<(Type,string),ObjectPoolBase>noiseNodesSnapshotPool=new(){
-      {(typeof(NoiseNodesSnapshot        ),""),Pool.GetPool<NoiseNodesSnapshot        >("",()=>new(),(NoiseNodesSnapshot         item)=>{item.Reset();})},
-      {(typeof(OperatorNoiseNodesSnapshot),""),Pool.GetPool<OperatorNoiseNodesSnapshot>("",()=>new(),(OperatorNoiseNodesSnapshot item)=>{item.Reset();})},
+      {(typeof(NoiseNodesSnapshot          ),""),Pool.GetPool<NoiseNodesSnapshot          >("",()=>new(),(NoiseNodesSnapshot           item)=>{item.Reset();})},
+      {(typeof(OperatorNoiseNodesSnapshot  ),""),Pool.GetPool<OperatorNoiseNodesSnapshot  >("",()=>new(),(OperatorNoiseNodesSnapshot   item)=>{item.Reset();})},
+      {(typeof(SelectorNoiseNodesSnapshot  ),""),Pool.GetPool<SelectorNoiseNodesSnapshot  >("",()=>new(),(SelectorNoiseNodesSnapshot   item)=>{item.Reset();})},
+      {(typeof(MultiplierNoiseNodesSnapshot),""),Pool.GetPool<MultiplierNoiseNodesSnapshot>("",()=>new(),(MultiplierNoiseNodesSnapshot item)=>{item.Reset();})},
      };
         internal static NoiseNodesSnapshot Rent(Type poolId){
          return(NoiseNodesSnapshot)noiseNodesSnapshotPool[(poolId,"")].ObjectRent();
@@ -153,26 +174,36 @@ namespace AKCondinoO.World{
         internal virtual void Reset(){
          parent=null;
          root=null;
-         tempSpawnTables.Clear();
+         ClearTempSpawnTables();
          module=null;
-         if(table!=null){
-          BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Return(table);table=null;
+         if(spawnTable!=null){
+          BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Return(spawnTable);spawnTable=null;
          }
         }
      protected ModuleBase module;
         internal virtual void SetModule(ModuleBase module){
          this.module=module;
         }
-     protected BiomeSpawnTablesSnapshot table;
-        internal virtual void MergeSpawnTables(){
-         if(tempSpawnTables.Count>0){
-          table=BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Rent();
-          table.DoSnapshot(tempSpawnTables);
-         }
+        internal virtual double GetValue(Vector3 noiseInput){
+         return this.module.GetValue(noiseInput.x,noiseInput.y,noiseInput.z);
+        }
+        internal virtual void ClearTempSpawnTables(){
          tempSpawnTables.Clear();
         }
-        internal virtual void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
-         table=this.table;
+     protected BiomeSpawnTablesSnapshot spawnTable;
+        internal virtual void MergeSpawnTables(){
+         if(tempSpawnTables.Count>0){
+          spawnTable=BiomeSpawnTablesSnapshot.biomeSpawnTablesSnapshotPool.Rent();
+          spawnTable.DoSnapshot(tempSpawnTables);
+         }
+         ClearTempSpawnTables();
+        }
+        internal virtual void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+         table=this.spawnTable;
+        }
+     protected MaterialTablesSnapshot materialTable;
+        internal virtual void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         table=this.materialTable;
         }
     }
     internal class OperatorNoiseNodesSnapshot:NoiseNodesSnapshot{
@@ -183,16 +214,88 @@ namespace AKCondinoO.World{
      protected NoiseNodesSnapshot input;
         internal virtual void SetInput(NoiseNodesSnapshot input){
          this.input=input;
-         tempSpawnTables.Clear();
+         ClearTempSpawnTables();
         }
         internal override void MergeSpawnTables(){
          input.MergeSpawnTables();
         }
-        internal override void Resolve(Vector3Int noiseInput,out BiomeSpawnTablesSnapshot table){
+        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+         input.Resolve(noiseInput,out table);
+        }
+        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          input.Resolve(noiseInput,out table);
         }
     }
     internal class SelectorNoiseNodesSnapshot:NoiseNodesSnapshot{
+        internal override void Reset(){
+         NoiseNodesSnapshot.Return(inputA.GetType(),inputA);inputA=null;
+         NoiseNodesSnapshot.Return(inputB.GetType(),inputB);inputB=null;
+         NoiseNodesSnapshot.Return(controller.GetType(),controller);controller=null;
+         base.Reset();
+        }
+     protected NoiseNodesSnapshot inputA;
+     protected NoiseNodesSnapshot inputB;
+     protected NoiseNodesSnapshot controller;
+        internal virtual void SetInput(
+         NoiseNodesSnapshot inputA,
+         NoiseNodesSnapshot inputB,
+         NoiseNodesSnapshot controller
+        ){
+         this.inputA=inputA;
+         this.inputB=inputB;
+         this.controller=controller;
+         ClearTempSpawnTables();
+        }
+        internal override void MergeSpawnTables(){
+         inputA.MergeSpawnTables();
+         inputB.MergeSpawnTables();
+         controller.MergeSpawnTables();
+        }
+        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+         var input=OnResolveGetNode(noiseInput);
+         input.Resolve(noiseInput,out table);
+        }
+        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         var input=OnResolveGetNode(noiseInput);
+         input.Resolve(noiseInput,out table);
+        }
+        private NoiseNodesSnapshot OnResolveGetNode(Vector3 noiseInput){
+         var cv=controller.GetValue(noiseInput);
+         var select=(Select)module;
+         var max=select.Maximum;
+         var min=select.Minimum;
+         if(cv<min||cv>max){
+          return inputA;
+         }
+         return inputB;
+        }
+    }
+    internal class MultiplierNoiseNodesSnapshot:NoiseNodesSnapshot{
+        internal override void Reset(){
+         NoiseNodesSnapshot.Return(lhs.GetType(),lhs);lhs=null;
+         NoiseNodesSnapshot.Return(rhs.GetType(),rhs);rhs=null;
+         base.Reset();
+        }
+     public NoiseNodesSnapshot lhs;
+     public NoiseNodesSnapshot rhs;
+        internal virtual void SetInput(
+         NoiseNodesSnapshot lhs,
+         NoiseNodesSnapshot rhs
+        ){
+         this.lhs=lhs;
+         this.rhs=rhs;
+         ClearTempSpawnTables();
+        }
+        internal override void MergeSpawnTables(){
+         lhs.MergeSpawnTables();
+         rhs.ClearTempSpawnTables();
+        }
+        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+         lhs.Resolve(noiseInput,out table);
+        }
+        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         lhs.Resolve(noiseInput,out table);
+        }
     }
     internal class BiomeSpawnTablesSnapshot{
      internal static readonly Utilities.ObjectPool<BiomeSpawnTablesSnapshot>biomeSpawnTablesSnapshotPool=
@@ -232,5 +335,8 @@ namespace AKCondinoO.World{
           picker.Clear();
          }
         }
+    }
+    internal class MaterialTablesSnapshot{
+     internal MaterialId baseMaterial;
     }
 }

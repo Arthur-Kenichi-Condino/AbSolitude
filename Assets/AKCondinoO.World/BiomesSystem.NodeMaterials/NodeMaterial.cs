@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
-    [CreateAssetMenu(menuName="AKCondinoO/Biomes/NodeMaterial")]
-    internal class NodeMaterial:ScriptableObject{
+    [Serializable]
+    internal class NodeMaterial{
+     public MaterialId material;
     }
 }

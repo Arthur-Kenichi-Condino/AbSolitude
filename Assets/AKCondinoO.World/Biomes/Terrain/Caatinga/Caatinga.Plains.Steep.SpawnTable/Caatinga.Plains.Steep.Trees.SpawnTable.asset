@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layers:
   - layer: 5
-    gridSize: 0
+    gridSize: 1
     entries:
     - prefab: {fileID: 7263138527205009167, guid: 3b02bbb1a5a515640ab873ba86f14c9c, type: 3}
       chance: 1
