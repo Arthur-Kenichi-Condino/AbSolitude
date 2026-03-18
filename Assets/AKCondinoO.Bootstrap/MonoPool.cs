@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal class MonoPool<T>where T:MonoBehaviour{
-     private readonly Stack<T>pool=new();
+     private readonly Queue<T>pool=new();
      private readonly T prefab;
      private readonly Transform parent;
         internal MonoPool(T prefab,Transform parent=null){
@@ -11,18 +11,18 @@ namespace AKCondinoO.Bootstrap{
         }
         internal T Rent(){
          if(pool.Count>0){
-          T item=pool.Pop();
+          T item=pool.Dequeue();
           return item;
          }
          return GameObject.Instantiate(prefab,parent);
         }
         internal void Return(T item){
-         pool.Push(item);
+         pool.Enqueue(item);
         }
         internal void Destroy(bool destroy=false){
          if(destroy){
           while(pool.Count>0){
-           T item=pool.Pop();
+           T item=pool.Dequeue();
            GameObject.Destroy(item.gameObject);
           }
          }

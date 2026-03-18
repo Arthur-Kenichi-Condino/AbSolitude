@@ -3,6 +3,7 @@ using AKCondinoO.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
+using System.Collections;
 namespace AKCondinoO.Bootstrap{
     internal class ActiveZone:MonoBehaviour{
      private static readonly Dictionary<ulong,ActiveZone>zones=new();
@@ -30,6 +31,7 @@ namespace AKCondinoO.Bootstrap{
           zone.Initialize();
          }
         }
+     private Coroutine spawnCoroutine;
         internal void Initialize(){
          Vector3 size=new(
           (WorldChunkManager.singleton.instantiationDistance.x*2+1)*Width,
@@ -37,6 +39,8 @@ namespace AKCondinoO.Bootstrap{
           (WorldChunkManager.singleton.instantiationDistance.y*2+1)*Depth
          );
          bounds=new(new(),size);
+         if(spawnCoroutine!=null){StopCoroutine(spawnCoroutine);}
+         spawnCoroutine=StartCoroutine(CalculateChunks());
         }
         internal static void ShutdownAny(){
          main=null;
@@ -50,6 +54,9 @@ namespace AKCondinoO.Bootstrap{
          zones.Clear();
         }
         internal void Shutdown(){
+         if(this!=null){
+          if(spawnCoroutine!=null){StopCoroutine(spawnCoroutine);}
+         }
          if(!object.ReferenceEquals(WorldChunkManager.singleton,null)){
           foreach(var coord in currChunks){
            WorldChunkManager.singleton.RemoveRef(coord);
@@ -58,8 +65,6 @@ namespace AKCondinoO.Bootstrap{
          currChunks.Clear();
          nextChunks.Clear();
          cCoord=default;
-         lastcCoord=default;
-         hasLastcCoord=false;
         }
         internal static void ManualUpdateTransformAll(){
          foreach(var kvp in zones){
@@ -69,6 +74,7 @@ namespace AKCondinoO.Bootstrap{
         }
      private ulong clientId;
      private Vector3 pos;
+     private Vector2Int cCoord;
         public void ManualUpdateTransform(){
          if(clientId==0){
           transform.position=MainCamera.singleton.transform.position;
@@ -79,20 +85,21 @@ namespace AKCondinoO.Bootstrap{
          //Logs.Message(Logs.LogType.Debug,"transform.hasChanged:"+transform.hasChanged);
          pos=transform.position;
          bounds.center=pos;
-         CalculateChunks();
+         cCoord=vecPosTocCoord(pos);
          transform.hasChanged=false;
         }
-     private HashSet<Vector2Int>currChunks=new();
-     private HashSet<Vector2Int>nextChunks=new();
-     private Vector2Int cCoord;
-     private Vector2Int lastcCoord;
-     private bool hasLastcCoord;
-        private void CalculateChunks(){
-         cCoord=vecPosTocCoord(pos);
-         if(!hasLastcCoord||cCoord!=lastcCoord){
-          nextChunks.Clear();
-          Vector2Int instDis=WorldChunkManager.singleton.instantiationDistance;
+     private readonly HashSet<Vector2Int>currChunks=new();
+     private readonly HashSet<Vector2Int>nextChunks=new();
+        private IEnumerator CalculateChunks(){
+         bool hasLastcCoord=false;
+         Vector2Int cCoord=default;
+         while(true){
+          while(hasLastcCoord&&cCoord==this.cCoord){
+           yield return null;
+          }
+          cCoord=this.cCoord;
           Vector2Int exprDis=WorldChunkManager.singleton.expropriationDistance;
+          Vector2Int instDis=WorldChunkManager.singleton.instantiationDistance;
           for(int y=-exprDis.y;y<=exprDis.y;y++){
            int cy=cCoord.y+y;
            if(Mathf.Abs(cy)>=MaxcCoordy)continue;
@@ -100,14 +107,15 @@ namespace AKCondinoO.Bootstrap{
             int cx=cCoord.x+x;
             if(Mathf.Abs(cx)>=MaxcCoordx)continue;
             var coord=new Vector2Int(cx,cy);
-            bool hasRef=currChunks.Contains(coord);
             nextChunks.Add(coord);
-            if(!hasRef){
-             WorldChunkManager.singleton.AddRef(coord);
-            }
-            if(Mathf.Abs(x)<=instDis.x&&Mathf.Abs(y)<=instDis.y){
-             WorldChunkManager.singleton.EnsureExists(coord);
-            }
+           }
+          }
+          foreach(var coord in nextChunks){
+           if(!currChunks.Contains(coord)){
+            WorldChunkManager.singleton.AddRef(coord);
+           }
+           if(InsideInstantiationDistance(coord)){
+            WorldChunkManager.singleton.EnsureExists(coord);
            }
           }
           foreach(var coord in currChunks){
@@ -115,11 +123,17 @@ namespace AKCondinoO.Bootstrap{
             WorldChunkManager.singleton.RemoveRef(coord);
            }
           }
-          var temp=currChunks;
-          currChunks=nextChunks;
-          nextChunks=temp;
-          lastcCoord=cCoord;
+          currChunks.Clear();
+          currChunks.UnionWith(nextChunks);
+          nextChunks.Clear();
           hasLastcCoord=true;
+          bool InsideInstantiationDistance(Vector2Int coord){
+           if(
+            Mathf.Abs(cCoord.x-coord.x)<=instDis.x&&
+            Mathf.Abs(cCoord.y-coord.y)<=instDis.y
+           ){return true;}
+           return false;
+          }
          }
         }
         void OnDrawGizmosSelected(){

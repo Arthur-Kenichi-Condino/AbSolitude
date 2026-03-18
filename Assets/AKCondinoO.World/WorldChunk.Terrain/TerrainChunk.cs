@@ -44,11 +44,11 @@ namespace AKCondinoO.World.Terrain{
          //Logs.Message(Logs.LogType.Debug,"'schedule updateJob'");
          debugDrawMeshWireframeVer.Clear();
          debugDrawMeshWireframeTri.Clear();
-         var updateJob=updateJobPool.Rent();
+         var updateJob=UpdateJob.pool.Rent();
          updateJob.dependency=this.updateJob;
          updateJob.chunk=this.chunk;
          if(!SharedCoroutines.TrySchedule(updateJob)){
-          updateJobPool.Return(updateJob);
+          UpdateJob.pool.Return(updateJob);
          }
          this.updateJob=updateJob;
         }
@@ -59,19 +59,19 @@ namespace AKCondinoO.World.Terrain{
          if(this.chunk.terrain!=updateJob.chunk.terrain){return false;}
          return true;
         }
-     static readonly Utilities.ObjectPool<UpdateJob>updateJobPool=
-      Pool.GetPool<UpdateJob>(
-       "",
-       ()=>new(),
-       (UpdateJob item)=>{
-        item.chunk=null;
-        item.pendingMarchingCubes=false;
-        item.waitingMarchingCubes=false;
-        item.pendingBakeJob      =false;
-        item.waitingBakeJob      =false;
-       }
-      );
         internal class UpdateJob:SharedCoroutineContainerJob{
+         internal static readonly Utilities.ObjectPool<UpdateJob>pool=
+          Pool.GetPool<UpdateJob>(
+           "",
+           ()=>new(),
+           (UpdateJob item)=>{
+            item.chunk=null;
+            item.pendingMarchingCubes=false;
+            item.waitingMarchingCubes=false;
+            item.pendingBakeJob      =false;
+            item.waitingBakeJob      =false;
+           }
+          );
          public SharedCoroutineContainerJob dependency{
           get{return doFirst;}set{doFirst=value;}
          }
@@ -104,11 +104,11 @@ namespace AKCondinoO.World.Terrain{
              if(!chunk.terrain.ValidJob(this)){return false;}
              if(!flush){
               if(pendingMarchingCubes){
-               DoMarchingCubesJob doMarchingCubesJob=doMarchingCubesJobPool.Rent();
+               DoMarchingCubesJob doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
                doMarchingCubesJob.updateJob=this;
                bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
                if(!scheduled){
-                doMarchingCubesJobPool.Return(doMarchingCubesJob);
+                DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
                 return false;
                }
                waitingMarchingCubes=true;//  ...job is scheduled
@@ -141,19 +141,19 @@ namespace AKCondinoO.World.Terrain{
             public void OnLoopCompleted(){
              sw.Stop();
              Logs.Message(Logs.LogType.Debug,"'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
-             updateJobPool.Return(this);
+             UpdateJob.pool.Return(this);
             }
         }
-     static readonly Utilities.ObjectPool<DoMarchingCubesJob>doMarchingCubesJobPool=
-      Pool.GetPool<DoMarchingCubesJob>(
-       "",
-       ()=>new(),
-       (DoMarchingCubesJob item)=>{
-        item.updateJob=null;
-        item.chunk=null;
-       }
-      );
         internal class DoMarchingCubesJob:MultithreadedContainerJob{
+         internal static readonly Utilities.ObjectPool<DoMarchingCubesJob>pool=
+          Pool.GetPool<DoMarchingCubesJob>(
+           "",
+           ()=>new(),
+           (DoMarchingCubesJob item)=>{
+            item.updateJob=null;
+            item.chunk=null;
+           }
+          );
          internal UpdateJob updateJob;
          internal WorldChunk chunk;
          internal Vector2Int cCoord;
@@ -204,7 +204,7 @@ namespace AKCondinoO.World.Terrain{
              MarchingCubesContext.pool.Return(context);
              context=null;
              updateJob.waitingMarchingCubes=false;
-             doMarchingCubesJobPool.Return(this);
+             DoMarchingCubesJob.pool.Return(this);
             }
         }
      private readonly List<Vertex>debugDrawMeshWireframeVer=new();
