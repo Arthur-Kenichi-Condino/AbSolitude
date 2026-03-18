@@ -313,7 +313,7 @@ namespace AKCondinoO.World.MarchingCubes{
                 return-1;
                }
             int count=vmaterialCounter.Count(mat);
-            context.weights[j]=count;
+            context.weights[slot]=count;
             total+=count;
            }
            if(total>0){
