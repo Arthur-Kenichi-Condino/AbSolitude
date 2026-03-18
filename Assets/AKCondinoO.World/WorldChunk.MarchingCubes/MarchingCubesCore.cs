@@ -270,53 +270,82 @@ namespace AKCondinoO.World.MarchingCubes{
           var materialCounter1=context.vertexToCounter[(uint)v1];MaterialCounter.MergeAdd(materialCounter1,dest);
           var materialCounter2=context.vertexToCounter[(uint)v2];MaterialCounter.MergeAdd(materialCounter2,dest);
           dest.Sort(context.weights.Length);
-          int total=0;
-          for(int j=0;j<dest.sortedLength;j++){
-           total+=dest.sortedC[j];
-          }
-          if(total>0){
+          tempVer[v0]=SetVertex(v0,tempVer[v0],materialCounter0);
+          tempVer[v1]=SetVertex(v1,tempVer[v1],materialCounter1);
+          tempVer[v2]=SetVertex(v2,tempVer[v2],materialCounter2);
+          Vertex SetVertex(int vidx,in Vertex v,MaterialCounter vmaterialCounter){
+           ReadSlots(v,context.slots);
+              void ReadSlots(in Vertex v,Vector2[]slots){
+               slots[0]=new(v.texCoord0.x,v.texCoord0.y);
+               slots[1]=new(v.texCoord0.z,v.texCoord0.w);
+               slots[2]=new(v.texCoord1.x,v.texCoord1.y);
+               slots[3]=new(v.texCoord1.z,v.texCoord1.w);
+               slots[4]=new(v.texCoord2.x,v.texCoord2.y);
+               slots[5]=new(v.texCoord2.z,v.texCoord2.w);
+               slots[6]=new(v.texCoord3.x,v.texCoord3.y);
+               slots[7]=new(v.texCoord3.z,v.texCoord3.w);
+              }
+           float total=0;
            for(int j=0;j<dest.sortedLength&&j<context.weights.Length;j++){
-            float w=dest.sortedC[j]/(float)total;
-            context.weights[j]=w;
-           }
-          }
-          SetVertex(v0);
-          SetVertex(v1);
-          SetVertex(v2);
-          void SetVertex(int vidx){
-           ref var tempVer=ref context.meshData.tempVer;
-           var v=tempVer[vidx];
-           Vector4 t0=v.texCoord0;
-           Vector4 t1=v.texCoord1;
-           Vector4 t2=v.texCoord2;
-           Vector4 t3=v.texCoord3;
-           Vector4 w0=v.texCoord6;
-           Vector4 w1=v.texCoord7;
-           for(int m=0;m<dest.sortedLength&&m<context.weights.Length;m++){
-            uint mat=dest.sortedId[m];
-            float weight=context.weights[m];
+            uint mat=dest.sortedId[j];
             Vector2 uv=MaterialAtlasHelper.GetCoord(mat);
-            switch(m){
-             case 0:t0.x=uv.x;t0.y=uv.y;w0.x=weight;break;
-             case 1:t0.z=uv.x;t0.w=uv.y;w0.y=weight;break;
-             case 2:t1.x=uv.x;t1.y=uv.y;w0.z=weight;break;
-             case 3:t1.z=uv.x;t1.w=uv.y;w0.w=weight;break;
-             case 4:t2.x=uv.x;t2.y=uv.y;w1.x=weight;break;
-             case 5:t2.z=uv.x;t2.w=uv.y;w1.y=weight;break;
-             case 6:t3.x=uv.x;t3.y=uv.y;w1.z=weight;break;
-             case 7:t3.z=uv.x;t3.w=uv.y;w1.w=weight;break;
-            }
+            int slot=FindSlot(context.slots,uv);
+            if(slot<=-1)slot=FindEmptySlot(context.slots);
+            if(slot<=-1)continue;
+            context.slots[slot]=uv;
+               int FindSlot(Vector2[]slots,Vector2 uv){
+                for(int i=0;i<slots.Length;i++){
+                 if(slots[i]==uv){
+                  return i;
+                 }
+                }
+                return-1;
+               }
+               int FindEmptySlot(Vector2[]slots){
+                for(int i=0;i<slots.Length;i++){
+                 if(
+                  slots[i].x==Vertex.emptyUV.x&&
+                  slots[i].y==Vertex.emptyUV.y
+                 ){
+                  return i;
+                 }
+                }
+                return-1;
+               }
+            int count=vmaterialCounter.Count(mat);
+            context.weights[j]=count;
+            total+=count;
            }
-           v.texCoord0=t0;
-           v.texCoord1=t1;
-           v.texCoord2=t2;
-           v.texCoord3=t3;
-           v.texCoord6=w0;
-           v.texCoord7=w1;
-           tempVer[vidx]=v;
+           if(total>0){
+            for(int j=0;j<context.weights.Length;j++)
+             context.weights[j]/=total;
+           }
+           var result=WriteSlots(v,context.slots,context.weights);
+              Vertex WriteSlots(in Vertex v,Vector2[]slots,float[]weights){
+               var result=v;
+               result.texCoord0.x=slots[0].x;result.texCoord0.y=slots[0].y;
+               result.texCoord0.z=slots[1].x;result.texCoord0.w=slots[1].y;
+               result.texCoord1.x=slots[2].x;result.texCoord1.y=slots[2].y;
+               result.texCoord1.z=slots[3].x;result.texCoord1.w=slots[3].y;
+               result.texCoord2.x=slots[4].x;result.texCoord2.y=slots[4].y;
+               result.texCoord2.z=slots[5].x;result.texCoord2.w=slots[5].y;
+               result.texCoord3.x=slots[6].x;result.texCoord3.y=slots[6].y;
+               result.texCoord3.z=slots[7].x;result.texCoord3.w=slots[7].y;
+               result.texCoord6.x=weights[0];
+               result.texCoord6.y=weights[1];
+               result.texCoord6.z=weights[2];
+               result.texCoord6.w=weights[3];
+               result.texCoord7.x=weights[4];
+               result.texCoord7.y=weights[5];
+               result.texCoord7.z=weights[6];
+               result.texCoord7.w=weights[7];
+               return result;
+              }
+           Array.Clear(context.slots  ,0,context.slots  .Length);
+           Array.Clear(context.weights,0,context.weights.Length);
+           return result;
           }
           dest.Reset();
-          Array.Clear(context.weights,0,context.weights.Length);
          }
          MaterialCounter.pool.Return(dest);
         }
@@ -536,6 +565,7 @@ namespace AKCondinoO.World.MarchingCubes{
       new(0,0,0),new(1,0,0),new(1,1,0),new(0,1,0),
       new(0,0,1),new(1,0,1),new(1,1,1),new(0,1,1),
      };
+     public readonly Vector2[]slots=new Vector2[8];
      public readonly float[]weights=new float[8];
     }
     internal class MaterialCounter{
@@ -644,6 +674,10 @@ namespace AKCondinoO.World.MarchingCubes{
            continue;
           dest.Add(mat,count);
          }
+        }
+        internal int Count(uint mat){
+         for(int i=0;i<length;i++){if(id[i]==mat)return c[i];}
+         return 0;
         }
     }
 }

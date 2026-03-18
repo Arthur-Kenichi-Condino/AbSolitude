@@ -69,7 +69,7 @@ namespace AKCondinoO.World{
             internal void DoSnapshot(){
              terrainSmoothingHeight=BiomesSystem.singleton.terrainSmoothingHeight;
              terrainModule=BiomesSystem.singleton.terrain.Build(BiomesSystem.singleton.seed,null,out _,out terrainNodesSnapshot);
-             terrainNodesSnapshot.MergeSpawnTables();
+             terrainNodesSnapshot.MergeTables();
             }
             internal void Dispose(){
              if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
@@ -117,6 +117,8 @@ namespace AKCondinoO.World{
          }
          if(heightValue>=0d){
           Resolve(new(noiseInput.z,noiseInput.x,0),out MaterialTablesSnapshot materialTable);
+          MaterialId material=MaterialId.MuddyDirt;
+          if(materialTable!=null){material=materialTable.baseMaterial;}
           if(noiseInputRounded.y<=heightValue+snapshot.terrainSmoothingHeight){
            float density=100.0f;
            float delta=(float)heightValue-noiseInputRounded.y;
@@ -125,7 +127,7 @@ namespace AKCondinoO.World{
            density=Mathf.Clamp(density,0f,100.0f);
            vxl=new(
             density,
-            MaterialId.MuddyDirt,
+            material,
             Vector3.zero
            );
            return;
@@ -133,12 +135,12 @@ namespace AKCondinoO.World{
          }
          vxl=Voxel.air;
         }
-        private static void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+        private static void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          table=null;
          snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
         }
-        private static void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+        private static void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          table=null;
          snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
@@ -175,12 +177,24 @@ namespace AKCondinoO.World{
         internal virtual void Reset(){
          parent=null;
          root=null;
-         ClearTempMaterialTables();
-         ClearTempSpawnTables   ();
+         ClearTempTables();
          module=null;
+         if(materialTable!=null){
+          MaterialTablesSnapshot.pool.Return(materialTable);materialTable=null;
+         }
          if(spawnTable!=null){
           BiomeSpawnTablesSnapshot.pool.Return(spawnTable);spawnTable=null;
          }
+        }
+        internal virtual void ClearTempTables(){
+         ClearTempMaterialTables();
+         ClearTempSpawnTables();
+        }
+        internal virtual void ClearTempMaterialTables(){
+         tempMaterialTables.Clear();
+        }
+        internal virtual void ClearTempSpawnTables(){
+         tempSpawnTables.Clear();
         }
      protected ModuleBase module;
         internal virtual void SetModule(ModuleBase module){
@@ -189,11 +203,20 @@ namespace AKCondinoO.World{
         internal virtual double GetValue(Vector3 noiseInput){
          return this.module.GetValue(noiseInput.x,noiseInput.y,noiseInput.z);
         }
-        internal virtual void ClearTempMaterialTables(){
-         tempMaterialTables.Clear();
+        internal virtual void MergeTables(){
+         MergeMaterialTables();
+         MergeSpawnTables();
         }
-        internal virtual void ClearTempSpawnTables(){
-         tempSpawnTables.Clear();
+     protected MaterialTablesSnapshot materialTable;
+        internal virtual void MergeMaterialTables(){
+         if(tempMaterialTables.Count>0){
+          materialTable=MaterialTablesSnapshot.pool.Rent();
+          materialTable.DoSnapshot(tempMaterialTables);
+         }
+         ClearTempMaterialTables();
+        }
+        internal virtual void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         table=this.materialTable;
         }
      protected BiomeSpawnTablesSnapshot spawnTable;
         internal virtual void MergeSpawnTables(){
@@ -206,10 +229,6 @@ namespace AKCondinoO.World{
         internal virtual void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          table=this.spawnTable;
         }
-     protected MaterialTablesSnapshot materialTable;
-        internal virtual void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
-         table=this.materialTable;
-        }
     }
     internal class OperatorNoiseNodesSnapshot:NoiseNodesSnapshot{
         internal override void Reset(){
@@ -219,15 +238,15 @@ namespace AKCondinoO.World{
      protected NoiseNodesSnapshot input;
         internal virtual void SetInput(NoiseNodesSnapshot input){
          this.input=input;
-         ClearTempSpawnTables();
+         ClearTempTables();
         }
-        internal override void MergeSpawnTables(){
-         input.MergeSpawnTables();
-        }
-        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
-         input.Resolve(noiseInput,out table);
+        internal override void MergeTables(){
+         input.MergeTables();
         }
         internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         input.Resolve(noiseInput,out table);
+        }
+        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          input.Resolve(noiseInput,out table);
         }
     }
@@ -249,18 +268,18 @@ namespace AKCondinoO.World{
          this.inputA=inputA;
          this.inputB=inputB;
          this.controller=controller;
-         ClearTempSpawnTables();
+         ClearTempTables();
         }
-        internal override void MergeSpawnTables(){
-         inputA.MergeSpawnTables();
-         inputB.MergeSpawnTables();
-         controller.MergeSpawnTables();
+        internal override void MergeTables(){
+         inputA.MergeTables();
+         inputB.MergeTables();
+         controller.ClearTempTables();
         }
-        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
+        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          var input=OnResolveGetNode(noiseInput);
          input.Resolve(noiseInput,out table);
         }
-        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+        internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          var input=OnResolveGetNode(noiseInput);
          input.Resolve(noiseInput,out table);
         }
@@ -289,17 +308,37 @@ namespace AKCondinoO.World{
         ){
          this.lhs=lhs;
          this.rhs=rhs;
-         ClearTempSpawnTables();
+         ClearTempTables();
         }
-        internal override void MergeSpawnTables(){
-         lhs.MergeSpawnTables();
-         rhs.ClearTempSpawnTables();
+        internal override void MergeTables(){
+         lhs.MergeTables();
+         rhs.ClearTempTables();
+        }
+        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
+         lhs.Resolve(noiseInput,out table);
         }
         internal override void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          lhs.Resolve(noiseInput,out table);
         }
-        internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
-         lhs.Resolve(noiseInput,out table);
+    }
+    internal class MaterialTablesSnapshot{
+     internal static readonly Utilities.ObjectPool<MaterialTablesSnapshot>pool=
+      Pool.GetPool<MaterialTablesSnapshot>(
+       "",
+       ()=>new(),
+       (MaterialTablesSnapshot item)=>{
+        item.Reset();
+       }
+      );
+     internal MaterialId baseMaterial;
+        internal virtual void DoSnapshot(List<NodeMaterialTable>tempMaterialTables){
+         foreach(var materialTable in tempMaterialTables){
+          foreach(var entry in materialTable.entries){
+           baseMaterial=(MaterialId)Math.Max((uint)entry.material,(uint)baseMaterial);
+          }
+         }
+        }
+        internal virtual void Reset(){
         }
     }
     internal class BiomeSpawnTablesSnapshot{
@@ -340,8 +379,5 @@ namespace AKCondinoO.World{
           picker.Clear();
          }
         }
-    }
-    internal class MaterialTablesSnapshot{
-     internal MaterialId baseMaterial;
     }
 }
