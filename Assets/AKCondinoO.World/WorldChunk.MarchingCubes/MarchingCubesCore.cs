@@ -322,6 +322,7 @@ namespace AKCondinoO.World.MarchingCubes{
            }
            var result=WriteSlots(v,context.slots,context.weights);
               Vertex WriteSlots(in Vertex v,Vector2[]slots,float[]weights){
+               SortSlots(slots,weights);
                var result=v;
                result.texCoord0.x=slots[0].x;result.texCoord0.y=slots[0].y;
                result.texCoord0.z=slots[1].x;result.texCoord0.w=slots[1].y;
@@ -340,6 +341,27 @@ namespace AKCondinoO.World.MarchingCubes{
                result.texCoord7.z=weights[6];
                result.texCoord7.w=weights[7];
                return result;
+                  static void SortSlots(Vector2[]slots,float[]weights){
+                   for(int i=1;i<slots.Length;i++){
+                    Vector2 s=slots[i];
+                    float w=weights[i];
+                    int j=i-1;
+                    while(j>=0&&Compare(slots[j],s)>0){
+                     slots[j+1]=slots[j];
+                     weights[j+1]=weights[j];
+                     j--;
+                    }
+                    slots[j+1]=s;
+                    weights[j+1]=w;
+                   }
+                  }
+                  static int Compare(Vector2 a,Vector2 b){
+                   if(a.x<b.x)return-1;
+                   if(a.x>b.x)return 1;
+                   if(a.y<b.y)return-1;
+                   if(a.y>b.y)return 1;
+                   return 0;
+                  }
               }
            Array.Clear(context.slots  ,0,context.slots  .Length);
            Array.Clear(context.weights,0,context.weights.Length);
