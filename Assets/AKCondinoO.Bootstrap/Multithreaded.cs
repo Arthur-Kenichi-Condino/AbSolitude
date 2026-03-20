@@ -65,7 +65,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.ExecuteAtBackgroundThread();
           }catch(Exception e){
-           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
           completed.Enqueue(job);
           Interlocked.Decrement(ref activeJobs);
@@ -91,7 +91,7 @@ namespace AKCondinoO.Bootstrap{
          try{
           job.OnScheduleSetContainerDataAtMainThread();
          }catch(Exception e){
-          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }
          priority=Math.Clamp(priority,0,scheduledByPriority.Length-1);
          scheduledByPriority[priority].Enqueue(job);
@@ -104,7 +104,7 @@ namespace AKCondinoO.Bootstrap{
           try{
            job.OnCompletedDoAtMainThread();
           }catch(Exception e){
-           Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           }
           if(ShouldYield()){
            break;

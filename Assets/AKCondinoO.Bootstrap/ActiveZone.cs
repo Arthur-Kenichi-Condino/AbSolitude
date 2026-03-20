@@ -82,7 +82,6 @@ namespace AKCondinoO.Bootstrap{
          if(!transform.hasChanged){
           return;
          }
-         //Logs.Message(Logs.LogType.Debug,"transform.hasChanged:"+transform.hasChanged);
          pos=transform.position;
          bounds.center=pos;
          cCoord=vecPosTocCoord(pos);

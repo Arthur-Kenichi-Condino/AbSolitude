@@ -58,13 +58,11 @@ namespace AKCondinoO.SimObjects{
          simObjects.Clear();
         }
         internal void DrawAll(){
-         //Logs.Message(Logs.LogType.Debug,"mesh.name:"+mesh.name+";subMeshCount:"+subMeshCount);
          const int batchSize=1023;
          for(int i=0;i<subMeshCount;i++){
           RenderParams rParams=renderParams[i];
           for(int j=0;j<count;j+=1023){
            int size=Mathf.Min(count-j,batchSize);
-           //Logs.Message(Logs.LogType.Debug,"size:"+size);
            Graphics.RenderMeshInstanced(
             in rParams,mesh,i,matrices,size,j
            );

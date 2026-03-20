@@ -12,9 +12,9 @@ namespace AKCondinoO.Bootstrap{
     ///</summary>
     [DefaultExecutionOrder(-100000)]
     internal class Main:MonoSingleton<Main>{
-     public override int initOrder{get{return 1;}}
      [SerializeField]private int workerCount=8;
      [SerializeField]ActiveZone activeZonePrefab;
+     [SerializeField]private bool debugToggleLogsDebugMessages=false;
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -22,7 +22,7 @@ namespace AKCondinoO.Bootstrap{
         }
         void Start(){
          if(singleton==this){
-          Logs.Message(Logs.LogType.Debug,"...hello, World!");
+          Logs.Debug("...hello, World!");
           ThreadDispatcher.Initialize(workerCount<=0?null:workerCount);
           ActiveZone.EnsureExists(activeZonePrefab);
           SingletonManager.InitializeAll();
@@ -47,10 +47,14 @@ namespace AKCondinoO.Bootstrap{
         public override void Shutdown(){
          if(this!=null){
          }
-         Logs.Message(Logs.LogType.Debug,"...good night, World. :)");
+         Logs.Debug("...good night, World. :)");
          base.Shutdown();
         }
         void Update(){
+         if(debugToggleLogsDebugMessages){
+          Logs.enableAll=!Logs.enableAll;
+          debugToggleLogsDebugMessages=false;
+         }
          ThreadDispatcher.FlushCompleted();
          ActiveZone.ManualUpdateTransformAll();
          SingletonManager.ManualUpdateAll();

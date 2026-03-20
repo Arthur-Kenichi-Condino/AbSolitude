@@ -6,7 +6,6 @@ using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunkManager:MonoSingleton<WorldChunkManager>{
-     public override int initOrder{get{return 9;}}
      [SerializeField]private WorldChunk chunkPrefab;
      private MonoPool<WorldChunk>chunkPool;
      [SerializeField]internal Vector2Int expropriationDistance=new Vector2Int(9,9);//  ...pool size
@@ -43,14 +42,12 @@ namespace AKCondinoO.World{
          base.Shutdown();
         }
         internal void AddRef(Vector2Int cCoord){
-         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
          if(!chunkRef.TryGetValue(cCoord,out var cRef)){
           chunkRef.Add(cCoord,cRef=0);
          }
          chunkRef[cCoord]=cRef+1;
         }
         internal void RemoveRef(Vector2Int cCoord){
-         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
          if(chunkRef.TryGetValue(cCoord,out var cRef)){
           cRef--;
           if(cRef<=0){
@@ -63,7 +60,6 @@ namespace AKCondinoO.World{
          }
         }
         internal void EnsureExists(Vector2Int cCoord){
-         //Logs.Message(Logs.LogType.Debug,"cCoord:"+cCoord);
          if(!chunks.TryGetValue(cCoord,out var cnk)){
           chunks.Add(cCoord,cnk=chunkPool.Rent());
           cnk.Initialize();

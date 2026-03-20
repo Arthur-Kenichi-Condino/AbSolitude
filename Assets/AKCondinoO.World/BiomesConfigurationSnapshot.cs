@@ -86,7 +86,7 @@ namespace AKCondinoO.World{
          try{
          snapshot=newSnapshot;
          }catch(Exception e){
-          Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }finally{
           rwl.ExitWriteLock();
          }
@@ -360,7 +360,7 @@ namespace AKCondinoO.World{
             pickerByLayer.Add(spawnTableLayer.layer,picker=new());
            }
            foreach(var entry in spawnTableLayer.entries){
-            Logs.Message(Logs.LogType.Debug,"'spawnTable entry':"+entry.prefab.name);
+            Logs.Debug("'spawnTable entry':"+entry.prefab.name);
             ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChanceObjectSpawnEntry<SimObject>.pool.Rent();
             pickerEntry.prefab=entry.prefab;
             pickerEntry.chance=entry.chance;

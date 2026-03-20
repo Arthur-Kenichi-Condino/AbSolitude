@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.Rendering;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
-     public override int initOrder{get{return 15;}}
      [SerializeField]private SimObjectPrefabs prefabsRegistry;
      [SerializeField]private bool      debugMassiveSpawnTest=false;
      [SerializeField]private SimObject debugMassiveSpawnType=null;
@@ -42,7 +41,7 @@ namespace AKCondinoO.SimObjects{
             MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
             Mesh mesh;
             if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
-             Logs.Message(Logs.LogType.Debug,"mesh.name:"+mesh.name);
+             Logs.Debug("mesh.name:"+mesh.name);
              instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
             }
            }
@@ -109,14 +108,14 @@ namespace AKCondinoO.SimObjects{
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
           debugMassiveSpawnTest=false;
-          Logs.Message(Logs.LogType.Debug,"'antes de rent':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
+          Logs.Debug("'antes de rent':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
           DebugMassiveSpawnJob debugMassiveSpawnJob=DebugMassiveSpawnJob.pool.Rent();
           bool scheduled=ThreadDispatcher.TrySchedule(debugMassiveSpawnJob);
-          Logs.Message(Logs.LogType.Debug,"scheduled:"+scheduled);
+          Logs.Debug("scheduled:"+scheduled);
           if(!scheduled){
            DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
           }
-          Logs.Message(Logs.LogType.Debug,"'depois de return':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
+          Logs.Debug("'depois de return':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
          }
         }
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
@@ -148,7 +147,7 @@ namespace AKCondinoO.SimObjects{
              debugMassiveSpawnCount=singleton.debugMassiveSpawnCount;
             }
             public void ExecuteAtBackgroundThread(){
-             Logs.Message(Logs.LogType.Debug,"DebugMassiveSpawnJob.BackgroundExecute");
+             Logs.Debug("DebugMassiveSpawnJob.BackgroundExecute");
              spawnList=SpawnList.pool.Rent();
              for(int i=0;i<debugMassiveSpawnCount;i++){
               spawnList.Add(
@@ -200,7 +199,6 @@ namespace AKCondinoO.SimObjects{
          }
          SimObjectSpawn item=data[currentIndex];
          currentIndex++;
-         //Logs.Message(Logs.LogType.Debug,"SpawnNext");
          if(simObjectPrefabs.TryGetValue(item.simObjectType,out var factory)){
           factory.Spawn(item);
          }

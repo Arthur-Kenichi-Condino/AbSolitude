@@ -41,7 +41,6 @@ namespace AKCondinoO.World.Terrain{
         }
      internal UpdateJob updateJob;
         internal void DoUpdateJob(){
-         //Logs.Message(Logs.LogType.Debug,"'schedule updateJob'");
          debugDrawMeshWireframeVer.Clear();
          debugDrawMeshWireframeTri.Clear();
          var updateJob=UpdateJob.pool.Rent();
@@ -140,7 +139,7 @@ namespace AKCondinoO.World.Terrain{
             }
             public void OnLoopCompleted(){
              sw.Stop();
-             Logs.Message(Logs.LogType.Debug,"'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
+             Logs.Debug("'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
              UpdateJob.pool.Return(this);
             }
         }
@@ -174,15 +173,14 @@ namespace AKCondinoO.World.Terrain{
              try{
               context.meshData.tempVer.Clear();
               context.meshData.tempTri.Clear();
-              //Logs.Message(Logs.LogType.Debug,"DoMarchingCubesJob.BackgroundExecute");
               MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
              }catch(Exception e){
-              Logs.Message(Logs.LogType.Error,e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+              Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
              }finally{
               BiomesConfigurationSnapshot.StoppedReading();
              }
              sw.Stop();
-             Logs.Message(Logs.LogType.Debug,"'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
+             Logs.Debug("'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
              if(chunk.terrain.ValidJob(updateJob)){
@@ -191,7 +189,6 @@ namespace AKCondinoO.World.Terrain{
                Height/2f,
                cnkRgn.y+(Depth/2f)
               );
-              //Logs.Message(Logs.LogType.Debug,"context.tempVer.Length:"+context.tempVer.Length);
               if(chunk.debugDrawMeshWireframe){
                ref var tempVer=ref context.meshData.tempVer;
                ref var tempTri=ref context.meshData.tempTri;

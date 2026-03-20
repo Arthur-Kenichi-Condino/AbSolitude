@@ -3,7 +3,6 @@ using AKCondinoO.World.Biomes;
 using UnityEngine;
 namespace AKCondinoO.World{
     internal class BiomesSystem:MonoSingleton<BiomesSystem>{
-     public override int initOrder{get{return 8;}}
      [SerializeField]internal int seed=0;
      [SerializeField]internal float terrainSmoothingHeight=4f;
      [SerializeField]internal NoiseNode terrain;

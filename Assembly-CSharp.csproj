@@ -255,6 +255,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.UpdateMotion.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\InputAction.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\GenerateHomunculus\GenerateHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\Wasteland.cs" />
@@ -346,9 +347,11 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\MarchingCubesWater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculiAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\InputBindingsAsset.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\RidgedMultifractalNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Pooling.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FloatLerpHelper.cs" />

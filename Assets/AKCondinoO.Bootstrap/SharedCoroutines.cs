@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal class SharedCoroutines:MonoSingleton<SharedCoroutines>{
-     public override int initOrder{get{return 0;}}
         internal interface SharedCoroutineContainerJob{
             SharedCoroutineContainerJob dependency{get;set;}
             void OnScheduleSetContainerData();
