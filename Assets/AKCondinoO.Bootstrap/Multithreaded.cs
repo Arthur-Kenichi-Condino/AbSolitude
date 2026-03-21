@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
@@ -9,7 +10,9 @@ namespace AKCondinoO.Bootstrap{
         void OnCompletedDoAtMainThread();
     }
     internal static class ThreadDispatcher{
-     private static volatile bool running;
+     private static int running;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsRunning()=>Volatile.Read(ref running)==1;
      private static Thread[]workers;
      private static readonly ConcurrentQueue<MultithreadedContainerJob>[]scheduledByPriority={
       new(),//  ...max priority
@@ -18,16 +21,19 @@ namespace AKCondinoO.Bootstrap{
       new(),
      };
      private static readonly ConcurrentQueue<MultithreadedContainerJob>completed=new();
-     private static int activeJobs;
      private static int maxConcurrentJobs;
      private static int workerCount;
+         private static int accepting;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool IsAccepting()=>Volatile.Read(ref accepting)==1;
+     private static int activeJobs;
         internal static void Initialize(int?setWorkerCount=null){
-         if(running)return;
+         if(Interlocked.Exchange(ref running,1)==1)return;
+         Interlocked.Exchange(ref accepting,1);
          int cpu=Environment.ProcessorCount;
          workerCount=setWorkerCount??Math.Max(1,cpu-2);
-         maxConcurrentJobs=workerCount*2;
+         maxConcurrentJobs=workerCount;
          workers=new Thread[workerCount];
-         running=true;
          for(int i=0;i<workerCount;i++){
           workers[i]=new Thread(WorkerLoop);
           workers[i].IsBackground=false;
@@ -36,7 +42,11 @@ namespace AKCondinoO.Bootstrap{
          }
         }
         internal static void Shutdown(){
-         running=false;
+         Interlocked.Exchange(ref accepting,0);
+         while(Volatile.Read(ref threadsEnqueueing)>0){
+          Thread.Yield();
+         }
+         Interlocked.Exchange(ref running,0);
          if(workers==null)return;
          for(int i=0;i<workers.Length;i++){
           workers[i]?.Join();
@@ -45,7 +55,7 @@ namespace AKCondinoO.Bootstrap{
         }
         private static void WorkerLoop(){
          SpinWait spin=new SpinWait();
-         while(running||HasPendingWork()){
+         while(IsRunning()||HasPendingWork()){
           int jobs=Volatile.Read(ref activeJobs);
           if(jobs>=maxConcurrentJobs){
            spin.SpinOnce();
@@ -81,13 +91,20 @@ namespace AKCondinoO.Bootstrap{
         private static bool HasPendingWork(){
          if(Volatile.Read(ref activeJobs)>0)
           return true;
+         if(Volatile.Read(ref threadsEnqueueing)>0)
+          return true;
          for(int i=0;i<scheduledByPriority.Length;i++)
           if(!scheduledByPriority[i].IsEmpty)
            return true;
          return false;
         }
+     private static int threadsEnqueueing;
         internal static bool TrySchedule(MultithreadedContainerJob job,int priority=0){
-         if(!running)return false;
+         Interlocked.Increment(ref threadsEnqueueing);
+         if(!IsRunning()||!IsAccepting()){
+          Interlocked.Decrement(ref threadsEnqueueing);
+          return false;
+         }
          try{
           job.OnScheduleSetContainerDataAtMainThread();
          }catch(Exception e){
@@ -95,6 +112,7 @@ namespace AKCondinoO.Bootstrap{
          }
          priority=Math.Clamp(priority,0,scheduledByPriority.Length-1);
          scheduledByPriority[priority].Enqueue(job);
+         Interlocked.Decrement(ref threadsEnqueueing);
          return true;
         }
         internal static void FlushCompleted(bool shutdown=false){

@@ -108,14 +108,14 @@ namespace AKCondinoO.SimObjects{
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
           debugMassiveSpawnTest=false;
-          Logs.Debug("'antes de rent':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
+          Logs.Debug("'antes de rent':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
           DebugMassiveSpawnJob debugMassiveSpawnJob=DebugMassiveSpawnJob.pool.Rent();
           bool scheduled=ThreadDispatcher.TrySchedule(debugMassiveSpawnJob);
           Logs.Debug("scheduled:"+scheduled);
           if(!scheduled){
            DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
           }
-          Logs.Debug("'depois de return':DebugMassiveSpawnJob.pool.count:"+DebugMassiveSpawnJob.pool.count);
+          Logs.Debug("'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
          }
         }
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){

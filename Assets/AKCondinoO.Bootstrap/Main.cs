@@ -1,3 +1,4 @@
+using AKCondinoO.Utilities;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     ///<summary>
@@ -22,7 +23,8 @@ namespace AKCondinoO.Bootstrap{
         }
         void Start(){
          if(singleton==this){
-          Logs.Debug("...hello, World!");
+          Logs.Debug("...hello, World! I'm alive! :D");
+          Pool.MultithreadedReturnDispatcher.Initialize();
           ThreadDispatcher.Initialize(workerCount<=0?null:workerCount);
           ActiveZone.EnsureExists(activeZonePrefab);
           SingletonManager.InitializeAll();
@@ -36,6 +38,7 @@ namespace AKCondinoO.Bootstrap{
           ThreadDispatcher.FlushCompleted(true);
           SingletonManager.ShutdownAll();
           ActiveZone.ShutdownAny();
+          Pool.MultithreadedReturnDispatcher.Shutdown();
          }
          base.OnDestroy();
         }

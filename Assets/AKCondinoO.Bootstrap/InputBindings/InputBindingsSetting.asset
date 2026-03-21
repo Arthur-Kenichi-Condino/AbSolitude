@@ -26,6 +26,6 @@ MonoBehaviour:
     inputCombination:
     - source: 0
       mode: 2
-      key: 27
+      key: 9
       mouseButton: 0
       controllerInput: 

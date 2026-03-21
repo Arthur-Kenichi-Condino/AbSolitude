@@ -44,9 +44,29 @@ namespace AKCondinoO.Bootstrap{
           var pair=bindings[i];
           var action=pair.action;
           var binding=pair.binding;
-          Logs.Debug("binding:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
+          //Logs.Debug("binding:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
+          switch(binding.combinationType){
+           case(InputCombinationType.Single):{
+            bool result;
+            result=ReadInput(binding.inputCombination[0]);
+            if(result){
+             Logs.Debug("action:"+action+":input received:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
+            }
+            break;
+           }
+          }
          }
          if(debugTryLogTranslateInputThisManyFrames>0){debugTryLogTranslateInputThisManyFrames--;}
+        }
+        private bool ReadInput(DeviceInput deviceInput){
+         switch(deviceInput.source){
+          case(DeviceInputSource.Keyboard):{
+           bool result;
+           result=Input.GetKeyDown(deviceInput.key);
+           return result;
+          }
+         }
+         return false;
         }
     }
     internal struct InputBinding{

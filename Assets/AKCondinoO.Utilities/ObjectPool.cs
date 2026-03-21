@@ -1,7 +1,10 @@
+using AKCondinoO.Bootstrap;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Utilities{
     ///<summary>
@@ -24,6 +27,7 @@ namespace AKCondinoO.Utilities{
          this.reset=reset;
          this.resetMethod=reset?.Method;
          this.resetTarget=reset?.Target;
+         staticReturn=ObjectPool<T>.StaticReturn;
          if(preallocate>0){for(int i=0;i<preallocate;i++){bag.Enqueue(this.factory());}}
         }
         internal T Rent(){
@@ -37,13 +41,22 @@ namespace AKCondinoO.Utilities{
         }
         internal void Return(T item){
          if(item is null)return;
+         Pool.MultithreadedReturnDispatcher.Enqueue(this,item);
+        }
+        internal void MultithreadedReturn(T item){
          reset?.Invoke(item);
          bag.Enqueue(item);
         }
         internal override void ObjectReturn(object item){
          Return((T)item);
         }
-     internal int count=>bag.Count;
+     internal int bagCount=>bag.Count;
+     internal readonly Action<object,object>staticReturn;
+        private static void StaticReturn(object poolObj,object itemObj){
+         var pool=(ObjectPool<T>)poolObj;
+         var item=(T)itemObj;
+         pool.MultithreadedReturn(item);
+        }
     }
     internal abstract class ObjectPoolBase{
         internal abstract object ObjectRent();internal abstract void ObjectReturn(object item);
@@ -77,7 +90,7 @@ namespace AKCondinoO.Utilities{
           if(!FactoriesMatch(result,requestedFactory)){
            return null;
           }
-          if(!ResetsMatch   (result,reset           )){
+          if(!ResetsMatch(result,reset)){
            return null;
           }
          }
@@ -92,11 +105,13 @@ namespace AKCondinoO.Utilities{
          }
          return true;
         }
-        static bool ResetsMatch<T>   (ObjectPool<T>pool,Action<T>reset){
-         if(pool.resetMethod  !=reset.Method){
+        static bool ResetsMatch<T>(ObjectPool<T>pool,Action<T>reset){
+         if(reset==null)
+          return pool.reset==null;
+         if(pool.resetMethod!=reset.Method){
           return false;
          }
-         if(!ReferenceEquals(pool.resetTarget  ,reset.Target  )){
+         if(!ReferenceEquals(pool.resetTarget,reset.Target)){
           return false;
          }
          return true;
@@ -116,5 +131,91 @@ namespace AKCondinoO.Utilities{
          ArrayPool<T>.Shared.Return(array,clearArray);
         }
         #endregion
+        struct MultithreadedReturnJob{
+         public object pool;
+         public object item;
+         public Action<object,object>staticReturn;
+        }
+        internal static class MultithreadedReturnDispatcher{
+         private static int running;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool IsRunning()=>Volatile.Read(ref running)==1;
+         private static Thread[]workers;
+         private static readonly ConcurrentQueue<MultithreadedReturnJob>scheduled=new();
+         private static int workerCount;
+         private static int accepting;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool IsAccepting()=>Volatile.Read(ref accepting)==1;
+         private static int inFlight;
+            internal static void Initialize(int?setWorkerCount=null){
+             if(Interlocked.Exchange(ref running,1)==1)return;
+             Interlocked.Exchange(ref accepting,1);
+             int cpu=Environment.ProcessorCount;
+             workerCount=setWorkerCount??Math.Max(1,cpu-2);
+             workers=new Thread[workerCount];
+             for(int i=0;i<workerCount;i++){
+              workers[i]=new Thread(WorkerLoop);
+              workers[i].IsBackground=false;
+              workers[i].Priority=System.Threading.ThreadPriority.BelowNormal;
+              workers[i].Start();
+             }
+            }
+            internal static void Shutdown(){
+             Interlocked.Exchange(ref accepting,0);
+             while(Volatile.Read(ref threadsEnqueueing)>0){
+              Thread.Yield();
+             }
+             Interlocked.Exchange(ref running,0);
+             if(workers==null)return;
+             for(int i=0;i<workers.Length;i++){
+              workers[i]?.Join();
+             }
+             workers=null;
+            }
+            private static void WorkerLoop(){
+             SpinWait spin=new SpinWait();
+             while(IsRunning()||HasPendingWork()){
+              if(scheduled.TryDequeue(out var job)){
+               try{
+                job.staticReturn(job.pool,job.item);
+               }catch(Exception e){
+                Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+               }finally{
+                Interlocked.Decrement(ref inFlight);
+               }
+              }else{
+               spin.SpinOnce();
+              }
+             }
+            }
+            private static bool HasPendingWork(){
+             if(Volatile.Read(ref inFlight)>0)
+              return true;
+             if(Volatile.Read(ref threadsEnqueueing)>0)
+              return true;
+             if(!scheduled.IsEmpty){
+              return true;
+             }
+             return false;
+            }
+         private static int threadsEnqueueing;
+            internal static void Enqueue<T>(ObjectPool<T>pool,T item){
+             Interlocked.Increment(ref threadsEnqueueing);
+             if(!IsRunning()||!IsAccepting()){
+              Interlocked.Decrement(ref threadsEnqueueing);
+              pool.MultithreadedReturn(item);
+              return;
+             }
+             Interlocked.Increment(ref inFlight);
+             scheduled.Enqueue(
+              new MultithreadedReturnJob{
+               pool=pool,
+               item=item,
+               staticReturn=pool.staticReturn
+              }
+             );
+             Interlocked.Decrement(ref threadsEnqueueing);
+            }
+        }
     }
 }

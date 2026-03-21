@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
-     internal static bool enableAll=false;
+     internal static bool enableAll=true;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
      };
