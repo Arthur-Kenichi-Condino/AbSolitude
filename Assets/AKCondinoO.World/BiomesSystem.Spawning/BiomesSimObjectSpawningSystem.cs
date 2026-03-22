@@ -7,7 +7,9 @@ namespace AKCondinoO.World.Spawning{
         }
         internal class BiomesSimObjectSpawnJob:MultithreadedContainerJob{
          internal Vector2Int cCoord;
-            public void OnScheduleSetContainerDataAtMainThread(){
+            public void CancelGraciously(){
+            }
+            public void OnDoScheduleSetContainerData(){
             }
             public void ExecuteAtBackgroundThread(){
             }

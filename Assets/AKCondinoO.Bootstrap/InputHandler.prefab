@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputBindingsSetting: {fileID: 11400000, guid: 8d2fed3ae0e188a4ca830318292ff075, type: 2}
+  debugTryLogTranslateInputThisManyFrames: 0

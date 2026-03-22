@@ -39,23 +39,35 @@ namespace AKCondinoO.World.Terrain{
          if(meshData.tempVer.IsCreated)meshData.tempVer.Dispose();
          if(meshData.tempTri.IsCreated)meshData.tempTri.Dispose();
         }
+        internal void OnChunkPool(){
+         if(updateJob!=null){updateJob.CancelGraciously();}
+        }
      internal UpdateJob updateJob;
         internal void DoUpdateJob(){
+         Logs.Debug("'doing update job for':"+chunk.cnkRgn);
          debugDrawMeshWireframeVer.Clear();
          debugDrawMeshWireframeTri.Clear();
-         var updateJob=UpdateJob.pool.Rent();
-         updateJob.dependency=this.updateJob;
-         updateJob.chunk=this.chunk;
-         if(!SharedCoroutines.TrySchedule(updateJob)){
-          UpdateJob.pool.Return(updateJob);
+         if(this.updateJob==null||chunk.cCoord!=updateJob.cCoord||!ValidJob(this.updateJob)){
+          var updateJob=UpdateJob.pool.Rent();
+          updateJob.dependency=this.updateJob;
+          updateJob.chunk=chunk;
+          if(!SharedCoroutines.TrySchedule(updateJob)){
+           UpdateJob.pool.Return(updateJob);
+          }
+          if(updateJob.dependency!=null){updateJob.dependency.CancelGraciously();}
+          this.updateJob=updateJob;
          }
-         this.updateJob=updateJob;
+        }
+     internal bool cancelled;
+        internal void OnUpdateJobDone(UpdateJob updateJob,bool cancelled){
+         if(this.updateJob==updateJob){
+          this.updateJob=null;
+          this.cancelled=cancelled;
+         }
         }
         internal bool ValidJob(UpdateJob updateJob){
          if(this.chunk==null){return false;}
-         if(this.chunk!=updateJob.chunk){return false;}
-         if(this.chunk.cCoord!=updateJob.cCoord){return false;}
-         if(this.chunk.terrain!=updateJob.chunk.terrain){return false;}
+         if(this.updateJob!=updateJob){return false;}
          return true;
         }
         internal class UpdateJob:SharedCoroutineContainerJob{
@@ -64,11 +76,14 @@ namespace AKCondinoO.World.Terrain{
            "",
            ()=>new(),
            (UpdateJob item)=>{
+            item.dependency=null;
+            item.isCancelledCanStop=false;
             item.chunk=null;
             item.pendingMarchingCubes=false;
             item.waitingMarchingCubes=false;
             item.pendingBakeJob      =false;
             item.waitingBakeJob      =false;
+            item.doMarchingCubesJob=null;
            }
           );
          public SharedCoroutineContainerJob dependency{
@@ -82,9 +97,19 @@ namespace AKCondinoO.World.Terrain{
          internal bool pendingMarchingCubes;
          internal bool waitingBakeJob;
          internal bool pendingBakeJob;
+         private DoMarchingCubesJob doMarchingCubesJob;
+         public bool isCancelledCanStop{
+          get{return cancelled&&!waitingMarchingCubes;}
+          set{cancelled=value;}
+         }
+         private bool cancelled;
          readonly System.Diagnostics.Stopwatch sw=new();
+            public void CancelGraciously(){
+             cancelled=true;
+            }
             public void OnScheduleSetContainerData(){
              sw.Restart();
+             cancelled=false;
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
              pendingMarchingCubes=true;
@@ -92,27 +117,37 @@ namespace AKCondinoO.World.Terrain{
              pendingBakeJob      =true;
              waitingBakeJob      =false;
             }
-            public bool OnLoopExecuteStep(bool flush=false){
-             if(waitingMarchingCubes){if(flush){return false;}return true;}
+            public int OnLoopExecuteStep(bool flush=false){
+             bool valid=chunk.terrain.ValidJob(this);if(!valid){cancelled=true;}
+             if(waitingMarchingCubes){
+              if(flush){
+               return -1;
+              }
+              if(cancelled){
+               //Logs.Debug("'wasting time doing marching cubes on chunk that changed...':"+sw.ElapsedMilliseconds+" ms");
+               doMarchingCubesJob.CancelGraciously();
+              }
+              return 0;
+             }
              if(waitingBakeJob){
               if(flush){
-               return false;
+               return -1;
               }
               waitingBakeJob=false;
              }
-             if(!chunk.terrain.ValidJob(this)){return false;}
+             if(cancelled){return -1;}
              if(!flush){
               if(pendingMarchingCubes){
-               DoMarchingCubesJob doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
+               doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
                doMarchingCubesJob.updateJob=this;
-               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob);
+               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,3);
                if(!scheduled){
                 DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
-                return false;
+                return -1;
                }
                waitingMarchingCubes=true;//  ...job is scheduled
                pendingMarchingCubes=false;
-               return true;
+               return 1;
               }
               if(pendingBakeJob){
                ref var tempVer=ref chunk.terrain.meshData.tempVer;
@@ -132,12 +167,14 @@ namespace AKCondinoO.World.Terrain{
                mesh.SetSubMesh(0,new SubMeshDescriptor(0,tempTri.Length){firstVertex=0,vertexCount=tempVer.Length},meshFlags);
                waitingBakeJob=true;
                pendingBakeJob=false;
-               return true;
+               return 1;
               }
              }
-             return false;//  ...end
+             return -1;//  ...end
             }
             public void OnLoopCompleted(){
+             bool valid=chunk.terrain.ValidJob(this);if(!valid){cancelled=true;}
+             chunk.terrain.OnUpdateJobDone(this,cancelled);
              sw.Stop();
              Logs.Debug("'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
              UpdateJob.pool.Return(this);
@@ -158,7 +195,15 @@ namespace AKCondinoO.World.Terrain{
          internal Vector2Int cCoord;
          internal Vector2Int cnkRgn;
          private MarchingCubesContext context;
-            public void OnScheduleSetContainerDataAtMainThread(){
+         private bool cancelled;
+            public void CancelGraciously(){
+             if(!cancelled){
+              Volatile.Write(ref context.cancel,1);
+             }
+             cancelled=true;
+            }
+            public void OnDoScheduleSetContainerData(){
+             cancelled=false;
              chunk=updateJob.chunk;
              cCoord=chunk.cCoord;
              cnkRgn=chunk.cnkRgn;
@@ -183,17 +228,20 @@ namespace AKCondinoO.World.Terrain{
              Logs.Debug("'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
-             if(chunk.terrain.ValidJob(updateJob)){
-              chunk.transform.position=chunk.bounds.center=new Vector3(
-               cnkRgn.x+(Width/2f),
-               Height/2f,
-               cnkRgn.y+(Depth/2f)
-              );
-              if(chunk.debugDrawMeshWireframe){
-               ref var tempVer=ref context.meshData.tempVer;
-               ref var tempTri=ref context.meshData.tempTri;
-               chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(tempVer[i]);}
-               chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(tempTri[i]);}
+             bool valid=chunk.terrain.ValidJob(updateJob);if(!valid){cancelled=true;}
+             if(valid){
+              if(!cancelled){
+               chunk.transform.position=chunk.bounds.center=new Vector3(
+                cnkRgn.x+(Width/2f),
+                Height/2f,
+                cnkRgn.y+(Depth/2f)
+               );
+               if(chunk.debugDrawMeshWireframe){
+                ref var tempVer=ref context.meshData.tempVer;
+                ref var tempTri=ref context.meshData.tempTri;
+                chunk.terrain.debugDrawMeshWireframeVer.Clear();for(int i=0;i<tempVer.Length;i++){chunk.terrain.debugDrawMeshWireframeVer.Add(tempVer[i]);}
+                chunk.terrain.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){chunk.terrain.debugDrawMeshWireframeTri.Add(tempTri[i]);}
+               }
               }
              }
              BiomesConfigurationContext.pool.Return(context.biomeContext);

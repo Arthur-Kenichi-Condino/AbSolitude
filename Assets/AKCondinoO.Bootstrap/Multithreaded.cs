@@ -5,7 +5,8 @@ using System.Threading;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal interface MultithreadedContainerJob{
-        void OnScheduleSetContainerDataAtMainThread();
+        void CancelGraciously();
+        void OnDoScheduleSetContainerData();
         void ExecuteAtBackgroundThread();
         void OnCompletedDoAtMainThread();
     }
@@ -106,7 +107,7 @@ namespace AKCondinoO.Bootstrap{
           return false;
          }
          try{
-          job.OnScheduleSetContainerDataAtMainThread();
+          job.OnDoScheduleSetContainerData();
          }catch(Exception e){
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }

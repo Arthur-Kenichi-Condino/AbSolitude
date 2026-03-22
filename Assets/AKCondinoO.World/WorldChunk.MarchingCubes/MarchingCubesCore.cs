@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Unity.Collections;
 using UnityEngine;
 using static AKCondinoO.World.Terrain.TerrainChunk;
@@ -43,6 +44,7 @@ namespace AKCondinoO.World.MarchingCubes{
          for(coord=new Vector3Int(0,min.y,0),polygonCoord=new();coord.y<=max.y;coord.y++,polygonCoord.y++){
          for(coord.x=               min.x   ,polygonCoord.x=0  ;coord.x<=max.x;coord.x++,polygonCoord.x++){
          for(coord.z=               min.z   ,polygonCoord.z=0  ;coord.z<=max.z;coord.z++,polygonCoord.z++){
+          if(Volatile.Read(ref context.cancel)==1){return;}
           var polygoncCoord=cCoord;
           var polygonvCoord=coord;
           ValidatevCoord(ref polygoncCoord,ref polygonvCoord);
@@ -393,8 +395,10 @@ namespace AKCondinoO.World.MarchingCubes{
         Pool.ReturnArray<Voxel  >(item.normalOffsetVoxelsCache,true);
         item.normalOffsetVoxelsCache=null;
         Array.Clear(item.polygonCell,0,item.polygonCell.Length);
+        Volatile.Write(ref item.cancel,0);
        }
       );
+     internal int cancel;
      public MeshData meshData;
      public BiomesConfigurationContext biomeContext;
      internal int width;

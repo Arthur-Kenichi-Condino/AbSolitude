@@ -61,9 +61,14 @@ namespace AKCondinoO.Bootstrap{
         private bool ReadInput(DeviceInput deviceInput){
          switch(deviceInput.source){
           case(DeviceInputSource.Keyboard):{
-           bool result;
-           result=Input.GetKeyDown(deviceInput.key);
-           return result;
+           bool readValue=false;
+           switch(deviceInput.mode){
+            case(InputDetectionMode.WhenDown):{
+             readValue=Input.GetKeyDown(deviceInput.key);
+             break;
+            }
+           }
+           return readValue;
           }
          }
          return false;

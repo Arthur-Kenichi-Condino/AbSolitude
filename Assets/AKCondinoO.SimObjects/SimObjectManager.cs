@@ -142,7 +142,9 @@ namespace AKCondinoO.SimObjects{
          private Type debugMassiveSpawnType;
          private int  debugMassiveSpawnCount;
          private SpawnList spawnList;
-            public void OnScheduleSetContainerDataAtMainThread(){
+            public void CancelGraciously(){
+            }
+            public void OnDoScheduleSetContainerData(){
              debugMassiveSpawnType =singleton.debugMassiveSpawnType.GetType();
              debugMassiveSpawnCount=singleton.debugMassiveSpawnCount;
             }

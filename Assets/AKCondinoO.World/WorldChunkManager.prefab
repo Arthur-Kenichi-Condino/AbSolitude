@@ -45,5 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkPrefab: {fileID: 1310050517158449116, guid: cc41d17b110f2114b8b1d5a92ab2d10d, type: 3}
-  expropriationDistance: {x: 9, y: 9}
+  expropriationDistance: {x: 18, y: 18}
   instantiationDistance: {x: 6, y: 6}
+  debugForceRegenerate: 0

@@ -29,12 +29,13 @@ namespace AKCondinoO.World{
         }
      private bool firstCall;
         internal void Initialize(){
-         firstCall=true;
+         if(!pooled)firstCall=true;
+         pooled=false;
         }
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
         internal void OnEnsureExists(Vector2Int cCoord){
-         if(firstCall||cCoord!=this.cCoord){
+         if(firstCall||cCoord!=this.cCoord||terrain.cancelled){
           firstCall=false;
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
@@ -47,7 +48,10 @@ namespace AKCondinoO.World{
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);
         }
+     private bool pooled;
         internal void OnPool(){
+         terrain.OnChunkPool();
+         pooled=true;
          foreach(var simObject in simObjects){
           simObject.OnChunkPooled();
          }

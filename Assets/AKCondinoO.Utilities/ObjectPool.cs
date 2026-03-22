@@ -176,6 +176,7 @@ namespace AKCondinoO.Utilities{
              SpinWait spin=new SpinWait();
              while(IsRunning()||HasPendingWork()){
               if(scheduled.TryDequeue(out var job)){
+               spin.Reset();
                try{
                 job.staticReturn(job.pool,job.item);
                }catch(Exception e){

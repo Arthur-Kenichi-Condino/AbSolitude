@@ -9,22 +9,22 @@ namespace AKCondinoO.World.Biomes{
      public double fallOff;
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          var selectorSnapshot=(SelectorNoiseNodesSnapshot)snapshot;
-         var inputAModule=inputA.Build(
+         var controllerModule=controller.Build(
           worldSeed,
           selectorSnapshot,
+          out var controllerSnapshot,
+          out _
+         );
+         var inputAModule=inputA.Build(
+          worldSeed,
+          controllerSnapshot,
           out var inputASnapshot,
           out _
          );
          var inputBModule=inputB.Build(
           worldSeed,
-          selectorSnapshot,
+          controllerSnapshot,
           out var inputBSnapshot,
-          out _
-         );
-         var controllerModule=controller.Build(
-          worldSeed,
-          selectorSnapshot,
-          out var controllerSnapshot,
           out _
          );
          selectorSnapshot.SetInput(inputASnapshot,inputBSnapshot,controllerSnapshot);
