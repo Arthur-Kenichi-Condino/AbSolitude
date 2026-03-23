@@ -140,7 +140,7 @@ namespace AKCondinoO.World.Terrain{
               if(pendingMarchingCubes){
                doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
                doMarchingCubesJob.updateJob=this;
-               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,3);
+               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,7);
                if(!scheduled){
                 DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
                 return -1;
@@ -231,11 +231,6 @@ namespace AKCondinoO.World.Terrain{
              bool valid=chunk.terrain.ValidJob(updateJob);if(!valid){cancelled=true;}
              if(valid){
               if(!cancelled){
-               chunk.transform.position=chunk.bounds.center=new Vector3(
-                cnkRgn.x+(Width/2f),
-                Height/2f,
-                cnkRgn.y+(Depth/2f)
-               );
                if(chunk.debugDrawMeshWireframe){
                 ref var tempVer=ref context.meshData.tempVer;
                 ref var tempTri=ref context.meshData.tempTri;

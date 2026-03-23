@@ -9,6 +9,7 @@ namespace AKCondinoO.Bootstrap{
      private static readonly Dictionary<ulong,ActiveZone>zones=new();
      internal static ActiveZone main;
      internal Bounds bounds;
+     internal Bounds worldBounds;
         internal static void EnsureExists(ActiveZone activeZonePrefab){
          if(main!=null)return;
          OnAddZoneFor(0,activeZonePrefab);
@@ -39,6 +40,7 @@ namespace AKCondinoO.Bootstrap{
           (WorldChunkManager.singleton.instantiationDistance.y*2+1)*Depth
          );
          bounds=new(new(),size);
+         worldBounds=new(new(),size);
          if(spawnCoroutine!=null){StopCoroutine(spawnCoroutine);}
          spawnCoroutine=StartCoroutine(CalculateChunks());
         }
@@ -75,6 +77,8 @@ namespace AKCondinoO.Bootstrap{
      private ulong clientId;
      private Vector3 pos;
      private Vector2Int cCoord;
+     private Vector2Int lastcCoord;
+     private bool hasLastcCoord;
         public void ManualUpdateTransform(){
          if(clientId==0){
           transform.position=MainCamera.singleton.transform.position;
@@ -85,15 +89,21 @@ namespace AKCondinoO.Bootstrap{
          pos=transform.position;
          bounds.center=pos;
          cCoord=vecPosTocCoord(pos);
+         if(!hasLastcCoord||cCoord!=lastcCoord){
+          var cnkRgn=cCoordTocnkRgn(cCoord);
+          worldBounds.center=new(cnkRgn.x,Height/2f,cnkRgn.y);
+          lastcCoord=cCoord;
+          hasLastcCoord=true;
+         }
          transform.hasChanged=false;
         }
      private readonly HashSet<Vector2Int>currChunks=new();
      private readonly HashSet<Vector2Int>nextChunks=new();
         private IEnumerator CalculateChunks(){
-         bool hasLastcCoord=false;
+         bool hascCoord=false;
          Vector2Int cCoord=default;
          while(true){
-          while(hasLastcCoord&&cCoord==this.cCoord){
+          while(hascCoord&&cCoord==this.cCoord){
            yield return null;
           }
           cCoord=this.cCoord;
@@ -125,7 +135,7 @@ namespace AKCondinoO.Bootstrap{
           currChunks.Clear();
           currChunks.UnionWith(nextChunks);
           nextChunks.Clear();
-          hasLastcCoord=true;
+          hascCoord=true;
           bool InsideInstantiationDistance(Vector2Int coord){
            if(
             Mathf.Abs(cCoord.x-coord.x)<=instDis.x&&
@@ -138,6 +148,7 @@ namespace AKCondinoO.Bootstrap{
         void OnDrawGizmos(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.blue);
+          DrawGizmos.Bounds(worldBounds,Color.white);
          #endif
         }
     }

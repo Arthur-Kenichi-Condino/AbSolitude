@@ -43,6 +43,11 @@ namespace AKCondinoO.World{
          }
         }
         internal void Generate(){
+         transform.position=bounds.center=new Vector3(
+          cnkRgn.x,
+          Height/2f,
+          cnkRgn.y
+         );
          terrain.DoUpdateJob();
         }
         internal void AddSimObject(SimObject simObject){

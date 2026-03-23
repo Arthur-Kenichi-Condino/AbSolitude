@@ -16,10 +16,7 @@ namespace AKCondinoO.Bootstrap{
         internal static bool IsRunning()=>Volatile.Read(ref running)==1;
      private static Thread[]workers;
      private static readonly ConcurrentQueue<MultithreadedContainerJob>[]scheduledByPriority={
-      new(),//  ...max priority
-      new(),
-      new(),
-      new(),
+      new(),new(),new(),new(),new(),new(),new(),new(),//  ...de max priority para min priority
      };
      private static readonly ConcurrentQueue<MultithreadedContainerJob>completed=new();
      private static int maxConcurrentJobs;
