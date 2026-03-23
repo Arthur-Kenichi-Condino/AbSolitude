@@ -1,15 +1,12 @@
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
-using AKCondinoO.World.Terrain;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
      internal Bounds bounds;
-     internal TerrainChunk terrain;
-     [SerializeField]internal GameObject terrainObject;
-     MeshFilter terrainFilter;
+     [SerializeField]internal WorldChunkTerrain terrain;
      internal readonly HashSet<SimObject>simObjects=new();
      [SerializeField]internal bool debugDrawMeshWireframe=false;
      [SerializeField]internal bool debugDrawMeshWireframeWhenSelectedOnly=true;
@@ -17,15 +14,10 @@ namespace AKCondinoO.World{
      [SerializeField]internal bool debugDrawMeshWireframeDrawNormals=true;
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
-         terrain=new(this);
-         terrainFilter=terrainObject.GetComponent<MeshFilter>();
-         terrainFilter.mesh=terrain.mesh;
+         terrain.chunk=this;
         }
         internal void ManualDestroy(){
-         if(terrainFilter!=null){
-          terrainFilter.mesh=null;
-         }
-         terrain.Destroy();
+         terrain.OnManualDestroy();
         }
      private bool firstCall;
         internal void Initialize(){
@@ -35,7 +27,9 @@ namespace AKCondinoO.World{
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
         internal void OnEnsureExists(Vector2Int cCoord){
-         if(firstCall||cCoord!=this.cCoord||terrain.cancelled){
+         if(firstCall||cCoord!=this.cCoord||
+          terrain.builder.cancelled
+         ){
           firstCall=false;
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
@@ -48,7 +42,7 @@ namespace AKCondinoO.World{
           Height/2f,
           cnkRgn.y
          );
-         terrain.DoUpdateJob();
+         terrain.OnGenerate();
         }
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);
@@ -62,13 +56,13 @@ namespace AKCondinoO.World{
          }
         }
         void OnDrawGizmos(){
-         terrain?.GizmosSelected(false);
+         terrain.builder?.GizmosSelected(false);
         }
         void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.gray);
          #endif
-         terrain?.GizmosSelected(true);
+         terrain.builder?.GizmosSelected(true);
         }
     }
 }

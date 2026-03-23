@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd51e00e429acf447901f0dc52952cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainObject: {fileID: 2128163307558759462}
+  terrain: {fileID: 6511037146098415160}
   debugDrawMeshWireframe: 0
   debugDrawMeshWireframeWhenSelectedOnly: 0
   debugDrawMeshWireframeDrawTriangles: 0
@@ -111,11 +111,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}
---- !u!1 &2128163307558759462 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 19094533784850350, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}
+--- !u!114 &6511037146098415160 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5156849076431164848, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}
   m_PrefabInstance: {fileID: 2146835074189534088}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14d69ab6889865340a72456b1f11531b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8356601167782838906 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7940843797437817330, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}

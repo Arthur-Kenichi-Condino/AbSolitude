@@ -145,7 +145,7 @@ namespace AKCondinoO.Bootstrap{
           }
          }
         }
-        void OnDrawGizmos(){
+        void OnDrawGizmosSelected(){
          #if UNITY_EDITOR
           DrawGizmos.Bounds(bounds,Color.blue);
           DrawGizmos.Bounds(worldBounds,Color.white);

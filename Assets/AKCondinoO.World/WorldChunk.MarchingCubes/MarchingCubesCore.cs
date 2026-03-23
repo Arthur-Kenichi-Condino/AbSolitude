@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine;
-using static AKCondinoO.World.Terrain.TerrainChunk;
+using static AKCondinoO.World.Terrain.TerrainChunkBuilder;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.MarchingCubes{
     internal struct MarchingCubesFlags{
