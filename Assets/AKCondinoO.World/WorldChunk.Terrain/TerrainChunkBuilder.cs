@@ -79,6 +79,7 @@ namespace AKCondinoO.World.Terrain{
          if(this.updateJob==updateJob){
           this.updateJob=null;
           this.cancelled=cancelled;
+          terrain.OnGenerateUpdate(cancelled);
          }
         }
         internal bool ValidJob(UpdateJob updateJob){

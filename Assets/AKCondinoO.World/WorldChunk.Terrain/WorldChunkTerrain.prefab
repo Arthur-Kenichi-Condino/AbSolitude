@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4719286878800932432}
   - component: {fileID: 7839605703773363956}
   - component: {fileID: 5619984662203089295}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WorldChunkTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5c332dad2b006ec4b87109ee40fafad2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

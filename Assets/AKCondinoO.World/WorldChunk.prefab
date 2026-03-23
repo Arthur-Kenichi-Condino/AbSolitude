@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3056474288981993761}
   - component: {fileID: 1310050517158449116}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WorldChunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,10 +62,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldChunkTerrain
       objectReference: {fileID: 0}
-    - target: {fileID: 7839605703773363956, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 5c332dad2b006ec4b87109ee40fafad2, type: 2}
     - target: {fileID: 7940843797437817330, guid: f9ed35973dd2d6e4c8263456da4066a1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

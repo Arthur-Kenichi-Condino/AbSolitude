@@ -5,20 +5,29 @@ namespace AKCondinoO.World{
     internal class WorldChunkTerrain:MonoBehaviour{
      internal WorldChunk chunk;
      internal TerrainChunkBuilder builder;
-     MeshFilter terrainFilter;
+     MeshFilter meshFilter;
+     internal MeshCollider meshCollider;
         void Awake(){
          builder=new(chunk,this);
-         terrainFilter=GetComponent<MeshFilter>();
-         terrainFilter.mesh=builder.mesh;
+         meshFilter=GetComponent<MeshFilter>();
+         meshFilter.mesh=builder.mesh;
+         meshCollider=GetComponent<MeshCollider>();
         }
         internal void OnManualDestroy(){
-         if(terrainFilter!=null){
-          terrainFilter.mesh=null;
+         if(meshFilter!=null){
+          meshFilter.mesh=null;
          }
          builder.Destroy();
         }
-        internal void OnGenerate(){
+        internal void DoGeneration(){
          builder.DoUpdateJob();
+        }
+        internal void OnGenerateUpdate(bool cancelled){
+         if(!cancelled){
+          meshCollider.sharedMesh=null;
+          meshCollider.sharedMesh=builder.mesh;
+         }
+         chunk.OnGeneratedTerrain(cancelled);
         }
         internal void OnChunkPool(){
          builder.OnChunkPool();

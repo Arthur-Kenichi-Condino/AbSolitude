@@ -42,7 +42,9 @@ namespace AKCondinoO.World{
           Height/2f,
           cnkRgn.y
          );
-         terrain.OnGenerate();
+         terrain.DoGeneration();
+        }
+        internal void OnGeneratedTerrain(bool cancelled){
         }
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);

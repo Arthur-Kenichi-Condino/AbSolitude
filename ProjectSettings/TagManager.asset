@@ -10,16 +10,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - NoPhysics
   - Water
   - UI
-  - VoxelTerrain
-  - Construction
-  - Sky
-  - Clouds
-  - Placeholder
-  - SimObject
-  - Sim
+  - WorldChunkTerrain
   - 
   - 
   - 
@@ -36,7 +30,13 @@ TagManager:
   - 
   - 
   - 
-  - Sight
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - Hitbox
   - Hurtbox
   m_SortingLayers:
