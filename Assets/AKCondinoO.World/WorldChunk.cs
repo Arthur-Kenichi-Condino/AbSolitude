@@ -45,6 +45,9 @@ namespace AKCondinoO.World{
          terrain.DoGeneration();
         }
         internal void OnGeneratedTerrain(bool cancelled){
+         if(!cancelled){
+          terrain.navMeshBuildData.SetNavMeshBuildData();
+         }
         }
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);

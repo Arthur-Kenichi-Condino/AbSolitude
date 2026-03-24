@@ -41,6 +41,7 @@ namespace AKCondinoO.Bootstrap{
          );
          bounds=new(new(),size);
          worldBounds=new(new(),size);
+         WorldChunkManager.singleton.navMeshProvider.RegisterActiveZone(this);
          if(spawnCoroutine!=null){StopCoroutine(spawnCoroutine);}
          spawnCoroutine=StartCoroutine(CalculateChunks());
         }

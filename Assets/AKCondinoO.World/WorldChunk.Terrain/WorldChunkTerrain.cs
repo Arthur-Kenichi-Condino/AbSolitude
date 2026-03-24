@@ -5,13 +5,15 @@ namespace AKCondinoO.World{
     internal class WorldChunkTerrain:MonoBehaviour{
      internal WorldChunk chunk;
      internal TerrainChunkBuilder builder;
-     MeshFilter meshFilter;
+     internal TerrainChunkNavMeshBuildData navMeshBuildData;
+     internal MeshFilter meshFilter;
      internal MeshCollider meshCollider;
         void Awake(){
          builder=new(chunk,this);
          meshFilter=GetComponent<MeshFilter>();
          meshFilter.mesh=builder.mesh;
          meshCollider=GetComponent<MeshCollider>();
+         navMeshBuildData=new(chunk,this);
         }
         internal void OnManualDestroy(){
          if(meshFilter!=null){

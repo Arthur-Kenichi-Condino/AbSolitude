@@ -20,13 +20,15 @@ namespace AKCondinoO.Utilities{
      internal readonly Action<T>  reset;
      internal readonly MethodInfo resetMethod;
      internal readonly object     resetTarget;
-        internal ObjectPool(Func<T>factory,Action<T>reset=null,int preallocate=0){
+     internal readonly bool multithreaded;
+        internal ObjectPool(Func<T>factory,Action<T>reset=null,bool multithreaded=true,int preallocate=0){
          this.factory=factory;
          this.factoryMethod=factory.Method;
          this.factoryTarget=factory.Target;
          this.reset=reset;
          this.resetMethod=reset?.Method;
          this.resetTarget=reset?.Target;
+         this.multithreaded=multithreaded;
          staticReturn=ObjectPool<T>.StaticReturn;
          if(preallocate>0){for(int i=0;i<preallocate;i++){bag.Enqueue(this.factory());}}
         }
@@ -41,9 +43,13 @@ namespace AKCondinoO.Utilities{
         }
         internal void Return(T item){
          if(item is null)return;
+         if(!multithreaded){
+          ProcessReturn(item);
+          return;
+         }
          Pool.MultithreadedReturnDispatcher.Enqueue(this,item);
         }
-        internal void MultithreadedReturn(T item){
+        internal void ProcessReturn(T item){
          reset?.Invoke(item);
          bag.Enqueue(item);
         }
@@ -55,7 +61,7 @@ namespace AKCondinoO.Utilities{
         private static void StaticReturn(object poolObj,object itemObj){
          var pool=(ObjectPool<T>)poolObj;
          var item=(T)itemObj;
-         pool.MultithreadedReturn(item);
+         pool.ProcessReturn(item);
         }
     }
     internal abstract class ObjectPoolBase{
@@ -68,7 +74,7 @@ namespace AKCondinoO.Utilities{
     ///</summary>
     internal static class Pool{
      static readonly ConcurrentDictionary<(Type type,string id),object>pools=new();
-        internal static ObjectPool<T>GetPool<T>(string id,Func<T>factory=null,Action<T>reset=null,int preallocate=0){
+        internal static ObjectPool<T>GetPool<T>(string id,Func<T>factory=null,Action<T>reset=null,bool multithreaded=true,int preallocate=0){
          var key=(typeof(T),id);
          bool requestedNonDefault=factory!=null;
          var requestedFactory=factory??CreateDefaultFactory<T>();
@@ -81,12 +87,16 @@ namespace AKCondinoO.Utilities{
            created=new ObjectPool<T>(
             requestedFactory,
             reset,
+            multithreaded,
             preallocate
            );
            return created;
           }
          );
          if(!ReferenceEquals(result,created)){
+          if(result.multithreaded!=multithreaded){
+           return null;
+          }
           if(!FactoriesMatch(result,requestedFactory)){
            return null;
           }
@@ -204,7 +214,7 @@ namespace AKCondinoO.Utilities{
              Interlocked.Increment(ref threadsEnqueueing);
              if(!IsRunning()||!IsAccepting()){
               Interlocked.Decrement(ref threadsEnqueueing);
-              pool.MultithreadedReturn(item);
+              pool.ProcessReturn(item);
               return;
              }
              Interlocked.Increment(ref inFlight);

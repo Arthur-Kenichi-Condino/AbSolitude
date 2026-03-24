@@ -124,6 +124,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\NavMeshHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterChunk.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\TerrainChunkNavMeshBuildData.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\VoxelWaterEditing.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.OnSkillUsed.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
     <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataSavingMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunkManager.NavMesh\NavMeshProvider.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Util.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ArrayHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuffEffectsState.cs" />

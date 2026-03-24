@@ -12,11 +12,17 @@ namespace AKCondinoO.World{
      [SerializeField]internal Vector2Int instantiationDistance=new Vector2Int(6,6);
      private readonly Dictionary<Vector2Int,int       >chunkRef=new();
      private readonly Dictionary<Vector2Int,WorldChunk>chunks  =new();
+     [SerializeField]internal string[]navMeshLayerNames=new string[]{
+      "WorldChunkTerrain",
+      "SimStructure",
+     };
+     internal NavMeshProvider navMeshProvider;
      [SerializeField]internal bool debugForceRegenerate=false;
         public override void Initialize(){
          base.Initialize();
          MaterialAtlasHelper.SetAtlasData();
          chunkPool=new(chunkPrefab);
+         navMeshProvider=new(this);
          if(this!=null){
          }
         }
