@@ -60,7 +60,7 @@ namespace AKCondinoO.World.Terrain{
         }
      internal UpdateJob updateJob;
         internal void DoUpdateJob(){
-         Logs.Debug("'doing update job for':"+chunk.cnkRgn);
+         Logs.Debug(()=>"'doing update job for':"+chunk.cnkRgn);
          debugDrawMeshWireframeVer.Clear();
          debugDrawMeshWireframeTri.Clear();
          if(this.updateJob==null||chunk.cCoord!=updateJob.cCoord||!ValidJob(this.updateJob)){
@@ -208,7 +208,7 @@ namespace AKCondinoO.World.Terrain{
              bool valid=builder.ValidJob(this);if(!valid){cancelled=true;}
              builder.OnUpdateJobDone(this,cancelled);
              sw.Stop();
-             Logs.Debug("'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
+             Logs.Debug(()=>"'terrain update job execution time':"+sw.ElapsedMilliseconds+" ms");
              UpdateJob.pool.Return(this);
             }
         }
@@ -254,7 +254,7 @@ namespace AKCondinoO.World.Terrain{
               BiomesConfigurationSnapshot.StoppedReading();
              }
              sw.Stop();
-             Logs.Debug("'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
+             Logs.Debug(()=>"'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
              if(updateJob==null){

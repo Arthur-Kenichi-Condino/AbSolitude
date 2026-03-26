@@ -15,12 +15,17 @@ namespace AKCondinoO.Bootstrap{
         internal static void Enable (string className)=>enabledAt.Add   (className);
         internal static void Disable(string className)=>enabledAt.Remove(className);
         [Conditional("ENABLE_LOG_DEBUG")]
-        internal static void Debug(string logMsg,Object context=null,bool condition=true,
+        internal static void Debug(System.Func<object>logMsg,Object context=null,bool condition=true,
          [CallerFilePath]string file="",
          [CallerMemberName]string member=""
         ){
+         if(!condition){return;}
+         string className=System.IO.Path.GetFileNameWithoutExtension(file);
+         if(!enableAll&&enabledAt.Count>0&&!enabledAt.Contains(className))
+          return;
+         string message=$"[{className}.{member}]:{logMsg.Invoke()}";
          WriteMessage(LogType.Debug,
-          logMsg,context,condition,
+          message,context,condition,
           file,
           member
          );
@@ -29,24 +34,16 @@ namespace AKCondinoO.Bootstrap{
          [CallerFilePath]string file="",
          [CallerMemberName]string member=""
         ){
+         string className=System.IO.Path.GetFileNameWithoutExtension(file);
+         string message=$"[{className}.{member}]:{logMsg}";
          WriteMessage(LogType.Error,
-          logMsg,context,condition,
+          message,context,condition,
           file,
           member
          );
         }
-        private static void WriteMessage(LogType logType,string logMsg,Object context=null,bool condition=true,string file="",string member=""
+        private static void WriteMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
         ){
-         string message=null;
-         if(logType==LogType.Error){
-          message=logMsg;
-         }else{
-          if(!condition){return;}
-          string className=System.IO.Path.GetFileNameWithoutExtension(file);
-          if(!enableAll&&enabledAt.Count>0&&!enabledAt.Contains(className))
-           return;
-          message=$"[{className}.{member}]:{logMsg}";
-         }
          if(message==null){return;}
          switch(logType){
           case(LogType.Debug):{

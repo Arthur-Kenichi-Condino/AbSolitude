@@ -14,7 +14,7 @@ namespace AKCondinoO.World{
          Set(MaterialId.EdgeBedrock,0,2);
          Set(MaterialId.MuddyDirt  ,1,0);
          Set(MaterialId.SmallRocks ,0,1);
-         Logs.Debug("UnsafeUtility.SizeOf<Vertex>():"+UnsafeUtility.SizeOf<Vertex>());
+         Logs.Debug(()=>"UnsafeUtility.SizeOf<Vertex>():"+UnsafeUtility.SizeOf<Vertex>());
         }
         static void Set(MaterialId id,int x,int y){
          atlasCoord[(uint)id]=new(x,y);

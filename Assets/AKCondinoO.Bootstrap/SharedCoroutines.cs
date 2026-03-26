@@ -213,7 +213,7 @@ namespace AKCondinoO.Bootstrap{
         internal static bool TrySchedule(SharedCoroutineContainerJob job,int priority=0){
          priority=Math.Clamp(priority,0,  readyJobsByPriority.Length-1);
          priority=Math.Clamp(priority,0,blockedJobsByPriority.Length-1);
-         Logs.Debug("'SharedCoroutines number of jobs before schedule':"+(readyJobsByPriority[priority].Count+blockedJobsByPriority[priority].Count));
+         Logs.Debug(()=>"'SharedCoroutines number of jobs before schedule':"+(readyJobsByPriority[priority].Count+blockedJobsByPriority[priority].Count));
          if(!running){return false;}
          job.OnScheduleSetContainerData();
          if(job.dependency==null||!DependencyStillAlive(job.dependency)){
@@ -222,7 +222,7 @@ namespace AKCondinoO.Bootstrap{
          }else{
           EnqueueBlockedJob(job,priority);
          }
-         Logs.Debug("'SharedCoroutines number of jobs after':"+(readyJobsByPriority[priority].Count+blockedJobsByPriority[priority].Count));
+         Logs.Debug(()=>"'SharedCoroutines number of jobs after':"+(readyJobsByPriority[priority].Count+blockedJobsByPriority[priority].Count));
          return true;
         }
         static bool DependencyStillAlive(SharedCoroutineContainerJob dependency){

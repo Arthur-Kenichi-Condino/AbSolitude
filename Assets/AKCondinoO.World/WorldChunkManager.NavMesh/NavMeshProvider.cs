@@ -36,6 +36,14 @@ namespace AKCondinoO.World{
           );
          }
         }
+        internal void Destroy(){
+         foreach(var cluster in clusters){
+          NavMeshCluster.pool.Return(cluster);
+         }
+         clusters.Clear();
+         zoneToCluster.Clear();
+         zones.Clear();
+        }
      internal readonly HashSet<ActiveZone>zones=new();
         internal void RegisterActiveZone(ActiveZone zone){
          zones.Add(zone);
@@ -89,7 +97,7 @@ namespace AKCondinoO.World{
             break;
            }
            toMerge.Remove(zoneCluster);
-           zoneCluster.AddZone(zone,false);
+           zoneCluster.RegisterZone(zone,false);
            zoneCluster.Merge(toMerge);
           }
           foreach(var clusterZone in zoneCluster.clusterZones){
@@ -105,7 +113,7 @@ namespace AKCondinoO.World{
           zoneCluster=NavMeshCluster.pool.Rent();
           zoneCluster.provider=this;
           zoneCluster.Init();
-          zoneCluster.AddZone(zone);
+          zoneCluster.RegisterZone(zone);
           clusters.Add(zoneCluster);
           zoneToCluster[zone]=zoneCluster;
          }
@@ -127,6 +135,8 @@ namespace AKCondinoO.World{
          internal readonly Dictionary<Vector2Int,NavMeshBuildSource>chunksSources=new();
          internal NavMeshDataInstance[]navMeshInstances;
             internal void Init(){
+             isDirty=true;
+             clusterBounds=default;
              navMeshInstances=Pool.RentArray<NavMeshDataInstance>(provider.agentsCount);
              for(int i=0;i<provider.agentsCount;++i){
               var agentTypeID=provider.indexToAgentType[i];
@@ -135,6 +145,7 @@ namespace AKCondinoO.World{
             }
             internal void Reset(){
              isDirty=true;
+             clusterBounds=default;
              for(int i=0;i<provider.agentsCount;i++){
               var agentTypeID=provider.indexToAgentType[i];
               if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
@@ -148,23 +159,10 @@ namespace AKCondinoO.World{
              provider=null;
             }
          private bool isDirty=true;
-            internal void AddZone(ActiveZone zone,bool updateBounds=true){
-             if(clusterZones.Add(zone)){
-              isDirty=true;
-              if(updateBounds)UpdateBounds();
-             }
-            }
-            internal void AddZonesRange(List<ActiveZone>zones,bool updateBounds=true){
-             if(!clusterZones.IsSupersetOf(zones)){
-              clusterZones.UnionWith(zones);
-              isDirty=true;
-             }
-             if(updateBounds)UpdateBounds();
-            }
          readonly HashSet<ActiveZone>unvisited=new();
          readonly List<(List<ActiveZone>list,Bounds groupBounds)>groups=new();
          internal static readonly Utilities.ObjectPool<List<ActiveZone>>groupPool=
-          Pool.GetPool<List<ActiveZone>>("",()=>new(),(List<ActiveZone> item)=>{item.Clear();});
+          Pool.GetPool<List<ActiveZone>>("",()=>new(),(List<ActiveZone>item)=>{item.Clear();});
             internal void UpdateOrSplit(ActiveZone zone,List<NavMeshCluster>splits){
              if(clusterZones.Contains(zone)){
               if(clusterZones.Count<=1){
@@ -239,24 +237,23 @@ namespace AKCondinoO.World{
                  }
                  groups[i]=curr;
                 }
-                Logs.Debug("'split':groups.Count:"+groups.Count);
-                //Logs.Debug("'split':clusterGroup:"+clusterGroup);
+                Logs.Debug(()=>"'split':groups.Count:"+groups.Count);
                 foreach(var group in groups){
                  if(group.list==clusterGroup){
                   if(clusterZones.Count!=group.list.Count||!clusterZones.IsSupersetOf(group.list)){
                    clusterZones.Clear();
                    clusterZones.UnionWith(group.list);
                   }
-                  //Logs.Debug("clusterZones.Count:"+clusterZones.Count);
                   SetBounds(group.groupBounds);
+                  //Logs.Debug("clusterZones.Count:"+clusterZones.Count);
                  }else{
                   var cluster=NavMeshCluster.pool.Rent();
                   cluster.provider=provider;
                   cluster.Init();
-                  cluster.AddZonesRange(group.list,false);
+                  cluster.RegisterMany(group.list,false);
                   cluster.SetBounds(group.groupBounds);
-                  //Logs.Debug("'split':cluster.clusterZones.Count:"+cluster.clusterZones.Count);
                   splits.Add(cluster);
+                  //Logs.Debug("'split':cluster.clusterZones.Count:"+cluster.clusterZones.Count);
                  }
                  groupPool.Return(group.list);
                 }
@@ -272,33 +269,47 @@ namespace AKCondinoO.World{
                isDirty=true;
               }
              }
-             Logs.Debug("clusterZones.Count:"+clusterZones.Count);
              UpdateBounds();
+             Logs.Debug(()=>"clusterZones.Count:"+clusterZones.Count);
             }
-            internal void SetBounds(Bounds bounds){
+            internal void RegisterZone(ActiveZone zone,bool updateBounds=true){
+             if(clusterZones.Add(zone)){
+              isDirty=true;
+              if(updateBounds)UpdateBounds();
+             }
+            }
+            private void RegisterMany(List<ActiveZone>zones,bool updateBounds=true){
+             if(!clusterZones.IsSupersetOf(zones)){
+              clusterZones.UnionWith(zones);
+              isDirty=true;
+              if(updateBounds)UpdateBounds();
+             }
+            }
+            void UpdateBounds(){
+             if(isDirty){
+              Bounds bounds=default;
+              bool first=true;
+              foreach(var clusterZone in clusterZones){
+               if(first){
+                first=false;
+                bounds=clusterZone.worldBounds;
+               }else{
+                bounds.Encapsulate(clusterZone.worldBounds);
+               }
+              }
+              SetBounds(bounds);
+             }
+            }
+            private void SetBounds(Bounds bounds){
              if(clusterBounds!=bounds){
              }
              clusterBounds=bounds;
              isDirty=false;
             }
-            void UpdateBounds(){
-             if(isDirty){
-              var oldBounds=clusterBounds;
-              bool first=true;
-              foreach(var clusterZone in clusterZones){
-               if(first){
-                first=false;
-                clusterBounds=clusterZone.worldBounds;
-               }else{
-                clusterBounds.Encapsulate(clusterZone.worldBounds);
-               }
-              }
-              if(clusterBounds!=oldBounds){
-              }
-             }
-             isDirty=false;
-            }
             internal bool Intersects(Bounds bounds){
+             if(isDirty){
+              UpdateBounds();
+             }
              if(clusterBounds.Intersects(bounds)){
               return true;
              }

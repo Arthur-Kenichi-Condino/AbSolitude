@@ -41,7 +41,7 @@ namespace AKCondinoO.SimObjects{
             MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
             Mesh mesh;
             if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
-             Logs.Debug("mesh.name:"+mesh.name);
+             Logs.Debug(()=>"mesh.name:"+mesh.name);
              instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
             }
            }
@@ -108,14 +108,14 @@ namespace AKCondinoO.SimObjects{
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
           debugMassiveSpawnTest=false;
-          Logs.Debug("'antes de rent':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
+          Logs.Debug(()=>"'antes de rent':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
           DebugMassiveSpawnJob debugMassiveSpawnJob=DebugMassiveSpawnJob.pool.Rent();
           bool scheduled=ThreadDispatcher.TrySchedule(debugMassiveSpawnJob);
-          Logs.Debug("scheduled:"+scheduled);
+          Logs.Debug(()=>"scheduled:"+scheduled);
           if(!scheduled){
            DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
           }
-          Logs.Debug("'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
+          Logs.Debug(()=>"'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
          }
         }
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
@@ -149,7 +149,7 @@ namespace AKCondinoO.SimObjects{
              debugMassiveSpawnCount=singleton.debugMassiveSpawnCount;
             }
             public void ExecuteAtBackgroundThread(){
-             Logs.Debug("DebugMassiveSpawnJob.BackgroundExecute");
+             Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
              spawnList=SpawnList.pool.Rent();
              for(int i=0;i<debugMassiveSpawnCount;i++){
               spawnList.Add(

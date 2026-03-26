@@ -67,7 +67,7 @@ namespace AKCondinoO.Bootstrap{
          }
          if(!object.ReferenceEquals(WorldChunkManager.singleton,null)){
           foreach(var coord in currChunks){
-           WorldChunkManager.singleton.RemoveRef(coord);
+           WorldChunkManager.singleton.RemoveRef(coord,this);
           }
          }
          currChunks.Clear();
@@ -127,7 +127,7 @@ namespace AKCondinoO.Bootstrap{
           }
           foreach(var coord in nextChunks){
            if(!currChunks.Contains(coord)){
-            WorldChunkManager.singleton.AddRef(coord);
+            WorldChunkManager.singleton.AddRef(coord,this);
            }
            if(InsideInstantiationDistance(coord)){
             WorldChunkManager.singleton.EnsureExists(coord);
@@ -135,7 +135,7 @@ namespace AKCondinoO.Bootstrap{
           }
           foreach(var coord in currChunks){
            if(!nextChunks.Contains(coord)){
-            WorldChunkManager.singleton.RemoveRef(coord);
+            WorldChunkManager.singleton.RemoveRef(coord,this);
            }
           }
           currChunks.Clear();

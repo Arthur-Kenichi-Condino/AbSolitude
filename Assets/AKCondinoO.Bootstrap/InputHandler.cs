@@ -50,7 +50,7 @@ namespace AKCondinoO.Bootstrap{
             bool result;
             result=ReadInput(binding.inputCombination[0]);
             if(result){
-             Logs.Debug("action:"+action+":input received:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
+             Logs.Debug(()=>"action:"+action+":input received:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
             }
             break;
            }

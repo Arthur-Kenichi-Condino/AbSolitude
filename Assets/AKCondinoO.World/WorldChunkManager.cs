@@ -11,8 +11,8 @@ namespace AKCondinoO.World{
      private MonoPool<WorldChunk>chunkPool;
      [SerializeField]internal Vector2Int expropriationDistance=new Vector2Int(9,9);//  ...pool size
      [SerializeField]internal Vector2Int instantiationDistance=new Vector2Int(6,6);
-     private readonly Dictionary<Vector2Int,int       >chunkRef=new();
-     private readonly Dictionary<Vector2Int,WorldChunk>chunks  =new();
+     private readonly Dictionary<Vector2Int,HashSet<ActiveZone>>chunkRef=new();
+     private readonly Dictionary<Vector2Int,WorldChunk         >chunks  =new();
      [SerializeField]internal string[]navMeshLayerNames=new string[]{
       "WorldChunkTerrain",
       "SimStructure",
@@ -29,6 +29,7 @@ namespace AKCondinoO.World{
         }
      private readonly List<WorldChunk>toDestroyModules=new();
         public override void PreShutdown(){
+         navMeshProvider.Destroy();
          foreach(var kvp in chunks){
           var cnk=kvp.Value;
           cnk.OnPool();
@@ -48,16 +49,19 @@ namespace AKCondinoO.World{
          chunkPool.Destroy();
          base.Shutdown();
         }
-        internal void AddRef(Vector2Int cCoord){
+     internal static readonly Utilities.ObjectPool<HashSet<ActiveZone>>cRefPool=
+      Pool.GetPool<HashSet<ActiveZone>>("",()=>new(),(HashSet<ActiveZone>item)=>{item.Clear();});
+        internal void AddRef(Vector2Int cCoord,ActiveZone zone){
          if(!chunkRef.TryGetValue(cCoord,out var cRef)){
-          chunkRef.Add(cCoord,cRef=0);
+          chunkRef.Add(cCoord,cRef=cRefPool.Rent());
          }
-         chunkRef[cCoord]=cRef+1;
+         chunkRef[cCoord].Add(zone);
         }
-        internal void RemoveRef(Vector2Int cCoord){
+        internal void RemoveRef(Vector2Int cCoord,ActiveZone zone){
          if(chunkRef.TryGetValue(cCoord,out var cRef)){
-          cRef--;
-          if(cRef<=0){
+          cRef.Remove(zone);
+          if(cRef.Count<=0){
+           cRefPool.Return(cRef);
            chunkRef.Remove(cCoord);
            if(chunks.Remove(cCoord,out var cnk)){
             cnk.OnPool();

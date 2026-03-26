@@ -19,7 +19,7 @@ namespace AKCondinoO.World.MarchingCubes{
     }
     internal static class MarchingCubesCore{
         internal static void BuildMeshData(Vector3Int min,Vector3Int max,Vector2Int cCoord,MarchingCubesContext context){
-         Logs.Debug($"cCoord:{cCoord}",null,cCoord==Vector2Int.zero);
+         Logs.Debug(()=>$"cCoord:{cCoord}",null,cCoord==Vector2Int.zero);
          Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
          int width =(max.x-min.x)+1;
          int height=(max.y-min.y)+1;

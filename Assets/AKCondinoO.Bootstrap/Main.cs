@@ -26,7 +26,7 @@ namespace AKCondinoO.Bootstrap{
         }
         void Start(){
          if(singleton==this){
-          Logs.Debug("...hello, World! I'm alive! :D");
+          Logs.Debug(()=>"...hello, World! I'm alive! :D");
           Pool.MultithreadedReturnDispatcher.Initialize();
           ThreadDispatcher.Initialize(workerCount<=0?null:workerCount);
           ActiveZone.EnsureExists(activeZonePrefab);
@@ -53,7 +53,7 @@ namespace AKCondinoO.Bootstrap{
         public override void Shutdown(){
          if(this!=null){
          }
-         Logs.Debug("...good night, World. :)");
+         Logs.Debug(()=>"...good night, World. :)");
          base.Shutdown();
         }
         void Update(){
