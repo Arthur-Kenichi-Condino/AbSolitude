@@ -2301,7 +2301,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                 candidatesThatConflict.Clear();
            }else if(candidateDescendingComparer.Compare(size2,size1)==0){
             if(candidatesThatConflictWithSameSize!=null){
-               kvp.Value.AddRange(candidatesThatConflictWithSameSize,DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+               kvp.Value.AddRange(candidatesThatConflictWithSameSize,DictionaryAddRangeHelper.DictionaryAddRangeMethod.Override);
                candidatesThatConflictWithSameSize.Clear();
             }
                candidatesThatConflictWithSameSize=kvp.Value;
@@ -3043,10 +3043,10 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
           if(VoxelSystem.Concurrent.surfaceHasData.TryGetValue(layer,out var surfaceHasDataBycnkIdx)){
            if(surfaceHasDataBycnkIdx.TryGetValue(cnkIdx,out var surfaceHasData)){
             if(keepInContainer){
-             container.hasData         [layer][cnkIdx].AddRange (hasData         [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.hasData         [layer][cnkIdx].AddRange (hasData         [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddRangeMethod.Override);
              container.hasNoData       [layer][cnkIdx].UnionWith(hasNoData       [layer][cnkIdx]);
-             container.state           [layer][cnkIdx].AddRange (state           [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
-             container.normalsPredicted[layer][cnkIdx].AddRange (normalsPredicted[layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddMethod.Override);
+             container.state           [layer][cnkIdx].AddRange (state           [layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddRangeMethod.Override);
+             container.normalsPredicted[layer][cnkIdx].AddRange (normalsPredicted[layer][cnkIdx],DictionaryAddRangeHelper.DictionaryAddRangeMethod.Override);
             }
             hasData         [layer].Remove(cnkIdx);
             hasNoData       [layer].Remove(cnkIdx);

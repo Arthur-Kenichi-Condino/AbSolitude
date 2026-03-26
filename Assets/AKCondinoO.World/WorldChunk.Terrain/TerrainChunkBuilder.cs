@@ -136,6 +136,11 @@ namespace AKCondinoO.World.Terrain{
             }
             public int OnLoopExecuteStep(bool flush=false){
              bool valid=builder.ValidJob(this);if(!valid){cancelled=true;}
+             if(flush){
+              if(doMarchingCubesJob!=null){
+               doMarchingCubesJob.updateJob=null;
+              }
+             }
              if(waitingMarchingCubes){
               if(flush){
                return -1;
@@ -165,6 +170,7 @@ namespace AKCondinoO.World.Terrain{
                bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,7);
                if(!scheduled){
                 DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
+                doMarchingCubesJob=null;
                 return -1;
                }
                waitingMarchingCubes=true;//  ...job is scheduled
@@ -251,22 +257,24 @@ namespace AKCondinoO.World.Terrain{
              Logs.Debug("'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
-             bool valid=updateJob.builder.ValidJob(updateJob);if(!valid){cancelled=true;}
-             if(valid){
-              if(!cancelled){
-               if(updateJob.builder.chunk.debugDrawMeshWireframe){
-                ref var tempVer=ref context.meshData.tempVer;
-                ref var tempTri=ref context.meshData.tempTri;
-                updateJob.builder.debugDrawMeshWireframeVer.Clear();for(int i=0;i<tempVer.Length;i++){updateJob.builder.debugDrawMeshWireframeVer.Add(tempVer[i]);}
-                updateJob.builder.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){updateJob.builder.debugDrawMeshWireframeTri.Add(tempTri[i]);}
-               }
+             if(updateJob==null){
+              cancelled=true;
+             }else{
+              bool valid=updateJob.builder.ValidJob(updateJob);if(!valid){cancelled=true;}
+             }
+             if(!cancelled){
+              if(updateJob.builder.chunk.debugDrawMeshWireframe){
+               ref var tempVer=ref context.meshData.tempVer;
+               ref var tempTri=ref context.meshData.tempTri;
+               updateJob.builder.debugDrawMeshWireframeVer.Clear();for(int i=0;i<tempVer.Length;i++){updateJob.builder.debugDrawMeshWireframeVer.Add(tempVer[i]);}
+               updateJob.builder.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){updateJob.builder.debugDrawMeshWireframeTri.Add(tempTri[i]);}
               }
              }
              BiomesConfigurationContext.pool.Return(context.biomeContext);
              context.biomeContext=null;
              MarchingCubesContext.pool.Return(context);
              context=null;
-             updateJob.waitingMarchingCubes=false;
+             if(updateJob!=null){updateJob.waitingMarchingCubes=false;}
              DoMarchingCubesJob.pool.Return(this);
             }
         }

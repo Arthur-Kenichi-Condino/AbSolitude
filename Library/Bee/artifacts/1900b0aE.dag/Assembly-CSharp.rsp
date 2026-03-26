@@ -539,6 +539,7 @@
 "Assets/AKCondinoO/BaseMultithreaded.cs"
 "Assets/AKCondinoO/Core.cs"
 "Assets/AKCondinoO/CoreDataSync.cs"
+"Assets/AKCondinoO/DictionaryAddRangeHelper.cs"
 "Assets/AKCondinoO/GameEntry.cs"
 "Assets/AKCondinoO/GameMode.cs"
 "Assets/AKCondinoO/Gameplayer.cs"

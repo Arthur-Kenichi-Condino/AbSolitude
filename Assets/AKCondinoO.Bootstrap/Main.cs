@@ -16,6 +16,9 @@ namespace AKCondinoO.Bootstrap{
      [SerializeField]private int workerCount=8;
      [SerializeField]ActiveZone activeZonePrefab;
      [SerializeField]private bool debugToggleLogsDebugMessages=false;
+     [SerializeField]private bool debugCreateActiveZone=false;
+     [SerializeField]private ulong debugCreateActiveZoneClientId=1u;
+     [SerializeField]private Vector3 debugCreateActiveZonePos=new(16,128,16);
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -57,6 +60,12 @@ namespace AKCondinoO.Bootstrap{
          if(debugToggleLogsDebugMessages){
           Logs.enableAll=!Logs.enableAll;
           debugToggleLogsDebugMessages=false;
+         }
+         if(debugCreateActiveZone){
+          debugCreateActiveZone=false;
+          ActiveZone.OnAddZoneFor(debugCreateActiveZoneClientId,activeZonePrefab);
+          ActiveZone.InitializeAny();
+          ActiveZone.zones[debugCreateActiveZoneClientId].transform.position=debugCreateActiveZonePos;
          }
          ThreadDispatcher.FlushCompleted();
          ActiveZone.ManualUpdateTransformAll();

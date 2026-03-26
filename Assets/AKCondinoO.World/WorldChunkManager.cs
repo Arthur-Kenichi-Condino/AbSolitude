@@ -1,5 +1,6 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
+using AKCondinoO.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -90,5 +91,12 @@ namespace AKCondinoO.World{
           }
          }
         }
-    }
+        void OnDrawGizmos(){
+         if(navMeshProvider!=null){
+          foreach(var cluster in navMeshProvider.clusters){
+           DrawGizmos.Bounds(cluster.clusterBounds,Color.blue);
+          }
+         }
+        }
+ }
 }

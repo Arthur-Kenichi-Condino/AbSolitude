@@ -6,7 +6,7 @@ using static AKCondinoO.World.WorldChunkManagerConst;
 using System.Collections;
 namespace AKCondinoO.Bootstrap{
     internal class ActiveZone:MonoBehaviour{
-     private static readonly Dictionary<ulong,ActiveZone>zones=new();
+     internal static readonly Dictionary<ulong,ActiveZone>zones=new();
      internal static ActiveZone main;
      internal Bounds bounds;
      internal Bounds worldBounds;
@@ -32,8 +32,13 @@ namespace AKCondinoO.Bootstrap{
           zone.Initialize();
          }
         }
+     bool initialized=false;
      private Coroutine spawnCoroutine;
         internal void Initialize(){
+         if(initialized){
+          return;
+         }
+         initialized=true;
          Vector3 size=new(
           (WorldChunkManager.singleton.instantiationDistance.x*2+1)*Width,
           Height,
@@ -75,7 +80,7 @@ namespace AKCondinoO.Bootstrap{
           zone.ManualUpdateTransform();
          }
         }
-     private ulong clientId;
+     internal ulong clientId;
      private Vector3 pos;
      private Vector2Int cCoord;
      private Vector2Int lastcCoord;
@@ -136,6 +141,7 @@ namespace AKCondinoO.Bootstrap{
           currChunks.Clear();
           currChunks.UnionWith(nextChunks);
           nextChunks.Clear();
+          WorldChunkManager.singleton.navMeshProvider.OnActiveZoneChangedcCoord(this,currChunks);
           hascCoord=true;
           bool InsideInstantiationDistance(Vector2Int coord){
            if(

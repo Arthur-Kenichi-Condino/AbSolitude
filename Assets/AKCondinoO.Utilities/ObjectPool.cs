@@ -73,14 +73,20 @@ namespace AKCondinoO.Utilities{
     /// Pool.GetPool<HashSet<Vector3Int>>().Return(hs);
     ///</summary>
     internal static class Pool{
-     static readonly ConcurrentDictionary<(Type type,string id),object>pools=new();
+     static readonly ConcurrentDictionary<PoolKey,object>pools=new();
         internal static ObjectPool<T>GetPool<T>(string id,Func<T>factory=null,Action<T>reset=null,bool multithreaded=true,int preallocate=0){
-         var key=(typeof(T),id);
          bool requestedNonDefault=factory!=null;
          var requestedFactory=factory??CreateDefaultFactory<T>();
          if(requestedFactory==null){
           return null;
          }
+         var key=new PoolKey(
+          typeof(T),
+          id,
+          requestedFactory as Func<object>,
+          reset as Action<object>,
+          multithreaded
+         );
          ObjectPool<T>created=null;
          ObjectPool<T>result=(ObjectPool<T>)pools.GetOrAdd(key,
           _=>{
@@ -93,38 +99,7 @@ namespace AKCondinoO.Utilities{
            return created;
           }
          );
-         if(!ReferenceEquals(result,created)){
-          if(result.multithreaded!=multithreaded){
-           return null;
-          }
-          if(!FactoriesMatch(result,requestedFactory)){
-           return null;
-          }
-          if(!ResetsMatch(result,reset)){
-           return null;
-          }
-         }
          return result;
-        }
-        static bool FactoriesMatch<T>(ObjectPool<T>pool,Func<T>factory){
-         if(pool.factoryMethod!=factory.Method){
-          return false;
-         }
-         if(!ReferenceEquals(pool.factoryTarget,factory.Target)){
-          return false;
-         }
-         return true;
-        }
-        static bool ResetsMatch<T>(ObjectPool<T>pool,Action<T>reset){
-         if(reset==null)
-          return pool.reset==null;
-         if(pool.resetMethod!=reset.Method){
-          return false;
-         }
-         if(!ReferenceEquals(pool.resetTarget,reset.Target)){
-          return false;
-         }
-         return true;
         }
         static Func<T>CreateDefaultFactory<T>(){
          //  Try to handle common cases: IList, ICollection, arrays and parameterless ctor
@@ -226,6 +201,50 @@ namespace AKCondinoO.Utilities{
               }
              );
              Interlocked.Decrement(ref threadsEnqueueing);
+            }
+        }
+        readonly struct PoolKey:IEquatable<PoolKey>{
+         public readonly Type type;
+         public readonly string id;
+         public readonly MethodInfo factoryMethod;
+         public readonly Type factoryTargetType;
+         public readonly MethodInfo resetMethod;
+         public readonly Type resetTargetType;
+         public readonly bool multithreaded;
+            public PoolKey(
+             Type type,
+             string id,
+             Func<object>factory,
+             Action<object>reset,
+             bool multithreaded
+            ){
+             this.type=type;
+             this.id=id;
+             this.factoryMethod=factory?.Method;
+             this.factoryTargetType=factory?.Target?.GetType();
+             this.resetMethod=reset?.Method;
+             this.resetTargetType=reset?.Target?.GetType();
+             this.multithreaded=multithreaded;
+            }
+            public bool Equals(PoolKey other){
+             return type==other.type&&
+                    id  ==other.id  &&
+                    factoryMethod    ==other.factoryMethod    &&
+                    factoryTargetType==other.factoryTargetType&&
+                    resetMethod      ==other.resetMethod      &&
+                    resetTargetType  ==other.resetTargetType  &&
+                    multithreaded==other.multithreaded;
+            }
+            public override int GetHashCode(){
+             return HashCode.Combine(
+              type,
+              id,
+              factoryMethod,
+              factoryTargetType,
+              resetMethod,
+              resetTargetType,
+              multithreaded
+             );
             }
         }
     }

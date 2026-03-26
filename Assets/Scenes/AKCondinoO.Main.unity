@@ -464,6 +464,18 @@ PrefabInstance:
       propertyPath: workerCount
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: debugCreateActiveZone
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: debugCreateActiveZonePos.x
+      value: -210
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: debugCreateActiveZonePos.z
+      value: -210
+      objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
