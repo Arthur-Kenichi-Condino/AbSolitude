@@ -28,6 +28,7 @@ namespace AKCondinoO.World{
          if(!cancelled){
           meshCollider.sharedMesh=null;
           meshCollider.sharedMesh=builder.mesh;
+          navMeshBuildData.UpdateNavMeshBuildData();
          }
          chunk.OnGeneratedTerrain(cancelled);
         }

@@ -4,8 +4,8 @@ namespace AKCondinoO.Bootstrap{
      Escape,
      Menu,
      Forward,
-     Backward,
      Left,
+     Backward,
      Right,
     }
 }

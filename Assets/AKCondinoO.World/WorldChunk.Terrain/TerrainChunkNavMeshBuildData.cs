@@ -14,11 +14,11 @@ namespace AKCondinoO.World.Terrain{
           transform=chunk.transform.localToWorldMatrix,//  ...deve ser atualizado sempre que o chunk é usado para outra coordenada
           shape=NavMeshBuildSourceShape.Mesh,
           sourceObject=terrain.builder.mesh,
-          component=terrain.meshFilter,
+          component=terrain.meshCollider,
           area=0,
          };
         }
-        internal void SetNavMeshBuildData(){
+        internal void UpdateNavMeshBuildData(){
          navMeshSource.transform=chunk.transform.localToWorldMatrix;
         }
     }

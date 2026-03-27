@@ -34,6 +34,8 @@ namespace AKCondinoO.World{
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
           Generate();
+         }else{
+          OnExists();
          }
         }
         internal void Generate(){
@@ -46,8 +48,26 @@ namespace AKCondinoO.World{
         }
         internal void OnGeneratedTerrain(bool cancelled){
          if(!cancelled){
-          terrain.navMeshBuildData.SetNavMeshBuildData();
+          OnGenerationStepDone();
          }
+        }
+        private void OnGenerationStepDone(){
+         if(terrain.builder.cancelled){
+          return;
+         }
+         OnExists();
+        }
+        private void OnExists(){
+         WorldChunkManager.singleton.OnExists(this);
+        }
+        internal bool IsValid(){
+         if(terrain.builder.cancelled){
+          return false;
+         }
+         if(terrain.builder.updateJob!=null){
+          return false;
+         }
+         return true;
         }
         internal void AddSimObject(SimObject simObject){
          simObjects.Add(simObject);

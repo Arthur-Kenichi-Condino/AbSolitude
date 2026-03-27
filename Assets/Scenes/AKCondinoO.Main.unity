@@ -253,6 +253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputHandler
       objectReference: {fileID: 0}
+    - target: {fileID: 3029691033859175889, guid: b93578196ed47d64893875a131f186e1, type: 3}
+      propertyPath: debugTryLogTranslateInputThisManyFrames
+      value: 10000
+      objectReference: {fileID: 0}
     - target: {fileID: 8197777957565697040, guid: b93578196ed47d64893875a131f186e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -466,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugCreateActiveZone
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugCreateActiveZonePos.x

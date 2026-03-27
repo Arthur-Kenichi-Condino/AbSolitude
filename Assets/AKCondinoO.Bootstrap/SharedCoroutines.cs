@@ -144,26 +144,26 @@ namespace AKCondinoO.Bootstrap{
             continue;
            }
            runningJobs.Add(job);
-           int jobStillRunning=0;
+           int jobStillLooping=0;
            int steps=1;
-           while(steps>0&&jobStillRunning>=0){
+           while(steps>0&&jobStillLooping>=0){
             workerLoops++;
             jobLoops++;
             steps--;
-            jobStillRunning=job.OnLoopExecuteStep();
-            if(jobStillRunning>0){
-             steps+=jobStillRunning;
+            jobStillLooping=job.OnLoopExecuteStep();
+            if(jobStillLooping>0){
+             steps+=jobStillLooping;
              if(!SharedCoroutineBudget.HasBudget(workerLoops)){
               break;
              }
              if(jobLoops>SharedCoroutineBudget.maxLoopsPerJob){
               break;
              }
-            }else if(jobStillRunning==0){
+            }else if(jobStillLooping==0){
              break;
             }
            }
-           if(jobStillRunning>=0){
+           if(jobStillLooping>=0){
             EnqueueReady(job,priority);
             runningJobs.Remove(job);
            }else{

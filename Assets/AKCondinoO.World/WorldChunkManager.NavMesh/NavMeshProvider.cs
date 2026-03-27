@@ -2,6 +2,7 @@ using AKCondinoO.Bootstrap;
 using AKCondinoO.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.World{
@@ -118,6 +119,12 @@ namespace AKCondinoO.World{
           zoneToCluster[zone]=zoneCluster;
          }
         }
+        internal void OnChunkExists(ActiveZone zone,WorldChunk chunk){
+         Logs.Debug(()=>"'chunk exists:rebuild nav mesh':"+chunk.cCoord);
+         if(zoneToCluster.TryGetValue(zone,out var cluster)){
+          cluster.AddOrUpdateSource(chunk);
+         }
+        }
         internal class NavMeshCluster{
          internal static readonly Utilities.ObjectPool<NavMeshCluster>pool=
           Pool.GetPool<NavMeshCluster>(
@@ -133,11 +140,9 @@ namespace AKCondinoO.World{
          internal Bounds clusterBounds;
          internal readonly Dictionary<int,NavMeshData>navMeshByAgentType=new();
          internal readonly Dictionary<Vector2Int,NavMeshBuildSource>chunksSources=new();
-         internal NavMeshDataInstance[]navMeshInstances;
             internal void Init(){
              isDirty=true;
              clusterBounds=default;
-             navMeshInstances=Pool.RentArray<NavMeshDataInstance>(provider.agentsCount);
              for(int i=0;i<provider.agentsCount;++i){
               var agentTypeID=provider.indexToAgentType[i];
               navMeshByAgentType.Add(agentTypeID,provider.navMeshDataPoolByAgentType[agentTypeID].Rent());
@@ -148,13 +153,10 @@ namespace AKCondinoO.World{
              clusterBounds=default;
              for(int i=0;i<provider.agentsCount;i++){
               var agentTypeID=provider.indexToAgentType[i];
-              if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
               provider.navMeshDataPoolByAgentType[agentTypeID].Return(navMeshByAgentType[agentTypeID]);
              }
              navMeshByAgentType.Clear();
              chunksSources.Clear();
-             Pool.ReturnArray<NavMeshDataInstance>(navMeshInstances);
-             navMeshInstances=null;
              clusterZones.Clear();
              provider=null;
             }
@@ -302,9 +304,11 @@ namespace AKCondinoO.World{
             }
             private void SetBounds(Bounds bounds){
              if(clusterBounds!=bounds){
+              pendingBuild=true;
              }
              clusterBounds=bounds;
              isDirty=false;
+             DoUpdateNavMeshAsync();
             }
             internal bool Intersects(Bounds bounds){
              if(isDirty){
@@ -315,8 +319,56 @@ namespace AKCondinoO.World{
              }
              return false;
             }
+         private bool pendingBuild=true;
+            internal void AddOrUpdateSource(WorldChunk chunk){
+             chunksSources[chunk.cCoord]=chunk.terrain.navMeshBuildData.navMeshSource;
+             pendingBuild=true;
+             DoUpdateNavMeshAsync();
+            }
+         NavMeshDataInstance navMeshInstance;
+            void DoUpdateNavMeshAsync(bool async=true){
+             //  TO DO: NavMeshBuildSnapshot
+             foreach(var chunkSource in chunksSources){
+              if(!WorldChunkManager.singleton.GetChunkValid(chunkSource.Key,out var chunk)){
+               Logs.Error("broken chunk source:"+chunkSource.Key,chunk);
+               return;
+              }
+             }
+             if(navMeshInstance.valid)navMeshInstance.Remove();
+             List<NavMeshBuildSource>sources=new();
+             sources.AddRange(chunksSources.Values);
+             for(int i=0;i<provider.agentsCount;++i){
+              var agentTypeID=provider.indexToAgentType[i];
+              var navMeshData=navMeshByAgentType[agentTypeID];
+              if(navMeshData==null){
+               continue;
+              }
+              NavMeshBuilder.UpdateNavMeshData(
+               navMeshData,
+               provider.navMeshBuildSettings[i],
+               sources,
+               clusterBounds
+              );
+              navMeshInstance.Remove();
+              navMeshInstance=NavMesh.AddNavMeshData(navMeshData);
+             }
+            }
         }
-        internal void OnChunkExists(WorldChunk chunk){
+        internal class NavMeshBuildSnapshot{
+         internal NavMeshCluster cluster;
+         internal int agentsCount;
+         internal NavMeshDataInstance[]navMeshInstances;
+            internal void Init(){
+             agentsCount=cluster.provider.agentsCount;
+             navMeshInstances=Pool.RentArray<NavMeshDataInstance>(agentsCount);
+            }
+            internal void Reset(){
+             for(int i=0;i<agentsCount;i++){
+              if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
+             }
+             Pool.ReturnArray<NavMeshDataInstance>(navMeshInstances);
+             navMeshInstances=null;
+            }
         }
     }
 }

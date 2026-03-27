@@ -77,6 +77,15 @@ namespace AKCondinoO.World{
          }
          cnk.OnEnsureExists(cCoord);
         }
+        internal void OnExists(WorldChunk chunk){
+         var cCoord=chunk.cCoord;
+         if(chunkRef.TryGetValue(cCoord,out var activeZones)){
+          foreach(var zone in activeZones){
+           navMeshProvider.OnChunkExists(zone,chunk);
+           break;
+          }
+         }
+        }
         internal bool OnAddSimObjectAt(Vector3 pos,SimObject simObject){
          Vector2Int cCoord=vecPosTocCoord(pos);
          if(chunks.TryGetValue(cCoord,out var cnk)){
@@ -94,6 +103,12 @@ namespace AKCondinoO.World{
            cnk.Generate();
           }
          }
+        }
+        internal bool GetChunkValid(Vector2Int cCoord,out WorldChunk chunk){
+         if(chunks.TryGetValue(cCoord,out chunk)){
+          return chunk.IsValid();
+         }
+         return false;
         }
         void OnDrawGizmos(){
          if(navMeshProvider!=null){

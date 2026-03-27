@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
-     internal static bool enableAll=true;
+     internal static bool enableAll=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
+      "NavMeshProvider",
      };
      internal enum LogType{
       Debug,
