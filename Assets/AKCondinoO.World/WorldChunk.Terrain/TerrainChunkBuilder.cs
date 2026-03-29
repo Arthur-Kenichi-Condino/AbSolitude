@@ -58,6 +58,14 @@ namespace AKCondinoO.World.Terrain{
         internal void OnChunkPool(){
          if(updateJob!=null){updateJob.CancelGraciously();}
         }
+     internal bool isBusy{
+      get{
+       if(updateJob!=null){
+        return true;
+       }
+       return false;
+      }
+     }
      internal UpdateJob updateJob;
         internal void DoUpdateJob(){
          Logs.Debug(()=>"'doing update job for':"+chunk.cnkRgn);
@@ -94,7 +102,7 @@ namespace AKCondinoO.World.Terrain{
            ()=>new(),
            (UpdateJob item)=>{
             item.dependency=null;
-            item.isCancelledCanStop=false;
+            item.cancelled=false;
             item.builder=null;
             item.pendingMarchingCubes=false;
             item.waitingMarchingCubes=false;
@@ -103,10 +111,17 @@ namespace AKCondinoO.World.Terrain{
             item.doMarchingCubesJob=null;
            }
           );
-         public SharedCoroutineContainerJob dependency{
-          get{return doFirst;}set{doFirst=value;}
-         }
          private SharedCoroutineContainerJob doFirst;
+         public SharedCoroutineContainerJob dependency{get{return doFirst;}set{doFirst=value;}}
+         private bool cancelled;
+         public bool isCancelled{get{return cancelled;}}
+         public bool canStop{
+          get{
+           if(waitingMarchingCubes)return false;
+           if(waitingBakeJob      )return false;
+           return true;
+          }
+         }
          internal TerrainChunkBuilder builder;
          internal Vector2Int cCoord;
          internal Vector2Int cnkRgn;
@@ -115,18 +130,13 @@ namespace AKCondinoO.World.Terrain{
          internal bool waitingBakeJob;
          internal bool pendingBakeJob;
          private DoMarchingCubesJob doMarchingCubesJob;
-         public bool isCancelledCanStop{
-          get{return cancelled&&!waitingMarchingCubes;}
-          set{cancelled=value;}
-         }
-         private bool cancelled;
          readonly System.Diagnostics.Stopwatch sw=new();
-            public void CancelGraciously(){
+            public void CancelGraciously(bool onPreShutdown=false){
              cancelled=true;
             }
             public void OnScheduleSetContainerData(){
-             sw.Restart();
              cancelled=false;
+             sw.Restart();
              cCoord=builder.chunk.cCoord;
              cnkRgn=builder.chunk.cnkRgn;
              pendingMarchingCubes=true;
@@ -134,73 +144,74 @@ namespace AKCondinoO.World.Terrain{
              pendingBakeJob      =true;
              waitingBakeJob      =false;
             }
-            public int OnLoopExecuteStep(bool flush=false){
+            public int OnLoopExecuteStep(bool onPreShutdown=false){
              bool valid=builder.ValidJob(this);if(!valid){cancelled=true;}
-             if(flush){
-              if(doMarchingCubesJob!=null){
-               doMarchingCubesJob.updateJob=null;
-              }
-             }
              if(waitingMarchingCubes){
-              if(flush){
-               return -1;
-              }
               if(cancelled){
                //Logs.Debug("'wasting time doing marching cubes on chunk that changed...':"+sw.ElapsedMilliseconds+" ms");
                doMarchingCubesJob.CancelGraciously();
               }
-              return 0;
+              if(onPreShutdown){
+               return -1;
+              }
+              return 0;//  ...loop again next frame
              }
              if(waitingBakeJob){
               ref var bakeJobHandle=ref builder.meshData.bakeJobHandle;
-              if(flush){
-               bakeJobHandle.Complete();
+              if(onPreShutdown){
+               bakeJobHandle.Complete();waitingBakeJob=false;
                return -1;
               }
               if(bakeJobHandle.IsCompleted){
-               bakeJobHandle.Complete();
-               waitingBakeJob=false;
+               bakeJobHandle.Complete();waitingBakeJob=false;
+              }else{
+               return 0;//  ...loop again next frame
               }
              }
-             if(cancelled){return -1;}
-             if(!flush){
-              if(pendingMarchingCubes){
-               doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
-               doMarchingCubesJob.updateJob=this;
-               bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,7);
-               if(!scheduled){
-                DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
-                doMarchingCubesJob=null;
-                return -1;
-               }
-               waitingMarchingCubes=true;//  ...job is scheduled
-               pendingMarchingCubes=false;
-               return 1;
+             if(cancelled){
+              if(onPreShutdown){
               }
-              if(pendingBakeJob){
-               ref var tempVer=ref builder.meshData.tempVer;
-               ref var tempTri=ref builder.meshData.tempTri;
-               var mesh=builder.mesh;
-               var meshFlags=builder.meshFlags;
-               bool resize;
-               if(resize=tempVer.Length>mesh.vertexCount){
-                mesh.SetVertexBufferParams(tempVer.Length,Vertex.layout);
-               }
-               mesh.SetVertexBufferData(tempVer.AsArray(),0,0,tempVer.Length,0,meshFlags);
-               if(resize){
-                mesh.SetIndexBufferParams(tempTri.Length,IndexFormat.UInt32);
-               }
-               mesh.SetIndexBufferData(tempTri.AsArray(),0,0,tempTri.Length,meshFlags);
-               mesh.subMeshCount=1;
-               mesh.SetSubMesh(0,new SubMeshDescriptor(0,tempTri.Length){firstVertex=0,vertexCount=tempVer.Length},meshFlags);
-               waitingBakeJob=true;
-               pendingBakeJob=false;
-               ref var bakeJob=ref builder.meshData.bakeJob;
-               ref var bakeJobHandle=ref builder.meshData.bakeJobHandle;
-               bakeJobHandle.Complete();
-               bakeJobHandle=bakeJob.Schedule();
-               return 1;
+              return -1;
+             }
+             if(onPreShutdown){
+              return -1;
+             }
+             if(pendingMarchingCubes){
+              doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
+              doMarchingCubesJob.updateJob=this;
+              bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,7);
+              if(!scheduled){
+               DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
+               doMarchingCubesJob=null;
+               return -1;
               }
+              waitingMarchingCubes=true;//  ...job is scheduled
+              pendingMarchingCubes=false;
+              return 1;
+             }
+             if(pendingBakeJob){
+              ref var tempVer=ref builder.meshData.tempVer;
+              ref var tempTri=ref builder.meshData.tempTri;
+              var mesh=builder.mesh;
+              var meshFlags=builder.meshFlags;
+              bool resize;
+              if(resize=tempVer.Length>mesh.vertexCount){
+               mesh.SetVertexBufferParams(tempVer.Length,Vertex.layout);
+              }
+              mesh.SetVertexBufferData(tempVer.AsArray(),0,0,tempVer.Length,0,meshFlags);
+              if(resize){
+               mesh.SetIndexBufferParams(tempTri.Length,IndexFormat.UInt32);
+              }
+              mesh.SetIndexBufferData(tempTri.AsArray(),0,0,tempTri.Length,meshFlags);
+              mesh.subMeshCount=1;
+              mesh.SetSubMesh(0,new SubMeshDescriptor(0,tempTri.Length){firstVertex=0,vertexCount=tempVer.Length},meshFlags);
+              waitingBakeJob=true;
+              pendingBakeJob=false;
+              ref var bakeJob=ref builder.meshData.bakeJob;
+              ref var bakeJobHandle=ref builder.meshData.bakeJobHandle;
+              bakeJobHandle.Complete();
+              bakeJobHandle=bakeJob.Schedule();
+              return 1;
              }
              return -1;//  ...end
             }
@@ -218,13 +229,11 @@ namespace AKCondinoO.World.Terrain{
            "",
            ()=>new(),
            (DoMarchingCubesJob item)=>{
+            MarchingCubesContext.pool.Return(item.context);item.context=null;
+            item.cancelled=false;
             item.updateJob=null;
            }
           );
-         internal UpdateJob updateJob;
-         internal Vector2Int cCoord;
-         internal Vector2Int cnkRgn;
-         private MarchingCubesContext context;
          private bool cancelled;
             public void CancelGraciously(){
              if(!cancelled){
@@ -232,6 +241,10 @@ namespace AKCondinoO.World.Terrain{
              }
              cancelled=true;
             }
+         internal UpdateJob updateJob;
+         internal Vector2Int cCoord;
+         internal Vector2Int cnkRgn;
+         private MarchingCubesContext context;
             public void OnDoScheduleSetContainerData(){
              cancelled=false;
              cCoord=updateJob.builder.chunk.cCoord;
@@ -257,11 +270,7 @@ namespace AKCondinoO.World.Terrain{
              Logs.Debug(()=>"'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
             }
             public void OnCompletedDoAtMainThread(){
-             if(updateJob==null){
-              cancelled=true;
-             }else{
-              bool valid=updateJob.builder.ValidJob(updateJob);if(!valid){cancelled=true;}
-             }
+             bool valid=updateJob.builder.ValidJob(updateJob);if(!valid){cancelled=true;}
              if(!cancelled){
               if(updateJob.builder.chunk.debugDrawMeshWireframe){
                ref var tempVer=ref context.meshData.tempVer;
@@ -270,11 +279,7 @@ namespace AKCondinoO.World.Terrain{
                updateJob.builder.debugDrawMeshWireframeTri.Clear();for(int i=0;i<tempTri.Length;i++){updateJob.builder.debugDrawMeshWireframeTri.Add(tempTri[i]);}
               }
              }
-             BiomesConfigurationContext.pool.Return(context.biomeContext);
-             context.biomeContext=null;
-             MarchingCubesContext.pool.Return(context);
-             context=null;
-             if(updateJob!=null){updateJob.waitingMarchingCubes=false;}
+             updateJob.waitingMarchingCubes=false;
              DoMarchingCubesJob.pool.Return(this);
             }
         }

@@ -7,7 +7,9 @@ namespace AKCondinoO.Bootstrap{
      internal static bool enableAll=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
-      "NavMeshProvider",
+      //"NavMeshProvider",
+      //"WorldChunk",
+      //"TerrainChunkBuilder",
      };
      internal enum LogType{
       Debug,

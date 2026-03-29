@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+using static AKCondinoO.World.NavMeshProvider;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.Terrain{
     internal class TerrainChunkNavMeshBuildData{
@@ -20,6 +21,16 @@ namespace AKCondinoO.World.Terrain{
         }
         internal void UpdateNavMeshBuildData(){
          navMeshSource.transform=chunk.transform.localToWorldMatrix;
+        }
+     internal readonly HashSet<NavMeshCluster>clusteredIn=new();
+        internal void RegisterCluter(NavMeshCluster cluster){
+         clusteredIn.Add(cluster);
+        }
+        internal void UnregisterSource(){
+         foreach(var cluster in clusteredIn){
+          cluster.RemoveSource(chunk);
+         }
+         clusteredIn.Clear();
         }
     }
 }

@@ -69,6 +69,9 @@ namespace AKCondinoO.Bootstrap{
           foreach(var coord in currChunks){
            WorldChunkManager.singleton.RemoveRef(coord,this);
           }
+          foreach(var coord in nextChunks){
+           WorldChunkManager.singleton.RemoveRef(coord,this);
+          }
          }
          currChunks.Clear();
          nextChunks.Clear();
@@ -96,8 +99,6 @@ namespace AKCondinoO.Bootstrap{
          bounds.center=pos;
          cCoord=vecPosTocCoord(pos);
          if(!hasLastcCoord||cCoord!=lastcCoord){
-          var cnkRgn=cCoordTocnkRgn(cCoord);
-          worldBounds.center=new(cnkRgn.x,Height/2f,cnkRgn.y);
           lastcCoord=cCoord;
           hasLastcCoord=true;
          }
@@ -106,12 +107,14 @@ namespace AKCondinoO.Bootstrap{
      private readonly HashSet<Vector2Int>currChunks=new();
      private readonly HashSet<Vector2Int>nextChunks=new();
         private IEnumerator CalculateChunks(){
+         const double maxTimePerFrame=0.010d;//  ...unidade: em segundos
          bool hascCoord=false;
          Vector2Int cCoord=default;
          while(true){
           while(hascCoord&&cCoord==this.cCoord){
            yield return null;
           }
+          double startTime=Time.realtimeSinceStartupAsDouble;
           cCoord=this.cCoord;
           Vector2Int exprDis=WorldChunkManager.singleton.expropriationDistance;
           Vector2Int instDis=WorldChunkManager.singleton.instantiationDistance;
@@ -132,15 +135,19 @@ namespace AKCondinoO.Bootstrap{
            if(InsideInstantiationDistance(coord)){
             WorldChunkManager.singleton.EnsureExists(coord);
            }
+           if(ShouldYield())yield return null;
           }
           foreach(var coord in currChunks){
            if(!nextChunks.Contains(coord)){
             WorldChunkManager.singleton.RemoveRef(coord,this);
            }
+           if(ShouldYield())yield return null;
           }
           currChunks.Clear();
           currChunks.UnionWith(nextChunks);
           nextChunks.Clear();
+          var cnkRgn=cCoordTocnkRgn(cCoord);
+          worldBounds.center=new(cnkRgn.x,Height/2f,cnkRgn.y);
           WorldChunkManager.singleton.navMeshProvider.OnActiveZoneChangedcCoord(this,currChunks);
           hascCoord=true;
           bool InsideInstantiationDistance(Vector2Int coord){
@@ -148,6 +155,13 @@ namespace AKCondinoO.Bootstrap{
             Mathf.Abs(cCoord.x-coord.x)<=instDis.x&&
             Mathf.Abs(cCoord.y-coord.y)<=instDis.y
            ){return true;}
+           return false;
+          }
+          bool ShouldYield(){
+           if(Time.realtimeSinceStartupAsDouble-startTime>=maxTimePerFrame){
+            startTime=Time.realtimeSinceStartupAsDouble;
+            return true;
+           }
            return false;
           }
          }

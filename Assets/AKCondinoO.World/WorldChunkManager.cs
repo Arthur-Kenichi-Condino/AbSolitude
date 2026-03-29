@@ -100,9 +100,10 @@ namespace AKCondinoO.World{
           debugForceRegenerate=false;
           foreach(var kvp in chunks){
            var cnk=kvp.Value;
-           cnk.Generate();
+           cnk.OnEnsureExists(cnk.cCoord,true);
           }
          }
+         navMeshProvider.OnManualUpdate();
         }
         internal bool GetChunkValid(Vector2Int cCoord,out WorldChunk chunk){
          if(chunks.TryGetValue(cCoord,out chunk)){

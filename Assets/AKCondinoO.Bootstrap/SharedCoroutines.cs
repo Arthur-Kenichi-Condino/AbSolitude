@@ -27,10 +27,12 @@ namespace AKCondinoO.Bootstrap{
     internal class SharedCoroutines:MonoSingleton<SharedCoroutines>{
         internal interface SharedCoroutineContainerJob{
             SharedCoroutineContainerJob dependency{get;set;}
-            bool isCancelledCanStop{get;set;}
-            void CancelGraciously();
+            bool isCancelled{get;}
+            bool canStop{get;}
+            bool isCancelledCanStop{get{return isCancelled&&canStop;}}
+            void CancelGraciously(bool onPreShutdown=false);
             void OnScheduleSetContainerData();
-            int OnLoopExecuteStep(bool flush=false);
+            int OnLoopExecuteStep(bool onPreShutdown=false);
             void OnLoopCompleted();
         }
      private static bool running;
@@ -91,7 +93,10 @@ namespace AKCondinoO.Bootstrap{
          }
          coroutines.Clear();
          foreach(var job in runningJobs){
-          while(job.OnLoopExecuteStep(true)>=0){}
+          job.CancelGraciously(true);
+          while(job.OnLoopExecuteStep(true)>=0||!job.canStop){
+           ThreadDispatcher.FlushCompleted();
+          }
           job.OnLoopCompleted();
          }
          runningJobs.Clear();
@@ -102,7 +107,10 @@ namespace AKCondinoO.Bootstrap{
           while(readyJobs.Count>0||blockedJobs.Count>0){
            while(readyJobs.Count>0){
             var job=DequeueReady(i);
-            while(job.OnLoopExecuteStep(true)>=0){}
+            job.CancelGraciously(true);
+            while(job.OnLoopExecuteStep(true)>=0||!job.canStop){
+             ThreadDispatcher.FlushCompleted();
+            }
             job.OnLoopCompleted();
             PromoteBlockedJobs(job,i);
            }
@@ -137,8 +145,8 @@ namespace AKCondinoO.Bootstrap{
            }
            int jobLoops=0;
            var job=DequeueReady(priority);
-           bool cancelled=job.isCancelledCanStop;
-           if(cancelled){
+           bool stoppedGraciously=job.isCancelledCanStop;
+           if(stoppedGraciously){
             job.OnLoopCompleted();
             PromoteBlockedJobs(job,priority);
             continue;
@@ -153,17 +161,17 @@ namespace AKCondinoO.Bootstrap{
             jobStillLooping=job.OnLoopExecuteStep();
             if(jobStillLooping>0){
              steps+=jobStillLooping;
-             if(!SharedCoroutineBudget.HasBudget(workerLoops)){
-              break;
-             }
-             if(jobLoops>SharedCoroutineBudget.maxLoopsPerJob){
-              break;
-             }
-            }else if(jobStillLooping==0){
+            }else{
+             break;
+            }
+            if(!SharedCoroutineBudget.HasBudget(workerLoops)){
+             break;
+            }
+            if(jobLoops>SharedCoroutineBudget.maxLoopsPerJob){
              break;
             }
            }
-           if(jobStillLooping>=0){
+           if(jobStillLooping>=0||!job.canStop){
             EnqueueReady(job,priority);
             runningJobs.Remove(job);
            }else{

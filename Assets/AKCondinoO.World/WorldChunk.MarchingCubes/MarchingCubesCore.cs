@@ -380,6 +380,7 @@ namespace AKCondinoO.World.MarchingCubes{
        "",
        ()=>new(),
        (MarchingCubesContext item)=>{
+        BiomesConfigurationContext.pool.Return(item.biomeContext);item.biomeContext=null;
         item.meshData=null;
         item.vertexCount=0;
         foreach(var kvp in item.vertexMaterials){

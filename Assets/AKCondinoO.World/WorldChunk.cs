@@ -1,7 +1,9 @@
+using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.World.NavMeshProvider;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
@@ -17,6 +19,7 @@ namespace AKCondinoO.World{
          terrain.chunk=this;
         }
         internal void ManualDestroy(){
+         Hibernate(cCoord);
          terrain.OnManualDestroy();
         }
      private bool firstCall;
@@ -26,10 +29,12 @@ namespace AKCondinoO.World{
         }
      internal Vector2Int cCoord;
      internal Vector2Int cnkRgn;
-        internal void OnEnsureExists(Vector2Int cCoord){
+        internal void OnEnsureExists(Vector2Int cCoord,bool regenerate=false){
          if(firstCall||cCoord!=this.cCoord||
-          terrain.builder.cancelled
+          terrain.builder.cancelled||
+          regenerate
          ){
+          Hibernate(cCoord);
           firstCall=false;
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
@@ -38,7 +43,7 @@ namespace AKCondinoO.World{
           OnExists();
          }
         }
-        internal void Generate(){
+        private void Generate(){
          transform.position=bounds.center=new Vector3(
           cnkRgn.x,
           Height/2f,
@@ -58,13 +63,19 @@ namespace AKCondinoO.World{
          OnExists();
         }
         private void OnExists(){
+         if(!IsValid()){
+          return;
+         }
          WorldChunkManager.singleton.OnExists(this);
+        }
+        internal void OnClusteredNotifySource(NavMeshCluster cluster){
+         terrain.navMeshBuildData.RegisterCluter(cluster);
         }
         internal bool IsValid(){
          if(terrain.builder.cancelled){
           return false;
          }
-         if(terrain.builder.updateJob!=null){
+         if(terrain.builder.isBusy){
           return false;
          }
          return true;
@@ -79,6 +90,12 @@ namespace AKCondinoO.World{
          foreach(var simObject in simObjects){
           simObject.OnChunkPooled();
          }
+         Hibernate(cCoord);
+        }
+        private void Hibernate(Vector2Int nextcCoord){
+         if(pooled){
+         }
+         terrain.navMeshBuildData.UnregisterSource();
         }
         void OnDrawGizmos(){
          terrain.builder?.GizmosSelected(false);
