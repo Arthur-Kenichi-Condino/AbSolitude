@@ -3,7 +3,7 @@ using AKCondinoO.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.World{
@@ -219,10 +219,10 @@ namespace AKCondinoO.World{
              NavMeshBuildSnapshot.pool.Return(currSnapshot);currSnapshot=null;
              provider=null;
             }
-            internal async void EnsureFinished(){
+            internal void EnsureFinished(){
              if(currSnapshot!=null){
               while(currSnapshot.IsBusy()){
-               await Task.Yield();
+               Thread.Sleep(1);
               }
              }
             }

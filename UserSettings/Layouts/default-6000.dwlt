@@ -1875,13 +1875,13 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -97.039215, y: 114.752594, z: -110.94946}
+    m_Target: {x: 37.632286, y: 25.65827, z: -76.79773}
     speed: 2
-    m_Value: {x: -97.039215, y: 114.752594, z: -110.94946}
+    m_Value: {x: 45.553562, y: 32.60036, z: -70.77866}
   m_RenderMode: 0
   m_CameraMode:
-    drawMode: 2
-    name: Shaded Wireframe
+    drawMode: 0
+    name: Shaded
     section: Shading Mode
   m_ValidateTrueMetals: 0
   m_DoValidateTrueMetals: 0
@@ -1923,13 +1923,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.40470138, y: -0.36800286, z: 0.18111315, w: 0.8182126}
+    m_Target: {x: 0.27819017, y: -0.24518132, z: 0.07117838, w: 0.9268572}
     speed: 2
-    m_Value: {x: -0.40470135, y: 0.36800286, z: -0.18111317, w: -0.8182127}
+    m_Value: {x: -0.1476333, y: 0.062003985, z: -0.006926662, w: -0.987899}
   m_Size:
-    m_Target: 162.50145
+    m_Target: 13.451799
     speed: 2
-    m_Value: 162.50145
+    m_Value: 13.451799
   m_Ortho:
     m_Target: 0
     speed: 2
