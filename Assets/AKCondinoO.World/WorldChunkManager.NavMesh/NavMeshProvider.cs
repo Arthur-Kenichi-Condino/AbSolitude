@@ -38,16 +38,28 @@ namespace AKCondinoO.World{
           );
          }
         }
+     internal readonly HashSet<NavMeshCluster>onDestroyToPool=new();
         internal void Destroy(){
          foreach(var cluster in clusters){
-          NavMeshCluster.pool.Return(cluster);
+          onDestroyToPool.Add(cluster);
          }
+         foreach(var clusterToPool in onDestroyToPool){
+          MarkClusterForPooling(clusterToPool);
+         }
+         onDestroyToPool.Clear();
+         foreach(var markedCluster in clustersMarkedForPooling){
+          onDestroyToPool.Add(markedCluster);
+         }
+         foreach(var clusterToPool in onDestroyToPool){
+          IfMarkedThenPool(clusterToPool);
+         }
+         onDestroyToPool.Clear();
+         clustersMarkedForPooling.Clear();
          clusters.Clear();
          zoneToCluster.Clear();
          zones.Clear();
         }
         internal void OnManualUpdate(){
-         TryPoolingClusters();
         }
      internal readonly HashSet<ActiveZone>zones=new();
         internal void RegisterActiveZone(ActiveZone zone){
@@ -110,8 +122,7 @@ namespace AKCondinoO.World{
           }
          }
          foreach(var merged in toMerge){
-          clusters.Remove(merged);
-          NavMeshCluster.pool.Return(merged);
+          MarkClusterForPooling(merged);
          }
          toMerge.Clear();
          if(zoneCluster==null){
@@ -130,15 +141,29 @@ namespace AKCondinoO.World{
         internal NavMeshCluster RequestCluster(){
          var cluster=NavMeshCluster.pool.Rent();
          cluster.Init(this);
+         if(cluster.updateNavMeshAsyncCoroutine!=null){world.StopCoroutine(cluster.updateNavMeshAsyncCoroutine);}
+         cluster.updateNavMeshAsyncCoroutine=world.StartCoroutine(cluster.UpdateNavMeshAsyncCoroutine());
          return cluster;
         }
      internal readonly HashSet<NavMeshCluster>clustersMarkedForPooling=new();
         internal void MarkClusterForPooling(NavMeshCluster cluster){
+         clusters.Remove(cluster);
          clustersMarkedForPooling.Add(cluster);
-        }
-        internal void TryPoolingClusters(){
-         foreach(var clusterToPool in clustersMarkedForPooling){
+         if(!cluster.isBusy){
+          IfMarkedThenPool(cluster);
          }
+        }
+        internal void IfMarkedThenPool(NavMeshCluster cluster){
+         if(!clustersMarkedForPooling.Contains(cluster)){
+          return;
+         }
+         if(world!=null){
+          if(cluster.updateNavMeshAsyncCoroutine!=null){world.StopCoroutine(cluster.updateNavMeshAsyncCoroutine);}
+          cluster.updateNavMeshAsyncCoroutine=null;
+         }
+         cluster.EnsureFinished();
+         clustersMarkedForPooling.Remove(cluster);
+         NavMeshCluster.pool.Return(cluster);
         }
         internal class NavMeshCluster{
          internal static readonly Utilities.ObjectPool<NavMeshCluster>pool=
@@ -155,7 +180,14 @@ namespace AKCondinoO.World{
          internal readonly HashSet<ActiveZone>clusterZones=new();
          internal Bounds clusterBounds;
          internal readonly Dictionary<int,NavMeshData>navMeshByAgentType=new();
-         internal readonly Dictionary<Vector2Int,NavMeshBuildSource>chunksSources=new();
+         internal readonly SortedDictionary<Vector2Int,NavMeshBuildSource>chunksSources=new(new ChunkCoordComparer());
+            class ChunkCoordComparer:IComparer<Vector2Int>{
+                public int Compare(Vector2Int a,Vector2Int b){
+                 int c=a.y.CompareTo(b.y);
+                 if(c!=0)return c;
+                 return a.x.CompareTo(b.x);
+                }
+            }
             internal void Init(NavMeshProvider provider){
              this.provider=provider;
              isDirty=true;
@@ -184,7 +216,15 @@ namespace AKCondinoO.World{
              clusterZones.Clear();
              pendingBuild=false;
              updating=false;
+             NavMeshBuildSnapshot.pool.Return(currSnapshot);currSnapshot=null;
              provider=null;
+            }
+            internal async void EnsureFinished(){
+             if(currSnapshot!=null){
+              while(currSnapshot.IsBusy()){
+               await Task.Yield();
+              }
+             }
             }
          private bool isDirty=true;
          readonly HashSet<ActiveZone>unvisited=new();
@@ -357,35 +397,43 @@ namespace AKCondinoO.World{
            return updating;
           }
          }
-            IEnumerator UpdateNavMeshAsyncCoroutine(){
-             var waitNavMeshUpdateInterval=new WaitForSeconds(0.1f);
+            internal IEnumerator UpdateNavMeshAsyncCoroutine(){
+             var waitNavMeshUpdateInterval=new WaitForSeconds(.2f);
              while(true){
               while(isDirty){
                yield return null;
               }
               yield return waitNavMeshUpdateInterval;
               if(pendingBuild){
+               pendingBuild=false;//  ...se precisar construir de novo, vai ficar true no meio da coroutine;
                updating=true;
-               currSnapshot=DoUpdateNavMeshAsync();
-               while(currSnapshot.IsBusy()){
-                yield return null;
+               DoSnapshot();
+               for(int i=0;i<provider.agentsCount;i++){
+                DoUpdateNavMeshAsync(i);
+                while(currSnapshot.IsBusy()){
+                 yield return null;
+                }
+                currSnapshot.CompleteUpdate(i);
                }
-               currSnapshot.OnCompleteUpdate();
-               pendingBuild=false;
+               PrepareSnapshotForReuse();
                updating=false;
               }
              }
             }
          private NavMeshBuildSnapshot currSnapshot;
-            NavMeshBuildSnapshot DoUpdateNavMeshAsync(){
-             Logs.Debug(()=>"'do async NavMesh update'");
-             var snapshot=currSnapshot;
-             if(snapshot==null){
-              snapshot=NavMeshBuildSnapshot.pool.Rent();
-              snapshot.Init(this);
+            void DoSnapshot(){
+             if(currSnapshot==null){
+              currSnapshot=NavMeshBuildSnapshot.pool.Rent();
+              currSnapshot.Init(this);
              }
-             snapshot.DoBuild();
-             return snapshot;
+             currSnapshot.asyncSources.AddRange(chunksSources.Values);
+            }
+            void PrepareSnapshotForReuse(){
+             currSnapshot.asyncSources.Clear();
+            }
+            void DoUpdateNavMeshAsync(int agentIndex){
+             Logs.Debug(()=>"'do async NavMesh update'");
+             currSnapshot.DoBuild(agentIndex);
             }
         }
         internal class NavMeshBuildSnapshot{
@@ -415,22 +463,20 @@ namespace AKCondinoO.World{
              navMeshInstances=null;
              asyncSources.Clear();
              asyncOps.Clear();
+             cluster=null;
             }
          private readonly HashSet<AsyncOperation>asyncOps=new();
-            internal void DoBuild(){
-             asyncSources.AddRange(cluster.chunksSources.Values);
-             for(int i=0;i<agentsCount;++i){
-              var agentTypeID=cluster.provider.indexToAgentType[i];
-              var navMeshData=cluster.navMeshByAgentType[agentTypeID];
-              var asyncOp=NavMeshBuilder.UpdateNavMeshDataAsync(
-               navMeshData,
-               cluster.provider.navMeshBuildSettings[i],
-               asyncSources,
-               cluster.clusterBounds
-              );
-              asyncOps.Add(asyncOp);
-             }
-             asyncSources.Clear();
+            internal void DoBuild(int agentIndex){
+             int i=agentIndex;
+             var agentTypeID=cluster.provider.indexToAgentType[i];
+             var navMeshData=cluster.navMeshByAgentType[agentTypeID];
+             var asyncOp=NavMeshBuilder.UpdateNavMeshDataAsync(
+              navMeshData,
+              cluster.provider.navMeshBuildSettings[i],
+              asyncSources,
+              cluster.clusterBounds
+             );
+             asyncOps.Add(asyncOp);
             }
          private readonly HashSet<AsyncOperation>done=new();
             internal bool IsBusy(){
@@ -447,13 +493,12 @@ namespace AKCondinoO.World{
              done.Clear();
              return asyncOps.Count>0;
             }
-            internal void OnCompleteUpdate(){
-             for(int i=0;i<agentsCount;++i){
-              if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
-              var agentTypeID=cluster.provider.indexToAgentType[i];
-              var navMeshData=cluster.navMeshByAgentType[agentTypeID];
-              navMeshInstances[i]=NavMesh.AddNavMeshData(navMeshData);
-             }
+            internal void CompleteUpdate(int agentIndex){
+             int i=agentIndex;
+             if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
+             var agentTypeID=cluster.provider.indexToAgentType[i];
+             var navMeshData=cluster.navMeshByAgentType[agentTypeID];
+             navMeshInstances[i]=NavMesh.AddNavMeshData(navMeshData);
             }
         }
     }
