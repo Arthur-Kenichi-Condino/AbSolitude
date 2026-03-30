@@ -7,13 +7,14 @@ namespace AKCondinoO.Bootstrap{
      internal static bool enableAll=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
-      //"NavMeshProvider",
+      "NavMeshProvider",
       //"WorldChunk",
       //"TerrainChunkBuilder",
      };
      internal enum LogType{
       Debug,
       Error,
+      Warning,
      }
         internal static void Enable (string className)=>enabledAt.Add   (className);
         internal static void Disable(string className)=>enabledAt.Remove(className);
@@ -45,6 +46,18 @@ namespace AKCondinoO.Bootstrap{
           member
          );
         }
+        internal static void Warning(string logMsg,Object context=null,bool condition=true,
+         [CallerFilePath]string file="",
+         [CallerMemberName]string member=""
+        ){
+         string className=System.IO.Path.GetFileNameWithoutExtension(file);
+         string message=$"[{className}.{member}]:{logMsg}";
+         WriteMessage(LogType.Warning,
+          message,context,condition,
+          file,
+          member
+         );
+        }
         private static void WriteMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
         ){
          if(message==null){return;}
@@ -55,6 +68,10 @@ namespace AKCondinoO.Bootstrap{
           }
           case(LogType.Error):{
            UnityEngine.Debug.LogError(message,context);
+           break;
+          }
+          case(LogType.Warning):{
+           UnityEngine.Debug.LogWarning(message,context);
            break;
           }
          }
