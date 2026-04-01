@@ -48,6 +48,7 @@ namespace AKCondinoO.SimObjects{
            simObjectFactories[type]=new(prefab.simObject);
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
+          simObjectManualUpdateInLotsCoroutine=StartCoroutine(SimObjectManualUpdateInLotsCoroutine());
          }
          Camera.onPreCull+=RenderInstanced;
         }
@@ -55,6 +56,9 @@ namespace AKCondinoO.SimObjects{
          if(this!=null){
           if(spawnCoroutine!=null){
            StopCoroutine(spawnCoroutine);
+          }
+          if(simObjectManualUpdateInLotsCoroutine!=null){
+           StopCoroutine(simObjectManualUpdateInLotsCoroutine);
           }
          }
          base.PreShutdown();
@@ -99,11 +103,14 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
+        internal void OnSpawn(SimObject simObject){
+        }
         internal void Despawn(SimObject simObject){
          if(simObjectFactories.TryGetValue(simObject.simObjectType,out var factory)){
           factory.Despawn(simObject);
          }
         }
+     internal readonly Dictionary<Type,Dictionary<ulong,SimObject>>simObjects=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
@@ -118,8 +125,14 @@ namespace AKCondinoO.SimObjects{
           Logs.Debug(()=>"'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
          }
         }
+     internal readonly Dictionary<Type,List<SimObject>>lazyUpdaterSnapshot=new();
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
          while(true){
+          foreach(var kvp in lazyUpdaterSnapshot){
+           var simObjects=kvp.Value;
+           foreach(var simObject in simObjects){
+           }
+          }
           yield return null;
          }
         }
@@ -202,7 +215,10 @@ namespace AKCondinoO.SimObjects{
          SimObjectSpawn item=data[currentIndex];
          currentIndex++;
          if(simObjectPrefabs.TryGetValue(item.simObjectType,out var factory)){
-          factory.Spawn(item);
+          var simObject=factory.Spawn(item);
+          if(simObject!=null){
+           SimObjectManager.singleton.OnSpawn(simObject);
+          }
          }
          return true;
         }

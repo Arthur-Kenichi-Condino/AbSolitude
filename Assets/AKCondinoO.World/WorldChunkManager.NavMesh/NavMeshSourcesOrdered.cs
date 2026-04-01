@@ -27,7 +27,6 @@ namespace AKCondinoO.World{
         internal void Reset(){
          chunksSourcesPendingAdd.Clear();
          chunksSourcesPendingRemove.Clear();
-         minRemovalIndex=int.MaxValue;
          sourcesIndexMap.Clear();
          indexToSourceKey.Clear();
          added.Clear();
@@ -56,22 +55,12 @@ namespace AKCondinoO.World{
         }
         internal void RegisterSource(WorldChunk chunk){
          chunksSourcesPendingRemove.Remove(chunk.cCoord);
-         SourceKey key=new(chunk.cCoord);
-         if(sourcesIndexMap.ContainsKey(key)){
-          return;
-         }
          chunkComparer.clusterBounds=snapshot.cluster.clusterBounds;
          chunksSourcesPendingAdd[chunk.cCoord]=chunk.terrain.navMeshBuildData.navMeshSource;
         }
      private readonly HashSet<Vector2Int>chunksSourcesPendingRemove=new();
-     private int minRemovalIndex=int.MaxValue;
         internal void UnregisterSource(WorldChunk chunk){
          chunksSourcesPendingAdd.Remove(chunk.cCoord);
-         SourceKey key=new(chunk.cCoord);
-         if(!sourcesIndexMap.TryGetValue(key,out int index)){
-          return;
-         }
-         minRemovalIndex=Math.Min(minRemovalIndex,index);
          chunksSourcesPendingRemove.Add(chunk.cCoord);
          Logs.Debug(()=>"'unregister source':chunk.cCoord:"+chunk.cCoord);
         }
@@ -113,20 +102,33 @@ namespace AKCondinoO.World{
      private IEnumerator<KeyValuePair<Vector2Int,NavMeshBuildSource>>appendingChunksSourcesEnumerator;
      private readonly HashSet<Vector2Int>sourcesMarkedForRemoval=new();
      private readonly List<NavMeshBuildSource>ordered=new();
+     bool removalInProgress;
+     int removalReadIndex;
+     int removalWriteIndex;
+     bool rebuildingIndexMap;
+     int indexMapRebuildIndex;
         internal void BeginOrderingSources(){
          added.Clear();
          added.AddRange(snapshot.asyncSources);
          appendingChunksSources.AddRange(chunksSourcesPendingAdd,DictionaryAddRangeHelper.DictionaryAddRangeMethod.Override);
          appendingChunksSourcesEnumerator=appendingChunksSources.GetEnumerator();
-         chunksSourcesPendingAdd.Clear();
          sourcesMarkedForRemoval.UnionWith(chunksSourcesPendingRemove);
+         chunksSourcesPendingAdd.Clear();
          chunksSourcesPendingRemove.Clear();
+         removalInProgress=false;
+         rebuildingIndexMap=false;
+         if(sourcesMarkedForRemoval.Count>0){
+          removalInProgress=true;
+          removalReadIndex=0;
+          removalWriteIndex=0;
+         }
         }
         internal bool OrderingSourcesIncremental(){
-         if(sourcesMarkedForRemoval.Count>0){
-          int writeIndex=minRemovalIndex;
-          for(int readIndex=minRemovalIndex;readIndex<ordered.Count;readIndex++){
-           var key=indexToSourceKey[readIndex];
+         if(removalInProgress){
+          int steps=0;
+          int maxSteps=batchSize;
+          while(removalReadIndex<ordered.Count&&steps<maxSteps){
+           var key=indexToSourceKey[removalReadIndex];
            bool remove=false;
            if(key.type==SourceType.WorldChunk){
             Vector2Int cCoord=key.chunk;
@@ -134,39 +136,62 @@ namespace AKCondinoO.World{
              remove=true;
             }
            }
-           if(remove){
-            continue;
+           if(!remove){
+            if(removalWriteIndex!=removalReadIndex){
+             ordered[removalWriteIndex]=ordered[removalReadIndex];
+             indexToSourceKey[removalWriteIndex]=indexToSourceKey[removalReadIndex];
+             if(removalWriteIndex<added.Count){
+              added[removalWriteIndex]=added[removalReadIndex];
+             }
+            }
+            removalWriteIndex++;
            }
-           if(writeIndex!=readIndex){
-            ordered[writeIndex]=ordered[readIndex];
-            indexToSourceKey[writeIndex]=indexToSourceKey[readIndex];
-            if(writeIndex<added.Count){
-             added[writeIndex]=added[readIndex];
+           removalReadIndex++;
+           steps++;
+          }
+          if(removalReadIndex>=ordered.Count){
+           int finalCount=removalWriteIndex;
+           if(finalCount<ordered.Count){
+            int removeCount=ordered.Count-finalCount;
+            ordered.RemoveRange(finalCount,removeCount);
+            indexToSourceKey.RemoveRange(finalCount,removeCount);
+            if(finalCount<added.Count){
+             added.RemoveRange(finalCount,added.Count-finalCount);
             }
            }
-           writeIndex++;
+           sourcesIndexMap.Clear();
+           rebuildingIndexMap=true;
+           indexMapRebuildIndex=0;
+           removalReadIndex=0;
+           removalWriteIndex=0;
+           removalInProgress=false;
+           sourcesMarkedForRemoval.Clear();
+           return true;
           }
-          if(writeIndex<ordered.Count){
-           int removeCount=ordered.Count-writeIndex;
-           ordered.RemoveRange(writeIndex,removeCount);
-           indexToSourceKey.RemoveRange(writeIndex,removeCount);
-           if(writeIndex<added.Count){
-            int addedRemoveCount=added.Count-writeIndex;
-            added.RemoveRange(writeIndex,addedRemoveCount);
-           }
-          }
-          sourcesIndexMap.Clear();
-          for(int i=0;i<indexToSourceKey.Count;i++){
-           sourcesIndexMap[indexToSourceKey[i]]=i;
-          }
+          return true;
          }
-         minRemovalIndex=int.MaxValue;
-         sourcesMarkedForRemoval.Clear();
+         if(rebuildingIndexMap){
+          int steps=0;
+          int maxSteps=batchSize;
+          while(indexMapRebuildIndex<indexToSourceKey.Count&&steps<maxSteps){
+           sourcesIndexMap[indexToSourceKey[indexMapRebuildIndex]]=indexMapRebuildIndex;
+           indexMapRebuildIndex++;
+           steps++;
+          }
+          if(indexMapRebuildIndex>=indexToSourceKey.Count){
+           rebuildingIndexMap=false;
+           return true;
+          }
+          return true;
+         }
          if(appendingChunksSourcesEnumerator.MoveNext()){
-          SourceKey key=new(appendingChunksSourcesEnumerator.Current.Key);
-          sourcesIndexMap[key]=ordered.Count;
-          indexToSourceKey.Add(key);
-          ordered.Add(appendingChunksSourcesEnumerator.Current.Value);
+          var cCoord=appendingChunksSourcesEnumerator.Current.Key;
+          SourceKey key=new(cCoord);
+          if(!sourcesIndexMap.ContainsKey(key)){
+           sourcesIndexMap[key]=ordered.Count;
+           indexToSourceKey.Add(key);
+           ordered.Add(appendingChunksSourcesEnumerator.Current.Value);
+          }
           return true;
          }
          appendingChunksSources.Clear();
