@@ -8,6 +8,7 @@ namespace AKCondinoO.Bootstrap{
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
       "NavMeshProvider",
+      "NavMeshSourcesOrdered",
       //"WorldChunk",
       //"TerrainChunkBuilder",
      };

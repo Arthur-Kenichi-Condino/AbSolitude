@@ -67,6 +67,7 @@ namespace AKCondinoO.World.Terrain{
       }
      }
      internal UpdateJob updateJob;
+     internal readonly HashSet<NavMeshCluster>staleClusterBonds=new();
         internal void DoUpdateJob(){
          Logs.Debug(()=>"'doing update job for':"+chunk.cnkRgn);
          debugDrawMeshWireframeVer.Clear();
@@ -75,6 +76,7 @@ namespace AKCondinoO.World.Terrain{
           var updateJob=UpdateJob.pool.Rent();
           updateJob.dependency=this.updateJob;
           updateJob.builder=this;
+          staleClusterBonds.UnionWith(terrain.navMeshBuildData.exitedClusters);
           if(!SharedCoroutines.TrySchedule(updateJob)){
            UpdateJob.pool.Return(updateJob);
           }
@@ -109,6 +111,7 @@ namespace AKCondinoO.World.Terrain{
             item.pendingBakeJob      =false;
             item.waitingBakeJob      =false;
             item.doMarchingCubesJob=null;
+            item.clustersFinished.Clear();
            }
           );
          private SharedCoroutineContainerJob doFirst;
@@ -144,8 +147,23 @@ namespace AKCondinoO.World.Terrain{
              pendingBakeJob      =true;
              waitingBakeJob      =false;
             }
+     internal readonly HashSet<NavMeshCluster>clustersFinished=new();
             public int OnLoopExecuteStep(bool onPreShutdown=false){
              bool valid=builder.ValidJob(this);if(!valid){cancelled=true;}
+             if(!cancelled){
+              foreach(var cluster in builder.staleClusterBonds){
+               if(!cluster.isBusy){
+                clustersFinished.Add(cluster);
+               }else{
+                continue;
+               }
+              }
+              builder.staleClusterBonds.ExceptWith(clustersFinished);
+              clustersFinished.Clear();
+              if(builder.staleClusterBonds.Count>0){
+               return 0;
+              }
+             }
              if(waitingMarchingCubes){
               if(cancelled){
                //Logs.Debug("'wasting time doing marching cubes on chunk that changed...':"+sw.ElapsedMilliseconds+" ms");

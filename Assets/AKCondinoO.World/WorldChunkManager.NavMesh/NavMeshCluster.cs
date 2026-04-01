@@ -259,8 +259,10 @@ namespace AKCondinoO.World{
             if(ShouldYield())yield return null;
            }
            for(int i=0;i<provider.agentsCount;i++){
-            snapshot.sourcesOrdered.BeginAddingSources();
-            while(snapshot.sourcesOrdered.AddingSourcesIncremental()){
+            snapshot.sourcesOrdered.PrepareSourcesForAgentBuild();
+            bool first=true;
+            while(snapshot.sourcesOrdered.AppendSourcesForAgentIncremental()||first){
+             first=false;
              if(ShouldYield())yield return null;
              DoUpdateNavMeshAsync(i);
              while(snapshot.IsBusy()){

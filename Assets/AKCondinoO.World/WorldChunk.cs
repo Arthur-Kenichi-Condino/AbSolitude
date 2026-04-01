@@ -19,7 +19,7 @@ namespace AKCondinoO.World{
          terrain.chunk=this;
         }
         internal void ManualDestroy(){
-         Hibernate(cCoord);
+         Hibernate(cCoord,true);
          terrain.OnManualDestroy();
         }
      private bool firstCall;
@@ -34,7 +34,7 @@ namespace AKCondinoO.World{
           terrain.builder.cancelled||
           regenerate
          ){
-          Hibernate(cCoord);
+          Hibernate(cCoord,true);
           firstCall=false;
           this.cCoord=cCoord;
           this.cnkRgn=cCoordTocnkRgn(this.cCoord);
@@ -92,10 +92,10 @@ namespace AKCondinoO.World{
          }
          Hibernate(cCoord);
         }
-        private void Hibernate(Vector2Int nextcCoord){
+        private void Hibernate(Vector2Int nextcCoord,bool invalid=false){
          if(pooled){
          }
-         terrain.navMeshBuildData.UnregisterSource();
+         terrain.navMeshBuildData.OnHibernation(invalid);
         }
         void OnDrawGizmos(){
          terrain.builder?.GizmosSelected(false);

@@ -537,6 +537,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
+      propertyPath: expropriationDistance.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
+      propertyPath: expropriationDistance.y
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1212675531806437069, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

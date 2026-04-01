@@ -25,7 +25,15 @@ namespace AKCondinoO.World.Terrain{
         internal void RegisterCluter(NavMeshCluster cluster){
          clusteredIn.Add(cluster);
         }
-        internal void UnregisterSource(){
+     internal readonly List<NavMeshCluster>exitedClusters=new();
+        internal void OnHibernation(bool invalid){
+         if(invalid){
+          exitedClusters.Clear();
+          exitedClusters.AddRange(clusteredIn);
+          UnregisterSource();
+         }
+        }
+        private void UnregisterSource(){
          foreach(var cluster in clusteredIn){
           cluster.RemoveSource(chunk);
          }
