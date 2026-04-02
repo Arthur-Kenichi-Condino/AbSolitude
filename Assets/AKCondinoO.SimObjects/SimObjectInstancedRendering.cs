@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectInstancedRendering{
-     private readonly Dictionary<Type,SimObjectInstancedRenderer>renderers=new();
-        internal void RegisterType(Type type,Mesh mesh,Material[]materials,int layer,int preallocate=0){
-         renderers[type]=new(mesh,materials,layer,preallocate);
+     private readonly Dictionary<(Type type,string variant),SimObjectInstancedRenderer>renderers=new();
+        internal void RegisterType((Type type,string variant)key,Mesh mesh,Material[]materials,int layer,int preallocate=0){
+         renderers[key]=new(mesh,materials,layer,preallocate);
         }
-        internal int AddInstance(Type type,SimObject simObject){
-         if(renderers.TryGetValue(type,out var renderer)){
+        internal int AddInstance((Type type,string variant)key,SimObject simObject){
+         if(renderers.TryGetValue(key,out var renderer)){
           return renderer.AddInstance(simObject);
          }
          return -1;
         }
-        internal void RemoveInstance(Type type,int index){
+        internal void RemoveInstance((Type type,string variant)key,int index){
          if(index<0){return;}
-         renderers[type].RemoveAtSwapBack(index);
+         renderers[key].RemoveAtSwapBack(index);
         }
         internal void Clear(bool destroy=false){
          foreach(var renderer in renderers.Values)renderer.Clear(destroy);

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
-     [SerializeField]private SimObjectPrefabs prefabsRegistry;
+     [SerializeField]private SimObjectPrefabs[]prefabsRegistry;
      [SerializeField]private bool      debugMassiveSpawnTest=false;
      [SerializeField]private SimObject debugMassiveSpawnType=null;
      [SerializeField]private int       debugMassiveSpawnCount=5000;
@@ -26,7 +26,7 @@ namespace AKCondinoO.SimObjects{
         }
      internal SimObjectInstancedRendering instancedRendering;
      internal BiomesSimObjectSpawningSystem biomesSpawningSystem;
-     private readonly Dictionary<Type,SimObjectFactory<SimObject>>simObjectFactories=new();
+     private readonly Dictionary<(Type type,string variant),SimObjectFactory<SimObject>>simObjectFactories=new();
      private Coroutine spawnCoroutine;
      private Coroutine simObjectManualUpdateInLotsCoroutine;
         public override void Initialize(){
@@ -34,18 +34,21 @@ namespace AKCondinoO.SimObjects{
          instancedRendering=new();
          biomesSpawningSystem=new();
          if(this!=null){
-          foreach(var prefab in prefabsRegistry.list){
-           var type=prefab.simObject.GetType();
-           if(prefab.simObject.useInstancedRendering){
-            MeshRenderer meshRenderer=prefab.simObject.meshObject.GetComponentInChildren<MeshRenderer>();
-            MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
-            Mesh mesh;
-            if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
-             Logs.Debug(()=>"mesh.name:"+mesh.name);
-             instancedRendering.RegisterType(type,mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
+          foreach(var prefabsRegistered in prefabsRegistry){
+           foreach(var prefab in prefabsRegistered.list){
+            var type=prefab.simObject.simObjectType;
+            var variant=prefab.simObject.variant;
+            if(prefab.simObject.useInstancedRendering){
+             MeshRenderer meshRenderer=prefab.simObject.meshObject.GetComponentInChildren<MeshRenderer>();
+             MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
+             Mesh mesh;
+             if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
+              Logs.Debug(()=>"mesh.name:"+mesh.name);
+              instancedRendering.RegisterType((type,variant),mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
+             }
             }
+            simObjectFactories[(type,variant)]=new(prefab.simObject);
            }
-           simObjectFactories[type]=new(prefab.simObject);
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
           simObjectManualUpdateInLotsCoroutine=StartCoroutine(SimObjectManualUpdateInLotsCoroutine());
@@ -106,11 +109,11 @@ namespace AKCondinoO.SimObjects{
         internal void OnSpawn(SimObject simObject){
         }
         internal void Despawn(SimObject simObject){
-         if(simObjectFactories.TryGetValue(simObject.simObjectType,out var factory)){
+         if(simObjectFactories.TryGetValue((simObject.simObjectType,simObject.variant),out var factory)){
           factory.Despawn(simObject);
          }
         }
-     internal readonly Dictionary<Type,Dictionary<ulong,SimObject>>simObjects=new();
+     internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimObject>>simObjects=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
@@ -125,7 +128,7 @@ namespace AKCondinoO.SimObjects{
           Logs.Debug(()=>"'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
          }
         }
-     internal readonly Dictionary<Type,List<SimObject>>lazyUpdaterSnapshot=new();
+     internal readonly Dictionary<(Type type,string variant),List<SimObject>>lazyUpdaterSnapshot=new();
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
          while(true){
           foreach(var kvp in lazyUpdaterSnapshot){
@@ -152,21 +155,23 @@ namespace AKCondinoO.SimObjects{
            ()=>new(),
            (DebugMassiveSpawnJob item)=>{}
           );
-         private Type debugMassiveSpawnType;
-         private int  debugMassiveSpawnCount;
+         private Type   debugMassiveSpawnType;
+         private string debugMassiveSpawnVariant;
+         private int    debugMassiveSpawnCount;
          private SpawnList spawnList;
             public void CancelGraciously(){
             }
             public void OnDoScheduleSetContainerData(){
-             debugMassiveSpawnType =singleton.debugMassiveSpawnType.GetType();
-             debugMassiveSpawnCount=singleton.debugMassiveSpawnCount;
+             debugMassiveSpawnType   =singleton.debugMassiveSpawnType.simObjectType;
+             debugMassiveSpawnVariant=singleton.debugMassiveSpawnType.variant;
+             debugMassiveSpawnCount  =singleton.debugMassiveSpawnCount;
             }
             public void ExecuteAtBackgroundThread(){
              Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
              spawnList=SpawnList.pool.Rent();
              for(int i=0;i<debugMassiveSpawnCount;i++){
               spawnList.Add(
-               new(debugMassiveSpawnType)
+               new(debugMassiveSpawnType,debugMassiveSpawnVariant)
               );
              }
             }
@@ -207,14 +212,14 @@ namespace AKCondinoO.SimObjects{
          currentIndex=0;
          dequeued=true;
         }
-        internal bool SpawnNext(Dictionary<Type,SimObjectFactory<SimObject>>simObjectPrefabs){
+        internal bool SpawnNext(Dictionary<(Type type,string variant),SimObjectFactory<SimObject>>simObjectPrefabs){
          if(currentIndex>=data.Count){
           dequeued=true;
           return false;
          }
          SimObjectSpawn item=data[currentIndex];
          currentIndex++;
-         if(simObjectPrefabs.TryGetValue(item.simObjectType,out var factory)){
+         if(simObjectPrefabs.TryGetValue((item.simObjectType,item.variant),out var factory)){
           var simObject=factory.Spawn(item);
           if(simObject!=null){
            SimObjectManager.singleton.OnSpawn(simObject);
@@ -225,8 +230,10 @@ namespace AKCondinoO.SimObjects{
     }
     internal struct SimObjectSpawn{
      internal Type simObjectType;
-        internal SimObjectSpawn(Type simObjectType){
+     internal string variant;
+        internal SimObjectSpawn(Type simObjectType,string variant){
          this.simObjectType=simObjectType;
+         this.variant=variant;
         }
     }
 }

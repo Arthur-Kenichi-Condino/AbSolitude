@@ -10,17 +10,16 @@ namespace AKCondinoO.SimObjects{
         }
         internal virtual SimObject Spawn(SimObjectSpawn item){
          T simObject=pool.Rent();
-         simObject.simObjectType=item.simObjectType;
          simObject.OnPositionChanged(out bool outOfBounds);
          if(!outOfBounds){
-          SimObjectManager.singleton.instancedRendering.AddInstance(simObject.simObjectType,simObject);
+          SimObjectManager.singleton.instancedRendering.AddInstance((simObject.simObjectType,simObject.variant),simObject);
          }else{
           simObject=null;
          }
          return simObject;
         }
         internal virtual void Despawn(T simObject){
-         SimObjectManager.singleton.instancedRendering.RemoveInstance(simObject.simObjectType,simObject.instancedRenderingIndex);
+         SimObjectManager.singleton.instancedRendering.RemoveInstance((simObject.simObjectType,simObject.variant),simObject.instancedRenderingIndex);
          pool.Return(simObject);
         }
     }
