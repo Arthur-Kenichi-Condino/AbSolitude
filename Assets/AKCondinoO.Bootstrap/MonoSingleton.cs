@@ -7,13 +7,15 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class SingletonManager{
      internal static readonly Dictionary<Type,int>initOrderTable=new(){
-      {typeof(SharedCoroutines ), 0},
-      {typeof(Main             ), 1},
-      {typeof(InputHandler     ), 2},
-      {typeof(MainCamera       ), 3},
-      {typeof(BiomesSystem     ), 4},
-      {typeof(WorldChunkManager), 5},
-      {typeof(SimObjectManager ), 6},
+      {typeof(SharedCoroutines        ), 0},
+      {typeof(Main                    ), 1},
+      {typeof(InputHandler            ), 2},
+      {typeof(MainCamera              ), 3},
+      {typeof(BiomesSystem            ), 4},
+      {typeof(WorldSimObjectSpatialMap), 5},
+      {typeof(WorldChunkManager       ), 6},
+      {typeof(SimObjectManager        ), 7},
+      {typeof(SimDirector             ), 8},
      };
      private static readonly List<ISingleton>singletons=new();
         internal static void Register(ISingleton singleton){

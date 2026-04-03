@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 193105811232424698}
   - component: {fileID: 33065013992664210}
   - component: {fileID: 23466419510729776}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pinus_elliottii_1.Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}

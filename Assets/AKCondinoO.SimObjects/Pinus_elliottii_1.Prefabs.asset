@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Pinus_elliottii_1.Prefabs
   m_EditorClassIdentifier: 
   list:
-  - variant: Base
-    simObject: {fileID: 7263138527205009167, guid: 3b02bbb1a5a515640ab873ba86f14c9c, type: 3}
+  - simObject: {fileID: 7242630871969314645, guid: cbd088c9aa919044183cb6c4623e1501, type: 3}

@@ -71,6 +71,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Server.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimIds.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnATTACK_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.Messages.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.MotionUpdater.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Inventory.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbsoluteFrenzy.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Placeholder.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\MeshHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\ConstNode.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\GPUInstancingTest.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnCHASE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.cs" />
     <Compile Include="Assets\AKCondinoO\Util\PhysUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimDirector.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItemsInContainerSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hitboxes.cs" />
@@ -186,6 +189,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillsManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.PersistentSimActorData.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldSimObjectSpatialMap.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ListWrapper.cs" />
     <Compile Include="Assets\AKCondinoO\Util\AnimatorUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventory.cs" />

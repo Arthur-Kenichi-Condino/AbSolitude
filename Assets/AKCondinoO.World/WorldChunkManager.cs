@@ -22,7 +22,7 @@ namespace AKCondinoO.World{
         public override void Initialize(){
          base.Initialize();
          MaterialAtlasHelper.SetAtlasData();
-         chunkPool=new(chunkPrefab);
+         chunkPool=new(chunkPrefab,transform);
          navMeshProvider=new(this);
          if(this!=null){
          }
@@ -87,11 +87,6 @@ namespace AKCondinoO.World{
          }
         }
         internal bool OnAddSimObjectAt(Vector3 pos,SimObject simObject){
-         Vector2Int cCoord=vecPosTocCoord(pos);
-         if(chunks.TryGetValue(cCoord,out var cnk)){
-          cnk.AddSimObject(simObject);
-          return true;
-         }
          return false;
         }
         public override void ManualUpdate(){

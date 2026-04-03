@@ -26,6 +26,7 @@ namespace AKCondinoO.SimObjects{
         }
      internal SimObjectInstancedRendering instancedRendering;
      internal BiomesSimObjectSpawningSystem biomesSpawningSystem;
+     internal SimIds simIds;
      private readonly Dictionary<(Type type,string variant),SimObjectFactory<SimObject>>simObjectFactories=new();
      private Coroutine spawnCoroutine;
      private Coroutine simObjectManualUpdateInLotsCoroutine;
@@ -33,21 +34,16 @@ namespace AKCondinoO.SimObjects{
          base.Initialize();
          instancedRendering=new();
          biomesSpawningSystem=new();
+         simIds=new();
          if(this!=null){
           foreach(var prefabsRegistered in prefabsRegistry){
            foreach(var prefab in prefabsRegistered.list){
             var type=prefab.simObject.simObjectType;
             var variant=prefab.simObject.variant;
-            if(prefab.simObject.useInstancedRendering){
-             MeshRenderer meshRenderer=prefab.simObject.meshObject.GetComponentInChildren<MeshRenderer>();
-             MeshFilter   meshFilter  =prefab.simObject.meshObject.GetComponentInChildren<MeshFilter  >();
-             Mesh mesh;
-             if(meshRenderer!=null&&meshFilter!=null&&(mesh=meshFilter.sharedMesh)!=null){
-              Logs.Debug(()=>"mesh.name:"+mesh.name);
-              instancedRendering.RegisterType((type,variant),mesh,meshRenderer.sharedMaterials,prefab.simObject.meshObject.layer);
-             }
-            }
-            simObjectFactories[(type,variant)]=new(prefab.simObject);
+            simObjectFactories[(type,variant)]=new(prefab.simObject,transform);
+            var key=(type,variant);
+            simObjects.Add(key,new());
+            lazyUpdaterSnapshot.Add(key,new());
            }
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
@@ -106,14 +102,16 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
+     internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimObject>>simObjects=new();
         internal void OnSpawn(SimObject simObject){
+         var key=(simObject.simObjectType,simObject.variant);
+         simObjects[key][simObject.id]=simObject;
         }
         internal void Despawn(SimObject simObject){
          if(simObjectFactories.TryGetValue((simObject.simObjectType,simObject.variant),out var factory)){
           factory.Despawn(simObject);
          }
         }
-     internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimObject>>simObjects=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
          if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
@@ -130,13 +128,28 @@ namespace AKCondinoO.SimObjects{
         }
      internal readonly Dictionary<(Type type,string variant),List<SimObject>>lazyUpdaterSnapshot=new();
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
+         const double maxTimePerFrame=0.001d;//  ...unidade: em segundos
          while(true){
+          double startTime=Time.realtimeSinceStartupAsDouble;
           foreach(var kvp in lazyUpdaterSnapshot){
-           var simObjects=kvp.Value;
-           foreach(var simObject in simObjects){
+           var key=kvp.Key;
+           var simObjectsList=kvp.Value;
+           simObjectsList.AddRange(this.simObjects[key].Values);
+           if(ShouldYield())yield return null;
+           foreach(var simObject in simObjectsList){
+            simObject.LazyUpdate();
+            if(ShouldYield())yield return null;
            }
+           simObjectsList.Clear();
           }
           yield return null;
+          bool ShouldYield(){
+           if(Time.realtimeSinceStartupAsDouble-startTime>=maxTimePerFrame){
+            startTime=Time.realtimeSinceStartupAsDouble;
+            return true;
+           }
+           return false;
+          }
          }
         }
         void RenderInstanced(Camera camera){
@@ -148,43 +161,45 @@ namespace AKCondinoO.SimObjects{
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
-        internal class DebugMassiveSpawnJob:MultithreadedContainerJob{
-         internal static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>pool=
-          Pool.GetPool<DebugMassiveSpawnJob>(
-           "",
-           ()=>new(),
-           (DebugMassiveSpawnJob item)=>{}
-          );
-         private Type   debugMassiveSpawnType;
-         private string debugMassiveSpawnVariant;
-         private int    debugMassiveSpawnCount;
-         private SpawnList spawnList;
-            public void CancelGraciously(){
-            }
-            public void OnDoScheduleSetContainerData(){
-             debugMassiveSpawnType   =singleton.debugMassiveSpawnType.simObjectType;
-             debugMassiveSpawnVariant=singleton.debugMassiveSpawnType.variant;
-             debugMassiveSpawnCount  =singleton.debugMassiveSpawnCount;
-            }
-            public void ExecuteAtBackgroundThread(){
-             Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
-             spawnList=SpawnList.pool.Rent();
-             for(int i=0;i<debugMassiveSpawnCount;i++){
-              spawnList.Add(
-               new(debugMassiveSpawnType,debugMassiveSpawnVariant)
+        #region Debug
+            internal class DebugMassiveSpawnJob:MultithreadedContainerJob{
+             internal static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>pool=
+              Pool.GetPool<DebugMassiveSpawnJob>(
+               "",
+               ()=>new(),
+               (DebugMassiveSpawnJob item)=>{}
               );
-             }
+             private Type   debugMassiveSpawnType;
+             private string debugMassiveSpawnVariant;
+             private int    debugMassiveSpawnCount;
+             private SpawnList spawnList;
+                public void CancelGraciously(){
+                }
+                public void OnDoScheduleSetContainerData(){
+                 debugMassiveSpawnType   =singleton.debugMassiveSpawnType.simObjectType;
+                 debugMassiveSpawnVariant=singleton.debugMassiveSpawnType.variant;
+                 debugMassiveSpawnCount  =singleton.debugMassiveSpawnCount;
+                }
+                public void ExecuteAtBackgroundThread(){
+                 Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
+                 spawnList=SpawnList.pool.Rent();
+                 for(int i=0;i<debugMassiveSpawnCount;i++){
+                  spawnList.Add(
+                   new(debugMassiveSpawnType,debugMassiveSpawnVariant)
+                  );
+                 }
+                }
+                public void OnCompletedDoAtMainThread(){
+                 if(!object.ReferenceEquals(singleton,null)){
+                  singleton.spawnQueue.Enqueue(spawnList);
+                 }else{
+                  SpawnList.pool.Return(spawnList);
+                 }
+                 spawnList=null;
+                 DebugMassiveSpawnJob.pool.Return(this);
+                }
             }
-            public void OnCompletedDoAtMainThread(){
-             if(!object.ReferenceEquals(singleton,null)){
-              singleton.spawnQueue.Enqueue(spawnList);
-             }else{
-              SpawnList.pool.Return(spawnList);
-             }
-             spawnList=null;
-             DebugMassiveSpawnJob.pool.Return(this);
-            }
-        }
+        #endregion
     }
     internal class SpawnList{
      internal static readonly Utilities.ObjectPool<SpawnList>pool=
@@ -221,9 +236,6 @@ namespace AKCondinoO.SimObjects{
          currentIndex++;
          if(simObjectPrefabs.TryGetValue((item.simObjectType,item.variant),out var factory)){
           var simObject=factory.Spawn(item);
-          if(simObject!=null){
-           SimObjectManager.singleton.OnSpawn(simObject);
-          }
          }
          return true;
         }

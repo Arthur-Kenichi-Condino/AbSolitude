@@ -57,6 +57,10 @@ namespace AKCondinoO.SimObjects{
          }
          simObjects.Clear();
         }
+        internal void UpdateInstance(int index){
+         Matrix4x4 matrix=simObjects[index].transform.localToWorldMatrix;
+         matrices[index]=matrix;
+        }
         internal void DrawAll(){
          const int batchSize=1023;
          for(int i=0;i<subMeshCount;i++){

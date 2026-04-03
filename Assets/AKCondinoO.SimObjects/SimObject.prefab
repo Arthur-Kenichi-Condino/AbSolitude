@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02006320897f394eb7a2982f21a9528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  variant: 
+  useInstancedRendering: 0
+  meshObject: {fileID: 0}
+  useMeshObjectSubMeshesForCollider: 

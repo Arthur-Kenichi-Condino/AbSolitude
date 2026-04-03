@@ -23,6 +23,10 @@ namespace AKCondinoO.SimObjects{
           renderers.Clear();
          }
         }
+        internal void UpdateInstance((Type type,string variant)key,int index){
+         if(index<0){return;}
+         renderers[key].UpdateInstance(index);
+        }
         internal void DrawAll(){
          foreach(var renderer in renderers.Values)renderer.DrawAll();
         }

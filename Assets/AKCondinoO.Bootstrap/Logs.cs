@@ -7,10 +7,13 @@ namespace AKCondinoO.Bootstrap{
      internal static bool enableAll=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
-      "NavMeshProvider",
-      "NavMeshSourcesOrdered",
+      //"NavMeshProvider",
+      //"NavMeshSourcesOrdered",
       //"WorldChunk",
       //"TerrainChunkBuilder",
+      "SimObjectManager",
+      "SimObjectFactory",
+      "SimObject",
      };
      internal enum LogType{
       Debug,
