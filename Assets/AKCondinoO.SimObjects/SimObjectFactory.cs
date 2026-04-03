@@ -43,6 +43,7 @@ namespace AKCondinoO.SimObjects{
         internal virtual SimObject Spawn(SimObjectSpawn item){
          var manager=SimObjectManager.singleton;
          T simObject=pool.Rent();
+         simObject.transform.position=item.position;
          AssignId(simObject);
          SetupSimObject(simObject);
          manager.OnSpawn(simObject);

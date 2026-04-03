@@ -13,6 +13,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]private bool      debugMassiveSpawnTest=false;
      [SerializeField]private SimObject debugMassiveSpawnType=null;
      [SerializeField]private int       debugMassiveSpawnCount=5000;
+     [SerializeField]private Vector3   debugMassiveSpawnPosition;
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -169,23 +170,25 @@ namespace AKCondinoO.SimObjects{
                ()=>new(),
                (DebugMassiveSpawnJob item)=>{}
               );
-             private Type   debugMassiveSpawnType;
-             private string debugMassiveSpawnVariant;
-             private int    debugMassiveSpawnCount;
+             private Type    debugMassiveSpawnType;
+             private string  debugMassiveSpawnVariant;
+             private int     debugMassiveSpawnCount;
+             private Vector3 debugMassiveSpawnPosition;
              private SpawnList spawnList;
                 public void CancelGraciously(){
                 }
                 public void OnDoScheduleSetContainerData(){
-                 debugMassiveSpawnType   =singleton.debugMassiveSpawnType.simObjectType;
-                 debugMassiveSpawnVariant=singleton.debugMassiveSpawnType.variant;
-                 debugMassiveSpawnCount  =singleton.debugMassiveSpawnCount;
+                 debugMassiveSpawnType    =singleton.debugMassiveSpawnType.simObjectType;
+                 debugMassiveSpawnVariant =singleton.debugMassiveSpawnType.variant;
+                 debugMassiveSpawnCount   =singleton.debugMassiveSpawnCount;
+                 debugMassiveSpawnPosition=singleton.debugMassiveSpawnPosition;
                 }
                 public void ExecuteAtBackgroundThread(){
                  Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
                  spawnList=SpawnList.pool.Rent();
                  for(int i=0;i<debugMassiveSpawnCount;i++){
                   spawnList.Add(
-                   new(debugMassiveSpawnType,debugMassiveSpawnVariant)
+                   new(debugMassiveSpawnType,debugMassiveSpawnVariant,debugMassiveSpawnPosition)
                   );
                  }
                 }
@@ -243,9 +246,11 @@ namespace AKCondinoO.SimObjects{
     internal struct SimObjectSpawn{
      internal Type simObjectType;
      internal string variant;
-        internal SimObjectSpawn(Type simObjectType,string variant){
+     internal Vector3 position;
+        internal SimObjectSpawn(Type simObjectType,string variant,Vector3 position){
          this.simObjectType=simObjectType;
          this.variant=variant;
+         this.position=position;
         }
     }
 }

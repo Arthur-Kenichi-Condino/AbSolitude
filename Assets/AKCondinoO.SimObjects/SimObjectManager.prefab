@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabsRegistry:
   - {fileID: 11400000, guid: 4419dd6a8f2cc7f4c8f5c83811d7cfd2, type: 2}
+  - {fileID: 11400000, guid: c19cb6b7e9934cd4d9407993ef2714a5, type: 2}
   debugMassiveSpawnTest: 1
   debugMassiveSpawnType: {fileID: 7242630871969314645, guid: cbd088c9aa919044183cb6c4623e1501, type: 3}
   debugMassiveSpawnCount: 2

@@ -23,6 +23,8 @@ namespace AKCondinoO.SimObjects{
         }
         internal void OnChunkPooled(){
         }
+        internal virtual void ManualUpdate(){
+        }
         internal virtual void LazyUpdate(){
          //Logs.Debug(()=>"'lazy update data'");
          if(this==null){

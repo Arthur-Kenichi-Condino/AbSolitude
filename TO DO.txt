@@ -17,6 +17,40 @@ chunk pool all
 
 destroy above after
 
+if(object.bounds overlaps chunk)
+    LoadChunk(object.relatedChunks)
+foreach(chunk in GetChunksFromBounds(object.bounds))
+{
+    grid[chunk].Add(objectId);
+}
+var chunks = GetChunksFromBounds(playerBounds);
+
+foreach(chunk in chunks)
+{
+    foreach(obj in grid[chunk])
+    {
+        // aqui sim testa bounds preciso
+    }
+}
+SimWorld
+{
+    SpatialIndex index;
+    Dictionary<ObjectId, WorldObjectData> objects;
+}
+struct ReservedSpace
+{
+    Bounds bounds;
+    Quaternion rotation;
+    ObjectId owner;
+}
+struct OBB
+{
+    Vector3 center;
+    Vector3 halfExtents;
+    Quaternion rotation;
+}
+        
+
 float noise = perlin.GetValue(x,z,0);
 
 if(picker.Get(noise,out var obj))

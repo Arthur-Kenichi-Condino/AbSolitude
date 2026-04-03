@@ -121,6 +121,7 @@
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectFactory.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiomeSimObjectsSpawnSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimDirector.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.SNIPE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectAsInventoryItemInContainerData.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnCHASE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.cs" />
     <Compile Include="Assets\AKCondinoO\Util\PhysUtil.cs" />
-    <Compile Include="Assets\AKCondinoO.SimObjects\SimDirector.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItemsInContainerSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hitboxes.cs" />
@@ -252,6 +252,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.Transform.cs" />
     <Compile Include="Assets\AKCondinoO\DictionaryAddRangeHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AStarPathfindingHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimBrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\Vertex.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimActor.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\FXAAEffect.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkManager.NavMesh\NavMeshBuildSnapshot.cs" />
@@ -402,6 +404,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />
     <Compile Include="Assets\AKCondinoO.World\MaterialAtlasHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillVisualEffect.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
     <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
