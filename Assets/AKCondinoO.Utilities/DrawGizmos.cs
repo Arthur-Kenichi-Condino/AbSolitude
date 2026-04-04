@@ -52,5 +52,17 @@ namespace AKCondinoO.Utilities{
              if(drawNormals)Gizmos.DrawLine((Vector3)vertices[a].pos+offset,(Vector3)vertices[a].pos+offset+(Vector3)vertices[a].normal);
             }
         }
+        //  Com ajuda de Gemini
+        internal static void DrawWireCapsule(Vector3 pos,float height,float radius,Color color){
+         Gizmos.color=color;
+         Vector3 point1=pos+Vector3.up*(height/2-radius);
+         Vector3 point2=pos-Vector3.up*(height/2-radius);
+         Gizmos.DrawWireSphere(point1,radius);
+         Gizmos.DrawWireSphere(point2,radius);
+         Gizmos.DrawLine(point1+Vector3.left   *radius,point2+Vector3.left   *radius);
+         Gizmos.DrawLine(point1+Vector3.right  *radius,point2+Vector3.right  *radius);
+         Gizmos.DrawLine(point1+Vector3.forward*radius,point2+Vector3.forward*radius);
+         Gizmos.DrawLine(point1+Vector3.back   *radius,point2+Vector3.back   *radius);
+        }
     }
 }

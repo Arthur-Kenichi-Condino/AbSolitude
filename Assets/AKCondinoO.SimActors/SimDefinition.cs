@@ -4,13 +4,15 @@ namespace AKCondinoO.SimActors{
     internal class SimDefinition:ScriptableObject{
      [SerializeField]internal SimBrain simBrain;
      [SerializeField]internal SimMovement simMovement;
+        internal virtual void OnAwake(SimActor sim){
+         simBrain   =Instantiate(simBrain   ,sim.transform);
+         simMovement=Instantiate(simMovement,sim.transform);
+         delta=Vector3.zero;
+        }
+     internal Vector3 delta;
         internal virtual void Tick(SimActor sim){
-         if((object)simBrain!=null){
-          simBrain.AI(sim);
-         }
-         if((object)simMovement!=null){
-          simMovement.OnTick(sim);
-         }
+         simBrain   .AI    (sim);
+         simMovement.OnTick(sim);
         }
     }
 }

@@ -67,7 +67,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3034588536261871932}
   - component: {fileID: 2218492268464110733}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: SimAIComponents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2952455378926100659, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3957859514455728373, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 namespace AKCondinoO.World{
     internal static class WorldChunkManagerConst{
@@ -8,6 +9,7 @@ namespace AKCondinoO.World{
      internal const ushort Depth=(16);
      internal const ushort FlattenOffset=(Width*Depth);
      internal const int VoxelsPerChunk=(FlattenOffset*Height);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Vector2Int vecPosTocCoord(Vector3 pos){
          pos.x/=(float)Width;
          pos.z/=(float)Depth;
@@ -16,6 +18,7 @@ namespace AKCondinoO.World{
           Mathf.FloorToInt(pos.z)
          );
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Vector3Int vecPosTovCoord(Vector3 pos){
          Vector3Int coord=new Vector3Int(
           Mathf.FloorToInt((pos.x%Width +Width )%Width ),
@@ -24,9 +27,11 @@ namespace AKCondinoO.World{
          );
          return coord;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Vector2Int cCoordTocnkRgn(Vector2Int cCoord){
          return new Vector2Int(cCoord.x*Width,cCoord.y*Depth);
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void ValidatevCoord(ref Vector2Int cCoord,ref Vector3Int vxlCoord){
          Vector2Int relativecCoord=vecPosTocCoord(vxlCoord);
          cCoord+=relativecCoord;

@@ -16,6 +16,7 @@ namespace AKCondinoO.Bootstrap{
       "SimObject",
       "SimActor",
       "SimBrain",
+      "SimMovement",
      };
      internal enum LogType{
       Debug,

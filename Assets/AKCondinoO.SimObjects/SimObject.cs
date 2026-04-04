@@ -1,7 +1,9 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.World;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.SimObjects{
     internal class SimObject:MonoBehaviour{
      internal Type simObjectType=>type??=GetType();private Type type;
@@ -35,20 +37,34 @@ namespace AKCondinoO.SimObjects{
         internal virtual void OnUpdate(){
          ValidateTransform();
         }
+     internal bool outOfBounds;
         internal virtual void ValidateTransform(){
          if(transform.hasChanged){
           //Logs.Debug(()=>"'transform.hasChanged'");
-          OnPositionChanged(out bool outOfBounds);
+          OnPositionChanged();
           transform.hasChanged=false;
          }
         }
-        internal void OnPositionChanged(out bool outOfBounds){
+        internal void OnPositionChanged(){
          var manager=SimObjectManager.singleton;
          outOfBounds=false;
+         if(!HasGroundBelow(transform.position,Height)){
+          outOfBounds=true;
+         }
+         UpdateGroundedState();
          if(instancedRenderingIndex>=0){
           manager.instancedRendering.UpdateInstance((simObjectType,variant),instancedRenderingIndex);
          }
-         UpdateGroundedState();
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal virtual bool HasGroundBelow(Vector3 origin,float maxDistance){
+         return Physics.Raycast(
+          origin,
+          Vector3.down,
+          maxDistance,
+          WorldChunkManager.singleton.terrainLayerMask,
+          QueryTriggerInteraction.Ignore
+         );
         }
         internal virtual void UpdateGroundedState(){
          isGrounded=true;

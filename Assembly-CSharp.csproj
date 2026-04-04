@@ -203,7 +203,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeapon.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.Action2.cs" />
-    <Compile Include="Assets\AKCondinoO.SimObjects\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\PassiveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
@@ -415,6 +414,7 @@
     <Compile Include="Assets\AKCondinoO\Util\ArrayHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuffEffectsState.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryItem.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectStatic.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Allies.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnTables\BiomeSpawnEntry.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />

@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6423607067738340504
 Transform:
@@ -50,3 +50,4 @@ MonoBehaviour:
   debugMassiveSpawnTest: 1
   debugMassiveSpawnType: {fileID: 7242630871969314645, guid: cbd088c9aa919044183cb6c4623e1501, type: 3}
   debugMassiveSpawnCount: 2
+  debugMassiveSpawnPosition: {x: 0, y: 0, z: 0}

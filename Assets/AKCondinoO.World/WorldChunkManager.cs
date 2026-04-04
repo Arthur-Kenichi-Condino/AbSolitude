@@ -8,6 +8,7 @@ using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class WorldChunkManager:MonoSingleton<WorldChunkManager>{
      [SerializeField]private WorldChunk chunkPrefab;
+     internal int terrainLayerMask{get{return chunkPrefab.terrain.gameObject.layer;}}
      private MonoPool<WorldChunk>chunkPool;
      [SerializeField]internal Vector2Int expropriationDistance=new Vector2Int(9,9);//  ...pool size
      [SerializeField]internal Vector2Int instantiationDistance=new Vector2Int(6,6);

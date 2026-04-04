@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1212675531806437069
 Transform:
@@ -47,4 +47,7 @@ MonoBehaviour:
   chunkPrefab: {fileID: 1310050517158449116, guid: cc41d17b110f2114b8b1d5a92ab2d10d, type: 3}
   expropriationDistance: {x: 18, y: 18}
   instantiationDistance: {x: 6, y: 6}
+  navMeshLayerNames:
+  - WorldChunkTerrain
+  - SimStructure
   debugForceRegenerate: 0

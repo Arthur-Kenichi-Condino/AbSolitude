@@ -498,7 +498,7 @@
 "Assets/AKCondinoO.SimObjects/SimObjectPool.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPrefabs.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectSaveSystem.cs"
-"Assets/AKCondinoO.SimObjects/SimTree.cs"
+"Assets/AKCondinoO.SimObjects/SimObjectStatic.cs"
 "Assets/AKCondinoO.Utilities/DrawGizmos.cs"
 "Assets/AKCondinoO.Utilities/MeshHelper.cs"
 "Assets/AKCondinoO.Utilities/ObjectPool.cs"
