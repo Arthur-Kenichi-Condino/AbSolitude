@@ -16,8 +16,8 @@ TagManager:
   - WorldChunkTerrain
   - SimStructure
   - SimObjectStatic
-  - 
-  - 
+  - SimObject
+  - Sim
   - 
   - 
   - 

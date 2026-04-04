@@ -487,6 +487,7 @@
 "Assets/AKCondinoO.SimActors/SimBrain.cs"
 "Assets/AKCondinoO.SimActors/SimDefinition.cs"
 "Assets/AKCondinoO.SimActors/SimDirector.cs"
+"Assets/AKCondinoO.SimActors/SimMovement.cs"
 "Assets/AKCondinoO.SimObjects/Pinus_elliottii_1.cs"
 "Assets/AKCondinoO.SimObjects/SimIds.cs"
 "Assets/AKCondinoO.SimObjects/SimObject.cs"

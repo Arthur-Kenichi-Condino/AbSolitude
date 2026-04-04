@@ -1,6 +1,15 @@
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO.SimActors{
     [CreateAssetMenu(menuName="AKCondinoO/Sims/AI/SimBrain")]
-    internal class SimBrain:ScriptableObject{
+    internal partial class SimBrain:ScriptableObject{
+     private SimActor     sim;
+     private NavMeshAgent simNavMeshAgent;
+        internal virtual void AI(SimActor sim){
+         if((object)this.sim==null||(object)this.sim!=sim){
+          this.sim=sim;
+          this.simNavMeshAgent=sim.simNavMeshAgent;
+         }
+        }
     }
 }

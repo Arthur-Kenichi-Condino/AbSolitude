@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimActor
       objectReference: {fileID: 0}
+    - target: {fileID: 6895208658961274412, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
     m_RemovedGameObjects: []
@@ -82,3 +86,4 @@ MonoBehaviour:
   useInstancedRendering: 0
   meshPrefab: {fileID: 0}
   useMeshObjectSubMeshesForCollider: 
+  simDefinition: {fileID: 0}

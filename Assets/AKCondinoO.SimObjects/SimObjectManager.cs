@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimActors;
 using AKCondinoO.Utilities;
 using AKCondinoO.World.Spawning;
 using System;
@@ -43,8 +44,12 @@ namespace AKCondinoO.SimObjects{
             var variant=prefab.simObject.variant;
             simObjectFactories[(type,variant)]=new(prefab.simObject,transform);
             var key=(type,variant);
-            simObjects.Add(key,new());
-            lazyUpdaterSnapshot.Add(key,new());
+            if(!IsSimActor(type)){
+             simObjects.Add(key,new());
+             lazyUpdaterSnapshot.Add(key,new());
+            }else{
+             sims.Add(key,new());
+            }
            }
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
@@ -104,9 +109,14 @@ namespace AKCondinoO.SimObjects{
          }
         }
      internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimObject>>simObjects=new();
+     internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimActor>>sims=new();
         internal void OnSpawn(SimObject simObject){
          var key=(simObject.simObjectType,simObject.variant);
-         simObjects[key][simObject.id]=simObject;
+         if(!IsSimActor(simObject.simObjectType)){
+          simObjects[key][simObject.id]=simObject;
+         }else{
+          sims[key][simObject.id]=(SimActor)simObject;
+         }
         }
         internal void Despawn(SimObject simObject){
          if(simObjectFactories.TryGetValue((simObject.simObjectType,simObject.variant),out var factory)){
@@ -125,6 +135,13 @@ namespace AKCondinoO.SimObjects{
            DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
           }
           Logs.Debug(()=>"'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
+         }
+         foreach(var kvp1 in sims){
+          var simsById=kvp1.Value;
+          foreach(var kvp2 in simsById){
+           var sim=kvp2.Value;
+           sim.ManualUpdate();
+          }
          }
         }
      internal readonly Dictionary<(Type type,string variant),List<SimObject>>lazyUpdaterSnapshot=new();
@@ -161,6 +178,9 @@ namespace AKCondinoO.SimObjects{
            }
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
+        }
+        internal static bool IsSimActor(Type type){
+         return typeof(SimActor).IsAssignableFrom(type);
         }
         #region Debug
             internal class DebugMassiveSpawnJob:MultithreadedContainerJob{

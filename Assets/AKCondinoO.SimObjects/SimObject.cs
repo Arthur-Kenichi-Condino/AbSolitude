@@ -14,16 +14,13 @@ namespace AKCondinoO.SimObjects{
      internal MeshRenderer simObjectMeshRenderer;
      internal MeshFilter   simObjectMeshFilter;
      internal MeshCollider simObjectMeshCollider;
-        internal void OnPositionChanged(out bool outOfBounds){
-         var manager=SimObjectManager.singleton;
-         outOfBounds=false;
-         if(instancedRenderingIndex>=0){
-          manager.instancedRendering.UpdateInstance((simObjectType,variant),instancedRenderingIndex);
-         }
+     internal bool isGrounded;
+        internal virtual void Awake(){
         }
         internal void OnChunkPooled(){
         }
         internal virtual void ManualUpdate(){
+         OnUpdate();
         }
         internal virtual void LazyUpdate(){
          //Logs.Debug(()=>"'lazy update data'");
@@ -33,11 +30,28 @@ namespace AKCondinoO.SimObjects{
          if(id==0){
           return;
          }
+         OnUpdate();
+        }
+        internal virtual void OnUpdate(){
+         ValidateTransform();
+        }
+        internal virtual void ValidateTransform(){
          if(transform.hasChanged){
           //Logs.Debug(()=>"'transform.hasChanged'");
           OnPositionChanged(out bool outOfBounds);
           transform.hasChanged=false;
          }
+        }
+        internal void OnPositionChanged(out bool outOfBounds){
+         var manager=SimObjectManager.singleton;
+         outOfBounds=false;
+         if(instancedRenderingIndex>=0){
+          manager.instancedRendering.UpdateInstance((simObjectType,variant),instancedRenderingIndex);
+         }
+         UpdateGroundedState();
+        }
+        internal virtual void UpdateGroundedState(){
+         isGrounded=true;
         }
     }
 }

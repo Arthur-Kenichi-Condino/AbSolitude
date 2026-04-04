@@ -336,6 +336,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NodeMaterials\NodeMaterial.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimMovement.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />

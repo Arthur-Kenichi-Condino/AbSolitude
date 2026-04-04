@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: SimDefinition
   m_EditorClassIdentifier: 
   simBrain: {fileID: 11400000, guid: efd10d3fac44766418c938d51347b913, type: 2}
+  simMovement: {fileID: 11400000, guid: 379cf0c82d75a3e4d95281955e6c765b, type: 2}
