@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static AKCondinoO.SimActors.SimDirector;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
      [SerializeField]private SimObjectPrefabs[]prefabsRegistry;
-     [SerializeField]private bool      debugMassiveSpawnTest=false;
-     [SerializeField]private SimObject debugMassiveSpawnType=null;
-     [SerializeField]private int       debugMassiveSpawnCount=5000;
-     [SerializeField]private Vector3   debugMassiveSpawnPosition;
+     [SerializeField]private bool      debugSpawnTest=false;
+     [SerializeField]private SimObject debugSpawnType=null;
+     [SerializeField]private int       debugSpawnCount=1;
+     [SerializeField]private Vector3   debugSpawnPosition;
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -125,17 +126,21 @@ namespace AKCondinoO.SimObjects{
         }
         public override void ManualUpdate(){
          base.ManualUpdate();
-         if(debugMassiveSpawnTest&&debugMassiveSpawnType!=null){
-          debugMassiveSpawnTest=false;
-          Logs.Debug(()=>"'antes de rent':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
-          DebugMassiveSpawnJob debugMassiveSpawnJob=DebugMassiveSpawnJob.pool.Rent();
-          bool scheduled=ThreadDispatcher.TrySchedule(debugMassiveSpawnJob);
-          Logs.Debug(()=>"scheduled:"+scheduled);
-          if(!scheduled){
-           DebugMassiveSpawnJob.pool.Return(debugMassiveSpawnJob);
-          }
-          Logs.Debug(()=>"'depois de return':DebugMassiveSpawnJob.pool.bagCount:"+DebugMassiveSpawnJob.pool.bagCount);
-         }
+         #region Debug
+             if(debugSpawnTest&&debugSpawnType!=null){
+              debugSpawnTest=false;
+              SpawnJob spawnJob=SpawnJob.Rent(typeof(SpawnJob));
+              spawnJob.spawnType    =debugSpawnType.simObjectType;
+              spawnJob.spawnVariant =debugSpawnType.variant;
+              spawnJob.spawnCount   =debugSpawnCount;
+              spawnJob.spawnPosition=debugSpawnPosition;
+              bool scheduled=ThreadDispatcher.TrySchedule(spawnJob);
+              Logs.Debug(()=>"scheduled:"+scheduled);
+              if(!scheduled){
+               SpawnJob.Return(spawnJob.GetType(),spawnJob);
+              }
+             }
+         #endregion
          foreach(var kvp1 in sims){
           var simsById=kvp1.Value;
           foreach(var kvp2 in simsById){
@@ -179,47 +184,58 @@ namespace AKCondinoO.SimObjects{
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
-        #region Debug
-            internal class DebugMassiveSpawnJob:MultithreadedContainerJob{
-             internal static readonly Utilities.ObjectPool<DebugMassiveSpawnJob>pool=
-              Pool.GetPool<DebugMassiveSpawnJob>(
-               "",
-               ()=>new(),
-               (DebugMassiveSpawnJob item)=>{}
-              );
-             private Type    debugMassiveSpawnType;
-             private string  debugMassiveSpawnVariant;
-             private int     debugMassiveSpawnCount;
-             private Vector3 debugMassiveSpawnPosition;
-             private SpawnList spawnList;
-                public void CancelGraciously(){
-                }
-                public void OnDoScheduleSetContainerData(){
-                 debugMassiveSpawnType    =singleton.debugMassiveSpawnType.simObjectType;
-                 debugMassiveSpawnVariant =singleton.debugMassiveSpawnType.variant;
-                 debugMassiveSpawnCount   =singleton.debugMassiveSpawnCount;
-                 debugMassiveSpawnPosition=singleton.debugMassiveSpawnPosition;
-                }
-                public void ExecuteAtBackgroundThread(){
-                 Logs.Debug(()=>"DebugMassiveSpawnJob.BackgroundExecute");
-                 spawnList=SpawnList.pool.Rent();
-                 for(int i=0;i<debugMassiveSpawnCount;i++){
-                  spawnList.Add(
-                   new(debugMassiveSpawnType,debugMassiveSpawnVariant,debugMassiveSpawnPosition)
-                  );
-                 }
-                }
-                public void OnCompletedDoAtMainThread(){
-                 if(!object.ReferenceEquals(singleton,null)){
-                  singleton.spawnQueue.Enqueue(spawnList);
-                 }else{
-                  SpawnList.pool.Return(spawnList);
-                 }
-                 spawnList=null;
-                 DebugMassiveSpawnJob.pool.Return(this);
-                }
+        internal class SpawnJob:MultithreadedContainerJob{
+         static readonly Dictionary<(Type,string),ObjectPoolBase>spawnJobPool=new(){
+          {(typeof(SpawnJob   ),""),Pool.GetPool<SpawnJob   >("",()=>new(),(SpawnJob    item)=>{item.Reset();})},
+          {(typeof(SimSpawnJob),""),Pool.GetPool<SimSpawnJob>("",()=>new(),(SimSpawnJob item)=>{item.Reset();})},
+         };
+        internal static SpawnJob Rent(Type poolId){
+         return(SpawnJob)spawnJobPool[(poolId,"")].ObjectRent();
+        }
+        internal static void Return(Type poolId,SpawnJob spawnJob){
+         spawnJobPool[(poolId,"")].ObjectReturn(spawnJob);
+        }
+         internal Type    spawnType;
+         internal string  spawnVariant;
+         internal int     spawnCount;
+         internal Vector3 spawnPosition;
+            protected virtual void Reset(){
             }
-        #endregion
+         protected SpawnList spawnList;
+            public void CancelGraciously(){
+            }
+            public void OnDoScheduleSetContainerData(){
+             PrepareSpawnJob();
+            }
+            protected virtual void PrepareSpawnJob(){
+             var singleton=SimObjectManager.singleton;
+            }
+            public void ExecuteAtBackgroundThread(){
+             Logs.Debug(()=>"SpawnJob.ExecuteAtBackgroundThread");
+             spawnList=SpawnList.pool.Rent();
+             FillSpawnList();
+            }
+            protected virtual void FillSpawnList(){
+             for(int i=0;i<spawnCount;i++){
+              spawnList.Add(
+               new(spawnType,spawnVariant,spawnPosition)
+              );
+             }
+            }
+            public void OnCompletedDoAtMainThread(){
+             EnqueueSpawnList();
+             Return(GetType(),this);
+            }
+            protected virtual void EnqueueSpawnList(){
+             var singleton=SimObjectManager.singleton;
+             if(!object.ReferenceEquals(singleton,null)){
+              singleton.spawnQueue.Enqueue(spawnList);
+             }else{
+              SpawnList.pool.Return(spawnList);
+             }
+             spawnList=null;
+            }
+        }
     }
     internal class SpawnList{
      internal static readonly Utilities.ObjectPool<SpawnList>pool=

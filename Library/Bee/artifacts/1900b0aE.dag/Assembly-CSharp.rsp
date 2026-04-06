@@ -494,6 +494,7 @@
 "Assets/AKCondinoO.SimActors/SimDirector.cs"
 "Assets/AKCondinoO.SimActors/SimInteractionResolver.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/IInteractable.cs"
+"Assets/AKCondinoO.SimActors/SimInteractions/InteractableHelper.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/InteractablesRegistry.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/InteractionDefinitions.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/SimInteractionDefinition.cs"

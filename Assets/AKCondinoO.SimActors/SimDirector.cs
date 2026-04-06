@@ -1,6 +1,10 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors.SimInteractions;
+using AKCondinoO.SimObjects;
+using AKCondinoO.Utilities;
+using System;
 using UnityEngine;
+using static AKCondinoO.SimObjects.SimObjectManager;
 namespace AKCondinoO.SimActors{
     internal class SimDirector:MonoSingleton<SimDirector>{
      [SerializeField]private InteractablesRegistry[]interactablesRegistry;
@@ -25,6 +29,8 @@ namespace AKCondinoO.SimActors{
          if(ActiveZone.main!=null){
           EnsureActiveSimExists();
          }
+        }
+        internal class SimSpawnJob:SpawnJob{
         }
     }
 }
