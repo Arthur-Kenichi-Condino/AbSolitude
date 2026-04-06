@@ -44,7 +44,7 @@ namespace AKCondinoO.SimObjects{
             var variant=prefab.simObject.variant;
             simObjectFactories[(type,variant)]=new(prefab.simObject,transform);
             var key=(type,variant);
-            if(!IsSimActor(type)){
+            if(!prefab.simObject.IsSimActor()){
              simObjects.Add(key,new());
              lazyUpdaterSnapshot.Add(key,new());
             }else{
@@ -112,7 +112,7 @@ namespace AKCondinoO.SimObjects{
      internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimActor>>sims=new();
         internal void OnSpawn(SimObject simObject){
          var key=(simObject.simObjectType,simObject.variant);
-         if(!IsSimActor(simObject.simObjectType)){
+         if(!simObject.IsSimActor()){
           simObjects[key][simObject.id]=simObject;
          }else{
           sims[key][simObject.id]=(SimActor)simObject;
@@ -140,7 +140,7 @@ namespace AKCondinoO.SimObjects{
           var simsById=kvp1.Value;
           foreach(var kvp2 in simsById){
            var sim=kvp2.Value;
-           sim.ManualUpdate();
+           sim.DynamicUpdate();
           }
          }
         }
@@ -178,9 +178,6 @@ namespace AKCondinoO.SimObjects{
            }
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
-        }
-        internal static bool IsSimActor(Type type){
-         return typeof(SimActor).IsAssignableFrom(type);
         }
         #region Debug
             internal class DebugMassiveSpawnJob:MultithreadedContainerJob{

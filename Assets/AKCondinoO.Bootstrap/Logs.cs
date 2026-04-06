@@ -7,6 +7,11 @@ namespace AKCondinoO.Bootstrap{
      internal static bool enableAll=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
+      "InputHandler",
+      "InputHandler.TranslateInput",
+      "InputHandler.InputContextualization",
+      "GameOrchestrator",
+      "RagnarokOnlineMode",
       //"NavMeshProvider",
       //"NavMeshSourcesOrdered",
       //"WorldChunk",

@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2db328d3e84cd949b24594f6110722a, type: 3}
-  m_Name: SimDefinition
+  m_Name: SimDescription
   m_EditorClassIdentifier: 
-  simBrain: {fileID: 11400000, guid: efd10d3fac44766418c938d51347b913, type: 2}
-  simMovement: {fileID: 11400000, guid: 379cf0c82d75a3e4d95281955e6c765b, type: 2}
+  simBrainTemplate: {fileID: 11400000, guid: efd10d3fac44766418c938d51347b913, type: 2}
+  simInteractionResolverTemplate: {fileID: 11400000, guid: b39cebe7d87a89c4f9930a774ae4dafd, type: 2}
+  simMovementTemplate: {fileID: 11400000, guid: 379cf0c82d75a3e4d95281955e6c765b, type: 2}

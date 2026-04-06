@@ -1,8 +1,9 @@
+using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.World.Terrain;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
-    internal class WorldChunkTerrain:MonoBehaviour{
+    internal partial class WorldChunkTerrain:MonoBehaviour,IInteractable{
      internal WorldChunk chunk;
      internal TerrainChunkBuilder builder;
      internal TerrainChunkNavMeshBuildData navMeshBuildData;

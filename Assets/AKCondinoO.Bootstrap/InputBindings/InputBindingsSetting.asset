@@ -29,3 +29,11 @@ MonoBehaviour:
       key: 9
       mouseButton: 0
       controllerInput: 
+  - action: 6
+    combinationType: 0
+    inputCombination:
+    - source: 1
+      mode: 0
+      key: 0
+      mouseButton: 0
+      controllerInput: 

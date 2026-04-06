@@ -54,8 +54,8 @@ CharacterController:
   m_Radius: 0.25
   m_SlopeLimit: 60
   m_StepOffset: 0.75
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_SkinWidth: 0.0001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8557643648630987761
 GameObject:
@@ -99,15 +99,15 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 1479372276
   m_Radius: 0.25
-  m_Speed: 2
+  m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 270
-  m_StoppingDistance: 0.0625
+  m_StoppingDistance: 0.02
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.755
+  m_Height: 1.75
   m_BaseOffset: 0.875
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
@@ -125,6 +125,14 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: efd10d3fac44766418c938d51347b913, type: 2}
     - target: {fileID: -798954210759013666, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}
       propertyPath: simDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: ab7701718e6fe2a4ab4f37eeec3fdd63, type: 2}
+    - target: {fileID: -798954210759013666, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}
+      propertyPath: simDescription
+      value: 
+      objectReference: {fileID: 11400000, guid: ab7701718e6fe2a4ab4f37eeec3fdd63, type: 2}
+    - target: {fileID: -798954210759013666, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}
+      propertyPath: simDescriptionTemplate
       value: 
       objectReference: {fileID: 11400000, guid: ab7701718e6fe2a4ab4f37eeec3fdd63, type: 2}
     - target: {fileID: 2952455378926100659, guid: da1d7f86fc607dd4b8fa3a73ce974079, type: 3}

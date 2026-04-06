@@ -7,14 +7,27 @@ using System.Text;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     [DefaultExecutionOrder(-99999)]
-    internal class InputHandler:MonoSingleton<InputHandler>{
+    internal partial class InputHandler:MonoSingleton<InputHandler>{
      [SerializeField]internal InputBindingsAsset inputBindingsSetting;
-     [SerializeField]private int debugTryLogTranslateInputThisManyFrames=0;
+     private InputInterpreter inputInterpreter;
         public override void Initialize(){
          base.Initialize();
          if(this!=null){
           Init();
          }
+        }
+     private readonly List<(InputBinding binding,InputAction action)>bindings=new();
+        private void Init(){
+         if(inputBindingsSetting!=null){
+          foreach(var bindingSetting in inputBindingsSetting.bindings){
+           bindings.Add((new(bindingSetting),bindingSetting.action));
+          }
+          bindings.Sort(InputBinding.Compare);
+         }
+         foreach(InputAction action in Enum.GetValues(typeof(InputAction))){
+          enabledState.Add(action,new());
+         }
+         inputInterpreter=new(this);
         }
         public override void PreShutdown(){
          if(this!=null){
@@ -26,53 +39,14 @@ namespace AKCondinoO.Bootstrap{
          }
          base.Shutdown();
         }
+     private Vector3 mousePosition;
+     private readonly Dictionary<InputAction,EnabledState>enabledState=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
+         mousePosition=Input.mousePosition;
          TranslateInput();
         }
-     internal readonly List<(InputBinding binding,InputAction action)>bindings=new();
-        private void Init(){
-         if(inputBindingsSetting!=null){
-          foreach(var bindingSetting in inputBindingsSetting.bindings){
-           bindings.Add((new(bindingSetting),bindingSetting.action));
-          }
-          bindings.Sort(InputBinding.Compare);
-         }
-        }
-        private void TranslateInput(){
-         for(int i=0;i<bindings.Count;i++){
-          var pair=bindings[i];
-          var action=pair.action;
-          var binding=pair.binding;
-          //Logs.Debug("binding:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
-          switch(binding.combinationType){
-           case(InputCombinationType.Single):{
-            bool result;
-            result=ReadInput(binding.inputCombination[0]);
-            if(result){
-             Logs.Debug(()=>"action:"+action+":input received:"+binding,null,debugTryLogTranslateInputThisManyFrames>0);
-            }
-            break;
-           }
-          }
-         }
-         if(debugTryLogTranslateInputThisManyFrames>0){debugTryLogTranslateInputThisManyFrames--;}
-        }
-        private bool ReadInput(DeviceInput deviceInput){
-         switch(deviceInput.source){
-          case(DeviceInputSource.Keyboard):{
-           bool readValue=false;
-           switch(deviceInput.mode){
-            case(InputDetectionMode.WhenDown):{
-             readValue=Input.GetKeyDown(deviceInput.key);
-             break;
-            }
-           }
-           return readValue;
-          }
-         }
-         return false;
-        }
+        private partial void TranslateInput();
     }
     internal struct InputBinding{
      public InputCombinationType combinationType;

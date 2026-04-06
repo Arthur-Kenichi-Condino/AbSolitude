@@ -1,5 +1,6 @@
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects;
+using AKCondinoO.UIObjects;
 using AKCondinoO.World;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,17 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class SingletonManager{
      internal static readonly Dictionary<Type,int>initOrderTable=new(){
-      {typeof(SharedCoroutines        ), 0},
-      {typeof(Main                    ), 1},
-      {typeof(InputHandler            ), 2},
-      {typeof(MainCamera              ), 3},
-      {typeof(BiomesSystem            ), 4},
-      {typeof(WorldSimObjectSpatialMap), 5},
-      {typeof(WorldChunkManager       ), 6},
-      {typeof(SimObjectManager        ), 7},
-      {typeof(SimDirector             ), 8},
+      {typeof(SharedCoroutines        ),   0},
+      {typeof(Main                    ), 100},
+      {typeof(InputHandler            ), 200},
+      {typeof(UISystem                ), 300},
+      {typeof(GameOrchestrator        ), 400},
+      {typeof(MainCamera              ), 500},
+      {typeof(BiomesSystem            ), 600},
+      {typeof(WorldSimObjectSpatialMap), 700},
+      {typeof(WorldChunkManager       ), 800},
+      {typeof(SimObjectManager        ), 900},
+      {typeof(SimDirector             ),1000},
      };
      private static readonly List<ISingleton>singletons=new();
         internal static void Register(ISingleton singleton){

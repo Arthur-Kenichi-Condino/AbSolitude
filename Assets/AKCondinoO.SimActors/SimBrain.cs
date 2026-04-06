@@ -1,17 +1,20 @@
+using AKCondinoO.SimActors.SimInteractions;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.SimActors{
     [CreateAssetMenu(menuName="AKCondinoO/Sims/AI/SimBrain")]
-    internal partial class SimBrain:ScriptableObject{
-     private SimActor      sim;
-     private SimDefinition simDefinition;
-     private NavMeshAgent  simNavMeshAgent;
+    internal partial class SimBrain:SimDescriptionElement{
+     protected NavMeshAgent simNavMeshAgent;
+        internal override SimDescriptionElement InstancedFor(SimDescription simDescription){
+         var instance=base.InstancedFor(simDescription)as SimBrain;
+         return instance;
+        }
+        internal override void InitializeRuntime(SimDescription simDescription){
+         base.InitializeRuntime(simDescription);
+         simNavMeshAgent=sim.simNavMeshAgent;
+        }
         internal virtual void AI(SimActor sim){
-         if((object)this.sim==null||(object)this.sim!=sim){
-          this.sim=sim;
-          this.simDefinition=sim.simDefinition;
-          this.simNavMeshAgent=sim.simNavMeshAgent;
-         }
         }
     }
 }

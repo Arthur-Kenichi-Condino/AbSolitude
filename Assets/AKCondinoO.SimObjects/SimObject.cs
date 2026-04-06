@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimActors;
 using AKCondinoO.World;
 using System;
 using System.Runtime.CompilerServices;
@@ -21,15 +22,15 @@ namespace AKCondinoO.SimObjects{
         }
         internal void OnChunkPooled(){
         }
-        internal virtual void ManualUpdate(){
+        internal virtual void DynamicUpdate(){
          OnUpdate();
         }
         internal virtual void LazyUpdate(){
          //Logs.Debug(()=>"'lazy update data'");
-         if(this==null){
+         if(id==0){
           return;
          }
-         if(id==0){
+         if(this==null){
           return;
          }
          OnUpdate();
@@ -37,7 +38,7 @@ namespace AKCondinoO.SimObjects{
         internal virtual void OnUpdate(){
          ValidateTransform();
         }
-     internal bool outOfBounds;
+     internal bool noGround;
         internal virtual void ValidateTransform(){
          if(transform.hasChanged){
           //Logs.Debug(()=>"'transform.hasChanged'");
@@ -47,13 +48,28 @@ namespace AKCondinoO.SimObjects{
         }
         internal void OnPositionChanged(){
          var manager=SimObjectManager.singleton;
-         outOfBounds=false;
+         noGround=false;
          if(!HasGroundBelow(transform.position,Height)){
-          outOfBounds=true;
+          nextFindGroundTime=Time.time+1f;
+          noGround=true;
          }
          UpdateGroundedState();
          if(instancedRenderingIndex>=0){
           manager.instancedRendering.UpdateInstance((simObjectType,variant),instancedRenderingIndex);
+         }
+        }
+     internal float nextFindGroundTime;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal virtual void TryWakeUp(){
+         if(noGround){
+          if(Time.time>=nextFindGroundTime){
+           nextFindGroundTime=Time.time+1f;
+           Logs.Debug(()=>"'try to find ground'");
+           if(HasGroundBelow(transform.position,Height)){
+            noGround=false;
+            UpdateGroundedState();
+           }
+          }
          }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,7 +83,21 @@ namespace AKCondinoO.SimObjects{
          );
         }
         internal virtual void UpdateGroundedState(){
-         isGrounded=true;
+         if(IsSimObjectStatic()){
+          isGrounded=true;
+         }
+        }
+        internal bool IsSimObjectStatic(){
+         return IsSimObjectStatic(simObjectType);
+        }
+        internal static bool IsSimObjectStatic(Type type){
+         return typeof(SimObjectStatic).IsAssignableFrom(type);
+        }
+        internal bool IsSimActor(){
+         return IsSimActor(simObjectType);
+        }
+        internal static bool IsSimActor(Type type){
+         return typeof(SimActor).IsAssignableFrom(type);
         }
     }
 }
