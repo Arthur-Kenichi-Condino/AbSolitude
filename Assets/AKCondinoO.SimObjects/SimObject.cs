@@ -12,6 +12,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal bool useInstancedRendering=false;
      [SerializeField]internal GameObject meshPrefab;
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
+     internal bool doInitialization=true;
      internal ulong id;
      internal int instancedRenderingIndex=-1;
      internal MeshRenderer simObjectMeshRenderer;
@@ -24,6 +25,7 @@ namespace AKCondinoO.SimObjects{
         }
         internal virtual void DynamicUpdate(){
          OnUpdate();
+         JustUpdated();
         }
         internal virtual void LazyUpdate(){
          //Logs.Debug(()=>"'lazy update data'");
@@ -34,9 +36,13 @@ namespace AKCondinoO.SimObjects{
           return;
          }
          OnUpdate();
+         JustUpdated();
         }
         internal virtual void OnUpdate(){
          ValidateTransform();
+        }
+        internal virtual void JustUpdated(){
+         doInitialization=false;
         }
      internal bool noGround;
         internal virtual void ValidateTransform(){

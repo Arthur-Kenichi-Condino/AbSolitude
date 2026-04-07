@@ -464,22 +464,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnTest
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnType
-      value: 
-      objectReference: {fileID: 3882544942882949274, guid: 851b73bfb00fc614eb03c95da3fec192, type: 3}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
-      propertyPath: debugMassiveSpawnPosition.y
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 6423607067738340504, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

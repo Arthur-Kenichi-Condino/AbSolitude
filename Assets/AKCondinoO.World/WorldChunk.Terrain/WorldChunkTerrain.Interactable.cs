@@ -9,13 +9,22 @@ namespace AKCondinoO.World{
             internal override bool CanInteract(SimActor sim,IInteractable target){
              return true;
             }
-            internal override SimInteractionInstance CreateInstance(){
+            internal override SimInteractionInstance CreateInstance(SimActor sim,IInteractable target,InteractionInstanceParameters parameters){
+             if(!CanInteract(sim,target))return null;
              var instance=(GoHereInstance)InteractionDefinitions.instancing[typeof(GoHereInstance)].ObjectRent();
+             instance.sim=sim;
+             instance.target=target;
+             instance.worldPosition=parameters.hitPosition;
              return instance;
             }
         }
         internal class GoHereInstance:SimInteractionInstance{
+         internal Vector3 worldPosition;
             internal override void Reset(){
+            }
+            internal override void Run(){
+             var simBrain=sim.simDescription.simBrain;
+             simBrain.GoTo(worldPosition);
             }
         }
     }

@@ -5,18 +5,22 @@ using UnityEngine;
 namespace AKCondinoO.SimActors.SimInteractions{
     internal static class InteractionDefinitions{
      private static readonly Dictionary<Type,List<SimInteractionDefinition>>definitions=new();
+     private static readonly Dictionary<Type,SimInteractionDefinition>defaultDefinition=new();
      internal static readonly Dictionary<Type,ObjectPoolBase>instancing=new();
-        internal static void RegisterInteraction<TTarget,TInstance>(Func<SimInteractionDefinition>def)
+        internal static void RegisterInteraction<TTarget,TInstance>(Func<SimInteractionDefinition>def,bool isDefault=false)
         where TInstance:SimInteractionInstance,new(){
          var targetType=typeof(TTarget);
-         RegisterInteraction<TInstance>(targetType,def);
+         RegisterInteraction<TInstance>(targetType,def,isDefault);
         }
-        internal static void RegisterInteraction<TInstance>(Type targetType,Func<SimInteractionDefinition>def)
+        internal static void RegisterInteraction<TInstance>(Type targetType,Func<SimInteractionDefinition>def,bool isDefault=false)
         where TInstance:SimInteractionInstance,new(){
          if(!definitions.TryGetValue(targetType,out var list)){
           definitions.Add(targetType,list=new());
          }
          list.Add(def());
+         if(isDefault){
+          defaultDefinition[targetType]=def();
+         }
          var instanceType=typeof(TInstance);
          if(!instancing.ContainsKey(instanceType)){
           var pool=Pool.GetPool<TInstance>(
@@ -35,6 +39,16 @@ namespace AKCondinoO.SimActors.SimInteractions{
           }
           type=type.BaseType;
          }
+        }
+        internal static SimInteractionDefinition GetDefaultFor(IInteractable target){
+         var type=target.GetType();
+         while(type!=null){
+          if(defaultDefinition.TryGetValue(type,out var def)){
+           return def;
+          }
+          type=type.BaseType;
+         }
+         return null;
         }
     }
     internal abstract class InteractableInteractions:ScriptableObject{

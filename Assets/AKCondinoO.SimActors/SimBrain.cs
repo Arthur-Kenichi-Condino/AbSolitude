@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors.SimInteractions;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,18 @@ namespace AKCondinoO.SimActors{
          simNavMeshAgent=sim.simNavMeshAgent;
         }
         internal virtual void AI(SimActor sim){
+         var interactionQueue=sim.simDescription.simInteractionResolver.interactionQueue;
+         var interaction=interactionQueue.Next();
+         if(interaction!=null){
+          Logs.Debug(()=>"interaction:"+interaction);
+          interaction.Run();
+         }
+        }
+        internal virtual void GoTo(Vector3 worldPosition){
+         Logs.Debug(()=>"worldPosition:"+worldPosition);
+         if(simNavMeshAgent.enabled){
+          simNavMeshAgent.destination=worldPosition;
+         }
         }
     }
 }

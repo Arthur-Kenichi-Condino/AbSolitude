@@ -8,6 +8,10 @@ namespace AKCondinoO.SimActors.SimInteractions{
         public virtual void AvailableInteractions(SimActor sim,List<SimInteractionDefinition>interactionDefinitions){
          InteractionDefinitions.GetFor(this,interactionDefinitions);
         }
+        public virtual SimInteractionDefinition DefaultInteraction(SimActor sim){
+         var defaultInteraction=InteractionDefinitions.GetDefaultFor(this);
+         return defaultInteraction;
+        }
         internal static bool GetInteractable(GameObject target,out IInteractable interactable){
          interactable=null;
          if(target==null){

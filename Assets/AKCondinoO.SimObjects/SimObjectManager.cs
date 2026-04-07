@@ -50,6 +50,7 @@ namespace AKCondinoO.SimObjects{
              lazyUpdaterSnapshot.Add(key,new());
             }else{
              sims.Add(key,new());
+             SimDirector.singleton.OnSimActorFactoryCreated(key,prefab);
             }
            }
           }
@@ -116,7 +117,9 @@ namespace AKCondinoO.SimObjects{
          if(!simObject.IsSimActor()){
           simObjects[key][simObject.id]=simObject;
          }else{
-          sims[key][simObject.id]=(SimActor)simObject;
+          var simActor=(SimActor)simObject;
+          sims[key][simObject.id]=simActor;
+          SimDirector.singleton.OnSimSpawn(simActor);
          }
         }
         internal void Despawn(SimObject simObject){
@@ -126,21 +129,6 @@ namespace AKCondinoO.SimObjects{
         }
         public override void ManualUpdate(){
          base.ManualUpdate();
-         #region Debug
-             if(debugSpawnTest&&debugSpawnType!=null){
-              debugSpawnTest=false;
-              SpawnJob spawnJob=SpawnJob.Rent(typeof(SpawnJob));
-              spawnJob.spawnType    =debugSpawnType.simObjectType;
-              spawnJob.spawnVariant =debugSpawnType.variant;
-              spawnJob.spawnCount   =debugSpawnCount;
-              spawnJob.spawnPosition=debugSpawnPosition;
-              bool scheduled=ThreadDispatcher.TrySchedule(spawnJob);
-              Logs.Debug(()=>"scheduled:"+scheduled);
-              if(!scheduled){
-               SpawnJob.Return(spawnJob.GetType(),spawnJob);
-              }
-             }
-         #endregion
          foreach(var kvp1 in sims){
           var simsById=kvp1.Value;
           foreach(var kvp2 in simsById){
@@ -148,6 +136,7 @@ namespace AKCondinoO.SimObjects{
            sim.DynamicUpdate();
           }
          }
+         FlushSpawnRequests();
         }
      internal readonly Dictionary<(Type type,string variant),List<SimObject>>lazyUpdaterSnapshot=new();
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
@@ -184,10 +173,42 @@ namespace AKCondinoO.SimObjects{
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
+     internal readonly List<SpawnRequest>spawnRequests=new();
+        internal void FlushSpawnRequests(){
+         #region Debug
+             if(debugSpawnTest&&debugSpawnType!=null){
+              debugSpawnTest=false;
+              SpawnRequest spawnRequest=new(){
+               type    =debugSpawnType.simObjectType,
+               variant =debugSpawnType.variant,
+               count   =debugSpawnCount,
+               position=debugSpawnPosition,
+              };
+              spawnRequests.Add(spawnRequest);
+             }
+         #endregion
+         if(spawnRequests.Count>0){
+          SpawnJob spawnJob=SpawnJob.Rent(typeof(SpawnJob));
+          bool scheduled=ThreadDispatcher.TrySchedule(spawnJob);
+          Logs.Debug(()=>"scheduled:"+scheduled);
+          if(!scheduled){
+           SpawnJob.Return(spawnJob.GetType(),spawnJob);
+          }else{
+           spawnRequests.Clear();
+          }
+         }
+        }
+        internal struct SpawnRequest{
+         internal Type type;
+         internal string variant;
+         internal int count;
+         internal Vector3 position;
+        }
         internal class SpawnJob:MultithreadedContainerJob{
          static readonly Dictionary<(Type,string),ObjectPoolBase>spawnJobPool=new(){
-          {(typeof(SpawnJob   ),""),Pool.GetPool<SpawnJob   >("",()=>new(),(SpawnJob    item)=>{item.Reset();})},
-          {(typeof(SimSpawnJob),""),Pool.GetPool<SimSpawnJob>("",()=>new(),(SimSpawnJob item)=>{item.Reset();})},
+          {(typeof(SpawnJob           ),""),Pool.GetPool<SpawnJob           >("",()=>new(),(SpawnJob            item)=>{item.Reset();})},
+          {(typeof(SimSpawnJob        ),""),Pool.GetPool<SimSpawnJob        >("",()=>new(),(SimSpawnJob         item)=>{item.Reset();})},
+          {(typeof(CriticalSimSpawnJob),""),Pool.GetPool<CriticalSimSpawnJob>("",()=>new(),(CriticalSimSpawnJob item)=>{item.Reset();})},
          };
         internal static SpawnJob Rent(Type poolId){
          return(SpawnJob)spawnJobPool[(poolId,"")].ObjectRent();
@@ -195,11 +216,9 @@ namespace AKCondinoO.SimObjects{
         internal static void Return(Type poolId,SpawnJob spawnJob){
          spawnJobPool[(poolId,"")].ObjectReturn(spawnJob);
         }
-         internal Type    spawnType;
-         internal string  spawnVariant;
-         internal int     spawnCount;
-         internal Vector3 spawnPosition;
+         protected readonly List<SpawnRequest>requested=new();
             protected virtual void Reset(){
+             requested.Clear();
             }
          protected SpawnList spawnList;
             public void CancelGraciously(){
@@ -209,6 +228,7 @@ namespace AKCondinoO.SimObjects{
             }
             protected virtual void PrepareSpawnJob(){
              var singleton=SimObjectManager.singleton;
+             requested.AddRange(singleton.spawnRequests);
             }
             public void ExecuteAtBackgroundThread(){
              Logs.Debug(()=>"SpawnJob.ExecuteAtBackgroundThread");
@@ -216,10 +236,12 @@ namespace AKCondinoO.SimObjects{
              FillSpawnList();
             }
             protected virtual void FillSpawnList(){
-             for(int i=0;i<spawnCount;i++){
-              spawnList.Add(
-               new(spawnType,spawnVariant,spawnPosition)
-              );
+             foreach(var request in requested){
+              for(int i=0;i<request.count;i++){
+               spawnList.Add(
+                new(request.type,request.variant,request.position)
+               );
+              }
              }
             }
             public void OnCompletedDoAtMainThread(){

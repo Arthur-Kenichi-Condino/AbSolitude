@@ -20,16 +20,20 @@ namespace AKCondinoO.Bootstrap{
          base.Initialize();
          gameLogic.Add(GameMode.RagnarokOnline,new RagnarokOnlineMode(this));
         }
-     private SimActor activeSim;
+     private SimActor activeSimSelected;
         internal void OnInputReceived(InputIntent intent){
          Logs.Debug(()=>"intent.action:"+intent.action);
          EnsureActiveSimSelected();
-         gameLogic[gameMode].Run(activeSim,intent);
+         gameLogic[gameMode].Run(activeSimSelected,intent);
         }
         private void EnsureActiveSimSelected(){
-         if(activeSim==null||activeSim.id==0){
-          activeSim=null;
-          Logs.Debug(()=>"'find sim to be the activeSim'");
+         if(activeSimSelected==null||activeSimSelected.id==0){
+          activeSimSelected=null;
+          Logs.Debug(()=>"'find sim to be the activeSimSelected...'");
+          SimDirector.singleton.GetSelectableSim(out activeSimSelected);
+          if(activeSimSelected!=null){
+           Logs.Debug(()=>"'activeSimSelected found!'");
+          }
          }
         }
         internal interface IGameModeLogic{

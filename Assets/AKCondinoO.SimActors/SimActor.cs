@@ -9,6 +9,7 @@ namespace AKCondinoO.SimActors{
     //  Com ajuda de ChatGPT
     internal class SimActor:SimObject{
      [SerializeField]internal SimDescription simDescriptionTemplate;
+     [SerializeField]internal bool isPlayable=true;
      internal SimDescription simDescription;
      internal CharacterController simCharacterController;
      internal NavMeshAgent simNavMeshAgent;
@@ -84,16 +85,16 @@ namespace AKCondinoO.SimActors{
          }
          //Logs.Debug(()=>"isGrounded:"+isGrounded);
         }
-     //private readonly List<SimInteractionDefinition>foundInteractions=new(0);
         internal void OnReceiveInteractionIntent(InputIntent intent){
-         //if(IInteractable.GetInteractable(intent.target,out var interactable)){
-         // interactable.AvailableInteractions(activeSim,interactionDefinitions);
-         // Logs.Debug(()=>"interactionDefinitions.Count:"+interactionDefinitions.Count);
-         //}
+         simDescription.simInteractionResolver.ResolveInteractionIntent(intent);
         }
         internal virtual void OnDrawGizmos(){
          if(simCharacterController!=null){
-          DrawGizmos.DrawWireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
+          if(simNavMeshAgent.enabled){
+           DrawGizmos.DrawWireCapsule(simNavMeshAgent.transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
+          }else{
+           DrawGizmos.DrawWireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
+          }
          }
         }
     }

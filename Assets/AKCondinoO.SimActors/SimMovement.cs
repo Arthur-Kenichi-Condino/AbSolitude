@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.SimActors{
@@ -19,8 +20,13 @@ namespace AKCondinoO.SimActors{
      private Vector3 moveVector;
      private float verticalMotion;
         internal virtual void OnTick(SimActor sim){
-         float dt=Mathf.Min(Time.deltaTime,0.02f);
          var controller=simCharacterController;
+         if(sim.doInitialization){
+          controller.enabled=true;
+          controller.Move(Vector3.zero);
+         }
+         float dt=Mathf.Min(Time.deltaTime,0.02f);
+         //Logs.Debug(()=>"dt:"+dt);
          if(!simNavMeshAgent.enabled){
           if(controller.isGrounded){
            if(controller.velocity.y<0f){
@@ -28,13 +34,13 @@ namespace AKCondinoO.SimActors{
            }
           }else{
            if(!sim.noGround){
-            verticalMotion+=Physics.gravity.y*Time.deltaTime;
+            verticalMotion+=Physics.gravity.y*dt;
            }
           }
           controller.transform.localPosition=Vector3.zero;
           moveVector=new(0f,verticalMotion,0f);
           if(!sim.noGround){
-           controller.Move(moveVector*Time.deltaTime);
+           controller.Move(moveVector*dt);
           }
           simDescription.movementDelta=controller.transform.localPosition;
          }

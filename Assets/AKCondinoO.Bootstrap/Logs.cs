@@ -19,8 +19,10 @@ namespace AKCondinoO.Bootstrap{
       "SimObjectManager",
       "SimObjectFactory",
       "SimObject",
+      "SimDirector",
       "SimActor",
       "SimBrain",
+      "SimInteractionResolver",
       "SimMovement",
      };
      internal enum LogType{
