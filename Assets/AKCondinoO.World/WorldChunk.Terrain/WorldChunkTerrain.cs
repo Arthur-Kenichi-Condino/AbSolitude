@@ -9,7 +9,7 @@ namespace AKCondinoO.World{
      internal TerrainChunkNavMeshBuildData navMeshBuildData;
      internal MeshFilter meshFilter;
      internal MeshCollider meshCollider;
-        void Awake(){
+        internal void OnAwake(){
          builder=new(chunk,this);
          meshFilter=GetComponent<MeshFilter>();
          meshFilter.mesh=builder.mesh;

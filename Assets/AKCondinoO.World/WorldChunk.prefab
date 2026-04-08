@@ -31,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8356601167782838906}
+  - {fileID: 3920636595632174954}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1310050517158449116
@@ -46,10 +47,84 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrain: {fileID: 6511037146098415160}
+  spawning: {fileID: 3298307474813262322}
   debugDrawMeshWireframe: 0
   debugDrawMeshWireframeWhenSelectedOnly: 0
   debugDrawMeshWireframeDrawTriangles: 0
   debugDrawMeshWireframeDrawNormals: 1
+--- !u!1001 &1994165116065621348
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3056474288981993761}
+    m_Modifications:
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3424220060510962878, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+      propertyPath: m_Name
+      value: WorldChunkSpawning
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+--- !u!114 &3298307474813262322 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3920739407397895318, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+  m_PrefabInstance: {fileID: 1994165116065621348}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e518fda7b1527bc4fb76eb1f18f6bb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &3920636595632174954 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3297853931809165838, guid: 63f5264237e05d940a61086696fd9dd2, type: 3}
+  m_PrefabInstance: {fileID: 1994165116065621348}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2146835074189534088
 PrefabInstance:
   m_ObjectHideFlags: 0

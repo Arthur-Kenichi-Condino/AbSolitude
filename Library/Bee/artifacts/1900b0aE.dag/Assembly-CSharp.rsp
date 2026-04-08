@@ -540,6 +540,8 @@
 "Assets/AKCondinoO.World/WorldChunk.MarchingCubes/paulbourke/Tables.cs"
 "Assets/AKCondinoO.World/WorldChunk.MarchingCubes/Vertex.cs"
 "Assets/AKCondinoO.World/WorldChunk.MarchingCubes/Voxel.cs"
+"Assets/AKCondinoO.World/WorldChunk.Spawning/ChunkSimObjectSpawner.cs"
+"Assets/AKCondinoO.World/WorldChunk.Spawning/WorldChunkSpawning.cs"
 "Assets/AKCondinoO.World/WorldChunk.Terrain/TerrainChunkBuilder.cs"
 "Assets/AKCondinoO.World/WorldChunk.Terrain/TerrainChunkNavMeshBuildData.cs"
 "Assets/AKCondinoO.World/WorldChunk.Terrain/WorldChunkTerrain.cs"

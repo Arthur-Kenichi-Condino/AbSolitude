@@ -168,6 +168,7 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\GameOrchestrator.GameModes\RagnarokOnlineMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\Voxel.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Spawning\WorldChunkSpawning.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
@@ -439,6 +440,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\TheSims3CameraModeButton\FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Spawning\ChunkSimObjectSpawner.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\MultiplyNode.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FollowerCameraModeButton\FixedUI.ButtonPressEvents.FollowerCameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />

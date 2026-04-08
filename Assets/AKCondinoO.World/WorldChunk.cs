@@ -9,6 +9,7 @@ namespace AKCondinoO.World{
     internal class WorldChunk:MonoBehaviour{
      internal Bounds bounds;
      [SerializeField]internal WorldChunkTerrain terrain;
+     [SerializeField]internal WorldChunkSpawning spawning;
      internal readonly HashSet<SimObject>simObjects=new();
      [SerializeField]internal bool debugDrawMeshWireframe=false;
      [SerializeField]internal bool debugDrawMeshWireframeWhenSelectedOnly=true;
@@ -17,6 +18,9 @@ namespace AKCondinoO.World{
         void Awake(){
          bounds=new(new(),new(Width,Height,Depth));
          terrain.chunk=this;
+         terrain.OnAwake();
+         spawning.chunk=this;
+         spawning.OnAwake();
         }
         internal void ManualDestroy(){
          Hibernate(cCoord,true);

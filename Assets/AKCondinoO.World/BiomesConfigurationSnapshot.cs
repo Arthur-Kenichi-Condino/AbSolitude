@@ -339,6 +339,7 @@ namespace AKCondinoO.World{
          }
         }
         internal virtual void OnReturnToPoolRecycle(){
+         baseMaterial=default;
         }
     }
     internal class BiomeSpawnTablesSnapshot{
