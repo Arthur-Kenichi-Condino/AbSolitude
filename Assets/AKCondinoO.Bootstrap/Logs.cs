@@ -15,6 +15,7 @@ namespace AKCondinoO.Bootstrap{
       //"NavMeshProvider",
       //"NavMeshSourcesOrdered",
       //"WorldChunk",
+      "WorldChunkTerrain.Interactable",
       //"TerrainChunkBuilder",
       "SimObjectManager",
       "SimObjectFactory",
@@ -23,7 +24,9 @@ namespace AKCondinoO.Bootstrap{
       "SimActor",
       "SimBrain",
       "SimInteractionResolver",
+      "SimInteractionQueue",
       "SimMovement",
+      "GoHereDefinition",
      };
      internal enum LogType{
       Debug,

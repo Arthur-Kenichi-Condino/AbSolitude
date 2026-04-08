@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
 using System.Collections.Generic;
@@ -20,11 +21,33 @@ namespace AKCondinoO.World{
         }
         internal class GoHereInstance:SimInteractionInstance{
          internal Vector3 worldPosition;
+         private bool destSet;
             internal override void Reset(){
+             destSet=false;
             }
-            internal override void Run(){
-             var simBrain=sim.simDescription.simBrain;
-             simBrain.GoTo(worldPosition);
+            internal override bool Running(){
+             if(sim.simNavMeshAgent==null){
+              return false;
+             }
+             if(!sim.simNavMeshAgent.enabled){
+              return true;
+             }
+             if(!destSet){
+              if(sim.simNavMeshAgent.destination!=worldPosition){
+               Logs.Debug(()=>"sim.simNavMeshAgent.destination:"+sim.simNavMeshAgent.destination+" is != from worldPosition:"+worldPosition);
+               var simBrain=sim.simDescription.simBrain;
+               destSet=simBrain.GoTo(worldPosition);
+              }
+             }
+             if(destSet){
+              if(!sim.simNavMeshAgent.pathPending){
+               if(sim.simNavMeshAgent.remainingDistance<=sim.simNavMeshAgent.stoppingDistance){
+                Logs.Debug(()=>"sim.simNavMeshAgent.remainingDistance:"+sim.simNavMeshAgent.remainingDistance+" is <= to sim.simNavMeshAgent.stoppingDistance:"+sim.simNavMeshAgent.stoppingDistance);
+                return false;
+               }
+              }
+             }
+             return true;
             }
         }
     }

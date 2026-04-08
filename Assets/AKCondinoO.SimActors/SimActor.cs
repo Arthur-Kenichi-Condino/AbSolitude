@@ -36,9 +36,6 @@ namespace AKCondinoO.SimActors{
          TryWakeUp();
          EnsureNavMeshAgentSafeState();
          simDescription.Tick(this);
-         if(!noGround){
-          transform.position+=simDescription.movementDelta;
-         }
         }
         void EnsureNavMeshAgentSafeState(){
          if(!isAutonomous){
@@ -90,11 +87,7 @@ namespace AKCondinoO.SimActors{
         }
         internal virtual void OnDrawGizmos(){
          if(simCharacterController!=null){
-          if(simNavMeshAgent.enabled){
-           DrawGizmos.DrawWireCapsule(simNavMeshAgent.transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
-          }else{
-           DrawGizmos.DrawWireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
-          }
+          DrawGizmos.DrawWireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
          }
         }
     }

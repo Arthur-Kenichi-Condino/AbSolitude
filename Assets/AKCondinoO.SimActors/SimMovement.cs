@@ -16,12 +16,15 @@ namespace AKCondinoO.SimActors{
          simNavMeshAgent=sim.simNavMeshAgent;
          moveVector=Vector3.zero;
          verticalMotion=0;
+         movementDelta=Vector3.zero;
         }
      private Vector3 moveVector;
      private float verticalMotion;
+     internal Vector3 movementDelta;
         internal virtual void OnTick(SimActor sim){
          var controller=simCharacterController;
          if(sim.doInitialization){
+          controller.transform.localPosition=Vector3.zero;
           controller.enabled=true;
           controller.Move(Vector3.zero);
          }
@@ -37,12 +40,16 @@ namespace AKCondinoO.SimActors{
             verticalMotion+=Physics.gravity.y*dt;
            }
           }
-          controller.transform.localPosition=Vector3.zero;
           moveVector=new(0f,verticalMotion,0f);
           if(!sim.noGround){
            controller.Move(moveVector*dt);
+           movementDelta=controller.transform.position-sim.transform.position;
+           sim.transform.position=controller.transform.position;
+           controller.transform.localPosition=Vector3.zero;
           }
-          simDescription.movementDelta=controller.transform.localPosition;
+         }else{
+          sim.transform.position=simNavMeshAgent.transform.position;
+          simNavMeshAgent.transform.localPosition=Vector3.zero;
          }
         }
     }

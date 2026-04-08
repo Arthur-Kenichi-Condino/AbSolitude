@@ -21,9 +21,7 @@ namespace AKCondinoO.SimActors{
          simBrain=simBrainTemplate.InstancedFor(this)as SimBrain;
          simInteractionResolver=simInteractionResolverTemplate.InstancedFor(this)as SimInteractionResolver;
          simMovement=simMovementTemplate.InstancedFor(this)as SimMovement;
-         movementDelta=Vector3.zero;
         }
-     internal Vector3 movementDelta;
         internal virtual void Tick(SimActor sim){
          simBrain.AI(sim);
          simMovement.OnTick(sim);

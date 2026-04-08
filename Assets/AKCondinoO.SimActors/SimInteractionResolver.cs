@@ -26,6 +26,7 @@ namespace AKCondinoO.SimActors{
            var instance=defaultInteraction.CreateInstance(sim,interactable,parameters);
            Logs.Debug(()=>"instance:"+instance);
            interactionQueue.Add(instance);
+           Logs.Debug(()=>"interactionQueue.Count:"+interactionQueue.Count);
           }
          }
         }

@@ -18,16 +18,14 @@ namespace AKCondinoO.SimActors{
         internal virtual void AI(SimActor sim){
          var interactionQueue=sim.simDescription.simInteractionResolver.interactionQueue;
          var interaction=interactionQueue.Next();
-         if(interaction!=null){
-          Logs.Debug(()=>"interaction:"+interaction);
-          interaction.Run();
-         }
         }
-        internal virtual void GoTo(Vector3 worldPosition){
-         Logs.Debug(()=>"worldPosition:"+worldPosition);
+        internal virtual bool GoTo(Vector3 worldPosition){
+         //Logs.Debug(()=>"worldPosition:"+worldPosition);
          if(simNavMeshAgent.enabled){
           simNavMeshAgent.destination=worldPosition;
+          return true;
          }
+         return false;
         }
     }
 }

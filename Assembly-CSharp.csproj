@@ -191,8 +191,8 @@
     <Compile Include="Assets\AKCondinoO.UIObjects\UISystem.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomeBehaviour.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillVisualEffect.cs" />
-    <Compile Include="Assets\AKCondinoO.SimObjects\SimObject.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\WorldChunkTerrainInteractions.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\Floor10x10x10\Floor10x10x10.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DepthOfFieldEffect.cs" />

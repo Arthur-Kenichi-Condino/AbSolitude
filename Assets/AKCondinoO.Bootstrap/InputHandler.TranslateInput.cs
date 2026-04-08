@@ -5,7 +5,7 @@ namespace AKCondinoO.Bootstrap{
      private Vector3 lastMousePosition;
      private bool hasLastMousePosition;
         private partial void TranslateInput(){
-         if(!hasLastMousePosition||!Mathf.Approximately((mousePosition-lastMousePosition).sqrMagnitude,0f)){
+         if(!hasLastMousePosition||mousePosition!=lastMousePosition){
          }
          for(int i=0;i<bindings.Count;i++){
           var pair=bindings[i];

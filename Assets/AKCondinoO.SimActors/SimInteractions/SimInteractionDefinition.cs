@@ -11,6 +11,6 @@ namespace AKCondinoO.SimActors.SimInteractions{
      internal SimActor sim{get;set;}
      internal IInteractable target{get;set;}
         internal abstract void Reset();
-        internal abstract void Run();
+        internal abstract bool Running();
     }
 }
