@@ -11,7 +11,7 @@ namespace AKCondinoO.World{
        "",
        ()=>new(),
        (NavMeshCluster item)=>{
-        item.Reset();
+        item.OnReturnToPoolRecycle();
        },
        false
       );
@@ -36,7 +36,7 @@ namespace AKCondinoO.World{
          snapshot=NavMeshBuildSnapshot.pool.Rent();
          snapshot.Init(this);
         }
-        internal void Reset(){
+        internal void OnReturnToPoolRecycle(){
          isDirty=true;
          clusterBounds=default;
          for(int i=0;i<provider.agentsCount;i++){

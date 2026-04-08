@@ -11,7 +11,7 @@ namespace AKCondinoO.World{
        "",
        ()=>new(),
        (NavMeshSourcesOrdered item)=>{
-        item.Reset();
+        item.OnReturnToPoolRecycle();
        },
        false
       );
@@ -24,7 +24,7 @@ namespace AKCondinoO.World{
         internal void Init(NavMeshBuildSnapshot snapshot){
          this.snapshot=snapshot;
         }
-        internal void Reset(){
+        internal void OnReturnToPoolRecycle(){
          chunksSourcesPendingAdd.Clear();
          chunksSourcesPendingRemove.Clear();
          sourcesIndexMap.Clear();

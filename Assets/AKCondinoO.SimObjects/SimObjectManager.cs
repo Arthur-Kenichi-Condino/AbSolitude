@@ -206,9 +206,9 @@ namespace AKCondinoO.SimObjects{
         }
         internal class SpawnJob:MultithreadedContainerJob{
          static readonly Dictionary<(Type,string),ObjectPoolBase>spawnJobPool=new(){
-          {(typeof(SpawnJob           ),""),Pool.GetPool<SpawnJob           >("",()=>new(),(SpawnJob            item)=>{item.Reset();})},
-          {(typeof(SimSpawnJob        ),""),Pool.GetPool<SimSpawnJob        >("",()=>new(),(SimSpawnJob         item)=>{item.Reset();})},
-          {(typeof(CriticalSimSpawnJob),""),Pool.GetPool<CriticalSimSpawnJob>("",()=>new(),(CriticalSimSpawnJob item)=>{item.Reset();})},
+          {(typeof(SpawnJob           ),""),Pool.GetPool<SpawnJob           >("",()=>new(),(SpawnJob            item)=>{item.OnReturnToPoolRecycle();})},
+          {(typeof(SimSpawnJob        ),""),Pool.GetPool<SimSpawnJob        >("",()=>new(),(SimSpawnJob         item)=>{item.OnReturnToPoolRecycle();})},
+          {(typeof(CriticalSimSpawnJob),""),Pool.GetPool<CriticalSimSpawnJob>("",()=>new(),(CriticalSimSpawnJob item)=>{item.OnReturnToPoolRecycle();})},
          };
         internal static SpawnJob Rent(Type poolId){
          return(SpawnJob)spawnJobPool[(poolId,"")].ObjectRent();
@@ -217,7 +217,7 @@ namespace AKCondinoO.SimObjects{
          spawnJobPool[(poolId,"")].ObjectReturn(spawnJob);
         }
          protected readonly List<SpawnRequest>requested=new();
-            protected virtual void Reset(){
+            protected virtual void OnReturnToPoolRecycle(){
              requested.Clear();
             }
          protected SpawnList spawnList;

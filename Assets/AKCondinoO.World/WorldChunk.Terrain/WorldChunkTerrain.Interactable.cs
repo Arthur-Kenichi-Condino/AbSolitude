@@ -22,7 +22,7 @@ namespace AKCondinoO.World{
         internal class GoHereInstance:SimInteractionInstance{
          internal Vector3 worldPosition;
          private bool destSet;
-            internal override void Reset(){
+            internal override void OnReturnToPoolRecycle(){
              destSet=false;
             }
             internal override bool Running(){

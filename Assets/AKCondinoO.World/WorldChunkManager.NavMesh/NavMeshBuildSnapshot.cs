@@ -9,7 +9,7 @@ namespace AKCondinoO.World{
        "",
        ()=>new(),
        (NavMeshBuildSnapshot item)=>{
-        item.Reset();
+        item.OnReturnToPoolRecycle();
        },
        false
       );
@@ -25,7 +25,7 @@ namespace AKCondinoO.World{
          sourcesOrdered=NavMeshSourcesOrdered.pool.Rent();
          sourcesOrdered.Init(this);
         }
-        internal void Reset(){
+        internal void OnReturnToPoolRecycle(){
          for(int i=0;i<agentsCount;i++){
           if(navMeshInstances[i].valid)navMeshInstances[i].Remove();
          }

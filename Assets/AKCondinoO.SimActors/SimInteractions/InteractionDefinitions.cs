@@ -26,7 +26,7 @@ namespace AKCondinoO.SimActors.SimInteractions{
           var pool=Pool.GetPool<TInstance>(
            "",
            ()=>new TInstance(),
-           (TInstance item)=>item.Reset()
+           (TInstance item)=>item.OnReturnToPoolRecycle()
           );
           instancing.Add(instanceType,pool);
          }

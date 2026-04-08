@@ -148,10 +148,10 @@ namespace AKCondinoO.World{
     }
     internal class NoiseNodesSnapshot{
      static readonly Dictionary<(Type,string),ObjectPoolBase>noiseNodesSnapshotPool=new(){
-      {(typeof(NoiseNodesSnapshot          ),""),Pool.GetPool<NoiseNodesSnapshot          >("",()=>new(),(NoiseNodesSnapshot           item)=>{item.Reset();})},
-      {(typeof(OperatorNoiseNodesSnapshot  ),""),Pool.GetPool<OperatorNoiseNodesSnapshot  >("",()=>new(),(OperatorNoiseNodesSnapshot   item)=>{item.Reset();})},
-      {(typeof(SelectorNoiseNodesSnapshot  ),""),Pool.GetPool<SelectorNoiseNodesSnapshot  >("",()=>new(),(SelectorNoiseNodesSnapshot   item)=>{item.Reset();})},
-      {(typeof(MultiplierNoiseNodesSnapshot),""),Pool.GetPool<MultiplierNoiseNodesSnapshot>("",()=>new(),(MultiplierNoiseNodesSnapshot item)=>{item.Reset();})},
+      {(typeof(NoiseNodesSnapshot          ),""),Pool.GetPool<NoiseNodesSnapshot          >("",()=>new(),(NoiseNodesSnapshot           item)=>{item.OnReturnToPoolRecycle();})},
+      {(typeof(OperatorNoiseNodesSnapshot  ),""),Pool.GetPool<OperatorNoiseNodesSnapshot  >("",()=>new(),(OperatorNoiseNodesSnapshot   item)=>{item.OnReturnToPoolRecycle();})},
+      {(typeof(SelectorNoiseNodesSnapshot  ),""),Pool.GetPool<SelectorNoiseNodesSnapshot  >("",()=>new(),(SelectorNoiseNodesSnapshot   item)=>{item.OnReturnToPoolRecycle();})},
+      {(typeof(MultiplierNoiseNodesSnapshot),""),Pool.GetPool<MultiplierNoiseNodesSnapshot>("",()=>new(),(MultiplierNoiseNodesSnapshot item)=>{item.OnReturnToPoolRecycle();})},
      };
         internal static NoiseNodesSnapshot Rent(Type poolId){
          return(NoiseNodesSnapshot)noiseNodesSnapshotPool[(poolId,"")].ObjectRent();
@@ -174,7 +174,7 @@ namespace AKCondinoO.World{
          if(noiseNode.materialTables!=null){tempMaterialTables.AddRange(noiseNode.materialTables);}
          if(noiseNode.spawnTables   !=null){tempSpawnTables   .AddRange(noiseNode.spawnTables   );}
         }
-        internal virtual void Reset(){
+        internal virtual void OnReturnToPoolRecycle(){
          parent=null;
          root=null;
          ClearTempTables();
@@ -231,9 +231,9 @@ namespace AKCondinoO.World{
         }
     }
     internal class OperatorNoiseNodesSnapshot:NoiseNodesSnapshot{
-        internal override void Reset(){
+        internal override void OnReturnToPoolRecycle(){
          NoiseNodesSnapshot.Return(input.GetType(),input);input=null;
-         base.Reset();
+         base.OnReturnToPoolRecycle();
         }
      protected NoiseNodesSnapshot input;
         internal virtual void SetInput(NoiseNodesSnapshot input){
@@ -251,11 +251,11 @@ namespace AKCondinoO.World{
         }
     }
     internal class SelectorNoiseNodesSnapshot:NoiseNodesSnapshot{
-        internal override void Reset(){
+        internal override void OnReturnToPoolRecycle(){
          NoiseNodesSnapshot.Return(inputA.GetType(),inputA);inputA=null;
          NoiseNodesSnapshot.Return(inputB.GetType(),inputB);inputB=null;
          NoiseNodesSnapshot.Return(controller.GetType(),controller);controller=null;
-         base.Reset();
+         base.OnReturnToPoolRecycle();
         }
      protected NoiseNodesSnapshot inputA;
      protected NoiseNodesSnapshot inputB;
@@ -295,10 +295,10 @@ namespace AKCondinoO.World{
         }
     }
     internal class MultiplierNoiseNodesSnapshot:NoiseNodesSnapshot{
-        internal override void Reset(){
+        internal override void OnReturnToPoolRecycle(){
          NoiseNodesSnapshot.Return(lhs.GetType(),lhs);lhs=null;
          NoiseNodesSnapshot.Return(rhs.GetType(),rhs);rhs=null;
-         base.Reset();
+         base.OnReturnToPoolRecycle();
         }
      public NoiseNodesSnapshot lhs;
      public NoiseNodesSnapshot rhs;
@@ -327,7 +327,7 @@ namespace AKCondinoO.World{
        "",
        ()=>new(),
        (MaterialTablesSnapshot item)=>{
-        item.Reset();
+        item.OnReturnToPoolRecycle();
        }
       );
      internal MaterialId baseMaterial;
@@ -338,7 +338,7 @@ namespace AKCondinoO.World{
           }
          }
         }
-        internal virtual void Reset(){
+        internal virtual void OnReturnToPoolRecycle(){
         }
     }
     internal class BiomeSpawnTablesSnapshot{
@@ -347,7 +347,7 @@ namespace AKCondinoO.World{
        "",
        ()=>new(),
        (BiomeSpawnTablesSnapshot item)=>{
-        item.Reset();
+        item.OnReturnToPoolRecycle();
        }
       );
      internal readonly Dictionary<int,
@@ -373,7 +373,7 @@ namespace AKCondinoO.World{
           picker.Build();
          }
         }
-        internal virtual void Reset(){
+        internal virtual void OnReturnToPoolRecycle(){
          foreach(var kvp in pickerByLayer){
           var picker=kvp.Value;
           picker.Clear();
