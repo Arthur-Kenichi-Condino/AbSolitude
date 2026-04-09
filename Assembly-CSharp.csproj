@@ -232,6 +232,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\_SimConstruction\SimConstruction.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIGameEventHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputBindingsAsset.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\RidgedMultifractalNode.cs" />

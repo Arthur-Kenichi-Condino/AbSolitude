@@ -3,12 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.uiobjects\\uigameeventhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.uiobjects\\uigameeventhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{71AF8EF0-F3AF-EE2E-B851-4CC9FF8F41B1}|Assembly-CSharp-firstpass.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\plugins\\ricardojmendez\\libnoise.unity\\operator\\multiply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{71AF8EF0-F3AF-EE2E-B851-4CC9FF8F41B1}|Assembly-CSharp-firstpass.csproj|solutionrelative:assets\\plugins\\ricardojmendez\\libnoise.unity\\operator\\multiply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.uiobjects\\uisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.uiobjects\\uisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.bootstrap\\inputinterpreter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.bootstrap\\inputinterpreter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\worldchunk.spawning\\worldchunkspawning.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\worldchunk.spawning\\worldchunkspawning.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\biomessystem.spawning\\biomessimobjectspawningsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,15 +51,11 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomessystem.noisenodes\\billownode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.bootstrap\\inputinterpreter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.bootstrap\\inputinterpreter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshBuildSnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshBuildSnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.world\\worldchunk.terrain\\worldchunkterrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\worldchunk.terrain\\worldchunkterrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\worldchunk.terrain\\worldchunkterrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -51,11 +67,7 @@
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\worldchunk.terrain\\terrainchunkbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.world\\worldchunk.spawning\\worldchunkspawning.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\worldchunk.spawning\\worldchunkspawning.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\akcondinoo.world\\worldchunk.spawning\\chunksimobjectspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\worldchunk.spawning\\chunksimobjectspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\worldchunk.spawning\\chunksimobjectspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -77,10 +89,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsimobjectsplacing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsimobjectsplacing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{71AF8EF0-F3AF-EE2E-B851-4CC9FF8F41B1}|Assembly-CSharp-firstpass.csproj|c:\\users\\arthu\\documentos\\github\\absolitude\\assets\\plugins\\ricardojmendez\\libnoise.unity\\operator\\multiply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{71AF8EF0-F3AF-EE2E-B851-4CC9FF8F41B1}|Assembly-CSharp-firstpass.csproj|solutionrelative:assets\\plugins\\ricardojmendez\\libnoise.unity\\operator\\multiply.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.world\\worldchunk.terrain\\worldchunkterraininteractions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -221,10 +229,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.uiobjects\\uisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.uiobjects\\uisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2DC22E5B-B02C-8F96-AFB5-B071F17D0D53}|Assembly-CSharp.csproj|C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\assets\\akcondinoo.bootstrap\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -554,7 +558,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -562,7 +566,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 96,
+              "DocumentIndex": 97,
               "Title": "Core.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Core.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Core.cs",
@@ -575,7 +579,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 93,
+              "DocumentIndex": 94,
               "Title": "MarchingCubesTerrain.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesTerrain.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesTerrain.cs",
@@ -588,7 +592,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 87,
+              "DocumentIndex": 88,
               "Title": "MarchingCubesMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\MarchingCubesMultithreaded.cs",
@@ -601,7 +605,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 62,
+              "DocumentIndex": 63,
               "Title": "VoxelTerrainChunk.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunk.cs",
@@ -614,7 +618,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 59,
+              "DocumentIndex": 60,
               "Title": "InputHandler.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.cs",
@@ -627,7 +631,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 58,
+              "DocumentIndex": 59,
               "Title": "ScreenInput.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\ScreenInput.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\ScreenInput.cs",
@@ -640,7 +644,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 97,
+              "DocumentIndex": 98,
               "Title": "InputHandler.Command.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.Command.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.Command.cs",
@@ -653,7 +657,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 64,
+              "DocumentIndex": 65,
               "Title": "InputHandler.Enabled.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\InputHandler.Enabled.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\InputHandler.Enabled.cs",
@@ -666,7 +670,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 54,
+              "DocumentIndex": 56,
               "Title": "MainMenu.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\MainMenu.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\MainMenu.cs",
@@ -679,7 +683,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 1,
               "Title": "Multiply.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\Plugins\\ricardojmendez\\LibNoise.Unity\\Operator\\Multiply.cs",
               "RelativeDocumentMoniker": "Assets\\Plugins\\ricardojmendez\\LibNoise.Unity\\Operator\\Multiply.cs",
@@ -693,17 +697,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAA6wF0AAAATAAAAAAAAAA==",
+              "ViewState": "AgIAABIIAAAAAAAAAAAmwBgIAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-29T15:41:18.295Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Bookmark",
@@ -711,7 +714,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 65,
+              "DocumentIndex": 66,
               "Title": "SimCharacterController.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\SimCharacterController.cs",
@@ -723,7 +726,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 66,
+              "DocumentIndex": 67,
               "Title": "BaseAI.NavMeshAgent.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.NavMeshAgent.cs",
@@ -735,7 +738,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 68,
+              "DocumentIndex": 69,
               "Title": "Pinus_elliottii_1.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\Pinus_elliottii_1.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\Pinus_elliottii_1.cs",
@@ -747,7 +750,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 36,
               "Title": "BaseAI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.cs",
@@ -759,7 +762,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 70,
+              "DocumentIndex": 71,
               "Title": "ReflectionUtil.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\ReflectionUtil.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\ReflectionUtil.cs",
@@ -771,7 +774,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 78,
+              "DocumentIndex": 79,
               "Title": "CatlikeCodingVoxelTerrain.shader",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrain.shader",
               "RelativeDocumentMoniker": "Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrain.shader",
@@ -783,7 +786,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 81,
+              "DocumentIndex": 82,
               "Title": "CatlikeCodingVoxelTerrainLighting.cginc",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainLighting.cginc",
               "RelativeDocumentMoniker": "Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainLighting.cginc",
@@ -795,7 +798,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 86,
+              "DocumentIndex": 87,
               "Title": "Log.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Log.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Log.cs",
@@ -807,7 +810,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 57,
+              "DocumentIndex": 58,
               "Title": "Util.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\Util.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\Util.cs",
@@ -819,7 +822,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 63,
+              "DocumentIndex": 64,
               "Title": "Select.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\Plugins\\ricardojmendez\\LibNoise.Unity\\Operator\\Select.cs",
               "RelativeDocumentMoniker": "Assets\\Plugins\\ricardojmendez\\LibNoise.Unity\\Operator\\Select.cs",
@@ -831,7 +834,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 94,
+              "DocumentIndex": 95,
               "Title": "NavMeshHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\NavMeshHelper.cs",
@@ -843,7 +846,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 95,
+              "DocumentIndex": 96,
               "Title": "VoxelSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\VoxelSystem.cs",
@@ -855,7 +858,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 105,
+              "DocumentIndex": 106,
               "Title": "BaseBiome.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiome.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiome.cs",
@@ -867,7 +870,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 111,
+              "DocumentIndex": 112,
               "Title": "FXWater4Advanced.shader",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Water\\Water4\\FXWater4Advanced.shader",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Water\\Water4\\FXWater4Advanced.shader",
@@ -879,7 +882,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 82,
+              "DocumentIndex": 83,
               "Title": "CatlikeCodingVoxelTerrainShadows.cginc",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainShadows.cginc",
               "RelativeDocumentMoniker": "Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainShadows.cginc",
@@ -891,7 +894,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 112,
+              "DocumentIndex": 113,
               "Title": "TMP_SDF Overlay.shader",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\TextMesh Pro\\Shaders\\TMP_SDF Overlay.shader",
               "RelativeDocumentMoniker": "Assets\\TextMesh Pro\\Shaders\\TMP_SDF Overlay.shader",
@@ -903,7 +906,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 113,
+              "DocumentIndex": 114,
               "Title": "TMP_SDF SSD.shader",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\TextMesh Pro\\Shaders\\TMP_SDF SSD.shader",
               "RelativeDocumentMoniker": "Assets\\TextMesh Pro\\Shaders\\TMP_SDF SSD.shader",
@@ -915,7 +918,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 114,
+              "DocumentIndex": 115,
               "Title": "TMP_SDF.shader",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\TextMesh Pro\\Shaders\\TMP_SDF.shader",
               "RelativeDocumentMoniker": "Assets\\TextMesh Pro\\Shaders\\TMP_SDF.shader",
@@ -927,7 +930,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 85,
+              "DocumentIndex": 86,
               "Title": "Gameplayer.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Gameplayer.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Gameplayer.cs",
@@ -939,7 +942,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 115,
+              "DocumentIndex": 116,
               "Title": "AtlasHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\AtlasHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\AtlasHelper.cs",
@@ -951,7 +954,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 39,
               "Title": "MainCamera.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\MainCamera.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\MainCamera.cs",
@@ -963,7 +966,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 116,
+              "DocumentIndex": 117,
               "Title": "CatlikeCodingVoxelTerrainOutput.cginc",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainOutput.cginc",
               "RelativeDocumentMoniker": "Assets\\CatlikeCoding\\Shaders\\AKCondinoO\\Voxels\\Terrain\\CatlikeCodingVoxelTerrainOutput.cginc",
@@ -975,7 +978,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 21,
               "Title": "VoxelTerrainSimObjectsPlacing.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSimObjectsPlacing.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSimObjectsPlacing.cs",
@@ -983,12 +986,11 @@
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSimObjectsPlacing.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAAwBUAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-27T20:24:18.624Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-27T20:24:18.624Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
@@ -996,12 +998,11 @@
               "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAqwF0AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-12T04:44:19.422Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-12T04:44:19.422Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 118,
+              "DocumentIndex": 119,
               "Title": "BaseBiomeSimObjectsSpawnSettings.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiomeSimObjectsSpawnSettings.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Biomes\\BaseBiomeSimObjectsSpawnSettings.cs",
@@ -1013,7 +1014,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 127,
+              "DocumentIndex": 128,
               "Title": "SimWeapon.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Weapons\\_SimWeapon\\SimWeapon.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Weapons\\_SimWeapon\\SimWeapon.cs",
@@ -1025,7 +1026,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 128,
+              "DocumentIndex": 129,
               "Title": "SimConstruction.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Constructions\\_SimConstruction\\SimConstruction.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Constructions\\_SimConstruction\\SimConstruction.cs",
@@ -1037,7 +1038,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 120,
+              "DocumentIndex": 121,
               "Title": "DebugGizmos.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\DebugGizmos.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\DebugGizmos.cs",
@@ -1049,7 +1050,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 122,
+              "DocumentIndex": 123,
               "Title": "VoxelTerrainChunkArraySync.Server.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunkArraySync.Server.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainChunkArraySync.Server.cs",
@@ -1061,7 +1062,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 77,
+              "DocumentIndex": 78,
               "Title": "SimObjectManager.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectManager.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimObjectManager.cs",
@@ -1073,7 +1074,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 129,
+              "DocumentIndex": 130,
               "Title": "HumanAI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Humanoid\\Human\\HumanAI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\Humanoid\\Human\\HumanAI.cs",
@@ -1085,7 +1086,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 130,
+              "DocumentIndex": 131,
               "Title": "DisfiguringHomunculusAI.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\Humanoid\\DisfiguringHomunculus\\DisfiguringHomunculusAI.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\Humanoid\\DisfiguringHomunculus\\DisfiguringHomunculusAI.cs",
@@ -1097,7 +1098,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 131,
+              "DocumentIndex": 132,
               "Title": "Hurtboxes.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\Hurtboxes.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\Hurtboxes.cs",
@@ -1109,7 +1110,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 132,
+              "DocumentIndex": 133,
               "Title": "BaseAI.Targeting.Combat.Hurtboxes.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Combat.Hurtboxes.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Actors\\_SimActor\\_BaseAI\\BaseAI.Targeting.Combat.Hurtboxes.cs",
@@ -1121,7 +1122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 125,
+              "DocumentIndex": 126,
               "Title": "BaseMultithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\BaseMultithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\BaseMultithreaded.cs",
@@ -1133,7 +1134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 124,
+              "DocumentIndex": 125,
               "Title": "ObjectPool.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\ObjectPool.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\ObjectPool.cs",
@@ -1145,7 +1146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 126,
+              "DocumentIndex": 127,
               "Title": "SimObject.Stats.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\Stats\\SimObject.Stats.cs",
@@ -1157,7 +1158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 134,
+              "DocumentIndex": 135,
               "Title": "Vector3Util.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\Vector3Util.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\Vector3Util.cs",
@@ -1169,7 +1170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 133,
+              "DocumentIndex": 134,
               "Title": "MemoryManagement.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\MemoryManagement.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\MemoryManagement.cs",
@@ -1181,7 +1182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 123,
+              "DocumentIndex": 124,
               "Title": "GameMode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\GameMode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\GameMode.cs",
@@ -1193,7 +1194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 135,
+              "DocumentIndex": 136,
               "Title": "RotationHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\RotationHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\RotationHelper.cs",
@@ -1205,7 +1206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 121,
+              "DocumentIndex": 122,
               "Title": "SpawnData.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SpawnData.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SpawnData.cs",
@@ -1217,7 +1218,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "SimsMachine.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Sims\\_SimObject\\SimsMachine.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Sims\\_SimObject\\SimsMachine.cs",
@@ -1250,7 +1251,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 31,
               "Title": "Logs.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Logs.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\Logs.cs",
@@ -1263,7 +1264,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 88,
+              "DocumentIndex": 89,
               "Title": "Multithreaded.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Multithreaded.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\Multithreaded.cs",
@@ -1276,7 +1277,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "ObjectPool.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\ObjectPool.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Utilities\\ObjectPool.cs",
@@ -1289,7 +1290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 44,
               "Title": "SimObjectFactory.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectFactory.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectFactory.cs",
@@ -1302,7 +1303,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 47,
               "Title": "SimObjectPrefabs.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPrefabs.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectPrefabs.cs",
@@ -1315,7 +1316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "SimObject.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObject.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObject.cs",
@@ -1324,12 +1325,11 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-28T07:11:19.076Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 72,
+              "DocumentIndex": 73,
               "Title": "SimObjectInstancedRendering.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectInstancedRendering.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectInstancedRendering.cs",
@@ -1342,7 +1342,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 73,
+              "DocumentIndex": 74,
               "Title": "SimObjectInstancedRenderer.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectInstancedRenderer.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectInstancedRenderer.cs",
@@ -1355,7 +1355,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 50,
+              "DocumentIndex": 52,
               "Title": "DrawGizmos.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\DrawGizmos.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Utilities\\DrawGizmos.cs",
@@ -1368,7 +1368,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 61,
+              "DocumentIndex": 62,
               "Title": "BiomesSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.cs",
@@ -1381,7 +1381,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 69,
+              "DocumentIndex": 70,
               "Title": "WorldChunkManagerConst.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManagerConst.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManagerConst.cs",
@@ -1394,7 +1394,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "WorldChunkManager.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManager.cs",
@@ -1403,12 +1403,11 @@
               "ViewState": "AgIAADsAAAAAAAAAAAArwEQAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-04T03:03:24.384Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 53,
+              "DocumentIndex": 55,
               "Title": "ActiveZone.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\ActiveZone.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\ActiveZone.cs",
@@ -1421,7 +1420,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "WorldChunk.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.cs",
@@ -1430,12 +1429,11 @@
               "ViewState": "AgIAAAgAAAAAAAAAAAAxwBQAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-04T02:59:15.655Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "WorldChunkTerrain.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrain.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrain.cs",
@@ -1444,12 +1442,11 @@
               "ViewState": "AgIAAAMAAAAAAAAAAAAnwAwAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-23T20:17:31.981Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 79,
+              "DocumentIndex": 80,
               "Title": "NavMeshProvider.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshProvider.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshProvider.cs",
@@ -1462,7 +1459,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "NavMeshCluster.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshCluster.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshCluster.cs",
@@ -1475,7 +1472,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "NavMeshSourcesOrdered.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshSourcesOrdered.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshSourcesOrdered.cs",
@@ -1488,7 +1485,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "NavMeshBuildSnapshot.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshBuildSnapshot.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunkManager.NavMesh\\NavMeshBuildSnapshot.cs",
@@ -1497,12 +1494,11 @@
               "ViewState": "AgIAADgAAAAAAAAAAAAYwAsAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-31T17:21:17.687Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 75,
+              "DocumentIndex": 76,
               "Title": "MeshHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\MeshHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Utilities\\MeshHelper.cs",
@@ -1515,7 +1511,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 80,
+              "DocumentIndex": 81,
               "Title": "TerrainChunkNavMeshBuildData.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Terrain\\TerrainChunkNavMeshBuildData.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Terrain\\TerrainChunkNavMeshBuildData.cs",
@@ -1528,7 +1524,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "TerrainChunkBuilder.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Terrain\\TerrainChunkBuilder.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Terrain\\TerrainChunkBuilder.cs",
@@ -1537,12 +1533,11 @@
               "ViewState": "AgIAAAMAAAAAAAAAAAAMwA4AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-23T20:31:22.803Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 89,
+              "DocumentIndex": 90,
               "Title": "MarchingCubesCore.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\MarchingCubesCore.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\MarchingCubesCore.cs",
@@ -1555,13 +1550,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "BiomesConfigurationSnapshot.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "RelativeToolTip": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "ViewState": "AgIAAHABAAAAAAAAAAAEwHsBAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAHEBAAAAAAAAAAAvwHsBAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-06T04:51:41.085Z",
               "IsPinned": true,
@@ -1569,7 +1564,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 110,
+              "DocumentIndex": 111,
               "Title": "Voxel.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\Voxel.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\Voxel.cs",
@@ -1582,7 +1577,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 83,
+              "DocumentIndex": 84,
               "Title": "Vertex.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\Vertex.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\Vertex.cs",
@@ -1595,7 +1590,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "Tables.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\paulbourke\\Tables.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.MarchingCubes\\paulbourke\\Tables.cs",
@@ -1604,12 +1599,11 @@
               "ViewState": "AgIAACYAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-14T15:31:19.543Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "NoiseNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\NoiseNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\NoiseNode.cs",
@@ -1618,12 +1612,11 @@
               "ViewState": "AgIAAAIAAAAAAAAAAAAnwAgAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-08T19:56:59.29Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 109,
+              "DocumentIndex": 110,
               "Title": "ConstNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\ConstNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\ConstNode.cs",
@@ -1636,7 +1629,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 108,
+              "DocumentIndex": 109,
               "Title": "PerlinNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\PerlinNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\PerlinNode.cs",
@@ -1649,7 +1642,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 107,
+              "DocumentIndex": 108,
               "Title": "RidgedMultifractalNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\RidgedMultifractalNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\RidgedMultifractalNode.cs",
@@ -1662,7 +1655,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 90,
+              "DocumentIndex": 91,
               "Title": "TurbulenceNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\TurbulenceNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\TurbulenceNode.cs",
@@ -1675,7 +1668,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 48,
               "Title": "ScaleBiasNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\ScaleBiasNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\ScaleBiasNode.cs",
@@ -1688,7 +1681,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 104,
+              "DocumentIndex": 105,
               "Title": "BiomeSpawnEntry.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnEntry.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnEntry.cs",
@@ -1701,7 +1694,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 106,
+              "DocumentIndex": 107,
               "Title": "BiomeSpawnLayer.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnLayer.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnLayer.cs",
@@ -1714,7 +1707,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 71,
+              "DocumentIndex": 72,
               "Title": "BiomeSpawnTable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnTable.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.SpawnTables\\BiomeSpawnTable.cs",
@@ -1727,7 +1720,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 101,
+              "DocumentIndex": 102,
               "Title": "GameSaveSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\GameSaveSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\GameSaveSystem.cs",
@@ -1740,7 +1733,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 117,
+              "DocumentIndex": 118,
               "Title": "SimObjectSaveSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectSaveSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectSaveSystem.cs",
@@ -1753,7 +1746,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 119,
+              "DocumentIndex": 120,
               "Title": "WorldSaveSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldSaveSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldSaveSystem.cs",
@@ -1766,7 +1759,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "BillowNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\BillowNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\BillowNode.cs",
@@ -1775,12 +1768,11 @@
               "ViewState": "AgIAAAMAAAAAAAAAAAAnwAsAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T20:37:37.213Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 92,
+              "DocumentIndex": 93,
               "Title": "MultiplyNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\MultiplyNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\MultiplyNode.cs",
@@ -1793,7 +1785,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 91,
+              "DocumentIndex": 92,
               "Title": "SelectNode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\SelectNode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NoiseNodes\\SelectNode.cs",
@@ -1806,7 +1798,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "BiomesSimObjectSpawningSystem.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.Spawning\\BiomesSimObjectSpawningSystem.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.Spawning\\BiomesSimObjectSpawningSystem.cs",
@@ -1815,12 +1807,11 @@
               "ViewState": "AgIAAAUAAAAAAAAAAAAUwAoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-14T15:19:36.917Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 103,
+              "DocumentIndex": 104,
               "Title": "ByChancePicker.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.Spawning\\ByChancePicker.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.Spawning\\ByChancePicker.cs",
@@ -1833,7 +1824,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 102,
+              "DocumentIndex": 103,
               "Title": "MaterialId.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MaterialId.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\MaterialId.cs",
@@ -1846,7 +1837,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 51,
               "Title": "MaterialAtlasHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MaterialAtlasHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\MaterialAtlasHelper.cs",
@@ -1859,7 +1850,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 100,
+              "DocumentIndex": 101,
               "Title": "NodeMaterial.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NodeMaterials\\NodeMaterial.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NodeMaterials\\NodeMaterial.cs",
@@ -1872,7 +1863,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 99,
+              "DocumentIndex": 100,
               "Title": "NodeMaterialTable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.NodeMaterials\\NodeMaterialTable.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.NodeMaterials\\NodeMaterialTable.cs",
@@ -1885,7 +1876,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 45,
               "Title": "MonoPool.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\MonoPool.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\MonoPool.cs",
@@ -1898,7 +1889,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 50,
               "Title": "DictionaryAddRangeHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\DictionaryAddRangeHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO\\DictionaryAddRangeHelper.cs",
@@ -1911,7 +1902,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 76,
+              "DocumentIndex": 77,
               "Title": "WorldSimObjectSpatialMap.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldSimObjectSpatialMap.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldSimObjectSpatialMap.cs",
@@ -1924,7 +1915,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 74,
+              "DocumentIndex": 75,
               "Title": "SimIds.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimIds.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimIds.cs",
@@ -1937,7 +1928,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 34,
               "Title": "SimActor.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimActor.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimActor.cs",
@@ -1949,7 +1940,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 33,
               "Title": "SimInteractionQueue.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\SimInteractionQueue.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\SimInteractionQueue.cs",
@@ -1961,7 +1952,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 38,
               "Title": "SimDescription.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimDescription.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimDescription.cs",
@@ -1973,7 +1964,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 46,
               "Title": "SimDescriptionElement.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimDescriptionElement.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimDescriptionElement.cs",
@@ -1985,7 +1976,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "SimBrain.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimBrain.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimBrain.cs",
@@ -1993,12 +1984,11 @@
               "RelativeToolTip": "Assets\\AKCondinoO.SimActors\\SimBrain.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-03T05:08:13.051Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-03T05:08:13.051Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 41,
               "Title": "SimDirector.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimDirector.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimDirector.cs",
@@ -2010,7 +2000,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "SimObjectManager.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectManager.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectManager.cs",
@@ -2018,12 +2008,11 @@
               "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimObjectManager.cs",
               "ViewState": "AgIAAKsAAAAAAAAAAAArwNsAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-27T08:00:31.774Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-27T08:00:31.774Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "InteractionDefinitions.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractionDefinitions.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractionDefinitions.cs",
@@ -2035,7 +2024,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 40,
               "Title": "IInteractable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\IInteractable.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\IInteractable.cs",
@@ -2047,7 +2036,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 49,
               "Title": "InteractableHelper.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractableHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractableHelper.cs",
@@ -2059,7 +2048,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 60,
+              "DocumentIndex": 61,
               "Title": "InteractablesRegistry.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractablesRegistry.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\InteractablesRegistry.cs",
@@ -2071,7 +2060,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 22,
               "Title": "WorldChunkTerrainInteractions.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrainInteractions.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrainInteractions.cs",
@@ -2083,7 +2072,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 37,
               "Title": "SimInteractionDefinition.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractions\\SimInteractionDefinition.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractions\\SimInteractionDefinition.cs",
@@ -2095,7 +2084,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "SimMovement.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimMovement.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimMovement.cs",
@@ -2107,7 +2096,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 84,
+              "DocumentIndex": 85,
               "Title": "SharedCoroutines.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\SharedCoroutines.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\SharedCoroutines.cs",
@@ -2119,7 +2108,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 35,
               "Title": "SimInteractionResolver.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimActors\\SimInteractionResolver.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimActors\\SimInteractionResolver.cs",
@@ -2138,7 +2127,7 @@
       "VerticalTabListWidth": 256,
       "FloatingWindowState": {
         "Id": "375cd57f-5ab8-4918-b967-4a9be04709f7",
-        "Display": 0,
+        "Display": 1,
         "X": -5,
         "Y": 114,
         "Width": 1546,
@@ -2152,7 +2141,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "InputAction.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\InputAction.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\InputAction.cs",
@@ -2165,7 +2154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 98,
+              "DocumentIndex": 99,
               "Title": "InputBindingsAsset.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\InputBindingsAsset.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\InputBindingsAsset.cs",
@@ -2178,7 +2167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 56,
+              "DocumentIndex": 57,
               "Title": "Main.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Main.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\Main.cs",
@@ -2191,7 +2180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 52,
+              "DocumentIndex": 54,
               "Title": "MonoSingleton.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\MonoSingleton.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\MonoSingleton.cs",
@@ -2204,7 +2193,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 51,
+              "DocumentIndex": 53,
               "Title": "InputHandler.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\InputHandler.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\InputHandler.cs",
@@ -2217,7 +2206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 32,
               "Title": "InputHandler.TranslateInput.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\InputHandler.TranslateInput.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\InputHandler.TranslateInput.cs",
@@ -2230,7 +2219,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "WorldChunkTerrain.Interactable.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrain.Interactable.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Terrain\\WorldChunkTerrain.Interactable.cs",
@@ -2243,7 +2232,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 43,
               "Title": "RagnarokOnlineMode.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\GameOrchestrator.GameModes\\RagnarokOnlineMode.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\GameOrchestrator.GameModes\\RagnarokOnlineMode.cs",
@@ -2255,7 +2244,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 42,
               "Title": "GameOrchestrator.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\GameOrchestrator.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\GameOrchestrator.cs",
@@ -2267,7 +2256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "InputInterpreter.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\InputInterpreter.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\InputInterpreter.cs",
@@ -2280,19 +2269,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 55,
-              "Title": "UISystem.cs",
-              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UISystem.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.UIObjects\\UISystem.cs",
-              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UISystem.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.UIObjects\\UISystem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-05T22:51:58.378Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 67,
+              "DocumentIndex": 68,
               "Title": "SimObjectStatic.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectStatic.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectStatic.cs",
@@ -2325,7 +2302,34 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 2,
+              "Title": "UISystem.cs",
+              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UISystem.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.UIObjects\\UISystem.cs",
+              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UISystem.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.UIObjects\\UISystem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T22:51:58.378Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UIGameEventHandler.cs",
+              "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UIGameEventHandler.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.UIObjects\\UIGameEventHandler.cs",
+              "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.UIObjects\\UIGameEventHandler.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.UIObjects\\UIGameEventHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAUAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-09T02:06:28.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "ChunkSimObjectSpawner.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Spawning\\ChunkSimObjectSpawner.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Spawning\\ChunkSimObjectSpawner.cs",
@@ -2333,21 +2337,19 @@
               "RelativeToolTip": "Assets\\AKCondinoO.World\\WorldChunk.Spawning\\ChunkSimObjectSpawner.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T21:22:42.343Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T21:22:42.343Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 5,
               "Title": "WorldChunkSpawning.cs",
               "DocumentMoniker": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Spawning\\WorldChunkSpawning.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\WorldChunk.Spawning\\WorldChunkSpawning.cs",
               "ToolTip": "C:\\Users\\arthu\\Documentos\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\WorldChunk.Spawning\\WorldChunkSpawning.cs",
               "RelativeToolTip": "Assets\\AKCondinoO.World\\WorldChunk.Spawning\\WorldChunkSpawning.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAmwAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T21:10:01.303Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T21:10:01.303Z"
             }
           ]
         }
