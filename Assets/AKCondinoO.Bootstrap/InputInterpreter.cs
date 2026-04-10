@@ -35,6 +35,9 @@ namespace AKCondinoO.Bootstrap{
           intent.target=mouseHit.collider.gameObject;
           valid=true;
          }
+         if(intent.isPointerOverUI){
+          valid=false;
+         }
          return valid;
         }
         private void DetectPointerOverUI(ref InputIntent intent){

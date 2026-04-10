@@ -88,14 +88,17 @@
     <Compile Include="Assets\AKCondinoO\Networking\NetworkCommandLine.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudsCamera.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Logs.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\ResizeHandle.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\RockBig_Desert_HighTower\RockBig_Desert_HighTower.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\Tables\TableFloors.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\DeferredFogEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\Hitboxes.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow\ScrollView.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AISensor.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.OnInput.cs" />
     <Compile Include="Assets\AKCondinoO\MainMenu.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\TabsGroup.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.cs" />
     <Compile Include="Assets\AKCondinoO.Utilities\DrawGizmos.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\TerrainChunkBuilder.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectFactory.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiomeSimObjectsSpawnSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAI.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow\Window.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimDirector.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.SNIPE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.cs" />
@@ -229,16 +233,17 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSendEditDataToServerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Command.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\PerlinNode.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow\UIWindow.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Leveling.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\_SimConstruction\SimConstruction.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
-    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.MarchingCubes\MarchingCubesCore.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow\WindowContent.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnTables\BiomeSpawnLayer.cs" />
     <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.cs" />
@@ -267,6 +272,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.Hurtboxes.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.PersistentData.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\TabsContainer.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AudioRange.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\GameSaveSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAI.Stats.cs" />
@@ -302,6 +308,7 @@
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\BiomeSettings.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow\Header.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.cs" />
@@ -411,6 +418,7 @@
     <Compile Include="Assets\AKCondinoO\UI\Fixed\InteractMode\FindNextSelectableSim\FixedUI.InteractMode.ButtonPressEvents.FindNextSelectableSim.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\GetVoxelWaterMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\BaseMultithreaded.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\ContentContainer.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Main.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\BillowNode.cs" />
@@ -421,6 +429,7 @@
     <Compile Include="Assets\AKCondinoO\Networking\rlabrecque\SteamManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />
     <Compile Include="Assets\AKCondinoO.World\MaterialAtlasHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\Tab.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />

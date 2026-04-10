@@ -16,6 +16,49 @@ sim object manager despawn all
 chunk pool all
 
 destroy above after
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class UIResizeHandle : MonoBehaviour, IDragHandler
+{
+    public RectTransform window;
+    public Vector2 minSize = new Vector2(200, 100);
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector2 size = window.sizeDelta;
+        size += new Vector2(eventData.delta.x, -eventData.delta.y);
+
+        size.x = Mathf.Max(size.x, minSize.x);
+        size.y = Mathf.Max(size.y, minSize.y);
+
+        window.sizeDelta = size;
+    }
+}
+
+Tabs
+ ├── Buttons
+ │    ├── Tab1Button
+ │    ├── Tab2Button
+ │
+ └── Views
+      ├── Tab1Content
+      ├── Tab2Content
+✔️ Script
+using UnityEngine;
+
+public class UITabs : MonoBehaviour
+{
+    public GameObject[] tabs;
+
+    public void Show(int index)
+    {
+        for (int i = 0; i < tabs.Length; i++)
+            tabs[i].SetActive(i == index);
+    }
+}
+✔️ Botão
+button.onClick.AddListener(() => tabs.Show(0));
 
 if(object.bounds overlaps chunk)
     LoadChunk(object.relatedChunks)
@@ -49,7 +92,20 @@ struct OBB
     Vector3 halfExtents;
     Quaternion rotation;
 }
-        
+    
+if(verticalVelocity > 0f){
+    isGrounded = false;
+    return;
+}    
+navmeshenabled then true
+bool isGrounded = Physics.SphereCast(
+    origin,
+    radius,
+    Vector3.down,
+    out RaycastHit hit,
+    groundCheckDistance,
+    groundMask
+);
 
 float noise = perlin.GetValue(x,z,0);
 
