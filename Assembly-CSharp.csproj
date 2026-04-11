@@ -347,6 +347,7 @@
     <Compile Include="Assets\AKCondinoO\Log.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\HomunculusAnimatorController.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectPart.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\WindTrails.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\AI\AICommandSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\InContainerTransformData.cs" />
