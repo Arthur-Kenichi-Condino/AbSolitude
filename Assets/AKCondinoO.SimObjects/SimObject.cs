@@ -2,6 +2,7 @@ using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
 using AKCondinoO.World;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static AKCondinoO.World.WorldChunkManagerConst;
@@ -12,6 +13,10 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal bool useInstancedRendering=false;
      [SerializeField]internal GameObject meshPrefab;
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
+     [SerializeField]internal GameObject simObjectRendererComponents;
+     [SerializeField]internal GameObject simObjectCollisionComponents;
+     [SerializeField]internal Transform simObjectPartsRoot;
+     internal List<SimObjectPart>simObjectParts=new();
      internal bool doInitialization=true;
      internal ulong id;
      internal int instancedRenderingIndex=-1;

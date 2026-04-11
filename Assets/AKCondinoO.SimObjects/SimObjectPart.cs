@@ -1,16 +1,15 @@
+using System;
 using UnityEngine;
-
-public class SimObjectPart : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+namespace AKCondinoO.SimObjects{
+    internal class SimObjectPart:MonoBehaviour{
+     [SerializeField]internal SimObjectPartStateTransition[]states;
+     internal GameObject simObjectRendererComponents;
+     internal GameObject simObjectCollisionComponents;
+     internal int currentState;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [Serializable]
+    internal class SimObjectPartStateTransition{
+     public Transform stateStart;
+     public Transform stateEnd;
     }
 }

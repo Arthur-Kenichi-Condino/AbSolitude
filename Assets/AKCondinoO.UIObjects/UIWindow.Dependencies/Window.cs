@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using UnityEngine;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
@@ -11,6 +12,7 @@ namespace AKCondinoO.UIObjects{
          verticalLayoutGroup=GetComponent<VerticalLayoutGroup>();
          header=GetComponentInChildren<Header>();
          header.window=this;
+         header.OnAwake();
          scrollView=GetComponentInChildren<ScrollView>();
          scrollView.window=this;
          tabsGroup=GetComponentInChildren<TabsGroup>();
@@ -19,11 +21,17 @@ namespace AKCondinoO.UIObjects{
           tabsGroup.OnAwake();
          }
         }
+        internal void Start(){
+         if(tabsGroup!=null){
+          tabsGroup.OnStart();
+         }
+        }
         internal void OnContentChanged(RectTransform rectTransform){
-         float headerHeight=((RectTransform)header.transform).rect.height;
+         float headerHeight=header.layoutElement.minHeight;
          float scrollbarHorizontalHeight=scrollView.scrollbarHorizontal.rect.height;
          float scrollbarVerticalWidth   =scrollView.scrollbarVertical  .rect.width ;
-         float tabsHeaderHeight=tabsGroup.tabsHeader.rect.height;
+         float tabsHeaderHeight=tabsGroup.tabsHeaderLayoutElement.minHeight;
+         Logs.Debug(()=>"headerHeight:"+headerHeight+";scrollbarHorizontalHeight:"+scrollbarHorizontalHeight+";scrollbarVerticalWidth:"+scrollbarVerticalWidth+";tabsHeaderHeight:"+tabsHeaderHeight);
          Vector2 size=rectTransform.rect.size;
          size.x+=verticalLayoutGroup.padding.left  +verticalLayoutGroup.padding.right;
          size.y+=verticalLayoutGroup.padding.bottom+verticalLayoutGroup.padding.top  +verticalLayoutGroup.spacing+headerHeight+tabsHeaderHeight;

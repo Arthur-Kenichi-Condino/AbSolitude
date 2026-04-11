@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
@@ -10,6 +11,10 @@ namespace AKCondinoO.SimObjects{
      private MeshRenderer prefabMeshRenderer;
      private MeshFilter   prefabMeshFilter  ;
      private Mesh colliderMesh;
+     private SimObjectPart[]partPrefabs             ;
+     private  MeshRenderer[]partPrefabMeshRenderers ;
+     private    MeshFilter[]partPrefabMeshFilters   ;
+     private          Mesh[]partPrefabColliderMeshes;
         internal SimObjectFactory(T prefab,Transform parent=null){
          var manager=SimObjectManager.singleton;
          pool=new(prefab,parent);
@@ -17,8 +22,9 @@ namespace AKCondinoO.SimObjects{
          var variant=prefab.variant;
          if(prefab.meshPrefab!=null){
           prefabMeshObject=prefab.meshPrefab;
-          prefabMeshRenderer=prefab.meshPrefab.GetComponentInChildren<MeshRenderer>();
-          prefabMeshFilter  =prefab.meshPrefab.GetComponentInChildren<MeshFilter  >();
+          prefabMeshRenderer=prefab.meshPrefab.GetComponent<MeshRenderer>();
+          prefabMeshFilter  =prefab.meshPrefab.GetComponent<MeshFilter  >();
+          partPrefabs=prefab.meshPrefab.GetComponentsInChildren<SimObjectPart>();
           Mesh mesh;
           if(prefabMeshRenderer!=null&&prefabMeshFilter!=null&&(mesh=prefabMeshFilter.sharedMesh)!=null){
            Logs.Debug(()=>"mesh.name:"+mesh.name);
@@ -59,6 +65,7 @@ namespace AKCondinoO.SimObjects{
           SetupRenderer(simObject);
          }
          SetupCollider(simObject);
+         SetupAnyParts(simObject);
         }
         private bool RegisterForInstancedRendering(T simObject){
          var manager=SimObjectManager.singleton;
@@ -71,8 +78,10 @@ namespace AKCondinoO.SimObjects{
         private void SetupRenderer(T simObject){
          if(prefabMeshObject!=null){
           if(simObject.simObjectMeshRenderer==null){
-           simObject.simObjectMeshRenderer=simObject.gameObject.AddComponent<MeshRenderer>();
-           simObject.simObjectMeshFilter  =simObject.gameObject.AddComponent<MeshFilter  >();
+           simObject.simObjectMeshRenderer=simObject.simObjectRendererComponents.AddComponent<MeshRenderer>();
+           simObject.simObjectMeshFilter  =simObject.simObjectRendererComponents.AddComponent<MeshFilter  >();
+           simObject.simObjectRendererComponents.transform.localRotation=prefabMeshObject.transform.localRotation;
+           simObject.simObjectRendererComponents.transform.localScale   =prefabMeshObject.transform.localScale;
            Mesh mesh;
            if(prefabMeshRenderer!=null&&prefabMeshFilter!=null&&(mesh=prefabMeshFilter.sharedMesh)!=null){
             simObject.simObjectMeshFilter.sharedMesh=mesh;
@@ -93,8 +102,25 @@ namespace AKCondinoO.SimObjects{
         }
         private void SetupCollider(T simObject){
          if(colliderMesh!=null&&simObject.simObjectMeshCollider==null){
-          simObject.simObjectMeshCollider=simObject.gameObject.AddComponent<MeshCollider>();
+          simObject.simObjectMeshCollider=simObject.simObjectCollisionComponents.AddComponent<MeshCollider>();
+          simObject.simObjectCollisionComponents.transform.localRotation=prefabMeshObject.transform.localRotation;
+          simObject.simObjectCollisionComponents.transform.localScale   =prefabMeshObject.transform.localScale;
           simObject.simObjectMeshCollider.sharedMesh=colliderMesh;
+         }
+        }
+        private void SetupAnyParts(T simObject){
+         if(prefabMeshObject!=null){
+          if(simObject.simObjectParts.Count<=0){
+           var originalParent=prefabMeshObject.transform;
+           simObject.simObjectPartsRoot.localPosition=originalParent.localPosition;
+           simObject.simObjectPartsRoot.localRotation=originalParent.localRotation;
+           simObject.simObjectPartsRoot.localScale   =originalParent.localScale;
+           foreach(var partPrefab in partPrefabs){
+            var simObjectPart=GameObject.Instantiate(partPrefab);
+            simObjectPart.transform.SetParent(simObject.simObjectPartsRoot,false);
+            simObject.simObjectParts.Add(simObjectPart);
+           }
+          }
          }
         }
         internal virtual void Despawn(T simObject){
