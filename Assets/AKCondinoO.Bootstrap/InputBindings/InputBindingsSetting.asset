@@ -19,7 +19,8 @@ MonoBehaviour:
     - source: 0
       mode: 0
       key: 27
-      mouseButton: 0
+      mouseButton: -1
+      mouseInput: 
       controllerInput: 
   - action: 1
     combinationType: 0
@@ -27,7 +28,8 @@ MonoBehaviour:
     - source: 0
       mode: 2
       key: 9
-      mouseButton: 0
+      mouseButton: -1
+      mouseInput: 
       controllerInput: 
   - action: 6
     combinationType: 0
@@ -36,4 +38,32 @@ MonoBehaviour:
       mode: 0
       key: 0
       mouseButton: 0
+      mouseInput: 
+      controllerInput: 
+  - action: 7
+    combinationType: 0
+    inputCombination:
+    - source: 1
+      mode: 1
+      key: 0
+      mouseButton: 1
+      mouseInput: 
+      controllerInput: 
+  - action: 8
+    combinationType: 0
+    inputCombination:
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      mouseInput: MouseX
+      controllerInput: 
+  - action: 10
+    combinationType: 1
+    inputCombination:
+    - source: 1
+      mode: 1
+      key: 0
+      mouseButton: 1
+      mouseInput: 
       controllerInput: 

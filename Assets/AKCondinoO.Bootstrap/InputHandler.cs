@@ -101,7 +101,8 @@ namespace AKCondinoO.Bootstrap{
           InputDetectionMode.AfterHoldingDelay=>0,
           InputDetectionMode.WhileHeld        =>1,
           InputDetectionMode.WhenDown         =>2,
-                                             _=>3,
+          InputDetectionMode.Continuous       =>3,
+                                             _=>4,
          };
         }
      internal static readonly Utilities.ObjectPool<StringBuilder>sbPool=
@@ -148,6 +149,7 @@ namespace AKCondinoO.Bootstrap{
      public InputDetectionMode mode;
      public KeyCode key;
      public int mouseButton;
+     public string mouseInput;
      public string controllerInput;
         internal static int Compare(DeviceInput a,DeviceInput b){
          int c;
@@ -165,13 +167,14 @@ namespace AKCondinoO.Bootstrap{
         }
     }
     internal enum InputDetectionMode{
-     WhenDown,
-     WhileHeld,
-     AfterHoldingDelay,
+     Continuous=-1,
+     WhenDown=0,
+     WhileHeld=1,
+     AfterHoldingDelay=2,
     }
     internal enum DeviceInputSource:byte{
-     Keyboard,
-     Mouse,
-     Controller,
+     Keyboard=0,
+     Mouse=1,
+     Controller=2,
     }
 }

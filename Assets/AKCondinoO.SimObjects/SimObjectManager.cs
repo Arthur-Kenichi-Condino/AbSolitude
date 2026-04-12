@@ -127,8 +127,12 @@ namespace AKCondinoO.SimObjects{
           factory.Despawn(simObject);
          }
         }
+     internal readonly HashSet<SimObjectPart>simObjectPartsOnStateChange=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
+         foreach(var simObjectPart in simObjectPartsOnStateChange){
+          simObjectPart.ManualUpdate();
+         }
          foreach(var kvp1 in sims){
           var simsById=kvp1.Value;
           foreach(var kvp2 in simsById){

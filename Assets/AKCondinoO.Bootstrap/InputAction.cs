@@ -8,5 +8,9 @@ namespace AKCondinoO.Bootstrap{
      Backward=4,
      Right=5,
      Action=6,
+     Aim=7,
+     MouseX=8,
+     MouseY=9,
+     CameraOrbit=10,
     }
 }

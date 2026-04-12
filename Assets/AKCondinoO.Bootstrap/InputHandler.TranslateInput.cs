@@ -14,15 +14,23 @@ namespace AKCondinoO.Bootstrap{
           //Logs.Debug("binding:"+binding);
           var enabledState=this.enabledState[action];
           enabledState.lastState=enabledState.curState;
+          enabledState.lastStateFloat=enabledState.curStateFloat;
           switch(binding.combinationType){
+           case(InputCombinationType.Chord):{
+            for(int j=0;j<binding.inputCombination.Length;j++){
+             var result=ReadInput(enabledState,binding.inputCombination[j]);
+            }
+            break;
+           }
            case(InputCombinationType.Single):{
-            bool result;
-            result=ReadInput(enabledState,binding.inputCombination[0]);
-            if(result){
+            var result=ReadInput(enabledState,binding.inputCombination[0]);
+            if(result.value){
              Logs.Debug(()=>"action:"+action+":input received:"+binding);
              enabledState.curState=true;
+             enabledState.curStateFloat=result.valueFloat;
             }else{
              enabledState.curState=false;
+             enabledState.curStateFloat=0f;
             }
             break;
            }
@@ -35,8 +43,27 @@ namespace AKCondinoO.Bootstrap{
          }
          lastMousePosition=mousePosition;hasLastMousePosition=true;
         }
-        private bool ReadInput(EnabledState enabledState,DeviceInput deviceInput){
+        private(bool value,float valueFloat)ReadInput(EnabledState enabledState,DeviceInput deviceInput){
+         (bool value,float valueFloat)result=(false,0f);
          switch(deviceInput.mode){
+          case(InputDetectionMode.Continuous):{
+           float readValueFloat=0f;
+           switch(deviceInput.source){
+            case(DeviceInputSource.Mouse):{
+             if(!string.IsNullOrEmpty(deviceInput.mouseInput)){
+              readValueFloat=Input.GetAxis(deviceInput.mouseInput);
+             }
+             break;
+            }
+           }
+           if(readValueFloat!=0f){
+            Logs.Debug(()=>"deviceInput.mouseInput:"+deviceInput.mouseInput+":readValueFloat:"+readValueFloat);
+            result.value=true;
+            result.valueFloat=readValueFloat;
+           }
+           enabledState.axisValue=readValueFloat;
+           return result;
+          }
           case(InputDetectionMode.WhenDown):{
            bool readValue=false;
            switch(deviceInput.source){
@@ -49,19 +76,20 @@ namespace AKCondinoO.Bootstrap{
              break;
             }
            }
-           bool result=false;
            if(readValue&&readValue!=enabledState.isDown){
-            result=true;
+            result.value=true;
            }
            enabledState.isDown=readValue;
            return result;
           }
          }
-         return false;
+         return result;
         }
         internal class EnabledState{
          internal bool isDown;
+         internal float axisValue;
          internal bool curState;internal bool lastState;
+         internal float curStateFloat;internal float lastStateFloat;
         }
     }
 }
