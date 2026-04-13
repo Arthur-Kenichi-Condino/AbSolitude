@@ -4,6 +4,7 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     [CreateAssetMenu(menuName="AKCondinoO/Input/Bindings")]
     internal class InputBindingsAsset:ScriptableObject{
+     public GameMode gameMode;
      public List<InputBindingEntry>bindings;
     }
     [Serializable]

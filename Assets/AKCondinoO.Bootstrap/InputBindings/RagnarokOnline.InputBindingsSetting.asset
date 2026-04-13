@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16fdf11ee19521b41b0dcd03eb8f5201, type: 3}
-  m_Name: InputBindingsSetting
+  m_Name: RagnarokOnline.InputBindingsSetting
   m_EditorClassIdentifier: 
+  gameMode: 0
   bindings:
   - action: 0
     combinationType: 0
@@ -58,6 +59,15 @@ MonoBehaviour:
       mouseButton: -1
       mouseInput: MouseX
       controllerInput: 
+  - action: 9
+    combinationType: 0
+    inputCombination:
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      mouseInput: MouseY
+      controllerInput: 
   - action: 10
     combinationType: 1
     inputCombination:
@@ -66,4 +76,16 @@ MonoBehaviour:
       key: 0
       mouseButton: 1
       mouseInput: 
+      controllerInput: 
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      mouseInput: MouseX
+      controllerInput: 
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      mouseInput: MouseY
       controllerInput: 

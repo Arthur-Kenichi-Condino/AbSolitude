@@ -8,7 +8,7 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     [DefaultExecutionOrder(-99999)]
     internal partial class InputHandler:MonoSingleton<InputHandler>{
-     [SerializeField]internal InputBindingsAsset inputBindingsSetting;
+     [SerializeField]internal InputBindingsAsset[]inputBindingsSettings;
      private InputInterpreter inputInterpreter;
         public override void Initialize(){
          base.Initialize();
@@ -16,16 +16,22 @@ namespace AKCondinoO.Bootstrap{
           Init();
          }
         }
-     private readonly List<(InputBinding binding,InputAction action)>bindings=new();
+     private readonly Dictionary<GameMode,List<(InputBinding binding,InputAction action)>>bindings=new();
         private void Init(){
-         if(inputBindingsSetting!=null){
-          foreach(var bindingSetting in inputBindingsSetting.bindings){
-           bindings.Add((new(bindingSetting),bindingSetting.action));
+         int maxCombinationLength=1;
+         if(inputBindingsSettings.Length>0){
+          foreach(var bindingSetting in inputBindingsSettings){
+           var gameMode=bindingSetting.gameMode;
+           var bindingsList=bindings[gameMode]=new();
+           foreach(var binding in bindingSetting.bindings){
+            bindingsList.Add((new(binding),binding.action));
+            maxCombinationLength=Math.Max(maxCombinationLength,binding.inputCombination.Length);
+           }
+           bindingsList.Sort(InputBinding.Compare);
           }
-          bindings.Sort(InputBinding.Compare);
          }
          foreach(InputAction action in Enum.GetValues(typeof(InputAction))){
-          enabledState.Add(action,new());
+          enabledState.Add(action,new(maxCombinationLength));
          }
          inputInterpreter=new(this);
         }
@@ -99,8 +105,8 @@ namespace AKCondinoO.Bootstrap{
         static int GetModePriority(InputDetectionMode m){
          return m switch{
           InputDetectionMode.AfterHoldingDelay=>0,
-          InputDetectionMode.WhileHeld        =>1,
-          InputDetectionMode.WhenDown         =>2,
+          InputDetectionMode.WhenDown         =>1,
+          InputDetectionMode.WhileHeld        =>2,
           InputDetectionMode.Continuous       =>3,
                                              _=>4,
          };

@@ -13,16 +13,18 @@ namespace AKCondinoO.Bootstrap.GameModes{
         public void Run(SimActor activeSim,InputIntent intent){
          switch(intent.action){
           case(InputAction.MouseX):{
-           Logs.Debug(()=>"InputAction.MouseX:"+intent.enabledState.curStateFloat);
+           Logs.Debug(()=>"InputAction.MouseX:"+intent.enabledState.curStateFloat[0]);
            break;
           }
           case(InputAction.MouseY):{
-           Logs.Debug(()=>"InputAction.MouseY:"+intent.enabledState.curStateFloat);
+           Logs.Debug(()=>"InputAction.MouseY:"+intent.enabledState.curStateFloat[0]);
            break;
           }
           case(InputAction.Action):{
-           if((object)activeSim!=null){
-            activeSim.OnReceiveInteractionIntent(intent);
+           if(intent.enabledState.curState[0]){
+            if((object)activeSim!=null){
+             activeSim.OnReceiveInteractionIntent(intent);
+            }
            }
            break;
           }
