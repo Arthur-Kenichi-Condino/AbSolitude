@@ -45,10 +45,25 @@ namespace AKCondinoO.Bootstrap{
          }
          base.Shutdown();
         }
+     internal bool hasFocus=false;
+     private bool skipNextFrame;
+        void OnApplicationFocus(bool focus){
+         this.hasFocus=focus;
+         if(focus){
+          skipNextFrame=true;
+         }
+        }
      private Vector3 mousePosition;
      private readonly Dictionary<InputAction,EnabledState>enabledState=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
+         if(!hasFocus){
+          return;
+         }
+         if(skipNextFrame){
+          skipNextFrame=false;
+          return;
+         }
          mousePosition=Input.mousePosition;
          TranslateInput();
         }
@@ -155,6 +170,7 @@ namespace AKCondinoO.Bootstrap{
      public InputDetectionMode mode;
      public KeyCode key;
      public int mouseButton;
+     public AxisRole axisRole;
      public string mouseInput;
      public string controllerInput;
         internal static int Compare(DeviceInput a,DeviceInput b){
@@ -177,6 +193,14 @@ namespace AKCondinoO.Bootstrap{
      WhenDown=0,
      WhileHeld=1,
      AfterHoldingDelay=2,
+    }
+    internal enum AxisRole:byte{
+     None,
+     LookX,
+     LookY,
+     MoveX,
+     MoveY,
+     Zoom
     }
     internal enum DeviceInputSource:byte{
      Keyboard=0,

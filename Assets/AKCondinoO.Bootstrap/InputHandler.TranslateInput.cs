@@ -47,8 +47,8 @@ namespace AKCondinoO.Bootstrap{
         private void TrySendIntent(InputAction action,InputBinding binding,EnabledState state){
          if(!state.stateChanged)
           return;
-         Logs.Debug(()=>"action:"+action+":input state changed:"+binding);
-         if(inputInterpreter.Resolve(action,state,mousePosition,out var intent)){
+         Logs.Debug(()=>"action:"+action+";state.curState[0]:"+state.curState[0]+":input state changed:"+binding);
+         if(inputInterpreter.Resolve(action,binding,state,mousePosition,out var intent)){
           GameOrchestrator.singleton.OnInputReceived(intent);
          }
         }
@@ -63,6 +63,7 @@ namespace AKCondinoO.Bootstrap{
          }
          for(int i=0;i<len;i++){
           ReadInput(state,inputs[i],i);
+          //Logs.Debug(()=>"state.curState[i]:"+state.curState[i]);
          }
          for(int i=0;i<len;i++){
           if(!state.curState[i]){
@@ -76,6 +77,7 @@ namespace AKCondinoO.Bootstrap{
         private void ClearState(EnabledState state,int len){
          for(int i=0;i<len;i++){
           state.curState[i]=false;
+          state.curStateFloat[i]=0f;
          }
         }
         private void FillState(EnabledState state,int len){
@@ -216,7 +218,7 @@ namespace AKCondinoO.Bootstrap{
             }
             internal void OnPostInputRead(){
              stateChanged=false;
-             for(int i=0;i<curStateFloat.Length;i++){
+             for(int i=0;i<curState.Length;i++){
               if(curState[i]!=lastState[i]){
                stateChanged=true;
                break;

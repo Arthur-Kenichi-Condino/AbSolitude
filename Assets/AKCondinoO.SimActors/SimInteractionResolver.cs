@@ -13,7 +13,7 @@ namespace AKCondinoO.SimActors{
         }
      private readonly List<SimInteractionDefinition>foundInteractions=new(0);
         internal void ResolveInteractionIntent(InputIntent intent){
-         if(intent.target.GetInteractable(out var interactable)){
+         if(intent.mouseTarget.GetInteractable(out var interactable)){
           interactable.AvailableInteractions(sim,foundInteractions);
           Logs.Debug(()=>"foundInteractions.Count:"+foundInteractions.Count);
           foundInteractions.Clear();

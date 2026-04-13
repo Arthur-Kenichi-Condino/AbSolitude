@@ -21,6 +21,7 @@ MonoBehaviour:
       mode: 0
       key: 27
       mouseButton: -1
+      axisRole: 0
       mouseInput: 
       controllerInput: 
   - action: 1
@@ -30,6 +31,7 @@ MonoBehaviour:
       mode: 2
       key: 9
       mouseButton: -1
+      axisRole: 0
       mouseInput: 
       controllerInput: 
   - action: 6
@@ -39,6 +41,7 @@ MonoBehaviour:
       mode: 0
       key: 0
       mouseButton: 0
+      axisRole: 0
       mouseInput: 
       controllerInput: 
   - action: 7
@@ -48,6 +51,7 @@ MonoBehaviour:
       mode: 1
       key: 0
       mouseButton: 1
+      axisRole: 0
       mouseInput: 
       controllerInput: 
   - action: 8
@@ -57,6 +61,7 @@ MonoBehaviour:
       mode: -1
       key: 0
       mouseButton: -1
+      axisRole: 3
       mouseInput: MouseX
       controllerInput: 
   - action: 9
@@ -66,6 +71,7 @@ MonoBehaviour:
       mode: -1
       key: 0
       mouseButton: -1
+      axisRole: 4
       mouseInput: MouseY
       controllerInput: 
   - action: 10
@@ -75,24 +81,21 @@ MonoBehaviour:
       mode: 1
       key: 0
       mouseButton: 1
+      axisRole: 0
       mouseInput: 
       controllerInput: 
     - source: 1
       mode: -1
       key: 0
       mouseButton: -1
+      axisRole: 1
       mouseInput: MouseX
       controllerInput: 
     - source: 1
       mode: -1
       key: 0
       mouseButton: -1
-      mouseInput: MouseY
-      controllerInput: 
-    - source: 1
-      mode: -1
-      key: 0
-      mouseButton: -1
+      axisRole: 2
       mouseInput: MouseY
       controllerInput: 
   - action: 2
@@ -102,5 +105,36 @@ MonoBehaviour:
       mode: 1
       key: 119
       mouseButton: -1
+      axisRole: 0
+      mouseInput: 
+      controllerInput: 
+  - action: 3
+    combinationType: 0
+    inputCombination:
+    - source: 0
+      mode: 1
+      key: 97
+      mouseButton: -1
+      axisRole: 0
+      mouseInput: 
+      controllerInput: 
+  - action: 4
+    combinationType: 0
+    inputCombination:
+    - source: 0
+      mode: 1
+      key: 115
+      mouseButton: -1
+      axisRole: 0
+      mouseInput: 
+      controllerInput: 
+  - action: 5
+    combinationType: 0
+    inputCombination:
+    - source: 0
+      mode: 1
+      key: 100
+      mouseButton: -1
+      axisRole: 0
       mouseInput: 
       controllerInput: 
