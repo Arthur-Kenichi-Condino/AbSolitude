@@ -89,3 +89,18 @@ MonoBehaviour:
       mouseButton: -1
       mouseInput: MouseY
       controllerInput: 
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      mouseInput: MouseY
+      controllerInput: 
+  - action: 2
+    combinationType: 0
+    inputCombination:
+    - source: 0
+      mode: 1
+      key: 119
+      mouseButton: -1
+      mouseInput: 
+      controllerInput: 
