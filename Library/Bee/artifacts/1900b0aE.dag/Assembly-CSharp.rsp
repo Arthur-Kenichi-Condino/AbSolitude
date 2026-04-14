@@ -482,6 +482,8 @@
 "Assets/AKCondinoO.Bootstrap/InputInterpreter.cs"
 "Assets/AKCondinoO.Bootstrap/Logs.cs"
 "Assets/AKCondinoO.Bootstrap/Main.cs"
+"Assets/AKCondinoO.Bootstrap/MainCamera.CameraModes/ICameraMode.cs"
+"Assets/AKCondinoO.Bootstrap/MainCamera.CameraModes/OrbitalCameraMode.cs"
 "Assets/AKCondinoO.Bootstrap/MainCamera.cs"
 "Assets/AKCondinoO.Bootstrap/MonoPool.cs"
 "Assets/AKCondinoO.Bootstrap/MonoSingleton.cs"

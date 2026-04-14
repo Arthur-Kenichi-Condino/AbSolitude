@@ -138,3 +138,13 @@ MonoBehaviour:
       axisRole: 0
       mouseInput: 
       controllerInput: 
+  - action: 11
+    combinationType: 0
+    inputCombination:
+    - source: 1
+      mode: -1
+      key: 0
+      mouseButton: -1
+      axisRole: 5
+      mouseInput: MouseScrollWheel
+      controllerInput: 

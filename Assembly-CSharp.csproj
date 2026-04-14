@@ -66,6 +66,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoE.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldSaveSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Sanity.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.CameraModes\ICameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Integrity.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
@@ -434,6 +435,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\QuagmireSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
+    <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.CameraModes\OrbitalCameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkManager.NavMesh\NavMeshProvider.cs" />

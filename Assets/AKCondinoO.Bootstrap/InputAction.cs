@@ -12,5 +12,6 @@ namespace AKCondinoO.Bootstrap{
      MouseX=8,
      MouseY=9,
      CameraOrbit=10,
+     Zoom=11,
     }
 }

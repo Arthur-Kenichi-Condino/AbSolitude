@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap.CameraModes;
 using AKCondinoO.Bootstrap.GameModes;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
@@ -23,6 +24,12 @@ namespace AKCondinoO.Bootstrap{
      private SimActor activeSimSelected;
         internal void OnInputReceived(InputIntent intent){
          Logs.Debug(()=>"intent.action:"+intent.action);
+         switch(gameMode){
+          case(GameMode.RagnarokOnline):{
+           MainCamera.singleton.SetCameraMode(CameraMode.OrbitalCameraMode);
+           break;
+          }
+         }
          EnsureActiveSimSelected();
          gameLogic[gameMode].Run(activeSimSelected,intent);
         }

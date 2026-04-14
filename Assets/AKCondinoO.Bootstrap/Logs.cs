@@ -15,6 +15,7 @@ namespace AKCondinoO.Bootstrap{
       "GameOrchestrator",
       "RagnarokOnlineMode",
       "MainCamera",
+      "OrbitalCameraMode",
       //"NavMeshProvider",
       //"NavMeshSourcesOrdered",
       //"WorldChunk",

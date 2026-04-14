@@ -34,6 +34,9 @@ namespace AKCondinoO.Bootstrap{
            case AxisRole.LookY:
             intent.lookY=enabledState.curStateFloat[i];
            break;
+           case AxisRole.Zoom:
+            intent.zoom=enabledState.curStateFloat[i];
+           break;
           }
          }
          bool valid=true;
@@ -92,6 +95,7 @@ namespace AKCondinoO.Bootstrap{
          internal EnabledState enabledState;
          internal float lookX;
          internal float lookY;
+         internal float zoom;
          internal bool isPointerOverUI;
          internal bool mouseOverObject;
          internal RaycastHit mouseHit;

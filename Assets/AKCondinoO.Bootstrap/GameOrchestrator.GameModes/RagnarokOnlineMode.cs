@@ -44,6 +44,11 @@ namespace AKCondinoO.Bootstrap.GameModes{
            MoveCamera();
            break;
           }
+          case(InputAction.Zoom):{
+           zoom=intent.zoom;
+           MoveCamera();
+           break;
+          }
           case(InputAction.MouseX):{
            //Logs.Debug(()=>"InputAction.MouseX:"+intent.enabledState.curStateFloat[0]);
            break;
@@ -65,6 +70,7 @@ namespace AKCondinoO.Bootstrap.GameModes{
      Vector3 pivot;
      float lookX;
      float lookY;
+     float zoom;
      bool cameraForward;
      bool cameraBackward;
      bool cameraLeft;
@@ -81,7 +87,7 @@ namespace AKCondinoO.Bootstrap.GameModes{
          cameraIntent.pivot=pivot;
          cameraIntent.lookDelta=new(lookX,lookY);
          cameraIntent.move=movement;
-         cameraIntent.zoom=0;
+         cameraIntent.zoom=zoom;
          cameraIntent.acceleration=40f;
          cameraIntent.damping=6f;
          cameraIntent.maxSpeed=12f;
