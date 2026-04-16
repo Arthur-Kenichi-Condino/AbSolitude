@@ -146,4 +146,5 @@ MonoBehaviour:
   useMeshObjectSubMeshesForCollider: 
   simObjectRendererComponents: {fileID: 2314076041146936289}
   simObjectCollisionComponents: {fileID: 2134435657969575048}
+  simObjectPartBase: {fileID: -1824753872948248401, guid: 7c5324f505c376a42ae6742a47211bba, type: 3}
   simObjectPartsRoot: {fileID: 7647893092124944746}

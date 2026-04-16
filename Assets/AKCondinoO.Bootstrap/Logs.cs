@@ -24,6 +24,7 @@ namespace AKCondinoO.Bootstrap{
       "SimObjectManager",
       "SimObjectFactory",
       "SimObject",
+      "IInteractable",
       "SimDirector",
       "SimActor",
       "SimBrain",

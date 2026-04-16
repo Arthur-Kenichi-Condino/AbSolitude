@@ -15,14 +15,15 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectRendererComponents;
      [SerializeField]internal GameObject simObjectCollisionComponents;
+     [SerializeField]internal SimObjectPart simObjectPartBase;
      [SerializeField]internal Transform simObjectPartsRoot;
      internal List<SimObjectPart>simObjectParts=new();
-     internal bool doInitialization=true;
-     internal ulong id;
-     internal int instancedRenderingIndex=-1;
      internal MeshRenderer simObjectMeshRenderer;
      internal MeshFilter   simObjectMeshFilter;
      internal MeshCollider simObjectMeshCollider;
+     internal bool doInitialization=true;
+     internal ulong id;
+     internal int instancedRenderingIndex=-1;
      internal bool isGrounded;
         internal virtual void Awake(){
         }

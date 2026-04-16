@@ -2,10 +2,14 @@ using AKCondinoO.SimActors.SimInteractions;
 using System;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
-    internal class SimObjectPart:MonoBehaviour,IInteractable{
+    internal partial class SimObjectPart:MonoBehaviour,IInteractable{
      [SerializeField]internal SimObjectPartStateTransition[]states;
-     internal GameObject simObjectRendererComponents;
-     internal GameObject simObjectCollisionComponents;
+     [SerializeField]internal int[]usePartMeshSubMeshesForCollider;
+     [SerializeField]internal GameObject simObjectPartRendererComponents;
+     [SerializeField]internal GameObject simObjectPartCollisionComponents;
+     internal MeshRenderer simObjectPartMeshRenderer;
+     internal MeshFilter   simObjectPartMeshFilter;
+     internal MeshCollider simObjectPartMeshCollider;
      internal int currentState;
         internal virtual void ManualUpdate(){
         }

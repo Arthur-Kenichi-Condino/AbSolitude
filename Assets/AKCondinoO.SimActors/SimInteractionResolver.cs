@@ -16,6 +16,9 @@ namespace AKCondinoO.SimActors{
          if(intent.mouseTarget.GetInteractable(out var interactable)){
           interactable.AvailableInteractions(sim,foundInteractions);
           Logs.Debug(()=>"foundInteractions.Count:"+foundInteractions.Count);
+          foreach(var found in foundInteractions){
+           Logs.Debug(()=>"found:"+found.GetType());
+          }
           foundInteractions.Clear();
           var defaultInteraction=interactable.DefaultInteraction(sim);
           if(defaultInteraction!=null){

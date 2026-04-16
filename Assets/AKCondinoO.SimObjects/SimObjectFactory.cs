@@ -11,31 +11,61 @@ namespace AKCondinoO.SimObjects{
      private MeshRenderer prefabMeshRenderer;
      private MeshFilter   prefabMeshFilter  ;
      private Mesh colliderMesh;
-     private SimObjectPart[]partPrefabs             ;
-     private  MeshRenderer[]partPrefabMeshRenderers ;
-     private    MeshFilter[]partPrefabMeshFilters   ;
-     private          Mesh[]partPrefabColliderMeshes;
+     private SimObjectPartData[]partsData;
+     struct SimObjectPartData{
+      public SimObjectPart prefab        ;
+      public MeshRenderer  prefabRenderer;
+      public MeshFilter    prefabFilter  ;
+      public Mesh colliderMesh;
+     }
         internal SimObjectFactory(T prefab,Transform parent=null){
          var manager=SimObjectManager.singleton;
          pool=new(prefab,parent);
          var type=prefab.simObjectType;
          var variant=prefab.variant;
          if(prefab.meshPrefab!=null){
-          prefabMeshObject=prefab.meshPrefab;
+          prefabMeshObject  =prefab.meshPrefab;
           prefabMeshRenderer=prefab.meshPrefab.GetComponent<MeshRenderer>();
           prefabMeshFilter  =prefab.meshPrefab.GetComponent<MeshFilter  >();
-          partPrefabs=prefab.meshPrefab.GetComponentsInChildren<SimObjectPart>();
-          Mesh mesh;
-          if(prefabMeshRenderer!=null&&prefabMeshFilter!=null&&(mesh=prefabMeshFilter.sharedMesh)!=null){
+          if(prefabMeshRenderer!=null&&TryGetMesh(prefabMeshFilter,out Mesh mesh)){
            Logs.Debug(()=>"mesh.name:"+mesh.name);
            if(prefab.useInstancedRendering){
             manager.instancedRendering.RegisterType((type,variant),mesh,prefabMeshRenderer.sharedMaterials,prefab.meshPrefab.layer);
            }
-           if(prefab.useMeshObjectSubMeshesForCollider.Length>0){
-            colliderMesh=MeshHelper.BuildColliderMeshFromSubMeshes(mesh,prefab.useMeshObjectSubMeshesForCollider);
+           colliderMesh=BuildColliderIfNeeded(
+            mesh,
+            prefab.useMeshObjectSubMeshesForCollider
+           );
+          }
+          var partPrefabs=prefab.meshPrefab.GetComponentsInChildren<SimObjectPart>();
+          partsData=new SimObjectPartData[partPrefabs.Length];
+          for(int i=0;i<partsData.Length;i++){
+           var partPrefab=partPrefabs[i];
+           var partData=new SimObjectPartData(){
+            prefab=        partPrefab,
+            prefabRenderer=partPrefab.GetComponent<MeshRenderer>(),
+            prefabFilter=  partPrefab.GetComponent<MeshFilter  >(),
+           };
+           if(TryGetMesh(partData.prefabFilter,out Mesh partMesh)){
+            partData.colliderMesh=BuildColliderIfNeeded(
+             partMesh,
+             partPrefab.usePartMeshSubMeshesForCollider
+            );
            }
+           partsData[i]=partData;
           }
          }
+        }
+        private static bool TryGetMesh(MeshFilter filter,out Mesh mesh){
+         mesh=filter!=null?filter.sharedMesh:null;
+         return mesh!=null;
+        }
+        private static Mesh BuildColliderIfNeeded(
+         Mesh mesh,
+         int[]subMeshes
+        ){
+         if(mesh==null||subMeshes==null||subMeshes.Length<=0)return null;
+         return MeshHelper.BuildColliderMeshFromSubMeshes(mesh,subMeshes);
         }
         internal void Destroy(bool destroy=false){
          pool.Destroy(destroy);
@@ -44,6 +74,14 @@ namespace AKCondinoO.SimObjects{
          prefabMeshFilter  =null;
          if(colliderMesh!=null){
           GameObject.Destroy(colliderMesh);colliderMesh=null;
+         }
+         if(partsData!=null){
+          for(int i=0;i<partsData.Length;i++){
+           var partData=partsData[i];
+           if(partData.colliderMesh!=null){
+            GameObject.Destroy(partData.colliderMesh);
+           }
+          }
          }
         }
         internal virtual SimObject Spawn(SimObjectSpawn item){
@@ -76,52 +114,97 @@ namespace AKCondinoO.SimObjects{
          return false;
         }
         private void SetupRenderer(T simObject){
-         if(prefabMeshObject!=null){
-          if(simObject.simObjectMeshRenderer==null){
-           simObject.simObjectMeshRenderer=simObject.simObjectRendererComponents.AddComponent<MeshRenderer>();
-           simObject.simObjectMeshFilter  =simObject.simObjectRendererComponents.AddComponent<MeshFilter  >();
-           simObject.simObjectRendererComponents.transform.localRotation=prefabMeshObject.transform.localRotation;
-           simObject.simObjectRendererComponents.transform.localScale   =prefabMeshObject.transform.localScale;
-           Mesh mesh;
-           if(prefabMeshRenderer!=null&&prefabMeshFilter!=null&&(mesh=prefabMeshFilter.sharedMesh)!=null){
-            simObject.simObjectMeshFilter.sharedMesh=mesh;
-            var source=prefabMeshRenderer;
-            var target=simObject.simObjectMeshRenderer;
-            target.sharedMaterials     =source.sharedMaterials     ;
-            target.shadowCastingMode   =source.shadowCastingMode   ;
-            target.receiveShadows      =source.receiveShadows      ;
-            target.renderingLayerMask  =source.renderingLayerMask  ;
-            target.lightProbeUsage     =source.lightProbeUsage     ;
-            target.reflectionProbeUsage=source.reflectionProbeUsage;
-            target.probeAnchor         =source.probeAnchor         ;
-            target.motionVectorGenerationMode=source.motionVectorGenerationMode;
-            target.allowOcclusionWhenDynamic =source.allowOcclusionWhenDynamic ;
-           }
-          }
+         if(prefabMeshObject==null)return;
+         CopyLocalTransform(
+          prefabMeshObject.transform,
+          simObject.simObjectRendererComponents.transform
+         );
+         SetupMeshRenderer(
+          simObject.simObjectRendererComponents.transform,
+          ref simObject.simObjectMeshRenderer,
+          ref simObject.simObjectMeshFilter,
+          prefabMeshRenderer,
+          prefabMeshFilter
+         );
+        }
+        private static void SetupMeshRenderer(
+         Transform root,
+         ref MeshRenderer renderer,
+         ref MeshFilter   filter,
+         MeshRenderer sourceRenderer,
+         MeshFilter   sourceFilter
+        ){
+         if(renderer!=null)return;
+         renderer=root.gameObject.AddComponent<MeshRenderer>();
+         filter  =root.gameObject.AddComponent<MeshFilter  >();
+         if(sourceRenderer!=null&&TryGetMesh(sourceFilter,out var mesh)){
+          filter.sharedMesh=mesh;
+          CopyRendererProperties(sourceRenderer,renderer);
          }
+        }
+        private static void CopyRendererProperties(MeshRenderer source,MeshRenderer target){
+         target.sharedMaterials     =source.sharedMaterials     ;
+         target.shadowCastingMode   =source.shadowCastingMode   ;
+         target.receiveShadows      =source.receiveShadows      ;
+         target.renderingLayerMask  =source.renderingLayerMask  ;
+         target.lightProbeUsage     =source.lightProbeUsage     ;
+         target.reflectionProbeUsage=source.reflectionProbeUsage;
+         target.probeAnchor         =source.probeAnchor         ;
+         target.motionVectorGenerationMode=source.motionVectorGenerationMode;
+         target.allowOcclusionWhenDynamic =source.allowOcclusionWhenDynamic ;
         }
         private void SetupCollider(T simObject){
-         if(colliderMesh!=null&&simObject.simObjectMeshCollider==null){
-          simObject.simObjectMeshCollider=simObject.simObjectCollisionComponents.AddComponent<MeshCollider>();
-          simObject.simObjectCollisionComponents.transform.localRotation=prefabMeshObject.transform.localRotation;
-          simObject.simObjectCollisionComponents.transform.localScale   =prefabMeshObject.transform.localScale;
-          simObject.simObjectMeshCollider.sharedMesh=colliderMesh;
-         }
+         if(colliderMesh==null)return;
+         CopyLocalTransform(
+          prefabMeshObject.transform,
+          simObject.simObjectCollisionComponents.transform
+         );
+         SetupMeshCollider(
+          simObject.simObjectCollisionComponents.transform,
+          colliderMesh,
+          ref simObject.simObjectMeshCollider
+         );
+        }
+        private static MeshCollider SetupMeshCollider(
+         Transform root,
+         Mesh mesh,
+         ref MeshCollider collider
+        ){
+         if(mesh==null||collider!=null)return collider;
+         collider=root.gameObject.AddComponent<MeshCollider>();
+         collider.sharedMesh=mesh;
+         return collider;
         }
         private void SetupAnyParts(T simObject){
-         if(prefabMeshObject!=null){
-          if(simObject.simObjectParts.Count<=0){
-           var originalParent=prefabMeshObject.transform;
-           simObject.simObjectPartsRoot.localPosition=originalParent.localPosition;
-           simObject.simObjectPartsRoot.localRotation=originalParent.localRotation;
-           simObject.simObjectPartsRoot.localScale   =originalParent.localScale;
-           foreach(var partPrefab in partPrefabs){
-            var simObjectPart=GameObject.Instantiate(partPrefab);
-            simObjectPart.transform.SetParent(simObject.simObjectPartsRoot,false);
-            simObject.simObjectParts.Add(simObjectPart);
-           }
-          }
+         if(prefabMeshObject==null||simObject.simObjectParts.Count>0)return;
+         CopyLocalTransform(
+          prefabMeshObject.transform,
+          simObject.simObjectPartsRoot
+         );
+         for(int i=0;i<partsData.Length;i++){
+          var partData=partsData[i];
+          var part=GameObject.Instantiate(simObject.simObjectPartBase);
+          part.transform.SetParent(simObject.simObjectPartsRoot,false);
+          CopyLocalTransform(partData.prefab.transform,part.transform);
+          SetupMeshRenderer(
+           part.simObjectPartRendererComponents.transform,
+           ref part.simObjectPartMeshRenderer,
+           ref part.simObjectPartMeshFilter,
+           partData.prefabRenderer,
+           partData.prefabFilter
+          );
+          SetupMeshCollider(
+           part.simObjectPartCollisionComponents.transform,
+           partData.colliderMesh,
+           ref part.simObjectPartMeshCollider
+          );
+          simObject.simObjectParts.Add(part);
          }
+        }
+        private static void CopyLocalTransform(Transform source,Transform target){
+         target.localPosition=source.localPosition;
+         target.localRotation=source.localRotation;
+         target.localScale   =source.localScale;
         }
         internal virtual void Despawn(T simObject){
          var manager=SimObjectManager.singleton;

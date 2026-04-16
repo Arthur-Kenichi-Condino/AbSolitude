@@ -18,9 +18,14 @@ namespace AKCondinoO.SimActors.SimInteractions{
           return false;
          }
          Logs.Debug(()=>"target.name:"+target.name);
-         SimObject simObject=target.GetComponent<SimObject>();
+         SimObject simObject=target.transform.parent.GetComponent<SimObject>();
          if(simObject!=null&&simObject is IInteractable simObjectInteractable){
           interactable=simObjectInteractable;
+          return true;
+         }
+         SimObjectPart simObjectPart=target.transform.parent.GetComponent<SimObjectPart>();
+         if(simObjectPart!=null&&simObjectPart is IInteractable simObjectPartInteractable){
+          interactable=simObjectPartInteractable;
           return true;
          }
          WorldChunkTerrain terrain=target.GetComponent<WorldChunkTerrain>();;
@@ -28,6 +33,7 @@ namespace AKCondinoO.SimActors.SimInteractions{
           interactable=terrainInteractable;
           return true;
          }
+         Logs.Debug(()=>"no interactable found!");
          return false;
         }
     }

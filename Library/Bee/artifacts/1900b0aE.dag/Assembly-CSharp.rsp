@@ -510,6 +510,8 @@
 "Assets/AKCondinoO.SimObjects/SimObjectInstancedRendering.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectManager.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPart.cs"
+"Assets/AKCondinoO.SimObjects/SimObjectPart.Interactable.cs"
+"Assets/AKCondinoO.SimObjects/SimObjectPartInteractions.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPool.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectPrefabs.cs"
 "Assets/AKCondinoO.SimObjects/SimObjectSaveSystem.cs"

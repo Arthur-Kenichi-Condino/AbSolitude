@@ -107,9 +107,9 @@
     <Compile Include="Assets\AKCondinoO.SimActors\SimDescriptionElement.cs" />
     <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\ScreenshotBackground.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\WorldChunkTerrain.Interactable.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.cs" />
-    <Compile Include="Assets\AKCondinoO.SimActors\SimInteractionResolver.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow.Dependencies\Header.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimInteractionResolver.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimInteractions\InteractionDefinitions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\SharedCoroutines.cs" />
@@ -163,6 +163,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\Teleport\Teleport.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\Hurtboxes.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectPartInteractions.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HurtboxesPrefabsList.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\AI\Targeting\AskHelpFromAllies.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Util.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.Stats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\AnimationManager.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectPart.Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildCategory\BuildCategorySimObjectsTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitGracePeriod\OnHitGracePeriodSkillBuff.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Secondary.cs" />
