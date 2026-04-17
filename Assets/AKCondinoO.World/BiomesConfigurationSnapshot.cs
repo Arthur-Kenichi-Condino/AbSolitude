@@ -361,7 +361,7 @@ namespace AKCondinoO.World{
             pickerByLayer.Add(spawnTableLayer.layer,picker=new());
            }
            foreach(var entry in spawnTableLayer.entries){
-            Logs.Debug(()=>"'spawnTable entry':"+entry.prefab.name);
+            Logs.Debug(()=>entry.prefab!=null?"'spawnTable entry':"+entry.prefab.name:"'spawnTable entry':null");
             ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChanceObjectSpawnEntry<SimObject>.pool.Rent();
             pickerEntry.prefab=entry.prefab;
             pickerEntry.chance=entry.chance;

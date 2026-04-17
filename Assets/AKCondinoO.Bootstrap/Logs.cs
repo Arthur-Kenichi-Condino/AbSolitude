@@ -24,6 +24,8 @@ namespace AKCondinoO.Bootstrap{
       "SimObjectManager",
       "SimObjectFactory",
       "SimObject",
+      "SimObjectPart",
+      "SimObjectPart.Interactable",
       "IInteractable",
       "SimDirector",
       "SimActor",
@@ -49,7 +51,13 @@ namespace AKCondinoO.Bootstrap{
          string className=System.IO.Path.GetFileNameWithoutExtension(file);
          if(!enableAll&&enabledAt.Count>0&&!enabledAt.Contains(className))
           return;
-         string message=$"[{className}.{member}]:{logMsg.Invoke()}";
+         string message;
+         try{
+          message=$"[{className}.{member}]:{logMsg.Invoke()}";
+         }catch(System.Exception e){
+          message=$"[{className}.{member}]:logMsg caused an Exception! >:o";
+          Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+         }
          WriteMessage(LogType.Debug,
           message,context,condition,
           file,

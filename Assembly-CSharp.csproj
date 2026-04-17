@@ -145,6 +145,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\NetworkSimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.Client.cs" />
     <Compile Include="Assets\AKCondinoO\GameplayerManagement.cs" />
+    <Compile Include="Assets\AKCondinoO.SimActors\SimInteractions\InteractionSlot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\MonoSingleton.cs" />
     <Compile Include="Assets\AKCondinoO.Utilities\ObjectPool.cs" />

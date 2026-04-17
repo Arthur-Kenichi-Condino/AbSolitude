@@ -50,6 +50,11 @@ namespace AKCondinoO.SimActors.SimInteractions{
          }
          return null;
         }
+        internal static void UnregisterAll(){
+         definitions      .Clear();
+         defaultDefinition.Clear();
+         instancing       .Clear();
+        }
     }
     internal abstract class InteractableInteractions:ScriptableObject{
         internal abstract void Register();

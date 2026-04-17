@@ -99,7 +99,7 @@ namespace AKCondinoO.World{
            cnk.OnEnsureExists(cnk.cCoord,true);
           }
          }
-         navMeshProvider.OnManualUpdate();
+         navMeshProvider?.OnManualUpdate();
         }
         internal bool GetChunkValid(Vector2Int cCoord,out WorldChunk chunk){
          if(chunks.TryGetValue(cCoord,out chunk)){

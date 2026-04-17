@@ -499,6 +499,7 @@
 "Assets/AKCondinoO.SimActors/SimInteractions/InteractableHelper.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/InteractablesRegistry.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/InteractionDefinitions.cs"
+"Assets/AKCondinoO.SimActors/SimInteractions/InteractionSlot.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/SimInteractionDefinition.cs"
 "Assets/AKCondinoO.SimActors/SimInteractions/SimInteractionQueue.cs"
 "Assets/AKCondinoO.SimActors/SimMovement.cs"

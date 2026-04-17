@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.Utilities;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace AKCondinoO.SimObjects{
       public MeshFilter    prefabFilter  ;
       public Mesh colliderMesh;
      }
+     private InteractionSlot[]slotPrefabs;
         internal SimObjectFactory(T prefab,Transform parent=null){
          var manager=SimObjectManager.singleton;
          pool=new(prefab,parent);
@@ -54,6 +56,7 @@ namespace AKCondinoO.SimObjects{
            }
            partsData[i]=partData;
           }
+          slotPrefabs=prefab.meshPrefab.GetComponentsInChildren<InteractionSlot>();
          }
         }
         private static bool TryGetMesh(MeshFilter filter,out Mesh mesh){
@@ -103,7 +106,8 @@ namespace AKCondinoO.SimObjects{
           SetupRenderer(simObject);
          }
          SetupCollider(simObject);
-         SetupAnyParts(simObject);
+         SetupAllParts(simObject);
+         SetupAllSlots(simObject);
         }
         private bool RegisterForInstancedRendering(T simObject){
          var manager=SimObjectManager.singleton;
@@ -175,7 +179,7 @@ namespace AKCondinoO.SimObjects{
          collider.sharedMesh=mesh;
          return collider;
         }
-        private void SetupAnyParts(T simObject){
+        private void SetupAllParts(T simObject){
          if(prefabMeshObject==null||simObject.simObjectParts.Count>0)return;
          CopyLocalTransform(
           prefabMeshObject.transform,
@@ -185,6 +189,7 @@ namespace AKCondinoO.SimObjects{
           var partData=partsData[i];
           var part=GameObject.Instantiate(simObject.simObjectPartBase);
           part.transform.SetParent(simObject.simObjectPartsRoot,false);
+          part.holder=simObject;
           CopyLocalTransform(partData.prefab.transform,part.transform);
           SetupMeshRenderer(
            part.simObjectPartRendererComponents.transform,
@@ -199,6 +204,20 @@ namespace AKCondinoO.SimObjects{
            ref part.simObjectPartMeshCollider
           );
           simObject.simObjectParts.Add(part);
+         }
+        }
+        private void SetupAllSlots(T simObject){
+         if(prefabMeshObject==null||simObject.simObjectSlots.Count>0)return;
+         CopyLocalTransform(
+          prefabMeshObject.transform,
+          simObject.simObjectSlotsRoot
+         );
+         for(int i=0;i<slotPrefabs.Length;i++){
+          var slotPrefab=slotPrefabs[i];
+          var slot=GameObject.Instantiate(slotPrefab);
+          slot.transform.SetParent(simObject.simObjectSlotsRoot,false);
+          CopyLocalTransform(slotPrefab.transform,slot.transform);
+          simObject.simObjectSlots.Add(slot);
          }
         }
         private static void CopyLocalTransform(Transform source,Transform target){

@@ -1,5 +1,6 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
+using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.World;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal GameObject simObjectCollisionComponents;
      [SerializeField]internal SimObjectPart simObjectPartBase;
      [SerializeField]internal Transform simObjectPartsRoot;
-     internal List<SimObjectPart>simObjectParts=new();
+     [SerializeField]internal Transform simObjectSlotsRoot;
      internal MeshRenderer simObjectMeshRenderer;
      internal MeshFilter   simObjectMeshFilter;
      internal MeshCollider simObjectMeshCollider;
+     internal List<SimObjectPart>simObjectParts=new();
+     internal List<InteractionSlot>simObjectSlots=new();
      internal bool doInitialization=true;
      internal ulong id;
      internal int instancedRenderingIndex=-1;

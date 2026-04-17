@@ -32,6 +32,7 @@ namespace AKCondinoO.SimActors{
          base.PreShutdown();
         }
         public override void Shutdown(){
+         InteractionDefinitions.UnregisterAll();
          base.Shutdown();
         }
      internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimActor>>sims=new();

@@ -13,7 +13,22 @@ namespace AKCondinoO.SimObjects{
              var instance=(ToggleInstance)InteractionDefinitions.instancing[typeof(ToggleInstance)].ObjectRent();
              instance.sim=sim;
              instance.target=target;
-             instance.worldPosition=parameters.hitPosition;
+             InteractionSlot interactionSlot=null;
+             if(target is SimObjectPart part){
+              var holder=part.holder;
+              for(int i=0;i<holder.simObjectSlots.Count;i++){
+               var slot=holder.simObjectSlots[i];
+               if(slot.purpose==InteractionSlot.SlotPurpose.InteractFront){
+                interactionSlot=slot;
+               }
+              }
+             }
+             Logs.Debug(()=>"interactionSlot:"+interactionSlot);
+             if(interactionSlot!=null){
+              instance.worldPosition=interactionSlot.transform.position;
+             }else{
+              instance.worldPosition=parameters.hitPosition;
+             }
              return instance;
             }
         }

@@ -7,6 +7,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal int[]usePartMeshSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectPartRendererComponents;
      [SerializeField]internal GameObject simObjectPartCollisionComponents;
+     internal SimObject holder;
      internal MeshRenderer simObjectPartMeshRenderer;
      internal MeshFilter   simObjectPartMeshFilter;
      internal MeshCollider simObjectPartMeshCollider;
