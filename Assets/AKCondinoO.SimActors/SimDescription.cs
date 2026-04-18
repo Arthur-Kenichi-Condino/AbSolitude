@@ -23,8 +23,8 @@ namespace AKCondinoO.SimActors{
          simMovement=simMovementTemplate.InstancedFor(this)as SimMovement;
         }
         internal virtual void Tick(SimActor sim){
-         simBrain.AI(sim);
          simMovement.OnTick(sim);
+         simBrain.AI(sim);
         }
     }
 }

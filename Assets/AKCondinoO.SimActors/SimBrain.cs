@@ -19,13 +19,5 @@ namespace AKCondinoO.SimActors{
          var interactionQueue=sim.simDescription.simInteractionResolver.interactionQueue;
          var interaction=interactionQueue.Next();
         }
-        internal virtual bool GoTo(Vector3 worldPosition){
-         //Logs.Debug(()=>"worldPosition:"+worldPosition);
-         if(simNavMeshAgent.enabled){
-          simNavMeshAgent.destination=worldPosition;
-          return true;
-         }
-         return false;
-        }
     }
 }

@@ -1,6 +1,8 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimActors.SimInteractions;
 using UnityEngine;
 using UnityEngine.AI;
+using static AKCondinoO.SimActors.SimActor;
 namespace AKCondinoO.SimActors{
     [CreateAssetMenu(menuName="AKCondinoO/Sims/Control/SimMovement")]
     internal class SimMovement:SimDescriptionElement{
@@ -22,6 +24,8 @@ namespace AKCondinoO.SimActors{
      private float verticalMotion;
      internal Vector3 movementDelta;
         internal virtual void OnTick(SimActor sim){
+         if(sim.simNavMeshAgentState.NotFollowingPath()){
+         }
          var controller=simCharacterController;
          if(sim.doInitialization){
           controller.transform.localPosition=Vector3.zero;
@@ -51,6 +55,45 @@ namespace AKCondinoO.SimActors{
           sim.transform.position=simNavMeshAgent.transform.position;
           simNavMeshAgent.transform.localPosition=Vector3.zero;
          }
+        }
+        internal virtual bool GoTo(Vector3 worldPosition){
+         //Logs.Debug(()=>"worldPosition:"+worldPosition);
+         var agent=simNavMeshAgent;
+         ref var state=ref sim.simNavMeshAgentState;
+         ref var ctx=ref sim.navMeshAgentPathContext;
+         if(agent==null){
+          return false;
+         }
+         if(state.Halted()){
+          return true;
+         }
+         float tolerance=agent.stoppingDistance;
+         if(ctx.isNavigationRequested&&
+          (ctx.desiredDestination-worldPosition).sqrMagnitude<=tolerance*tolerance
+         ){
+          return true;
+         }
+         ctx.isNavigationRequested=true;
+         if(IsSameDestinationRequested(worldPosition)){
+          return true;
+         }
+         bool destinationRequested=simNavMeshAgent.SetDestination(worldPosition);
+         ctx.hasDesiredDestination=true;
+         ctx.desiredDestination=worldPosition;
+         if(destinationRequested){
+         }
+         Logs.Debug(()=>"destinationRequested:"+destinationRequested);
+         return destinationRequested;
+        }
+        bool IsSameDestinationRequested(Vector3 target){
+         var agent=simNavMeshAgent;
+         ref var state=ref sim.simNavMeshAgentState;
+         ref var ctx=ref sim.navMeshAgentPathContext;
+         float tolerance=agent.stoppingDistance;
+         if(ctx.hasDesiredDestination){
+          return(ctx.desiredDestination-target).sqrMagnitude<=tolerance*tolerance;
+         }
+         return false;
         }
     }
 }

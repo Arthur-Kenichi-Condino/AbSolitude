@@ -22,8 +22,10 @@ namespace AKCondinoO.SimObjects{
                 interactionSlot=slot;
                }
               }
+              instance.part=part;
              }
              Logs.Debug(()=>"interactionSlot:"+interactionSlot);
+             instance.interactionSlot=interactionSlot;
              if(interactionSlot!=null){
               instance.worldPosition=interactionSlot.transform.position;
              }else{
@@ -33,34 +35,26 @@ namespace AKCondinoO.SimObjects{
             }
         }
         internal class ToggleInstance:SimInteractionInstance{
+         internal SimObjectPart part;
+         internal InteractionSlot interactionSlot;
          internal Vector3 worldPosition;
-         private bool destSet;
+         private bool enRoute;
             internal override void OnReturnToPoolRecycle(){
-             destSet=false;
+             part=null;
+             interactionSlot=null;
+             enRoute=false;
             }
             internal override bool Running(){
-             if(sim.simNavMeshAgent==null){
+             enRoute=sim.RouteToObjectRadius(worldPosition,interactionSlot,part);
+             //Logs.Debug(()=>"enRoute:"+enRoute);
+             if(!enRoute){
               return false;
              }
-             if(!sim.simNavMeshAgent.enabled){
+             if(!sim.HasReachedDestination()){
               return true;
              }
-             if(!destSet){
-              if(sim.simNavMeshAgent.destination!=worldPosition){
-               Logs.Debug(()=>"sim.simNavMeshAgent.destination:"+sim.simNavMeshAgent.destination+" is != from worldPosition:"+worldPosition);
-               var simBrain=sim.simDescription.simBrain;
-               destSet=simBrain.GoTo(worldPosition);
-              }
-             }
-             if(destSet){
-              if(!sim.simNavMeshAgent.pathPending){
-               if(sim.simNavMeshAgent.remainingDistance<=sim.simNavMeshAgent.stoppingDistance){
-                Logs.Debug(()=>"sim.simNavMeshAgent.remainingDistance:"+sim.simNavMeshAgent.remainingDistance+" is <= to sim.simNavMeshAgent.stoppingDistance:"+sim.simNavMeshAgent.stoppingDistance);
-                return false;
-               }
-              }
-             }
-             return true;
+             Logs.Debug(()=>"'sim.HasReachedDestination()'");
+             return false;
             }
         }
     }

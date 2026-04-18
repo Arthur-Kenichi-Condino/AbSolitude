@@ -29,10 +29,10 @@ namespace AKCondinoO.Bootstrap{
       "IInteractable",
       "SimDirector",
       "SimActor",
+      "SimMovement",
       "SimBrain",
       "SimInteractionResolver",
       "SimInteractionQueue",
-      "SimMovement",
       "GoHereDefinition",
      };
      internal enum LogType{
