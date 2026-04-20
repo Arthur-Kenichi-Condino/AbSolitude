@@ -27,6 +27,7 @@ namespace AKCondinoO.Bootstrap{
       "SimObjectPart",
       "SimObjectPart.Interactable",
       "IInteractable",
+      "OpenObjectStateDefinition",
       "SimDirector",
       "SimActor",
       "SimMovement",

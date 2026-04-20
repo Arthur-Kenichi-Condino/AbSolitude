@@ -69,12 +69,14 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.CameraModes\ICameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Integrity.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Targeting.Combat.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectPartStateMachine.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.Layers.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimInteractions\IInteractable.cs" />
     <Compile Include="Assets\AKCondinoO\GameMode.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Server.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimIds.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnATTACK_ST.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\StateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.Client.Messages.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.MotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Networking.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\GetVoxelMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\Multithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectUtil.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\StateMachine.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.AStarPathfinding.Pathfinding.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Concurrent.cs" />
@@ -388,6 +391,7 @@
     <Compile Include="Assets\AKCondinoO.SimActors\SimInteractions\InteractablesRegistry.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimInteractions\SimInteractionDefinition.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\OpenObjectStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Passive\AbSolitude\AbSolitude.cs" />
     <Compile Include="Assets\AKCondinoO\Core.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\UIGameEventHandler.cs" />
@@ -410,6 +414,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.OnSkillUsed.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Skill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AutonomyCore.cs" />
+    <Compile Include="Assets\AKCondinoO.World\WorldChunk.Terrain\WorldChunkTerrainStateMachine.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSimObjectsPlacing.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesConfigurationSnapshot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\StatsTable.cs" />

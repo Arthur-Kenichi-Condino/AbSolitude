@@ -69,6 +69,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7242630871969314645}
   m_SourcePrefab: {fileID: 100100000, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+--- !u!4 &1494534254507577401 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7647893092124944746, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  m_PrefabInstance: {fileID: 9124117761999944019}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2391362463082950527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6895208658961274412, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
@@ -90,3 +95,23 @@ MonoBehaviour:
   useInstancedRendering: 0
   meshPrefab: {fileID: 1970681966781816, guid: 3be6615bc2334784484d834af90d0ae7, type: 3}
   useMeshObjectSubMeshesForCollider: 00000000
+  simObjectRendererComponents: {fileID: 6810110200450159282}
+  simObjectCollisionComponents: {fileID: 7133817461847268827}
+  simObjectPartBase: {fileID: -1824753872948248401, guid: 7c5324f505c376a42ae6742a47211bba, type: 3}
+  simObjectPartsRoot: {fileID: 1494534254507577401}
+  simObjectSlotsRoot: {fileID: 2704698300053221223}
+--- !u!4 &2704698300053221223 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6563543481112909364, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  m_PrefabInstance: {fileID: 9124117761999944019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6810110200450159282 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2314076041146936289, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  m_PrefabInstance: {fileID: 9124117761999944019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7133817461847268827 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2134435657969575048, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  m_PrefabInstance: {fileID: 9124117761999944019}
+  m_PrefabAsset: {fileID: 0}

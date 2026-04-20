@@ -24,7 +24,7 @@ namespace AKCondinoO.SimActors{
           agentTypeID=simNavMeshAgent.agentTypeID,
              areaMask=simNavMeshAgent.areaMask,
          };
-         Logs.Debug(()=>"simCharacterController:"+simCharacterController+";simNavMeshAgent:"+simNavMeshAgent);
+         //Logs.Debug(()=>"simCharacterController:"+simCharacterController+";simNavMeshAgent:"+simNavMeshAgent);
          simDescription=simDescriptionTemplate.InstancedFor(this);
         }
      internal bool isPlayerControlled;

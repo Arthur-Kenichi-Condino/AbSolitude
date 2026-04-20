@@ -1,5 +1,6 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors.SimInteractions;
+using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.Utilities;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,15 @@ namespace AKCondinoO.SimObjects{
      private MeshRenderer prefabMeshRenderer;
      private MeshFilter   prefabMeshFilter  ;
      private Mesh colliderMesh;
+     private StateDefinition[]stateDefinitions;
      private SimObjectPartData[]partsData;
      struct SimObjectPartData{
-      public SimObjectPart prefab        ;
+      public SimObjectPart partPrefab    ;
+      public GameObject    partMeshPrefab;
       public MeshRenderer  prefabRenderer;
       public MeshFilter    prefabFilter  ;
       public Mesh colliderMesh;
+      public StateDefinition[]partStateDefinitions;
      }
      private InteractionSlot[]slotPrefabs;
         internal SimObjectFactory(T prefab,Transform parent=null){
@@ -39,14 +43,18 @@ namespace AKCondinoO.SimObjects{
             prefab.useMeshObjectSubMeshesForCollider
            );
           }
+          var stateDefinitionComponents=prefab.meshPrefab.GetComponentsInChildren<StateDefinition>();
+          stateDefinitions=stateDefinitionComponents.Where(s=>s.transform.parent==prefab.meshPrefab.transform).ToArray();
           var partPrefabs=prefab.meshPrefab.GetComponentsInChildren<SimObjectPart>();
           partsData=new SimObjectPartData[partPrefabs.Length];
           for(int i=0;i<partsData.Length;i++){
            var partPrefab=partPrefabs[i];
+           var partMeshPrefab=partPrefab.transform.parent.gameObject;
            var partData=new SimObjectPartData(){
-            prefab=        partPrefab,
-            prefabRenderer=partPrefab.GetComponent<MeshRenderer>(),
-            prefabFilter=  partPrefab.GetComponent<MeshFilter  >(),
+            partPrefab    =partPrefab,
+            partMeshPrefab=partMeshPrefab,
+            prefabRenderer=partMeshPrefab.GetComponent<MeshRenderer>(),
+            prefabFilter=  partMeshPrefab.GetComponent<MeshFilter  >(),
            };
            if(TryGetMesh(partData.prefabFilter,out Mesh partMesh)){
             partData.colliderMesh=BuildColliderIfNeeded(
@@ -54,7 +62,12 @@ namespace AKCondinoO.SimObjects{
              partPrefab.usePartMeshSubMeshesForCollider
             );
            }
+           partData.partStateDefinitions=stateDefinitionComponents.Where(s=>s.transform.parent==partPrefab.transform).ToArray();
            partsData[i]=partData;
+          }
+          for(int i=0;i<stateDefinitionComponents.Length;i++){
+           var stateDefinition=stateDefinitionComponents[i];
+           stateDefinition.RegisterState();
           }
           slotPrefabs=prefab.meshPrefab.GetComponentsInChildren<InteractionSlot>();
          }
@@ -187,10 +200,14 @@ namespace AKCondinoO.SimObjects{
          );
          for(int i=0;i<partsData.Length;i++){
           var partData=partsData[i];
-          var part=GameObject.Instantiate(simObject.simObjectPartBase);
+          var part=GameObject.Instantiate(partData.partPrefab);
           part.transform.SetParent(simObject.simObjectPartsRoot,false);
+          part.partStateMachine=new(part,partData.partStateDefinitions);
           part.holder=simObject;
-          CopyLocalTransform(partData.prefab.transform,part.transform);
+          CopyLocalTransform(
+           partData.partMeshPrefab.transform,
+           part.transform
+          );
           SetupMeshRenderer(
            part.simObjectPartRendererComponents.transform,
            ref part.simObjectPartMeshRenderer,

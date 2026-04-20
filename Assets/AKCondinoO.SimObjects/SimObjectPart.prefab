@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564a199e4b32c10478dd358c44ea5744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useMeshObjectSubMeshesForCollider: 00000000
   states: []
+  usePartMeshSubMeshesForCollider: 00000000
   simObjectPartRendererComponents: {fileID: 2301385876264361248}
   simObjectPartCollisionComponents: {fileID: 1773881402574166044}

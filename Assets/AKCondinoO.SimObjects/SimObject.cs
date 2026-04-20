@@ -16,7 +16,6 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectRendererComponents;
      [SerializeField]internal GameObject simObjectCollisionComponents;
-     [SerializeField]internal SimObjectPart simObjectPartBase;
      [SerializeField]internal Transform simObjectPartsRoot;
      [SerializeField]internal Transform simObjectSlotsRoot;
      internal MeshRenderer simObjectMeshRenderer;

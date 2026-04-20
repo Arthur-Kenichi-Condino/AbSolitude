@@ -1,10 +1,12 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
+using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.World;
 using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.SimActors.SimInteractions{
     internal interface IInteractable{
+        StateMachine stateMachine{get;}
         public virtual void AvailableInteractions(SimActor sim,List<SimInteractionDefinition>interactionDefinitions){
          InteractionDefinitions.GetFor(this,interactionDefinitions);
         }

@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
+using AKCondinoO.SimObjects.StateMachines;
 using UnityEngine;
 namespace AKCondinoO.SimObjects{
     internal partial class SimObjectPart{
@@ -39,12 +40,15 @@ namespace AKCondinoO.SimObjects{
          internal InteractionSlot interactionSlot;
          internal Vector3 worldPosition;
          private bool enRoute;
+         private bool machineRunning;
             internal override void OnReturnToPoolRecycle(){
              part=null;
              interactionSlot=null;
              enRoute=false;
+             machineRunning=false;
             }
             internal override bool Running(){
+             var stateMachine=part.stateMachine;
              enRoute=sim.RouteToObjectRadius(worldPosition,interactionSlot,part);
              //Logs.Debug(()=>"enRoute:"+enRoute);
              if(!enRoute){
@@ -53,7 +57,18 @@ namespace AKCondinoO.SimObjects{
              if(!sim.HasReachedDestination()){
               return true;
              }
-             Logs.Debug(()=>"'sim.HasReachedDestination()'");
+             //Logs.Debug(()=>"'sim.HasReachedDestination()'");
+             if(!machineRunning){
+              machineRunning=stateMachine.RunState(typeof(OpenObjectStateDefinition));
+              if(!machineRunning){
+               return false;
+              }
+              Logs.Debug(()=>"machineRunning:"+machineRunning);
+             }
+             if(stateMachine.IsBusy){
+              return true;
+             }
+             Logs.Debug(()=>"'state machine finished'");
              return false;
             }
         }

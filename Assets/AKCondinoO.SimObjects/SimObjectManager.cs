@@ -1,5 +1,6 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
+using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.Utilities;
 using AKCondinoO.World.Spawning;
 using System;
@@ -127,11 +128,11 @@ namespace AKCondinoO.SimObjects{
           factory.Despawn(simObject);
          }
         }
-     internal readonly HashSet<SimObjectPart>simObjectPartsOnStateChange=new();
+     internal readonly HashSet<StateMachines.StateMachine>stateMachinesRunning=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
-         foreach(var simObjectPart in simObjectPartsOnStateChange){
-          simObjectPart.ManualUpdate();
+         foreach(var stateMachine in stateMachinesRunning){
+          stateMachine.Tick(Time.deltaTime);
          }
          foreach(var kvp1 in sims){
           var simsById=kvp1.Value;
@@ -141,6 +142,9 @@ namespace AKCondinoO.SimObjects{
           }
          }
          FlushSpawnRequests();
+        }
+        internal void OnStateMachinesRunning(StateMachines.StateMachine stateMachine){
+         stateMachinesRunning.Add(stateMachine);
         }
      internal readonly Dictionary<(Type type,string variant),List<SimObject>>lazyUpdaterSnapshot=new();
         IEnumerator SimObjectManualUpdateInLotsCoroutine(){
