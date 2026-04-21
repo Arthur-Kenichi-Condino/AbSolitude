@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.Utilities;
 using System;
@@ -12,12 +13,13 @@ namespace AKCondinoO.SimObjects.StateMachines{
          this.interactable=interactable;
          this.stateDefinitions=stateDefinitions;
         }
-        internal bool RunState(Type stateDefinition){
+        internal bool RunState(Func<StateDefinition,bool>predicate){
          for(int i=0;i<stateDefinitions.Length;i++){
           var def=stateDefinitions[i];
-          if(stateDefinition==def.GetType()){
+          if(predicate(def)){
            var state=def.SetupState(interactable);
            SetState(state);
+           Logs.Debug(()=>"'found state':"+state);
            SimObjectManager.singleton.OnStateMachinesRunning(this);
            return true;
           }

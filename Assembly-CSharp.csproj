@@ -258,6 +258,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\HealingSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BiomesEnum.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\CloseObjectStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FixedUI.CameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\_SimWeapon\SimWeaponOnShootVisualEffect.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\BiomeSettings.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\ToggleStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow.Dependencies\Tabs\TabsGroup.cs" />

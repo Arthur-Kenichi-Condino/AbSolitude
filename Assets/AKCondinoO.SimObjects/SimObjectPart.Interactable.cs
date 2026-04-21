@@ -59,7 +59,15 @@ namespace AKCondinoO.SimObjects{
              }
              //Logs.Debug(()=>"'sim.HasReachedDestination()'");
              if(!machineRunning){
-              machineRunning=stateMachine.RunState(typeof(OpenObjectStateDefinition));
+              machineRunning=stateMachine.RunState(
+               def=>{
+                if(def is ToggleStateDefinition toggle){
+                 return toggle.A is OpenObjectStateDefinition&&
+                        toggle.B is CloseObjectStateDefinition;
+                }
+                return false;
+               }
+              );
               if(!machineRunning){
                return false;
               }

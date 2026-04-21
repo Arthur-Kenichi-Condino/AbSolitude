@@ -13,6 +13,12 @@ namespace AKCondinoO.SimObjects.StateMachines{
          return null;
         }
     }
+    internal interface IStateEvaluator{
+        bool Evaluate(IInteractable interactable);
+    }
+    internal interface IState<TContext>{
+        void Setup(in TContext context);
+    }
     internal class State:IState{
      protected readonly StateDefinition definition;
         internal State(StateDefinition definition){
@@ -60,6 +66,9 @@ namespace AKCondinoO.SimObjects.StateMachines{
         public virtual void Tick(float dt){
         }
         public virtual bool IsComplete=>true;
+    }
+    internal interface IStateTask<TContext>{
+        void Setup(in TContext context);
     }
     interface IStateTask{
      internal static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new();
