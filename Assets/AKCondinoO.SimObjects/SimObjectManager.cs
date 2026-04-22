@@ -17,6 +17,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]private SimObject debugSpawnType=null;
      [SerializeField]private int       debugSpawnCount=1;
      [SerializeField]private Vector3   debugSpawnPosition;
+     [SerializeField]internal int debugSpawnCoordsDrawHeight=30; 
         protected override void Awake(){
          base.Awake();
          if(singleton==this){
@@ -181,6 +182,11 @@ namespace AKCondinoO.SimObjects{
           #endif
          if(instancedRendering!=null)instancedRendering.DrawAll();
         }
+        internal void OnChunkRefAdded(Vector2Int cCoord){
+        }
+        internal void OnEnsureChunkExists(Vector2Int cCoord){
+         biomesSpawningSystem.DoBiomeSpawnJobFor(cCoord);
+        }
      internal readonly List<SpawnRequest>spawnRequests=new();
         internal void FlushSpawnRequests(){
          #region Debug
@@ -265,6 +271,9 @@ namespace AKCondinoO.SimObjects{
              }
              spawnList=null;
             }
+        }
+        void OnDrawGizmosSelected(){
+         biomesSpawningSystem?.GizmosSelected(true);
         }
     }
     internal class SpawnList{

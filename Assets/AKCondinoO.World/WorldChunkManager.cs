@@ -56,7 +56,9 @@ namespace AKCondinoO.World{
          if(!chunkRef.TryGetValue(cCoord,out var cRef)){
           chunkRef.Add(cCoord,cRef=cRefPool.Rent());
          }
-         chunkRef[cCoord].Add(zone);
+         if(chunkRef[cCoord].Add(zone)){
+          SimObjectManager.singleton.OnChunkRefAdded(cCoord);
+         }
         }
         internal void RemoveRef(Vector2Int cCoord,ActiveZone zone){
          if(chunkRef.TryGetValue(cCoord,out var cRef)){
@@ -77,6 +79,7 @@ namespace AKCondinoO.World{
           cnk.Initialize();
          }
          cnk.OnEnsureExists(cCoord);
+         SimObjectManager.singleton.OnEnsureChunkExists(cCoord);
         }
         internal void OnExists(WorldChunk chunk){
          var cCoord=chunk.cCoord;

@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
+using AKCondinoO.Utilities;
 using AKCondinoO.World;
 using System;
 using System.Collections.Generic;
@@ -113,5 +114,12 @@ namespace AKCondinoO.SimObjects{
         internal static bool IsSimActor(Type type){
          return typeof(SimActor).IsAssignableFrom(type);
         }
+        #if UNITY_EDITOR
+            void OnDrawGizmosSelected(){
+             if(simObjectMeshRenderer!=null){
+              DrawGizmos.Bounds(simObjectMeshRenderer.bounds,Color.gray);
+             }
+            }
+        #endif
     }
 }

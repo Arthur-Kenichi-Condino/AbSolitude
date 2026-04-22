@@ -15,6 +15,7 @@ namespace AKCondinoO.World.Spawning{
      internal T prefab;
      internal float chance;
      internal int priority;
+     internal Bounds bounds;
     }
     internal class ByChancePicker<T>where T:class{
      internal readonly List<ByChanceObjectSpawnEntry<T>>items=new();

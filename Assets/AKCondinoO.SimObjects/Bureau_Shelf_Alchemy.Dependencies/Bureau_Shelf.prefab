@@ -77,6 +77,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1096873221064887782}
+  - {fileID: 350863162521128406}
   - {fileID: 7684079745356979856}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
@@ -194,4 +195,78 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3365631254174208285, guid: e41a2c32c6b5f0f4c8dd9e6331c93890, type: 3}
   m_PrefabInstance: {fileID: 4906190327276588941}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7906363072774411106
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1534142844302996922}
+    m_Modifications:
+    - target: {fileID: 5008253286159651223, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_Name
+      value: Bureau_Shelf_Drawer_BookStand
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.77879745
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7787975
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7787975
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.00023034851
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.013719424
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.021026231
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+--- !u!4 &350863162521128406 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7595197062663872180, guid: f1e0d6d2047f67a4696e2bb80f49bba0, type: 3}
+  m_PrefabInstance: {fileID: 7906363072774411106}
   m_PrefabAsset: {fileID: 0}

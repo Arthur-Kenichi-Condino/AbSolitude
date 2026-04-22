@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class BiomesConfigurationContext{
@@ -63,20 +64,53 @@ namespace AKCondinoO.World{
            ()=>new(),
            (Snapshot item)=>{item.Dispose();}
           );
-         internal float terrainSmoothingHeight;
-         internal ModuleBase terrainModule;
-         internal NoiseNodesSnapshot terrainNodesSnapshot;
+         internal float                 terrainSmoothingHeight;
+         internal ModuleBase            terrainModule;
+         internal NoiseNodesSnapshot    terrainNodesSnapshot;
+         internal SpawnSettingsSnapshot terrainSpawnSettingsSnapshot;
             internal void DoSnapshot(){
              terrainSmoothingHeight=BiomesSystem.singleton.terrainSmoothingHeight;
-             terrainModule=BiomesSystem.singleton.terrain.Build(BiomesSystem.singleton.seed,null,out _,out terrainNodesSnapshot);
-             terrainNodesSnapshot.MergeTables();
+             terrainModule         =BiomesSystem.singleton.terrain.Build(BiomesSystem.singleton.seed,null,out _,out terrainNodesSnapshot);
+             terrainNodesSnapshot.MergeTables(out terrainSpawnSettingsSnapshot);
             }
             internal void Dispose(){
              if(terrainModule!=null){terrainModule.Dispose();}terrainModule=null;
              if(terrainNodesSnapshot!=null){
               NoiseNodesSnapshot.Return(terrainNodesSnapshot.GetType(),terrainNodesSnapshot);terrainNodesSnapshot=null;
              }
+             SpawnSettingsSnapshot.pool.Return(terrainSpawnSettingsSnapshot);
             }
+        }
+        internal class SpawnSettingsSnapshot{
+         internal static readonly Utilities.ObjectPool<SpawnSettingsSnapshot>pool=
+          Pool.GetPool<SpawnSettingsSnapshot>(
+           "",
+           ()=>new(),
+           (SpawnSettingsSnapshot item)=>{
+            item.OnReturnToPoolRecycle();
+           }
+          );
+         internal int minLayer;
+         internal int maxLayer;
+         internal readonly SortedDictionary<int,SnapshotSpawnLayerData>layerData=new();
+            internal void OnReturnToPoolRecycle(){
+             minLayer=int.MaxValue;
+             maxLayer=int.MinValue;
+             layerData.Clear();
+            }
+            internal void MergeFrom(SpawnSettingsSnapshot other){
+             if(other==null)return;
+             minLayer=Math.Min(minLayer,other.minLayer);
+             maxLayer=Math.Max(maxLayer,other.maxLayer);
+             foreach(var kvp in other.layerData){
+              layerData[kvp.Key]=kvp.Value;
+             }
+             pool.Return(other);
+            }
+        }
+        internal struct SnapshotSpawnLayerData{
+         internal int gridSize;
+         internal Vector3 maxBoundsSize;
         }
         internal static void Build(){
          Snapshot newSnapshot=Snapshot.pool.Rent();
@@ -135,6 +169,25 @@ namespace AKCondinoO.World{
          }
          vxl=Voxel.air;
         }
+        internal static SpawnSettingsSnapshot GetSpawnSettings(){
+         return snapshot.terrainSpawnSettingsSnapshot;
+        }
+        internal static ByChanceObjectSpawnEntry<SimObject>GetSpawnEntry(Vector3Int vCoord,Vector2Int cCoord,int layer){
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
+         Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
+         Vector3Int noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
+         Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
+         Resolve(new(noiseInput.z,noiseInput.x,0),out BiomeSpawnTablesSnapshot table);
+         if(table!=null){
+          double heightValue=snapshot.terrainModule.GetValue(noiseInput.z,noiseInput.x,0);
+          float noise=NormalizeHeight(heightValue,Height);
+          var picker=table.pickerByLayer[layer];
+          if(picker.Get(noise,out var result)){
+           return result;
+          }
+         }
+         return null;
+        }
         private static void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          table=null;
@@ -144,6 +197,9 @@ namespace AKCondinoO.World{
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          table=null;
          snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
+        }
+        internal static float NormalizeHeight(double height,float maxHeight){
+         return Mathf.Clamp01((float)(height/maxHeight));
         }
     }
     internal class NoiseNodesSnapshot{
@@ -203,9 +259,9 @@ namespace AKCondinoO.World{
         internal virtual double GetValue(Vector3 noiseInput){
          return this.module.GetValue(noiseInput.x,noiseInput.y,noiseInput.z);
         }
-        internal virtual void MergeTables(){
+        internal virtual void MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshot){
          MergeMaterialTables();
-         MergeSpawnTables();
+         spawnSettingsSnapshot=MergeSpawnTables();
         }
      protected MaterialTablesSnapshot materialTable;
         internal virtual void MergeMaterialTables(){
@@ -219,12 +275,14 @@ namespace AKCondinoO.World{
          table=this.materialTable;
         }
      protected BiomeSpawnTablesSnapshot spawnTable;
-        internal virtual void MergeSpawnTables(){
+        internal virtual SpawnSettingsSnapshot MergeSpawnTables(){
+         SpawnSettingsSnapshot spawnSettingsSnapshot=null;
          if(tempSpawnTables.Count>0){
           spawnTable=BiomeSpawnTablesSnapshot.pool.Rent();
-          spawnTable.DoSnapshot(tempSpawnTables);
+          spawnSettingsSnapshot=spawnTable.DoSnapshot(tempSpawnTables);
          }
          ClearTempSpawnTables();
+         return spawnSettingsSnapshot;
         }
         internal virtual void Resolve(Vector3 noiseInput,out BiomeSpawnTablesSnapshot table){
          table=this.spawnTable;
@@ -240,8 +298,8 @@ namespace AKCondinoO.World{
          this.input=input;
          ClearTempTables();
         }
-        internal override void MergeTables(){
-         input.MergeTables();
+        internal override void MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshot){
+         input.MergeTables(out spawnSettingsSnapshot);
         }
         internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          input.Resolve(noiseInput,out table);
@@ -270,10 +328,16 @@ namespace AKCondinoO.World{
          this.controller=controller;
          ClearTempTables();
         }
-        internal override void MergeTables(){
-         inputA.MergeTables();
-         inputB.MergeTables();
+        internal override void MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshot){
+         inputA.MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshotA);
+         inputB.MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshotB);
          controller.ClearTempTables();
+         if     (spawnSettingsSnapshotA==null)spawnSettingsSnapshot=spawnSettingsSnapshotB;
+         else if(spawnSettingsSnapshotB==null)spawnSettingsSnapshot=spawnSettingsSnapshotA;
+         else{
+          spawnSettingsSnapshotA.MergeFrom(spawnSettingsSnapshotB);
+          spawnSettingsSnapshot=spawnSettingsSnapshotA;
+         }
         }
         internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
          var input=OnResolveGetNode(noiseInput);
@@ -310,8 +374,8 @@ namespace AKCondinoO.World{
          this.rhs=rhs;
          ClearTempTables();
         }
-        internal override void MergeTables(){
-         lhs.MergeTables();
+        internal override void MergeTables(out SpawnSettingsSnapshot spawnSettingsSnapshot){
+         lhs.MergeTables(out spawnSettingsSnapshot);
          rhs.ClearTempTables();
         }
         internal override void Resolve(Vector3 noiseInput,out   MaterialTablesSnapshot table){
@@ -354,25 +418,57 @@ namespace AKCondinoO.World{
      internal readonly Dictionary<int,
       ByChancePicker<SimObject>
      >pickerByLayer=new();
-        internal virtual void DoSnapshot(List<BiomeSpawnTable>tempSpawnTables){
+        internal virtual SpawnSettingsSnapshot DoSnapshot(List<BiomeSpawnTable>tempSpawnTables){
+         SpawnSettingsSnapshot spawnSettingsSnapshot=SpawnSettingsSnapshot.pool.Rent();
          foreach(var spawnTable in tempSpawnTables){
           foreach(var spawnTableLayer in spawnTable.layers){
-           if(!pickerByLayer.TryGetValue(spawnTableLayer.layer,out var picker)){
-            pickerByLayer.Add(spawnTableLayer.layer,picker=new());
+           int layer=spawnTableLayer.layer;
+           var spawnLayerData=new SnapshotSpawnLayerData(){
+            gridSize=spawnTableLayer.gridSize,
+           };
+           if(!pickerByLayer.TryGetValue(layer,out var picker)){
+            pickerByLayer.Add(layer,picker=new());
+           }
+           if(layer<spawnSettingsSnapshot.minLayer){
+            spawnSettingsSnapshot.minLayer=layer;
+           }
+           if(layer>spawnSettingsSnapshot.maxLayer){
+            spawnSettingsSnapshot.maxLayer=layer;
            }
            foreach(var entry in spawnTableLayer.entries){
             Logs.Debug(()=>entry.prefab!=null?"'spawnTable entry':"+entry.prefab.name:"'spawnTable entry':null");
             ByChanceObjectSpawnEntry<SimObject>pickerEntry=ByChanceObjectSpawnEntry<SimObject>.pool.Rent();
             pickerEntry.prefab=entry.prefab;
             pickerEntry.chance=entry.chance;
+            if(pickerEntry.prefab.meshPrefab!=null){
+             var meshPrefab=pickerEntry.prefab.meshPrefab;
+             var prefabMeshRenderer=meshPrefab.GetComponent<MeshRenderer>();
+             var prefabMeshFilter  =meshPrefab.GetComponent<MeshFilter  >();
+             if(prefabMeshRenderer!=null&&prefabMeshFilter!=null){
+              var sharedMesh=prefabMeshFilter.sharedMesh;
+              Logs.Debug(()=>"prefab sharedMesh:"+sharedMesh);
+              if(sharedMesh!=null){
+               var localBounds=sharedMesh.bounds;
+               Logs.Debug(()=>"prefab localBounds:"+localBounds);
+               var bounds=localBounds;
+               bounds.center=Vector3.Scale(bounds.center,meshPrefab.transform.localScale);
+               bounds.size  =Vector3.Scale(bounds.size  ,meshPrefab.transform.localScale);
+               Logs.Debug(()=>"prefab bounds:"+bounds);
+               spawnLayerData.maxBoundsSize=Vector3.Max(spawnLayerData.maxBoundsSize,bounds.size);
+               pickerEntry.bounds=bounds;
+              }
+             }
+            }
             picker.items.Add(pickerEntry);
            }
+           spawnSettingsSnapshot.layerData[layer]=spawnLayerData;
           }
          }
          foreach(var kvp in pickerByLayer){
           var picker=kvp.Value;
           picker.Build();
          }
+         return spawnSettingsSnapshot;
         }
         internal virtual void OnReturnToPoolRecycle(){
          foreach(var kvp in pickerByLayer){
