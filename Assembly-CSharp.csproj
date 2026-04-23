@@ -272,7 +272,6 @@
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelArraySync.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AISignal.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.AsInventoryItem.Transform.cs" />
-    <Compile Include="Assets\AKCondinoO\DictionaryAddRangeHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\AStarPathfindingHelper.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimBrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\HumanoidAnimatorControllerMotionUpdater.cs" />
@@ -315,6 +314,7 @@
     <Compile Include="Assets\AKCondinoO\Util\QuaternionUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunk.Interactions.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\BiomeSettings.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\MathUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\StateMachines\ToggleStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
@@ -363,6 +363,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Substats.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\_SimTree\SimTree.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\HumanAnimatorControllerMotionUpdater.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\DictionaryAddRangeHelper.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NodeMaterials\NodeMaterial.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunk.cs" />
     <Compile Include="Assets\AKCondinoO.SimActors\SimMovement.cs" />
@@ -458,6 +459,7 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputInterpreter.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.SpawnTables\BiomeSpawnEntry.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Util.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\RandomHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\_SimFloor\SimFloor.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\RemingtonModel700BDL\RemingtonModel700BDL.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />
@@ -470,7 +472,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Luck.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Biomes\BaseBiome.Water.cs" />
-    <Compile Include="Assets\AKCondinoO\Util\MathUtil.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomesSystem.NoiseNodes\NoiseNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRenderer.cs" />

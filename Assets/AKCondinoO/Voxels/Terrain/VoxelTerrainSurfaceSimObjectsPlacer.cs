@@ -400,7 +400,7 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
                bool canSpawnInZ3=true;
                bool unknownInX3=false;
                bool unknownInZ3=false;
-               foreach(var coord3 in MathUtil.GetCoords(
+               foreach(var coord3 in GetCoords(
                 minX:-extent1.x+1-extentMax.x+1,maxX:extent1.x-1+extentMax.x-1,
                 minZ:-extent1.z+1-extentMax.z+1,maxZ:extent1.z-1+extentMax.z-1,
                 innerMinX:-extent1.x+1,innerMaxX:extent1.x-1,
@@ -684,6 +684,18 @@ namespace AKCondinoO.Voxels.Terrain.SimObjectsPlacing{
            }
           }
          }
+        }
+        //  feito com ajuda do chatGPT
+        internal static IEnumerable<(int x,int z)>GetCoords(
+         int minX,int maxX,
+         int minZ,int maxZ,
+          int innerMinX,int innerMaxX,
+          int innerMinZ,int innerMaxZ
+        ){
+         for(int x=minX       ;x<=maxX       ;x++){for(int z=innerMaxZ+1;z<=maxZ       ;z++){yield return(x,z);}}//  Quadrante superior
+         for(int x=minX       ;x<=maxX       ;x++){for(int z=minZ       ;z<=innerMinZ-1;z++){yield return(x,z);}}//  Quadrante inferior
+         for(int x=minX       ;x<=innerMinX-1;x++){for(int z=innerMinZ  ;z<=innerMaxZ  ;z++){yield return(x,z);}}//  Quadrante esquerdo
+         for(int x=innerMaxX+1;x<=maxX       ;x++){for(int z=innerMinZ  ;z<=innerMaxZ  ;z++){yield return(x,z);}}//  Quadrante direito
         }
     }
 }

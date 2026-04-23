@@ -185,7 +185,6 @@ namespace AKCondinoO.SimObjects{
         internal void OnChunkRefAdded(Vector2Int cCoord){
         }
         internal void OnEnsureChunkExists(Vector2Int cCoord){
-         biomesSpawningSystem.DoBiomeSpawnJobFor(cCoord);
         }
      internal readonly List<SpawnRequest>spawnRequests=new();
         internal void FlushSpawnRequests(){
@@ -273,7 +272,6 @@ namespace AKCondinoO.SimObjects{
             }
         }
         void OnDrawGizmosSelected(){
-         biomesSpawningSystem?.GizmosSelected(true);
         }
     }
     internal class SpawnList{

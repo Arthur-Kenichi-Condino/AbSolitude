@@ -8,5 +8,11 @@ namespace AKCondinoO.World{
         internal void OnAwake(){
          spawner=new(chunk,this);
         }
+        internal void DoGeneration(){
+         spawner.DoBiomeSpawnJob();
+        }
+        void OnDrawGizmosSelected(){
+         spawner?.GizmosSelected(true);
+        }
     }
 }

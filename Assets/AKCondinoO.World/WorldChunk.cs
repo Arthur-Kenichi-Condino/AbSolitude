@@ -54,6 +54,7 @@ namespace AKCondinoO.World{
           cnkRgn.y
          );
          terrain.DoGeneration();
+         spawning.DoGeneration();
         }
         internal void OnGeneratedTerrain(bool cancelled){
          if(!cancelled){
