@@ -86,7 +86,7 @@ namespace AKCondinoO.World.SimObjects{
              for(int x=start.x;x<=end.x;x+=gridSize){
              for(int z=start.z;z<=end.z;z+=gridSize){
               Vector3Int worldCoord=new(x,0,z);
-              DoRecursion(setup,worldCoord);
+              DoRecursion(setup,worldCoord,null);
              }}
             }
          static readonly Utilities.ObjectPool<List<SpawnConflict>>conflictsListPool=
@@ -102,10 +102,14 @@ namespace AKCondinoO.World.SimObjects{
              Rejected,
              Accepted,
             }
-            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord){
+            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord,Vector3Int?caller){
              if(visited.TryGetValue(worldCoord,out var visitedCandidate)){
               switch(visitedCandidate.state){
-               case(CandidateState.Resolving):{return false;}
+               case(CandidateState.Resolving):{
+                if(caller.HasValue)
+                 return ResolveCycle(setup,worldCoord,caller.Value);
+                return false;
+               }
                case(CandidateState.Rejected ):{return false;}
                case(CandidateState.Accepted ):{return true ;}
               }
@@ -136,7 +140,7 @@ namespace AKCondinoO.World.SimObjects{
                continue;
               if(!ConflictBlocks(setup,conflict,candidate))
                continue;
-              if(DoRecursion(setup,conflict.worldCoord)){
+              if(DoRecursion(setup,conflict.worldCoord,worldCoord)){
                blocked=true;
                break;
               }
@@ -152,6 +156,13 @@ namespace AKCondinoO.World.SimObjects{
               Reserve(vCoord,cCoord,spawnEntry);
               return true;
              }
+            }
+            bool ResolveCycle(GridIterationSetup setup,Vector3Int A,Vector3Int B){
+             var maxBoundsSize=setup.spawnLayerData.maxBoundsSize;
+             int seqSize=Mathf.CeilToInt(
+              Mathf.Max(maxBoundsSize.x,maxBoundsSize.z)*2f
+             );
+             return PositionalTieBreak(A,B,seqSize);
             }
             private bool ConflictBlocks(GridIterationSetup setup,SpawnConflict A,SpawnCandidate B){
              var maxBoundsSize=setup.spawnLayerData.maxBoundsSize;
