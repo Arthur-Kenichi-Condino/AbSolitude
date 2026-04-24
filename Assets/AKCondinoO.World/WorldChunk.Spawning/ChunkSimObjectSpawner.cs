@@ -6,11 +6,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
+using static AKCondinoO.World.SimObjects.ChunkSimObjectSpawner.BiomesSimObjectSpawnerJob;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.SimObjects{
     internal class ChunkSimObjectSpawner{
      private readonly WorldChunk chunk;
      private readonly WorldChunkSpawning spawning;
+        internal ChunkSimObjectSpawner(WorldChunk chunk,WorldChunkSpawning spawning){
+         this.chunk=chunk;this.spawning=spawning;
+        }
         internal void DoBiomeSpawnJob(){
          Vector2Int cCoord=chunk.cCoord;
          var doBiomeSpawnerJob=BiomesSimObjectSpawnerJob.pool.Rent();
@@ -36,7 +40,7 @@ namespace AKCondinoO.World.SimObjects{
          internal ChunkSimObjectSpawner spawner;
          internal Vector2Int cCoord;
          private readonly Dictionary<Vector3Int,SpawnCandidate>visited=new();
-         internal readonly HashSet<Vector3>debugSpawnCoords=new();
+         internal readonly HashSet<SpawnReserve>debugSpawnCoords=new();
             public void CancelGraciously(){
             }
             public void OnDoScheduleSetContainerData(){
@@ -57,7 +61,7 @@ namespace AKCondinoO.World.SimObjects{
                 layer=layer,
                 spawnLayerData=spawnLayerData,
                };
-               RecursivelyTryReserveBoundsAt(iterationSetup,cnkRgn);
+               RecursivelyReserveBounds(iterationSetup,cnkRgn);
                visited.Clear();
               }
              }catch(Exception e){
@@ -67,21 +71,157 @@ namespace AKCondinoO.World.SimObjects{
              }
              Logs.Debug(()=>"'biome sim object spawning done':"+cCoord);
             }
-            internal struct SpawnCandidate{
-             internal bool state;
-            }
             /// <summary>
-            ///  "Eu só desisto se quem me derrota realmente existir.", chatGPT
+            ///  "Eu só desisto se a função disser que eu perdi e quem me derrota realmente conseguir existir.", chatGPT
             /// </summary>
             /// <param name="setup"></param>
             /// <param name="center"></param>
-            void RecursivelyTryReserveBoundsAt(GridIterationSetup setup,Vector2Int center){
+            void RecursivelyReserveBounds(GridIterationSetup setup,Vector2Int center){
              int layer=setup.layer;
              var gridIteration=SetupGridIteration(setup,center);
              var gridSize=gridIteration.gridSize;
              var start=gridIteration.start;
              var end=gridIteration.end;
              Logs.Debug(()=>"gridSize:"+gridSize);
+             for(int x=start.x;x<=end.x;x+=gridSize){
+             for(int z=start.z;z<=end.z;z+=gridSize){
+              Vector3Int worldCoord=new(x,0,z);
+              DoRecursion(setup,worldCoord);
+             }}
+            }
+         static readonly Utilities.ObjectPool<List<SpawnConflict>>conflictsListPool=
+          Pool.GetPool<List<SpawnConflict>>("",()=>new(),(List<SpawnConflict>item)=>{item.Clear();});
+            internal struct SpawnCandidate{
+             internal CandidateState state;
+             internal Vector3Int worldCoord;
+             internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+            }
+            internal enum CandidateState{
+             Unknown=0,
+             Resolving,
+             Rejected,
+             Accepted,
+            }
+            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord){
+             if(visited.TryGetValue(worldCoord,out var visitedCandidate)){
+              switch(visitedCandidate.state){
+               case(CandidateState.Resolving):{return false;}
+               case(CandidateState.Rejected ):{return false;}
+               case(CandidateState.Accepted ):{return true ;}
+              }
+             }
+             var candidate=new SpawnCandidate(){
+              state=CandidateState.Resolving,
+              worldCoord=worldCoord,
+             };
+             visited[worldCoord]=candidate;
+             int layer=setup.layer;
+             Vector3Int coord=worldCoord-new Vector3Int(cnkRgn.x,0,cnkRgn.y)+new Vector3Int(Width/2,0,Depth/2);
+             var cCoord=this.cCoord;
+             var vCoord=coord;
+             ValidatevCoord(ref cCoord,ref vCoord);
+             if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry)){
+              candidate.state=CandidateState.Rejected;
+              visited[worldCoord]=candidate;
+              return false;
+             }
+             candidate.spawnEntry=spawnEntry;
+             visited[worldCoord]=candidate;
+             var conflictsList=conflictsListPool.Rent();
+             CollectConflicts(setup,worldCoord,conflictsList);
+             bool blocked=false;
+             //Logs.Debug(()=>"conflicts:"+conflictsList.Count);
+             foreach(var conflict in conflictsList){
+              if(conflict.worldCoord==candidate.worldCoord)
+               continue;
+              if(!ConflictBlocks(setup,conflict,candidate))
+               continue;
+              if(DoRecursion(setup,conflict.worldCoord)){
+               blocked=true;
+               break;
+              }
+             }
+             conflictsListPool.Return(conflictsList);
+             if(blocked){
+              candidate.state=CandidateState.Rejected;
+              visited[worldCoord]=candidate;
+              return false;
+             }else{
+              candidate.state=CandidateState.Accepted;
+              visited[worldCoord]=candidate;
+              Reserve(vCoord,cCoord,spawnEntry);
+              return true;
+             }
+            }
+            private bool ConflictBlocks(GridIterationSetup setup,SpawnConflict A,SpawnCandidate B){
+             var maxBoundsSize=setup.spawnLayerData.maxBoundsSize;
+             var boundsA=A.spawnEntry.bounds;
+             var boundsB=B.spawnEntry.bounds;
+             boundsA.center+=A.worldCoord;
+             boundsB.center+=B.worldCoord;
+             if(!boundsA.Intersects(boundsB)){
+              return false;
+             }
+             float areaA=boundsA.size.x*boundsA.size.z;
+             float areaB=boundsB.size.x*boundsB.size.z;
+             if(areaA!=areaB)
+              return areaA>areaB;
+             int seqSize=Mathf.CeilToInt(
+              Mathf.Max(maxBoundsSize.x,maxBoundsSize.z)*2f
+             );
+             return PositionalTieBreak(A.worldCoord,B.worldCoord,seqSize);
+            }
+            enum AxisPriority{
+             Negative=0,//  West/South
+             Positive=1,//  East/North
+             Both=2
+            }
+            bool PositionalTieBreak(Vector3Int Apos,Vector3Int Bpos,int seqSize){
+             int sxA=MathUtil.AlternatingSequenceWithSeparator(Apos.x,seqSize,0);
+             int szA=MathUtil.AlternatingSequenceWithSeparator(Apos.z,seqSize,0);
+             int sxB=MathUtil.AlternatingSequenceWithSeparator(Bpos.x,seqSize,0);
+             int szB=MathUtil.AlternatingSequenceWithSeparator(Bpos.z,seqSize,0);
+             int pxA=PriorityValue((AxisPriority)sxA);
+             int pzA=PriorityValue((AxisPriority)szA);
+             int pxB=PriorityValue((AxisPriority)sxB);
+             int pzB=PriorityValue((AxisPriority)szB);
+             return ResolveTieByPosition(
+              pxA,pzA,sxA,szA,
+              pxB,pzB,sxB,szB,
+              Apos,Bpos
+             );
+            }
+            int PriorityValue(AxisPriority p){
+             switch(p){
+              case AxisPriority.Both:    return 2;
+              case AxisPriority.Positive:return 1;
+              case AxisPriority.Negative:return 0;
+             }
+             return 0;
+            }
+            bool ResolveTieByPosition(
+             int pxA,int pzA,int sxA,int szA,
+             int pxB,int pzB,int sxB,int szB,
+             Vector3Int Apos,Vector3Int Bpos
+            ){
+             if(pxA!=pxB)return pxA>pxB;
+             if(pzA!=pzB)return pzA>pzB;
+             if(sxA!=sxB)return sxA>sxB;
+             if(szA!=szB)return szA>szB;
+             if(Apos.x!=Bpos.x)return Apos.x<Bpos.x;
+             if(Apos.z!=Bpos.z)return Apos.z<Bpos.z;
+             return false;
+            }
+            internal struct SpawnConflict{
+             internal Vector3Int worldCoord;
+             internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+            }
+            void CollectConflicts(GridIterationSetup setup,Vector3Int candidateCoord,List<SpawnConflict>conflictsList){
+             int layer=setup.layer;
+             var gridIteration=SetupGridIteration(setup,new(candidateCoord.x,candidateCoord.z));
+             var gridSize=gridIteration.gridSize;
+             var start=gridIteration.start;
+             var end=gridIteration.end;
              for(int x=start.x;x<=end.x;x+=gridSize){
              for(int z=start.z;z<=end.z;z+=gridSize){
               Vector3Int worldCoord=new(x,0,z);
@@ -92,27 +232,13 @@ namespace AKCondinoO.World.SimObjects{
               if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry)){
                continue;
               }
-              //  test if conflict blocks
-              //  if it does, do recursion for the conflict
-              //  if conflict will be blocked in its recursion, then this is valid
-              //  reserve if nothing blocks
-              Reserve(vCoord,cCoord,spawnEntry);
+              conflictsList.Add(
+               new(){
+                worldCoord=worldCoord,
+                spawnEntry=spawnEntry,
+               }
+              );
              }}
-            }
-            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry){
-             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(vCoord,cCoord,layer);
-             if(spawnEntry!=null){
-              return true;
-             }
-             return false;
-            }
-            internal struct SpawnReserve{
-            }
-            void Reserve(Vector3Int vCoord,Vector2Int cCoord,ByChanceObjectSpawnEntry<SimObject>spawnEntry){
-             Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
-             Vector3 pos=vCoord+new Vector3(0.5f,0.5f,0.5f)-new Vector3(Width/2f,0,Depth/2f)+new Vector3(cnkRgn.x,0,cnkRgn.y);
-             var bounds=spawnEntry.bounds;
-             debugSpawnCoords.Add(pos);
             }
             struct GridIterationSetup{
              internal int layer;
@@ -156,22 +282,42 @@ namespace AKCondinoO.World.SimObjects{
             int AlignUp(int value,int gridSize){
              return Mathf.CeilToInt((float)value/gridSize)*gridSize;
             }
+            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry){
+             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(vCoord,cCoord,layer);
+             if(spawnEntry!=null){
+              return true;
+             }
+             return false;
+            }
+            internal struct SpawnReserve{
+             internal Vector3 pos;
+             internal Bounds bounds;
+            }
+            void Reserve(Vector3Int vCoord,Vector2Int cCoord,ByChanceObjectSpawnEntry<SimObject>spawnEntry){
+             Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
+             Vector3 pos=vCoord+new Vector3(0.5f,0.5f,0.5f)-new Vector3(Width/2f,0,Depth/2f)+new Vector3(cnkRgn.x,0,cnkRgn.y);
+             var bounds=spawnEntry.bounds;
+             var spawnReserve=new SpawnReserve(){
+              pos=pos,
+              bounds=bounds,
+             };
+             debugSpawnCoords.Add(spawnReserve);
+            }
             public void OnCompletedDoAtMainThread(){
              spawner.debugSpawnCoords.Clear();
              spawner.debugSpawnCoords.UnionWith(debugSpawnCoords);
              BiomesSimObjectSpawnerJob.pool.Return(this);
             }
         }
-        internal ChunkSimObjectSpawner(WorldChunk chunk,WorldChunkSpawning spawning){
-         this.chunk=chunk;this.spawning=spawning;
-        }
-     private readonly HashSet<Vector3>debugSpawnCoords=new();
+     private readonly HashSet<SpawnReserve>debugSpawnCoords=new();
         internal void GizmosSelected(bool selected){
          #if UNITY_EDITOR
          var singleton=SimObjectManager.singleton;
-         foreach(var coord in debugSpawnCoords){
+         foreach(var reserve in debugSpawnCoords){
+          Vector3 coord=reserve.pos;
+          Bounds bounds=reserve.bounds;
           Gizmos.color=new Color(.5f,.5f,.5f,.5f);
-          Gizmos.DrawCube(coord+new Vector3(0,singleton.debugSpawnCoordsDrawHeight,0),Vector3.one);
+          Gizmos.DrawCube(coord+new Vector3(0,singleton.debugSpawnCoordsDrawHeight,0),bounds.size);
          }
          #endif
         }
