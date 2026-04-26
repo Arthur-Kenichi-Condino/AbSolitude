@@ -9,12 +9,13 @@ namespace AKCondinoO.World.Biomes{
      public double power;
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          var operatorSnapshot=(OperatorNoiseNodesSnapshot)snapshot;
-         var inputModule=input.Build(
+         input.Build(
           worldSeed,
           operatorSnapshot,
           out var inputSnapshot,
           out _
          );
+         var inputModule=inputSnapshot.GetModule(channel);
          operatorSnapshot.SetInput(inputSnapshot);
          int seed=SeedHash(worldSeed,seedOffset);
          var turbulence=new Turbulence(inputModule);

@@ -9,12 +9,13 @@ namespace AKCondinoO.World.Biomes{
      public double bias;
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          var operatorSnapshot=(OperatorNoiseNodesSnapshot)snapshot;
-         var inputModule=input.Build(
+         input.Build(
           worldSeed,
           operatorSnapshot,
           out var inputSnapshot,
           out _
          );
+         var inputModule=inputSnapshot.GetModule(channel);
          operatorSnapshot.SetInput(inputSnapshot);
          return new ScaleBias(
           scale,

@@ -52,7 +52,11 @@ namespace AKCondinoO.World.SimObjects{
              cnkRgn=cCoordTocnkRgn(cCoord);
              BiomesConfigurationSnapshot.IsReading();
              try{
-              var settings=BiomesConfigurationSnapshot.GetSpawnSettings();
+              var settings=BiomesConfigurationSnapshot.GetSpawnSettings(NoiseChannel.Spawn);
+              if(settings==null){
+               Logs.Debug(()=>"'failed to get spawn settings!'");
+               return;
+              }
               int minLayer=settings.minLayer;
               int maxLayer=settings.maxLayer;
               Logs.Debug(()=>"minLayer:"+minLayer+";maxLayer:"+maxLayer);
@@ -90,6 +94,7 @@ namespace AKCondinoO.World.SimObjects{
               Vector3Int worldCoord=new(x,0,z);
               DoRecursion(setup,worldCoord,null);
              }}
+             Logs.Debug(()=>"spawn count:"+debugSpawnCoords.Count);
             }
          static readonly Utilities.ObjectPool<List<SpawnConflict>>conflictsListPool=
           Pool.GetPool<List<SpawnConflict>>("",()=>new(),(List<SpawnConflict>item)=>{item.Clear();});
@@ -299,7 +304,7 @@ namespace AKCondinoO.World.SimObjects{
              return Mathf.CeilToInt((float)value/gridSize)*gridSize;
             }
             bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry,out SpawnVariation variation){
-             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(vCoord,cCoord,layer,out variation);
+             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(NoiseChannel.Spawn,vCoord,cCoord,layer,out variation);
              if(spawnEntry!=null){
               return true;
              }

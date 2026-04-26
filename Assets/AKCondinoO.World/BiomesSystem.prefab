@@ -46,5 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 0
   terrainSmoothingHeight: 4
-  terrain: {fileID: 11400000, guid: ebf2bc8ce6d9c734598f0f821239a11d, type: 2}
+  terrain: {fileID: 11400000, guid: 3236c41214e92b44f80b88ce61522743, type: 2}
   debugForceRebuild: 0

@@ -34,11 +34,11 @@ namespace AKCondinoO.World.Spawning{
              scaleMax=variations.scaleMax;
              alignToTerrain=variations.alignToTerrain;
             }
-            internal SpawnVariation Get(ModuleBase module,Vector3 noiseInput){
+            internal SpawnVariation Get(BiomesConfigurationSnapshot.Snapshot snapshot,Vector3 noiseInput){
              uint rotationHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,1));
              uint    scaleHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,2));
-             float rotationNoise=NormalizeHeight((float)module.GetValue(noiseInput.z,noiseInput.x,rotationHash),Height);
-             float    scaleNoise=NormalizeHeight((float)module.GetValue(noiseInput.z,noiseInput.x,   scaleHash),Height);
+             float rotationNoise=(float)snapshot.nodes.GetValue(NoiseChannel.Spawn,new(noiseInput.z,noiseInput.x,rotationHash));
+             float    scaleNoise=(float)snapshot.nodes.GetValue(NoiseChannel.Spawn,new(noiseInput.z,noiseInput.x,   scaleHash));
              //Logs.Debug(()=>"rotationNoise:"+rotationNoise+";scaleNoise:"+scaleNoise);
              var variation=new SpawnVariation(){
               alignToTerrain=alignToTerrain,

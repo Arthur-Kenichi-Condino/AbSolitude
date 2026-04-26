@@ -3,7 +3,7 @@ using LibNoise.Generator;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/Billow")]
-    internal class BillowNode:NoiseNode{
+    internal class BillowNode:Node{
      public double frequency;
      public double lacunarity;
      public double persistence;

@@ -5,7 +5,7 @@ namespace AKCondinoO.World{
     internal class BiomesSystem:MonoSingleton<BiomesSystem>{
      [SerializeField]internal int seed=0;
      [SerializeField]internal float terrainSmoothingHeight=4f;
-     [SerializeField]internal NoiseNode terrain;
+     [SerializeField]internal Node terrain;
      [SerializeField]private bool debugForceRebuild=false;
         public override void Initialize(){
          base.Initialize();

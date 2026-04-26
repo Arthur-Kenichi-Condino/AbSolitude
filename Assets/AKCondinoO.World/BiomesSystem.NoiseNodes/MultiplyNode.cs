@@ -6,18 +6,20 @@ namespace AKCondinoO.World.Biomes{
     internal class MultiplyNode:MultiplierNoiseNode{
         protected override ModuleBase CreateModule(int worldSeed,NoiseNodesSnapshot snapshot){
          var multiplierSnapshot=(MultiplierNoiseNodesSnapshot)snapshot;
-         var rhsModule=rhs.Build(
+         rhs.Build(
           worldSeed,
           multiplierSnapshot,
           out var rhsSnapshot,
           out _
          );
-         var lhsModule=lhs.Build(
+         lhs.Build(
           worldSeed,
           rhsSnapshot,
           out var lhsSnapshot,
           out _
          );
+         var rhsModule=rhsSnapshot.GetModule(channel);
+         var lhsModule=lhsSnapshot.GetModule(channel);
          multiplierSnapshot.SetInput(lhsSnapshot,rhsSnapshot);
          return new Multiply(
           lhsModule,rhsModule

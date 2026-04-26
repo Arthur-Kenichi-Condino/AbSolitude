@@ -3,7 +3,7 @@ using LibNoise.Generator;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/RidgedMultifractal")]
-    internal class RidgedMultifractalNode:NoiseNode{
+    internal class RidgedMultifractalNode:Node{
      public double frequency;
      public double lacunarity;
      public int octaves;

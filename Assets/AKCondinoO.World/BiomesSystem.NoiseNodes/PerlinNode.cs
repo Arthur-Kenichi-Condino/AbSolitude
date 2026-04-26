@@ -3,7 +3,7 @@ using LibNoise.Generator;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     [CreateAssetMenu(menuName="AKCondinoO/Biomes/Noise/Perlin")]
-    internal class PerlinNode:NoiseNode{
+    internal class PerlinNode:Node{
      public double frequency;
      public double lacunarity;
      public double persistence;

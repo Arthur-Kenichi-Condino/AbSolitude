@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63e5763047c4068468dc059687f87d02, type: 3}
+  m_Name: Caatinga
+  m_EditorClassIdentifier: 
+  channel: -1
+  seedOffset: 0
+  materialTables: []
+  spawnTables: []
+  branches:
+  - {fileID: 11400000, guid: ebf2bc8ce6d9c734598f0f821239a11d, type: 2}

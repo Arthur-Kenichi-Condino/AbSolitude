@@ -70,7 +70,7 @@ namespace AKCondinoO.World.MarchingCubes{
           Vector3Int polygonCellCoord =polygonCoord +offset;
           Vector3Int polygonCellvCoord=polygonvCoord+offset;
           context.biomeContext.coord=polygonCellCoord;
-          BiomesConfigurationSnapshot.Setvxl(ref context.polygonCell[corner],polygonCellvCoord,polygoncCoord,context.biomeContext);
+          BiomesConfigurationSnapshot.SetTerrainvxl(ref context.polygonCell[corner],polygonCellvCoord,polygoncCoord,context.biomeContext);
           SetPolygonCellVoxelNormal(ref context.polygonCell[corner],corner,polygonCellvCoord,polygoncCoord,polygonCellCoord,context);
          }
         }
@@ -83,7 +83,7 @@ namespace AKCondinoO.World.MarchingCubes{
            Vector3Int vCoord=polygonCellvCoord+offset;
            if(!context.TryGetPolygonCellVoxelNormalOffsetCachedVoxel(i,polygonCellCoord)){
             context.biomeContext.coord=coord;
-            BiomesConfigurationSnapshot.Setvxl(ref context.normalOffsetVoxels[i],vCoord,cCoord,context.biomeContext);
+            BiomesConfigurationSnapshot.SetTerrainvxl(ref context.normalOffsetVoxels[i],vCoord,cCoord,context.biomeContext);
            }
           }
           Vector3 normal=new(
