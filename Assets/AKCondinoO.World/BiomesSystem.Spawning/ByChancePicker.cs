@@ -1,7 +1,13 @@
+using AKCondinoO.Bootstrap;
 using AKCondinoO.Utilities;
+using LibNoise;
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using static AKCondinoO.World.Biomes.BiomeSpawnEntry;
+using static AKCondinoO.World.BiomesConfigurationSnapshot;
+using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.Spawning{
     internal class ByChanceObjectSpawnEntry<T>where T:class{
      internal static readonly Utilities.ObjectPool<ByChanceObjectSpawnEntry<T>>pool=
@@ -16,6 +22,37 @@ namespace AKCondinoO.World.Spawning{
      internal float chance;
      internal int priority;
      internal Bounds bounds;
+     internal SpawnVariationsSnapshot variations;
+        internal class SpawnVariationsSnapshot{
+         internal bool alignToTerrain;
+         internal Vector3 rotMin,rotMax;
+         internal Vector3 scaleMin;
+         internal Vector3 scaleMax;
+            internal SpawnVariationsSnapshot(SpawnVariations variations){
+             rotMin=variations.rotMin;rotMax=variations.rotMax;
+             scaleMin=variations.scaleMin;
+             scaleMax=variations.scaleMax;
+             alignToTerrain=variations.alignToTerrain;
+            }
+            internal SpawnVariation Get(ModuleBase module,Vector3 noiseInput){
+             uint rotationHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,1));
+             uint    scaleHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,2));
+             float rotationNoise=NormalizeHeight((float)module.GetValue(noiseInput.z,noiseInput.x,rotationHash),Height);
+             float    scaleNoise=NormalizeHeight((float)module.GetValue(noiseInput.z,noiseInput.x,   scaleHash),Height);
+             //Logs.Debug(()=>"rotationNoise:"+rotationNoise+";scaleNoise:"+scaleNoise);
+             var variation=new SpawnVariation(){
+              alignToTerrain=alignToTerrain,
+              rot=Vector3.Lerp(rotMin,rotMax,rotationNoise),
+              scale=Vector3.Lerp(scaleMin,scaleMax,scaleNoise),
+             };
+             return variation;
+            }
+        }
+        internal struct SpawnVariation{
+         internal bool alignToTerrain;
+         internal Vector3 rot;
+         internal Vector3 scale;
+        }
     }
     internal class ByChancePicker<T>where T:class{
      internal readonly List<ByChanceObjectSpawnEntry<T>>items=new();

@@ -18,3 +18,9 @@ MonoBehaviour:
     entries:
     - prefab: {fileID: 7242630871969314645, guid: cbd088c9aa919044183cb6c4623e1501, type: 3}
       chance: 1
+      variations:
+        rotMin: {x: 0, y: 0, z: 0}
+        rotMax: {x: 0, y: 360, z: 0}
+        scaleMin: {x: 0.5, y: 0.5, z: 0.5}
+        scaleMax: {x: 1, y: 1, z: 1}
+        alignToTerrain: 1

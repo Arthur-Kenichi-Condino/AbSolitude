@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
+using static AKCondinoO.World.Spawning.ByChanceObjectSpawnEntry<AKCondinoO.SimObjects.SimObject>;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
     internal class BiomesConfigurationContext{
@@ -172,8 +173,9 @@ namespace AKCondinoO.World{
         internal static SpawnSettingsSnapshot GetSpawnSettings(){
          return snapshot.terrainSpawnSettingsSnapshot;
         }
-        internal static ByChanceObjectSpawnEntry<SimObject>GetSpawnEntry(Vector3Int vCoord,Vector2Int cCoord,int layer){
+        internal static ByChanceObjectSpawnEntry<SimObject>GetSpawnEntry(Vector3Int vCoord,Vector2Int cCoord,int layer,out SpawnVariation variation){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
+         variation=default;
          Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
          Vector3Int noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
          Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
@@ -183,6 +185,7 @@ namespace AKCondinoO.World{
           float noise=NormalizeHeight(heightValue,Height);
           var picker=table.pickerByLayer[layer];
           if(picker.Get(noise,out var result)){
+           variation=result.variations.Get(snapshot.terrainModule,noiseInput);
            return result;
           }
          }
@@ -199,7 +202,7 @@ namespace AKCondinoO.World{
          snapshot.terrainNodesSnapshot.Resolve(noiseInput,out table);
         }
         internal static float NormalizeHeight(double height,float maxHeight){
-         return Mathf.Clamp01((float)(height/maxHeight));
+         return(float)(height/maxHeight);
         }
     }
     internal class NoiseNodesSnapshot{
@@ -459,6 +462,7 @@ namespace AKCondinoO.World{
               }
              }
             }
+            pickerEntry.variations=new(entry.variations);
             picker.items.Add(pickerEntry);
            }
            spawnSettingsSnapshot.layerData[layer]=spawnLayerData;

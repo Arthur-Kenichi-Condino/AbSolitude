@@ -32,7 +32,49 @@ namespace AKCondinoO.Utilities{
          UnityEngine.Debug.DrawLine(p3,p7,color,duration);
          UnityEngine.Debug.DrawLine(p4,p8,color,duration);
         }
-        internal static void DrawMeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,bool drawTriangles,bool drawNormals,Vector3 offset=default){
+        internal static void RotatedBounds(
+         Bounds bounds,
+         Transform t,
+         Color color,
+         float duration=0
+        ){
+         var v=Pool.RentArray<Vector3>(8);
+         BoundsHelper.TransformBoundsVertices(bounds,t,v);
+         RotatedBounds(v,color,duration);
+         Pool.ReturnArray(v);
+        }
+        internal static void RotatedBounds(
+         Bounds bounds,
+         Vector3 pos,
+         Quaternion rot,
+         Vector3 scale,
+         Color color,
+         float duration=0
+        ){
+         var v=Pool.RentArray<Vector3>(8);
+         BoundsHelper.TransformBoundsVertices(bounds,pos,rot,scale,v);
+         RotatedBounds(v,color,duration);
+         Pool.ReturnArray(v);
+        }
+        internal static void RotatedBounds(
+         Vector3[]v,
+         Color color,
+         float duration=0
+        ){
+         Debug.DrawLine(v[0],v[1],color,duration);
+         Debug.DrawLine(v[1],v[2],color,duration);
+         Debug.DrawLine(v[2],v[3],color,duration);
+         Debug.DrawLine(v[3],v[0],color,duration);
+         Debug.DrawLine(v[4],v[5],color,duration);
+         Debug.DrawLine(v[5],v[6],color,duration);
+         Debug.DrawLine(v[6],v[7],color,duration);
+         Debug.DrawLine(v[7],v[4],color,duration);
+         Debug.DrawLine(v[0],v[4],color,duration);
+         Debug.DrawLine(v[1],v[5],color,duration);
+         Debug.DrawLine(v[2],v[6],color,duration);
+         Debug.DrawLine(v[3],v[7],color,duration);
+        }
+        internal static void MeshWireframe(List<Vertex>vertices,List<UInt32>triangles,Color color,bool drawTriangles,bool drawNormals,Vector3 offset=default){
          Gizmos.color=color;
          int triCount=triangles.Count/3;
          for(int t=0;t<triCount;t++){
@@ -53,7 +95,7 @@ namespace AKCondinoO.Utilities{
             }
         }
         //  Com ajuda de Gemini
-        internal static void DrawWireCapsule(Vector3 pos,float height,float radius,Color color){
+        internal static void WireCapsule(Vector3 pos,float height,float radius,Color color){
          Gizmos.color=color;
          Vector3 point1=pos+Vector3.up*(height/2-radius);
          Vector3 point2=pos-Vector3.up*(height/2-radius);

@@ -206,7 +206,7 @@ namespace AKCondinoO.SimActors{
         }
         internal virtual void OnDrawGizmos(){
          if(simCharacterController!=null){
-          DrawGizmos.DrawWireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
+          DrawGizmos.WireCapsule(transform.position,simCharacterController.height,simCharacterController.radius,Color.blue);
          }
         }
     }

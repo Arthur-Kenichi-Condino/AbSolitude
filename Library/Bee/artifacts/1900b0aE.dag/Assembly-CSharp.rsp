@@ -535,6 +535,7 @@
 "Assets/AKCondinoO.UIObjects/UIWindow.Dependencies/Tabs/TabsGroup.cs"
 "Assets/AKCondinoO.UIObjects/UIWindow.Dependencies/Window.cs"
 "Assets/AKCondinoO.UIObjects/UIWindow.Dependencies/WindowContent.cs"
+"Assets/AKCondinoO.Utilities/BoundsHelper.cs"
 "Assets/AKCondinoO.Utilities/DictionaryAddRangeHelper.cs"
 "Assets/AKCondinoO.Utilities/DrawGizmos.cs"
 "Assets/AKCondinoO.Utilities/MathUtil.cs"

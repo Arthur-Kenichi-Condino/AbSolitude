@@ -17,6 +17,7 @@ namespace AKCondinoO.Bootstrap{
       "MainCamera",
       "OrbitalCameraMode",
       "BiomesConfigurationSnapshot",
+      "ByChancePicker",
       //"NavMeshProvider",
       //"NavMeshSourcesOrdered",
       //"WorldChunk",

@@ -1,12 +1,14 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
+using AKCondinoO.World.MarchingCubes;
 using AKCondinoO.World.Spawning;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.SimObjects.ChunkSimObjectSpawner.BiomesSimObjectSpawnerJob;
+using static AKCondinoO.World.Spawning.ByChanceObjectSpawnEntry<AKCondinoO.SimObjects.SimObject>;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.SimObjects{
     internal class ChunkSimObjectSpawner{
@@ -95,6 +97,7 @@ namespace AKCondinoO.World.SimObjects{
              internal CandidateState state;
              internal Vector3Int worldCoord;
              internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+             internal SpawnVariation variation;
             }
             internal enum CandidateState{
              Unknown=0,
@@ -124,12 +127,13 @@ namespace AKCondinoO.World.SimObjects{
              var cCoord=this.cCoord;
              var vCoord=coord;
              ValidatevCoord(ref cCoord,ref vCoord);
-             if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry)){
+             if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation)){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
               return false;
              }
              candidate.spawnEntry=spawnEntry;
+             candidate.variation=variation;
              visited[worldCoord]=candidate;
              var conflictsList=conflictsListPool.Rent();
              CollectConflicts(setup,worldCoord,conflictsList);
@@ -153,7 +157,7 @@ namespace AKCondinoO.World.SimObjects{
              }else{
               candidate.state=CandidateState.Accepted;
               visited[worldCoord]=candidate;
-              Reserve(vCoord,cCoord,spawnEntry);
+              Reserve(vCoord,cCoord,candidate);
               return true;
              }
             }
@@ -226,6 +230,7 @@ namespace AKCondinoO.World.SimObjects{
             internal struct SpawnConflict{
              internal Vector3Int worldCoord;
              internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+             internal SpawnVariation variation;
             }
             void CollectConflicts(GridIterationSetup setup,Vector3Int candidateCoord,List<SpawnConflict>conflictsList){
              int layer=setup.layer;
@@ -240,13 +245,13 @@ namespace AKCondinoO.World.SimObjects{
               var cCoord=this.cCoord;
               var vCoord=coord;
               ValidatevCoord(ref cCoord,ref vCoord);
-              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry)){
+              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation)){
                continue;
               }
               conflictsList.Add(
                new(){
                 worldCoord=worldCoord,
-                spawnEntry=spawnEntry,
+                spawnEntry=spawnEntry,variation=variation,
                }
               );
              }}
@@ -293,8 +298,8 @@ namespace AKCondinoO.World.SimObjects{
             int AlignUp(int value,int gridSize){
              return Mathf.CeilToInt((float)value/gridSize)*gridSize;
             }
-            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry){
-             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(vCoord,cCoord,layer);
+            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry,out SpawnVariation variation){
+             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(vCoord,cCoord,layer,out variation);
              if(spawnEntry!=null){
               return true;
              }
@@ -303,14 +308,18 @@ namespace AKCondinoO.World.SimObjects{
             internal struct SpawnReserve{
              internal Vector3 pos;
              internal Bounds bounds;
+             internal Vector3 rot;
+             internal Vector3 scale;
             }
-            void Reserve(Vector3Int vCoord,Vector2Int cCoord,ByChanceObjectSpawnEntry<SimObject>spawnEntry){
+            void Reserve(Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
              Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
              Vector3 pos=vCoord+new Vector3(0.5f,0.5f,0.5f)-new Vector3(Width/2f,0,Depth/2f)+new Vector3(cnkRgn.x,0,cnkRgn.y);
-             var bounds=spawnEntry.bounds;
+             var bounds=candidate.spawnEntry.bounds;
              var spawnReserve=new SpawnReserve(){
               pos=pos,
               bounds=bounds,
+              rot=candidate.variation.rot,
+              scale=candidate.variation.scale,
              };
              debugSpawnCoords.Add(spawnReserve);
             }
@@ -320,15 +329,19 @@ namespace AKCondinoO.World.SimObjects{
              BiomesSimObjectSpawnerJob.pool.Return(this);
             }
         }
+        internal static void PredictNormal(Vector3 pos){
+         //MarchingCubesCore.BuildMeshData();
+        }
      private readonly HashSet<SpawnReserve>debugSpawnCoords=new();
         internal void GizmosSelected(bool selected){
          #if UNITY_EDITOR
          var singleton=SimObjectManager.singleton;
          foreach(var reserve in debugSpawnCoords){
-          Vector3 coord=reserve.pos;
+          Vector3 pos  =reserve.pos   ;
           Bounds bounds=reserve.bounds;
-          Gizmos.color=new Color(.5f,.5f,.5f,.5f);
-          Gizmos.DrawCube(coord+new Vector3(0,singleton.debugSpawnCoordsDrawHeight,0),bounds.size);
+          Vector3 rot  =reserve.rot   ;
+          Vector3 scale=reserve.scale ;
+          DrawGizmos.RotatedBounds(bounds,pos,Quaternion.Euler(rot),scale,Color.green);
          }
          #endif
         }
