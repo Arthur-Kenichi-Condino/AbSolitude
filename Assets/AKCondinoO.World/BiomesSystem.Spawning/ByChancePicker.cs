@@ -37,8 +37,8 @@ namespace AKCondinoO.World.Spawning{
             internal SpawnVariation Get(BiomesConfigurationSnapshot.Snapshot snapshot,Vector3 noiseInput){
              uint rotationHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,1));
              uint    scaleHash=math.hash(new int4((int)noiseInput.x,(int)noiseInput.y,(int)noiseInput.z,2));
-             float rotationNoise=(float)snapshot.nodes.GetValue(NoiseChannel.Spawn,new(noiseInput.z,noiseInput.x,rotationHash));
-             float    scaleNoise=(float)snapshot.nodes.GetValue(NoiseChannel.Spawn,new(noiseInput.z,noiseInput.x,   scaleHash));
+             float rotationNoise=(float)snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceSpawn,new(noiseInput.z,noiseInput.x,rotationHash));
+             float    scaleNoise=(float)snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceSpawn,new(noiseInput.z,noiseInput.x,   scaleHash));
              //Logs.Debug(()=>"rotationNoise:"+rotationNoise+";scaleNoise:"+scaleNoise);
              var variation=new SpawnVariation(){
               alignToTerrain=alignToTerrain,

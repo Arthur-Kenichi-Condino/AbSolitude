@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
+using AKCondinoO.World.Biomes;
 using AKCondinoO.World.MarchingCubes;
 using AKCondinoO.World.Spawning;
 using System;
@@ -52,7 +53,7 @@ namespace AKCondinoO.World.SimObjects{
              cnkRgn=cCoordTocnkRgn(cCoord);
              BiomesConfigurationSnapshot.IsReading();
              try{
-              var settings=BiomesConfigurationSnapshot.GetSpawnSettings(NoiseChannel.Spawn);
+              var settings=BiomesConfigurationSnapshot.GetSpawnSettings(NoiseChannel.TerrainSurfaceSpawn);
               if(settings==null){
                Logs.Debug(()=>"'failed to get spawn settings!'");
                return;
@@ -304,7 +305,7 @@ namespace AKCondinoO.World.SimObjects{
              return Mathf.CeilToInt((float)value/gridSize)*gridSize;
             }
             bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry,out SpawnVariation variation){
-             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(NoiseChannel.Spawn,vCoord,cCoord,layer,out variation);
+             spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(NoiseChannel.TerrainSurfaceSpawn,vCoord,cCoord,layer,out variation);
              if(spawnEntry!=null){
               return true;
              }
