@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705d6b5fec1b15947b4e65c0f8271b68, type: 3}
+  m_Name: Caatinga.Deserto.Select
+  m_EditorClassIdentifier: 
+  channel: -1
+  seedOffset: 8
+  materialTables: []
+  biomeSpawnTables: []
+  inputA: {fileID: 0}
+  inputB: {fileID: 0}
+  controller: {fileID: 11400000, guid: 9681982d8fc30be429ad3ebd0ad0dd5b, type: 2}
+  min: -0.15
+  max: 0.15
+  fallOff: 0.5

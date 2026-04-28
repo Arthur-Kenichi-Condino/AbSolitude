@@ -5,5 +5,6 @@ namespace AKCondinoO.World{
      EdgeBedrock =1,//  Indestrutível
      MuddyDirt   =2,
      SmallRocks  =3,
+     ScorchedDirt=4,
     }
 }

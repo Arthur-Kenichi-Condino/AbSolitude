@@ -134,7 +134,7 @@ PrefabInstance:
     - target: {fileID: -8497116176115511129, guid: 2b577f04e216d3542a06d3b8541516a8, type: 3}
       propertyPath: biomeGraph
       value: 
-      objectReference: {fileID: 11400000, guid: d5b6ed9f2713fa34283e7c9793f60a5a, type: 2}
+      objectReference: {fileID: 11400000, guid: ba9e7f37db5d0bd45b1209128f68de56, type: 2}
     - target: {fileID: 5897963981768378988, guid: 2b577f04e216d3542a06d3b8541516a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -21,15 +21,13 @@ namespace AKCondinoO.World.Biomes{
         }
         internal override void BuildSnapshotResolution(){
          graph.BuildSnapshotResolution();
+         graph.PropagateSpawnSettings(spawnSettings);
         }
         internal override double GetValue(NoiseChannel channel,Vector3 noiseInput){
          return graph.GetValue(channel,noiseInput);
         }
         internal override SnapshotMaterialTable GetMaterialTable(NoiseChannel channel,Vector3 noiseInput){
          return graph.GetMaterialTable(channel,noiseInput);
-        }
-        internal override SnapshotSpawnSettings GetSpawnSettings(NoiseChannel channel){
-         return graph.GetSpawnSettings(channel);
         }
         internal override SnapshotBiomeSpawnTable GetBiomeSpawnTable(NoiseChannel channel,Vector3 noiseInput){
          return graph.GetBiomeSpawnTable(channel,noiseInput);

@@ -10,10 +10,11 @@ namespace AKCondinoO.World{
 
         internal static void SetAtlasData(){
          atlasCoord.Clear();
-         Set(MaterialId.AirNone    ,0,0);
-         Set(MaterialId.EdgeBedrock,0,2);
-         Set(MaterialId.MuddyDirt  ,1,0);
-         Set(MaterialId.SmallRocks ,0,1);
+         Set(MaterialId.AirNone     ,0,0);
+         Set(MaterialId.EdgeBedrock ,0,2);
+         Set(MaterialId.MuddyDirt   ,1,0);
+         Set(MaterialId.SmallRocks  ,0,1);
+         Set(MaterialId.ScorchedDirt,1,1);
          Logs.Debug(()=>"UnsafeUtility.SizeOf<Vertex>():"+UnsafeUtility.SizeOf<Vertex>());
         }
         static void Set(MaterialId id,int x,int y){

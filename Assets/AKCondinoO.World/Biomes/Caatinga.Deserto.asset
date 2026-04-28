@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad7542dab93ffc041a442fb178c8c745, type: 3}
+  m_Name: Caatinga.Deserto
+  m_EditorClassIdentifier: 
+  min: 0
+  max: 0
+  fallOff: 0
+  inputA: {fileID: 11400000, guid: d5b6ed9f2713fa34283e7c9793f60a5a, type: 2}
+  inputB: {fileID: 11400000, guid: 765c862feddf9ce4d8b7dfe46b38e473, type: 2}
+  controller: {fileID: 11400000, guid: ee2e88814928cc34587cbe7e8ba3f223, type: 2}
