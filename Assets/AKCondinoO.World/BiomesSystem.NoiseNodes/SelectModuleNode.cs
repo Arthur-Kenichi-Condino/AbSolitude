@@ -55,6 +55,12 @@ namespace AKCondinoO.World.Biomes{
          if(inputA!=null){inputA.PropagateSpawnSettings(spawnSettings);}
          if(inputB!=null){inputB.PropagateSpawnSettings(spawnSettings);}
         }
+        internal override SnapshotMaterialTable GetMaterialTable(Vector3 noiseInput){
+         return SelectNode(noiseInput).GetMaterialTable(noiseInput);
+        }
+        internal override SnapshotBiomeSpawnTable GetBiomeSpawnTable(Vector3 noiseInput){
+         return SelectNode(noiseInput).GetBiomeSpawnTable(noiseInput);
+        }
         private NoiseNodesSnapshot SelectNode(Vector3 noiseInput){
          var cv=controller.module.GetValue(noiseInput);
          var select=(Select)module;

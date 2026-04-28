@@ -40,5 +40,11 @@ namespace AKCondinoO.World.Biomes{
          spawnSettings=SnapshotSpawnSettings.pool.Rent();
          input.PropagateSpawnSettings(spawnSettings);
         }
+        internal override SnapshotMaterialTable GetMaterialTable(Vector3 noiseInput){
+         return input.GetMaterialTable(noiseInput);
+        }
+        internal override SnapshotBiomeSpawnTable GetBiomeSpawnTable(Vector3 noiseInput){
+         return input.GetBiomeSpawnTable(noiseInput);
+        }
     }
 }

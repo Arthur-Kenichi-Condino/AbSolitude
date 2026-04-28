@@ -9,6 +9,7 @@ using LibNoise.Operator;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.Spawning.ByChanceObjectSpawnEntry<AKCondinoO.SimObjects.SimObject>;
@@ -19,8 +20,8 @@ namespace AKCondinoO.World{
      TerrainHeight=0,
      TerrainSurfaceMaterial=1,
      TerrainSurfaceSpawn=2,
-     Rotation,
-     Scale,
+     TerrainSurfaceRotation,
+     TerrainSurfaceScale,
      Temperature,
     }
     internal class BiomesConfigurationContext{
@@ -156,10 +157,18 @@ namespace AKCondinoO.World{
          Vector3    noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
          SnapshotBiomeSpawnTable table=snapshot.graph.GetBiomeSpawnTable(channel,new(noiseInput.z,noiseInput.x,0));
          if(table!=null){
-          double spawnValue=snapshot.graph.GetValue(channel,new(noiseInput.z,noiseInput.x,0));
+          double spawnValue=Normalize01Clamped(snapshot.graph.GetValue(channel,new(noiseInput.z,noiseInput.x,0)));
           var picker=table.pickerByLayer[layer];
           if(picker.Get((float)spawnValue,out var result)){
-           variation=result.variations.Get(snapshot,noiseInput);
+           float rotationNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceRotation,new(noiseInput.z,noiseInput.x,0)));
+           float    scaleNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceScale   ,new(noiseInput.z,noiseInput.x,0)));
+           variation=result.variations.Get(
+            new(){
+             rotationNoise=rotationNoise,
+                scaleNoise=   scaleNoise,
+            },
+            noiseInput
+           );
            return result;
           }
          }
@@ -167,6 +176,10 @@ namespace AKCondinoO.World{
         }
         internal static float NormalizeHeight(double height,float maxHeight){
          return(float)(height/maxHeight);
+        }
+        internal static float Normalize01Clamped(double value){
+         value=Math.Max(-1.0,Math.Min(1.0,value));
+         return(float)((value+1.0)*0.5);
         }
     }
 }

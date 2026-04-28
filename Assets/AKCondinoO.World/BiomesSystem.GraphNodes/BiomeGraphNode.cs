@@ -50,13 +50,13 @@ namespace AKCondinoO.World.Biomes{
         }
         internal override SnapshotMaterialTable GetMaterialTable(NoiseChannel channel,Vector3 noiseInput){
          if(configs.TryGetValue(channel,out var noiseSnapshot)){
-          return noiseSnapshot.mergedMaterialTable;
+          return noiseSnapshot.GetMaterialTable(noiseInput);
          }
          return null;
         }
         internal override SnapshotBiomeSpawnTable GetBiomeSpawnTable(NoiseChannel channel,Vector3 noiseInput){
          if(configs.TryGetValue(channel,out var noiseSnapshot)){
-          return noiseSnapshot.mergedBiomeSpawnTable;
+          return noiseSnapshot.GetBiomeSpawnTable(noiseInput);
          }
          return null;
         }

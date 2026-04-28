@@ -242,8 +242,8 @@ namespace AKCondinoO.World{
      }
         internal IEnumerator UpdateNavMeshAsyncCoroutine(){
          const double maxTimePerFrame=0.001d;//  ...unidade: em segundos
-         var waitNavMeshUpdateInterval=new WaitForSeconds(.05f);
-         var waitAgentTypeInterval=new WaitForSeconds(.005f);
+         var waitNavMeshUpdateInterval=new WaitForSeconds(.1f);
+         var waitAgentTypeInterval=new WaitForSeconds(.01f);
          while(true){
           while(isDirty){
            yield return null;

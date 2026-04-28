@@ -39,6 +39,19 @@ namespace AKCondinoO.World.Biomes{
         }
         internal virtual void BuildSnapshotResolution(){
         }
+        internal void PropagateSpawnSettings(Dictionary<NoiseChannel,SnapshotSpawnSettings>target){
+         foreach(var kvp in spawnSettings){
+          var channel=kvp.Key;
+          var settings=kvp.Value;
+          if(target.TryGetValue(channel,out var t)){
+           t.MergeFrom(settings);
+           SnapshotSpawnSettings.pool.Return(settings);
+          }else{
+           target[channel]=settings;
+          }
+         }
+         spawnSettings.Clear();
+        }
         internal virtual double GetValue(NoiseChannel channel,Vector3 noiseInput){
          return 0d;
         }

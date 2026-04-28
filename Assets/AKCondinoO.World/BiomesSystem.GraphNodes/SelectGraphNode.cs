@@ -45,23 +45,8 @@ namespace AKCondinoO.World.Biomes{
         internal override void BuildSnapshotResolution(){
          inputA.BuildSnapshotResolution();
          inputB.BuildSnapshotResolution();
-         foreach(var kvp in inputA.spawnSettings){
-          var channel=kvp.Key;
-          var result=SnapshotSpawnSettings.pool.Rent();
-          result.MergeFrom(kvp.Value);
-          if(inputB.spawnSettings.TryGetValue(channel,out var b)){
-           result.MergeFrom(b);
-          }
-          spawnSettings[channel]=result;
-         }
-         foreach(var kvp in inputB.spawnSettings){
-          var channel=kvp.Key;
-          if(spawnSettings.ContainsKey(channel))
-           continue;
-          var result=SnapshotSpawnSettings.pool.Rent();
-          result.MergeFrom(kvp.Value);
-          spawnSettings[channel]=result;
-         }
+         inputA.PropagateSpawnSettings(spawnSettings);
+         inputB.PropagateSpawnSettings(spawnSettings);
         }
         internal override double GetValue(NoiseChannel channel,Vector3 noiseInput){
          var select=((SelectorNoiseNodesSnapshot)this.select);

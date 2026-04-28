@@ -15,10 +15,10 @@ MonoBehaviour:
   channel: 2
   seedOffset: 0
   materialTables: []
-  spawnTables:
+  biomeSpawnTables:
   - {fileID: 11400000, guid: 0ec97b30ded09444182c8ce35a624fe5, type: 2}
-  frequency: 0.015
-  lacunarity: 2
-  persistence: 0.5
-  octaves: 6
+  frequency: 0.2
+  lacunarity: 2.5
+  persistence: 2
+  octaves: 8
   quality: 0

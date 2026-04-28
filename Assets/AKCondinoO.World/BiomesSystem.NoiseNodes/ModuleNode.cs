@@ -93,6 +93,12 @@ namespace AKCondinoO.World.Biomes{
          target.MergeFrom(spawnSettings);
          SnapshotSpawnSettings.pool.Return(spawnSettings);spawnSettings=null;
         }
+        internal virtual SnapshotMaterialTable GetMaterialTable(Vector3 noiseInput){
+         return mergedMaterialTable;
+        }
+        internal virtual SnapshotBiomeSpawnTable GetBiomeSpawnTable(Vector3 noiseInput){
+         return mergedBiomeSpawnTable;
+        }
     }
     internal class SnapshotMaterialTable{
      internal static readonly Utilities.ObjectPool<SnapshotMaterialTable>pool=
