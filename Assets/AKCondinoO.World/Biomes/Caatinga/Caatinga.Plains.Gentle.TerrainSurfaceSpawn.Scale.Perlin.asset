@@ -15,8 +15,7 @@ MonoBehaviour:
   channel: 4
   seedOffset: 2
   materialTables: []
-  biomeSpawnTables:
-  - {fileID: 11400000, guid: 0ec97b30ded09444182c8ce35a624fe5, type: 2}
+  biomeSpawnTables: []
   frequency: 1
   lacunarity: 4
   persistence: 0.5
