@@ -486,7 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: debugSpawnPosition.y
-      value: 27.69
+      value: 26.9
       objectReference: {fileID: 0}
     - target: {fileID: -8363767751357299819, guid: a655860e9acec594ebb1db9778b35e0b, type: 3}
       propertyPath: debugSpawnPosition.z
