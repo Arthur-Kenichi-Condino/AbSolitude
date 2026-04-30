@@ -1,0 +1,73 @@
+/* 
+ * ComparisonView.uss
+ * Styles for shared comparison view component.
+ * Most styles now come from ComparisonViewBase.uss
+ */
+
+@import url("ComparisonViewBase.uss");
+
+/* Extend base theme classes if necessary to add theme style differences as variables - the shared color variables come from TableViewBase.uss and ComparisonViewBase.uss*/
+.table-view-base__dark:root
+{
+}
+
+.table-view-base__light:root
+{
+}
+
+/* View-specific overrides (if any) */
+
+.comparison-view__secondary__description-label
+{
+    -unity-text-align: middle-right;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#comparison-view__secondary__base
+{
+    margin-right: 8px;
+    width: 50%;
+}
+
+#comparison-view__secondary__base-table-container
+{
+    flex-grow: 1;
+}
+
+#comparison-view__secondary__compared
+{
+    margin-left: 8px;
+    width: 50%;
+}
+
+#comparison-view__secondary__compared-table-container
+{
+    flex-grow: 1;
+}
+
+#comparison-view__secondary MultiColumnTreeView
+{
+    height: 120px;
+}
+
+#comparison-view__error-label
+{
+    -unity-text-align: middle-center;
+    background-color: var(--comparison-view__loading-overlay__background-color);
+    bottom: 0px;
+    display: none;
+    left: 0px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    visibility: hidden;
+}
+
+.comparison-view__snapshot-size-bar .memory-bar-element__committed-bar
+{
+    background-color: #D6D6D6;
+}

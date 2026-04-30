@@ -1,0 +1,35 @@
+/* 
+ * UnityObjectsTableView.uss
+ * Styles specific to the Unity Objects table view.
+ * Imports common table view styles from TableViewBase.uss
+ */
+
+@import url("../../Shared/TableViewBase.uss");
+
+/* Extend base theme classes if necessary to add theme style differences as variables - the shared color variables come from TableViewBase.uss */
+.table-view-base__dark:root
+{
+}
+
+.table-view-base__light:root
+{
+}
+
+/* Unity Objects specific: Toolbar styles */
+#unity-objects-table-view__toolbar
+{
+    border-top-width: 1px;
+    height: 32px;
+    padding-right: 12px;
+    overflow: hidden;
+}
+
+#unity-objects-table-view__toolbar Toggle
+{
+    padding-left: 12px;
+}
+
+#unity-objects-table-view__toolbar Toggle .unity-toggle__text
+{
+    padding-left: 4px;
+}

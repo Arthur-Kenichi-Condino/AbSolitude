@@ -1,3 +1,10 @@
+RegisterGenericJobTypeAttribute
+Unity
+Entities
+DataStreamReader
+Networking
+Transport
+DataStreamWriter
 AssetModificationProcessor
 
 Sysroot
@@ -142,12 +149,16 @@ RayTracingAccelerationStructure
 RendererList
 RendererUtils
 RendererListStatus
-RayTracingShader
+RayTracingShaderHelpURLAttribute
 PixelPerfectRendering
 U2D
 SpriteBone
 LocalizationAsset
 UnityEditor
+CurrentPlayer
+Unity
+Multiplayer
+Playmode
 SpriteShapeParameters
 UnityEngine
 Experimental

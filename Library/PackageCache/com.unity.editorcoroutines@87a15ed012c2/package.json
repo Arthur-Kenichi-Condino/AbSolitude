@@ -1,0 +1,29 @@
+{
+  "name": "com.unity.editorcoroutines",
+  "displayName": "Editor Coroutines",
+  "version": "1.1.0",
+  "unity": "2022.3",
+  "description": "The editor coroutines package allows developers to start constructs similar to Unity's monobehaviour based coroutines within the editor using arbitrary objects. ",
+  "keywords": [
+    "coroutine",
+    "coroutines",
+    "editor"
+  ],
+  "dependencies": {},
+  "relatedPackages": {
+    "com.unity.editorcoroutines.tests": "1.1.0"
+  },
+  "_upm": {
+    "changelog": "### Changed\n - Fixed an issue with nested coroutines where unsubscribing from inside a coroutine could thow a NullReferenceException, case [UUM-122753](https://issuetracker.unity3d.com/issues/the-coroutine-still-executes-for-one-frame-and-throws-a-nullreferenceexception-when-its-stopped-from-editorapplication-dot-update).\n - Improved documentation for the EditorCoroutine class.\n - Increased the minimum Unity version required to 2022LTS."
+  },
+  "upmCi": {
+    "footprint": "0fa84393c422eb80e20bbb4fa10c43e3e892d8dd"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.editorcoroutines@1.1/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/com.unity.editorcoroutines.git",
+    "type": "git",
+    "revision": "fe3477fa8c73dfd5e2e03a4960fff28d1b2c7cf1"
+  },
+  "_fingerprint": "87a15ed012c21ed5d88f4ba868a5b1948294627b"
+}
