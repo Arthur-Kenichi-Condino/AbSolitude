@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simmovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simmovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,14 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\marchingcubescore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -38,24 +38,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "SimMovement.cs",
               "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
               "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
               "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAIAwwDQAAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAEcAAAAAAAAAAAD4v1YAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-30T17:42:56.256Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "SimDescription.cs",
               "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
@@ -68,7 +68,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "SimActor.cs",
               "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimActor.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimActor.cs",
@@ -107,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "MarchingCubesHelper.cs",
               "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
@@ -141,13 +141,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "BiomesConfigurationSnapshot.cs",
               "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
               "RelativeToolTip": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAvwMcAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAAwMcAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-30T02:18:46.065Z",
               "EditorCaption": ""
