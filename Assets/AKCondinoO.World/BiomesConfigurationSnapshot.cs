@@ -135,39 +135,39 @@ namespace AKCondinoO.World{
           Vector3.zero
          );
         }
-    internal struct SampleContext{
-     public Vector3Int vCoord;
-     public Vector2Int cCoord;
-     public Vector2Int cnkRgn;
-     public Vector3Int noiseInputRounded;
-     public Vector3    noiseInput       ;
-        internal SampleContext(Vector3Int vCoord,Vector2Int cCoord){
-         ValidatevCoord(ref cCoord,ref vCoord);
-         this.vCoord=vCoord;
-         this.cCoord=cCoord;
-         cnkRgn=cCoordTocnkRgn(cCoord);
-         noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
-         noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
+        internal struct SampleContext{
+         public Vector3Int vCoord;
+         public Vector2Int cCoord;
+         public Vector2Int cnkRgn;
+         public Vector3Int noiseInputRounded;
+         public Vector3    noiseInput       ;
+            internal SampleContext(Vector3Int vCoord,Vector2Int cCoord){
+             ValidatevCoord(ref cCoord,ref vCoord);
+             this.vCoord=vCoord;
+             this.cCoord=cCoord;
+             cnkRgn=cCoordTocnkRgn(cCoord);
+             noiseInputRounded=vCoord+new Vector3Int(cnkRgn.x,0,cnkRgn.y);
+             noiseInput       =noiseInputRounded+new Vector3(.5f,.5f,.5f);
+            }
         }
-    }
-    internal struct SampleDensityContext{
-     public Vector3Int vCoord;
-     public Vector2Int cCoord;
-     public Vector2Int cnkRgn;
-     public Vector3Int noiseInputRounded;
-     public Vector3    noiseInput       ;
-     public bool hasHeight;
-     public double heightValue;
-        internal SampleDensityContext(SampleContext input){
-         vCoord=input.vCoord;
-         cCoord=input.cCoord;
-         cnkRgn=input.cnkRgn;
-         noiseInputRounded=input.noiseInputRounded;
-         noiseInput       =input.noiseInput       ;
-         hasHeight=false;
-         heightValue=-1f;
+        internal struct SampleDensityContext{
+         public Vector3Int vCoord;
+         public Vector2Int cCoord;
+         public Vector2Int cnkRgn;
+         public Vector3Int noiseInputRounded;
+         public Vector3    noiseInput       ;
+         public bool hasHeight;
+         public double heightValue;
+            internal SampleDensityContext(SampleContext input){
+             vCoord=input.vCoord;
+             cCoord=input.cCoord;
+             cnkRgn=input.cnkRgn;
+             noiseInputRounded=input.noiseInputRounded;
+             noiseInput       =input.noiseInput       ;
+             hasHeight=false;
+             heightValue=-1f;
+            }
         }
-    }
         internal static float SampleDensity(ref SampleDensityContext context,out bool computed){
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          computed=false;
@@ -199,20 +199,20 @@ namespace AKCondinoO.World{
          }
          return Voxel.air.density;
         }
-    internal struct SampleMaterialContext{
-     public Vector3Int vCoord;
-     public Vector2Int cCoord;
-     public Vector2Int cnkRgn;
-     public Vector3Int noiseInputRounded;
-     public Vector3    noiseInput       ;
-        internal SampleMaterialContext(SampleContext input){
-         vCoord=input.vCoord;
-         cCoord=input.cCoord;
-         cnkRgn=input.cnkRgn;
-         noiseInputRounded=input.noiseInputRounded;
-         noiseInput       =input.noiseInput       ;
+        internal struct SampleMaterialContext{
+         public Vector3Int vCoord;
+         public Vector2Int cCoord;
+         public Vector2Int cnkRgn;
+         public Vector3Int noiseInputRounded;
+         public Vector3    noiseInput       ;
+            internal SampleMaterialContext(SampleContext input){
+             vCoord=input.vCoord;
+             cCoord=input.cCoord;
+             cnkRgn=input.cnkRgn;
+             noiseInputRounded=input.noiseInputRounded;
+             noiseInput       =input.noiseInput       ;
+            }
         }
-    }
         internal static MaterialId SampleMaterial(
          ref SampleMaterialContext context
         ){

@@ -279,6 +279,7 @@
     <Compile Include="Assets\AKCondinoO.SimObjects\SimBrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Combat.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.UpdateMotion.cs" />
+    <Compile Include="Assets\AKCondinoO.Utilities\PhysicsUtil.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputAction.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\GenerateHomunculus\GenerateHomunculus.cs" />

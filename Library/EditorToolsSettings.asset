@@ -85,7 +85,7 @@ MonoBehaviour:
   - groupType: UnityEngine.LightProbeProxyVolume, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     collapsed: 0
-  m_LastPivotModeTypeString: UnityEditor.CenterPivotMode, UnityEditor.CoreModule,
+  m_LastPivotModeTypeString: UnityEditor.PivotPointPivotMode, UnityEditor.CoreModule,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   m_LastPivotRotationTypeString: UnityEditor.LocalPivotRotation, UnityEditor.CoreModule,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

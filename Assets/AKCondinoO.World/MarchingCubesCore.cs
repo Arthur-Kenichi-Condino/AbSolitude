@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine;
+using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.Terrain.TerrainChunkBuilder;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.MarchingCubes{
@@ -86,14 +87,89 @@ namespace AKCondinoO.World.MarchingCubes{
             BiomesConfigurationSnapshot.SetTerrainvxl(ref context.normalOffsetVoxels[i],vCoord,cCoord,context.biomeContext);
            }
           }
-          Vector3 normal=new(
-           (context.normalOffsetVoxels[1].density-context.normalOffsetVoxels[0].density),
-           (context.normalOffsetVoxels[3].density-context.normalOffsetVoxels[2].density),
-           (context.normalOffsetVoxels[5].density-context.normalOffsetVoxels[4].density)
-          );
-          polygonCellVoxel.normal=normal.normalized;
+          polygonCellVoxel.normal=SampleNormal(context.normalOffsetVoxels);
           context.UpdatePolygonCellVoxelNormalOffsetCache(corner,polygonCellCoord);
          }
+        }
+        internal static Vector3 SampleNormal(
+         Voxel[]normalOffsetVoxels
+        ){
+         float dxL =normalOffsetVoxels[0].density;
+         float dxR =normalOffsetVoxels[1].density;
+         float dyBo=normalOffsetVoxels[2].density;
+         float dyT =normalOffsetVoxels[3].density;
+         float dzBa=normalOffsetVoxels[4].density;
+         float dzF =normalOffsetVoxels[5].density;
+         return SampleNormal(dxL,dxR,dyBo,dyT,dzBa,dzF);
+        }
+     internal static readonly Vector3Int[]sampleNormalOffsets=new[]{
+      new Vector3Int(-1,0,0),
+      new Vector3Int( 1,0,0),
+      new Vector3Int(0,-1,0),
+      new Vector3Int(0, 1,0),
+      new Vector3Int(0,0,-1),
+      new Vector3Int(0,0, 1),
+     };
+        internal struct SampleNormalContext{
+         public SampleDensityContext dxL ;
+         public SampleDensityContext dxR ;
+         public SampleDensityContext dyBo;
+         public SampleDensityContext dyT ;
+         public SampleDensityContext dzBa;
+         public SampleDensityContext dzF ;
+           internal static void Build(
+            Vector3Int center,
+            Vector2Int cCoord,
+            ref SampleDensityContext baseContext,
+            ref SampleNormalContext normalContext
+           ){
+            BuildSubContext(ref normalContext.dxL ,center,cCoord,sampleNormalOffsets[0],ref baseContext);
+            BuildSubContext(ref normalContext.dxR ,center,cCoord,sampleNormalOffsets[1],ref baseContext);
+            BuildSubContext(ref normalContext.dyBo,center,cCoord,sampleNormalOffsets[2],ref baseContext);
+            BuildSubContext(ref normalContext.dyT ,center,cCoord,sampleNormalOffsets[3],ref baseContext);
+            BuildSubContext(ref normalContext.dzBa,center,cCoord,sampleNormalOffsets[4],ref baseContext);
+            BuildSubContext(ref normalContext.dzF ,center,cCoord,sampleNormalOffsets[5],ref baseContext);
+               static void BuildSubContext(
+                ref SampleDensityContext ctx,
+                Vector3Int center,
+                Vector2Int cCoord,
+                Vector3Int offset,
+                ref SampleDensityContext baseContext
+               ){
+                var coord=center+offset;
+                var input=new SampleContext(coord,cCoord);
+                if(offset.x==0&&offset.z==0){
+                 ctx=new SampleDensityContext(input){
+                  hasHeight=baseContext.hasHeight,
+                  heightValue=baseContext.heightValue
+                 };
+                }else{
+                 ctx=new SampleDensityContext(input);
+                }
+               }
+           }
+        }
+        internal static Vector3 SampleNormal(ref SampleNormalContext normalContext){
+         float dxL =SampleDensity(ref normalContext.dxL ,out _);
+         float dxR =SampleDensity(ref normalContext.dxR ,out _);
+         float dyBo=SampleDensity(ref normalContext.dyBo,out _);
+         float dyT =SampleDensity(ref normalContext.dyT ,out _);
+         float dzBa=SampleDensity(ref normalContext.dzBa,out _);
+         float dzF =SampleDensity(ref normalContext.dzF ,out _);
+         return SampleNormal(dxL,dxR,dyBo,dyT,dzBa,dzF);
+        }
+        internal static Vector3 SampleNormal(
+         float dxL ,float dxR,
+         float dyBo,float dyT,
+         float dzBa,float dzF
+        ){
+         Vector3 normal=new(
+          dxR-dxL,
+          dyT-dyBo,
+          dzF-dzBa
+         );
+         normal.Normalize();
+         return normal!=Vector3.zero?normal:Vector3.up;
         }
      private static readonly Vector3[]corners=new Vector3[8]{
       new(-.5f,-.5f,-.5f),

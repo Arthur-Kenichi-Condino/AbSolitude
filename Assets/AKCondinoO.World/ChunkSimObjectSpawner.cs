@@ -6,7 +6,9 @@ using AKCondinoO.World.MarchingCubes;
 using AKCondinoO.World.Spawning;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static AKCondinoO.PhysicsUtil;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.SimObjects.ChunkSimObjectSpawner.BiomesSimObjectSpawnerJob;
 using static AKCondinoO.World.Spawning.ByChanceObjectSpawnEntry<AKCondinoO.SimObjects.SimObject>;
@@ -104,6 +106,8 @@ namespace AKCondinoO.World.SimObjects{
              internal Vector3Int worldCoord;
              internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
              internal SpawnVariation variation;
+             internal SpawnSurface surface;
+             internal OrientedBounds obb;
             }
             internal enum CandidateState{
              Unknown=0,
@@ -133,13 +137,15 @@ namespace AKCondinoO.World.SimObjects{
              var cCoord=this.cCoord;
              var vCoord=coord;
              ValidatevCoord(ref cCoord,ref vCoord);
-             if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation)){
+             if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
               return false;
              }
              candidate.spawnEntry=spawnEntry;
              candidate.variation=variation;
+             candidate.surface=surface;
+             candidate.obb=CalculateOrientedBounds(spawnEntry,variation,surface);
              visited[worldCoord]=candidate;
              var conflictsList=conflictsListPool.Rent();
              CollectConflicts(setup,worldCoord,conflictsList);
@@ -180,7 +186,9 @@ namespace AKCondinoO.World.SimObjects{
              var boundsB=B.spawnEntry.bounds;
              boundsA.center+=A.worldCoord;
              boundsB.center+=B.worldCoord;
-             if(!boundsA.Intersects(boundsB)){
+             var obbA=A.obb;
+             var obbB=B.obb;
+             if(!obbA.Intersects(obbB)){
               return false;
              }
              float areaA=boundsA.size.x*boundsA.size.z;
@@ -237,6 +245,8 @@ namespace AKCondinoO.World.SimObjects{
              internal Vector3Int worldCoord;
              internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
              internal SpawnVariation variation;
+             internal SpawnSurface surface;
+             internal OrientedBounds obb;
             }
             void CollectConflicts(GridIterationSetup setup,Vector3Int candidateCoord,List<SpawnConflict>conflictsList){
              int layer=setup.layer;
@@ -251,13 +261,16 @@ namespace AKCondinoO.World.SimObjects{
               var cCoord=this.cCoord;
               var vCoord=coord;
               ValidatevCoord(ref cCoord,ref vCoord);
-              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation)){
+              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
                continue;
               }
               conflictsList.Add(
                new(){
                 worldCoord=worldCoord,
-                spawnEntry=spawnEntry,variation=variation,
+                spawnEntry=spawnEntry,
+                variation=variation,
+                surface=surface,
+                obb=CalculateOrientedBounds(spawnEntry,variation,surface),
                }
               );
              }}
@@ -304,12 +317,56 @@ namespace AKCondinoO.World.SimObjects{
             int AlignUp(int value,int gridSize){
              return Mathf.CeilToInt((float)value/gridSize)*gridSize;
             }
-            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry,out SpawnVariation variation){
+            internal struct SpawnSurface{
+             internal Vector3 hitPoint;
+             internal Vector3 normal;
+            }
+            bool GetEntry(int layer,Vector3Int vCoord,Vector2Int cCoord,out ByChanceObjectSpawnEntry<SimObject>spawnEntry,out SpawnVariation variation,out SpawnSurface surface){
+             surface=default;
              spawnEntry=BiomesConfigurationSnapshot.GetSpawnEntry(NoiseChannel.TerrainSurfaceSpawn,vCoord,cCoord,layer,out variation);
              if(spawnEntry!=null){
-              return true;
+              if(MarchingCubesHelper.TryFindSurfaceTopDown(
+               vCoord,
+               cCoord,
+               Height-1,
+               0,
+               out var hitPoint,
+               out var normal
+              )){
+               surface=new SpawnSurface(){
+                hitPoint=hitPoint,
+                normal=normal,
+               };
+               return true;
+              }
              }
              return false;
+            }
+            internal OrientedBounds CalculateOrientedBounds(ByChanceObjectSpawnEntry<SimObject>spawnEntry,SpawnVariation variation,SpawnSurface surface){
+             Quaternion align=Quaternion.FromToRotation(Vector3.up,surface.normal);
+             Quaternion rot;
+             if(variation.alignToTerrain){
+              rot=align*Quaternion.Euler(variation.rot);
+             }else{
+              Quaternion yaw=Quaternion.AngleAxis(variation.rot.y,Vector3.up);
+              rot=align*yaw;
+             }
+             Vector3 ext=Vector3.Scale(spawnEntry.bounds.extents,variation.scale);
+             Vector3 up=rot*Vector3.up;
+             Vector3 pivotOffsetLocal=spawnEntry.bounds.center;
+             Vector3 pivotOffsetScaled=Vector3.Scale(pivotOffsetLocal,variation.scale);
+             Vector3 pivotOffsetWorld=rot*pivotOffsetScaled;
+             Vector3 center=surface.hitPoint-pivotOffsetWorld;
+             Vector3 offset=(rot*Vector3.up)*ext.y;
+             center+=offset;
+             OrientedBounds obb=new(){
+              center=center,
+              axisX=(rot*Vector3.right  ).normalized,
+              axisY=(rot*Vector3.up     ).normalized,
+              axisZ=(rot*Vector3.forward).normalized,
+              extents=ext
+             };
+             return obb;
             }
             internal struct SpawnReserve{
              internal Vector3 pos;
@@ -319,7 +376,7 @@ namespace AKCondinoO.World.SimObjects{
             }
             void Reserve(Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
              Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
-             Vector3 pos=vCoord+new Vector3(0.5f,0.5f,0.5f)-new Vector3(Width/2f,0,Depth/2f)+new Vector3(cnkRgn.x,0,cnkRgn.y);
+             Vector3 pos=candidate.obb.center;
              var bounds=candidate.spawnEntry.bounds;
              var spawnReserve=new SpawnReserve(){
               pos=pos,
@@ -334,9 +391,6 @@ namespace AKCondinoO.World.SimObjects{
              spawner.debugSpawnCoords.UnionWith(debugSpawnCoords);
              BiomesSimObjectSpawnerJob.pool.Return(this);
             }
-        }
-        internal static void PredictNormal(Vector3 pos){
-         //MarchingCubesCore.BuildMeshData();
         }
      private readonly HashSet<SpawnReserve>debugSpawnCoords=new();
         internal void GizmosSelected(bool selected){
