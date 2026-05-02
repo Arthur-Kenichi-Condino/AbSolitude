@@ -569,6 +569,10 @@ PrefabInstance:
       propertyPath: debugToggleLogsDebugMessages
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: debugFeedClassArrayToLogsDebugMessages
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -868,15 +872,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.34
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 32.6
+      value: 31.65
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.3
+      value: 4.74
       objectReference: {fileID: 0}
     - target: {fileID: 8196262838495269357, guid: c9297374174baa544a5159ac10838048, type: 3}
       propertyPath: m_LocalRotation.w

@@ -15,7 +15,9 @@ namespace AKCondinoO.Bootstrap{
     internal class Main:MonoSingleton<Main>{
      [SerializeField]private int workerCount=8;
      [SerializeField]ActiveZone activeZonePrefab;
-     [SerializeField]private bool debugToggleLogsDebugMessages=false;
+     [SerializeField]private bool debugToggleAllLogsDebugMessages=false;
+     [SerializeField]private bool debugFeedClassArrayToLogsDebugMessages=false;
+     [SerializeField]private string[]debugClassArrayToLogsDebugMessages;
      [SerializeField]private bool debugCreateActiveZone=false;
      [SerializeField]private ulong debugCreateActiveZoneClientId=1u;
      [SerializeField]private Vector3 debugCreateActiveZonePos=new(16,128,16);
@@ -57,9 +59,15 @@ namespace AKCondinoO.Bootstrap{
          base.Shutdown();
         }
         void Update(){
-         if(debugToggleLogsDebugMessages){
+         if(debugToggleAllLogsDebugMessages){
           Logs.enableAll=!Logs.enableAll;
-          debugToggleLogsDebugMessages=false;
+          debugToggleAllLogsDebugMessages=false;
+         }
+         if(debugFeedClassArrayToLogsDebugMessages){
+          debugFeedClassArrayToLogsDebugMessages=false;
+          foreach(string className in debugClassArrayToLogsDebugMessages){
+           Logs.Enable(className);
+          }
          }
          if(debugCreateActiveZone){
           debugCreateActiveZone=false;
