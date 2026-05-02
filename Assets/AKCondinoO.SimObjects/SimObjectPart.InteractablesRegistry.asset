@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactables:
   - {fileID: 11400000, guid: ddf21b0fd44c5d8409cb3a59e7fffc0b, type: 2}
+  - {fileID: 11400000, guid: b65ea6fb05b27ed4e988d80978693c71, type: 2}
