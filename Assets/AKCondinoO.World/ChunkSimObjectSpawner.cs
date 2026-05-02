@@ -108,6 +108,7 @@ namespace AKCondinoO.World.SimObjects{
              internal SpawnVariation variation;
              internal SpawnSurface surface;
              internal OrientedBounds obb;
+             internal Quaternion rot;
             }
             internal enum CandidateState{
              Unknown=0,
@@ -145,7 +146,7 @@ namespace AKCondinoO.World.SimObjects{
              candidate.spawnEntry=spawnEntry;
              candidate.variation=variation;
              candidate.surface=surface;
-             candidate.obb=CalculateOrientedBounds(spawnEntry,variation,surface);
+             candidate.obb=CalculateOrientedBounds(spawnEntry,variation,surface,out candidate.rot);
              visited[worldCoord]=candidate;
              var conflictsList=conflictsListPool.Rent();
              CollectConflicts(setup,worldCoord,conflictsList);
@@ -270,7 +271,7 @@ namespace AKCondinoO.World.SimObjects{
                 spawnEntry=spawnEntry,
                 variation=variation,
                 surface=surface,
-                obb=CalculateOrientedBounds(spawnEntry,variation,surface),
+                obb=CalculateOrientedBounds(spawnEntry,variation,surface,out Quaternion rot),
                }
               );
              }}
@@ -342,9 +343,8 @@ namespace AKCondinoO.World.SimObjects{
              }
              return false;
             }
-            internal OrientedBounds CalculateOrientedBounds(ByChanceObjectSpawnEntry<SimObject>spawnEntry,SpawnVariation variation,SpawnSurface surface){
+            internal OrientedBounds CalculateOrientedBounds(ByChanceObjectSpawnEntry<SimObject>spawnEntry,SpawnVariation variation,SpawnSurface surface,out Quaternion rot){
              Quaternion align=Quaternion.FromToRotation(Vector3.up,surface.normal);
-             Quaternion rot;
              if(variation.alignToTerrain){
               rot=align*Quaternion.Euler(variation.rot);
              }else{
@@ -371,7 +371,7 @@ namespace AKCondinoO.World.SimObjects{
             internal struct SpawnReserve{
              internal Vector3 pos;
              internal Bounds bounds;
-             internal Vector3 rot;
+             internal Quaternion rot;
              internal Vector3 scale;
             }
             void Reserve(Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
@@ -381,7 +381,7 @@ namespace AKCondinoO.World.SimObjects{
              var spawnReserve=new SpawnReserve(){
               pos=pos,
               bounds=bounds,
-              rot=candidate.variation.rot,
+              rot=candidate.rot,
               scale=candidate.variation.scale,
              };
              debugSpawnCoords.Add(spawnReserve);
@@ -397,11 +397,11 @@ namespace AKCondinoO.World.SimObjects{
          #if UNITY_EDITOR
          var singleton=SimObjectManager.singleton;
          foreach(var reserve in debugSpawnCoords){
-          Vector3 pos  =reserve.pos   ;
-          Bounds bounds=reserve.bounds;
-          Vector3 rot  =reserve.rot   ;
-          Vector3 scale=reserve.scale ;
-          DrawGizmos.RotatedBounds(bounds,pos,Quaternion.Euler(rot),scale,Color.green);
+          Vector3 pos   =reserve.pos   ;
+          Bounds bounds =reserve.bounds;
+          Quaternion rot=reserve.rot   ;
+          Vector3 scale =reserve.scale ;
+          DrawGizmos.RotatedBounds(bounds,pos,rot,scale,Color.green);
          }
          #endif
         }
