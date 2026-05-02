@@ -6,15 +6,14 @@ namespace AKCondinoO.SimObjects.StateMachines{
      [SerializeField]protected StateDefinition stateB;
      public StateDefinition A=>stateA;
      public StateDefinition B=>stateB;
-
         internal override State SetupState(IInteractable interactable){
-         if(!Evaluate(stateA,interactable))
+         if(!IsInTargetState(stateA,interactable))
           return stateA.SetupState(interactable);
          return stateB.SetupState(interactable);
         }
-        private bool Evaluate(StateDefinition def,IInteractable interactable){
-         if(def is IStateEvaluator eval)
-          return eval.Evaluate(interactable);
+        private bool IsInTargetState(StateDefinition def,IInteractable interactable){
+         if(def is IStateEvaluator state)
+          return state.IsTheStateOf(interactable);
          return false;
         }
     }

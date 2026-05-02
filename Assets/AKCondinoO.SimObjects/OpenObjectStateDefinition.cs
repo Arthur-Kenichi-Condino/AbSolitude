@@ -35,7 +35,7 @@ namespace AKCondinoO.SimObjects.StateMachines{
          state.Setup(in context);
          return state;
         }
-        public virtual bool Evaluate(IInteractable interactable){
+        public virtual bool IsTheStateOf(IInteractable interactable){
          if(interactable is MonoBehaviour monoBehaviour){
           var t=monoBehaviour.transform;
           return IsOpen(t,this);

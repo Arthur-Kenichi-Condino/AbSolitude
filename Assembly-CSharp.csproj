@@ -133,6 +133,7 @@
     <Compile Include="Assets\AKCondinoO.World\TurbulenceModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.OnTeleportTo.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\MonoSingleton.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\InspectablePart.cs" />
     <Compile Include="Assets\AKCondinoO.Utilities\ObjectPool.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\BuildBuyEditMode\BuildBuyEditModeUIContent.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Client.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Assets\AKCondinoO\InputHandler.Enabled.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.HandsUsage.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Trees\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\InspectablePart.Interactable.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectInstancedRendering.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\_SimRifle\SimRifle.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInputUtil.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\BaseAI.Motion.Enum.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\UI\WorldSpace\WorldSpaceUI.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\InspectablePartInteractions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.TranslateInput.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectManager.cs" />
@@ -325,6 +328,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\SimCharacterController.ProcessCommand.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\MarchingCubesTerrain.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\InspectStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO.World\MultiplyModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimInteractionResolver.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3Util.cs" />

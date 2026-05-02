@@ -3,305 +3,130 @@
   "WorkspaceRootPath": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.bootstrap\\logs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.bootstrap\\logs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\inspectablepart.interactable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\inspectablepart.interactable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.bootstrap\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.bootstrap\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simobjectpart.interactable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simobjectpart.interactable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\modulenode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\modulenode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\inspectablepartinteractions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\inspectablepartinteractions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\chunksimobjectspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\chunksimobjectspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\togglestatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\togglestatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomesconfigurationsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\siminteractionresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\siminteractionresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\terrainchunkbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\terrainchunkbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simobjectpart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simobjectpart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.utilities\\physicsutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.utilities\\physicsutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simobjectpartinteractions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simobjectpartinteractions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\marchingcubeshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\statemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\statemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\marchingcubescore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\marchingcubescore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\interactablesregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\interactablesregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\biomessystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\biomessystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\inspectstatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\inspectstatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.utilities\\mathutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.utilities\\mathutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\inspectablepart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\inspectablepart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\util\\physutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\statedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\statedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\bychancepicker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\bychancepicker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacermultithreaded.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo\\voxels\\terrain\\voxelterrainsurfacesimobjectsplacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simmovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simmovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simdescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simdescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\simactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\simactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.world\\voxel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.world\\voxel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\arthur\\documents\\github\\absolitude\\assets\\akcondinoo.simobjects\\openobjectstatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\akcondinoo.simobjects\\openobjectstatedefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 177,
+      "VerticalTabListWidth": 224,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Main.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Main.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\Main.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Main.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.Bootstrap\\Main.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAkwEQAAAAiAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "InteractablesRegistry.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InteractablesRegistry.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\InteractablesRegistry.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InteractablesRegistry.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\InteractablesRegistry.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T09:07:34.19Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "TerrainChunkBuilder.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\TerrainChunkBuilder.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\TerrainChunkBuilder.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\TerrainChunkBuilder.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\TerrainChunkBuilder.cs",
-              "ViewState": "AgIAAA4BAAAAAAAAAAAtwBwBAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T07:51:46.256Z",
+              "WhenOpened": "2026-05-02T11:03:27.816Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Logs.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Logs.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.Bootstrap\\Logs.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Bootstrap\\Logs.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.Bootstrap\\Logs.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAhwBsAAAAIAAAAAAAAAA==",
+              "Title": "InspectablePart.Interactable.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePart.Interactable.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\InspectablePart.Interactable.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePart.Interactable.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\InspectablePart.Interactable.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAABjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T03:12:05.573Z",
+              "WhenOpened": "2026-05-02T11:02:20.712Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "MathUtil.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\MathUtil.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.Utilities\\MathUtil.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\MathUtil.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.Utilities\\MathUtil.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T23:51:25.863Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ByChancePicker.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ByChancePicker.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\ByChancePicker.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ByChancePicker.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\ByChancePicker.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAQwAsAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T20:58:49.285Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "SimMovement.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimMovement.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAD4v1YAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T17:42:56.256Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "SimDescription.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimDescription.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAIA7wBkAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T17:42:49.811Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "SimActor.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimActor.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimActor.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimActor.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimActor.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAQwCkAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T17:41:52.031Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ChunkSimObjectSpawner.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ChunkSimObjectSpawner.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\ChunkSimObjectSpawner.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ChunkSimObjectSpawner.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\ChunkSimObjectSpawner.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAgwDYAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T02:08:19.333Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "MarchingCubesCore.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MarchingCubesCore.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\MarchingCubesCore.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MarchingCubesCore.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\MarchingCubesCore.cs",
-              "ViewState": "AgIAAKsAAAAAAAAAAAAtwJcAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T02:02:02.556Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "MarchingCubesHelper.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\MarchingCubesHelper.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwCgAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T02:01:58.257Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "d97637f3-1509-432e-ad67-83728c57d074",
-        "Display": 0,
-        "X": 229,
-        "Y": 102,
-        "Width": 1312,
-        "Height": 718,
-        "WindowState": 2
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ModuleNode.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ModuleNode.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\ModuleNode.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\ModuleNode.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\ModuleNode.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAWwEgAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T08:42:46.421Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "BiomesSystem.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesSystem.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesSystem.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\BiomesSystem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T03:38:35.277Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "Voxel.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\Voxel.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\Voxel.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\Voxel.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\Voxel.cs",
+              "Title": "InspectablePart.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePart.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\InspectablePart.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePart.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\InspectablePart.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T15:46:05.533Z",
+              "WhenOpened": "2026-05-02T10:52:50.104Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "BiomesConfigurationSnapshot.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.World\\BiomesConfigurationSnapshot.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAApwBUBAAAJAAAAAAAAAA==",
+              "Title": "SimInteractionResolver.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimInteractionResolver.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimInteractionResolver.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimInteractionResolver.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimInteractionResolver.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwB0AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T02:18:46.065Z",
+              "WhenOpened": "2026-05-02T10:44:13.541Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "InspectStateDefinition.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectStateDefinition.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\InspectStateDefinition.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectStateDefinition.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\InspectStateDefinition.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T09:35:27.66Z",
               "EditorCaption": ""
             }
           ]
@@ -312,7 +137,7 @@
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "FloatingWindowState": {
-        "Id": "09513d48-24f0-48c1-99f4-c29dd2613215",
+        "Id": "a4924d9a-7294-44d9-8b8e-d7c223d81b1f",
         "Display": 1,
         "X": 229,
         "Y": 130,
@@ -323,58 +148,131 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "PhysicsUtil.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\PhysicsUtil.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO.Utilities\\PhysicsUtil.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.Utilities\\PhysicsUtil.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO.Utilities\\PhysicsUtil.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAYwEgAAAABAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "StateMachine.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\StateMachine.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\StateMachine.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\StateMachine.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\StateMachine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T23:58:38.186Z",
+              "WhenOpened": "2026-05-02T11:08:18.935Z",
               "EditorCaption": ""
             },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SimObjectPart.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPart.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectPart.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPart.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimObjectPart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T10:48:23.756Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InspectablePartInteractions.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePartInteractions.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\InspectablePartInteractions.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\InspectablePartInteractions.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\InspectablePartInteractions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T11:10:38.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SimObjectPartInteractions.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPartInteractions.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectPartInteractions.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPartInteractions.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimObjectPartInteractions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T11:03:40.184Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SimObjectPart.Interactable.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPart.Interactable.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\SimObjectPart.Interactable.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\SimObjectPart.Interactable.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\SimObjectPart.Interactable.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAABxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T10:49:48.945Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "b19cfa81-5267-4726-bf4f-34a836345ce4",
+        "Display": 2,
+        "X": 229,
+        "Y": 130,
+        "Width": 1312,
+        "Height": 690,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "PhysUtil.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\PhysUtil.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Util\\PhysUtil.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Util\\PhysUtil.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO\\Util\\PhysUtil.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAeAAAAAAAAAA==",
+              "Title": "StateDefinition.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\StateDefinition.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\StateDefinition.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\StateDefinition.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\StateDefinition.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA/wCoAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T20:40:15.861Z",
+              "WhenOpened": "2026-05-02T09:28:12.078Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacer.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "ToggleStateDefinition.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\ToggleStateDefinition.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\ToggleStateDefinition.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\ToggleStateDefinition.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\ToggleStateDefinition.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T20:35:37.001Z",
+              "WhenOpened": "2026-05-02T09:46:51.279Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "RelativeDocumentMoniker": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "RelativeToolTip": "Assets\\AKCondinoO\\Voxels\\Terrain\\VoxelTerrainSurfaceSimObjectsPlacerMultithreaded.cs",
-              "ViewState": "AgIAAF0JAAAAAAAAAAAWwG8JAAAqAAAAAAAAAA==",
+              "DocumentIndex": 12,
+              "Title": "OpenObjectStateDefinition.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\OpenObjectStateDefinition.cs",
+              "RelativeDocumentMoniker": "Assets\\AKCondinoO.SimObjects\\OpenObjectStateDefinition.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\AbSolitude\\Assets\\AKCondinoO.SimObjects\\OpenObjectStateDefinition.cs",
+              "RelativeToolTip": "Assets\\AKCondinoO.SimObjects\\OpenObjectStateDefinition.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAcwEQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T20:35:28.531Z",
+              "WhenOpened": "2026-05-02T09:28:07.887Z",
               "EditorCaption": ""
             }
           ]

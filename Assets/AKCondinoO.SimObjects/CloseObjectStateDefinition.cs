@@ -24,7 +24,7 @@ namespace AKCondinoO.SimObjects.StateMachines{
          state.Setup(in context);
          return state;
         }
-        public override bool Evaluate(IInteractable interactable){
+        public override bool IsTheStateOf(IInteractable interactable){
          if(interactable is MonoBehaviour monoBehaviour){
           var t=monoBehaviour.transform;
           return IsClosed(t,this);

@@ -14,7 +14,7 @@ namespace AKCondinoO.SimObjects.StateMachines{
         }
     }
     internal interface IStateEvaluator{
-        bool Evaluate(IInteractable interactable);
+        bool IsTheStateOf(IInteractable interactable);
     }
     internal interface IState<TContext>{
         void Setup(in TContext context);
