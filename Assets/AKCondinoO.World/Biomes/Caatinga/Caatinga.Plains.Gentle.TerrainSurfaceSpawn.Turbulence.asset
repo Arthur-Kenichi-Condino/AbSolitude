@@ -15,7 +15,8 @@ MonoBehaviour:
   channel: 2
   seedOffset: 0
   materialTables: []
-  biomeSpawnTables: []
+  biomeSpawnTables:
+  - {fileID: 11400000, guid: 0ec97b30ded09444182c8ce35a624fe5, type: 2}
   input: {fileID: 11400000, guid: 32ab165f1d26a5647894dc1e9d2cf60e, type: 2}
   frequency: 0.25
   power: 1

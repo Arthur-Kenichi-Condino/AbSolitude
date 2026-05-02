@@ -53,30 +53,30 @@ namespace AKCondinoO.World.SimObjects{
          private Vector2Int cnkRgn;
             public void ExecuteAtBackgroundThread(){
              cnkRgn=cCoordTocnkRgn(cCoord);
-             BiomesConfigurationSnapshot.IsReading();
-             try{
-              var settings=BiomesConfigurationSnapshot.GetSpawnSettings(NoiseChannel.TerrainSurfaceSpawn);
-              if(settings==null){
-               Logs.Debug(()=>"'failed to get spawn settings!'");
-               return;
+             using(ReadScope.Enter()){
+              try{
+               var settings=BiomesConfigurationSnapshot.GetSpawnSettings(NoiseChannel.TerrainSurfaceSpawn);
+               if(settings==null){
+                Logs.Debug(()=>"'failed to get spawn settings!'");
+                return;
+               }
+               int minLayer=settings.minLayer;
+               int maxLayer=settings.maxLayer;
+               Logs.Debug(()=>"minLayer:"+minLayer+";maxLayer:"+maxLayer);
+               foreach(var kvp in settings.layerData){
+                int layer=kvp.Key;
+                var spawnLayerData=kvp.Value;
+                var iterationSetup=new GridIterationSetup(){
+                 layer=layer,
+                 spawnLayerData=spawnLayerData,
+                };
+                RecursivelyReserveBounds(iterationSetup,cnkRgn);
+                visited.Clear();
+               }
+              }catch(Exception e){
+               Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+              }finally{
               }
-              int minLayer=settings.minLayer;
-              int maxLayer=settings.maxLayer;
-              Logs.Debug(()=>"minLayer:"+minLayer+";maxLayer:"+maxLayer);
-              foreach(var kvp in settings.layerData){
-               int layer=kvp.Key;
-               var spawnLayerData=kvp.Value;
-               var iterationSetup=new GridIterationSetup(){
-                layer=layer,
-                spawnLayerData=spawnLayerData,
-               };
-               RecursivelyReserveBounds(iterationSetup,cnkRgn);
-               visited.Clear();
-              }
-             }catch(Exception e){
-              Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-             }finally{
-              BiomesConfigurationSnapshot.StoppedReading();
              }
              Logs.Debug(()=>"'biome sim object spawning done':"+cCoord);
             }

@@ -8,6 +8,7 @@ using LibNoise;
 using LibNoise.Operator;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Mathematics;
 using UnityEngine;
@@ -61,11 +62,25 @@ namespace AKCondinoO.World{
     }
     internal static class BiomesConfigurationSnapshot{
      private static readonly ReaderWriterLockSlim rwl=new(LockRecursionPolicy.SupportsRecursion);
-        internal static void IsReading(){
-         rwl.EnterReadLock();
+        [ThreadStatic]
+        private static int readDepth;
+        internal struct ReadScope:IDisposable{
+            public static ReadScope Enter(){
+             rwl.EnterReadLock();
+             readDepth++;
+             return new();
+            }
+            public void Dispose(){
+             readDepth--;
+             rwl.ExitReadLock();
+            }
         }
-        internal static void StoppedReading(){
-         rwl. ExitReadLock();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static void EnsureReading(){
+         if(readDepth<=0)
+          throw new InvalidOperationException(
+           "você precisa avisar que está lendo dados do bioma com o uso de ReadScope! x.x"
+          );
         }
      private static Snapshot snapshot;
         internal class Snapshot{
@@ -106,6 +121,7 @@ namespace AKCondinoO.World{
          Snapshot.pool.Return(snapshot);snapshot=null;
         }
         internal static void SetTerrainvxl(ref Voxel vxl,Vector3Int vCoord,Vector2Int cCoord,BiomesConfigurationContext context){
+         EnsureReading();
          /*  fora do mundo, baixo:  */
          if(vCoord.y<=0){
           vxl=Voxel.bedrock;
@@ -169,6 +185,7 @@ namespace AKCondinoO.World{
             }
         }
         internal static float SampleDensity(ref SampleDensityContext context,out bool computed){
+         EnsureReading();
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          computed=false;
          Vector3Int vCoord=context.vCoord;
@@ -216,6 +233,7 @@ namespace AKCondinoO.World{
         internal static MaterialId SampleMaterial(
          ref SampleMaterialContext context
         ){
+         EnsureReading();
          var snapshot=BiomesConfigurationSnapshot.snapshot;
          Vector3Int vCoord=context.vCoord;
          Vector3Int noiseInputRounded=context.noiseInputRounded;

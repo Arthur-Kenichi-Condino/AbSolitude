@@ -10,6 +10,7 @@ using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static AKCondinoO.Bootstrap.SharedCoroutines;
+using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World.Terrain{
     internal class TerrainChunkBuilder{
@@ -274,15 +275,15 @@ namespace AKCondinoO.World.Terrain{
          readonly System.Diagnostics.Stopwatch sw=new();
             public void ExecuteAtBackgroundThread(){
              sw.Restart();
-             BiomesConfigurationSnapshot.IsReading();
-             try{
-              context.meshData.tempVer.Clear();
-              context.meshData.tempTri.Clear();
-              MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
-             }catch(Exception e){
-              Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-             }finally{
-              BiomesConfigurationSnapshot.StoppedReading();
+             using(ReadScope.Enter()){
+              try{
+               context.meshData.tempVer.Clear();
+               context.meshData.tempTri.Clear();
+               MarchingCubesCore.BuildMeshData(new(-1,0,-1),new(Width,Height-1,Depth),cCoord,context);
+              }catch(Exception e){
+               Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+              }finally{
+              }
              }
              sw.Stop();
              Logs.Debug(()=>"'build terrain mesh execution time':"+sw.ElapsedMilliseconds+" ms");
