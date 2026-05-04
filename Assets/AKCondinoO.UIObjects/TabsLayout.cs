@@ -5,8 +5,6 @@ namespace AKCondinoO.UIObjects{
     internal abstract class TabsLayout:MonoBehaviour{
      internal TabsGroup tabsGroup;
      [SerializeField]internal RectTransform tabsHeader;
-     [SerializeField]internal GameObject headerButtonPrefab;
-     [SerializeField]internal TabDefinition[]tabsInGroup;
      internal LayoutElement tabsHeaderLayoutElement;
      internal TabsContainer container;
         internal virtual void OnAwake(){

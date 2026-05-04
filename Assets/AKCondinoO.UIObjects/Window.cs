@@ -70,14 +70,16 @@ namespace AKCondinoO.UIObjects{
          float tabsHeaderHeight=0f;
          float tabsHeaderWidth=0f;
          if(tabsGroup!=null){
-          switch(tabsGroup.tabsOrientation){
-           case TabsGroup.TabsOrientation.Horizontal:{
-            tabsHeaderHeight=tabsGroup.tabsLayout.tabsHeaderLayoutElement.minHeight;
-            break;
-           }
-           case TabsGroup.TabsOrientation.Vertical:{
-            tabsHeaderWidth=tabsGroup.tabsLayout.tabsHeaderLayoutElement.minWidth;
-            break;
+          if(tabsGroup.tabsLayout.container.hasMultipleTabs){
+           switch(tabsGroup.tabsOrientation){
+            case TabsGroup.TabsOrientation.Horizontal:{
+             tabsHeaderHeight=tabsGroup.tabsLayout.tabsHeaderLayoutElement.minHeight;
+             break;
+            }
+            case TabsGroup.TabsOrientation.Vertical:{
+             tabsHeaderWidth=tabsGroup.tabsLayout.tabsHeaderLayoutElement.minWidth;
+             break;
+            }
            }
           }
          }

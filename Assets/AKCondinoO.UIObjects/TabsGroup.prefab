@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8705665733525812912
@@ -54,6 +54,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tabsOrientation: 0
   tabsOrderInverted: 0
+  headerButtonPrefab: {fileID: 1104084753901567343, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+  tabsInGroup:
+  - title: Tab 1
+    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
   horizontalTabsPrefab: {fileID: 8876092374749311001, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
   verticalTabsPrefab: {fileID: -6195572637612516192, guid: 5b34ef0bc3fff9b49af832d9bcfec44c, type: 3}
 --- !u!222 &6113392512949205861

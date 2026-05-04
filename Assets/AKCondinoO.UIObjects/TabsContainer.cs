@@ -8,6 +8,7 @@ namespace AKCondinoO.UIObjects{
      internal Tab[]tabs;
      private RectTransform[]tabRects;
      private Button[]tabButtons;
+     internal bool hasMultipleTabs;
         internal void Build(TabDefinition[]tabsInGroup,GameObject headerButtonPrefab){
          layoutElement=GetComponent<LayoutElement>();
          tabs=new Tab[tabsInGroup.Length];
@@ -24,6 +25,8 @@ namespace AKCondinoO.UIObjects{
           button.onClick.AddListener(()=>Show(index));
           tabButtons[idx]=button;
          }
+         hasMultipleTabs=tabsInGroup.Length>1;
+         tabsLayout.tabsHeader.gameObject.SetActive(hasMultipleTabs);
         }
      private int currentIndex;
      private Tab currentTab;

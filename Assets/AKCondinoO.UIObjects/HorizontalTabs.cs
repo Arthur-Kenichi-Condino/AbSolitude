@@ -6,7 +6,7 @@ namespace AKCondinoO.UIObjects{
         internal override void OnAwake(){
          base.OnAwake();
          tabsHeaderHorizontalLayoutGroup=tabsHeader.GetComponent<HorizontalLayoutGroup>();
-         container.Build(tabsInGroup,headerButtonPrefab);
+         container.Build(tabsGroup.tabsInGroup,tabsGroup.headerButtonPrefab);
          container.Show(0);
         }
     }

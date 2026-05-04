@@ -167,10 +167,6 @@ MonoBehaviour:
   tabsInGroup:
   - title: Tab 1
     contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
-  - title: Tab 2
-    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
-  - title: Tab 3
-    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
 --- !u!222 &5885030373535227377
 CanvasRenderer:
   m_ObjectHideFlags: 0
