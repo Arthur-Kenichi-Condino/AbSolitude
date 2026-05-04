@@ -222,8 +222,8 @@
     <Compile Include="Assets\AKCondinoO\Util\FileUtil.cs" />
     <Compile Include="Assets\AKCondinoO.World\NavMeshCluster.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimActor.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallHomunculus\CallHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\WindowDragArea.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallHomunculus\CallHomunculus.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\ICameraMode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
@@ -367,8 +367,8 @@
     <Compile Include="Assets\AKCondinoO\Ambience\AmbientLightIntensity.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
-    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\PositionChangeSkill.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkManagerConst.cs" />
+    <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\PositionChangeSkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoEManager.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunTransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnFOLLOW_ST.cs" />
