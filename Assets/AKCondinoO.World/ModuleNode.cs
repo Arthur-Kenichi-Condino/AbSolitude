@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.World.Biomes{
     internal abstract class ModuleNode:ScriptableObject{
-     public NoiseChannel channel;
-     public int seedOffset;
-     public BiomeMaterialTable[]materialTables;
-     public BiomeSpawnTable[]biomeSpawnTables;
+     [SerializeField]public NoiseChannel channel;
+     [SerializeField]public int seedOffset;
+     [SerializeField]public BiomeMaterialTable[]materialTables=new BiomeMaterialTable[0];
+     [SerializeField]public BiomeSpawnTable[]biomeSpawnTables=new BiomeSpawnTable[0];
         internal virtual NoiseNodesSnapshot DoSnapshot(int worldSeed,NoiseNodesSnapshot parent){
          var snapshot=CreateSnapshot();
          snapshot.channel=channel;
