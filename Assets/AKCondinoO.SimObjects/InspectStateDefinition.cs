@@ -42,4 +42,16 @@ namespace AKCondinoO.SimObjects.StateMachines{
          base.Exit();
         }
     }
+    internal class OpenUIWindowTask:StateTask,IStateTask<InspectionContext>{
+        internal OpenUIWindowTask(InspectStateDefinition definition):base(definition){
+        }
+     protected InspectionContext context;
+        public override void OnReturnToPoolRecycle(){
+         context=default;
+        }
+        public virtual void Setup(in InspectionContext context){
+        }
+        public override void Tick(float dt){
+        }
+    }
 }

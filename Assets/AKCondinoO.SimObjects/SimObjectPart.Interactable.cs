@@ -3,6 +3,7 @@ using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.SimObjects.StateMachines;
 using UnityEngine;
+using static AKCondinoO.SimActors.SimInteractions.InteractionSlot;
 namespace AKCondinoO.SimObjects{
     internal partial class SimObjectPart{
         internal class ToggleDefinition:SimInteractionDefinition{
@@ -14,15 +15,8 @@ namespace AKCondinoO.SimObjects{
              var instance=(ToggleInstance)InteractionDefinitions.instancing[typeof(ToggleInstance)].ObjectRent();
              instance.sim=sim;
              instance.target=target;
-             InteractionSlot interactionSlot=null;
+             InteractionSlot interactionSlot=GetSlot(target,SlotPurpose.InteractFront);
              if(target is SimObjectPart part){
-              var holder=part.holder;
-              for(int i=0;i<holder.simObjectSlots.Count;i++){
-               var slot=holder.simObjectSlots[i];
-               if(slot.purpose==InteractionSlot.SlotPurpose.InteractFront){
-                interactionSlot=slot;
-               }
-              }
               instance.part=part;
              }
              Logs.Debug(()=>"interactionSlot:"+interactionSlot);
@@ -38,14 +32,10 @@ namespace AKCondinoO.SimObjects{
         internal class ToggleInstance:SimInteractionInstance{
          internal SimObjectPart part;
          internal InteractionSlot interactionSlot;
-         internal Vector3 worldPosition;
-         private bool enRoute;
-         private bool machineRunning;
             internal override void OnReturnToPoolRecycle(){
              part=null;
              interactionSlot=null;
-             enRoute=false;
-             machineRunning=false;
+             base.OnReturnToPoolRecycle();
             }
             internal override bool Running(){
              var stateMachine=part.stateMachine;
@@ -58,22 +48,16 @@ namespace AKCondinoO.SimObjects{
               return true;
              }
              //Logs.Debug(()=>"'sim.HasReachedDestination()'");
-             if(!machineRunning){
-              machineRunning=stateMachine.RunState(
-               def=>{
-                if(def is ToggleStateDefinition toggle){
-                 return toggle.A is OpenObjectStateDefinition&&
-                        toggle.B is CloseObjectStateDefinition;
-                }
-                return false;
+             bool running=RunStateMachine(stateMachine,
+              def=>{
+               if(def is ToggleStateDefinition toggle){
+                return toggle.A is OpenObjectStateDefinition&&
+                       toggle.B is CloseObjectStateDefinition;
                }
-              );
-              if(!machineRunning){
                return false;
               }
-              Logs.Debug(()=>"machineRunning:"+machineRunning);
-             }
-             if(stateMachine.IsBusy){
+             );
+             if(running){
               return true;
              }
              Logs.Debug(()=>"'state machine finished'");

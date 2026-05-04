@@ -20,10 +20,8 @@ namespace AKCondinoO.World{
             }
         }
         internal class GoHereInstance:SimInteractionInstance{
-         internal Vector3 worldPosition;
-         private bool enRoute;
             internal override void OnReturnToPoolRecycle(){
-             enRoute=false;
+             base.OnReturnToPoolRecycle();
             }
             internal override bool Running(){
              enRoute=sim.RouteTo(worldPosition);

@@ -1,8 +1,9 @@
+using LibNoise.Operator;
 using UnityEngine;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
     internal class TabsContainer:MonoBehaviour{
-     internal TabsGroup tabsGroup;
+     internal TabsLayout tabsLayout;
      private LayoutElement layoutElement;
      internal Tab[]tabs;
      private RectTransform[]tabRects;
@@ -13,14 +14,15 @@ namespace AKCondinoO.UIObjects{
          tabRects=new RectTransform[tabsInGroup.Length];
          tabButtons=new Button[tabsInGroup.Length];
          for(int i=0;i<tabsInGroup.Length;i++){
-          var tab=Instantiate(tabsInGroup[i].contentPrefab,transform);
-          tabs[i]=tab.GetComponent<Tab>();
-          tabRects[i]=tab.GetComponent<RectTransform>();
-          var headerButtonGameObject=Instantiate(headerButtonPrefab,tabsGroup.tabsHeader);
+          int idx=tabsLayout.tabsGroup.tabsOrderInverted?(tabsInGroup.Length-1-i):i;
+          var tab=Instantiate(tabsInGroup[idx].contentPrefab,transform);
+          tabs[idx]=tab.GetComponent<Tab>();
+          tabRects[idx]=tab.GetComponent<RectTransform>();
+          var headerButtonGameObject=Instantiate(headerButtonPrefab,tabsLayout.tabsHeader);
           var button=headerButtonGameObject.GetComponent<Button>();
-          int index=i;
+          int index=idx;
           button.onClick.AddListener(()=>Show(index));
-          tabButtons[i]=button;
+          tabButtons[idx]=button;
          }
         }
      private int currentIndex;
@@ -39,8 +41,8 @@ namespace AKCondinoO.UIObjects{
           tab.gameObject.SetActive(i==index);
           tabButtons[i].interactable=(i!=index);
          }
-         if(tabsGroup.window!=null){
-          tabsGroup.window.OnContentChanged((RectTransform)currentTab.transform);
+         if(tabsLayout.tabsGroup.window!=null){
+          tabsLayout.tabsGroup.window.OnContentChanged((RectTransform)currentTab.transform);
          }
         }
     }

@@ -19,6 +19,7 @@ namespace AKCondinoO.World{
       "SimStructure",
      };
      internal NavMeshProvider navMeshProvider;
+     [SerializeField]internal bool debugDisableGeneration=false;
      [SerializeField]internal bool debugForceRegenerate=false;
         public override void Initialize(){
          base.Initialize();
@@ -77,6 +78,9 @@ namespace AKCondinoO.World{
          if(!chunks.TryGetValue(cCoord,out var cnk)){
           chunks.Add(cCoord,cnk=chunkPool.Rent());
           cnk.Initialize();
+         }
+         if(debugDisableGeneration){
+          return;
          }
          cnk.OnEnsureExists(cCoord);
          SimObjectManager.singleton.OnEnsureChunkExists(cCoord);

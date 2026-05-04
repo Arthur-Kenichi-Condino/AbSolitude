@@ -23,12 +23,12 @@ namespace AKCondinoO.World.Terrain{
          internal BakeJob bakeJob;
          internal JobHandle bakeJobHandle;
             internal struct BakeJob:IJob{
-             public int meshId;
+             public EntityId meshId;
                 public void Execute(){
                  Physics.BakeMesh(meshId,false);
                 }
             }
-            internal MeshData(int meshId){
+            internal MeshData(EntityId meshId){
              tempVer=new NativeList<Vertex>(Allocator.Persistent);
              tempTri=new NativeList<UInt32>(Allocator.Persistent);
              bakeJob=new BakeJob(){
@@ -47,7 +47,7 @@ namespace AKCondinoO.World.Terrain{
          mesh=new Mesh(){
           bounds=chunk.bounds,
          };
-         meshData=new(mesh.GetInstanceID());
+         meshData=new(mesh.GetEntityId());
         }
         internal void Destroy(){
          updateJob=null;
