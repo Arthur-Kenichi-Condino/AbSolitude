@@ -1548,7 +1548,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj" />
     <ProjectReference Include="Assembly-CSharp.csproj" />
     <ProjectReference Include="Netcode for GameObjects Community Extensions.csproj" />
     <ProjectReference Include="UMA_Core_Editor.csproj" />
