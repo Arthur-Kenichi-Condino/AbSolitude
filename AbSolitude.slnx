@@ -1,10 +1,14 @@
 ﻿<Solution>
   <Project Path="UMA_Core_Editor.csproj" />
+  <Project Path="UMA_Core.csproj" />
+  <Project Path="UMA_Examples.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Netcode.Runtime.csproj" />
   <Project Path="Netcode for GameObjects Community Extensions.csproj" />
-  <Project Path="UMA_Core.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="UMA_Content.csproj" />
   <Project Path="Addressable_Editor.csproj" />
+  <Project Path="UMA_Examples_Editor.csproj" />
+  <Project Path="Shaderpackager-editor.csproj" />
   <Project Path="Netcode for GameObjects Community Extensions Editor.csproj" />
 </Solution>

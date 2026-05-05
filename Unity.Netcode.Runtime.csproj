@@ -109,8 +109,8 @@
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Messaging\RpcTargets\AuthorityRpcTarget.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Messaging\INetworkMessageProvider.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Messaging\Messages\ParentSyncMessage.cs" />
-    <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Messaging\Messages\SessionOwnerMessage.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Serialization\INetworkSerializable.cs" />
+    <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Messaging\Messages\SessionOwnerMessage.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Components\NetworkRigidbody.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Metrics\NetworkMetrics.cs" />
     <Compile Include="Library\PackageCache\com.unity.netcode.gameobjects@60c1d83693e8\Runtime\Transports\UTP\BatchedReceiveQueue.cs" />

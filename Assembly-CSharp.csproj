@@ -397,8 +397,8 @@
     <Compile Include="Assets\AKCondinoO\Ambience\CloudParticleSystem.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\ArthurCondino\ArthurCondinoAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkManagerConst.cs" />
-    <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Scale.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Movement\PositionChangeSkill.cs" />
+    <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Scale.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\SkillAoEManager.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunTransform.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnFOLLOW_ST.cs" />
@@ -406,8 +406,8 @@
     <Compile Include="Assets\AKCondinoO\Util\IdSortedList.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Add.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\ActiveZone.cs" />
-    <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\SimObjectScreenshotHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SimTime.cs" />
+    <Compile Include="Assets\AKCondinoO\SimObjectToSpriteTool\SimObjectScreenshotHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainGetFileEditDataToNetSyncMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainChunkUnnamedMessageHandler.Server.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.NavMeshAgent.Pathfinding.cs" />
@@ -434,8 +434,8 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\MainCamera.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\AnimationEventsHandler.cs" />
-    <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitSkill.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO.World\ConstModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.WeaponTypes.cs" />
     <Compile Include="Assets\AKCondinoO\GameEntry.cs" />
@@ -497,10 +497,10 @@
     <Compile Include="Assets\AKCondinoO.UIObjects\WindowContent.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\WindowsRoot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\RemingtonModel700BDL\RemingtonModel700BDL.cs" />
-    <Compile Include="Assets\AKCondinoO.World\BiomeMaterialTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventoryManager.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\VoxelSystem.Networking.cs" />
+    <Compile Include="Assets\AKCondinoO.World\BiomeMaterialTable.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\TheSims3CameraModeButton\FixedUI.ButtonPressEvents.TheSims3CameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\FollowerCameraModeButton\FixedUI.ButtonPressEvents.FollowerCameraModeButton.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\MasterSlave\CallSlaveSkill.cs" />
@@ -533,12 +533,13 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\SourceShaders\CompositingShaders\WorldLightBRP.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\COPYING.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\AKCondinoO\Voxels\Water\Water4\WaterInclude.cginc" />
-    <None Include="Assets\UMA\InternalDataStore\InGame\Resources\Shader\NormalShader.compute" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\InternalDataStore\InGame\Resources\Shader\NormalShader.compute" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainInput.cginc" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainLighting.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
@@ -550,19 +551,23 @@
     <None Include="Assets\AKCondinoO\Voxels\Water\Water4\FXWater4Advanced.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainUtil.cginc" />
-    <None Include="Assets\UMA\InternalDataStore\InGame\Resources\PlaceholderAssets\PlaceholderAssetsREADME.txt" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\InternalDataStore\InGame\Resources\PlaceholderAssets\PlaceholderAssetsREADME.txt" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\HowToAutoUpdate.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
-    <None Include="Assets\UMA\InternalDataStore\AssetVersion.xml" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\InternalDataStore\AssetVersion.xml" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Lif\_3D\Original\FBX\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\Whats New in UMA.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Humanoid\Human\_3D\_UMA\HairFadeCutoutSS.shader" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\InternalDataStore\InGame\Resources\Shader\Combiner.compute" />
     <None Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\_3D\Original\FBX\Readme.txt" />
+    <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\ProjectSettings\ProjectVersion.txt" />
     <None Include="Assets\AKCondinoO\UI\Fixed\Crosshairs\Textures\Readme.txt" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrain.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
@@ -1729,10 +1734,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.AI.Navigation.Updater">
-      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.AI.Navigation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1741,12 +1742,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime.Shared">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
+    <Reference Include="Unity.AI.Navigation.Updater">
+      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Multiplayer.Tools.MetricTypes">
-      <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Tools.MetricTypes.dll</HintPath>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime.Shared">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Multiplayer.Tools.NetVis.Configuration">
@@ -1759,6 +1760,10 @@
     </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Multiplayer.Tools.MetricTypes">
+      <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Tools.MetricTypes.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Searcher.Editor">
@@ -1833,16 +1838,16 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net.editor">
-      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.ProBuilder.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net.editor">
+      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Netcode.PackageChecker.Editor">
@@ -2000,10 +2005,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Netcode for GameObjects Community Extensions.csproj" />
-    <ProjectReference Include="UMA_Core_Editor.csproj" />
+    <ProjectReference Include="UMA_Examples_Editor.csproj" />
     <ProjectReference Include="Unity.Netcode.Runtime.csproj" />
+    <ProjectReference Include="UMA_Examples.csproj" />
     <ProjectReference Include="UMA_Core.csproj" />
     <ProjectReference Include="Addressable_Editor.csproj" />
+    <ProjectReference Include="Shaderpackager-editor.csproj" />
+    <ProjectReference Include="UMA_Content.csproj" />
+    <ProjectReference Include="UMA_Core_Editor.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>
