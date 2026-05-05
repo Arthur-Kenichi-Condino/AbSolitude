@@ -1,11 +1,33 @@
-/[Mm]emoryCaptures/**
+#  BLENDER
+*.blend1
+*.blend1.meta
+#  DISCORD BOT
 /[Dd]iscordBots/**/.env
-/[Tt]emp/UnityLockfile
-/[Tt]emp/FSTimeGet-*
-/[Ll]ibrary/ArtifactDB*
-/[Ll]ibrary/[Aa]rtifacts/**
-/[Ll]ibrary/Bee/[Aa]rtifacts/**
-/[Ll]ibrary/PlayerDataCache/**
+#  IDE
+.vs/**
+.idea/**
+#  MISC
+crashlytics-build.properties
+mono_crash.*
+sysinfo.txt
+#  NESTED REPOSITORY
+**/.git
+#  OS
+.DS_Store
+Thumbs.db
+#  UNITY CACHE
+/[Ll]ibrary/**
+!/[Ll]ibrary/PackageCache/
+!/[Ll]ibrary/PackageCache/**
+!/[Ll]ibrary/SourceAssetDB
+!/[Ll]ibrary/SourceAssetDB-lock
+/[Oo]bj/**
+#  UNITY LOGS/TEMP
+.utmp/
 /[Ll]ogs/**
-.vs/**/FileContentIndex/*.vsidx
-.vs/**/v17/.suo
+/[Mm]emoryCaptures/**
+/[Rr]ecordings/**
+/[Tt]emp/**
+#  UNITY BUILD
+/[Bb]uild/**
+/[Bb]uilds/**
