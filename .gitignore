@@ -1,14 +1,19 @@
 #  BLENDER
 *.blend1
 *.blend1.meta
+*.blend2
+*.blend2.meta
 #  DISCORD BOT
-/[Dd]iscordBots/**/.env
+.env
+.env.*
 #  IDE
 .vs/**
 .idea/**
 #  MISC
 crashlytics-build.properties
+*.lock
 mono_crash.*
+*.swp
 sysinfo.txt
 #  NESTED REPOSITORY
 **/.git
