@@ -1,3 +1,6 @@
 [submodule "Assets/AKCondinoO.ExternalCode/ricardojmendez/LibNoise.Unity"]
 	path = Assets/AKCondinoO.ExternalCode/ricardojmendez/LibNoise.Unity
 	url = https://github.com/Arthur-Kenichi-Condino/LibNoise.Unity
+[submodule "Assets/AKCondinoO.ExternalCode/umasteeringgroup/UMA"]
+	path = Assets/AKCondinoO.ExternalCode/umasteeringgroup/UMA
+	url = https://github.com/Arthur-Kenichi-Condino/UMA
