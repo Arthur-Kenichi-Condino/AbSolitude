@@ -15,7 +15,8 @@ namespace AKCondinoO.UIObjects{
          Horizontal=0,
          Vertical=1,
         }
-        internal void OnAwake(){
+        internal void OnAwake(Window window){
+         this.window=window;
          switch(tabsOrientation){
           case TabsOrientation.Vertical:{
            tabsLayout=Instantiate(verticalTabsPrefab,transform);
@@ -28,8 +29,6 @@ namespace AKCondinoO.UIObjects{
          }
          tabsLayout.tabsGroup=this;
          tabsLayout.OnAwake();
-        }
-        internal void OnStart(){
         }
     }
 }

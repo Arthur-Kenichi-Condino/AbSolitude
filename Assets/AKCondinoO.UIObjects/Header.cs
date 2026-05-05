@@ -4,10 +4,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
     internal class Header:MonoBehaviour{
-     internal Window window;
+     private Window window;
      internal LayoutElement layoutElement;
      internal bool hidden=false;
-        internal void OnAwake(){
+        internal void OnAwake(Window window){
+         this.window=window;
          layoutElement=GetComponent<LayoutElement>();
         }
     }

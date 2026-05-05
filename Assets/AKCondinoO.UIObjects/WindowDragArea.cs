@@ -6,10 +6,11 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 namespace AKCondinoO.UIObjects{
     internal class WindowDragArea:MonoBehaviour,IPointerDownHandler,IDragHandler{
-     internal Window window;
+     private Window window;
      internal int siblingIndex;
      internal LayoutElement layoutElement;
-        internal void OnAwake(){
+        internal void OnAwake(Window window){
+         this.window=window;
          siblingIndex=transform.GetSiblingIndex();
          layoutElement=GetComponent<LayoutElement>();
         }

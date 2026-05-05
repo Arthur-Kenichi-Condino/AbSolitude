@@ -199,6 +199,7 @@
     <Compile Include="Assets\AKCondinoO.World\WorldSimObjectSpatialMap.cs" />
     <Compile Include="Assets\AKCondinoO\Util\ListWrapper.cs" />
     <Compile Include="Assets\AKCondinoO.World\NavMeshProvider.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\Minimized.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkTerrainInteractions.cs" />
     <Compile Include="Assets\AKCondinoO\Util\AnimatorUtil.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimInventory.cs" />
@@ -236,12 +237,12 @@
     <Compile Include="Assets\AKCondinoO.World\MarchingCubesHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
     <Compile Include="Assets\AKCondinoO.World\Voxel.cs" />
-    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindow.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimMovement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindowRoot.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\SimActor.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Healing\SpiritualHealing\SpiritualHealingSkillVisualEffect.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\ConsoleInputField.cs" />
     <Compile Include="Assets\AKCondinoO\MainCamera.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\WindowDockManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfinding.cs" />
     <Compile Include="Assets\AKCondinoO.World\MaterialId.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Rendering.cs" />
@@ -435,6 +437,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\CloseButton.cs" />
     <Compile Include="Assets\AKCondinoO\Networking\rlabrecque\SteamManager.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\HitboxesPrefabsList.cs" />
     <Compile Include="Assets\AKCondinoO.World\MaterialAtlasHelper.cs" />
@@ -461,6 +464,7 @@
     <Compile Include="Assets\AKCondinoO.Utilities\RandomHelper.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Constructions\Floors\_SimFloor\SimFloor.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\WindowContent.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\WindowsRoot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Weapons\Rifle\SniperRifle\RemingtonModel700BDL\RemingtonModel700BDL.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomeMaterialTable.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Targeting.Sight.cs" />

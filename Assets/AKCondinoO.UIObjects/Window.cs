@@ -5,14 +5,16 @@ namespace AKCondinoO.UIObjects{
     internal class Window:MonoBehaviour{
      [SerializeField]internal bool autoResize=true;
      [SerializeField]internal bool hideHeader=false;
-     internal UIWindow root;
+     internal UIWindowRoot root;
      internal VerticalLayoutGroup verticalLayoutGroup;
      internal Header header;
      internal ScrollView scrollView;
      internal TabsGroup tabsGroup;
      internal RectOffset verticalLayoutDefaultPadding;
      internal WindowDragArea dragArea;
-        internal void OnAwake(){
+     internal CloseButton closeButton;
+        internal void OnAwake(UIWindowRoot root){
+         this.root=root;
          verticalLayoutGroup=GetComponent<VerticalLayoutGroup>();
          verticalLayoutDefaultPadding=new RectOffset(
           verticalLayoutGroup.padding.left,
@@ -21,26 +23,20 @@ namespace AKCondinoO.UIObjects{
           verticalLayoutGroup.padding.bottom
          );
          header=GetComponentInChildren<Header>();
-         header.window=this;
-         header.OnAwake();
+         header.OnAwake(this);
          scrollView=GetComponentInChildren<ScrollView>();
-         scrollView.window=this;
+         scrollView.OnAwake(this);
          tabsGroup=GetComponentInChildren<TabsGroup>();
          if(tabsGroup!=null){
-          tabsGroup.window=this;
-          tabsGroup.OnAwake();
+          tabsGroup.OnAwake(this);
          }
          dragArea=GetComponentInChildren<WindowDragArea>();
-         dragArea.window=this;
-         dragArea.OnAwake();
+         dragArea.OnAwake(this);
+         closeButton=GetComponentInChildren<CloseButton>();
+         closeButton.OnAwake(this);
          SetHeaderVisible(!hideHeader);
         }
-        internal void Start(){
-         if(tabsGroup!=null){
-          tabsGroup.OnStart();
-         }
-        }
-        void Update(){
+        internal void OnManualUpdate(){
          SetHeaderVisible(!hideHeader);
         }
         internal void SetHeaderVisible(bool visible){
