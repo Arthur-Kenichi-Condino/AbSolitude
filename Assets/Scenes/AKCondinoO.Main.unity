@@ -843,7 +843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: debugDisableGeneration
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: expropriationDistance.x
