@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
@@ -35,6 +36,10 @@ namespace AKCondinoO.UIObjects{
          closeButton=GetComponentInChildren<CloseButton>();
          closeButton.OnAwake(this);
          SetHeaderVisible(!hideHeader);
+        }
+     internal Minimized minimizedBtn;
+        internal void RegisterMinimizedBtn(Minimized minimizedBtn){
+         this.minimizedBtn=minimizedBtn;
         }
         internal void OnManualUpdate(){
          SetHeaderVisible(!hideHeader);

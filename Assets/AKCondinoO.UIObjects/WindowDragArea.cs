@@ -18,8 +18,12 @@ namespace AKCondinoO.UIObjects{
          window.root.transform.SetAsLastSibling();
         }
         public void OnDrag(PointerEventData eventData){
-         ((RectTransform)window.transform).anchoredPosition+=eventData.delta;
+         ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
          //Logs.Debug(()=>"eventData.delta");
+         var mousePosition=eventData.position;
+         if(WindowDockManager.IsNearScreenEdge(mousePosition,window.root.canvas)){
+          UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,mousePosition);
+         }
         }
         internal void OnSetHeaderVisible(bool visible){
          if(visible){

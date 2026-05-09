@@ -30,6 +30,7 @@ namespace AKCondinoO.UIObjects{
         }
         public override void ManualUpdate(){
          base.ManualUpdate();
+         windowDockManager.OnManualUpdate();
          foreach(var windowRoot in windows){
           windowRoot.ManualUpdate();
          }
