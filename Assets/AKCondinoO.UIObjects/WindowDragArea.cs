@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 namespace AKCondinoO.UIObjects{
-    internal class WindowDragArea:MonoBehaviour,IPointerDownHandler,IDragHandler{
+    internal class WindowDragArea:MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDragHandler{
      private Window window;
      internal int siblingIndex;
      internal LayoutElement layoutElement;
@@ -20,6 +20,8 @@ namespace AKCondinoO.UIObjects{
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
          //Logs.Debug(()=>"eventData.delta");
+        }
+        public void OnEndDrag(PointerEventData eventData){
          var mousePosition=eventData.position;
          if(WindowDockManager.IsNearScreenEdge(mousePosition,window.root.canvas)){
           UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,mousePosition);
