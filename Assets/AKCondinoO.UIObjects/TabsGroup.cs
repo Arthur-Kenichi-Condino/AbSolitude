@@ -6,7 +6,6 @@ namespace AKCondinoO.UIObjects{
      internal Window window;
      [SerializeField]internal TabsOrientation tabsOrientation;
      [SerializeField]internal bool tabsOrderInverted;
-     [SerializeField]internal GameObject headerButtonPrefab;
      [SerializeField]internal TabDefinition[]tabsInGroup;
      [SerializeField]HorizontalTabs horizontalTabsPrefab;
      [SerializeField]VerticalTabs verticalTabsPrefab;

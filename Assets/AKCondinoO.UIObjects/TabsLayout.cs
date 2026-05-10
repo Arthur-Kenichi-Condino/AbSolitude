@@ -16,6 +16,7 @@ namespace AKCondinoO.UIObjects{
     [Serializable]
     internal class TabDefinition{
      public string title;
+     public GameObject headerButtonPrefab;
      public GameObject contentPrefab;
     }
 }

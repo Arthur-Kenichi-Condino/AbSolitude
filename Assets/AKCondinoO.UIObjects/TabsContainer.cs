@@ -9,13 +9,14 @@ namespace AKCondinoO.UIObjects{
      private RectTransform[]tabRects;
      private Button[]tabButtons;
      internal bool hasMultipleTabs;
-        internal void Build(TabDefinition[]tabsInGroup,GameObject headerButtonPrefab){
+        internal void Build(TabDefinition[]tabsInGroup){
          layoutElement=GetComponent<LayoutElement>();
          tabs=new Tab[tabsInGroup.Length];
          tabRects=new RectTransform[tabsInGroup.Length];
          tabButtons=new Button[tabsInGroup.Length];
          for(int i=0;i<tabsInGroup.Length;i++){
           int idx=tabsLayout.tabsGroup.tabsOrderInverted?(tabsInGroup.Length-1-i):i;
+          var headerButtonPrefab=tabsInGroup[idx].headerButtonPrefab;
           var tab=Instantiate(tabsInGroup[idx].contentPrefab,transform);
           tabs[idx]=tab.GetComponent<Tab>();
           tabRects[idx]=tab.GetComponent<RectTransform>();
