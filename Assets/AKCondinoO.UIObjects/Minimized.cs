@@ -20,21 +20,20 @@ namespace AKCondinoO.UIObjects{
         internal void RegisterWindow(Window window){
          this.window=window;
         }
-     bool dragging;
+     bool wasDragged;
         public void OnPointerDown(PointerEventData eventData){
-         dragging=false;
+         wasDragged=false;
         }
         public void OnBeginDrag(PointerEventData eventData){
-         dragging=true;
+         wasDragged=true;
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)transform).anchoredPosition+=(eventData.delta/root.canvas.scaleFactor);
         }
         public void OnEndDrag(PointerEventData eventData){
-         dragging=false;
         }
         public void OnPointerClick(PointerEventData eventData){
-         if(dragging)
+         if(wasDragged)
           return;
          UISystem.singleton.windowDockManager.Restore(this,window);
         }
