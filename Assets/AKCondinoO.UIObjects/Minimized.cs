@@ -19,18 +19,24 @@ namespace AKCondinoO.UIObjects{
      internal Window window;
         internal void RegisterWindow(Window window){
          this.window=window;
-         btn.onClick.AddListener(()=>UISystem.singleton.windowDockManager.Restore(this,window));
         }
      bool dragging;
         public void OnPointerDown(PointerEventData eventData){
+         dragging=false;
         }
         public void OnBeginDrag(PointerEventData eventData){
+         dragging=true;
         }
         public void OnDrag(PointerEventData eventData){
+         ((RectTransform)transform).anchoredPosition+=(eventData.delta/root.canvas.scaleFactor);
         }
         public void OnEndDrag(PointerEventData eventData){
+         dragging=false;
         }
         public void OnPointerClick(PointerEventData eventData){
+         if(dragging)
+          return;
+         UISystem.singleton.windowDockManager.Restore(this,window);
         }
     }
 }
