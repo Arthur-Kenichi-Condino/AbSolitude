@@ -15,8 +15,6 @@ namespace AKCondinoO.UIObjects{
          minimized.OnAwake(this);
          window=GetComponentInChildren<Window>();
          window.OnAwake(this);
-         minimized.RegisterWindow(window);
-         window.RegisterMinimizedBtn(minimized);
         }
         internal virtual void ManualUpdate(){
          window.OnManualUpdate();

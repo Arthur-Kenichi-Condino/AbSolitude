@@ -15,7 +15,7 @@ namespace AKCondinoO.UIObjects{
          layoutElement=GetComponent<LayoutElement>();
         }
         public void OnPointerDown(PointerEventData eventData){
-         window.root.transform.SetAsLastSibling();
+         window.BringToFront();
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);

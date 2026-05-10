@@ -22,10 +22,6 @@ sysinfo.txt
 Thumbs.db
 #  UNITY CACHE
 /[Ll]ibrary/**
-!/[Ll]ibrary/PackageCache/
-!/[Ll]ibrary/PackageCache/**
-!/[Ll]ibrary/SourceAssetDB
-!/[Ll]ibrary/SourceAssetDB-lock
 /[Oo]bj/**
 #  UNITY LOGS/TEMP
 .utmp/

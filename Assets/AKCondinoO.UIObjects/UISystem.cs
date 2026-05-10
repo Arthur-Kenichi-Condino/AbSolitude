@@ -24,9 +24,13 @@ namespace AKCondinoO.UIObjects{
          if(windows.Add(windowRoot)){
           Logs.Debug(()=>"added:"+windowRoot.name,windowRoot);
           windowRoot.OnAddWindow();
+          RegisterWindow(windowRoot);
          }else{
           Logs.Debug(()=>"already added:"+windowRoot.name,windowRoot);
          }
+        }
+        internal void RegisterWindow(UIWindowRoot windowRoot){
+         windowDockManager.OnRegistration(windowRoot);
         }
         public override void ManualUpdate(){
          base.ManualUpdate();

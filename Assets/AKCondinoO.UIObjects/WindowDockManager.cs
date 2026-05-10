@@ -6,6 +6,13 @@ namespace AKCondinoO.UIObjects{
         internal WindowDockManager(UISystem uiSystem){
          this.uiSystem=uiSystem;
         }
+        internal void OnRegistration(UIWindowRoot windowRoot){
+         var minimized=windowRoot.minimized;
+         var window=windowRoot.window;
+         minimized.RegisterWindow(window);
+         window.RegisterMinimizedBtn(minimized);
+         minimized.gameObject.SetActive(false);
+        }
      private readonly Dictionary<Window,Minimized>docked=new();
         internal void Minimize(Minimized minimizedBtn,Window window,Vector2 pos=default){
          if(docked.ContainsKey(window)){
@@ -23,12 +30,13 @@ namespace AKCondinoO.UIObjects{
          }
          window.gameObject.SetActive(true);
          minimizedBtn.gameObject.SetActive(false);
+         window.BringToFront();
          docked.Remove(window);
         }
         internal void OnManualUpdate(){
         }
         internal static bool IsNearScreenEdge(Vector2 pos,Canvas canvas){
-         float edge=8f*canvas.scaleFactor;
+         float edge=16f*canvas.scaleFactor;
          return
           pos.x<=edge||
           pos.x>=Screen.width -edge||

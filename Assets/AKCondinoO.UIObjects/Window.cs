@@ -91,6 +91,9 @@ namespace AKCondinoO.UIObjects{
          var windowRectTransform=(RectTransform)transform;
          windowRectTransform.sizeDelta=size;
         }
+        internal void BringToFront(){
+         root.transform.SetAsLastSibling();
+        }
         internal void OnContentChanged(RectTransform rectTransform){
          contentSize=rectTransform.rect.size;
          if(autoResize){
