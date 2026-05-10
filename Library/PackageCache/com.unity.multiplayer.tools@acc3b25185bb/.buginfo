@@ -1,5 +1,0 @@
-system: jira
-server: jira.unity3d.com
-project: MTTB
-issuetype: Bug
-package: Multiplayer Tools

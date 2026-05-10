@@ -1,9 +1,0 @@
-{
-  "name": "Unity.Multiplayer.Tools.Adapters.MockNgo",
-  "rootNamespace": "Unity.Multiplayer.Tools.Adapters.MockNgo",
-  "references": [
-    "Unity.Multiplayer.Tools.Adapters",
-    "Unity.Multiplayer.Tools.Common"
-  ],
-  "defineConstraints": ["UNITY_MP_TOOLS_MOCK_NETWORK_ADAPTER"]
-}
