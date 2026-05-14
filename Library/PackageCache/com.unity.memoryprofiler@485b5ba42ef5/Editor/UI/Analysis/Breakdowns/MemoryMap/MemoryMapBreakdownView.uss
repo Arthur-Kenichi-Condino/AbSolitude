@@ -1,0 +1,30 @@
+/* 
+ * MemoryMapBreakdownView.uss
+ * Styles specific to the Memory Map breakdown table view.
+ * Imports common table view styles from TableViewBase.uss
+ */
+
+@import url("../Shared/TableViewBase.uss");
+
+/* Extend base theme classes if necessary to add theme style differences as variables - the shared color variables come from TableViewBase.uss */
+.table-view-base__dark:root
+{
+}
+
+.table-view-base__light:root
+{
+}
+
+/* Memory Map specific: Monospace font for address column */
+.memory-map-breakdown-view__tree-view__address
+{
+    -unity-font-definition: resource("Fonts/RobotoMono/RobotoMono-Regular SDF.asset");
+}
+
+/* Memory Map specific: Monospace font and right-aligned size column */
+.memory-map-breakdown-view__tree-view__size
+{
+    -unity-font-definition: resource("Fonts/RobotoMono/RobotoMono-Regular SDF.asset");
+    -unity-text-align: middle-right;
+    padding-right: 8px;
+}

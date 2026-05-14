@@ -1,0 +1,43 @@
+#if COM_UNITY_NETCODE_FOR_GAMEOBJECTS_V2_4_X
+using System;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
+using Unity.Multiplayer.Tools.MetricTypes;
+using Unity.Multiplayer.Tools.NetStats;
+using Unity.Netcode;
+
+namespace Unity.Multiplayer.Tools.GameObjects.Tests
+{
+    internal class NetworkMetricsRegistrationTests
+    {
+        private static Type[] s_MetricTypes = AppDomain.CurrentDomain.GetAssemblies().Where((c)=> c.GetName().Name == "Unity.Multiplayer.Tools.MetricTypes")
+            .SelectMany(x => x.GetTypes())
+            .Where(x => x.GetInterfaces().Contains(typeof(INetworkMetricEvent)))
+            .ToArray();
+
+        [TestCaseSource(nameof(s_MetricTypes))]
+        //[Ignore("Disable test while we reevaluate the assumption that INetworkMetricEvent interfaces must be reported from MLAPI. This ignored test is tracked in MTT-11339")]
+        public void ValidateThatAllMetricTypesAreRegistered(Type metricType)
+        {
+            var dispatcher = new NetworkMetrics().Dispatcher as MetricDispatcher;
+            Assert.NotNull(dispatcher);
+
+            var collection = typeof(MetricDispatcher)
+                .GetField("m_Collection", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(dispatcher) as MetricCollection;
+            Assert.NotNull(collection);
+
+            Assert.That(
+                collection.Metrics.OfType<IEventMetric>(),
+                Has.Exactly(2).Matches<IEventMetric>(
+                    eventMetric =>
+                    {
+                        var eventType = eventMetric.GetType().GetGenericArguments()?.FirstOrDefault();
+                        return eventType == metricType;
+                    }));
+        }
+    }
+}
+
+#endif

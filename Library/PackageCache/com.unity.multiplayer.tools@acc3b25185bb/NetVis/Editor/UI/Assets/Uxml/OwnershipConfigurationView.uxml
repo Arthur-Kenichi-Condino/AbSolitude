@@ -1,0 +1,21 @@
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xmlns:nv="Unity.Multiplayer.Tools.NetVis.Editor.UI"
+         editor-extension-mode="False">
+    <Style src="../Uss/NetVisGlobal.uss" />
+    <ui:VisualElement>
+        <ui:Toggle
+            name="TextOverlayEnabled"
+            text="Text Overlay"
+            tooltip="Enable this option to visualize per-object ownership using text labels."
+        />
+        <ui:Toggle
+            name="MeshShadingEnabled"
+            text="Shading"
+            tooltip="Enable this option to visualize per-object ownership using a colored overlay."
+        />
+        <nv:OwnershipServerClientConfigurationView 
+                name="OwnershipServerClientConfigurationView"
+                tooltip="Server/clients list."/>
+    </ui:VisualElement>
+</ui:UXML>

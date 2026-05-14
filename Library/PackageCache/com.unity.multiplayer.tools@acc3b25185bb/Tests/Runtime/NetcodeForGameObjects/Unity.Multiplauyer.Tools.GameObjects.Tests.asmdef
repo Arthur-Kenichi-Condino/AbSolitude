@@ -1,0 +1,55 @@
+{
+    "name": "Unity.Multiplayer.Tools.GameObjects.Tests",
+    "rootNamespace": "Unity.Multiplayer.Tools.GameObjects.Tests",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "Unity.Collections",
+        "Unity.Multiplayer.Tools.MetricTypes",
+        "Unity.Multiplayer.Tools.NetStats",
+        "Unity.Networking.Transport",
+        "Unity.Netcode.TestHelpers.Runtime",
+        "Unity.Mathematics",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.Netcode.Runtime.Tests"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.netcode.gameobjects",
+            "expression": "2.4.0",
+            "define": "COM_UNITY_NETCODE_FOR_GAMEOBJECTS_V2_4_X"
+        },
+        {
+            "name": "com.unity.multiplayer.tools",
+            "expression": "",
+            "define": "MULTIPLAYER_TOOLS"
+        },
+        {
+            "name": "Unity",
+            "expression": "(0,2022.2.0a5)",
+            "define": "UNITY_UNET_PRESENT"
+        },
+        {
+            "name": "com.unity.multiplayer.tools",
+            "expression": "1.0.0-pre.7",
+            "define": "MULTIPLAYER_TOOLS_1_0_0_PRE_7"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "COM_UNITY_MODULES_PHYSICS"
+        }
+    ],
+    "noEngineReferences": false
+}

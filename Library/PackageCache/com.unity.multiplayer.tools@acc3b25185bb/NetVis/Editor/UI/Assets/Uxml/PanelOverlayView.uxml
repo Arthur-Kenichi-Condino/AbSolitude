@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xmlns:nv="Unity.Multiplayer.Tools.NetVis.Editor.UI"
+         editor-extension-mode="True">
+    <Style src="../Uss/NetVisGlobal.uss" />
+    <ui:VisualElement name="content-container">
+        <uie:ToolbarToggle name="BandwidthToggle" tooltip="Enable network bandwidth visualization."  class="NetVisPanelOverlayButton">
+            <ui:VisualElement class="NetVisIcon" name="BandwidthIcon"/>
+            <ui:Label text="Bandwidth"/>
+        </uie:ToolbarToggle>
+        <nv:BandwidthConfigurationView name="BandwidthConfigurationView" />
+        <uie:ToolbarToggle name="OwnershipToggle" text="Ownership" tooltip="Enable network ownership visualization." class="NetVisPanelOverlayButton">
+            <ui:VisualElement class="NetVisIcon" name="OwnershipIcon"/>
+            <ui:Label text="Ownership"/>
+        </uie:ToolbarToggle>
+        <nv:OwnershipConfigurationView name="OwnershipConfigurationView" />
+        <uie:ToolbarToggle name="SettingsToggle" text="Settings" tooltip="Configure network visualization." class="NetVisPanelOverlayButton">
+            <ui:VisualElement class="NetVisIcon" name="SettingsIcon"/>
+            <ui:Label text="Settings" />
+        </uie:ToolbarToggle>
+        <nv:CommonSettingsView name="CommonSettingsView" />
+    </ui:VisualElement>
+</ui:UXML>

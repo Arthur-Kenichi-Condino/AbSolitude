@@ -21,7 +21,11 @@ sysinfo.txt
 .DS_Store
 Thumbs.db
 #  UNITY CACHE
-/[Ll]ibrary/**
+/[Ll]ibrary/*
+!/[Ll]ibrary/[Pp]ackage[Cc]ache/
+/[Ll]ibrary/[Pp]ackage[Cc]ache/*
+!/[Ll]ibrary/[Pp]ackage[Cc]ache/com.*/
+!/[Ll]ibrary/[Pp]ackage[Cc]ache/com.*/**
 /[Oo]bj/**
 #  UNITY LOGS/TEMP
 .utmp/
