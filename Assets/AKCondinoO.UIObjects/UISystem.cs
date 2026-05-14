@@ -4,6 +4,7 @@ using UnityEngine;
 namespace AKCondinoO.UIObjects{
     internal class UISystem:MonoSingleton<UISystem>{
      internal int uiLayer{get;private set;}
+     internal bool initialized;
      internal UIGameEventHandler gameEventHandler;
      internal WindowDockManager windowDockManager;
      internal WindowsRoot windowsRoot;
@@ -14,6 +15,7 @@ namespace AKCondinoO.UIObjects{
          gameEventHandler=new(this);
          windowDockManager=new(this);
          windowsRoot=GetComponentInChildren<WindowsRoot>();
+         initialized=true;
          UIWindowRoot[]existingWindows=GetComponentsInChildren<UIWindowRoot>();
          foreach(UIWindowRoot windowRoot in existingWindows){
           AddWindow(windowRoot);
@@ -21,6 +23,10 @@ namespace AKCondinoO.UIObjects{
         }
         internal void AddWindow(UIWindowRoot windowRoot){
          Logs.Debug(()=>"try add:"+windowRoot.name,windowRoot);
+         if(!initialized){
+          Logs.Debug(()=>"'!initialized':can't add:"+windowRoot.name,windowRoot);
+          return;
+         }
          if(windows.Add(windowRoot)){
           Logs.Debug(()=>"added:"+windowRoot.name,windowRoot);
           windowRoot.OnAddWindow();
