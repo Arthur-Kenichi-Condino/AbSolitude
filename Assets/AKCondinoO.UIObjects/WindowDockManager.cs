@@ -49,6 +49,8 @@ namespace AKCondinoO.UIObjects{
          minimizedBtn.gameObject.SetActive(false);
          RectTransform windowRect=(RectTransform)window.transform;
          if(minimizedBtn.minimizedFromCloseButton){
+          windowRect.anchoredPosition=minimizedBtn.previousWindowPos;
+         }else{
           windowRect.anchoredPosition=GetWindowPosFromMinimizedPos(window,minimizedBtn);
          }
          window.BringToFront();
@@ -64,8 +66,6 @@ namespace AKCondinoO.UIObjects{
          Vector2 btnPos=minimizedRect.anchoredPosition;
          float btnWidth =minimizedRect.sizeDelta.x;
          float btnHeight=minimizedRect.sizeDelta.y;
-         float halfW=(canvasRect.rect.width *canvas.scaleFactor)*0.5f;
-         float halfH=(canvasRect.rect.height*canvas.scaleFactor)*0.5f;
          bool left  =btnPos.x< 0;
          bool right =btnPos.x>=0;
          bool bottom=btnPos.y< 0;
@@ -76,6 +76,7 @@ namespace AKCondinoO.UIObjects{
          else if(right ){windowPos.x=btnPos.x-windowWidth *0.5f;}
          if     (bottom){windowPos.y=btnPos.y+windowHeight*0.5f;}
          else if(top   ){windowPos.y=btnPos.y-windowHeight*0.5f;}
+         windowPos=ClampInsideCanvas(windowPos,window.gameObject,canvas);
          return windowPos;
         }
         internal void OnManualUpdate(){
