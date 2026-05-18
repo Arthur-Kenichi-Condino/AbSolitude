@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
-    internal class Window:MonoBehaviour{
+    internal class Window:MonoBehaviour,IUIWindowElement{
      [SerializeField]internal bool autoResize=true;
      [SerializeField]internal bool hideHeader=false;
      internal UIWindowRoot root;
@@ -91,7 +91,7 @@ namespace AKCondinoO.UIObjects{
          var windowRectTransform=(RectTransform)transform;
          windowRectTransform.sizeDelta=size;
         }
-        internal void BringToFront(){
+        public void BringToFront(){
          root.transform.SetAsLastSibling();
         }
         internal void OnContentChanged(RectTransform rectTransform){

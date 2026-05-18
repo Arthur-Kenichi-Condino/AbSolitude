@@ -12,7 +12,7 @@ namespace AKCondinoO.UIObjects{
         private void OnClick(){
          if(window==null)return;
          bool isActive=window.gameObject.activeSelf;
-         UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,((RectTransform)transform).position);
+         UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,true,((RectTransform)transform).position);
         }
     }
 }

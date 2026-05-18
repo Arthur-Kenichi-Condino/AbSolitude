@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 namespace AKCondinoO.UIObjects{
-    internal class Minimized:MonoBehaviour,
+    internal class Minimized:MonoBehaviour,IUIWindowElement,
      IPointerDownHandler,
      IBeginDragHandler,
      IDragHandler,
@@ -32,10 +32,15 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnEndDrag(PointerEventData eventData){
         }
+     internal bool minimizedFromCloseButton;
+     internal Vector2 previousWindowPos;
         public void OnPointerClick(PointerEventData eventData){
          if(wasDragged)
           return;
          UISystem.singleton.windowDockManager.Restore(this,window);
+        }
+        public void BringToFront(){
+         root.transform.SetAsLastSibling();
         }
     }
 }

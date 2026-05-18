@@ -191,6 +191,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.TranslateInput.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectManager.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\IUIWindowRootElement.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\UISystem.cs" />

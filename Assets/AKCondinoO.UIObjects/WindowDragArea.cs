@@ -24,7 +24,7 @@ namespace AKCondinoO.UIObjects{
         public void OnEndDrag(PointerEventData eventData){
          var mousePosition=eventData.position;
          if(WindowDockManager.IsNearScreenEdge(mousePosition,window.root.canvas)){
-          UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,mousePosition);
+          UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
          }
         }
         internal void OnSetHeaderVisible(bool visible){
