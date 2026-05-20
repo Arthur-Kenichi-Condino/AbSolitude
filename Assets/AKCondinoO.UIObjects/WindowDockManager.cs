@@ -20,18 +20,20 @@ namespace AKCondinoO.UIObjects{
          if(docked.ContainsKey(window)){
           return;
          }
-         minimizedBtn.previousWindowPos=((RectTransform)window.transform).anchoredPosition;
+         Vector2 previousWindowPos=((RectTransform)window.transform).anchoredPosition;
          window.gameObject.SetActive(false);
          var btnGO=minimizedBtn.gameObject;
          btnGO.SetActive(true);
          Vector2 minimizePos;
+         bool minimizedFromCloseButton=false;
          if(closeButton){
           minimizePos=ScreenToCanvasPosition(rawPosition,minimizedBtn.root.canvas);
-          minimizedBtn.minimizedFromCloseButton=true;
+          minimizedFromCloseButton=true;
          }else{
           minimizePos=GetMinimizePosFromMouse(rawPosition,minimizedBtn,btnGO);
-          minimizedBtn.minimizedFromCloseButton=false;
+          minimizedFromCloseButton=false;
          }
+         minimizedBtn.OnMinimizedButtonEnabled(previousWindowPos,minimizedFromCloseButton);
          ((RectTransform)btnGO.transform).anchoredPosition=minimizePos;
          minimizedBtn.BringToFront();
          docked.Add(window,minimizedBtn);
@@ -48,7 +50,7 @@ namespace AKCondinoO.UIObjects{
          window.gameObject.SetActive(true);
          minimizedBtn.gameObject.SetActive(false);
          RectTransform windowRect=(RectTransform)window.transform;
-         if(minimizedBtn.minimizedFromCloseButton){
+         if(minimizedBtn.minimizedFromCloseButton&&!minimizedBtn.draggedAfterCloseButton){
           windowRect.anchoredPosition=minimizedBtn.previousWindowPos;
          }else{
           windowRect.anchoredPosition=GetWindowPosFromMinimizedPos(window,minimizedBtn);
@@ -66,16 +68,25 @@ namespace AKCondinoO.UIObjects{
          Vector2 btnPos=minimizedRect.anchoredPosition;
          float btnWidth =minimizedRect.sizeDelta.x;
          float btnHeight=minimizedRect.sizeDelta.y;
-         bool left  =btnPos.x< 0;
-         bool right =btnPos.x>=0;
-         bool bottom=btnPos.y< 0;
-         bool top   =btnPos.y>=0;
-         Logs.Debug(()=>"left:"+left+";right:"+right+";bottom:"+bottom+";top:"+top);
-         Vector2 windowPos=new();
-         if     (left  ){windowPos.x=btnPos.x+windowWidth *0.5f;}
-         else if(right ){windowPos.x=btnPos.x-windowWidth *0.5f;}
-         if     (bottom){windowPos.y=btnPos.y+windowHeight*0.5f;}
-         else if(top   ){windowPos.y=btnPos.y-windowHeight*0.5f;}
+         float edge=Mathf.Max(btnWidth,btnHeight);
+         bool nearEdge=IsNearCanvasEdgeLocalSpace(btnPos,canvas,out bool left,out bool right,out bool bottom,out bool top,edge);
+         Vector2 windowPos=new(
+          btnPos.x-windowWidth *0.5f,
+          btnPos.y-windowHeight*0.5f
+         );
+         if(nearEdge){
+          if(left  ){
+           windowPos.x=btnPos.x+windowWidth *0.5f;
+          }
+          if(right ){
+          }
+          if(bottom){
+           windowPos.y=btnPos.y+windowHeight*0.5f;
+          }
+          if(top   ){
+          }
+         }
+         Logs.Debug(()=>"canvasRect:"+canvasRect.rect.size+";btnPos:"+btnPos+";nearEdge:"+nearEdge+";edge:"+edge+";left:"+left+";right:"+right+";bottom:"+bottom+";top:"+top);
          windowPos=ClampInsideCanvas(windowPos,window.gameObject,canvas);
          return windowPos;
         }
@@ -111,13 +122,27 @@ namespace AKCondinoO.UIObjects{
          pos.y=Mathf.Clamp(pos.y,minY,maxY);
          return pos;
         }
-        internal static bool IsNearScreenEdge(Vector2 pos,Canvas canvas){
-         float edge=32f*canvas.scaleFactor;
+        internal static bool IsNearCanvasEdgeLocalSpace(Vector2 anchoredPos,Canvas canvas,out bool left,out bool right,out bool bottom,out bool top,float edge=32f){
+         RectTransform canvasRect=(RectTransform)canvas.transform;
+         float halfW=canvasRect.rect.width *0.5f;
+         float halfH=canvasRect.rect.height*0.5f;
+         left  =anchoredPos.x <=-halfW+edge;
+         right =anchoredPos.x >= halfW-edge;
+         bottom=anchoredPos.y <=-halfH+edge;
+         top   =anchoredPos.y >= halfH-edge;
          return
-          pos.x<=edge||
-          pos.x>=Screen.width -edge||
-          pos.y<=edge||
-          pos.y>=Screen.height-edge;
+          left||
+          right||
+          bottom||
+          top;
+        }
+        internal static bool IsNearScreenEdgeScreenSpace(Vector2 screenPos,Canvas canvas,float edge=32f){
+         edge*=canvas.scaleFactor;
+         return
+          screenPos.x<=edge||
+          screenPos.x>=Screen.width -edge||
+          screenPos.y<=edge||
+          screenPos.y>=Screen.height-edge;
         }
     }
 }

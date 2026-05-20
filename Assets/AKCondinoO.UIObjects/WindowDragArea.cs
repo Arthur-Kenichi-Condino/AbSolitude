@@ -23,8 +23,11 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnEndDrag(PointerEventData eventData){
          var mousePosition=eventData.position;
-         if(WindowDockManager.IsNearScreenEdge(mousePosition,window.root.canvas)){
+         if(WindowDockManager.IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,64f)){
           UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
+         }else{
+          var windowRect=((RectTransform)window.transform);
+          windowRect.anchoredPosition=WindowDockManager.ClampInsideCanvas(windowRect.anchoredPosition,window.gameObject,window.root.canvas);
          }
         }
         internal void OnSetHeaderVisible(bool visible){
