@@ -92,6 +92,7 @@
     <Compile Include="Assets\AKCondinoO.World\BiomeMaterial.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomeSpawnLayer.cs" />
     <Compile Include="Assets\AKCondinoO\ScreenInput.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\IUIObjectModule.cs" />
     <Compile Include="Assets\AKCondinoO.Utilities\DrawGizmos.cs" />
     <Compile Include="Assets\AKCondinoO\Util\CultureInfoUtil.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\InteractionDefinitions.cs" />
@@ -191,7 +192,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Stats\SimObject.Stats.Primary.cs" />
     <Compile Include="Assets\AKCondinoO.Bootstrap\InputHandler.TranslateInput.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimObjectManager.cs" />
-    <Compile Include="Assets\AKCondinoO.UIObjects\IUIWindowRootElement.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIObject.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.GetBest.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\EmissiveOscillator.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\UISystem.cs" />
@@ -256,7 +257,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObject.Interactions.cs" />
     <Compile Include="Assets\CatlikeCoding\Scripts\BloomEffect.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\SimAnimatorController.AnimatorStateInfo.cs" />
-    <Compile Include="Assets\AKCondinoO.UIObjects\UIWindowRoot.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3PosLerpHelper.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Select.cs" />
     <Compile Include="Assets\AKCondinoO\Music\BGM.cs" />
@@ -467,6 +467,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Rocks\_SimRock\SimRock.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\StateMachine.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.OnIDLE_ST.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\UIObjectModule.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Pathfinding\AStar\AStarPathfindingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSurfaceSimObjectsPlacer.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\CloseButton.cs" />

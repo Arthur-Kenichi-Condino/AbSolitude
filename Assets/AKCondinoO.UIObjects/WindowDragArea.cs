@@ -4,8 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static AKCondinoO.UIObjects.UISystem;
 namespace AKCondinoO.UIObjects{
-    internal class WindowDragArea:MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDragHandler{
+    internal class WindowDragArea:MonoBehaviour,
+     IPointerDownHandler,
+     IBeginDragHandler,
+     IDragHandler,
+     IEndDragHandler
+    {
      private Window window;
      internal int siblingIndex;
      internal LayoutElement layoutElement;
@@ -14,8 +20,13 @@ namespace AKCondinoO.UIObjects{
          siblingIndex=transform.GetSiblingIndex();
          layoutElement=GetComponent<LayoutElement>();
         }
+     internal bool wasDragged{get;private set;}
         public void OnPointerDown(PointerEventData eventData){
+         wasDragged=false;
          window.BringToFront();
+        }
+        public void OnBeginDrag(PointerEventData eventData){
+         wasDragged=true;
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
@@ -23,12 +34,13 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnEndDrag(PointerEventData eventData){
          var mousePosition=eventData.position;
-         if(WindowDockManager.IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,64f)){
+         if(IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,64f)){
           UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
          }else{
           var windowRect=((RectTransform)window.transform);
-          windowRect.anchoredPosition=WindowDockManager.ClampInsideCanvas(windowRect.anchoredPosition,window.gameObject,window.root.canvas);
+          window.SetSafePos(windowRect.anchoredPosition);
          }
+         wasDragged=false;
         }
         internal void OnSetHeaderVisible(bool visible){
          if(visible){

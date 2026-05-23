@@ -8,7 +8,7 @@ namespace AKCondinoO.UIObjects{
      internal UIGameEventHandler gameEventHandler;
      internal WindowDockManager windowDockManager;
      internal WindowsRoot windowsRoot;
-     private readonly HashSet<UIWindowRoot>windows=new();
+     private readonly HashSet<UIObject>windows=new();
         public override void Initialize(){
          base.Initialize();
          uiLayer=LayerMask.NameToLayer("UI");
@@ -16,34 +16,96 @@ namespace AKCondinoO.UIObjects{
          windowDockManager=new(this);
          windowsRoot=GetComponentInChildren<WindowsRoot>();
          initialized=true;
-         UIWindowRoot[]existingWindows=GetComponentsInChildren<UIWindowRoot>();
-         foreach(UIWindowRoot windowRoot in existingWindows){
-          AddWindow(windowRoot);
+         UIObject[]existingWindows=GetComponentsInChildren<UIObject>();
+         foreach(UIObject uiObject in existingWindows){
+          AddWindow(uiObject);
          }
         }
-        internal void AddWindow(UIWindowRoot windowRoot){
-         Logs.Debug(()=>"try add:"+windowRoot.name,windowRoot);
+        internal void AddWindow(UIObject uiObject){
+         Logs.Debug(()=>"try add:"+uiObject.name,uiObject);
          if(!initialized){
-          Logs.Debug(()=>"'!initialized':can't add:"+windowRoot.name,windowRoot);
+          Logs.Debug(()=>"'!initialized':can't add:"+uiObject.name,uiObject);
           return;
          }
-         if(windows.Add(windowRoot)){
-          Logs.Debug(()=>"added:"+windowRoot.name,windowRoot);
-          windowRoot.OnAddWindow();
-          RegisterWindow(windowRoot);
+         if(windows.Add(uiObject)){
+          Logs.Debug(()=>"added:"+uiObject.name,uiObject);
+          uiObject.OnAddWindow();
+          RegisterWindow(uiObject);
          }else{
-          Logs.Debug(()=>"already added:"+windowRoot.name,windowRoot);
+          Logs.Debug(()=>"already added:"+uiObject.name,uiObject);
          }
         }
-        internal void RegisterWindow(UIWindowRoot windowRoot){
-         windowDockManager.OnRegistration(windowRoot);
+        internal void RegisterWindow(UIObject uiObject){
+         windowDockManager.OnRegistration(uiObject);
         }
         public override void ManualUpdate(){
          base.ManualUpdate();
          windowDockManager.OnManualUpdate();
-         foreach(var windowRoot in windows){
-          windowRoot.ManualUpdate();
+         foreach(var uiObject in windows){
+          uiObject.ManualUpdate();
          }
+        }
+        internal static Vector2 ScreenToCanvasPosition(
+         Vector2 screenPos,
+         Canvas canvas
+        ){
+         RectTransform canvasRect=(RectTransform)canvas.transform;
+         RectTransformUtility.ScreenPointToLocalPointInRectangle(
+          canvasRect,
+          screenPos,
+          canvas.worldCamera,
+          out Vector2 canvasPos
+         );
+         return canvasPos;
+        }
+        internal static Vector2 ClampInsideCanvas(
+         Vector2 anchoredPos,
+         GameObject element,
+         Canvas canvas,
+         float margin=8f
+        ){
+         RectTransform elementRectTransform=(RectTransform)element.transform;
+         Bounds bounds=RectTransformUtility.CalculateRelativeRectTransformBounds(elementRectTransform);
+         return ClampInsideCanvas(anchoredPos,element,elementRectTransform,bounds,canvas,margin);
+        }
+        internal static Vector2 ClampInsideCanvas(
+         Vector2 anchoredPos,
+         GameObject element,
+         RectTransform elementRectTransform,
+         Bounds bounds,
+         Canvas canvas,
+         float margin=8f
+        ){
+         Vector2 canvasSize=((RectTransform)canvas.transform).rect.size;
+         float minX=-canvasSize.x*0.5f-bounds.min.x+margin;
+         float maxX= canvasSize.x*0.5f-bounds.max.x-margin;
+         float minY=-canvasSize.y*0.5f-bounds.min.y+margin;
+         float maxY= canvasSize.y*0.5f-bounds.max.y-margin;
+         anchoredPos.x=Mathf.Clamp(anchoredPos.x,minX,maxX);
+         anchoredPos.y=Mathf.Clamp(anchoredPos.y,minY,maxY);
+         return anchoredPos;
+        }
+        internal static bool IsNearCanvasEdgeLocalSpace(Vector2 anchoredPos,Canvas canvas,out bool left,out bool right,out bool bottom,out bool top,float edge=32f){
+         RectTransform canvasRect=(RectTransform)canvas.transform;
+         float halfW=canvasRect.rect.width *0.5f;
+         float halfH=canvasRect.rect.height*0.5f;
+         left  =anchoredPos.x <=-halfW+edge;
+         right =anchoredPos.x >= halfW-edge;
+         bottom=anchoredPos.y <=-halfH+edge;
+         top   =anchoredPos.y >= halfH-edge;
+         return
+          left||
+          right||
+          bottom||
+          top;
+        }
+        internal static bool IsNearScreenEdgeScreenSpace(Vector2 screenPos,Canvas canvas,float edge=32f){
+         edge*=canvas.scaleFactor;
+         return
+          screenPos.x<=edge||
+          screenPos.x>=Screen.width -edge||
+          screenPos.y<=edge||
+          screenPos.y>=Screen.height-edge;
         }
     }
 }

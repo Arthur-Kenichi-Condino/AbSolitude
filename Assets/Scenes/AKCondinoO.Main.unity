@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5520786086672119587, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
       propertyPath: m_Name
-      value: BookWindow
+      value: UIBook
       objectReference: {fileID: 0}
     - target: {fileID: 5520786086672119587, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
       propertyPath: m_IsActive
@@ -278,11 +278,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5668825635488879995, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.45609
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5668825635488879995, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 35.50022
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5668825635488879995, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
       propertyPath: m_LocalPosition.z
@@ -361,8 +361,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
---- !u!4 &173211841 stripped
-Transform:
+--- !u!224 &173211841 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 6595169791517436912, guid: 476255938913a5941afb3e990b2a6fcf, type: 3}
   m_PrefabInstance: {fileID: 455399116}
   m_PrefabAsset: {fileID: 0}
@@ -665,7 +665,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 114187184614727719, guid: 962baa7e471525048a10d532e52e220b, type: 3}
       propertyPath: m_Name
-      value: PlayerStatusWindow
+      value: UIPlayerStatus
       objectReference: {fileID: 0}
     - target: {fileID: 114187184614727719, guid: 962baa7e471525048a10d532e52e220b, type: 3}
       propertyPath: m_IsActive
@@ -673,11 +673,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 262299428443849343, guid: 962baa7e471525048a10d532e52e220b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -77.894455
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 262299428443849343, guid: 962baa7e471525048a10d532e52e220b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 33.832634
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 262299428443849343, guid: 962baa7e471525048a10d532e52e220b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -943,7 +943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugClassArrayToLogsDebugMessages.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[0]'
@@ -959,22 +959,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[3]'
-      value: SimInteractionResolver
+      value: UIObjectModule
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[4]'
-      value: InspectablePart
+      value: SimInteractionResolver
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[5]'
-      value: InspectablePart.Interactable
+      value: InspectablePart
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[6]'
-      value: InspectInstance
+      value: InspectablePart.Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[7]'
+      value: InspectInstance
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[8]'
       value: InspectStateDefinition
       objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
@@ -1083,8 +1087,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af5196cb3c87b7e40b4bd6b32f32badd, type: 3}
---- !u!4 &976987586 stripped
-Transform:
+--- !u!224 &976987586 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 5668825635488879995, guid: 32c053e85677bd94ab93a2662e124013, type: 3}
   m_PrefabInstance: {fileID: 155071115}
   m_PrefabAsset: {fileID: 0}
@@ -1145,8 +1149,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edce2affbd79c7f40bd4cf11370011bb, type: 3}
---- !u!4 &1384297806 stripped
-Transform:
+--- !u!224 &1384297806 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 262299428443849343, guid: 962baa7e471525048a10d532e52e220b, type: 3}
   m_PrefabInstance: {fileID: 670383198}
   m_PrefabAsset: {fileID: 0}
@@ -1286,7 +1290,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 684380187060553508, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
       propertyPath: m_Name
-      value: UIWindowRoot
+      value: UIObject
       objectReference: {fileID: 0}
     - target: {fileID: 684380187060553508, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
       propertyPath: m_IsActive
@@ -1408,6 +1412,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8000156591423298087, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
+      propertyPath: hideHeader
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8150562911863006847, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1453,8 +1461,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
---- !u!4 &2059512706 stripped
-Transform:
+--- !u!224 &2059512706 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 813211392830907772, guid: 77183d2a5649e9c4b9a09254fafc5114, type: 3}
   m_PrefabInstance: {fileID: 2059512705}
   m_PrefabAsset: {fileID: 0}

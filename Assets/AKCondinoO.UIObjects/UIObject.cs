@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 namespace AKCondinoO.UIObjects{
-    internal class UIWindowRoot:MonoBehaviour{
+    internal class UIObject:MonoBehaviour{
      internal Canvas canvas;
      internal Minimized minimized;
      internal Window window;
+     internal readonly HashSet<UIObjectModule>modules=new();
         void Awake(){
          if(UISystem.singleton!=null){
           UISystem.singleton.AddWindow(this);
@@ -13,11 +15,15 @@ namespace AKCondinoO.UIObjects{
          canvas=GetComponentInParent<Canvas>();
          minimized=GetComponentInChildren<Minimized>();
          minimized.OnAwake(this);
+         modules.Add(minimized);
          window=GetComponentInChildren<Window>();
          window.OnAwake(this);
+         modules.Add(window);
         }
         internal virtual void ManualUpdate(){
-         window.OnManualUpdate();
+         foreach(var module in modules){
+          module.OnManualUpdate();
+         }
         }
     }
 }

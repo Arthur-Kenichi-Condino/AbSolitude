@@ -2,11 +2,11 @@ using AKCondinoO.Bootstrap;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using static AKCondinoO.UIObjects.UISystem;
 namespace AKCondinoO.UIObjects{
-    internal class Window:MonoBehaviour,IUIWindowElement{
+    internal class Window:UIObjectModule{
      [SerializeField]internal bool autoResize=true;
      [SerializeField]internal bool hideHeader=false;
-     internal UIWindowRoot root;
      internal VerticalLayoutGroup verticalLayoutGroup;
      internal Header header;
      internal ScrollView scrollView;
@@ -14,8 +14,8 @@ namespace AKCondinoO.UIObjects{
      internal RectOffset verticalLayoutDefaultPadding;
      internal WindowDragArea dragArea;
      internal CloseButton closeButton;
-        internal void OnAwake(UIWindowRoot root){
-         this.root=root;
+        public override void OnAwake(UIObject root){
+         base.OnAwake(root);
          verticalLayoutGroup=GetComponent<VerticalLayoutGroup>();
          verticalLayoutDefaultPadding=new RectOffset(
           verticalLayoutGroup.padding.left,
@@ -41,7 +41,16 @@ namespace AKCondinoO.UIObjects{
         internal void RegisterMinimizedBtn(Minimized minimizedBtn){
          this.minimizedBtn=minimizedBtn;
         }
-        internal void OnManualUpdate(){
+     protected override bool shouldAutoKeepSafe{
+      get{
+       if(!dragArea.wasDragged){
+        return true;
+       }
+       return false;
+      }
+     }
+        public override void OnManualUpdate(){
+         base.OnManualUpdate();
          SetHeaderVisible(!hideHeader);
         }
         internal void SetHeaderVisible(bool visible){
@@ -91,11 +100,8 @@ namespace AKCondinoO.UIObjects{
          var windowRectTransform=(RectTransform)transform;
          windowRectTransform.sizeDelta=size;
         }
-        public void BringToFront(){
-         root.transform.SetAsLastSibling();
-        }
-        internal void OnContentChanged(RectTransform rectTransform){
-         contentSize=rectTransform.rect.size;
+        internal void OnContentChanged(RectTransform contentRectTransform){
+         contentSize=contentRectTransform.rect.size;
          if(autoResize){
           UpdateSize();
          }
