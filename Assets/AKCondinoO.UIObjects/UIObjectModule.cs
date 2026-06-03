@@ -3,7 +3,8 @@ using UnityEngine;
 namespace AKCondinoO.UIObjects{
     internal abstract class UIObjectModule:MonoBehaviour,IUIObjectModule{
      internal UIObject root;
-     protected RectTransform rectTransform;
+     internal RectTransform rectTransform;
+     private Bounds bounds;
         public virtual void OnAwake(UIObject root){
          this.root=root;
          rectTransform=(RectTransform)transform;
@@ -12,6 +13,8 @@ namespace AKCondinoO.UIObjects{
      private bool pendingCanvasClamp;
      protected virtual bool shouldAutoKeepSafe=>true;
         public virtual void OnManualUpdate(){
+         if(transform.hasChanged){
+         }
          if(shouldAutoKeepSafe){
           Vector2 canvasSize=GetCanvasSize();
           bool canvasResized=lastCanvasSize!=canvasSize;
@@ -28,8 +31,10 @@ namespace AKCondinoO.UIObjects{
           }
           if(transform.hasChanged){
            EnsureInsideCanvas();
-           transform.hasChanged=false;
           }
+         }
+         if(transform.hasChanged){
+          transform.hasChanged=false;
          }
          //Logs.Debug(()=>"current:"+rectTransform.anchoredPosition);
         }
@@ -42,8 +47,20 @@ namespace AKCondinoO.UIObjects{
          SetSafePos(rectTransform.anchoredPosition);
         }
         public virtual void SetSafePos(Vector2 anchoredPos){
-         rectTransform.anchoredPosition=UISystem.ClampInsideCanvas(anchoredPos,gameObject,root.canvas);
+         rectTransform.anchoredPosition=UISystem.ClampInsideCanvas(anchoredPos,this,root.canvas);
          transform.hasChanged=false;
+        }
+        public virtual void UpdateBounds(){
+         bounds=RectTransformUtility.CalculateRelativeRectTransformBounds(rectTransform);
+         Logs.Debug(()=>"'bounds updated':center:"+bounds.center+";size:"+bounds.size);
+        }
+        public virtual Bounds GetBounds(){
+         UpdateBounds();
+         return bounds;
+        }
+        public virtual Vector2 GetSize(){
+         UpdateBounds();
+         return new(bounds.size.x,bounds.size.y);
         }
         protected Vector2 GetCanvasSize(){
          return((RectTransform)root.canvas.transform).rect.size;

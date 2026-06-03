@@ -5,6 +5,9 @@ namespace AKCondinoO.UIObjects{
         void OnManualUpdate();
         void OnCanvasResized();
         void SetSafePos(Vector2 anchoredPos);
+        void UpdateBounds();
+        Bounds GetBounds();
+        Vector2 GetSize();
         void BringToFront();
     }
 }

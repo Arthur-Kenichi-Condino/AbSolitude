@@ -106,5 +106,56 @@ namespace AKCondinoO.UIObjects{
           UpdateSize();
          }
         }
+     internal bool closedFromButton;
+     internal bool dragged;
+        internal void OnMinimize(bool closeButton){
+         closedFromButton=closeButton;
+        }
+        internal void OnMinimized(){
+         if(!closedFromButton){
+          OnDocked();
+         }
+         dragged=false;
+         gameObject.SetActive(false);
+        }
+     internal Vector2 restoredPos;
+        internal void OnRestore(){
+         gameObject.SetActive(true);
+         Vector2 windowPos=rectTransform.anchoredPosition;
+         Vector2 windowSize=GetSize();
+         float windowWidth =windowSize.x;
+         float windowHeight=windowSize.y;
+         Vector2 btnPos=minimizedBtn.rectTransform.anchoredPosition;
+         Vector2 btnSize=minimizedBtn.GetSize();
+         float btnWidth =btnSize.x;
+         float btnHeight=btnSize.y;
+         Logs.Debug(()=>"btnPos:"+btnPos+";btnSize:"+btnSize+";windowSize:"+windowSize);
+         restoredPos=minimizedBtn.previousWindowPos;
+         if(docked){
+          return;
+         }
+         if(minimizedBtn.minimizedFromCloseButton||minimizedBtn.draggedAfterCloseButton){
+          restoredPos=new(
+           btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
+           btnPos.y+btnHeight*0.5f-windowHeight*0.5f
+          );
+          return;
+         }
+        }
+        internal void OnRestored(){
+         SetSafePos(restoredPos);
+         BringToFront();
+        }
+     internal bool docked;
+        internal void OnDocked(){
+         docked=true;
+        }
+        internal void OnUndocked(){
+         docked=false;
+        }
+     internal bool pinned;
+     internal Vector2 pinnedPos;
+        internal void OnPinned(){
+        }
     }
 }

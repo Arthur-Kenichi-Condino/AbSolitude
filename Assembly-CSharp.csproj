@@ -233,6 +233,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\SkillBuff.Effect.cs" />
     <Compile Include="Assets\AKCondinoO\Ambience\SunLight.cs" />
     <Compile Include="Assets\AKCondinoO\Util\QuaternionRotLerpHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\PinToggle.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\ToggleStateDefinition.cs" />
     <Compile Include="Assets\AKCondinoO\Util\FileUtil.cs" />
     <Compile Include="Assets\AKCondinoO.World\NavMeshCluster.cs" />
@@ -439,6 +440,7 @@
     <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO.World\ConstModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.WeaponTypes.cs" />
+    <Compile Include="Assets\AKCondinoO.UIObjects\DockButton.cs" />
     <Compile Include="Assets\AKCondinoO\GameEntry.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Water\WaterSpreadingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataLoadingMultithreaded.cs" />

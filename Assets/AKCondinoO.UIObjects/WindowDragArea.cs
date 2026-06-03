@@ -27,6 +27,8 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
+         window.dragged=true;
+         window.OnUndocked();
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
@@ -34,7 +36,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnEndDrag(PointerEventData eventData){
          var mousePosition=eventData.position;
-         if(IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,64f)){
+         if(IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,new(64f,64f))){
           UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
          }else{
           var windowRect=((RectTransform)window.transform);

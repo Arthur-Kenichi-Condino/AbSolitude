@@ -60,22 +60,11 @@ namespace AKCondinoO.UIObjects{
         }
         internal static Vector2 ClampInsideCanvas(
          Vector2 anchoredPos,
-         GameObject element,
+         UIObjectModule element,
          Canvas canvas,
          float margin=8f
         ){
-         RectTransform elementRectTransform=(RectTransform)element.transform;
-         Bounds bounds=RectTransformUtility.CalculateRelativeRectTransformBounds(elementRectTransform);
-         return ClampInsideCanvas(anchoredPos,element,elementRectTransform,bounds,canvas,margin);
-        }
-        internal static Vector2 ClampInsideCanvas(
-         Vector2 anchoredPos,
-         GameObject element,
-         RectTransform elementRectTransform,
-         Bounds bounds,
-         Canvas canvas,
-         float margin=8f
-        ){
+         Bounds bounds=element.GetBounds();
          Vector2 canvasSize=((RectTransform)canvas.transform).rect.size;
          float minX=-canvasSize.x*0.5f-bounds.min.x+margin;
          float maxX= canvasSize.x*0.5f-bounds.max.x-margin;
@@ -85,27 +74,27 @@ namespace AKCondinoO.UIObjects{
          anchoredPos.y=Mathf.Clamp(anchoredPos.y,minY,maxY);
          return anchoredPos;
         }
-        internal static bool IsNearCanvasEdgeLocalSpace(Vector2 anchoredPos,Canvas canvas,out bool left,out bool right,out bool bottom,out bool top,float edge=32f){
+        internal static bool IsNearCanvasEdgeLocalSpace(Vector2 anchoredPos,Canvas canvas,out bool left,out bool right,out bool bottom,out bool top,Vector2 edge){
          RectTransform canvasRect=(RectTransform)canvas.transform;
          float halfW=canvasRect.rect.width *0.5f;
          float halfH=canvasRect.rect.height*0.5f;
-         left  =anchoredPos.x <=-halfW+edge;
-         right =anchoredPos.x >= halfW-edge;
-         bottom=anchoredPos.y <=-halfH+edge;
-         top   =anchoredPos.y >= halfH-edge;
+         left  =anchoredPos.x <=-halfW+edge.x;
+         right =anchoredPos.x >= halfW-edge.x;
+         bottom=anchoredPos.y <=-halfH+edge.y;
+         top   =anchoredPos.y >= halfH-edge.y;
          return
           left||
           right||
           bottom||
           top;
         }
-        internal static bool IsNearScreenEdgeScreenSpace(Vector2 screenPos,Canvas canvas,float edge=32f){
+        internal static bool IsNearScreenEdgeScreenSpace(Vector2 screenPos,Canvas canvas,Vector2 edge){
          edge*=canvas.scaleFactor;
          return
-          screenPos.x<=edge||
-          screenPos.x>=Screen.width -edge||
-          screenPos.y<=edge||
-          screenPos.y>=Screen.height-edge;
+          screenPos.x<=              edge.x||
+          screenPos.x>=Screen.width -edge.x||
+          screenPos.y<=              edge.y||
+          screenPos.y>=Screen.height-edge.y;
         }
     }
 }

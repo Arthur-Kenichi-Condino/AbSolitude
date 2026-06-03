@@ -1,3 +1,4 @@
+using AKCondinoO.Bootstrap;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -37,6 +38,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
+         window.OnUndocked();
          if(minimizedFromCloseButton){
           draggedAfterCloseButton=true;
          }
@@ -49,18 +51,55 @@ namespace AKCondinoO.UIObjects{
          SetSafePos(minimizedRect.anchoredPosition);
          wasDragged=false;
         }
-     internal Vector2 previousWindowPos;
-     internal bool minimizedFromCloseButton;
-     internal bool draggedAfterCloseButton;
         public void OnPointerClick(PointerEventData eventData){
          if(wasDragged)
           return;
          UISystem.singleton.windowDockManager.Restore(this,window);
         }
-        internal void OnMinimizedButtonEnabled(Vector2 previousWindowPos,bool minimizedFromCloseButton){
-         this.previousWindowPos=previousWindowPos;
-         this.minimizedFromCloseButton=minimizedFromCloseButton;
-         draggedAfterCloseButton=false;
+     internal Vector2 previousWindowPos;
+     internal bool minimizedFromCloseButton;
+     internal bool draggedAfterCloseButton;
+     internal Vector2 minimizedPos;
+        internal void OnMinimize(bool closeButton,Vector2 rawPosition){
+         gameObject.SetActive(true);
+         Vector2 windowPos=window.rectTransform.anchoredPosition;
+         previousWindowPos=windowPos;
+         Vector2 windowSize=window.GetSize();
+         float windowWidth =windowSize.x;
+         float windowHeight=windowSize.y;
+         Vector2 btnPos=rectTransform.anchoredPosition;
+         Vector2 btnSize=GetSize();
+         float btnWidth =btnSize.x;
+         float btnHeight=btnSize.y;
+         Logs.Debug(()=>"windowPos:"+windowPos+";windowSize:"+windowSize+";btnSize:"+btnSize);
+         minimizedFromCloseButton=closeButton;
+         minimizedPos=rectTransform.anchoredPosition;
+         if(!closeButton){
+          draggedAfterCloseButton=false;
+         }
+         if(window.docked){
+          return;
+         }
+         if(draggedAfterCloseButton&&!window.dragged){
+          return;
+         }
+         if(closeButton){
+          minimizedPos=new(
+           windowPos.x+windowWidth *0.5f-btnWidth *0.5f,
+           windowPos.y+windowHeight*0.5f-btnHeight*0.5f
+          );
+          return;
+         }
+         minimizedPos=ScreenToCanvasPosition(rawPosition,root.canvas);
+        }
+        internal void OnMinimized(){
+         SetSafePos(minimizedPos);
+         BringToFront();
+        }
+        internal void OnRestore(){
+        }
+        internal void OnRestored(){
+         gameObject.SetActive(false);
         }
     }
 }
