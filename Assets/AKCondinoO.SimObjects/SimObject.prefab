@@ -93,6 +93,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4730096249008150122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5422198899012985211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7088834284306652354}
+  m_Layer: 9
+  m_Name: SimObjectAIComponents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7088834284306652354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422198899012985211}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4730096249008150122}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6194598103988588675
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +187,7 @@ Transform:
   m_Children:
   - {fileID: 551336311448700651}
   - {fileID: 2131443198145934157}
+  - {fileID: 7088834284306652354}
   - {fileID: 7647893092124944746}
   - {fileID: 6563543481112909364}
   m_Father: {fileID: 0}
@@ -178,6 +210,6 @@ MonoBehaviour:
   useMeshObjectSubMeshesForCollider: 
   simObjectRendererComponents: {fileID: 2314076041146936289}
   simObjectCollisionComponents: {fileID: 2134435657969575048}
-  simObjectPartBase: {fileID: -1824753872948248401, guid: 7c5324f505c376a42ae6742a47211bba, type: 3}
+  simObjectAIComponents: {fileID: 5422198899012985211}
   simObjectPartsRoot: {fileID: 7647893092124944746}
   simObjectSlotsRoot: {fileID: 6563543481112909364}

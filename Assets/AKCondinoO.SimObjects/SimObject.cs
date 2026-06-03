@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.AI;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.SimObjects{
     internal class SimObject:MonoBehaviour{
@@ -17,11 +18,13 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectRendererComponents;
      [SerializeField]internal GameObject simObjectCollisionComponents;
+     [SerializeField]internal GameObject simObjectAIComponents;
      [SerializeField]internal Transform simObjectPartsRoot;
      [SerializeField]internal Transform simObjectSlotsRoot;
      internal MeshRenderer simObjectMeshRenderer;
      internal MeshFilter   simObjectMeshFilter;
      internal MeshCollider simObjectMeshCollider;
+     internal NavMeshObstacle simObjectNavMeshObstacle;
      internal List<SimObjectPart>simObjectParts=new();
      internal List<InteractionSlot>simObjectSlots=new();
      internal bool doInitialization=true;

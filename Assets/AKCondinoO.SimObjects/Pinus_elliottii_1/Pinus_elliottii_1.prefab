@@ -97,12 +97,17 @@ MonoBehaviour:
   useMeshObjectSubMeshesForCollider: 00000000
   simObjectRendererComponents: {fileID: 6810110200450159282}
   simObjectCollisionComponents: {fileID: 7133817461847268827}
-  simObjectPartBase: {fileID: -1824753872948248401, guid: 7c5324f505c376a42ae6742a47211bba, type: 3}
+  simObjectAIComponents: {fileID: 3864341268670208040}
   simObjectPartsRoot: {fileID: 1494534254507577401}
   simObjectSlotsRoot: {fileID: 2704698300053221223}
 --- !u!4 &2704698300053221223 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6563543481112909364, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+  m_PrefabInstance: {fileID: 9124117761999944019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3864341268670208040 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5422198899012985211, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
   m_PrefabInstance: {fileID: 9124117761999944019}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6810110200450159282 stripped

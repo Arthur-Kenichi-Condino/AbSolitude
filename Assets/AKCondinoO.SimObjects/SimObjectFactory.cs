@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectFactory<T>where T:SimObject{
      private readonly SimObjectPool<T>pool;
@@ -119,6 +120,7 @@ namespace AKCondinoO.SimObjects{
           SetupRenderer(simObject);
          }
          SetupCollider(simObject);
+         SetupAI(simObject);
          SetupAllParts(simObject);
          SetupAllSlots(simObject);
         }
@@ -191,6 +193,32 @@ namespace AKCondinoO.SimObjects{
          collider=root.gameObject.AddComponent<MeshCollider>();
          collider.sharedMesh=mesh;
          return collider;
+        }
+        private void SetupAI(T simObject){
+         if(colliderMesh==null)return;
+         CopyLocalTransform(
+          prefabMeshObject.transform,
+          simObject.simObjectAIComponents.transform
+         );
+         SetupNavMeshObstacle(
+          simObject.simObjectAIComponents.transform,
+          colliderMesh,
+          ref simObject.simObjectNavMeshObstacle
+         );
+        }
+        private static NavMeshObstacle SetupNavMeshObstacle(
+         Transform root,
+         Mesh mesh,
+         ref NavMeshObstacle obstacle
+        ){
+         if(mesh==null||obstacle!=null)return obstacle;
+         obstacle=root.gameObject.AddComponent<NavMeshObstacle>();
+         Bounds bounds=mesh.bounds;
+         obstacle.shape=NavMeshObstacleShape.Box;
+         obstacle.center=bounds.center;
+         obstacle.size=bounds.size;
+         obstacle.carving=true;
+         return obstacle;
         }
         private void SetupAllParts(T simObject){
          if(prefabMeshObject==null||simObject.simObjectParts.Count>0)return;
