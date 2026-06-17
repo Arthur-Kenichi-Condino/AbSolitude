@@ -244,6 +244,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.MySkill.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimHands.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimInteractionQueue.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\RockBig_Desert_HighTower\RockBig_Desert_HighTower.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\Terrain\VoxelTerrainSendEditDataToServerMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkTerrain.Interactable.cs" />
     <Compile Include="Assets\AKCondinoO\InputHandler.Command.cs" />

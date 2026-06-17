@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabsRegistry:
+  - {fileID: 11400000, guid: 10011f48445ebd04996e5c06f366b753, type: 2}
   - {fileID: 11400000, guid: 4419dd6a8f2cc7f4c8f5c83811d7cfd2, type: 2}
   - {fileID: 11400000, guid: 82af325b72e531245baf896b624f93d4, type: 2}
   - {fileID: 11400000, guid: c19cb6b7e9934cd4d9407993ef2714a5, type: 2}
@@ -52,3 +53,4 @@ MonoBehaviour:
   debugSpawnType: {fileID: 3882544942882949274, guid: 851b73bfb00fc614eb03c95da3fec192, type: 3}
   debugSpawnCount: 1
   debugSpawnPosition: {x: 0, y: 50, z: 0}
+  debugSpawnCoordsDrawHeight: 30

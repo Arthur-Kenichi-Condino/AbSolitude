@@ -257,18 +257,19 @@ namespace AKCondinoO.World{
          SnapshotBiomeSpawnTable table=snapshot.graph.GetBiomeSpawnTable(channel,new(noiseInput.z,noiseInput.x,0));
          if(table!=null){
           double spawnValue=Normalize01Clamped(snapshot.graph.GetValue(channel,new(noiseInput.z,noiseInput.x,0)));
-          var picker=table.pickerByLayer[layer];
-          if(picker.Get((float)spawnValue,out var result)){
-           float rotationNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceRotation,new(noiseInput.z,noiseInput.x,0)));
-           float    scaleNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceScale   ,new(noiseInput.z,noiseInput.x,0)));
-           variation=result.variations.Get(
-            new(){
-             rotationNoise=rotationNoise,
-                scaleNoise=   scaleNoise,
-            },
-            noiseInput
-           );
-           return result;
+          if(table.pickerByLayer.TryGetValue(layer,out var picker)){
+           if(picker.Get((float)spawnValue,out var result)){
+            float rotationNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceRotation,new(noiseInput.z,noiseInput.x,0)));
+            float    scaleNoise=(float)Normalize01Clamped(snapshot.graph.GetValue(NoiseChannel.TerrainSurfaceScale   ,new(noiseInput.z,noiseInput.x,0)));
+            variation=result.variations.Get(
+             new(){
+              rotationNoise=rotationNoise,
+                 scaleNoise=   scaleNoise,
+             },
+             noiseInput
+            );
+            return result;
+           }
           }
          }
          return null;

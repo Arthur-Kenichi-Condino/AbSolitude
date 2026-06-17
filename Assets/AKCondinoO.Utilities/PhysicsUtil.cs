@@ -1,16 +1,53 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace AKCondinoO{
     internal static class PhysicsUtil{
-        internal struct OrientedBounds{
+        internal struct OrientedBounds:IEquatable<OrientedBounds>{
          public Vector3 center;
          public Vector3 axisX;
          public Vector3 axisY;
          public Vector3 axisZ;
          public Vector3 extents;
+            internal Bounds ToAABB(){
+             Vector3 e=new(
+              Mathf.Abs(axisX.x)*extents.x+Mathf.Abs(axisY.x)*extents.y+Mathf.Abs(axisZ.x)*extents.z,
+              Mathf.Abs(axisX.y)*extents.x+Mathf.Abs(axisY.y)*extents.y+Mathf.Abs(axisZ.y)*extents.z,
+              Mathf.Abs(axisX.z)*extents.x+Mathf.Abs(axisY.z)*extents.y+Mathf.Abs(axisZ.z)*extents.z
+             );
+             return new Bounds(
+              center,
+              e*2f
+             );
+            }
+            public bool Equals(OrientedBounds other){
+             return center ==other.center&&
+                    axisX  ==other.axisX &&
+                    axisY  ==other.axisY &&
+                    axisZ  ==other.axisZ &&
+                    extents==other.extents;
+            }
+            public override bool Equals(object obj){
+             return obj is OrientedBounds other&&Equals(other);
+            }
+            public static bool operator==(OrientedBounds left,OrientedBounds right){
+             return left.Equals(right);
+            }
+            public static bool operator!=(OrientedBounds left,OrientedBounds right){
+             return!left.Equals(right);
+            }
+            public override int GetHashCode(){
+             return HashCode.Combine(
+              center,
+              axisX,
+              axisY,
+              axisZ,
+              extents
+             );
+            }
         }
         //  Feito com ajuda do(a) ChatGPT e do(a) Gemini
-        internal static bool Intersects(this in OrientedBounds A, in OrientedBounds B) {
+        internal static bool Intersects(this in OrientedBounds A,in OrientedBounds B){
          Vector3 t=B.center-A.center;
          //  Converte t para o espaço de A
          Vector3 T=new Vector3(Vector3.Dot(t,A.axisX),Vector3.Dot(t,A.axisY),Vector3.Dot(t,A.axisZ));

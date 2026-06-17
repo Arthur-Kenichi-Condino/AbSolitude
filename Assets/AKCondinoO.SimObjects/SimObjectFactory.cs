@@ -218,6 +218,9 @@ namespace AKCondinoO.SimObjects{
          obstacle.center=bounds.center;
          obstacle.size=bounds.size;
          obstacle.carving=true;
+         obstacle.carveOnlyStationary=true;
+         obstacle.carvingMoveThreshold=.001f;
+         obstacle.carvingTimeToStationary=.01f;
          return obstacle;
         }
         private void SetupAllParts(T simObject){

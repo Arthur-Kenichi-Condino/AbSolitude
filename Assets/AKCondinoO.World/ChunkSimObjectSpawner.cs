@@ -25,7 +25,7 @@ namespace AKCondinoO.World.SimObjects{
          var doBiomeSpawnerJob=BiomesSimObjectSpawnerJob.pool.Rent();
          doBiomeSpawnerJob.spawner=this;
          doBiomeSpawnerJob.cCoord=cCoord;
-         bool scheduled=ThreadDispatcher.TrySchedule(doBiomeSpawnerJob,7);
+         bool scheduled=ThreadDispatcher.TrySchedule(doBiomeSpawnerJob,3);
          if(!scheduled){
           BiomesSimObjectSpawnerJob.pool.Return(doBiomeSpawnerJob);
           doBiomeSpawnerJob=null;
@@ -37,7 +37,9 @@ namespace AKCondinoO.World.SimObjects{
            "",
            ()=>new(),
            (BiomesSimObjectSpawnerJob item)=>{
-            item.debugSpawnCoords.Clear();
+            foreach(var kvp in item.debugSpawnCoords){
+             kvp.Value.Clear();
+            }
             item.visited.Clear();
             item.spawner=null;
            }
@@ -45,7 +47,7 @@ namespace AKCondinoO.World.SimObjects{
          internal ChunkSimObjectSpawner spawner;
          internal Vector2Int cCoord;
          private readonly Dictionary<Vector3Int,SpawnCandidate>visited=new();
-         internal readonly HashSet<SpawnReserve>debugSpawnCoords=new();
+         internal readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();
             public void CancelGraciously(){
             }
             public void OnDoScheduleSetContainerData(){
@@ -97,7 +99,9 @@ namespace AKCondinoO.World.SimObjects{
               Vector3Int worldCoord=new(x,0,z);
               DoRecursion(setup,worldCoord,null);
              }}
-             Logs.Debug(()=>"spawn count:"+debugSpawnCoords.Count);
+             if(debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
+              Logs.Debug(()=>"layer.."+layer+"..spawn count:"+debugSpawns.Count);
+             }
             }
          static readonly Utilities.ObjectPool<List<SpawnConflict>>conflictsListPool=
           Pool.GetPool<List<SpawnConflict>>("",()=>new(),(List<SpawnConflict>item)=>{item.Clear();});
@@ -163,6 +167,12 @@ namespace AKCondinoO.World.SimObjects{
               }
              }
              conflictsListPool.Return(conflictsList);
+             if(!blocked){
+              if(WorldSimObjectSpatialMap.HasSpawnConflicts(setup.layer,cCoord,candidate)){
+               blocked=true;
+               Logs.Debug(()=>"'HasSpawnConflicts'");
+              }
+             }
              if(blocked){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
@@ -170,7 +180,7 @@ namespace AKCondinoO.World.SimObjects{
              }else{
               candidate.state=CandidateState.Accepted;
               visited[worldCoord]=candidate;
-              Reserve(vCoord,cCoord,candidate);
+              Reserve(layer,vCoord,cCoord,candidate);
               return true;
              }
             }
@@ -373,8 +383,9 @@ namespace AKCondinoO.World.SimObjects{
              internal Bounds bounds;
              internal Quaternion rot;
              internal Vector3 scale;
+             internal OrientedBounds obb;
             }
-            void Reserve(Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
+            void Reserve(int layer,Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
              Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
              Vector3 pos=candidate.obb.center;
              var bounds=candidate.spawnEntry.bounds;
@@ -383,25 +394,39 @@ namespace AKCondinoO.World.SimObjects{
               bounds=bounds,
               rot=candidate.rot,
               scale=candidate.variation.scale,
+              obb=candidate.obb,
              };
-             debugSpawnCoords.Add(spawnReserve);
+             WorldSimObjectSpatialMap.RegisterSimObjectSpawn(layer,cCoord,spawnReserve);
+             if(!debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
+              debugSpawnCoords.Add(layer,debugSpawns=new());
+             }
+             debugSpawns.Add(spawnReserve);
             }
             public void OnCompletedDoAtMainThread(){
-             spawner.debugSpawnCoords.Clear();
-             spawner.debugSpawnCoords.UnionWith(debugSpawnCoords);
+             foreach(var kvp in spawner.debugSpawnCoords){
+              kvp.Value.Clear();
+             }
+             foreach(var kvp in debugSpawnCoords){
+              if(!spawner.debugSpawnCoords.TryGetValue(kvp.Key,out var debugSpawns)){
+               spawner.debugSpawnCoords.Add(kvp.Key,debugSpawns=new());
+              }
+              spawner.debugSpawnCoords[kvp.Key].UnionWith(kvp.Value);
+             }
              BiomesSimObjectSpawnerJob.pool.Return(this);
             }
         }
-     private readonly HashSet<SpawnReserve>debugSpawnCoords=new();
+     private readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();
         internal void GizmosSelected(bool selected){
          #if UNITY_EDITOR
          var singleton=SimObjectManager.singleton;
-         foreach(var reserve in debugSpawnCoords){
-          Vector3 pos   =reserve.pos   ;
-          Bounds bounds =reserve.bounds;
-          Quaternion rot=reserve.rot   ;
-          Vector3 scale =reserve.scale ;
-          DrawGizmos.RotatedBounds(bounds,pos,rot,scale,Color.green);
+         foreach(var kvp in debugSpawnCoords){
+          foreach(var reserve in kvp.Value){
+           Vector3 pos   =reserve.pos   ;
+           Bounds bounds =reserve.bounds;
+           Quaternion rot=reserve.rot   ;
+           Vector3 scale =reserve.scale ;
+           DrawGizmos.RotatedBounds(bounds,pos,rot,scale,Color.green);
+          }
          }
          #endif
         }

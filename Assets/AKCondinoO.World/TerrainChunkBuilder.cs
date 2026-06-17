@@ -198,7 +198,7 @@ namespace AKCondinoO.World.Terrain{
              if(pendingMarchingCubes){
               doMarchingCubesJob=DoMarchingCubesJob.pool.Rent();
               doMarchingCubesJob.updateJob=this;
-              bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,7);
+              bool scheduled=ThreadDispatcher.TrySchedule(doMarchingCubesJob,2);
               if(!scheduled){
                DoMarchingCubesJob.pool.Return(doMarchingCubesJob);
                doMarchingCubesJob=null;
