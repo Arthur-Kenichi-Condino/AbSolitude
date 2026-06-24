@@ -48,12 +48,14 @@ namespace AKCondinoO.World.SimObjects{
          internal Vector2Int cCoord;
          private readonly Dictionary<Vector3Int,SpawnCandidate>visited=new();
          internal readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();
+         protected SpawnList spawnList;
             public void CancelGraciously(){
             }
             public void OnDoScheduleSetContainerData(){
             }
          private Vector2Int cnkRgn;
             public void ExecuteAtBackgroundThread(){
+             spawnList=SpawnList.pool.Rent();
              cnkRgn=cCoordTocnkRgn(cCoord);
              using(ReadScope.Enter()){
               try{
@@ -180,7 +182,13 @@ namespace AKCondinoO.World.SimObjects{
              }else{
               candidate.state=CandidateState.Accepted;
               visited[worldCoord]=candidate;
-              Reserve(layer,vCoord,cCoord,candidate);
+              var reserve=Reserve(layer,vCoord,cCoord,candidate);
+              if(!caller.HasValue){
+               var prefab=candidate.spawnEntry.prefab;
+               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,reserve.pos){
+               };
+               spawnList.Add(spawn);
+              }
               return true;
              }
             }
@@ -354,12 +362,12 @@ namespace AKCondinoO.World.SimObjects{
              return false;
             }
             internal OrientedBounds CalculateOrientedBounds(ByChanceObjectSpawnEntry<SimObject>spawnEntry,SpawnVariation variation,SpawnSurface surface,out Quaternion rot){
-             Quaternion align=Quaternion.FromToRotation(Vector3.up,surface.normal);
              if(variation.alignToTerrain){
+              Quaternion align=Quaternion.FromToRotation(Vector3.up,surface.normal);
               rot=align*Quaternion.Euler(variation.rot);
              }else{
               Quaternion yaw=Quaternion.AngleAxis(variation.rot.y,Vector3.up);
-              rot=align*yaw;
+              rot=yaw;
              }
              Vector3 ext=Vector3.Scale(spawnEntry.bounds.extents,variation.scale);
              Vector3 up=rot*Vector3.up;
@@ -385,7 +393,7 @@ namespace AKCondinoO.World.SimObjects{
              internal Vector3 scale;
              internal OrientedBounds obb;
             }
-            void Reserve(int layer,Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
+            SpawnReserve Reserve(int layer,Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
              Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
              Vector3 pos=candidate.obb.center;
              var bounds=candidate.spawnEntry.bounds;
@@ -401,8 +409,10 @@ namespace AKCondinoO.World.SimObjects{
               debugSpawnCoords.Add(layer,debugSpawns=new());
              }
              debugSpawns.Add(spawnReserve);
+             return spawnReserve;
             }
             public void OnCompletedDoAtMainThread(){
+             EnqueueSpawnList();
              foreach(var kvp in spawner.debugSpawnCoords){
               kvp.Value.Clear();
              }
@@ -413,6 +423,15 @@ namespace AKCondinoO.World.SimObjects{
               spawner.debugSpawnCoords[kvp.Key].UnionWith(kvp.Value);
              }
              BiomesSimObjectSpawnerJob.pool.Return(this);
+            }
+            protected void EnqueueSpawnList(){
+             var singleton=SimObjectManager.singleton;
+             if(!object.ReferenceEquals(singleton,null)){
+              singleton.spawnQueue.Enqueue(spawnList);
+             }else{
+              SpawnList.pool.Return(spawnList);
+             }
+             spawnList=null;
             }
         }
      private readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();

@@ -113,7 +113,7 @@ namespace AKCondinoO.UIObjects{
         }
         internal void OnMinimized(){
          if(!closedFromButton){
-          OnDocked();
+          OnDocking();
          }
          dragged=false;
          gameObject.SetActive(false);
@@ -147,15 +147,15 @@ namespace AKCondinoO.UIObjects{
          BringToFront();
         }
      internal bool docked;
-        internal void OnDocked(){
+        internal void OnDocking(){
          docked=true;
         }
-        internal void OnUndocked(){
+        internal void OnUndocking(){
          docked=false;
         }
      internal bool pinned;
      internal Vector2 pinnedPos;
-        internal void OnPinned(){
+        internal void OnPinning(){
         }
     }
 }

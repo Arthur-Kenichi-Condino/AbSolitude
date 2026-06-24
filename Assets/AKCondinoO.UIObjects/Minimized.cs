@@ -38,7 +38,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
-         window.OnUndocked();
+         window.OnUndocking();
          if(minimizedFromCloseButton){
           draggedAfterCloseButton=true;
          }
