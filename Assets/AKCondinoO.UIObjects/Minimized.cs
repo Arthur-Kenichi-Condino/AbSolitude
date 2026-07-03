@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static AKCondinoO.UIObjects.UISystem;
+using static AKCondinoO.UIObjects.Window;
 namespace AKCondinoO.UIObjects{
     internal class Minimized:UIObjectModule,
      IPointerDownHandler,
@@ -39,9 +40,6 @@ namespace AKCondinoO.UIObjects{
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
          window.OnUndocking();
-         if(minimizedFromCloseButton){
-          draggedAfterCloseButton=true;
-         }
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)transform).anchoredPosition+=(eventData.delta/root.canvas.scaleFactor);
@@ -57,8 +55,8 @@ namespace AKCondinoO.UIObjects{
          UISystem.singleton.windowDockManager.Restore(this,window);
         }
      internal Vector2 previousWindowPos;
+     internal bool wasDocked;
      internal bool minimizedFromCloseButton;
-     internal bool draggedAfterCloseButton;
      internal Vector2 minimizedPos;
         internal void OnMinimize(bool closeButton,Vector2 rawPosition){
          gameObject.SetActive(true);
@@ -73,24 +71,28 @@ namespace AKCondinoO.UIObjects{
          float btnHeight=btnSize.y;
          Logs.Debug(()=>"windowPos:"+windowPos+";windowSize:"+windowSize+";btnSize:"+btnSize);
          minimizedFromCloseButton=closeButton;
-         minimizedPos=rectTransform.anchoredPosition;
-         if(!closeButton){
-          draggedAfterCloseButton=false;
+         switch(window.dockingState){
+          case DockingState.Free:{
+           minimizedPos=new(
+            windowPos.x+windowWidth *0.5f-btnWidth *0.5f,
+            windowPos.y+windowHeight*0.5f-btnHeight*0.5f
+           );
+           break;
+          }
+          case DockingState.Docked:{
+           if(wasDocked){
+            minimizedPos=rectTransform.anchoredPosition;
+           }else{
+            minimizedPos=ScreenToCanvasPosition(rawPosition,root.canvas);
+           }
+           break;
+          }
+          default:{
+           minimizedPos=rectTransform.anchoredPosition;
+           break;
+          }
          }
-         if(window.docked){
-          return;
-         }
-         if(draggedAfterCloseButton&&!window.dragged){
-          return;
-         }
-         if(closeButton){
-          minimizedPos=new(
-           windowPos.x+windowWidth *0.5f-btnWidth *0.5f,
-           windowPos.y+windowHeight*0.5f-btnHeight*0.5f
-          );
-          return;
-         }
-         minimizedPos=ScreenToCanvasPosition(rawPosition,root.canvas);
+         wasDocked=window.dockingState==DockingState.Docked;
         }
         internal void OnMinimized(){
          SetSafePos(minimizedPos);
@@ -100,6 +102,11 @@ namespace AKCondinoO.UIObjects{
         }
         internal void OnRestored(){
          gameObject.SetActive(false);
+        }
+        internal void OnDocked(){
+         wasDocked=false;
+        }
+        internal void OnUndocked(){
         }
     }
 }

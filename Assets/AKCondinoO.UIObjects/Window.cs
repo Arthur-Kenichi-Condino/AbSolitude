@@ -106,16 +106,20 @@ namespace AKCondinoO.UIObjects{
           UpdateSize();
          }
         }
+     internal DockingState dockingState=DockingState.Free;
+        internal enum DockingState{
+         Free,
+         Docked,
+         Pinned,
+        };
      internal bool closedFromButton;
-     internal bool dragged;
         internal void OnMinimize(bool closeButton){
          closedFromButton=closeButton;
-        }
-        internal void OnMinimized(){
-         if(!closedFromButton){
+         if(!closeButton){
           OnDocking();
          }
-         dragged=false;
+        }
+        internal void OnMinimized(){
          gameObject.SetActive(false);
         }
      internal Vector2 restoredPos;
@@ -130,28 +134,57 @@ namespace AKCondinoO.UIObjects{
          float btnWidth =btnSize.x;
          float btnHeight=btnSize.y;
          Logs.Debug(()=>"btnPos:"+btnPos+";btnSize:"+btnSize+";windowSize:"+windowSize);
-         restoredPos=minimizedBtn.previousWindowPos;
-         if(docked){
-          return;
-         }
-         if(minimizedBtn.minimizedFromCloseButton||minimizedBtn.draggedAfterCloseButton){
-          restoredPos=new(
-           btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
-           btnPos.y+btnHeight*0.5f-windowHeight*0.5f
-          );
-          return;
+         switch(dockingState){
+          case DockingState.Free:{
+           restoredPos=new(
+            btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
+            btnPos.y+btnHeight*0.5f-windowHeight*0.5f
+           );
+           break;
+          }
+          case DockingState.Docked:{
+           restoredPos=minimizedBtn.previousWindowPos;
+           break;
+          }
+          default:{
+           restoredPos=rectTransform.anchoredPosition;
+           break;
+          }
          }
         }
         internal void OnRestored(){
          SetSafePos(restoredPos);
          BringToFront();
         }
-     internal bool docked;
         internal void OnDocking(){
-         docked=true;
+         if(OnChangeDockingState(DockingState.Docked)){
+          minimizedBtn.OnDocked();
+         }
         }
         internal void OnUndocking(){
-         docked=false;
+         if(OnChangeDockingState(DockingState.Free)){
+          minimizedBtn.OnUndocked();
+         }
+        }
+        internal bool OnChangeDockingState(DockingState newState){
+         if(newState==DockingState.Pinned){
+          DoChangeDockingState();
+          return true;
+         }else{
+          if(dockingState!=DockingState.Pinned){
+           DoChangeDockingState();
+           return true;
+          }else{
+           if(newState==DockingState.Free){
+            DoChangeDockingState();
+            return true;
+           }
+          }
+         }
+         return false;
+         void DoChangeDockingState(){
+          dockingState=newState;
+         }
         }
      internal bool pinned;
      internal Vector2 pinnedPos;
