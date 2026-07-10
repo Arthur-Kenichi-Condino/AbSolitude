@@ -116,7 +116,7 @@ namespace AKCondinoO.UIObjects{
         internal void OnMinimize(bool closeButton){
          closedFromButton=closeButton;
          if(!closeButton){
-          OnDocking();
+          OnDocking(this);
          }
         }
         internal void OnMinimized(){
@@ -143,7 +143,19 @@ namespace AKCondinoO.UIObjects{
            break;
           }
           case DockingState.Docked:{
-           restoredPos=minimizedBtn.previousWindowPos;
+           if(redocked){
+            if(doRedockNewPos){
+             restoredPos=new(
+              btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
+              btnPos.y+btnHeight*0.5f-windowHeight*0.5f
+             );
+             minimizedBtn.previousWindowPos=restoredPos;
+            }else{
+             restoredPos=minimizedBtn.previousWindowPos;
+            }
+           }else{
+            restoredPos=minimizedBtn.previousWindowPos;
+           }
            break;
           }
           default:{
@@ -151,19 +163,31 @@ namespace AKCondinoO.UIObjects{
            break;
           }
          }
+         justUndocked=false;
+         redocked=false;
         }
         internal void OnRestored(){
          SetSafePos(restoredPos);
          BringToFront();
         }
-        internal void OnDocking(){
+     bool wasDocked;
+     bool justUndocked;
+     bool redocked;
+        internal void OnDocking(UIObjectModule source){
          if(OnChangeDockingState(DockingState.Docked)){
           minimizedBtn.OnDocked();
+          if(justUndocked&&wasDocked){
+           redocked=true;
+          }
          }
         }
-        internal void OnUndocking(){
+     bool doRedockNewPos;
+        internal void OnUndocking(UIObjectModule source){
+         wasDocked=dockingState==DockingState.Docked;
          if(OnChangeDockingState(DockingState.Free)){
           minimizedBtn.OnUndocked();
+          justUndocked=true;
+          doRedockNewPos=source!=this;
          }
         }
         internal bool OnChangeDockingState(DockingState newState){

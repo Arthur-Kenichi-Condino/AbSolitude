@@ -39,7 +39,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
-         window.OnUndocking();
+         window.OnUndocking(this);
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)transform).anchoredPosition+=(eventData.delta/root.canvas.scaleFactor);
@@ -48,6 +48,11 @@ namespace AKCondinoO.UIObjects{
          var minimizedRect=((RectTransform)transform);
          SetSafePos(minimizedRect.anchoredPosition);
          wasDragged=false;
+         if(IsNearCanvasEdgeLocalSpace(minimizedRect.anchoredPosition,root.canvas,out bool left,out bool right,out bool bottom,out bool top,new(64f,64f))){
+          window.OnDocking(this);
+          Logs.Debug(()=>"'IsNearCanvasEdgeLocalSpace':"+window.dockingState);
+          redocked=true;
+         }
         }
         public void OnPointerClick(PointerEventData eventData){
          if(wasDragged)
@@ -56,6 +61,7 @@ namespace AKCondinoO.UIObjects{
         }
      internal Vector2 previousWindowPos;
      internal bool wasDocked;
+     internal bool redocked;
      internal bool minimizedFromCloseButton;
      internal Vector2 minimizedPos;
         internal void OnMinimize(bool closeButton,Vector2 rawPosition){
@@ -82,6 +88,8 @@ namespace AKCondinoO.UIObjects{
           case DockingState.Docked:{
            if(wasDocked){
             minimizedPos=rectTransform.anchoredPosition;
+           }else if(redocked){
+            minimizedPos=rectTransform.anchoredPosition;
            }else{
             minimizedPos=ScreenToCanvasPosition(rawPosition,root.canvas);
            }
@@ -93,6 +101,7 @@ namespace AKCondinoO.UIObjects{
           }
          }
          wasDocked=window.dockingState==DockingState.Docked;
+         redocked=false;
         }
         internal void OnMinimized(){
          SetSafePos(minimizedPos);

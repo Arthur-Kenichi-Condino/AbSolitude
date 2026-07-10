@@ -27,7 +27,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          wasDragged=true;
-         window.OnUndocking();
+         window.OnUndocking(window);
         }
         public void OnDrag(PointerEventData eventData){
          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
