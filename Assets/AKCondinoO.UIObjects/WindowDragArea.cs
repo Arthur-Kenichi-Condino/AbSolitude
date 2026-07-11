@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static AKCondinoO.UIObjects.UISystem;
+using static AKCondinoO.UIObjects.Window;
 namespace AKCondinoO.UIObjects{
     internal class WindowDragArea:MonoBehaviour,
      IPointerDownHandler,
@@ -26,22 +27,29 @@ namespace AKCondinoO.UIObjects{
          window.BringToFront();
         }
         public void OnBeginDrag(PointerEventData eventData){
-         wasDragged=true;
-         window.OnUndocking(window);
+         if(window.dockingState!=DockingState.Pinned){
+          window.movedAfterRestore=true;
+          wasDragged=true;
+          window.OnUndocking();
+         }
         }
         public void OnDrag(PointerEventData eventData){
-         ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
-         //Logs.Debug(()=>"eventData.delta");
+         if(window.dockingState!=DockingState.Pinned){
+          ((RectTransform)window.transform).anchoredPosition+=(eventData.delta/window.root.canvas.scaleFactor);
+          //Logs.Debug(()=>"eventData.delta");
+         }
         }
         public void OnEndDrag(PointerEventData eventData){
-         var mousePosition=eventData.position;
-         if(IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,new(64f,64f))){
-          UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
-         }else{
-          var windowRect=((RectTransform)window.transform);
-          window.SetSafePos(windowRect.anchoredPosition);
+         if(window.dockingState!=DockingState.Pinned){
+          var mousePosition=eventData.position;
+          if(IsNearScreenEdgeScreenSpace(mousePosition,window.root.canvas,new(64f,64f))){
+           UISystem.singleton.windowDockManager.Minimize(window.minimizedBtn,window,false,mousePosition);
+          }else{
+           var windowRect=((RectTransform)window.transform);
+           window.SetSafePos(windowRect.anchoredPosition);
+          }
+          wasDragged=false;
          }
-         wasDragged=false;
         }
         internal void OnSetHeaderVisible(bool visible){
          if(visible){

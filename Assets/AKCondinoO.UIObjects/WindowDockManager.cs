@@ -37,6 +37,14 @@ namespace AKCondinoO.UIObjects{
          window      .OnRestored();
          docked.Remove(window);
         }
+        internal void Pin  (Minimized minimizedBtn,Window window,Vector2 rawPosition=default){
+         Logs.Debug(()=>"'Pin'");
+         window.OnPin();
+        }
+        internal void Unpin(Minimized minimizedBtn,Window window,Vector2 rawPosition=default){
+         Logs.Debug(()=>"'Unpin'");
+         window.OnUnpin();
+        }
         internal void OnManualUpdate(){
         }
     }

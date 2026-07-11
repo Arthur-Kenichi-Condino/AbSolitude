@@ -14,6 +14,7 @@ namespace AKCondinoO.UIObjects{
      internal RectOffset verticalLayoutDefaultPadding;
      internal WindowDragArea dragArea;
      internal CloseButton closeButton;
+     internal PinToggle pinToggle;
         public override void OnAwake(UIObject root){
          base.OnAwake(root);
          verticalLayoutGroup=GetComponent<VerticalLayoutGroup>();
@@ -35,6 +36,8 @@ namespace AKCondinoO.UIObjects{
          dragArea.OnAwake(this);
          closeButton=GetComponentInChildren<CloseButton>();
          closeButton.OnAwake(this);
+         pinToggle=GetComponentInChildren<PinToggle>();
+         pinToggle.OnAwake(this);
          SetHeaderVisible(!hideHeader);
         }
      internal Minimized minimizedBtn;
@@ -116,12 +119,16 @@ namespace AKCondinoO.UIObjects{
         internal void OnMinimize(bool closeButton){
          closedFromButton=closeButton;
          if(!closeButton){
-          OnDocking(this);
+          OnDocking();
          }
         }
+     internal bool redockUpdatePos;
         internal void OnMinimized(){
+         redockUpdatePos=minimizedBtn.redocked;
+         movedAfterRestore=false;
          gameObject.SetActive(false);
         }
+     internal bool movedAfterRestore=true;
      internal Vector2 restoredPos;
         internal void OnRestore(){
          gameObject.SetActive(true);
@@ -135,45 +142,73 @@ namespace AKCondinoO.UIObjects{
          float btnHeight=btnSize.y;
          Logs.Debug(()=>"btnPos:"+btnPos+";btnSize:"+btnSize+";windowSize:"+windowSize);
          switch(dockingState){
+          case DockingState.Pinned:{
+           restoredPos=pinnedPos;
+           break;
+          }
           case DockingState.Free:{
-           restoredPos=new(
-            btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
-            btnPos.y+btnHeight*0.5f-windowHeight*0.5f
-           );
+           if(!minimizedBtn.movedAfterMinimize){
+            SetRestoredPos(RestoredPosFrom.Unchanged);
+           }else{
+            SetRestoredPos(RestoredPosFrom.MinimizedBtn);
+           }
            break;
           }
           case DockingState.Docked:{
-           if(redocked){
-            if(doRedockNewPos){
-             restoredPos=new(
-              btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
-              btnPos.y+btnHeight*0.5f-windowHeight*0.5f
-             );
-             minimizedBtn.previousWindowPos=restoredPos;
+           if(minimizedBtn.dockedFromButtonDrag){
+            SetRestoredPos(RestoredPosFrom.MinimizedBtn);
+           }else if(redocked){
+            if(redockUpdatePos){
+             SetRestoredPos(RestoredPosFrom.MinimizedBtn);
             }else{
-             restoredPos=minimizedBtn.previousWindowPos;
+             SetRestoredPos(RestoredPosFrom.MinimizedBtnPreviousWindowPos);
             }
            }else{
-            restoredPos=minimizedBtn.previousWindowPos;
+            SetRestoredPos(RestoredPosFrom.MinimizedBtnPreviousWindowPos);
            }
            break;
           }
           default:{
-           restoredPos=rectTransform.anchoredPosition;
+           SetRestoredPos(RestoredPosFrom.Unchanged);
            break;
           }
          }
-         justUndocked=false;
-         redocked=false;
+         SetSafePos(restoredPos);
+         void SetRestoredPos(RestoredPosFrom mode){
+          switch(mode){
+           case RestoredPosFrom.MinimizedBtnPreviousWindowPos:{
+            restoredPos=minimizedBtn.previousWindowPos;
+            break;
+           }
+           case RestoredPosFrom.MinimizedBtn:{
+            restoredPos=new(
+             btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
+             btnPos.y+btnHeight*0.5f-windowHeight*0.5f
+            );
+            break;
+           }
+           default:{
+            restoredPos=rectTransform.anchoredPosition;
+            break;
+           }
+          }
+         }
+        }
+        enum RestoredPosFrom{
+         Unchanged,
+         MinimizedBtn,
+         MinimizedBtnPreviousWindowPos,
         }
         internal void OnRestored(){
-         SetSafePos(restoredPos);
+         justUndocked=false;
+         redocked=false;
+         redockUpdatePos=false;
          BringToFront();
         }
-     bool wasDocked;
-     bool justUndocked;
-     bool redocked;
-        internal void OnDocking(UIObjectModule source){
+     internal bool wasDocked;
+     internal bool justUndocked;
+     internal bool redocked;
+        internal void OnDocking(){
          if(OnChangeDockingState(DockingState.Docked)){
           minimizedBtn.OnDocked();
           if(justUndocked&&wasDocked){
@@ -181,38 +216,44 @@ namespace AKCondinoO.UIObjects{
           }
          }
         }
-     bool doRedockNewPos;
-        internal void OnUndocking(UIObjectModule source){
+        internal void OnUndocking(){
          wasDocked=dockingState==DockingState.Docked;
          if(OnChangeDockingState(DockingState.Free)){
           minimizedBtn.OnUndocked();
           justUndocked=true;
-          doRedockNewPos=source!=this;
          }
         }
+     internal bool pinOn;
+     internal Vector2 pinnedPos;
+        internal void OnPin(){
+         pinOn=true;
+         pinnedPos=rectTransform.anchoredPosition;
+         if(OnChangeDockingState(DockingState.Pinned)){
+          minimizedBtn.OnWindowPinned();
+         }
+         Logs.Debug(()=>"'OnPin':"+dockingState);
+        }
+        internal void OnUnpin(){
+         pinOn=false;
+         if(OnChangeDockingState(DockingState.Free)){
+          minimizedBtn.OnWindowUnpinned();
+         }
+         Logs.Debug(()=>"'OnUnpin':"+dockingState);
+        }
         internal bool OnChangeDockingState(DockingState newState){
-         if(newState==DockingState.Pinned){
-          DoChangeDockingState();
-          return true;
-         }else{
-          if(dockingState!=DockingState.Pinned){
+         if(pinOn){
+          if(newState==DockingState.Pinned){
            DoChangeDockingState();
            return true;
-          }else{
-           if(newState==DockingState.Free){
-            DoChangeDockingState();
-            return true;
-           }
           }
+         }else{
+          DoChangeDockingState();
+          return true;
          }
          return false;
          void DoChangeDockingState(){
           dockingState=newState;
          }
-        }
-     internal bool pinned;
-     internal Vector2 pinnedPos;
-        internal void OnPinning(){
         }
     }
 }
