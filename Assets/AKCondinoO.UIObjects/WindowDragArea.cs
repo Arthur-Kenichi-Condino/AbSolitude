@@ -28,7 +28,7 @@ namespace AKCondinoO.UIObjects{
         }
         public void OnBeginDrag(PointerEventData eventData){
          if(window.dockingState!=DockingState.Pinned){
-          window.movedAfterRestore=true;
+          window.windowMovedAfterRestore=true;
           wasDragged=true;
           window.OnUndocking();
          }

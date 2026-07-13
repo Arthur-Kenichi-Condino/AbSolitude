@@ -115,23 +115,48 @@ namespace AKCondinoO.UIObjects{
          Docked,
          Pinned,
         };
-     internal bool closedFromButton;
+     internal bool minimizedFromCloseButton;
         internal void OnMinimize(bool closeButton){
-         closedFromButton=closeButton;
+         minimizedFromCloseButton=closeButton;
          if(!closeButton){
           OnDocking();
          }
         }
-     internal bool redockUpdatePos;
+     internal bool shouldUpdatePreviousWindowPosOnRestore;
         internal void OnMinimized(){
-         redockUpdatePos=minimizedBtn.redocked;
-         movedAfterRestore=false;
+         shouldUpdatePreviousWindowPosOnRestore=minimizedBtn.redocked;
+         windowMovedAfterRestore=false;
          gameObject.SetActive(false);
         }
-     internal bool movedAfterRestore=true;
+     internal bool windowMovedAfterRestore=true;
+     internal bool wasDockedBeforeMinimize;
+     internal bool justUndockedFromDock;
+     internal bool restoredAfterRedock;
      internal Vector2 restoredPos;
         internal void OnRestore(){
          gameObject.SetActive(true);
+         restoredPos=GetRestoredPosition();
+         SetSafePos(restoredPos);
+        }
+        Vector2 GetRestoredPosition(){
+         switch(dockingState){
+          case DockingState.Pinned:{
+           return pinnedPos;
+          }
+          case DockingState.Free:{
+           return minimizedBtn.buttonMovedAfterMinimize?RestoredPosition(RestoredPosFrom.MinimizedBtn):RestoredPosition(RestoredPosFrom.Unchanged);
+          }
+          case DockingState.Docked:{
+           if(minimizedBtn.dockedByButtonDrag)return RestoredPosition(RestoredPosFrom.MinimizedBtn);
+           if(restoredAfterRedock&&shouldUpdatePreviousWindowPosOnRestore)return RestoredPosition(RestoredPosFrom.MinimizedBtn);
+           return RestoredPosition(RestoredPosFrom.MinimizedBtnPreviousWindowPos);
+          }
+          default:{
+           return RestoredPosition(RestoredPosFrom.Unchanged);
+          }
+         }
+        }
+        Vector2 RestoredPosition(RestoredPosFrom mode){
          Vector2 windowPos=rectTransform.anchoredPosition;
          Vector2 windowSize=GetSize();
          float windowWidth =windowSize.x;
@@ -141,56 +166,18 @@ namespace AKCondinoO.UIObjects{
          float btnWidth =btnSize.x;
          float btnHeight=btnSize.y;
          Logs.Debug(()=>"btnPos:"+btnPos+";btnSize:"+btnSize+";windowSize:"+windowSize);
-         switch(dockingState){
-          case DockingState.Pinned:{
-           restoredPos=pinnedPos;
-           break;
+         switch(mode){
+          case RestoredPosFrom.MinimizedBtnPreviousWindowPos:{
+           return minimizedBtn.previousWindowPos;
           }
-          case DockingState.Free:{
-           if(!minimizedBtn.movedAfterMinimize){
-            SetRestoredPos(RestoredPosFrom.Unchanged);
-           }else{
-            SetRestoredPos(RestoredPosFrom.MinimizedBtn);
-           }
-           break;
-          }
-          case DockingState.Docked:{
-           if(minimizedBtn.dockedFromButtonDrag){
-            SetRestoredPos(RestoredPosFrom.MinimizedBtn);
-           }else if(redocked){
-            if(redockUpdatePos){
-             SetRestoredPos(RestoredPosFrom.MinimizedBtn);
-            }else{
-             SetRestoredPos(RestoredPosFrom.MinimizedBtnPreviousWindowPos);
-            }
-           }else{
-            SetRestoredPos(RestoredPosFrom.MinimizedBtnPreviousWindowPos);
-           }
-           break;
+          case RestoredPosFrom.MinimizedBtn:{
+           return new(
+            btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
+            btnPos.y+btnHeight*0.5f-windowHeight*0.5f
+           );
           }
           default:{
-           SetRestoredPos(RestoredPosFrom.Unchanged);
-           break;
-          }
-         }
-         SetSafePos(restoredPos);
-         void SetRestoredPos(RestoredPosFrom mode){
-          switch(mode){
-           case RestoredPosFrom.MinimizedBtnPreviousWindowPos:{
-            restoredPos=minimizedBtn.previousWindowPos;
-            break;
-           }
-           case RestoredPosFrom.MinimizedBtn:{
-            restoredPos=new(
-             btnPos.x+btnWidth *0.5f-windowWidth *0.5f,
-             btnPos.y+btnHeight*0.5f-windowHeight*0.5f
-            );
-            break;
-           }
-           default:{
-            restoredPos=rectTransform.anchoredPosition;
-            break;
-           }
+           return rectTransform.anchoredPosition;
           }
          }
         }
@@ -200,27 +187,24 @@ namespace AKCondinoO.UIObjects{
          MinimizedBtnPreviousWindowPos,
         }
         internal void OnRestored(){
-         justUndocked=false;
-         redocked=false;
-         redockUpdatePos=false;
+         justUndockedFromDock=false;
+         restoredAfterRedock=false;
+         shouldUpdatePreviousWindowPosOnRestore=false;
          BringToFront();
         }
-     internal bool wasDocked;
-     internal bool justUndocked;
-     internal bool redocked;
         internal void OnDocking(){
          if(OnChangeDockingState(DockingState.Docked)){
           minimizedBtn.OnDocked();
-          if(justUndocked&&wasDocked){
-           redocked=true;
+          if(justUndockedFromDock&&wasDockedBeforeMinimize){
+           restoredAfterRedock=true;
           }
          }
         }
         internal void OnUndocking(){
-         wasDocked=dockingState==DockingState.Docked;
+         wasDockedBeforeMinimize=dockingState==DockingState.Docked;
          if(OnChangeDockingState(DockingState.Free)){
           minimizedBtn.OnUndocked();
-          justUndocked=true;
+          justUndockedFromDock=true;
          }
         }
      internal bool pinOn;
