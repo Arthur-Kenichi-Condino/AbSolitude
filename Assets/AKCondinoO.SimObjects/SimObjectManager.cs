@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.Utilities;
@@ -13,10 +14,12 @@ using static AKCondinoO.SimActors.SimDirector;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectManager:MonoSingleton<SimObjectManager>{
      [SerializeField]private SimObjectPrefabs[]prefabsRegistry;
-     [SerializeField]private bool      debugSpawnTest=false;
-     [SerializeField]private SimObject debugSpawnType=null;
-     [SerializeField]private int       debugSpawnCount=1;
-     [SerializeField]private Vector3   debugSpawnPosition;
+     [SerializeField]private bool       debugSpawnTest=false;
+     [SerializeField]private SimObject  debugSpawnType=null;
+     [SerializeField]private int        debugSpawnCount=1;
+     [SerializeField]private Vector3    debugSpawnPosition;
+     [SerializeField]private Quaternion debugSpawnRotation=Quaternion.identity;
+     [SerializeField]private Vector3    debugSpawnScale=Vector3.one;
      [SerializeField]internal int debugSpawnCoordsDrawHeight=30; 
         protected override void Awake(){
          base.Awake();
@@ -54,6 +57,7 @@ namespace AKCondinoO.SimObjects{
              sims.Add(key,new());
              SimDirector.singleton.OnSimActorFactoryCreated(key,prefab);
             }
+            (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSimObjectSaveFile(type);
            }
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
@@ -196,6 +200,8 @@ namespace AKCondinoO.SimObjects{
                variant =debugSpawnType.variant,
                count   =debugSpawnCount,
                position=debugSpawnPosition,
+               rotation=debugSpawnRotation,
+               scale   =debugSpawnScale,
               };
               spawnRequests.Add(spawnRequest);
              }
@@ -216,6 +222,8 @@ namespace AKCondinoO.SimObjects{
          internal string variant;
          internal int count;
          internal Vector3 position;
+         internal Quaternion rotation;
+         internal Vector3 scale;
         }
         internal class SpawnJob:MultithreadedContainerJob{
          static readonly Dictionary<(Type,string),ObjectPoolBase>spawnJobPool=new(){
@@ -252,7 +260,7 @@ namespace AKCondinoO.SimObjects{
              foreach(var request in requested){
               for(int i=0;i<request.count;i++){
                spawnList.Add(
-                new(request.type,request.variant,request.position)
+                new(request.type,request.variant,request.position,request.rotation,request.scale)
                );
               }
              }
@@ -317,10 +325,14 @@ namespace AKCondinoO.SimObjects{
      internal Type simObjectType;
      internal string variant;
      internal Vector3 position;
-        internal SimObjectSpawn(Type simObjectType,string variant,Vector3 position){
+     internal Quaternion rotation;
+     internal Vector3 scale;
+        internal SimObjectSpawn(Type simObjectType,string variant,Vector3 position,Quaternion rotation,Vector3 scale){
          this.simObjectType=simObjectType;
          this.variant=variant;
          this.position=position;
+         this.rotation=rotation;
+         this.scale=scale;
         }
     }
 }

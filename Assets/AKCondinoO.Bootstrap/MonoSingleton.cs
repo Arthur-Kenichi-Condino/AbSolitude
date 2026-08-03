@@ -1,3 +1,4 @@
+using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects;
 using AKCondinoO.UIObjects;
@@ -11,6 +12,7 @@ namespace AKCondinoO.Bootstrap{
      internal static readonly Dictionary<Type,int>initOrderTable=new(){
       {typeof(SharedCoroutines        ),   0},
       {typeof(Main                    ), 100},
+      {typeof(PersistentDataManager   ), 110},
       {typeof(InputHandler            ), 200},
       {typeof(UISystem                ), 300},
       {typeof(GameOrchestrator        ), 400},

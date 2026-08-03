@@ -105,9 +105,11 @@ namespace AKCondinoO.SimObjects{
          var manager=SimObjectManager.singleton;
          T simObject=pool.Rent();
          simObject.doInitialization=true;
-         simObject.transform.position=item.position;
          AssignId(simObject);
          SetupSimObject(simObject);
+         simObject.transform.position=item.position;
+         simObject.transform.rotation=item.rotation;
+         simObject.transform.localScale=item.scale;
          manager.OnSpawn(simObject);
          return simObject;
         }

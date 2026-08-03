@@ -69,6 +69,8 @@ namespace AKCondinoO.SimActors{
             variant =playable.variant,
             count   =1,
             position=new(0f,Height/2f,0f),
+            rotation=Quaternion.identity,
+            scale   =Vector3.one,
            };
            criticalSimRequests.Add(request);
            break;

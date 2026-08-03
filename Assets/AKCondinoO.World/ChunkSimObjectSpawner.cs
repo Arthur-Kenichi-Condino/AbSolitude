@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.PersistentData;
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using AKCondinoO.World.Biomes;
@@ -54,6 +55,7 @@ namespace AKCondinoO.World.SimObjects{
             public void OnDoScheduleSetContainerData(){
             }
          private Vector2Int cnkRgn;
+         readonly System.Diagnostics.Stopwatch layerSw=new();
             public void ExecuteAtBackgroundThread(){
              spawnList=SpawnList.pool.Rent();
              cnkRgn=cCoordTocnkRgn(cCoord);
@@ -68,6 +70,7 @@ namespace AKCondinoO.World.SimObjects{
                int maxLayer=settings.maxLayer;
                Logs.Debug(()=>"minLayer:"+minLayer+";maxLayer:"+maxLayer);
                foreach(var kvp in settings.layerData){
+                layerSw.Restart();
                 int layer=kvp.Key;
                 var spawnLayerData=kvp.Value;
                 var iterationSetup=new GridIterationSetup(){
@@ -76,6 +79,8 @@ namespace AKCondinoO.World.SimObjects{
                 };
                 RecursivelyReserveBounds(iterationSetup,cnkRgn);
                 visited.Clear();
+                layerSw.Stop();
+                Logs.Debug(()=>"'layer "+layer+" spawn recursion execution time':"+layerSw.ElapsedMilliseconds+" ms");
                }
               }catch(Exception e){
                Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
@@ -172,7 +177,7 @@ namespace AKCondinoO.World.SimObjects{
              if(!blocked){
               if(WorldSimObjectSpatialMap.HasSpawnConflicts(setup.layer,cCoord,candidate)){
                blocked=true;
-               Logs.Debug(()=>"'HasSpawnConflicts'");
+               //Logs.Debug(()=>"'HasSpawnConflicts'");
               }
              }
              if(blocked){
@@ -183,9 +188,13 @@ namespace AKCondinoO.World.SimObjects{
               candidate.state=CandidateState.Accepted;
               visited[worldCoord]=candidate;
               var reserve=Reserve(layer,vCoord,cCoord,candidate);
-              if(!caller.HasValue){
+              var cnkRgn=cCoordTocnkRgn(cCoord);
+              (PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles)?.OpenSpawnMapSaveFile(cnkRgn);
+              if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
-               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,reserve.pos){
+               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
+                reserve.pos,reserve.rot,reserve.scale
+               ){
                };
                spawnList.Add(spawn);
               }
