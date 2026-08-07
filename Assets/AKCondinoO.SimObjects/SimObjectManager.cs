@@ -57,7 +57,7 @@ namespace AKCondinoO.SimObjects{
              sims.Add(key,new());
              SimDirector.singleton.OnSimActorFactoryCreated(key,prefab);
             }
-            (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSimObjectSaveFile(type);
+            (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSpawnMapSaveFile(type);
            }
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());

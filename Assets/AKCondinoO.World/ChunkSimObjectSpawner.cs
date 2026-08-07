@@ -189,7 +189,9 @@ namespace AKCondinoO.World.SimObjects{
               visited[worldCoord]=candidate;
               var reserve=Reserve(layer,vCoord,cCoord,candidate);
               var cnkRgn=cCoordTocnkRgn(cCoord);
-              (PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles)?.OpenSpawnMapSaveFile(cnkRgn);
+              SpawnMapFiles spawnMapFiles;
+              (spawnMapFiles=(PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles))?.OpenSpawnMapSaveFile(cnkRgn);
+              spawnMapFiles?.WriteToSpawnMapFile(cnkRgn,layer,vCoord,candidate,reserve);
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
                SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,

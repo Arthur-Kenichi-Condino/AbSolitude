@@ -33,6 +33,7 @@ namespace AKCondinoO.Voxels{
      internal const int VoxelsPerChunk=(FlattenOffset*Height);
         #region chunk
             internal static Vector2Int vecPosTocCoord(Vector3 pos){
+             throw new System.Exception("deprecated");
                                                               pos.x/=(float)Width;
                                                               pos.z/=(float)Depth;
              return new Vector2Int(
@@ -40,17 +41,26 @@ namespace AKCondinoO.Voxels{
               Mathf.FloorToInt(pos.z)
                                   );
             }
-            internal static Vector2Int vecPosTocnkRgn(Vector3 pos){Vector2Int coord=vecPosTocCoord(pos);
+            internal static Vector2Int vecPosTocnkRgn(Vector3 pos){
+             throw new System.Exception("deprecated");
+             Vector2Int coord=vecPosTocCoord(pos);
              return new Vector2Int(coord.x*Width,
                                    coord.y*Depth);
             }
-            internal static Vector2Int cnkRgnTocCoord(Vector2Int cnkRgn){return new Vector2Int(cnkRgn.x/Width,cnkRgn.y/Depth);}
-            internal static Vector2Int cCoordTocnkRgn(Vector2Int cCoord){return new Vector2Int(cCoord.x*Width,cCoord.y*Depth);}
-            internal static int GetcnkIdx(int cx,int cy){return cy+cx*(MaxcCoordy*2+1);}
+            internal static Vector2Int cnkRgnTocCoord(Vector2Int cnkRgn){
+             throw new System.Exception("deprecated");
+             return new Vector2Int(cnkRgn.x/Width,cnkRgn.y/Depth);}
+            internal static Vector2Int cCoordTocnkRgn(Vector2Int cCoord){
+             throw new System.Exception("deprecated");
+             return new Vector2Int(cCoord.x*Width,cCoord.y*Depth);}
+            internal static int GetcnkIdx(int cx,int cy){
+             throw new System.Exception("deprecated");
+             return cy+cx*(MaxcCoordy*2+1);}
             internal static readonly ReadOnlyDictionary<int,Vector2Int>GetcCoord;
         #endregion
         #region voxel
             internal static Vector3Int vecPosTovCoord(Vector3 pos,out Vector2Int rgn){
+             throw new System.Exception("deprecated");
              rgn=vecPosTocnkRgn(pos);
              Vector3Int coord=new Vector3Int(
               Mathf.FloorToInt((pos.x%Width +Width )%Width ),
@@ -60,11 +70,15 @@ namespace AKCondinoO.Voxels{
              return coord;
             }
             internal static Vector3Int vecPosTovCoord(Vector3 pos){
+             throw new System.Exception("deprecated");
              return vecPosTovCoord(pos,out _);
             }
-            internal static int GetvxlIdx(int vcx,int vcy,int vcz){return vcy*FlattenOffset+vcx*Depth+vcz;}
+            internal static int GetvxlIdx(int vcx,int vcy,int vcz){
+             throw new System.Exception("deprecated");
+             return vcy*FlattenOffset+vcx*Depth+vcz;}
             internal static readonly ReadOnlyCollection<Vector3Int>GetvCoord;
             internal static int GetoftIdx(Vector2Int offset){//  ..for neighbors
+             throw new System.Exception("deprecated");
              if(offset.x== 0&&offset.y== 0)return 0;
              if(offset.x==-1&&offset.y== 0)return 1;
              if(offset.x== 1&&offset.y== 0)return 2;
@@ -79,6 +93,7 @@ namespace AKCondinoO.Voxels{
         #endregion
         #region validation
             internal static void ValidateCoord(ref Vector2Int region,ref Vector3Int vxlCoord){
+             throw new System.Exception("deprecated");
              Vector2Int relativecnkRgn=vecPosTocnkRgn(vxlCoord);
              region+=relativecnkRgn;
              vxlCoord=vecPosTovCoord(vxlCoord);
