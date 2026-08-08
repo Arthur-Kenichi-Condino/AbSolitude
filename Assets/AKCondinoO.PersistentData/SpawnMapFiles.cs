@@ -44,14 +44,13 @@ namespace AKCondinoO.PersistentData{
            rotation=reserve.rot,
            scale=reserve.scale
           };
-          WriteSpawnMapSimObject(fileHandle,layer,vCoord,key,spawnObject);
+          WriteSpawnMapSimObject(fileHandle,key,spawnObject);
          }
         }
-        private void WriteSpawnMapSimObject(SpawnMapFileHandle fileHandle,int layer,Vector3Int vCoord,SpawnMapKey key,SpawnMapObject spawnObject){
+        private void WriteSpawnMapSimObject(SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapObject spawnObject){
          using(var writerLease=fileHandle.AcquireWriter()){
           var writer=writerLease.writer;
-          var indexes=fileHandle.indexes;
-          if(writer==null||indexes==null){
+          if(writer==null){
            return;
           }
           long offset=writer.BaseStream.Length;
@@ -59,13 +58,19 @@ namespace AKCondinoO.PersistentData{
            offset,
            SeekOrigin.Begin
           );
-          writer.Write(layer);
-          spawnObject.WriteTo(writer);
-          indexes[key]=new SpawnMapIndex{
+          var index=new SpawnMapIndex(){
            offset=offset,
-           version=this.version,
-           size=spawnObject.GetSerializedSize(),
+           version=version,
           };
+          var recordSize=
+                 index.GetSerializedSize()+
+                   key.GetSerializedSize()+
+           spawnObject.GetSerializedSize();
+          index.recordSize=recordSize;
+                index.WriteTo(writer);
+                  key.WriteTo(writer);
+          spawnObject.WriteTo(writer);
+          fileHandle.SetIndex(key,index);
          }
         }
         internal bool FindIndex(SpawnMapFileHandle fileHandle,
@@ -76,13 +81,12 @@ namespace AKCondinoO.PersistentData{
         ){
          using(var readerLease=fileHandle.AcquireReader()){
           var reader=readerLease.reader;
-          var indexes=fileHandle.indexes;
-          if(reader==null||indexes==null){
+          if(reader==null){
            key=default;
            index=new(){offset=-1,};
            return false;
           }
-          return indexes.TryGetValue(
+          return fileHandle.TryGetIndex(
            key=new SpawnMapKey(coordinate,layer),
            out index
           );
@@ -99,6 +103,14 @@ namespace AKCondinoO.PersistentData{
              this.coordinateIndex=coordinate;
              this.layer=layer;
             }
+            internal void WriteTo(BinaryWriter writer){
+             writer.Write(coordinateIndex);
+             writer.Write(layer);
+            }
+            internal int GetSerializedSize(){
+             return sizeof(int)+//  coordinateIndex
+                    sizeof(int);//  layer
+            }
             public bool Equals(SpawnMapKey other){
              return coordinateIndex==other.coordinateIndex&&layer==other.layer;
             }
@@ -112,7 +124,15 @@ namespace AKCondinoO.PersistentData{
         internal struct SpawnMapIndex{
          public long offset;
          public int version;
-         public int size;
+         public int recordSize;
+            internal void WriteTo(BinaryWriter writer){
+             writer.Write(version);
+             writer.Write(recordSize);
+            }
+            internal int GetSerializedSize(){
+             return sizeof(int)+//  version
+                    sizeof(int);//  size
+            }
         }
         internal struct SpawnMapObject{
          public string type;
@@ -141,10 +161,25 @@ namespace AKCondinoO.PersistentData{
         }
     }
     internal class SpawnMapFileHandle:PersistentDataFileHandle{
-     internal Dictionary<SpawnMapKey,SpawnMapIndex>indexes{
-      get{
-       return(GetFile()as SpawnMapFile)?.indexes;
-      }
-     }
+        protected SpawnMapFile GetSpawnMapFile(){
+         return GetFile()as SpawnMapFile;
+        }
+        internal bool TryGetIndex(SpawnMapKey key,out SpawnMapIndex index){
+         var file=GetSpawnMapFile();
+         if(file!=null){
+          return file.indexes.TryGetValue(key,out index);
+         }
+         index=new(){offset=-1,};
+         return false;
+        }
+        internal void SetIndex(
+         SpawnMapKey key,
+         SpawnMapIndex index
+        ){
+         var file=GetSpawnMapFile();
+         if(file!=null){
+          file.indexes[key]=index;
+         }
+        }
     }
 }
