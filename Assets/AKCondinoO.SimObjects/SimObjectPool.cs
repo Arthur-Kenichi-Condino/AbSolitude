@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectPool<T>where T:SimObject{
      private readonly MonoPool<T>pool;
-     private readonly T prefab;
+     internal readonly T prefab;
      private readonly Transform parent;
         internal SimObjectPool(T prefab,Transform parent=null){
          this.prefab=prefab;

@@ -95,6 +95,7 @@ namespace AKCondinoO.World.SimObjects{
             /// <param name="setup"></param>
             /// <param name="center"></param>
             void RecursivelyReserveBounds(GridIterationSetup setup,Vector2Int center){
+             SpawnMapFiles spawnMapFiles=(PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles);
              int layer=setup.layer;
              var gridIteration=SetupGridIteration(setup,center);
              var gridSize=gridIteration.gridSize;
@@ -104,7 +105,7 @@ namespace AKCondinoO.World.SimObjects{
              for(int x=start.x;x<=end.x;x+=gridSize){
              for(int z=start.z;z<=end.z;z+=gridSize){
               Vector3Int worldCoord=new(x,0,z);
-              DoRecursion(setup,worldCoord,null);
+              DoRecursion(setup,worldCoord,null,spawnMapFiles);
              }}
              if(debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
               Logs.Debug(()=>"layer.."+layer+"..spawn count:"+debugSpawns.Count);
@@ -115,11 +116,15 @@ namespace AKCondinoO.World.SimObjects{
             internal struct SpawnCandidate{
              internal CandidateState state;
              internal Vector3Int worldCoord;
-             internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+             internal SpawnEntry spawnEntry;
              internal SpawnVariation variation;
              internal SpawnSurface surface;
              internal OrientedBounds obb;
              internal Quaternion rot;
+            }
+            internal struct SpawnEntry{
+             public SimObject prefab;
+             public Bounds bounds;
             }
             internal enum CandidateState{
              Unknown=0,
@@ -127,7 +132,7 @@ namespace AKCondinoO.World.SimObjects{
              Rejected,
              Accepted,
             }
-            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord,Vector3Int?caller){
+            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord,Vector3Int?caller,SpawnMapFiles spawnMapFiles){
              if(visited.TryGetValue(worldCoord,out var visitedCandidate)){
               switch(visitedCandidate.state){
                case(CandidateState.Resolving):{
@@ -145,19 +150,48 @@ namespace AKCondinoO.World.SimObjects{
              };
              visited[worldCoord]=candidate;
              int layer=setup.layer;
-             Vector3Int coord=worldCoord-new Vector3Int(cnkRgn.x,0,cnkRgn.y)+new Vector3Int(Width/2,0,Depth/2);
+             Vector3Int coord=worldCoord-new Vector3Int(this.cnkRgn.x,0,this.cnkRgn.y)+new Vector3Int(Width/2,0,Depth/2);
              var cCoord=this.cCoord;
              var vCoord=coord;
              ValidatevCoord(ref cCoord,ref vCoord);
+             var cnkRgn=cCoordTocnkRgn(cCoord);
+             if(spawnMapFiles.ReadFromSpawnMapFile(cnkRgn,layer,vCoord,out var spawnObject)){
+              //Logs.Debug(()=>"'ReadFromSpawnMapFile':"+spawnObject.spawnEntry.prefab.GetType());
+              candidate.spawnEntry=spawnObject.spawnEntry;
+              candidate.variation=spawnObject.variation;
+              candidate.surface=spawnObject.surface;
+              candidate.obb=CalculateOrientedBounds(
+               candidate.spawnEntry,candidate.variation,candidate.surface,
+               out candidate.rot
+              );
+              candidate.state=CandidateState.Accepted;
+              visited[worldCoord]=candidate;
+              var reserve=Reserve(layer,vCoord,cCoord,candidate);
+              if(cnkRgn==this.cnkRgn){
+               var prefab=candidate.spawnEntry.prefab;
+               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
+                reserve.pos,reserve.rot,reserve.scale
+               ){
+               };
+               spawnList.Add(spawn);
+              }
+              return true;
+             }
              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
               return false;
              }
-             candidate.spawnEntry=spawnEntry;
+             candidate.spawnEntry=new SpawnEntry(){
+              prefab=spawnEntry.prefab,
+              bounds=spawnEntry.bounds
+             };
              candidate.variation=variation;
              candidate.surface=surface;
-             candidate.obb=CalculateOrientedBounds(spawnEntry,variation,surface,out candidate.rot);
+             candidate.obb=CalculateOrientedBounds(
+              candidate.spawnEntry,candidate.variation,candidate.surface,
+              out candidate.rot
+             );
              visited[worldCoord]=candidate;
              var conflictsList=conflictsListPool.Rent();
              CollectConflicts(setup,worldCoord,conflictsList);
@@ -168,7 +202,7 @@ namespace AKCondinoO.World.SimObjects{
                continue;
               if(!ConflictBlocks(setup,conflict,candidate))
                continue;
-              if(DoRecursion(setup,conflict.worldCoord,worldCoord)){
+              if(DoRecursion(setup,conflict.worldCoord,worldCoord,spawnMapFiles)){
                blocked=true;
                break;
               }
@@ -188,9 +222,6 @@ namespace AKCondinoO.World.SimObjects{
               candidate.state=CandidateState.Accepted;
               visited[worldCoord]=candidate;
               var reserve=Reserve(layer,vCoord,cCoord,candidate);
-              var cnkRgn=cCoordTocnkRgn(cCoord);
-              SpawnMapFiles spawnMapFiles;
-              (spawnMapFiles=(PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles))?.OpenSpawnMapSaveFile(cnkRgn);
               spawnMapFiles?.WriteToSpawnMapFile(cnkRgn,layer,vCoord,candidate,reserve);
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
@@ -273,7 +304,7 @@ namespace AKCondinoO.World.SimObjects{
             }
             internal struct SpawnConflict{
              internal Vector3Int worldCoord;
-             internal ByChanceObjectSpawnEntry<SimObject>spawnEntry;
+             internal SpawnEntry spawnEntry;
              internal SpawnVariation variation;
              internal SpawnSurface surface;
              internal OrientedBounds obb;
@@ -291,17 +322,25 @@ namespace AKCondinoO.World.SimObjects{
               var cCoord=this.cCoord;
               var vCoord=coord;
               ValidatevCoord(ref cCoord,ref vCoord);
-              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
+              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation conflictVariation,out SpawnSurface conflictSurface)){
                continue;
               }
+              SpawnEntry conflictSpawnEntry=new(){
+               prefab=spawnEntry.prefab,
+               bounds=spawnEntry.bounds,
+              };
+              SpawnConflict conflict=new(){
+               worldCoord=worldCoord,
+               spawnEntry=conflictSpawnEntry,
+               variation=conflictVariation,
+               surface=conflictSurface,
+               obb=CalculateOrientedBounds(
+                conflictSpawnEntry,conflictVariation,conflictSurface,
+                out Quaternion rot
+               ),
+              };
               conflictsList.Add(
-               new(){
-                worldCoord=worldCoord,
-                spawnEntry=spawnEntry,
-                variation=variation,
-                surface=surface,
-                obb=CalculateOrientedBounds(spawnEntry,variation,surface,out Quaternion rot),
-               }
+               conflict
               );
              }}
             }
@@ -372,7 +411,7 @@ namespace AKCondinoO.World.SimObjects{
              }
              return false;
             }
-            internal OrientedBounds CalculateOrientedBounds(ByChanceObjectSpawnEntry<SimObject>spawnEntry,SpawnVariation variation,SpawnSurface surface,out Quaternion rot){
+            internal OrientedBounds CalculateOrientedBounds(SpawnEntry spawnEntry,SpawnVariation variation,SpawnSurface surface,out Quaternion rot){
              if(variation.alignToTerrain){
               Quaternion align=Quaternion.FromToRotation(Vector3.up,surface.normal);
               rot=align*Quaternion.Euler(variation.rot);

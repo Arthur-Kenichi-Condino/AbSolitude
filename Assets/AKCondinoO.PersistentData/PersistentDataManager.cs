@@ -103,8 +103,8 @@ namespace AKCondinoO.PersistentData{
          }
         }
      protected readonly Dictionary<string,PersistentDataFileStreaming>openFiles=new();
-        protected virtual PersistentDataFileHandle GetOrOpenSaveFile(string saveFilePath){
-         Logs.Debug(()=>"'try to open the save file:'"+saveFilePath);
+        protected virtual PersistentDataFileHandle GetOrOpenSaveFile(string saveFilePath,bool onlyIfExists=false){
+         //Logs.Debug(()=>"'try to open the save file:'"+saveFilePath);
          rwl.EnterUpgradeableReadLock();
          try{
           if(!PersistentDataManager.singleton.canSave){
@@ -112,6 +112,9 @@ namespace AKCondinoO.PersistentData{
            return null;
           }
           if(!openFiles.TryGetValue(saveFilePath,out var file)){
+           if(onlyIfExists&&!File.Exists(saveFilePath)){
+            return CreateHandle(null);
+           }
            rwl.EnterWriteLock();
            try{
             if(!openFiles.TryGetValue(saveFilePath,out file)){
@@ -285,9 +288,10 @@ namespace AKCondinoO.PersistentData{
          rwl.EnterWriteLock();
          try{
           saveFilePath=filePath;
-          Logs.Debug(()=>"'try to open file stream for:'"+saveFilePath);
+          //Logs.Debug(()=>"'try to open file stream for:'"+saveFilePath);
           fileBinaryWriter=new(new(filePath,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
           Interlocked.Exchange(ref open,1);
+          OnOpen();
           return true;
          }catch(Exception e){
           Interlocked.Exchange(ref open,0);
@@ -298,6 +302,8 @@ namespace AKCondinoO.PersistentData{
          }finally{
           rwl.ExitWriteLock();
          }
+        }
+        internal virtual void OnOpen(){
         }
         internal virtual void Close(){
          rwl.EnterWriteLock();
@@ -453,41 +459,6 @@ namespace AKCondinoO.PersistentData{
              binReader=null;
             }
         }
-        internal static void WriteVector3(BinaryWriter writer,Vector3 value){
-         writer.Write(value.x);
-         writer.Write(value.y);
-         writer.Write(value.z);
-        }
-        internal static Vector3 ReadVector3(BinaryReader reader){
-         return new Vector3(
-          reader.ReadSingle(),
-          reader.ReadSingle(),
-          reader.ReadSingle()
-         );
-        }
-        internal static void WriteQuaternion(BinaryWriter writer,Quaternion value){
-         writer.Write(value.x);
-         writer.Write(value.y);
-         writer.Write(value.z);
-         writer.Write(value.w);
-        }
-        internal static Quaternion ReadQuaternion(BinaryReader reader){
-         return new Quaternion(
-          reader.ReadSingle(),
-          reader.ReadSingle(),
-          reader.ReadSingle(),
-          reader.ReadSingle()
-         );
-        }
-        internal static int GetStringSerializedSize(string value){
-         int byteCount=Encoding.UTF8.GetByteCount(value);
-         int lengthBytes=1;
-         while(byteCount>=0x80){
-          byteCount>>=7;
-          lengthBytes++;
-         }
-         return lengthBytes+Encoding.UTF8.GetByteCount(value);
-        }
     }
     internal class PersistentDataFileHandle:IDisposable{
 
@@ -531,6 +502,58 @@ namespace AKCondinoO.PersistentData{
           return default;
          }
          return fileManager.AcquireReader(saveFilePath);
+        }
+    }
+    internal interface IPersistentDataSerializer<T>{
+     int CalculateSerializedSize(T value,int version);
+     void WriteTo(BinaryWriter writer,T value,int version);
+     T ReadFrom(BinaryReader reader,int version);
+    }
+    internal static class PersistentDataSerialization{
+        internal static void WriteVector3(BinaryWriter writer,Vector3 value){
+         writer.Write(value.x);
+         writer.Write(value.y);
+         writer.Write(value.z);
+        }
+        internal static Vector3 ReadVector3(BinaryReader reader){
+         return new Vector3(
+          reader.ReadSingle(),
+          reader.ReadSingle(),
+          reader.ReadSingle()
+         );
+        }
+        internal static void WriteQuaternion(BinaryWriter writer,Quaternion value){
+         writer.Write(value.x);
+         writer.Write(value.y);
+         writer.Write(value.z);
+         writer.Write(value.w);
+        }
+        internal static Quaternion ReadQuaternion(BinaryReader reader){
+         return new Quaternion(
+          reader.ReadSingle(),
+          reader.ReadSingle(),
+          reader.ReadSingle(),
+          reader.ReadSingle()
+         );
+        }
+        internal static void WriteBounds(BinaryWriter writer,Bounds bounds){
+         WriteVector3(writer,bounds.center);
+         WriteVector3(writer,bounds.size);
+        }
+        internal static Bounds ReadBounds(BinaryReader reader){
+         return new Bounds(
+          ReadVector3(reader),
+          ReadVector3(reader)
+         );
+        }
+        internal static int GetStringSerializationSize(string value){
+         int byteCount=Encoding.UTF8.GetByteCount(value);
+         int lengthBytes=1;
+         while(byteCount>=0x80){
+          byteCount>>=7;
+          lengthBytes++;
+         }
+         return lengthBytes+Encoding.UTF8.GetByteCount(value);
         }
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.AI;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectFactory<T>where T:SimObject{
-     private readonly SimObjectPool<T>pool;
+     internal readonly SimObjectPool<T>pool;
      private GameObject   prefabMeshObject  ;
      private MeshRenderer prefabMeshRenderer;
      private MeshFilter   prefabMeshFilter  ;

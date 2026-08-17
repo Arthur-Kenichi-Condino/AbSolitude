@@ -7,6 +7,7 @@ using AKCondinoO.World.Spawning;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -38,6 +39,9 @@ namespace AKCondinoO.SimObjects{
      private readonly Dictionary<(Type type,string variant),SimObjectFactory<SimObject>>simObjectFactories=new();
      private Coroutine spawnCoroutine;
      private Coroutine simObjectManualUpdateInLotsCoroutine;
+     private int initialized;
+     internal bool isInitialized=>Volatile.Read(ref initialized)!=0;
+     internal readonly ManualResetEventSlim initializationCompleted=new(false);
         public override void Initialize(){
          base.Initialize();
          instancedRendering=new();
@@ -48,8 +52,8 @@ namespace AKCondinoO.SimObjects{
            foreach(var prefab in prefabsRegistered.list){
             var type=prefab.simObject.simObjectType;
             var variant=prefab.simObject.variant;
-            simObjectFactories[(type,variant)]=new(prefab.simObject,transform);
             var key=(type,variant);
+            simObjectFactories[key]=new(prefab.simObject,transform);
             if(!prefab.simObject.IsSimActor()){
              simObjects.Add(key,new());
              lazyUpdaterSnapshot.Add(key,new());
@@ -64,6 +68,19 @@ namespace AKCondinoO.SimObjects{
           simObjectManualUpdateInLotsCoroutine=StartCoroutine(SimObjectManualUpdateInLotsCoroutine());
          }
          Camera.onPreCull+=RenderInstanced;
+         Volatile.Write(ref initialized,1);
+         initializationCompleted.Set();
+        }
+        internal void WaitUntilInitialized(){
+         initializationCompleted.Wait();
+        }
+        internal SimObject GetPrefab(Type type,string variant){
+         WaitUntilInitialized();
+         var key=(type,variant);
+         if(simObjectFactories.TryGetValue(key,out var factory)){
+          return factory.pool.prefab;
+         }
+         return null;
         }
         public override void PreShutdown(){
          if(this!=null){
