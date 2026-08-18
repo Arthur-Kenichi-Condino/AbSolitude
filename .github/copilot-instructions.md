@@ -4,7 +4,7 @@
 		Keep this file short and actionable. Avoid high-level generic coaching — focus on patterns, files, and commands
 -->
 
-# Copilot instructions for AbSolitude
+# Copilot instructions for AbSolitude and general coding
 
 Regra permanente: não editar, criar, mover ou apagar arquivos sem minha aprovação explícita: e se eu pedir alguma edição, antes de qualquer mudança, me mostrar o plano de diff proposto.
 IMPORTANTÍSSIMO: tentar medir o próprio uso de tokens e economizar o máximo possível de tokens/uso da AI para que possa usar o plano gratuito o máximo possível após cada renovação da semana.
