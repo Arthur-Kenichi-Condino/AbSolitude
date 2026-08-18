@@ -239,6 +239,7 @@
     <Compile Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\Core\Scripts\OverlayViewer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".github\copilot-instructions.md" />
     <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\Core\StandardAssets\UMA\Atlas\Normal\AtlasNormalShader_Darken.shader" />
     <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\Core\StandardAssets\UMA\Atlas\Diffuse\AtlasDiffuseShader_Screen.shader" />
     <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\Core\StandardAssets\UMA\Atlas\Normal\AtlasNormalShader32.shader" />
