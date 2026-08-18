@@ -12,7 +12,7 @@ using static AKCondinoO.World.Spawning.ByChanceObjectSpawnEntry<AKCondinoO.SimOb
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.PersistentData{
     internal class SpawnMapFiles:PersistentDataFileManager{
-     internal static int version=0;
+     internal static int version=1;
         internal SpawnMapFiles(string saveFolderPath):base(saveFolderPath){
         }
         internal void OpenSpawnMapSaveFile(Vector2Int cnkRgn){
@@ -56,8 +56,8 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnMapKeySerializer spawnMapKeySerializer=new();
         internal sealed class SpawnMapKeySerializer:IPersistentDataSerializer<SpawnMapKey>{
-            public int CalculateSerializedSize(SpawnMapKey value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnMapKey value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return
                 sizeof(int)+//  coordinateIndex
@@ -65,8 +65,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnMapKey value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnMapKey value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                writer.Write(value.coordinateIndex);
                writer.Write(value.layer);
@@ -74,8 +74,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public SpawnMapKey ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnMapKey OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                int coordinateIndex=reader.ReadInt32();
                int layer=reader.ReadInt32();
@@ -88,36 +88,57 @@ namespace AKCondinoO.PersistentData{
          public long offset;
          public int version;
          public int serializationSize;
+         public bool empty;
             public override string ToString(){
-             return$"version:{version},serializationSize:{serializationSize}";
+             return$"version:{version},serializationSize:{serializationSize},empty:{empty}";
             }
         }
      internal static readonly SpawnMapIndexSerializer spawnMapIndexSerializer=new();
         internal sealed class SpawnMapIndexSerializer:IPersistentDataSerializer<SpawnMapIndex>{
-            public int CalculateSerializedSize(SpawnMapIndex value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnMapIndex value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
+               if(version>=1){
+                return
+                 sizeof(int)+//  version
+                 sizeof(int)+//  serializationSize
+                 sizeof(bool);//  empty
+               }
                return
                 sizeof(int)+//  version
                 sizeof(int);//  serializationSize
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnMapIndex value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnMapIndex value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
+               if(version>=1){
+                writer.Write(value.version);
+                writer.Write(value.serializationSize);
+                writer.Write(value.empty);
+                break;
+               }
                writer.Write(value.version);
                writer.Write(value.serializationSize);
                break;
               }
              }
             }
-            public SpawnMapIndex ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnMapIndex OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
+               if(version>=1){
+                return new(){
+                 version=reader.ReadInt32(),
+                 serializationSize=reader.ReadInt32(),
+                 empty=reader.ReadBoolean(),
+                };
+               }
                return new(){
                 version=reader.ReadInt32(),
                 serializationSize=reader.ReadInt32(),
+                empty=false,
                };
               }
              }
@@ -139,8 +160,8 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnMapObjectSerializer spawnMapObjectSerializer=new();
         internal sealed class SpawnMapObjectSerializer:IPersistentDataSerializer<SpawnMapObject>{
-            public int CalculateSerializedSize(SpawnMapObject value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnMapObject value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return
                 spawnEntrySerializer.CalculateSerializedSize(value.spawnEntry,version)+
@@ -152,8 +173,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnMapObject value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnMapObject value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                spawnEntrySerializer.WriteTo(writer,value.spawnEntry,version);
                spawnVariationSerializer.WriteTo(writer,value.variation,version);
@@ -165,8 +186,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public SpawnMapObject ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnMapObject OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return new(){
                 spawnEntry=spawnEntrySerializer.ReadFrom(reader,version),
@@ -182,8 +203,8 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnVariationSerializer spawnVariationSerializer=new();
         internal sealed class SpawnVariationSerializer:IPersistentDataSerializer<SpawnVariation>{
-            public int CalculateSerializedSize(SpawnVariation value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnVariation value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return
                 sizeof(bool)+//  alignToTerrain
@@ -192,8 +213,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnVariation value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnVariation value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                writer.Write(value.alignToTerrain);
                WriteVector3(writer,value.rot);
@@ -202,8 +223,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public SpawnVariation ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnVariation OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return new(){
                 alignToTerrain=reader.ReadBoolean(),
@@ -216,8 +237,8 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnSurfaceSerializer spawnSurfaceSerializer=new();
         internal sealed class SpawnSurfaceSerializer:IPersistentDataSerializer<SpawnSurface>{
-            public int CalculateSerializedSize(SpawnSurface value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnSurface value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return
                 sizeof(float)*3+//  hitPoint
@@ -225,8 +246,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnSurface value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnSurface value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                WriteVector3(writer,value.hitPoint);
                WriteVector3(writer,value.normal);
@@ -234,8 +255,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public SpawnSurface ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnSurface OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return new(){
                 hitPoint=ReadVector3(reader),
@@ -247,8 +268,8 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnEntrySerializer spawnEntrySerializer=new();
         internal sealed class SpawnEntrySerializer:IPersistentDataSerializer<SpawnEntry>{
-            public int CalculateSerializedSize(SpawnEntry value,int version){
-             switch(version){
+            protected override int OnCalculateSerializedSize(SpawnEntry value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                return
                 GetStringSerializationSize(value.prefab.GetType().AssemblyQualifiedName)+
@@ -257,8 +278,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public void WriteTo(BinaryWriter writer,SpawnEntry value,int version){
-             switch(version){
+            protected override void OnWriteTo(BinaryWriter writer,SpawnEntry value,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                writer.Write(value.prefab.GetType().AssemblyQualifiedName);
                writer.Write(value.prefab.variant);
@@ -267,8 +288,8 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
-            public SpawnEntry ReadFrom(BinaryReader reader,int version){
-             switch(version){
+            protected override SpawnEntry OnReadFrom(BinaryReader reader,int version,int effectiveVersion){
+             switch(effectiveVersion){
               default:{
                var prefabTypeName=reader.ReadString();
                var prefabType=Type.GetType(prefabTypeName);
@@ -287,42 +308,46 @@ namespace AKCondinoO.PersistentData{
          //Logs.Debug(()=>"'WriteToSpawnMapFile':filePath:"+filePath);
          using(var fileHandle=(SpawnMapFileHandle)GetOrOpenSaveFile(filePath)){
           int coordinateIndex=GetCoordinateIndex(vCoord);
-          bool indexed=FindIndex(fileHandle,coordinateIndex,layer,
-           out SpawnMapKey key,out SpawnMapIndex index
-          );
-          //Logs.Debug(()=>"'WriteToSpawnMapFile':indexed:"+indexed+";index.offset:"+index.offset);
-          if(indexed||index.offset<0){return;}
-          SpawnMapObject spawnObject=new(){
-           spawnEntry=candidate.spawnEntry,
-           variation=candidate.variation,
-           surface=candidate.surface,
-           rot=reserve.rot,
-           pos=reserve.pos,
-           scale=reserve.scale
-          };
-          WriteSpawnMapSimObject(fileHandle,key,spawnObject);
+          using(var readerLease=fileHandle.AcquireReader(true)){
+           var reader=readerLease.reader;
+           bool indexed=FindIndex(reader,fileHandle,coordinateIndex,layer,
+            out SpawnMapKey key,out SpawnMapIndex index
+           );
+           //Logs.Debug(()=>"'WriteToSpawnMapFile':indexed:"+indexed+";index.offset:"+index.offset);
+           if(indexed||index.offset<0){return;}
+           SpawnMapObject spawnObject=new(){
+            spawnEntry=candidate.spawnEntry,
+            variation=candidate.variation,
+            surface=candidate.surface,
+            rot=reserve.rot,
+            pos=reserve.pos,
+            scale=reserve.scale
+           };
+           using(var writerLease=fileHandle.AcquireWriter()){
+            var writer=writerLease.writer;
+            WriteSpawnMapSimObject(writer,fileHandle,key,spawnObject);
+           }
+          }
          }
         }
-        private void WriteSpawnMapSimObject(SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapObject spawnObject){
-         using(var writerLease=fileHandle.AcquireWriter()){
-          var writer=writerLease.writer;
-          if(writer==null){
-           return;
-          }
-          long offset=writer.BaseStream.Length;
-          writer.BaseStream.Seek(
-           offset,
-           SeekOrigin.Begin
-          );
-          var index=new SpawnMapIndex(){
-           offset=offset,
-           version=version,
-          };
-          var serializationSize=CalculateSerializationSize(ref index,key,spawnObject);
-          WriteTo(writer,index,key,spawnObject);
-          fileHandle.SetIndex(key,index);
-          Logs.Debug(()=>"'WriteSpawnMapSimObject':key:"+key+";index:"+index);
+        private void WriteSpawnMapSimObject(BinaryWriter writer,SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapObject spawnObject){
+         if(writer==null){
+          return;
          }
+         long offset=writer.BaseStream.Length;
+         writer.BaseStream.Seek(
+          offset,
+          SeekOrigin.Begin
+         );
+         var index=new SpawnMapIndex(){
+          offset=offset,
+          version=version,
+          empty=false,
+         };
+         var serializationSize=CalculateSerializationSize(ref index,key,spawnObject);
+         WriteTo(writer,index,key,spawnObject);
+         fileHandle.SetIndex(key,index);
+         Logs.Debug(()=>"'WriteSpawnMapSimObject':key:"+key+";index:"+index);
         }
         internal int CalculateSerializationSize(ref SpawnMapIndex index,SpawnMapKey key,SpawnMapObject spawnObject){
          var serializationSize=
@@ -337,37 +362,100 @@ namespace AKCondinoO.PersistentData{
          spawnMapKeySerializer.WriteTo(writer,key,version);
          spawnMapObjectSerializer.WriteTo(writer,spawnObject,version);
         }
-        internal bool ReadFromSpawnMapFile(Vector2Int cnkRgn,int layer,Vector3Int vCoord,out SpawnMapObject spawnObject){
+        internal void WriteEmptyToSpawnMapFile(Vector2Int cnkRgn,int layer,Vector3Int vCoord){
+         var filePath=GetSpawnMapSaveFilePath(cnkRgn);
+         using(var fileHandle=(SpawnMapFileHandle)GetOrOpenSaveFile(filePath)){
+          int coordinateIndex=GetCoordinateIndex(vCoord);
+          using(var readerLease=fileHandle.AcquireReader(true)){
+           var reader=readerLease.reader;
+           bool indexed=FindIndex(reader,fileHandle,coordinateIndex,layer,
+            out SpawnMapKey key,out SpawnMapIndex index
+           );
+           if(indexed||index.offset<0){return;}
+           using(var writerLease=fileHandle.AcquireWriter()){
+            var writer=writerLease.writer;
+            WriteEmpty(writer,fileHandle,key);
+           }
+          }
+         }
+        }
+        void WriteEmpty(BinaryWriter writer,SpawnMapFileHandle fileHandle,SpawnMapKey key){
+         if(writer==null){
+          return;
+         }
+         long offset=writer.BaseStream.Length;
+         writer.BaseStream.Seek(
+          offset,
+          SeekOrigin.Begin
+         );
+         var index=new SpawnMapIndex(){
+          offset=offset,
+          version=version,
+          empty=true,
+         };
+         CalculateSerializationSize(ref index,key);
+         WriteEmptyTo(writer,index,key);
+         fileHandle.SetIndex(key,index);
+        }
+        internal int CalculateSerializationSize(ref SpawnMapIndex index,SpawnMapKey key){
+         var serializationSize=
+          spawnMapIndexSerializer.CalculateSerializedSize(index,version)+
+          spawnMapKeySerializer.CalculateSerializedSize(key,version);
+         index.serializationSize=serializationSize;
+         return serializationSize;
+        }
+        void WriteEmptyTo(BinaryWriter writer,SpawnMapIndex index,SpawnMapKey key){
+         spawnMapIndexSerializer.WriteTo(writer,index,version);
+         spawnMapKeySerializer.WriteTo(writer,key,version);
+        }
+        internal enum SpawnMapFileReadResult:byte{
+         NotFound,
+         Empty,
+         SpawnObject,
+        }
+        internal bool ReadFromSpawnMapFile(Vector2Int cnkRgn,int layer,Vector3Int vCoord,out SpawnMapObject spawnObject,out SpawnMapFileReadResult result){
+         result=SpawnMapFileReadResult.NotFound;
          var filePath=GetSpawnMapSaveFilePath(cnkRgn);
          using(var fileHandle=(SpawnMapFileHandle)GetOrOpenSaveFile(filePath,true)){
           int coordinateIndex=GetCoordinateIndex(vCoord);
-          bool indexed=FindIndex(fileHandle,coordinateIndex,layer,
-           out SpawnMapKey key,out SpawnMapIndex index
-          );
-          if(!indexed){
-           spawnObject=default;
-           return false;
+          using(var readerLease=fileHandle.AcquireReader(false)){
+           var reader=readerLease.reader;
+           bool indexed=FindIndex(reader,fileHandle,coordinateIndex,layer,
+            out SpawnMapKey key,out SpawnMapIndex index
+           );
+           if(!indexed){
+            spawnObject=default;
+            return false;
+           }
+           if(index.empty){
+            result=SpawnMapFileReadResult.Empty;
+           }
+           bool returnResult=ReadSpawnMapSimObject(reader,fileHandle,key,index,out spawnObject);
+           if(returnResult){
+            result=SpawnMapFileReadResult.SpawnObject;
+           }
+           return returnResult;
           }
-          return ReadSpawnMapSimObject(fileHandle,key,index,out spawnObject);
          }
         }
-        internal bool ReadSpawnMapSimObject(SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapIndex index,out SpawnMapObject spawnObject){
-         using(var readerLease=fileHandle.AcquireReader()){
-          var reader=readerLease.reader;
-          if(reader==null){
-           spawnObject=default;
-           return false;
-          }
-          var stream=reader.BaseStream;
-          if(index.offset+index.serializationSize>stream.Length){
-           spawnObject=default;
-           return false;
-          }
-          int version=index.version;
-          SeekToSpawnMapSimObject(stream,index,key,version);
-          spawnObject=spawnMapObjectSerializer.ReadFrom(reader,version);
-          return true;
+        internal bool ReadSpawnMapSimObject(BinaryReader reader,SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapIndex index,out SpawnMapObject spawnObject){
+         if(reader==null){
+          spawnObject=default;
+          return false;
          }
+         var stream=reader.BaseStream;
+         if(index.offset+index.serializationSize>stream.Length){
+          spawnObject=default;
+          return false;
+         }
+         int version=index.version;
+         if(index.empty){
+          spawnObject=default;
+          return false;
+         }
+         SeekToSpawnMapSimObject(stream,index,key,version);
+         spawnObject=spawnMapObjectSerializer.ReadFrom(reader,version);
+         return true;
         }
         void SeekToSpawnMapSimObject(Stream stream,SpawnMapIndex index,SpawnMapKey key,int version){
          stream.Seek(
@@ -377,24 +465,21 @@ namespace AKCondinoO.PersistentData{
           SeekOrigin.Begin
          );
         }
-        internal bool FindIndex(SpawnMapFileHandle fileHandle,
+        internal bool FindIndex(BinaryReader reader,SpawnMapFileHandle fileHandle,
          int coordinate,
          int layer,
          out SpawnMapKey key,
          out SpawnMapIndex index
         ){
-         using(var readerLease=fileHandle.AcquireReader()){
-          var reader=readerLease.reader;
-          if(reader==null){
-           key=default;
-           index=new(){offset=-1,};
-           return false;
-          }
-          return fileHandle.TryGetIndex(
-           key=new SpawnMapKey(coordinate,layer),
-           out index
-          );
+         if(reader==null){
+          key=default;
+          index=new(){offset=-1,};
+          return false;
          }
+         return fileHandle.TryGetIndex(
+          key=new SpawnMapKey(coordinate,layer),
+          out index
+         );
         }
         internal int GetCoordinateIndex(Vector3Int vCoord){
          int index=vCoord.x*Depth+vCoord.z;
@@ -412,7 +497,7 @@ namespace AKCondinoO.PersistentData{
          RebuildIndexes();
         }
         protected void RebuildIndexes(){
-         using(var readerLease=AcquireReader()){
+         using(var readerLease=AcquireReader(false)){
           var reader=readerLease.reader;
           if(reader==null){
            return;
@@ -427,17 +512,17 @@ namespace AKCondinoO.PersistentData{
            var index=spawnMapIndexSerializer.ReadFrom(reader,version);
            index.offset=offset;
            var key=spawnMapKeySerializer.ReadFrom(reader,version);
-           indexes[key]=index;
+           indexes.Add(key,index);
            var serializationSize=index.serializationSize;
            stream.Position=offset+serializationSize;
-           //Logs.Debug(()=>"'RebuildIndexes()' key:"+key+";index:"+index+";serializationSize:"+serializationSize);
+           Logs.Debug(()=>"'RebuildIndexes()' key:"+key+";index:"+index+";serializationSize:"+serializationSize);
           }
          }
         }
     }
     internal class SpawnMapFileHandle:PersistentDataFileHandle{
         protected SpawnMapFile GetSpawnMapFile(){
-         return GetFile()as SpawnMapFile;
+         return CurrentFile()as SpawnMapFile;
         }
         internal bool TryGetIndex(SpawnMapKey key,out SpawnMapIndex index){
          var file=GetSpawnMapFile();
@@ -453,7 +538,7 @@ namespace AKCondinoO.PersistentData{
         ){
          var file=GetSpawnMapFile();
          if(file!=null){
-          file.indexes[key]=index;
+          file.indexes.Add(key,index);
          }
         }
     }

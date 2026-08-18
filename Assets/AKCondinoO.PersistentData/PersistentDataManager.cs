@@ -177,13 +177,7 @@ namespace AKCondinoO.PersistentData{
         internal virtual PersistentDataFileStreaming GetFile(string saveFilePath){
          rwl.EnterReadLock();
          try{
-          if(!PersistentDataManager.singleton.canSave){
-           return null;
-          }
-          if(!openFiles.TryGetValue(saveFilePath,out var file)){
-           return null;
-          }
-          return file;
+          return CurrentFile(saveFilePath);
          }catch(Exception e){
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
           return null;
@@ -191,10 +185,19 @@ namespace AKCondinoO.PersistentData{
           rwl.ExitReadLock();
          }
         }
+        internal virtual PersistentDataFileStreaming CurrentFile(string saveFilePath){
+         if(!PersistentDataManager.singleton.canSave){
+          return null;
+         }
+         if(!openFiles.TryGetValue(saveFilePath,out var file)){
+          return null;
+         }
+         return file;
+        }
         internal BinaryWriterLease AcquireWriter(string saveFilePath){
          rwl.EnterReadLock();
          try{
-          var file=GetFile(saveFilePath);
+          var file=CurrentFile(saveFilePath);
           if(file!=null){
            return file.AcquireWriter();
           }
@@ -206,12 +209,12 @@ namespace AKCondinoO.PersistentData{
           rwl.ExitReadLock();
          }
         }
-        internal BinaryReaderLease AcquireReader(string saveFilePath){
+        internal BinaryReaderLease AcquireReader(string saveFilePath,bool upgradeable){
          rwl.EnterReadLock();
          try{
-          var file=GetFile(saveFilePath);
+          var file=CurrentFile(saveFilePath);
           if(file!=null){
-           return file.AcquireReader();
+           return file.AcquireReader(upgradeable);
           }
           return default;
          }catch(Exception e){
@@ -281,27 +284,52 @@ namespace AKCondinoO.PersistentData{
         }
      protected int open;
      internal bool isOpen=>Volatile.Read(ref open)==1;
+     private int initializingThreadId;
+     private readonly ManualResetEventSlim initializationCompleted=new(false);
         protected virtual void OnReturnToPoolRecycle(){
          Close();
+         initializationCompleted.Reset();
         }
         internal virtual bool Open(string filePath){
+         int threadId=Environment.CurrentManagedThreadId;
+         if(Interlocked.CompareExchange(ref initializingThreadId,threadId,0)!=0){
+          WaitForInitialization();
+         }
+         bool result;
          rwl.EnterWriteLock();
          try{
           saveFilePath=filePath;
           //Logs.Debug(()=>"'try to open file stream for:'"+saveFilePath);
           fileBinaryWriter=new(new(filePath,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite));
           Interlocked.Exchange(ref open,1);
-          OnOpen();
-          return true;
+          result=true;
          }catch(Exception e){
           Interlocked.Exchange(ref open,0);
           PersistentDataManager.singleton.DisableSaving(e,"'failed to open file stream for:'..."+saveFilePath);
           DisposeResources();
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
-          return false;
+          result=false;
          }finally{
           rwl.ExitWriteLock();
          }
+         try{
+          if(result){
+           OnOpen();
+          }
+         }catch(Exception e){
+          Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          result=false;
+         }finally{
+          Interlocked.Exchange(ref initializingThreadId,0);
+          initializationCompleted.Set();
+         }
+         return result;
+        }
+        private void WaitForInitialization(){
+         if(Volatile.Read(ref initializingThreadId)==Environment.CurrentManagedThreadId){
+          return;
+         }
+         initializationCompleted.Wait();
         }
         internal virtual void OnOpen(){
         }
@@ -337,6 +365,7 @@ namespace AKCondinoO.PersistentData{
          }
         }
         internal BinaryWriterLease AcquireWriter(){
+         WaitForInitialization();
          return new(this,fileBinaryWriter);
         }
         internal struct BinaryWriterLease:IDisposable{
@@ -373,8 +402,9 @@ namespace AKCondinoO.PersistentData{
              Exit();
             }
         }
-        internal BinaryReaderLease AcquireReader(){
-         return new(this,RentBinaryReader,ReturnBinaryReader);
+        internal BinaryReaderLease AcquireReader(bool upgradeable){
+         WaitForInitialization();
+         return new(this,RentBinaryReader,ReturnBinaryReader,upgradeable);
         }
         protected virtual PersistentDataBinaryReader RentBinaryReader(){
          if(!PersistentDataManager.singleton.canSave){
@@ -412,12 +442,18 @@ namespace AKCondinoO.PersistentData{
          private PersistentDataFileStreaming file;
          private readonly Action<PersistentDataBinaryReader>returnBinaryReader;
          private PersistentDataBinaryReader binReader;
-            internal BinaryReaderLease(PersistentDataFileStreaming file,Func<PersistentDataBinaryReader>rentBinaryReader,Action<PersistentDataBinaryReader>returnBinaryReader){
+         private bool upgradeable;
+            internal BinaryReaderLease(PersistentDataFileStreaming file,Func<PersistentDataBinaryReader>rentBinaryReader,Action<PersistentDataBinaryReader>returnBinaryReader,bool upgradeable){
+             this.upgradeable=upgradeable;
              this.file=file;
              binReader=null;
              this.returnBinaryReader=returnBinaryReader;
              if(file==null)return;
-             file.rwl.EnterReadLock();
+             if(upgradeable){
+              file.rwl.EnterUpgradeableReadLock();
+             }else{
+              file.rwl.EnterReadLock();
+             }
              if(!PersistentDataManager.singleton.canSave){
               Exit();
               return;
@@ -437,7 +473,11 @@ namespace AKCondinoO.PersistentData{
              }
             }
             void Exit(){
-             file.rwl.ExitReadLock();
+             if(upgradeable){
+              file.rwl.ExitUpgradeableReadLock();
+             }else{
+              file.rwl.ExitReadLock();
+             }
              file=null;
             }
             public BinaryReader reader{
@@ -491,23 +531,42 @@ namespace AKCondinoO.PersistentData{
          }
          return fileManager.GetFile(saveFilePath);
         }
+        protected PersistentDataFileStreaming CurrentFile(){
+         if(saveFilePath==null){
+          return null;
+         }
+         return fileManager.CurrentFile(saveFilePath);
+        }
         internal BinaryWriterLease AcquireWriter(){
          if(saveFilePath==null){
           return default;
          }
          return fileManager.AcquireWriter(saveFilePath);
         }
-        internal BinaryReaderLease AcquireReader(){
+        internal BinaryReaderLease AcquireReader(bool upgradeable){
          if(saveFilePath==null){
           return default;
          }
-         return fileManager.AcquireReader(saveFilePath);
+         return fileManager.AcquireReader(saveFilePath,upgradeable);
         }
     }
-    internal interface IPersistentDataSerializer<T>{
-     int CalculateSerializedSize(T value,int version);
-     void WriteTo(BinaryWriter writer,T value,int version);
-     T ReadFrom(BinaryReader reader,int version);
+    internal abstract class IPersistentDataSerializer<T>{
+     protected virtual int latestSupportedVersion{get{return 0;}}
+     protected virtual int EffectiveVersion(int version){
+      return Math.Min(version,latestSupportedVersion);
+     }
+     public virtual int CalculateSerializedSize(T value,int version){
+      return OnCalculateSerializedSize(value,version,EffectiveVersion(version));
+     }
+     public virtual void WriteTo(BinaryWriter writer,T value,int version){
+      OnWriteTo(writer,value,version,EffectiveVersion(version));
+     }
+     public virtual T ReadFrom(BinaryReader reader,int version){
+      return OnReadFrom(reader,version,EffectiveVersion(version));
+     }
+     protected abstract int OnCalculateSerializedSize(T value,int version,int effectiveVersion);
+     protected abstract void OnWriteTo(BinaryWriter writer,T value,int version,int effectiveVersion);
+     protected abstract T OnReadFrom(BinaryReader reader,int version,int effectiveVersion);
     }
     internal static class PersistentDataSerialization{
         internal static void WriteVector3(BinaryWriter writer,Vector3 value){

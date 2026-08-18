@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static AKCondinoO.PersistentData.SpawnMapFiles;
 using static AKCondinoO.PhysicsUtil;
 using static AKCondinoO.World.BiomesConfigurationSnapshot;
 using static AKCondinoO.World.SimObjects.ChunkSimObjectSpawner.BiomesSimObjectSpawnerJob;
@@ -155,7 +156,7 @@ namespace AKCondinoO.World.SimObjects{
              var vCoord=coord;
              ValidatevCoord(ref cCoord,ref vCoord);
              var cnkRgn=cCoordTocnkRgn(cCoord);
-             if(spawnMapFiles.ReadFromSpawnMapFile(cnkRgn,layer,vCoord,out var spawnObject)){
+             if(spawnMapFiles.ReadFromSpawnMapFile(cnkRgn,layer,vCoord,out var spawnObject,out SpawnMapFileReadResult result)){
               //Logs.Debug(()=>"'ReadFromSpawnMapFile':"+spawnObject.spawnEntry.prefab.GetType());
               candidate.spawnEntry=spawnObject.spawnEntry;
               candidate.variation=spawnObject.variation;
@@ -177,9 +178,17 @@ namespace AKCondinoO.World.SimObjects{
               }
               return true;
              }
+             if(result==SpawnMapFileReadResult.Empty){
+              //Logs.Debug(()=>"'ReadFromSpawnMapFile':empty:"+empty);
+              candidate.state=CandidateState.Rejected;
+              visited[worldCoord]=candidate;
+              return false;
+             }
+             //Logs.Debug(()=>"'get entry should not be called anymore if generation was completed and saved':result:"+result);
              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
+              spawnMapFiles?.WriteEmptyToSpawnMapFile(cnkRgn,layer,vCoord);
               return false;
              }
              candidate.spawnEntry=new SpawnEntry(){
@@ -217,6 +226,7 @@ namespace AKCondinoO.World.SimObjects{
              if(blocked){
               candidate.state=CandidateState.Rejected;
               visited[worldCoord]=candidate;
+              spawnMapFiles?.WriteEmptyToSpawnMapFile(cnkRgn,layer,vCoord);
               return false;
              }else{
               candidate.state=CandidateState.Accepted;
