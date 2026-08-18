@@ -263,5 +263,50 @@ Example:
 
 Do not perform the automated change without the user's approval.
 
+## Repeated-change detection
+
+When reviewing the user's planned changes, distinguish between:
+
+A. Intentional repetition:
+   The code is naturally repetitive and centralizing it would make the design worse.
+
+B. Accidental repetition:
+   The same rule, format, or behavior is duplicated in multiple places and future changes will require changing all of them.
+
+If B is detected, briefly flag it and suggest a single-source-of-truth design.
+
+Do not automatically refactor it. Let the user decide whether the reduction in future maintenance justifies the change.
+
+If a centralized solution is proposed, prefer the simplest abstraction that removes the repetition. Do not introduce generic frameworks, factories, registries, reflection, dependency injection, or additional layers unless they provide a concrete benefit for the current codebase.
+
+## Formatting preference
+
+The user intentionally prefers compact C# formatting.
+
+Example preferred style:
+
+if(condition){
+ DoSomething();
+}else{
+ DoSomethingElse();
+}
+
+Do NOT automatically transform it into:
+
+if (condition)
+{
+    DoSomething();
+}
+else
+{
+    DoSomethingElse();
+}
+
+Preserve the user's compact formatting when modifying existing code.
+
+Do not insert blank lines between logically adjacent members unless the surrounding code already uses them.
+
+Do not reformat code merely because another style is considered more conventional.
+
 ---
 If this file misses any repository-specific conventions you rely on, please edit and commit the addition or tell the assistant which details to add.
