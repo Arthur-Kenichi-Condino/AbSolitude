@@ -43,10 +43,13 @@ namespace AKCondinoO.World{
           for(int z=minOffset.y;z<=maxOffset.y;z++){
            Vector2Int cCoord2=cCoord+new Vector2Int(x,z);
            var map=GetOrAddSpawnSpatialMap(cCoord2);
-           map.Add(layer,spawn,entry);
+           if(map.TryRegister(layer,spawn,entry)){
+            map.Add(layer,spawn,entry);
+           }
           }}
          }catch(Exception e){
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+          Logs.Warning("spawn.obb:"+spawn.obb);
          }finally{
           rwl.ExitWriteLock();
          }

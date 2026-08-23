@@ -45,6 +45,9 @@ namespace AKCondinoO{
               extents
              );
             }
+            public override string ToString(){
+             return$"OrientedBounds(center:{center},axisX:{axisX},axisY:{axisY},axisZ:{axisZ},extents:{extents})";
+            }
         }
         //  Feito com ajuda do(a) ChatGPT e do(a) Gemini
         internal static bool Intersects(this in OrientedBounds A,in OrientedBounds B){

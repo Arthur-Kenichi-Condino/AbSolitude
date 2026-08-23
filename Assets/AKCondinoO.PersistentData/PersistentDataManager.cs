@@ -10,6 +10,10 @@ using System.Threading;
 using UnityEngine;
 using static AKCondinoO.PersistentData.PersistentDataFileStreaming;
 namespace AKCondinoO.PersistentData{
+    /// <summary>
+    ///  Nenhum código chamado enquanto PersistentDataFileStreaming.rwl estiver adquirido deve 
+    /// tentar adquirir PersistentDataFileManager.rwl.
+    /// </summary>
     internal class PersistentDataManager:MonoSingleton<PersistentDataManager>{
      private readonly Dictionary<Type,PersistenDatatInitialization>initOrderTable=new(){
       {typeof( SpawnMapFiles),
@@ -194,7 +198,10 @@ namespace AKCondinoO.PersistentData{
          }
          return file;
         }
-        internal BinaryWriterLease AcquireWriter(string saveFilePath){
+        internal BinaryWriterLease AcquireWriter(string saveFilePath,BinaryReaderLease readerLease){
+         if(readerLease.TryUpgrade(out var writerLease)){
+          return writerLease;
+         }
          rwl.EnterReadLock();
          try{
           var file=CurrentFile(saveFilePath);
@@ -498,6 +505,19 @@ namespace AKCondinoO.PersistentData{
              }
              binReader=null;
             }
+            public bool TryUpgrade(out BinaryWriterLease writerLease){
+             if(file==null){
+              writerLease=default;
+              return false;
+             }
+             if(!upgradeable){
+              Logs.Error("'attempted to acquire write lease on a non-upgradeable read lease'");
+              writerLease=default;
+              return false;
+             }
+             writerLease=file.AcquireWriter();
+             return true;
+            }
         }
     }
     internal class PersistentDataFileHandle:IDisposable{
@@ -537,11 +557,11 @@ namespace AKCondinoO.PersistentData{
          }
          return fileManager.CurrentFile(saveFilePath);
         }
-        internal BinaryWriterLease AcquireWriter(){
+        internal BinaryWriterLease AcquireWriter(BinaryReaderLease readerLease){
          if(saveFilePath==null){
           return default;
          }
-         return fileManager.AcquireWriter(saveFilePath);
+         return fileManager.AcquireWriter(saveFilePath,readerLease);
         }
         internal BinaryReaderLease AcquireReader(bool upgradeable){
          if(saveFilePath==null){

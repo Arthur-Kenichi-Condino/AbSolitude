@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static AKCondinoO.UIObjects.UISystem;
 namespace AKCondinoO.UIObjects{
-    internal class WindowDockManager:MonoBehaviour{
+    internal class WindowDockManager{
      internal readonly UISystem uiSystem;
         internal WindowDockManager(UISystem uiSystem){
          this.uiSystem=uiSystem;

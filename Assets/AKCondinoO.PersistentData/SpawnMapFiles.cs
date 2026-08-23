@@ -323,7 +323,7 @@ namespace AKCondinoO.PersistentData{
             pos=reserve.pos,
             scale=reserve.scale
            };
-           using(var writerLease=fileHandle.AcquireWriter()){
+           using(var writerLease=fileHandle.AcquireWriter(readerLease)){
             var writer=writerLease.writer;
             WriteSpawnMapSimObject(writer,fileHandle,key,spawnObject);
            }
@@ -347,6 +347,7 @@ namespace AKCondinoO.PersistentData{
          var serializationSize=CalculateSerializationSize(ref index,key,spawnObject);
          WriteTo(writer,index,key,spawnObject);
          fileHandle.SetIndex(key,index);
+         fileHandle.SetSpawnMapObject(key,spawnObject);
          Logs.Debug(()=>"'WriteSpawnMapSimObject':key:"+key+";index:"+index);
         }
         internal int CalculateSerializationSize(ref SpawnMapIndex index,SpawnMapKey key,SpawnMapObject spawnObject){
@@ -372,7 +373,7 @@ namespace AKCondinoO.PersistentData{
             out SpawnMapKey key,out SpawnMapIndex index
            );
            if(indexed||index.offset<0){return;}
-           using(var writerLease=fileHandle.AcquireWriter()){
+           using(var writerLease=fileHandle.AcquireWriter(readerLease)){
             var writer=writerLease.writer;
             WriteEmpty(writer,fileHandle,key);
            }
@@ -396,6 +397,7 @@ namespace AKCondinoO.PersistentData{
          CalculateSerializationSize(ref index,key);
          WriteEmptyTo(writer,index,key);
          fileHandle.SetIndex(key,index);
+         fileHandle.SetSpawnMapObject(key,default);
         }
         internal int CalculateSerializationSize(ref SpawnMapIndex index,SpawnMapKey key){
          var serializationSize=
@@ -441,6 +443,9 @@ namespace AKCondinoO.PersistentData{
         internal bool ReadSpawnMapSimObject(BinaryReader reader,SpawnMapFileHandle fileHandle,SpawnMapKey key,SpawnMapIndex index,out SpawnMapObject spawnObject){
          if(reader==null){
           spawnObject=default;
+          return false;
+         }
+         if(fileHandle.TryGetSpawnMapObject(key,out spawnObject)){
           return false;
          }
          var stream=reader.BaseStream;
@@ -490,8 +495,10 @@ namespace AKCondinoO.PersistentData{
         protected override void OnReturnToPoolRecycle(){
          base.OnReturnToPoolRecycle();
          indexes.Clear();
+         values.Clear();
         }
      internal readonly Dictionary<SpawnMapKey,SpawnMapIndex>indexes=new();
+     internal readonly Dictionary<SpawnMapKey,SpawnMapObject>values=new();
         internal override void OnOpen(){
          base.OnOpen();
          RebuildIndexes();
@@ -539,6 +546,23 @@ namespace AKCondinoO.PersistentData{
          var file=GetSpawnMapFile();
          if(file!=null){
           file.indexes.Add(key,index);
+         }
+        }
+        internal bool TryGetSpawnMapObject(SpawnMapKey key,out SpawnMapObject spawnMapObject){
+         var file=GetSpawnMapFile();
+         if(file!=null){
+          return file.values.TryGetValue(key,out spawnMapObject);
+         }
+         spawnMapObject=default;
+         return false;
+        }
+        internal void SetSpawnMapObject(
+         SpawnMapKey key,
+         SpawnMapObject spawnMapObject
+        ){
+         var file=GetSpawnMapFile();
+         if(file!=null){
+          file.values.Add(key,spawnMapObject);
          }
         }
     }
