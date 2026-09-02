@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using System.Collections;
 using System.Collections.Generic;
@@ -232,6 +233,12 @@ namespace AKCondinoO.World{
         internal void RemoveSource(WorldChunk chunk){
          if(snapshot==null){return;}
          snapshot.sourcesOrdered.UnregisterSource(chunk);
+         pendingBuild=true;
+        }
+        internal void AddOrUpdateSource(SimObject simObject){
+         if(snapshot==null){return;}
+         snapshot.sourcesOrdered.RegisterSource(simObject);
+         simObject.OnClusteredNotifySource(this);
          pendingBuild=true;
         }
      private bool updating;

@@ -202,11 +202,21 @@ namespace AKCondinoO.SimObjects{
           prefabMeshObject.transform,
           simObject.simObjectAIComponents.transform
          );
-         SetupNavMeshObstacle(
-          simObject.simObjectAIComponents.transform,
-          colliderMesh,
-          ref simObject.simObjectNavMeshObstacle
-         );
+         if(simObject.useBoundsForNavMesh){
+          SetupNavMeshObstacle(
+           simObject.simObjectAIComponents.transform,
+           colliderMesh,
+           ref simObject.simObjectNavMeshObstacle
+          );
+         }else if(simObject.createNavMeshSource){
+          simObject.simObjectNavMeshSource=new(){
+           transform=simObject.simObjectCollisionComponents.transform.localToWorldMatrix,//  ...deve ser atualizado sempre que o objeto é movido
+           shape=NavMeshBuildSourceShape.Mesh,
+           sourceObject=colliderMesh,
+           component=simObject.simObjectMeshCollider,
+           area=0,
+          };
+         }
         }
         private static NavMeshObstacle SetupNavMeshObstacle(
          Transform root,

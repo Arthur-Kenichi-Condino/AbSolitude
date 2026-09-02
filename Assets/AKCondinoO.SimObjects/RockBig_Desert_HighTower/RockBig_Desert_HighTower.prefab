@@ -92,6 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AKCondinoO.SimObjects.RockBig_Desert_HighTower
   variant: 1
   useInstancedRendering: 0
+  useBoundsForNavMesh: 0
+  createNavMeshSource: 1
   meshPrefab: {fileID: 5866466971050810783, guid: ba9faceaea630174cb150f62bc3b799f, type: 3}
   useMeshObjectSubMeshesForCollider: 00000000
   simObjectRendererComponents: {fileID: 9048587360216002950}

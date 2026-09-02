@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using System.Collections;
 using System.Collections.Generic;
@@ -135,6 +136,12 @@ namespace AKCondinoO.World{
          Logs.Debug(()=>"'chunk exists:rebuild nav mesh':"+chunk.cCoord);
          if(zoneToCluster.TryGetValue(zone,out var cluster)){
           cluster.AddOrUpdateSource(chunk);
+         }
+        }
+        internal void OnSimObjectPositionChanged(ActiveZone zone,SimObject simObject){
+         Logs.Debug(()=>"'sim object position changed:rebuild nav mesh':"+simObject.id);
+         if(zoneToCluster.TryGetValue(zone,out var cluster)){
+          cluster.AddOrUpdateSource(simObject);
          }
         }
         internal NavMeshCluster RequestCluster(){

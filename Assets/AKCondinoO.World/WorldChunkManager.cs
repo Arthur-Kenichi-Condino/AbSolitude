@@ -74,6 +74,9 @@ namespace AKCondinoO.World{
           }
          }
         }
+        internal bool HasRef(Vector2Int cCoord,out HashSet<ActiveZone>cRef){
+         return chunkRef.TryGetValue(cCoord,out cRef);
+        }
         internal void EnsureExists(Vector2Int cCoord){
          if(!chunks.TryGetValue(cCoord,out var cnk)){
           chunks.Add(cCoord,cnk=chunkPool.Rent());

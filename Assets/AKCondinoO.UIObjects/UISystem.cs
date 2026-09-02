@@ -66,12 +66,22 @@ namespace AKCondinoO.UIObjects{
         ){
          Bounds bounds=element.GetBounds();
          Vector2 canvasSize=((RectTransform)canvas.transform).rect.size;
+         Logs.Debug(()=>"'element.GetBounds()':"+bounds+";canvasSize:"+canvasSize);
          float minX=-canvasSize.x*0.5f-bounds.min.x+margin;
          float maxX= canvasSize.x*0.5f-bounds.max.x-margin;
          float minY=-canvasSize.y*0.5f-bounds.min.y+margin;
          float maxY= canvasSize.y*0.5f-bounds.max.y-margin;
-         anchoredPos.x=Mathf.Clamp(anchoredPos.x,minX,maxX);
-         anchoredPos.y=Mathf.Clamp(anchoredPos.y,minY,maxY);
+         if(
+          bounds.size.x>canvasSize.x||
+          bounds.size.y>canvasSize.y
+         ){
+          Logs.Debug(()=>"'element size is larger than canvas':'"+bounds.size+">"+canvasSize+"'");
+          anchoredPos.x=maxX;
+          anchoredPos.y=minY;
+         }else{
+          anchoredPos.x=Mathf.Clamp(anchoredPos.x,minX,maxX);
+          anchoredPos.y=Mathf.Clamp(anchoredPos.y,minY,maxY);
+         }
          return anchoredPos;
         }
         internal static bool IsNearCanvasEdgeLocalSpace(Vector2 anchoredPos,Canvas canvas,out bool left,out bool right,out bool bottom,out bool top,Vector2 edge){

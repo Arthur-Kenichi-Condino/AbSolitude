@@ -217,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 5627748809821370129, guid: e57eef97563de9841b559e79c82dae95, type: 3}
       propertyPath: resizable
       value: 
-      objectReference: {fileID: 6006108330714710234}
+      objectReference: {fileID: -410541174474203696}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

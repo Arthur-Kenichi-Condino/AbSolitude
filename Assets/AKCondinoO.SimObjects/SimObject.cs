@@ -14,6 +14,8 @@ namespace AKCondinoO.SimObjects{
      internal Type simObjectType=>type??=GetType();private Type type;
      [SerializeField]internal string variant;
      [SerializeField]internal bool useInstancedRendering=false;
+     [SerializeField]internal bool useBoundsForNavMesh=false;
+     [SerializeField]internal bool createNavMeshSource=false;
      [SerializeField]internal GameObject meshPrefab;
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectRendererComponents;
@@ -25,6 +27,7 @@ namespace AKCondinoO.SimObjects{
      internal MeshFilter   simObjectMeshFilter;
      internal MeshCollider simObjectMeshCollider;
      internal NavMeshObstacle simObjectNavMeshObstacle;
+     internal NavMeshBuildSource simObjectNavMeshSource;
      internal List<SimObjectPart>simObjectParts=new();
      internal List<InteractionSlot>simObjectSlots=new();
      internal bool doInitialization=true;
@@ -75,6 +78,22 @@ namespace AKCondinoO.SimObjects{
          if(instancedRenderingIndex>=0){
           manager.instancedRendering.UpdateInstance((simObjectType,variant),instancedRenderingIndex);
          }
+         UpdateNavMeshSource();
+        }
+        internal void UpdateNavMeshSource(){
+         if(createNavMeshSource){
+          Logs.Debug(()=>"'update simObjectNavMeshSource':"+name+";transform:"+transform.position+","+transform.rotation+","+transform.localScale);
+          simObjectNavMeshSource.transform=simObjectCollisionComponents.transform.localToWorldMatrix;
+          var cCoord=vecPosTocCoord(transform.position);
+          if(WorldChunkManager.singleton.HasRef(cCoord,out var cRef)){
+           foreach(var zone in cRef){
+            WorldChunkManager.singleton.navMeshProvider.OnSimObjectPositionChanged(zone,this);
+           }
+          }
+         }
+        }
+        internal void OnClusteredNotifySource(NavMeshCluster navMeshCluster){
+         Logs.Debug(()=>"'OnClusteredNotifySource':'sim object':"+id);
         }
      internal float nextFindGroundTime;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

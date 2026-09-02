@@ -28,6 +28,7 @@ namespace AKCondinoO.UIObjects{
          header.OnAwake(this);
          scrollView=GetComponentInChildren<ScrollView>();
          scrollView.OnAwake(this);
+         ignoredForBounds.Add((RectTransform)scrollView.transform);
          tabsGroup=GetComponentInChildren<TabsGroup>();
          if(tabsGroup!=null){
           tabsGroup.OnAwake(this);

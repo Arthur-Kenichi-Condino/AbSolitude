@@ -17,6 +17,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9115913815891721559, guid: 539e5873aeae9564c81a4f50e8a9ff87, type: 3}
     - target: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+      propertyPath: useBoundsForAI
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
+      propertyPath: useBoundsForNavMesh
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
       propertyPath: useMeshObjectSubMeshesForCollider.Array.size
       value: 1
       objectReference: {fileID: 0}

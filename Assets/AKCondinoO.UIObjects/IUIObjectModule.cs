@@ -7,7 +7,7 @@ namespace AKCondinoO.UIObjects{
         void SetSafePos(Vector2 anchoredPos);
         void UpdateBounds();
         Bounds GetBounds();
-        Vector2 GetSize();
+        Vector2 GetSize(bool raw);
         void BringToFront();
     }
 }
