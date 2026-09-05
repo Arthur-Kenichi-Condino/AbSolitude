@@ -293,7 +293,12 @@ namespace AKCondinoO.PersistentData{
      internal bool isOpen=>Volatile.Read(ref open)==1;
      private int initializingThreadId;
      private readonly ManualResetEventSlim initializationCompleted=new(false);
+     internal PersistentDataFileHeader fileHeader;
         protected virtual void OnReturnToPoolRecycle(){
+         if(fileHeader!=null){
+          Logs.Error("'file header was not returned to pool before returning file to pool'");
+         }
+         fileHeader=null;
          Close();
          initializationCompleted.Reset();
         }
@@ -339,6 +344,12 @@ namespace AKCondinoO.PersistentData{
          initializationCompleted.Wait();
         }
         internal virtual void OnOpen(){
+         EnsureHeader();
+         if(fileHeader==null){
+          Logs.Error("'file header must be set for every file on open'");
+         }
+        }
+        protected virtual void EnsureHeader(){
         }
         internal virtual void Close(){
          rwl.EnterWriteLock();
@@ -570,23 +581,88 @@ namespace AKCondinoO.PersistentData{
          return fileManager.AcquireReader(saveFilePath,upgradeable);
         }
     }
+    internal abstract class PersistentDataFileHeader{
+     static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
+      {(typeof(SpawnMapFileHeader      ),""),Pool.GetPool<SpawnMapFileHeader      >("",()=>new(),(SpawnMapFileHeader       item)=>{item.OnReturnToPoolRecycle();},true)},
+     };
+        internal static PersistentDataFileHeader Rent(Type poolId){
+         return(PersistentDataFileHeader)pool[(poolId,"")].ObjectRent();
+        }
+        internal static void Return(Type poolId,PersistentDataFileHeader fileHeader){
+         pool[(poolId,"")].ObjectReturn(fileHeader);
+        }
+     internal abstract int magicBytes{get;}
+     internal int headerVersion;
+     internal int headerSize;
+        protected virtual void OnReturnToPoolRecycle(){
+         headerVersion=-1;
+         headerSize=0;
+        }
+        internal int CalculateSerializedSize(int version,int supportedVersion){
+         switch(supportedVersion){
+          default:{
+           return
+            sizeof(int)+//  magicBytes
+            sizeof(int)+//  headerVersion
+            sizeof(int)+//  headerSize
+            OnCalculateSerializedSize(version,supportedVersion);
+          }
+         }
+        }
+        protected abstract int OnCalculateSerializedSize(int version,int supportedVersion);
+        internal void WriteTo(BinaryWriter writer,int requestedVersion,int supportedVersion){
+         switch(supportedVersion){
+          default:{
+           writer.Write(magicBytes);
+           writer.Write(headerVersion);
+           writer.Write(headerSize);
+           OnWriteTo(writer,requestedVersion,supportedVersion);
+           break;
+          }
+         }
+        }
+        protected abstract void OnWriteTo(BinaryWriter writer,int requestedVersion,int supportedVersion);
+        internal void ReadFrom(BinaryReader reader,int savedVersion,int supportedVersion){
+         int magicBytes=reader.ReadInt32();
+         if(magicBytes!=this.magicBytes){
+          Logs.Error("'trying to read spawn map file but the file is not valid: magic bytes is not the correct one'");
+          return;
+         }
+         headerVersion=reader.ReadInt32();
+         headerSize=reader.ReadInt32();
+         OnReadFrom(reader,savedVersion,supportedVersion);
+        }
+        protected abstract void OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion);
+        internal void Generate(int requestedVersion,int supportedVersion){
+         headerVersion=supportedVersion;
+         headerSize=CalculateSerializedSize(requestedVersion,supportedVersion);
+         OnGenerate(requestedVersion,supportedVersion);
+        }
+        protected abstract void OnGenerate(int requestedVersion,int supportedVersion);
+    }
+    internal abstract class PersistentDataFileHeaderSerializer<T>:IPersistentDataSerializer<T>{
+        internal T Generate(int requestedVersion){
+         return OnGenerate(requestedVersion,GetSupportedVersion(requestedVersion));
+        }
+        protected abstract T OnGenerate(int requestedVersion,int supportedVersion);
+    }
     internal abstract class IPersistentDataSerializer<T>{
      protected virtual int latestSupportedVersion{get{return 0;}}
-     protected virtual int EffectiveVersion(int version){
+     protected virtual int GetSupportedVersion(int version){
       return Math.Min(version,latestSupportedVersion);
      }
      public virtual int CalculateSerializedSize(T value,int version){
-      return OnCalculateSerializedSize(value,version,EffectiveVersion(version));
+      return OnCalculateSerializedSize(value,version,GetSupportedVersion(version));
      }
-     public virtual void WriteTo(BinaryWriter writer,T value,int version){
-      OnWriteTo(writer,value,version,EffectiveVersion(version));
+     public virtual void WriteTo(BinaryWriter writer,T value,int requestedVersion){
+      OnWriteTo(writer,value,requestedVersion,GetSupportedVersion(requestedVersion));
      }
-     public virtual T ReadFrom(BinaryReader reader,int version){
-      return OnReadFrom(reader,version,EffectiveVersion(version));
+     public virtual T ReadFrom(BinaryReader reader,int savedVersion){
+      return OnReadFrom(reader,savedVersion,GetSupportedVersion(savedVersion));
      }
-     protected abstract int OnCalculateSerializedSize(T value,int version,int effectiveVersion);
-     protected abstract void OnWriteTo(BinaryWriter writer,T value,int version,int effectiveVersion);
-     protected abstract T OnReadFrom(BinaryReader reader,int version,int effectiveVersion);
+     protected abstract int OnCalculateSerializedSize(T value,int version,int supportedVersion);
+     protected abstract void OnWriteTo(BinaryWriter writer,T value,int requestedVersion,int supportedVersion);
+     protected abstract T OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion);
     }
     internal static class PersistentDataSerialization{
         internal static void WriteVector3(BinaryWriter writer,Vector3 value){
