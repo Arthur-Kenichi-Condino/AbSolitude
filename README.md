@@ -10,14 +10,13 @@ Se você quiser fazer doações para ajudar o projeto crescer, use os links ao l
 - Artista dos concepts para modelagem 3D dos Homunculi Vanilmirth, Sera, Lif, Eleanor, Eira e Filir
 
 ### neves482
-- Modeladora 3D, Documentãção/GDD, Organização, Discord, 
-
-### Night Moon Games
+- Modeladora 3D, Documentação/GDD, Organização, Discord 
 
 ### Thiago Piagentini Lombardi 
 - Ilustração, GDD, Programador Auxiliar
 
 ### Tiago
+- Modelador 3D, programação
 
 # README
 Original official Portuguese README below the following English translation.
