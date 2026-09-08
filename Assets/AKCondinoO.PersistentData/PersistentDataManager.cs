@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using static AKCondinoO.PersistentData.PersistentDataFileStreaming;
+using static AKCondinoO.PersistentData.PersistentDataSerialization;
 namespace AKCondinoO.PersistentData{
     /// <summary>
     ///  Nenhum código chamado enquanto PersistentDataFileStreaming.rwl estiver adquirido deve 
@@ -350,6 +351,25 @@ namespace AKCondinoO.PersistentData{
          }
         }
         protected virtual void EnsureHeader(){
+        }
+        protected virtual void EnsureHeaderSize(
+         FileStream stream,
+         PersistentDataFileHeader header,
+         int newHeaderSize,
+         out bool sizeChanged
+        ){
+         int oldHeaderSize=fileHeader.headerSize;
+         if(oldHeaderSize==newHeaderSize){
+          sizeChanged=false;
+          return;
+         }
+         sizeChanged=true;
+         ResizeHeader(
+          stream,
+          oldHeaderSize,
+          newHeaderSize
+         );
+         header.headerSize=newHeaderSize;
         }
         internal virtual void Close(){
          rwl.EnterWriteLock();
@@ -709,6 +729,75 @@ namespace AKCondinoO.PersistentData{
           lengthBytes++;
          }
          return lengthBytes+Encoding.UTF8.GetByteCount(value);
+        }
+        internal static void ResizeHeader(
+         FileStream stream,
+         int oldHeaderSize,
+         int newHeaderSize
+        ){
+         if(oldHeaderSize==newHeaderSize){
+          return;
+         }
+         long dataSize=stream.Length-oldHeaderSize;
+         if(dataSize<=0){
+          stream.SetLength(newHeaderSize);
+          return;
+         }
+         ShiftStreamData(
+          stream,
+          oldHeaderSize,
+          newHeaderSize,
+          dataSize
+         );
+         stream.SetLength(newHeaderSize+dataSize);
+        }
+        internal static void ShiftStreamData(
+         FileStream stream,
+         long sourceOffset,
+         long destinationOffset,
+         long size
+        ){
+         if(size<=0||sourceOffset==destinationOffset){
+          return;
+         }
+         const int bufferSize=81920;
+         var buffer=Pool.RentArray<byte>(bufferSize);
+         try{
+          if(destinationOffset>sourceOffset){
+           long remaining=size;
+           while(remaining>0){
+            int count=(int)Math.Min(bufferSize,remaining);
+            long position=sourceOffset+remaining-count;
+            stream.Position=position;
+            int read=stream.Read(buffer,0,count);
+            if(read!=count){
+             Logs.Error("'end of stream:file is corrupt'");
+             return;
+            }
+            stream.Position=destinationOffset+remaining-count;
+            stream.Write(buffer,0,count);
+            remaining-=count;
+           }
+          }else{
+           long processed=0;
+           while(processed<size){
+            int count=(int)Math.Min(bufferSize,size-processed);
+            stream.Position=sourceOffset+processed;
+            int read=stream.Read(buffer,0,count);
+            if(read!=count){
+             Logs.Error("'end of stream:file is corrupt'");
+             return;
+            }
+            stream.Position=destinationOffset+processed;
+            stream.Write(buffer,0,count);
+            processed+=count;
+           }
+          }
+         }catch(Exception e){
+          Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
+         }finally{
+          Pool.ReturnArray(buffer);
+         }
         }
     }
 }

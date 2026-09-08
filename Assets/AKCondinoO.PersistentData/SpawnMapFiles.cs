@@ -13,20 +13,37 @@ using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.PersistentData{
     internal sealed class SpawnMapFileHeader:PersistentDataFileHeader{
      internal override int magicBytes=>0x534D4648;//  SMFH
-     internal static int version=0;
+     internal static int version=1;
+     internal bool done;
         protected override void OnReturnToPoolRecycle(){
          //  limpar aqui
+         done=false;
          base.OnReturnToPoolRecycle();
         }
         protected override int OnCalculateSerializedSize(int version,int supportedVersion){
-         return 0;
+         switch(supportedVersion){
+          default:{
+           return sizeof(bool);
+          }
+         }
         }
         protected override void OnWriteTo(BinaryWriter writer,int requestedVersion,int supportedVersion){
+         switch(supportedVersion){
+          default:{
+           writer.Write(done);
+           break;
+          }
+         }
         }
         protected override void OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion){
          switch(headerVersion){
           default:{
            //  preencher com dados faltantes
+           if(headerVersion>=1){
+            done=reader.ReadBoolean();
+           }else{
+            done=false;
+           }
            break;
           }
          }
@@ -40,9 +57,13 @@ namespace AKCondinoO.PersistentData{
              return value.CalculateSerializedSize(version,supportedVersion);
             }
             protected override void OnWriteTo(BinaryWriter writer,SpawnMapFileHeader value,int requestedVersion,int supportedVersion){
+             var stream=writer.BaseStream;
+             stream.Seek(0,SeekOrigin.Begin);
              value.WriteTo(writer,requestedVersion,supportedVersion);
             }
             protected override SpawnMapFileHeader OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion){
+             var stream=reader.BaseStream;
+             stream.Seek(0,SeekOrigin.Begin);
              var fileHeader=(SpawnMapFileHeader)PersistentDataFileHeader.Rent(typeof(SpawnMapFileHeader));
              fileHeader.ReadFrom(reader,savedVersion,supportedVersion);
              return fileHeader;
@@ -554,8 +575,8 @@ namespace AKCondinoO.PersistentData{
           if(reader==null){
            return;
           }
-          var stream=reader.BaseStream;
-          if(stream.Length==0){
+          var readerStream=reader.BaseStream;
+          if(readerStream.Length==0){
            fileHeader=SpawnMapFileHeader.serializer.Generate(SpawnMapFileHeader.version);
            using(var writerLease=AcquireWriter()){
             var writer=writerLease.writer;
@@ -563,6 +584,23 @@ namespace AKCondinoO.PersistentData{
            }
           }else{
            fileHeader=SpawnMapFileHeader.serializer.ReadFrom(reader,SpawnMapFileHeader.version);
+           int oldHeaderVersion=fileHeader.headerVersion;
+           int newHeaderVersion=SpawnMapFileHeader.version;
+           if(oldHeaderVersion!=newHeaderVersion){
+            using(var writerLease=AcquireWriter()){
+             var writer=writerLease.writer;
+             if(writer==null){
+              return;
+             }
+             var writerStream=writer.BaseStream;
+             int newHeaderSize=SpawnMapFileHeader.serializer.CalculateSerializedSize((SpawnMapFileHeader)fileHeader,SpawnMapFileHeader.version);
+             EnsureHeaderSize((FileStream)writerStream,fileHeader,newHeaderSize,out bool sizeChanged);
+             if(sizeChanged){
+              Logs.Debug(()=>"'EnsureHeaderSize' size changed for file:"+saveFilePath);
+             }
+             SpawnMapFileHeader.serializer.WriteTo(writer,(SpawnMapFileHeader)fileHeader,SpawnMapFileHeader.version);
+            }
+           }
           }
          }
         }
