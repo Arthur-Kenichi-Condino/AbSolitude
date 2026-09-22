@@ -4,6 +4,7 @@ using UnityEngine;
 namespace AKCondinoO{
     internal static class PhysicsUtil{
         internal struct OrientedBounds:IEquatable<OrientedBounds>{
+         public Vector3 spawnPos;
          public Vector3 center;
          public Vector3 axisX;
          public Vector3 axisY;
@@ -21,11 +22,12 @@ namespace AKCondinoO{
              );
             }
             public bool Equals(OrientedBounds other){
-             return center ==other.center&&
-                    axisX  ==other.axisX &&
-                    axisY  ==other.axisY &&
-                    axisZ  ==other.axisZ &&
-                    extents==other.extents;
+             return spawnPos==other.spawnPos&&
+                    center  ==other.center&&
+                    axisX   ==other.axisX &&
+                    axisY   ==other.axisY &&
+                    axisZ   ==other.axisZ &&
+                    extents ==other.extents;
             }
             public override bool Equals(object obj){
              return obj is OrientedBounds other&&Equals(other);
@@ -38,6 +40,7 @@ namespace AKCondinoO{
             }
             public override int GetHashCode(){
              return HashCode.Combine(
+              spawnPos,
               center,
               axisX,
               axisY,
@@ -46,7 +49,7 @@ namespace AKCondinoO{
              );
             }
             public override string ToString(){
-             return$"OrientedBounds(center:{center},axisX:{axisX},axisY:{axisY},axisZ:{axisZ},extents:{extents})";
+             return$"OrientedBounds(spawnPos:{spawnPos},center:{center},axisX:{axisX},axisY:{axisY},axisZ:{axisZ},extents:{extents})";
             }
         }
         //  Feito com ajuda do(a) ChatGPT e do(a) Gemini

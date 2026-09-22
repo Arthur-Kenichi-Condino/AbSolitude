@@ -39,9 +39,13 @@ namespace AKCondinoO.World{
           if(!(registered=ownerMap.TryRegister(layer,spawn,entry))){
            goto _End;
           }
+          ownerMap.Add(layer,spawn,entry);
           for(int x=minOffset.x;x<=maxOffset.x;x++){
           for(int z=minOffset.y;z<=maxOffset.y;z++){
            Vector2Int cCoord2=cCoord+new Vector2Int(x,z);
+           if(cCoord2==ownercCoord){
+            continue;
+           }
            var map=GetOrAddSpawnSpatialMap(cCoord2);
            if(map.TryRegister(layer,spawn,entry)){
             map.Add(layer,spawn,entry);

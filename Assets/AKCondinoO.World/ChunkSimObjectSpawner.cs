@@ -7,6 +7,7 @@ using AKCondinoO.World.MarchingCubes;
 using AKCondinoO.World.Spawning;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using static AKCondinoO.PersistentData.SpawnMapFiles;
@@ -430,21 +431,141 @@ namespace AKCondinoO.World.SimObjects{
               rot=yaw;
              }
              Vector3 ext=Vector3.Scale(spawnEntry.bounds.extents,variation.scale);
-             Vector3 up=rot*Vector3.up;
+             Vector3 axisX=(rot*Vector3.right  ).normalized;
+             Vector3 axisY=(rot*Vector3.up     ).normalized;
+             Vector3 axisZ=(rot*Vector3.forward).normalized;
              Vector3 pivotOffsetLocal=spawnEntry.bounds.center;
              Vector3 pivotOffsetScaled=Vector3.Scale(pivotOffsetLocal,variation.scale);
              Vector3 pivotOffsetWorld=rot*pivotOffsetScaled;
-             Vector3 center=surface.hitPoint-pivotOffsetWorld;
-             Vector3 offset=(rot*Vector3.up)*ext.y;
-             center+=offset;
+             Vector3 spawnPos=surface.hitPoint-pivotOffsetWorld+(axisY*ext.y);
+             Vector3 center=spawnPos+pivotOffsetWorld;
              OrientedBounds obb=new(){
+              spawnPos=spawnPos,
               center=center,
-              axisX=(rot*Vector3.right  ).normalized,
-              axisY=(rot*Vector3.up     ).normalized,
-              axisZ=(rot*Vector3.forward).normalized,
+              axisX=axisX,
+              axisY=axisY,
+              axisZ=axisZ,
               extents=ext
              };
+             if(!FitOrientedBoundsToTerrain(ref obb,1.0f)){
+              //Logs.Error("obb could not be put in a suitable position on the terrain");
+             }
              return obb;
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal bool FitOrientedBoundsToTerrain(ref OrientedBounds obb,float sampleMultiplier=1f,float baseDrop=0f){
+             sampleMultiplier=Mathf.Clamp01(sampleMultiplier);
+             int sampleStep=sampleMultiplier<=0f?int.MaxValue:sampleMultiplier>=1f?1:Mathf.CeilToInt(1f/sampleMultiplier);
+             Vector3 spawnPos=obb.spawnPos;
+             Vector3 obbCenter=obb.center;Vector3 obbAxisX=obb.axisX;Vector3 obbAxisY=obb.axisY;Vector3 obbAxisZ=obb.axisZ;Vector3 obbExtents=obb.extents;
+             Vector3 bottomCenter=obbCenter-obbAxisY*obbExtents.y;
+             Vector2Int bottomCenterStep=new(Mathf.FloorToInt(bottomCenter.x),Mathf.FloorToInt(bottomCenter.z));
+             Vector3 p0=bottomCenter-obbAxisX*obbExtents.x-obbAxisZ*obbExtents.z;Vector2Int p0Step=new(Mathf.FloorToInt(p0.x),Mathf.FloorToInt(p0.z));
+             Vector3 p1=bottomCenter+obbAxisX*obbExtents.x-obbAxisZ*obbExtents.z;Vector2Int p1Step=new(Mathf.FloorToInt(p1.x),Mathf.FloorToInt(p1.z));
+             Vector3 p2=bottomCenter+obbAxisX*obbExtents.x+obbAxisZ*obbExtents.z;Vector2Int p2Step=new(Mathf.FloorToInt(p2.x),Mathf.FloorToInt(p2.z));
+             Vector3 p3=bottomCenter-obbAxisX*obbExtents.x+obbAxisZ*obbExtents.z;Vector2Int p3Step=new(Mathf.FloorToInt(p3.x),Mathf.FloorToInt(p3.z));
+             bool IsMandatoryStep(int x,int z){
+              return
+               (x==bottomCenterStep.x&&z==bottomCenterStep.y)||
+               (x==p0Step.x          &&z==p0Step.y)          ||
+               (x==p1Step.x          &&z==p1Step.y)          ||
+               (x==p2Step.x          &&z==p2Step.y)          ||
+               (x==p3Step.x          &&z==p3Step.y);
+             }
+             Vector3 bottomPlaneNormal=Vector3.Cross(obbAxisX,obbAxisZ);
+             //  Face praticamente vertical: não conseguimos determinar Y
+             // por uma linha vertical.
+             if(Mathf.Abs(bottomPlaneNormal.y)<0.0001f){
+              //Logs.Error("cannot determine Y for vertical face");
+              return false;
+             }
+             float maxDrop=0f;
+             SamplePoint(bottomCenter,out float bottomCenterY,out float bottomCenterSurface,out float bottomCenterDrop,true);
+             SamplePoint(p0,out float p0Y,out float p0Surface,out float p0Drop,true);
+             SamplePoint(p1,out float p1Y,out float p1Surface,out float p1Drop,true);
+             SamplePoint(p2,out float p2Y,out float p2Surface,out float p2Drop,true);
+             SamplePoint(p3,out float p3Y,out float p3Surface,out float p3Drop,true);
+             //Logs.Debug(()=>"'spawnPos':"+spawnPos+";'obbCenter':"+obbCenter+";'obbAxisX':"+obbAxisX+";'obbAxisY':"+obbAxisY+";'obbAxisZ':"+obbAxisZ+";'obbExtents':"+obbExtents+"'bottomCenter':"+bottomCenter+";'bottomCenterY':"+bottomCenterY+";'bottomCenterSurface':"+bottomCenterSurface+";'bottomCenterDrop':"+bottomCenterDrop+";'bottomCenterStep':"+bottomCenterStep+";'p0':"+p0+";'p0Y':"+p0Y+";'p0Surface':"+p0Surface+";'p0Drop':"+p0Drop+";'p0Step':"+p0Step+";'p1':"+p1+";'p1Y':"+p1Y+";'p1Surface':"+p1Surface+";'p1Drop':"+p1Drop+";'p1Step':"+p1Step+";'p2':"+p2+";'p2Y':"+p2Y+";'p2Surface':"+p2Surface+";'p2Drop':"+p2Drop+";'p2Step':"+p2Step+";'p3':"+p3+";'p3Y':"+p3Y+";'p3Surface':"+p3Surface+";'p3Drop':"+p3Drop+";'p3Step':"+p3Step+";'maxDrop':"+maxDrop);
+             void SamplePoint(Vector3 point,out float y,out float surface,out float drop,bool mandatory=false){
+              if(!mandatory&&!IsPointInBottomPlane(point,p0,p1,p2,p3)){
+               y=-1f;
+               surface=-1f;
+               drop=-1f;
+               return;
+              }
+              y=GetPlanePointHeight(
+               bottomCenter,
+               bottomPlaneNormal,
+               point.x,
+               point.z
+              );
+              Vector3 samplePoint=new(
+               point.x,
+               Height-1,
+               point.z
+              );
+              Vector2Int cCoord=vecPosTocCoord(samplePoint);
+              Vector3Int vCoord=vecPosTovCoord(samplePoint);
+              surface=MarchingCubesHelper.GetMarchingSurfaceHeight(cCoord,vCoord,point.x,point.z);
+              drop=(y-surface);
+              if(drop>maxDrop){
+               maxDrop=drop;
+              }
+             }
+             //  Projeção da face inferior no plano XZ.
+             float minX=Mathf.Min(p0.x,p1.x,p2.x,p3.x);
+             float maxX=Mathf.Max(p0.x,p1.x,p2.x,p3.x);
+             float minZ=Mathf.Min(p0.z,p1.z,p2.z,p3.z);
+             float maxZ=Mathf.Max(p0.z,p1.z,p2.z,p3.z);
+             int startX=Mathf.FloorToInt(minX);
+             int   endX=Mathf. CeilToInt(maxX);
+             int startZ=Mathf.FloorToInt(minZ);
+             int   endZ=Mathf. CeilToInt(maxZ);
+             for(int x=startX;x<=endX;x+=sampleStep){
+             for(int z=startZ;z<=endZ;z+=sampleStep){
+              if(IsMandatoryStep(x,z)){
+               continue;
+              }
+              Vector3 p=new(x+0.5f,0f,z+0.5f);
+              SamplePoint(p,out float pY,out float pSurface,out float pDrop);
+             }}
+             float slopeDrop=
+              Mathf.Abs(obbAxisX.y)*obbExtents.x+
+              Mathf.Abs(obbAxisZ.y)*obbExtents.z;
+             if(slopeDrop>maxDrop){
+              maxDrop=slopeDrop;
+             }
+             maxDrop+=baseDrop;
+             if(maxDrop<=0f){
+              return false;
+             }
+             obb.center-=Vector3.up*maxDrop;
+             obb.spawnPos-=Vector3.up*maxDrop;
+             return true;
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static bool IsPointInBottomPlane(Vector3 p,Vector3 p0,Vector3 p1,Vector3 p2,Vector3 p3){
+             float c0=CrossXZ(p0,p1,p);
+             float c1=CrossXZ(p1,p2,p);
+             float c2=CrossXZ(p2,p3,p);
+             float c3=CrossXZ(p3,p0,p);
+             bool hasPositive=c0>0f||c1>0f||c2>0f||c3>0f;
+             bool hasNegative=c0<0f||c1<0f||c2<0f||c3<0f;
+             return!(hasPositive&&hasNegative);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static float CrossXZ(Vector3 a,Vector3 b,Vector3 p){
+             return
+              (b.x-a.x)*(p.z-a.z)-
+              (b.z-a.z)*(p.x-a.x);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static float GetPlanePointHeight(Vector3 facePoint,Vector3 normal,float x,float z){
+             return 
+              facePoint.y-(
+               normal.x*(x-facePoint.x)+
+               normal.z*(z-facePoint.z)
+              )/normal.y;
             }
             internal struct SpawnReserve{
              internal Vector3 pos;
@@ -455,7 +576,7 @@ namespace AKCondinoO.World.SimObjects{
             }
             SpawnReserve Reserve(int layer,Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
              Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
-             Vector3 pos=candidate.obb.center;
+             Vector3 pos=candidate.obb.spawnPos;
              var bounds=candidate.spawnEntry.bounds;
              var spawnReserve=new SpawnReserve(){
               pos=pos,

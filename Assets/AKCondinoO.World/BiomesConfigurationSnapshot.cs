@@ -174,14 +174,23 @@ namespace AKCondinoO.World{
          public Vector3    noiseInput       ;
          public bool hasHeight;
          public double heightValue;
-            internal SampleDensityContext(SampleContext input){
+            internal SampleDensityContext(SampleContext input){vCoord=default;cCoord=default;cnkRgn=default;noiseInputRounded=default;noiseInput=default;
+             hasHeight=false;
+             heightValue=-1f;
+             SetNoiseInput(input);
+            }
+            void SetNoiseInput(SampleContext input){
              vCoord=input.vCoord;
              cCoord=input.cCoord;
              cnkRgn=input.cnkRgn;
              noiseInputRounded=input.noiseInputRounded;
              noiseInput       =input.noiseInput       ;
-             hasHeight=false;
-             heightValue=-1f;
+            }
+            internal void SetvCoordY(int y){
+             var vCoord=this.vCoord;
+             vCoord.y=y;
+             SampleContext input=new(vCoord,cCoord);
+             SetNoiseInput(input);
             }
         }
         internal static float SampleDensity(ref SampleDensityContext context,out bool computed){
@@ -196,14 +205,39 @@ namespace AKCondinoO.World{
          if(vCoord.y>=Height)
           return Voxel.air.density;
          if(!context.hasHeight){
-          context.heightValue=snapshot.graph.GetValue(
-           NoiseChannel.TerrainHeight,
-           new(noiseInput.z,noiseInput.x,0)
-          );
+          SampleTerrainHeight(ref context,out _);
           computed=true;
           context.hasHeight=true;
          }
          double heightValue=context.heightValue;
+         return SampleDensity(ref context,heightValue);
+        }
+        internal static void SampleTerrainHeight(ref SampleDensityContext context,out double terrainDensityStartHeight){
+         EnsureReading();
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
+         context.heightValue=snapshot.graph.GetValue(
+          NoiseChannel.TerrainHeight,
+          new(
+           context.noiseInput.z,
+           context.noiseInput.x,
+           0
+          )
+         );
+         terrainDensityStartHeight=context.heightValue+snapshot.terrainSmoothingHeight;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static float SampleDensity(
+         ref SampleDensityContext context,
+         double heightValue
+        ){
+         EnsureReading();
+         var snapshot=BiomesConfigurationSnapshot.snapshot;
+         Vector3Int vCoord=context.vCoord;
+         Vector3Int noiseInputRounded=context.noiseInputRounded;
+         if(vCoord.y<=0)
+          return Voxel.bedrock.density;
+         if(vCoord.y>=Height)
+          return Voxel.air.density;
          if(heightValue>=0d){
           if(noiseInputRounded.y<=heightValue+snapshot.terrainSmoothingHeight){
            float density=100.0f;

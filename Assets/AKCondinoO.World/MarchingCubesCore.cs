@@ -171,15 +171,15 @@ namespace AKCondinoO.World.MarchingCubes{
          normal.Normalize();
          return normal!=Vector3.zero?normal:Vector3.up;
         }
-     private static readonly Vector3[]corners=new Vector3[8]{
-      new(-.5f,-.5f,-.5f),
-      new( .5f,-.5f,-.5f),
-      new( .5f, .5f,-.5f),
-      new(-.5f, .5f,-.5f),
-      new(-.5f,-.5f, .5f),
-      new( .5f,-.5f, .5f),
-      new( .5f, .5f, .5f),
-      new(-.5f, .5f, .5f),
+     internal static readonly Vector3[]corners=new Vector3[8]{
+      new(-.5f,-.5f,-.5f),//  0
+      new( .5f,-.5f,-.5f),//  1
+      new( .5f, .5f,-.5f),//  2
+      new(-.5f, .5f,-.5f),//  3
+      new(-.5f,-.5f, .5f),//  4
+      new( .5f,-.5f, .5f),//  5
+      new( .5f, .5f, .5f),//  6
+      new(-.5f, .5f, .5f),//  7
      };
      private static readonly int[,]interpCorners=new int[,]{
       {0,1,},{1,2,},{2,3,},
@@ -242,14 +242,7 @@ namespace AKCondinoO.World.MarchingCubes{
            vertex[0]=corners[c0];density[0]=-polygonCell[c0].density;material[0]=polygonCell[c0].material;
            vertex[1]=corners[c1];density[1]=-polygonCell[c1].density;material[1]=polygonCell[c1].material;
            if(isCached){goto _Normal;}
-           if(Math.Abs(isoLevel  -density[0])<float.Epsilon){p=vertex[0];goto _Normal;}
-           if(Math.Abs(isoLevel  -density[1])<float.Epsilon){p=vertex[1];goto _Normal;}
-           if(Math.Abs(density[0]-density[1])<float.Epsilon){p=vertex[0];goto _Normal;}
-           float marchingUnit=(isoLevel-density[0])/(density[1]-density[0]);
-           p.x=(float)(vertex[0].x+marchingUnit*(vertex[1].x-vertex[0].x));
-           p.y=(float)(vertex[0].y+marchingUnit*(vertex[1].y-vertex[0].y));
-           p.z=(float)(vertex[0].z+marchingUnit*(vertex[1].z-vertex[0].z));
-           goto _Normal;
+           p=InterpolateVertex(vertex[0],vertex[1],density[0],density[1],isoLevel);goto _Normal;
            _Normal:{}
            float[]distance=context.distance;
            distance[0]=Vector3.Distance(vertex[0],vertex[1]);
@@ -334,6 +327,22 @@ namespace AKCondinoO.World.MarchingCubes{
            }
           }
          }
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Vector3 InterpolateVertex(
+         Vector3 vertex0,
+         Vector3 vertex1,
+          float density0,
+          float density1,
+           float isoLevel=-50.0f
+        ){
+         if(Math.Abs(isoLevel-density0)<float.Epsilon){return vertex0;}
+         if(Math.Abs(isoLevel-density1)<float.Epsilon){return vertex1;}
+         if(Math.Abs(density0-density1)<float.Epsilon){return vertex0;}
+         float marchingUnit=
+          (isoLevel-density0)/
+          (density1-density0);
+         return vertex0+marchingUnit*(vertex1-vertex0);
         }
         internal static void BlendMaterials(MarchingCubesContext context){
          if(context.vertexToCounter.Count<=0){return;}
