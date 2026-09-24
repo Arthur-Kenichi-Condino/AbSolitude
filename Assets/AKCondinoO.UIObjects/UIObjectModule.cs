@@ -61,9 +61,9 @@ namespace AKCondinoO.UIObjects{
          bool set=false;
          Traverse(root);
             void Traverse(RectTransform current){
-             Logs.Debug(()=>"'traversing':"+current.name);
+             //Logs.Debug(()=>"'traversing':"+current.name);
              if(ignoredForBounds.Contains(current)){
-              Logs.Debug(()=>"'traversing':ignored");
+              //Logs.Debug(()=>"'traversing':ignored");
               return;
              }
              Vector3[]corners=new Vector3[4];
