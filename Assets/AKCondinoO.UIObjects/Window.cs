@@ -24,20 +24,20 @@ namespace AKCondinoO.UIObjects{
           verticalLayoutGroup.padding.top,
           verticalLayoutGroup.padding.bottom
          );
-         header=GetComponentInChildren<Header>();
+         header=GetComponentInChildren<Header>(true);
          header.OnAwake(this);
-         scrollView=GetComponentInChildren<ScrollView>();
+         scrollView=GetComponentInChildren<ScrollView>(true);
          scrollView.OnAwake(this);
          ignoredForBounds.Add((RectTransform)scrollView.transform);
-         tabsGroup=GetComponentInChildren<TabsGroup>();
+         tabsGroup=GetComponentInChildren<TabsGroup>(true);
          if(tabsGroup!=null){
           tabsGroup.OnAwake(this);
          }
-         dragArea=GetComponentInChildren<WindowDragArea>();
+         dragArea=GetComponentInChildren<WindowDragArea>(true);
          dragArea.OnAwake(this);
-         closeButton=GetComponentInChildren<CloseButton>();
+         closeButton=GetComponentInChildren<CloseButton>(true);
          closeButton.OnAwake(this);
-         pinToggle=GetComponentInChildren<PinToggle>();
+         pinToggle=GetComponentInChildren<PinToggle>(true);
          pinToggle.OnAwake(this);
          SetHeaderVisible(!hideHeader);
         }

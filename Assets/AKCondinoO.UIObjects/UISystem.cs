@@ -14,9 +14,9 @@ namespace AKCondinoO.UIObjects{
          uiLayer=LayerMask.NameToLayer("UI");
          gameEventHandler=new(this);
          windowDockManager=new(this);
-         windowsRoot=GetComponentInChildren<WindowsRoot>();
+         windowsRoot=GetComponentInChildren<WindowsRoot>(true);
          initialized=true;
-         UIObject[]existingWindows=GetComponentsInChildren<UIObject>();
+         UIObject[]existingWindows=GetComponentsInChildren<UIObject>(true);
          foreach(UIObject uiObject in existingWindows){
           AddWindow(uiObject);
          }

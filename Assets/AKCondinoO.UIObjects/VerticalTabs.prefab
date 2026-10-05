@@ -1,5 +1,107 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2779340743610090597
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3141193405292294408}
+    m_Modifications:
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1104084753901567343, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+      propertyPath: m_Name
+      value: TabButton
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+--- !u!224 &3072446381411698862 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 878683628720934091, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
+  m_PrefabInstance: {fileID: 2779340743610090597}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7834445977536431316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,6 +222,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7690674831663876562, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8516155795914874936, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
       propertyPath: m_MinWidth
       value: 176
@@ -164,8 +270,12 @@ PrefabInstance:
     - {fileID: 8685680610956784694, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
     - {fileID: 8876092374749311001, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
     - {fileID: 1482212890650444704, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2822689345645616728, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5129118226175964636, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3072446381411698862}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6377916670001807174, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
       insertIndex: 1
@@ -231,14 +341,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AKCondinoO.UIObjects.VerticalTabs
   tabsHeader: {fileID: 3141193405292294408}
-  headerButtonPrefab: {fileID: 1104084753901567343, guid: 0cd11b3013122e44b838912b4dcb1929, type: 3}
-  tabsInGroup:
-  - title: Tab 1
-    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
-  - title: Tab 2
-    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
-  - title: Tab 3
-    contentPrefab: {fileID: 4770262430538166193, guid: 771cc615675e58a42b3cc3443a5f3af1, type: 3}
 --- !u!114 &-1211555625732003075
 MonoBehaviour:
   m_ObjectHideFlags: 0

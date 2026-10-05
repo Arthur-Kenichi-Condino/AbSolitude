@@ -1,0 +1,1570 @@
+fileFormatVersion: 2
+guid: f7e16145f0ba2264e9761977032aaa26
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 2
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UIBook_Icons0_0
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01973303c928cfb468140cd7e0e5a2aa
+      internalID: 1321893554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_1
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3c36e0e50a547745aab38a9251e9f8e
+      internalID: -1455195271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_2
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f693823156319db45ac5e445f3e7a823
+      internalID: 877272790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_3
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4434de64282acaf43a719a541e0f6c85
+      internalID: 1264623379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_4
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c18ef2c7c5bfe0d4696baaef1100c825
+      internalID: -1717913886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_5
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 816a63fc0b73642488deb3839b2d2c81
+      internalID: 835966425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_6
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb751679d1758c94d8b14fef5c7aa6f9
+      internalID: -1962154980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_7
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 749949691bbae8b43b2b4913cf8f5ef0
+      internalID: -985581257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_8
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e61b4c2039b1c504c959c52fe793a675
+      internalID: 1490025355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_9
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 012feace8a355674ba2c794f5199b258
+      internalID: -1524111944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_10
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92da87e3513954f4d837af40d75f0eb9
+      internalID: -1753740454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_11
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bfb39b977bdef54eb30cee56d2b8802
+      internalID: -1209423727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_12
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce485ba84a994c14c8258f43437b31bf
+      internalID: -310691569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_13
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8747bfa79b716034c8ae71399efabaab
+      internalID: 108119245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_14
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1920
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 980908408ab22be4189ff61eb6af2eec
+      internalID: -1935340574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_15
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fe1c247dca25844ab70837bef46153e
+      internalID: -562080760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_16
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fe4842801f71d949aa6a33fa218db3c
+      internalID: -235278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_17
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c516f7648690abb41a7c9b6f9a72ab2e
+      internalID: -1632591063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_18
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4060671b98654624b9358c0d0e8491ae
+      internalID: -378886760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_19
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40474aaadf16a544095b1e57bcfe3093
+      internalID: 169855171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_20
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daeafc63d4b126b46b0df27739a1b550
+      internalID: 2020812089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_21
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9eacbbad57ba5747b29c1430cd3558a
+      internalID: 2111089033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_22
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0122bbec27c4d74993ef0c1b7d0c32f
+      internalID: 462374067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_23
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73aacffccc866aa4e9d922143eea9ea2
+      internalID: 653630452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_24
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d75b8c4b538786345857cc8b82a93cdd
+      internalID: -246348550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_25
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18cd1965320363f45b9dfa234de885bd
+      internalID: -2133160929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_26
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a113a83eb29bfb4b96b593a27c8e536
+      internalID: -647866299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_27
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c66f19697f22e24389ac0374ea67ff4
+      internalID: -1264743501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_28
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd5871d24381a0041999fbdd7e503b25
+      internalID: -270432786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_29
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1840
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 914fa7c51d21eca428c678f1a02adca8
+      internalID: 381420342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_30
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9da37733132536d4cbf7861b02929c48
+      internalID: 239698103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_31
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da4afd379441c8d4a94e3d61a172e7c9
+      internalID: 1324469620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_32
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b397dc9bff7a9014bbef1ec4c94bf4c4
+      internalID: -80908793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_33
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c0fe622ffbe5241907a189ce41cf87
+      internalID: 325825886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_34
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e44a6721c0e637241a64d04a2d4caec9
+      internalID: -1945014164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_35
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8e7a2d174a477142a387d4afd79fcba
+      internalID: -410537243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_36
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd0d07860ac7dea42864d6f2cdb51b76
+      internalID: 1685291190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_37
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f14547c59a549ac4c937f97ab839779d
+      internalID: -677761716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_38
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cd52763aa6f6114b9ee429fbc97f630
+      internalID: 350631783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_39
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d2e9e88735b381408c2f792b6067e36
+      internalID: 2111824301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_40
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6003b4f123c35534b920a25d87693248
+      internalID: 956102885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_41
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96f88f680539bc44c8110a8255335af1
+      internalID: -1726266955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_42
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5da43e76def0e9e45851120fb04b3a40
+      internalID: 1087954652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_43
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4a2b569e8219714ca4624e21393b1f9
+      internalID: -1536015311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_44
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1760
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d499ee273f563fe45aa2a903fe1cecfb
+      internalID: 2066530112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_45
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13b92d23860384844bb9ae3d7c49e6a7
+      internalID: -441322195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_46
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff1a7d787cbbb914993d1e4b82f44486
+      internalID: 1176231634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_47
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86b7267aa61e9ec41b0b63cdd2b04642
+      internalID: 1864904307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_48
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f82ca8736bc8787478e01b02166e18e2
+      internalID: -675322498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_49
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ab0cbcbaf634344d9a2498c05467f07
+      internalID: -1743601642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_50
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1680
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab7073c263eade4eb1ea1de67b17b9a
+      internalID: 1415019400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_51
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 195c2a13489d53f4d992a910e277dd28
+      internalID: 604670443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_52
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02c213afd5781ec4b885c0d2997fb1bf
+      internalID: 1493192040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_53
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 383f5ff1db705a8488064567d7db1b79
+      internalID: -1782640329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_54
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06294758b9fb7454b893f39e07a9604a
+      internalID: -1455326523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_55
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 494222f82b995794a8c893e1c416cd3f
+      internalID: -1354256434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_56
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1600
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 690a0bd34bde4604496302f8dbe7fa9b
+      internalID: -419000919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_57
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6af43525682609a49ae07d661ab0ce95
+      internalID: 1620709942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_58
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0228e4e2c15536a4a82168a550c121d0
+      internalID: 132831234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_59
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acddeeb010237e646853154326a6941c
+      internalID: -876321659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_60
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6eb3f7137273824f90c60bb419a5292
+      internalID: 649955518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_61
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dafec172dfc767a4899a39bd127f7afa
+      internalID: 409551383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIBook_Icons0_62
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1520
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b1eade7d3b331c40a0de6cd7bbb314c
+      internalID: 1013441609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 488bc39bd797fe248ada2d002cda2b6e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceOnImport
+        value: True
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":true,"gridCellCount":{"x":25.0,"y":25.0},"gridSpriteSize":{"x":80.0,"y":80.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      UIBook_Icons0_0: 1321893554
+      UIBook_Icons0_1: -1455195271
+      UIBook_Icons0_10: -1753740454
+      UIBook_Icons0_11: -1209423727
+      UIBook_Icons0_12: -310691569
+      UIBook_Icons0_13: 108119245
+      UIBook_Icons0_14: -1935340574
+      UIBook_Icons0_15: -562080760
+      UIBook_Icons0_16: -235278
+      UIBook_Icons0_17: -1632591063
+      UIBook_Icons0_18: -378886760
+      UIBook_Icons0_19: 169855171
+      UIBook_Icons0_2: 877272790
+      UIBook_Icons0_20: 2020812089
+      UIBook_Icons0_21: 2111089033
+      UIBook_Icons0_22: 462374067
+      UIBook_Icons0_23: 653630452
+      UIBook_Icons0_24: -246348550
+      UIBook_Icons0_25: -2133160929
+      UIBook_Icons0_26: -647866299
+      UIBook_Icons0_27: -1264743501
+      UIBook_Icons0_28: -270432786
+      UIBook_Icons0_29: 381420342
+      UIBook_Icons0_3: 1264623379
+      UIBook_Icons0_30: 239698103
+      UIBook_Icons0_31: 1324469620
+      UIBook_Icons0_32: -80908793
+      UIBook_Icons0_33: 325825886
+      UIBook_Icons0_34: -1945014164
+      UIBook_Icons0_35: -410537243
+      UIBook_Icons0_36: 1685291190
+      UIBook_Icons0_37: -677761716
+      UIBook_Icons0_38: 350631783
+      UIBook_Icons0_39: 2111824301
+      UIBook_Icons0_4: -1717913886
+      UIBook_Icons0_40: 956102885
+      UIBook_Icons0_41: -1726266955
+      UIBook_Icons0_42: 1087954652
+      UIBook_Icons0_43: -1536015311
+      UIBook_Icons0_44: 2066530112
+      UIBook_Icons0_45: -441322195
+      UIBook_Icons0_46: 1176231634
+      UIBook_Icons0_47: 1864904307
+      UIBook_Icons0_48: -675322498
+      UIBook_Icons0_49: -1743601642
+      UIBook_Icons0_5: 835966425
+      UIBook_Icons0_50: 1415019400
+      UIBook_Icons0_51: 604670443
+      UIBook_Icons0_52: 1493192040
+      UIBook_Icons0_53: -1782640329
+      UIBook_Icons0_54: -1455326523
+      UIBook_Icons0_55: -1354256434
+      UIBook_Icons0_56: -419000919
+      UIBook_Icons0_57: 1620709942
+      UIBook_Icons0_58: 132831234
+      UIBook_Icons0_59: -876321659
+      UIBook_Icons0_6: -1962154980
+      UIBook_Icons0_60: 649955518
+      UIBook_Icons0_61: 409551383
+      UIBook_Icons0_62: 1013441609
+      UIBook_Icons0_7: -985581257
+      UIBook_Icons0_8: 1490025355
+      UIBook_Icons0_9: -1524111944
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

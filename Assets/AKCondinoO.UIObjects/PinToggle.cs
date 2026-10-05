@@ -12,6 +12,7 @@ namespace AKCondinoO.UIObjects{
         }
         private void OnToggleChanged(bool isOn){
          if(window==null)return;
+         if(!Application.isPlaying){return;}
          if(isOn){
           UISystem.singleton.windowDockManager.Pin  (window.minimizedBtn,window,((RectTransform)transform).position);
          }else{

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 878683628720934091}
+  - component: {fileID: -524625409677346089}
   - component: {fileID: 8559069023372618283}
   - component: {fileID: 8502907507063561976}
   - component: {fileID: 4070037211341713061}
@@ -40,6 +41,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 176, y: 38}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-524625409677346089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104084753901567343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827a1c30e01ba024fb99097021194c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TabButton
 --- !u!222 &8559069023372618283
 CanvasRenderer:
   m_ObjectHideFlags: 0

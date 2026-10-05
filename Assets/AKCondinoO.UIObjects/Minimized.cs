@@ -17,6 +17,13 @@ namespace AKCondinoO.UIObjects{
         public override void OnAwake(UIObject root){
          base.OnAwake(root);
          btn=GetComponent<Button>();
+         Image image=btn.GetComponent<Image>();
+         if(image!=null&&image.sprite!=null){
+          Texture2D texture=image.sprite.texture;
+          if(texture!=null&&texture.isReadable){
+           image.alphaHitTestMinimumThreshold=.1f;
+          }
+         }
         }
      internal Window window;
         internal void RegisterWindow(Window window){

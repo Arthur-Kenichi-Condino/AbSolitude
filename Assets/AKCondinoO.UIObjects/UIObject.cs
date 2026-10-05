@@ -11,14 +11,20 @@ namespace AKCondinoO.UIObjects{
           UISystem.singleton.AddWindow(this);
          }
         }
-        internal virtual void OnAddWindow(){
-         canvas=GetComponentInParent<Canvas>();
-         minimized=GetComponentInChildren<Minimized>();
+        #if UNITY_EDITOR
+        [ContextMenu("AKCondinoO/On Editor/Build UI")]
+        private void OnEditorInspectorBuildUI(){
+         OnAddWindow(true);
+        }
+        #endif
+        internal virtual void OnAddWindow(bool editor=false){
+         canvas=GetComponentInParent<Canvas>(true);
+         minimized=GetComponentInChildren<Minimized>(true);
          minimized.OnAwake(this);
-         modules.Add(minimized);
-         window=GetComponentInChildren<Window>();
+         if(!editor)modules.Add(minimized);
+         window=GetComponentInChildren<Window>(true);
          window.OnAwake(this);
-         modules.Add(window);
+         if(!editor)modules.Add(window);
         }
         internal virtual void ManualUpdate(){
          foreach(var module in modules){
