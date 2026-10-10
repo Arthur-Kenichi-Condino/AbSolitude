@@ -1886,7 +1886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugClassArrayToLogsDebugMessages.Array.size
-      value: 24
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[0]'
@@ -1942,46 +1942,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[13]'
-      value: MarchingCubesHelper
+      value: ByChancePicker
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[14]'
-      value: ChunkSimObjectSpawner
+      value: MarchingCubesHelper
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[15]'
-      value: WorldSimObjectSpatialMap
+      value: ChunkSimObjectSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[16]'
-      value: NavMeshSourcesOrdered
+      value: WorldSimObjectSpatialMap
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[17]'
-      value: NavMeshProvider
+      value: NavMeshSourcesOrdered
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[18]'
-      value: SimInteractionResolver
+      value: NavMeshProvider
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[19]'
-      value: SimObject
+      value: SimInteractionResolver
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[20]'
-      value: InspectablePart
+      value: SimObjectFactory
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[21]'
-      value: InspectablePart.Interactable
+      value: SimObject
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[22]'
-      value: InspectInstance
+      value: InspectablePart
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[23]'
+      value: InspectablePart.Interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[24]'
+      value: InspectInstance
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[25]'
       value: InspectStateDefinition
       objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
@@ -2706,7 +2714,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: debugDisableGeneration
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -528374055874012982, guid: ea204ff3bd0313648b527cdf62cc3de4, type: 3}
       propertyPath: expropriationDistance.x

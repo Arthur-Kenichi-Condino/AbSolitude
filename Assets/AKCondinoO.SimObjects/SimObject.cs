@@ -17,6 +17,7 @@ namespace AKCondinoO.SimObjects{
      [SerializeField]internal bool useBoundsForNavMesh=false;
      [SerializeField]internal bool createNavMeshSource=false;
      [SerializeField]internal GameObject meshPrefab;
+     internal GroundingPlane groundingPlane;
      [SerializeField]internal int[]useMeshObjectSubMeshesForCollider;
      [SerializeField]internal GameObject simObjectRendererComponents;
      [SerializeField]internal GameObject simObjectCollisionComponents;

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -5,6 +6,7 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
      internal static bool enableAll=false;
+     internal static bool autoFlush=false;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
       //"InputHandler",
@@ -66,7 +68,7 @@ namespace AKCondinoO.Bootstrap{
           message=$"[{className}.{member}]:logMsg caused an Exception! >:o";
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }
-         WriteMessage(LogType.Debug,
+         ProcessMessage(LogType.Debug,
           message,context,condition,
           file,
           member
@@ -78,7 +80,7 @@ namespace AKCondinoO.Bootstrap{
         ){
          string className=System.IO.Path.GetFileNameWithoutExtension(file);
          string message=$"[{className}.{member}]:{logMsg}";
-         WriteMessage(LogType.Error,
+         ProcessMessage(LogType.Error,
           message,context,condition,
           file,
           member
@@ -90,11 +92,31 @@ namespace AKCondinoO.Bootstrap{
         ){
          string className=System.IO.Path.GetFileNameWithoutExtension(file);
          string message=$"[{className}.{member}]:{logMsg}";
-         WriteMessage(LogType.Warning,
+         ProcessMessage(LogType.Warning,
           message,context,condition,
           file,
           member
          );
+        }
+        private static void ProcessMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
+        ){
+         if(message==null){return;}
+         if(autoFlush){
+          WriteMessage(logType,message,context,condition,file,member);
+          return;
+         }
+         var logMessage=new LogMessage{
+          logType=logType,
+          message=message,
+          context=context,
+          condition=condition,
+          file=file,
+          member=member
+         };
+         logMessages.Enqueue(logMessage);
+         if(logMessages.Count>=256){
+          Flush();
+         }
         }
         private static void WriteMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
         ){
@@ -112,6 +134,20 @@ namespace AKCondinoO.Bootstrap{
            UnityEngine.Debug.LogWarning(message,context);
            break;
           }
+         }
+        }
+     internal static readonly ConcurrentQueue<LogMessage>logMessages=new();
+        internal struct LogMessage{
+         internal LogType logType;
+         internal string message;
+         internal Object context;
+         internal bool condition;
+         internal string file;
+         internal string member;
+        }
+        private static void Flush(){
+         while(logMessages.TryDequeue(out var logMessage)){
+          WriteMessage(logMessage.logType,logMessage.message,logMessage.context,logMessage.condition,logMessage.file,logMessage.member);
          }
         }
     }

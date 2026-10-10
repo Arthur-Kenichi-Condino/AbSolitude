@@ -254,6 +254,7 @@
     <Compile Include="Assets\AKCondinoO.World\MarchingCubesHelper.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Generator\Voronoi.cs" />
     <Compile Include="Assets\AKCondinoO\Util\RotationHelper.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\GroundingPlane.cs" />
     <Compile Include="Assets\AKCondinoO.World\Voxel.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.State.Enum.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimMovement.cs" />
@@ -485,8 +486,8 @@
     <Compile Include="Assets\AKCondinoO.World\NavMeshBuildSnapshot.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Humanoid\DisfiguringHomunculus\DisfiguringHomunculusAnimatorControllerMotionUpdater.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\Quagmire\Quagmire.cs" />
-    <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\TabButton.cs" />
+    <Compile Include="Assets\AKCondinoO\UI\StatBar.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\PersistentSimInventoryDataSavingMultithreaded.cs" />
     <Compile Include="Assets\AKCondinoO.World\TerrainChunkBuilder.cs" />
     <Compile Include="Assets\AKCondinoO.World\WorldChunkSpawning.cs" />

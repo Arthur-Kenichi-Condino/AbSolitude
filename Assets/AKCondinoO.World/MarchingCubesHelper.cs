@@ -18,8 +18,47 @@ namespace AKCondinoO.World.MarchingCubes{
          var startCoord=new Vector3Int(vCoord.x,startY,vCoord.z);
          var sampleInput=new SampleContext(startCoord,cCoord);
          var sampleDensityContext=new SampleDensityContext(sampleInput);
+         SampleTerrainHeight(ref sampleDensityContext,out double terrainDensityStartHeight);
+         double heightValue=sampleDensityContext.heightValue;
+         float terrainSmoothingHeight=(float)(terrainDensityStartHeight-heightValue);
+         float surfaceEstimate=(float)(
+          heightValue+
+          terrainSmoothingHeight*(isoLevel/100f)
+         );
+         int y=Mathf.FloorToInt(surfaceEstimate);
+         if(y>=bottomY&&y+1<=startY){
+          sampleDensityContext.SetvCoordY(y);
+          float density0=SampleDensity(ref sampleDensityContext,heightValue);
+          sampleDensityContext.SetvCoordY(y+1);
+          float density1=SampleDensity(ref sampleDensityContext,heightValue);
+          sampleDensityContext.SetvCoordY(y);
+          SampleNormalContext normalContext=default;
+          SampleNormalContext.Build(
+           new(vCoord.x,y,vCoord.z),
+           cCoord,
+           ref sampleDensityContext,
+           ref normalContext
+          );
+          normal=-SampleNormal(ref normalContext);
+          if(Vector3.Dot(normal,Vector3.up)<=0f){
+           hitPoint=default;
+           normal=default;
+           goto _TryLoop;
+          }
+          hitPoint=GetInterpolatedSurface(
+           cCoord,
+           new(vCoord.x,y,vCoord.z),
+           new(vCoord.x,y+1,vCoord.z),
+           density0,
+           density1,
+           isoLevel
+          );
+          return true;
+         }
+         _TryLoop:{}
+         sampleDensityContext=new SampleDensityContext(sampleInput);
          double prevDensity=SampleDensity(ref sampleDensityContext,out _);
-         for(int y=startY-1;y>=bottomY;y--){
+         for(y=startY-1;y>=bottomY;y--){
           var coord=new Vector3Int(vCoord.x,y,vCoord.z);
           var input=new SampleContext(coord,cCoord);
           var context=new SampleDensityContext(input){

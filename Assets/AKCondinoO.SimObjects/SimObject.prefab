@@ -206,8 +206,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variant: 
   useInstancedRendering: 0
+  useBoundsForNavMesh: 0
+  createNavMeshSource: 0
   meshPrefab: {fileID: 0}
   useMeshObjectSubMeshesForCollider: 
+  groundingPlane: {fileID: 0}
   simObjectRendererComponents: {fileID: 2314076041146936289}
   simObjectCollisionComponents: {fileID: 2134435657969575048}
   simObjectAIComponents: {fileID: 5422198899012985211}

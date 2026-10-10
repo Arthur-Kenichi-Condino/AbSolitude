@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using LibNoise;
 using System;
@@ -28,11 +29,16 @@ namespace AKCondinoO.World.Spawning{
          internal Vector3 rotMin,rotMax;
          internal Vector3 scaleMin;
          internal Vector3 scaleMax;
-            internal SpawnVariationsSnapshot(SpawnVariations variations){
+         internal float groundOffset;
+            internal SpawnVariationsSnapshot(ByChanceObjectSpawnEntry<T>pickerEntry,SpawnVariations variations){
+             alignToTerrain=variations.alignToTerrain;
              rotMin=variations.rotMin;rotMax=variations.rotMax;
              scaleMin=variations.scaleMin;
              scaleMax=variations.scaleMax;
-             alignToTerrain=variations.alignToTerrain;
+             if(pickerEntry.prefab is SimObject simObject&&(object)simObject.groundingPlane!=null){
+              groundOffset=simObject.groundingPlane.groundOffset;
+              //Logs.Debug(()=>"groundOffset:"+groundOffset);
+             }    
             }
          internal struct SpawnVariationNoises{
           internal float rotationNoise;
@@ -44,6 +50,7 @@ namespace AKCondinoO.World.Spawning{
               alignToTerrain=alignToTerrain,
               rot=Vector3.Lerp(rotMin,rotMax,noise.rotationNoise),
               scale=Vector3.Lerp(scaleMin,scaleMax,noise.scaleNoise),
+              groundOffset=groundOffset,
              };
              return variation;
             }
@@ -52,6 +59,7 @@ namespace AKCondinoO.World.Spawning{
          internal bool alignToTerrain;
          internal Vector3 rot;
          internal Vector3 scale;
+         internal float groundOffset;
         }
     }
     internal class ByChancePicker<T>where T:class{

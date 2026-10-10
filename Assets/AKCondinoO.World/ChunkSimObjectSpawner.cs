@@ -447,7 +447,8 @@ namespace AKCondinoO.World.SimObjects{
               axisZ=axisZ,
               extents=ext
              };
-             if(!FitOrientedBoundsToTerrain(ref obb,1.0f)){
+             //Logs.Debug(()=>"variation.groundOffset:"+variation.groundOffset);
+             if(!FitOrientedBoundsToTerrain(ref obb,1.0f,baseDrop:variation.groundOffset)){
               //Logs.Error("obb could not be put in a suitable position on the terrain");
              }
              return obb;
@@ -485,7 +486,7 @@ namespace AKCondinoO.World.SimObjects{
              SamplePoint(p1,out float p1Y,out float p1Surface,out float p1Drop,true);
              SamplePoint(p2,out float p2Y,out float p2Surface,out float p2Drop,true);
              SamplePoint(p3,out float p3Y,out float p3Surface,out float p3Drop,true);
-             //Logs.Debug(()=>"'spawnPos':"+spawnPos+";'obbCenter':"+obbCenter+";'obbAxisX':"+obbAxisX+";'obbAxisY':"+obbAxisY+";'obbAxisZ':"+obbAxisZ+";'obbExtents':"+obbExtents+"'bottomCenter':"+bottomCenter+";'bottomCenterY':"+bottomCenterY+";'bottomCenterSurface':"+bottomCenterSurface+";'bottomCenterDrop':"+bottomCenterDrop+";'bottomCenterStep':"+bottomCenterStep+";'p0':"+p0+";'p0Y':"+p0Y+";'p0Surface':"+p0Surface+";'p0Drop':"+p0Drop+";'p0Step':"+p0Step+";'p1':"+p1+";'p1Y':"+p1Y+";'p1Surface':"+p1Surface+";'p1Drop':"+p1Drop+";'p1Step':"+p1Step+";'p2':"+p2+";'p2Y':"+p2Y+";'p2Surface':"+p2Surface+";'p2Drop':"+p2Drop+";'p2Step':"+p2Step+";'p3':"+p3+";'p3Y':"+p3Y+";'p3Surface':"+p3Surface+";'p3Drop':"+p3Drop+";'p3Step':"+p3Step+";'maxDrop':"+maxDrop);
+             //Logs.Debug(()=>"baseDrop:"+baseDrop+";'spawnPos':"+spawnPos+";'obbCenter':"+obbCenter+";'obbAxisX':"+obbAxisX+";'obbAxisY':"+obbAxisY+";'obbAxisZ':"+obbAxisZ+";'obbExtents':"+obbExtents+"'bottomCenter':"+bottomCenter+";'bottomCenterY':"+bottomCenterY+";'bottomCenterSurface':"+bottomCenterSurface+";'bottomCenterDrop':"+bottomCenterDrop+";'bottomCenterStep':"+bottomCenterStep+";'p0':"+p0+";'p0Y':"+p0Y+";'p0Surface':"+p0Surface+";'p0Drop':"+p0Drop+";'p0Step':"+p0Step+";'p1':"+p1+";'p1Y':"+p1Y+";'p1Surface':"+p1Surface+";'p1Drop':"+p1Drop+";'p1Step':"+p1Step+";'p2':"+p2+";'p2Y':"+p2Y+";'p2Surface':"+p2Surface+";'p2Drop':"+p2Drop+";'p2Step':"+p2Step+";'p3':"+p3+";'p3Y':"+p3Y+";'p3Surface':"+p3Surface+";'p3Drop':"+p3Drop+";'p3Step':"+p3Step+";'maxDrop':"+maxDrop);
              void SamplePoint(Vector3 point,out float y,out float surface,out float drop,bool mandatory=false){
               if(!mandatory&&!IsPointInBottomPlane(point,p0,p1,p2,p3)){
                y=-1f;

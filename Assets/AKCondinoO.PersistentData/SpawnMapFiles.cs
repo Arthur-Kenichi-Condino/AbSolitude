@@ -267,9 +267,17 @@ namespace AKCondinoO.PersistentData{
         }
      internal static readonly SpawnVariationSerializer spawnVariationSerializer=new();
         internal sealed class SpawnVariationSerializer:IPersistentDataSerializer<SpawnVariation>{
+            protected override int latestSupportedVersion{get{return 1;}}
             protected override int OnCalculateSerializedSize(SpawnVariation value,int version,int supportedVersion){
              switch(supportedVersion){
               default:{
+               if(version>=1){
+                return
+                 sizeof(bool)+//  alignToTerrain
+                 sizeof(float)*3+//  rot
+                 sizeof(float)*3+//  scale
+                 sizeof(float);//  groundOffset
+               }
                return
                 sizeof(bool)+//  alignToTerrain
                 sizeof(float)*3+//  rot
@@ -280,6 +288,13 @@ namespace AKCondinoO.PersistentData{
             protected override void OnWriteTo(BinaryWriter writer,SpawnVariation value,int requestedVersion,int supportedVersion){
              switch(supportedVersion){
               default:{
+               if(requestedVersion>=1){
+                writer.Write(value.alignToTerrain);
+                WriteVector3(writer,value.rot);
+                WriteVector3(writer,value.scale);
+                writer.Write(value.groundOffset);
+                break;
+               }
                writer.Write(value.alignToTerrain);
                WriteVector3(writer,value.rot);
                WriteVector3(writer,value.scale);
@@ -290,6 +305,14 @@ namespace AKCondinoO.PersistentData{
             protected override SpawnVariation OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion){
              switch(supportedVersion){
               default:{
+               if(savedVersion>=1){
+                return new(){
+                 alignToTerrain=reader.ReadBoolean(),
+                 rot=ReadVector3(reader),
+                 scale=ReadVector3(reader),
+                 groundOffset=reader.ReadSingle(),
+                };
+               }
                return new(){
                 alignToTerrain=reader.ReadBoolean(),
                 rot=ReadVector3(reader),

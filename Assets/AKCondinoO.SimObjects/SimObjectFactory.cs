@@ -13,6 +13,7 @@ namespace AKCondinoO.SimObjects{
      private GameObject   prefabMeshObject  ;
      private MeshRenderer prefabMeshRenderer;
      private MeshFilter   prefabMeshFilter  ;
+     private GroundingPlane groundingPlane;
      private Mesh colliderMesh;
      private StateDefinition[]stateDefinitions;
      private SimObjectPartData[]partsData;
@@ -34,6 +35,13 @@ namespace AKCondinoO.SimObjects{
           prefabMeshObject  =prefab.meshPrefab;
           prefabMeshRenderer=prefab.meshPrefab.GetComponent<MeshRenderer>();
           prefabMeshFilter  =prefab.meshPrefab.GetComponent<MeshFilter  >();
+          groundingPlane=prefabMeshObject.GetComponentInChildren<GroundingPlane>(true);
+          if(groundingPlane!=null){
+           Logs.Debug(()=>"'groundingPlane':"+groundingPlane.transform.localPosition+";'prefab.meshPrefab':"+prefab.meshPrefab.transform.position);
+           prefab.groundingPlane=groundingPlane;
+           groundingPlane.groundOffset=groundingPlane.transform.position.y;
+           Logs.Debug(()=>"'groundOffset':"+groundingPlane.groundOffset);
+          }
           if(prefabMeshRenderer!=null&&TryGetMesh(prefabMeshFilter,out Mesh mesh)){
            Logs.Debug(()=>"mesh.name:"+mesh.name);
            if(prefab.useInstancedRendering){
@@ -105,6 +113,10 @@ namespace AKCondinoO.SimObjects{
          var manager=SimObjectManager.singleton;
          T simObject=pool.Rent();
          simObject.doInitialization=true;
+         simObject.groundingPlane=groundingPlane;
+         if(simObject.groundingPlane!=null){
+          Logs.Debug(()=>"simObject.groundingPlane.groundOffset:"+simObject.groundingPlane.groundOffset);
+         }
          AssignId(simObject);
          SetupSimObject(simObject);
          simObject.transform.position=item.position;

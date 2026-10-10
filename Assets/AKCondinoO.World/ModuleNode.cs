@@ -183,7 +183,7 @@ namespace AKCondinoO.World.Biomes{
               }
              }
             }
-            pickerEntry.variations=new(entry.variations);
+            pickerEntry.variations=new(pickerEntry,entry.variations);
             picker.items.Add(pickerEntry);
            }
            spawnSettingsSnapshot.layerData[layer]=spawnLayerData;
