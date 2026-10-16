@@ -1,4 +1,6 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.PersistentData;
+using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
 using System;
 using System.Collections.Concurrent;
@@ -115,6 +117,16 @@ namespace AKCondinoO.World{
          }
          return map;
         }
+        internal void RegisterSimObject(SimObject simObject){
+         var type=simObject.simObjectType;
+         var variant=simObject.variant;
+         var pos=simObject.transform.position;
+         var cCoord=vecPosTocCoord(pos);
+         var cnkRgn=cCoordTocnkRgn(cCoord);
+         Logs.Debug(()=>"simObject:"+simObject.name+";simObject.id:"+simObject.id+";type:"+type+";variant:"+variant+";pos:"+pos+";cCoord:"+cCoord+";cnkRgn:"+cnkRgn);
+         //Logs.Debug(()=>"'type':"+type.FullName+";'simObject.GetType()':"+simObject.GetType().FullName);
+         (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSimObjectSaveFile(cnkRgn,type,variant);
+        }
     }
     internal class SpawnSpatialMap{
      internal static readonly Utilities.ObjectPool<SpawnSpatialMap>pool=
@@ -174,6 +186,18 @@ namespace AKCondinoO.World{
          ownercCoord=default;
          obb=default;
          layer=default;
+        }
+    }
+    internal class SpatialEntry{
+     internal static readonly Utilities.ObjectPool<SpatialEntry>pool=
+      Pool.GetPool<SpatialEntry>(
+       "",
+       ()=>new(),
+       (SpatialEntry item)=>{
+        item.OnReturnToPoolRecycle();
+       }
+      );
+        internal void OnReturnToPoolRecycle(){
         }
     }
 }

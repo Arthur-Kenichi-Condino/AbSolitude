@@ -6,7 +6,8 @@ using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal static class Logs{
      internal static bool enableAll=false;
-     internal static bool autoFlush=false;
+     internal static bool isDirectWrite=false;
+     internal static bool autoFlush=true;
      private static readonly HashSet<string>enabledAt=new(){
       "Main",
       //"InputHandler",
@@ -101,7 +102,7 @@ namespace AKCondinoO.Bootstrap{
         private static void ProcessMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
         ){
          if(message==null){return;}
-         if(autoFlush){
+         if(isDirectWrite){
           WriteMessage(logType,message,context,condition,file,member);
           return;
          }
@@ -114,8 +115,10 @@ namespace AKCondinoO.Bootstrap{
           member=member
          };
          logMessages.Enqueue(logMessage);
-         if(logMessages.Count>=256){
-          Flush();
+         if(autoFlush){
+          if(logMessages.Count>=1024){
+           Flush();
+          }
          }
         }
         private static void WriteMessage(LogType logType,string message,Object context=null,bool condition=true,string file="",string member=""
@@ -146,8 +149,10 @@ namespace AKCondinoO.Bootstrap{
          internal string member;
         }
         private static void Flush(){
-         while(logMessages.TryDequeue(out var logMessage)){
+         int count=logMessages.Count;
+         while(logMessages.TryDequeue(out var logMessage)&&count>0){
           WriteMessage(logMessage.logType,logMessage.message,logMessage.context,logMessage.condition,logMessage.file,logMessage.member);
+          count--;
          }
         }
     }

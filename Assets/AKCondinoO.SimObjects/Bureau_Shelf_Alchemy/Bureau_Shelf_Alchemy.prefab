@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
       propertyPath: variant
-      value: 1
+      value: Bureau_Shelf_Alchemy_1
       objectReference: {fileID: 0}
     - target: {fileID: -3741939729549112076, guid: aca27bc4849bb1b4f8bfc58fcb1972df, type: 3}
       propertyPath: meshPrefab

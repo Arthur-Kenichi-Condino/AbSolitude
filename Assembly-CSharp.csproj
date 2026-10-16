@@ -370,6 +370,7 @@
     <Compile Include="Assets\AKCondinoO.Bootstrap\RagnarokOnlineMode.cs" />
     <Compile Include="Assets\AKCondinoO\UI\Fixed\Stretcher.cs" />
     <Compile Include="Assets\AKCondinoO.World\BiomeSpawnEntry.cs" />
+    <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1\Pinus_elliottii.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Subtract.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\Arquimedes\ArquimedesAI.Stats.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Curve.cs" />
@@ -442,7 +443,6 @@
     <Compile Include="Assets\AKCondinoO\Sims\_SimObject\SimObjectSpawner.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.Motion\AnimationEventsHandler.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\OnHit\OnHitSkill.cs" />
-    <Compile Include="Assets\AKCondinoO.SimObjects\Pinus_elliottii_1\Pinus_elliottii_1.cs" />
     <Compile Include="Assets\AKCondinoO.World\ConstModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.Inventory.WeaponTypes.cs" />
     <Compile Include="Assets\AKCondinoO.UIObjects\DockButton.cs" />

@@ -123,6 +123,7 @@ namespace AKCondinoO.PersistentData{
            rwl.EnterWriteLock();
            try{
             if(!openFiles.TryGetValue(saveFilePath,out file)){
+             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(saveFilePath)));
              file=OpenStream(saveFilePath);
              openFiles.Add(saveFilePath,file);
             }
@@ -237,6 +238,7 @@ namespace AKCondinoO.PersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(PersistentDataFileStreaming),""),Pool.GetPool<PersistentDataFileStreaming>("",()=>new(),(PersistentDataFileStreaming item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SpawnMapFile               ),""),Pool.GetPool<SpawnMapFile               >("",()=>new(),(SpawnMapFile                item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SimObjectFile              ),""),Pool.GetPool<SimObjectFile              >("",()=>new(),(SimObjectFile               item)=>{item.OnReturnToPoolRecycle();},true)},
      };
         internal static PersistentDataFileStreaming Rent(Type poolId){
          return(PersistentDataFileStreaming)pool[(poolId,"")].ObjectRent();
@@ -556,6 +558,7 @@ namespace AKCondinoO.PersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(PersistentDataFileHandle),""),Pool.GetPool<PersistentDataFileHandle>("",()=>new(),(PersistentDataFileHandle item)=>{item.Reset();},true)},
       {(typeof(SpawnMapFileHandle      ),""),Pool.GetPool<SpawnMapFileHandle      >("",()=>new(),(SpawnMapFileHandle       item)=>{item.Reset();},true)},
+      {(typeof(SimObjectFileHandle     ),""),Pool.GetPool<SimObjectFileHandle     >("",()=>new(),(SimObjectFileHandle      item)=>{item.Reset();},true)},
      };
         internal static PersistentDataFileHandle Rent(Type poolId){
          return(PersistentDataFileHandle)pool[(poolId,"")].ObjectRent();
@@ -604,6 +607,7 @@ namespace AKCondinoO.PersistentData{
     internal abstract class PersistentDataFileHeader{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(SpawnMapFileHeader      ),""),Pool.GetPool<SpawnMapFileHeader      >("",()=>new(),(SpawnMapFileHeader       item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SimObjectFileHeader     ),""),Pool.GetPool<SimObjectFileHeader     >("",()=>new(),(SimObjectFileHeader      item)=>{item.OnReturnToPoolRecycle();},true)},
      };
         internal static PersistentDataFileHeader Rent(Type poolId){
          return(PersistentDataFileHeader)pool[(poolId,"")].ObjectRent();

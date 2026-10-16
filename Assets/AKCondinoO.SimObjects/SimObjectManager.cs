@@ -3,6 +3,7 @@ using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.Utilities;
+using AKCondinoO.World;
 using AKCondinoO.World.Spawning;
 using System;
 using System.Collections;
@@ -61,7 +62,6 @@ namespace AKCondinoO.SimObjects{
              sims.Add(key,new());
              SimDirector.singleton.OnSimActorFactoryCreated(key,prefab);
             }
-            (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSpawnMapSaveFile(type);
            }
           }
           spawnCoroutine=StartCoroutine(SpawnCoroutine());
@@ -139,6 +139,7 @@ namespace AKCondinoO.SimObjects{
          var key=(simObject.simObjectType,simObject.variant);
          if(!simObject.IsSimActor()){
           simObjects[key][simObject.id]=simObject;
+          WorldSimObjectSpatialMap.singleton.RegisterSimObject(simObject);
          }else{
           var simActor=(SimActor)simObject;
           sims[key][simObject.id]=simActor;

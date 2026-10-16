@@ -1886,7 +1886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugClassArrayToLogsDebugMessages.Array.size
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[0]'
@@ -1910,86 +1910,90 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[5]'
-      value: WindowDockManager
+      value: SimObjectFiles
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[6]'
-      value: UIObjectModule
+      value: WindowDockManager
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[7]'
-      value: Window
+      value: UIObjectModule
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[8]'
-      value: TabsContainer
+      value: Window
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[9]'
-      value: TabsGroup
+      value: TabsContainer
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[10]'
-      value: Minimized
+      value: TabsGroup
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[11]'
-      value: PinToggle
+      value: Minimized
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[12]'
-      value: BiomesConfigurationSnapshot
+      value: PinToggle
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[13]'
-      value: ByChancePicker
+      value: BiomesConfigurationSnapshot
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[14]'
-      value: MarchingCubesHelper
+      value: ByChancePicker
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[15]'
-      value: ChunkSimObjectSpawner
+      value: MarchingCubesHelper
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[16]'
-      value: WorldSimObjectSpatialMap
+      value: ChunkSimObjectSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[17]'
-      value: NavMeshSourcesOrdered
+      value: WorldSimObjectSpatialMap
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[18]'
-      value: NavMeshProvider
+      value: NavMeshSourcesOrdered
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[19]'
-      value: SimInteractionResolver
+      value: NavMeshProvider
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[20]'
-      value: SimObjectFactory
+      value: SimInteractionResolver
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[21]'
-      value: SimObject
+      value: SimObjectFactory
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[22]'
-      value: InspectablePart
+      value: SimObject
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[23]'
-      value: InspectablePart.Interactable
+      value: InspectablePart
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[24]'
-      value: InspectInstance
+      value: InspectablePart.Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[25]'
+      value: InspectInstance
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[26]'
       value: InspectStateDefinition
       objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
