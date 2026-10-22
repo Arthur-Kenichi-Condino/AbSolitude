@@ -460,6 +460,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\BaseAI.cs" />
     <Compile Include="Assets\AKCondinoO\ISingletonInitialization.cs" />
     <Compile Include="Assets\AKCondinoO.World\SelectGraphNode.cs" />
+    <Compile Include="Assets\AKCondinoO.PersistentData\SpatialMapFiles.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\_SimActor\_BaseAI\_BaseAI.IsUsingAI\BaseAI.IsUsingAI.Functions.cs" />
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Homunculi\Vanilmirth\VanilmirthAI.cs" />
     <Compile Include="Assets\AKCondinoO\Voxels\AtlasHelper.cs" />

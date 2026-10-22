@@ -17,10 +17,12 @@ namespace AKCondinoO.PersistentData{
     /// </summary>
     internal class PersistentDataManager:MonoSingleton<PersistentDataManager>{
      private readonly Dictionary<Type,PersistenDatatInitialization>initOrderTable=new(){
-      {typeof( SpawnMapFiles),
-       new(   0, "SpawnMap/",path=>new  SpawnMapFiles(path))},
-      {typeof(SimObjectFiles),
-       new( 100,"SimObject/",path=>new SimObjectFiles(path))},
+      {typeof(  SpawnMapFiles),
+       new(   0, "SpawnMap/",path=>  new SpawnMapFiles(path))},
+      {typeof( SimObjectFiles),
+       new( 100,"SimObject/",path=> new SimObjectFiles(path))},
+      {typeof(SpatialMapFiles),
+       new( 200,"SimObject/",path=>new SpatialMapFiles(path))},
      };
         private readonly struct PersistenDatatInitialization{
          internal readonly int initOrder;
@@ -239,6 +241,7 @@ namespace AKCondinoO.PersistentData{
       {(typeof(PersistentDataFileStreaming),""),Pool.GetPool<PersistentDataFileStreaming>("",()=>new(),(PersistentDataFileStreaming item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SpawnMapFile               ),""),Pool.GetPool<SpawnMapFile               >("",()=>new(),(SpawnMapFile                item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SimObjectFile              ),""),Pool.GetPool<SimObjectFile              >("",()=>new(),(SimObjectFile               item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SpatialMapFile             ),""),Pool.GetPool<SpatialMapFile             >("",()=>new(),(SpatialMapFile              item)=>{item.OnReturnToPoolRecycle();},true)},
      };
         internal static PersistentDataFileStreaming Rent(Type poolId){
          return(PersistentDataFileStreaming)pool[(poolId,"")].ObjectRent();
@@ -559,6 +562,7 @@ namespace AKCondinoO.PersistentData{
       {(typeof(PersistentDataFileHandle),""),Pool.GetPool<PersistentDataFileHandle>("",()=>new(),(PersistentDataFileHandle item)=>{item.Reset();},true)},
       {(typeof(SpawnMapFileHandle      ),""),Pool.GetPool<SpawnMapFileHandle      >("",()=>new(),(SpawnMapFileHandle       item)=>{item.Reset();},true)},
       {(typeof(SimObjectFileHandle     ),""),Pool.GetPool<SimObjectFileHandle     >("",()=>new(),(SimObjectFileHandle      item)=>{item.Reset();},true)},
+      {(typeof(SpatialMapFileHandle    ),""),Pool.GetPool<SpatialMapFileHandle    >("",()=>new(),(SpatialMapFileHandle     item)=>{item.Reset();},true)},
      };
         internal static PersistentDataFileHandle Rent(Type poolId){
          return(PersistentDataFileHandle)pool[(poolId,"")].ObjectRent();
@@ -608,6 +612,7 @@ namespace AKCondinoO.PersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(SpawnMapFileHeader      ),""),Pool.GetPool<SpawnMapFileHeader      >("",()=>new(),(SpawnMapFileHeader       item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SimObjectFileHeader     ),""),Pool.GetPool<SimObjectFileHeader     >("",()=>new(),(SimObjectFileHeader      item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SpatialMapFileHeader    ),""),Pool.GetPool<SpatialMapFileHeader    >("",()=>new(),(SpatialMapFileHeader     item)=>{item.OnReturnToPoolRecycle();},true)},
      };
         internal static PersistentDataFileHeader Rent(Type poolId){
          return(PersistentDataFileHeader)pool[(poolId,"")].ObjectRent();
