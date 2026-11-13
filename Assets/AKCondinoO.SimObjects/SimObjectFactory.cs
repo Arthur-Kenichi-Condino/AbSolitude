@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.SimObjects.StateMachines;
 using AKCondinoO.Utilities;
@@ -109,7 +110,7 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
-        internal virtual SimObject Spawn(SimObjectSpawn item){
+        internal virtual SimObject Spawn(SimObjectSpawn item,SimObjectPersistentData persistentData){
          var manager=SimObjectManager.singleton;
          T simObject=pool.Rent();
          simObject.doInitialization=true;
@@ -122,12 +123,17 @@ namespace AKCondinoO.SimObjects{
          simObject.transform.position=item.position;
          simObject.transform.rotation=item.rotation;
          simObject.transform.localScale=item.scale;
+         simObject.OnSpawn(persistentData);
          manager.OnSpawn(simObject);
          return simObject;
         }
         private void AssignId(T simObject){
          var manager=SimObjectManager.singleton;
          simObject.id=manager.simIds.Next((simObject.simObjectType,simObject.variant));
+        }
+        private void ReturnId(T simObject){
+         Logs.Warning("'não implementado ainda'");
+         simObject.id=0;
         }
         internal void SetupSimObject(T simObject){
          if(!RegisterForInstancedRendering(simObject)){
@@ -299,7 +305,9 @@ namespace AKCondinoO.SimObjects{
         }
         internal virtual void Despawn(T simObject){
          var manager=SimObjectManager.singleton;
-         simObject.id=0;
+         manager.OnDespawning(simObject);
+         simObject.OnDespawning();
+         ReturnId(simObject);
          manager.instancedRendering.RemoveInstance((simObject.simObjectType,simObject.variant),simObject.instancedRenderingIndex);
          simObject.instancedRenderingIndex=-1;
          pool.Return(simObject);

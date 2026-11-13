@@ -17,12 +17,10 @@ namespace AKCondinoO.PersistentData{
     /// </summary>
     internal class PersistentDataManager:MonoSingleton<PersistentDataManager>{
      private readonly Dictionary<Type,PersistenDatatInitialization>initOrderTable=new(){
-      {typeof(  SpawnMapFiles),
-       new(   0, "SpawnMap/",path=>  new SpawnMapFiles(path))},
-      {typeof( SimObjectFiles),
-       new( 100,"SimObject/",path=> new SimObjectFiles(path))},
-      {typeof(SpatialMapFiles),
-       new( 200,"SimObject/",path=>new SpatialMapFiles(path))},
+      {typeof(  SpawnMapFiles),new(   0,     "SpawnMap/",path=>  new SpawnMapFiles(path))},
+      {typeof(    SimIdsFiles),new(  50,"SimObject/Ids/",path=>    new SimIdsFiles(path))},
+      {typeof( SimObjectFiles),new( 100,    "SimObject/",path=> new SimObjectFiles(path))},
+      {typeof(SpatialMapFiles),new( 200,    "SimObject/",path=>new SpatialMapFiles(path))},
      };
         private readonly struct PersistenDatatInitialization{
          internal readonly int initOrder;
@@ -240,6 +238,7 @@ namespace AKCondinoO.PersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(PersistentDataFileStreaming),""),Pool.GetPool<PersistentDataFileStreaming>("",()=>new(),(PersistentDataFileStreaming item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SpawnMapFile               ),""),Pool.GetPool<SpawnMapFile               >("",()=>new(),(SpawnMapFile                item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SimIdsFile                 ),""),Pool.GetPool<SimIdsFile                 >("",()=>new(),(SimIdsFile                  item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SimObjectFile              ),""),Pool.GetPool<SimObjectFile              >("",()=>new(),(SimObjectFile               item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SpatialMapFile             ),""),Pool.GetPool<SpatialMapFile             >("",()=>new(),(SpatialMapFile              item)=>{item.OnReturnToPoolRecycle();},true)},
      };
@@ -375,6 +374,9 @@ namespace AKCondinoO.PersistentData{
           newHeaderSize
          );
          header.headerSize=newHeaderSize;
+        }
+        internal virtual int GetHeaderSize(){
+         return fileHeader?.headerSize??-1;
         }
         internal virtual void Close(){
          rwl.EnterWriteLock();
@@ -561,6 +563,7 @@ namespace AKCondinoO.PersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(PersistentDataFileHandle),""),Pool.GetPool<PersistentDataFileHandle>("",()=>new(),(PersistentDataFileHandle item)=>{item.Reset();},true)},
       {(typeof(SpawnMapFileHandle      ),""),Pool.GetPool<SpawnMapFileHandle      >("",()=>new(),(SpawnMapFileHandle       item)=>{item.Reset();},true)},
+      {(typeof(SimIdsFileHandle        ),""),Pool.GetPool<SimIdsFileHandle        >("",()=>new(),(SimIdsFileHandle         item)=>{item.Reset();},true)},
       {(typeof(SimObjectFileHandle     ),""),Pool.GetPool<SimObjectFileHandle     >("",()=>new(),(SimObjectFileHandle      item)=>{item.Reset();},true)},
       {(typeof(SpatialMapFileHandle    ),""),Pool.GetPool<SpatialMapFileHandle    >("",()=>new(),(SpatialMapFileHandle     item)=>{item.Reset();},true)},
      };
@@ -611,6 +614,7 @@ namespace AKCondinoO.PersistentData{
     internal abstract class PersistentDataFileHeader{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(SpawnMapFileHeader      ),""),Pool.GetPool<SpawnMapFileHeader      >("",()=>new(),(SpawnMapFileHeader       item)=>{item.OnReturnToPoolRecycle();},true)},
+      {(typeof(SimIdsFileHeader        ),""),Pool.GetPool<SimIdsFileHeader        >("",()=>new(),(SimIdsFileHeader         item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SimObjectFileHeader     ),""),Pool.GetPool<SimObjectFileHeader     >("",()=>new(),(SimObjectFileHeader      item)=>{item.OnReturnToPoolRecycle();},true)},
       {(typeof(SpatialMapFileHeader    ),""),Pool.GetPool<SpatialMapFileHeader    >("",()=>new(),(SpatialMapFileHeader     item)=>{item.OnReturnToPoolRecycle();},true)},
      };
@@ -669,13 +673,21 @@ namespace AKCondinoO.PersistentData{
         }
         protected abstract void OnGenerate(int requestedVersion,int supportedVersion);
     }
-    internal abstract class PersistentDataFileHeaderSerializer<T>:IPersistentDataSerializer<T>{
+    internal abstract class PersistentDataFileHeaderSerializer<T>:PersistentDataSerializer<T>{
         internal T Generate(int requestedVersion){
          return OnGenerate(requestedVersion,GetSupportedVersion(requestedVersion));
         }
         protected abstract T OnGenerate(int requestedVersion,int supportedVersion);
     }
-    internal abstract class IPersistentDataSerializer<T>{
+    internal interface IPersistentDataSerializer{
+    }
+    internal interface IPersistentDataSerializer<T>:IPersistentDataSerializer{
+     int CalculateSerializedSize(T value,int version);
+     void WriteTo(BinaryWriter writer,T value,int requestedVersion);
+     T ReadFrom(BinaryReader reader,int savedVersion);
+     void ReadFromInto(BinaryReader reader,T value,int savedVersion);
+    }
+    internal abstract class PersistentDataSerializer<T>:IPersistentDataSerializer<T>{
      protected virtual int latestSupportedVersion{get{return 0;}}
      protected virtual int GetSupportedVersion(int version){
       return Math.Min(version,latestSupportedVersion);
@@ -689,9 +701,18 @@ namespace AKCondinoO.PersistentData{
      public virtual T ReadFrom(BinaryReader reader,int savedVersion){
       return OnReadFrom(reader,savedVersion,GetSupportedVersion(savedVersion));
      }
+     public virtual void ReadFromInto(BinaryReader reader,T value,int savedVersion){
+      OnReadFromInto(reader,value,savedVersion,GetSupportedVersion(savedVersion));
+     }
      protected abstract int OnCalculateSerializedSize(T value,int version,int supportedVersion);
      protected abstract void OnWriteTo(BinaryWriter writer,T value,int requestedVersion,int supportedVersion);
-     protected abstract T OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion);
+     protected virtual T OnReadFrom(BinaryReader reader,int savedVersion,int supportedVersion){
+      Logs.Error("we are calling 'OnReadFrom' but it wasn't implemented in the derived class");
+      return default(T);
+     }
+     protected virtual void OnReadFromInto(BinaryReader reader,T value,int savedVersion,int supportedVersion){
+      Logs.Error("we are calling 'OnReadFromInto' but it wasn't implemented in the derived class");
+     }
     }
     internal static class PersistentDataSerialization{
         internal static void WriteVector3(BinaryWriter writer,Vector3 value){

@@ -118,15 +118,8 @@ namespace AKCondinoO.World{
          return map;
         }
         internal void RegisterSimObject(SimObject simObject){
-         var type=simObject.simObjectType;
-         var variant=simObject.variant;
-         var pos=simObject.transform.position;
-         var cCoord=vecPosTocCoord(pos);
-         var cnkRgn=cCoordTocnkRgn(cCoord);
-         Logs.Debug(()=>"simObject:"+simObject.name+";simObject.id:"+simObject.id+";type:"+type+";variant:"+variant+";pos:"+pos+";cCoord:"+cCoord+";cnkRgn:"+cnkRgn);
-         (PersistentDataManager.singleton.GetFileManager(typeof(SpatialMapFiles))as SpatialMapFiles)?.WriteToSpatialMapFile(cnkRgn,simObject);
-         //Logs.Debug(()=>"'type':"+type.FullName+";'simObject.GetType()':"+simObject.GetType().FullName);
-         (PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles)?.OpenSimObjectSaveFile(cnkRgn,type,variant);
+        }
+        internal void UnregisterSimObject(SimObject simObject){
         }
     }
     internal class SpawnSpatialMap{

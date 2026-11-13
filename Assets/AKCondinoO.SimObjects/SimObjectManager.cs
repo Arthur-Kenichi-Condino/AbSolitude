@@ -2,6 +2,7 @@ using AKCondinoO.Bootstrap;
 using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects.StateMachines;
+using AKCondinoO.Sims;
 using AKCondinoO.Utilities;
 using AKCondinoO.World;
 using AKCondinoO.World.Spawning;
@@ -35,6 +36,7 @@ namespace AKCondinoO.SimObjects{
          base.OnDestroy();
         }
      internal SimObjectInstancedRendering instancedRendering;
+     internal SimObjectSaveSystem simObjectSaveSystem;
      internal BiomesSimObjectSpawningSystem biomesSpawningSystem;
      internal SimIds simIds;
      private readonly Dictionary<(Type type,string variant),SimObjectFactory<SimObject>>simObjectFactories=new();
@@ -46,6 +48,7 @@ namespace AKCondinoO.SimObjects{
         public override void Initialize(){
          base.Initialize();
          instancedRendering=new();
+         simObjectSaveSystem=new();
          biomesSpawningSystem=new();
          simIds=new();
          if(this!=null){
@@ -133,6 +136,24 @@ namespace AKCondinoO.SimObjects{
           }
          }
         }
+        internal bool Exists(Type type,string variant,ulong id,out SimObject simObject){
+         var key=(type,variant);
+         if(!SimObject.IsSimActor(type)){
+          if(simObjects.TryGetValue(key,out var simObjectsById)){
+           return simObjectsById.TryGetValue(id,out simObject);
+          }
+         }else{
+          if(sims.TryGetValue(key,out var simsById)){
+           bool exists=simsById.TryGetValue(id,out var sim);
+           if(exists){
+            simObject=sim;
+            return true;
+           }
+          }
+         }
+         simObject=null;
+         return false;
+        }
      internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimObject>>simObjects=new();
      internal readonly Dictionary<(Type type,string variant),Dictionary<ulong,SimActor>>sims=new();
         internal void OnSpawn(SimObject simObject){
@@ -151,6 +172,17 @@ namespace AKCondinoO.SimObjects{
           factory.Despawn(simObject);
          }
         }
+        internal void OnDespawning(SimObject simObject){
+         var key=(simObject.simObjectType,simObject.variant);
+         if(!simObject.IsSimActor()){
+          simObjects[key].Remove(simObject.id);
+          WorldSimObjectSpatialMap.singleton.UnregisterSimObject(simObject);
+         }else{
+          var simActor=(SimActor)simObject;
+          sims[key].Remove(simObject.id);
+          SimDirector.singleton.OnSimDespawning(simActor);
+         }
+        }
      internal readonly HashSet<StateMachines.StateMachine>stateMachinesRunning=new();
         public override void ManualUpdate(){
          base.ManualUpdate();
@@ -164,6 +196,7 @@ namespace AKCondinoO.SimObjects{
            sim.DynamicUpdate();
           }
          }
+         simObjectSaveSystem.OnManualUpdate();
          FlushSpawnRequests();
         }
         internal void OnStateMachinesRunning(StateMachines.StateMachine stateMachine){
@@ -309,11 +342,13 @@ namespace AKCondinoO.SimObjects{
       );
      internal bool dequeued{get;private set;}
      private readonly List<SimObjectSpawn>data;
+     private readonly Dictionary<int,SimObjectPersistentData>readData;
      private int currentIndex;
         internal SpawnList():this(0){
         }
         internal SpawnList(int capacity){
          data=new(capacity);
+         readData=new(capacity);
          currentIndex=0;
          dequeued=true;
         }
@@ -323,6 +358,12 @@ namespace AKCondinoO.SimObjects{
         }
         internal void Clear(){
          data.Clear();
+         if(readData.Count>0){
+          foreach(var kvp in readData){
+           SimObjectPersistentData.Return(kvp.Value.GetType(),kvp.Value);
+          }
+          readData.Clear();
+         }
          currentIndex=0;
          dequeued=true;
         }
@@ -331,10 +372,12 @@ namespace AKCondinoO.SimObjects{
           dequeued=true;
           return false;
          }
-         SimObjectSpawn item=data[currentIndex];
-         currentIndex++;
+         int index=currentIndex++;
+         SimObjectSpawn item=data[index];
+         readData.TryGetValue(index,out var persistentData);
          if(simObjectPrefabs.TryGetValue((item.simObjectType,item.variant),out var factory)){
-          var simObject=factory.Spawn(item);
+          readData.Remove(index);
+          var simObject=factory.Spawn(item,persistentData);
          }
          return true;
         }

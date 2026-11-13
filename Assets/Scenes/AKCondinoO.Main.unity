@@ -477,6 +477,67 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6495761685273194140, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
   m_PrefabInstance: {fileID: 404516919}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &337872544
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -140
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_Name
+      value: sceneComplete_floor_bricks_HP
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
 --- !u!1001 &350465338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1886,7 +1947,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugClassArrayToLogsDebugMessages.Array.size
-      value: 28
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[0]'
@@ -1910,94 +1971,118 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[5]'
-      value: SpatialMapFiles
+      value: SimIdsFiles
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[6]'
-      value: SimObjectFiles
+      value: SimIdsFile
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[7]'
-      value: WindowDockManager
+      value: SpatialMapFiles
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[8]'
-      value: UIObjectModule
+      value: SpatialMapFile
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[9]'
-      value: Window
+      value: SimObjectFiles
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[10]'
-      value: TabsContainer
+      value: SimObjectFile
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[11]'
-      value: TabsGroup
+      value: WindowDockManager
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[12]'
-      value: Minimized
+      value: UIObjectModule
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[13]'
-      value: PinToggle
+      value: Window
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[14]'
-      value: BiomesConfigurationSnapshot
+      value: TabsContainer
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[15]'
-      value: ByChancePicker
+      value: TabsGroup
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[16]'
-      value: MarchingCubesHelper
+      value: Minimized
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[17]'
-      value: ChunkSimObjectSpawner
+      value: PinToggle
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[18]'
-      value: WorldSimObjectSpatialMap
+      value: BiomesConfigurationSnapshot
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[19]'
-      value: NavMeshSourcesOrdered
+      value: ByChancePicker
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[20]'
-      value: NavMeshProvider
+      value: MarchingCubesHelper
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[21]'
-      value: SimInteractionResolver
+      value: ChunkSimObjectSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[22]'
-      value: SimObjectFactory
+      value: WorldSimObjectSpatialMap
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[23]'
-      value: SimObject
+      value: NavMeshSourcesOrdered
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[24]'
-      value: InspectablePart
+      value: NavMeshProvider
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[25]'
-      value: InspectablePart.Interactable
+      value: SimInteractionResolver
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[26]'
-      value: InspectInstance
+      value: SimObjectSaveSystem
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[27]'
+      value: SimIds
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[28]'
+      value: SimObjectFactory
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[29]'
+      value: SimObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[30]'
+      value: InspectablePart
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[31]'
+      value: InspectablePart.Interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[32]'
+      value: InspectInstance
+      objectReference: {fileID: 0}
+    - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
+      propertyPath: 'debugClassArrayToLogsDebugMessages.Array.data[33]'
       value: InspectStateDefinition
       objectReference: {fileID: 0}
     - target: {fileID: 45482367409864081, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
@@ -2956,6 +3041,67 @@ PrefabInstance:
       addedObject: {fileID: 1733017541}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
+--- !u!1001 &2069059068
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -142
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_Name
+      value: sceneComplete_floor_bricks_HP (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 298d9fe516798a2448cbc45bdb526410, type: 3}
 --- !u!224 &2081658800 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8742185746386300135, guid: da07e7ef1e8cf414db345bc45dffebc7, type: 3}
@@ -3275,6 +3421,79 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4182596863830784400, guid: f0f5b313d5782ba4ea49725e15ff8d8e, type: 3}
   m_PrefabInstance: {fileID: 158457919958319853}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7432124693325327702
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944812166701004872, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2277233044975873563, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2277233044975873563, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: -4871606379512013889, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+    - target: {fileID: 2277233044975873563, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479478668702758311, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_Name
+      value: Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479478668702758311, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 436c138cebbe98a4cbf7d91e87e52b7f, type: 3}
 --- !u!1001 &7637751917217014019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3349,3 +3568,6 @@ SceneRoots:
   - {fileID: 891784849}
   - {fileID: 955055010}
   - {fileID: 518544418}
+  - {fileID: 337872544}
+  - {fileID: 2069059068}
+  - {fileID: 7432124693325327702}

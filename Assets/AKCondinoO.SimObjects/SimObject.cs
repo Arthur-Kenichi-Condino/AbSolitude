@@ -1,4 +1,5 @@
 using AKCondinoO.Bootstrap;
+using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimActors.SimInteractions;
 using AKCondinoO.Utilities;
@@ -34,8 +35,22 @@ namespace AKCondinoO.SimObjects{
      internal bool doInitialization=true;
      internal ulong id;
      internal int instancedRenderingIndex=-1;
+     internal SimObjectPersistentData persistentData;
      internal bool isGrounded;
         internal virtual void Awake(){
+        }
+        internal virtual void OnSpawn(SimObjectPersistentData filePersistentData){
+         persistentData=filePersistentData??RentPersistentData();
+         UpdatePersistentData();
+        }
+        internal virtual SimObjectPersistentData RentPersistentData(){
+         return SimObjectPersistentData.RentFor(simObjectType);
+        }
+        internal virtual void UpdatePersistentData(bool despawning=false){
+         SimObjectManager.singleton.simObjectSaveSystem.OnSimObjectChanged(this,!despawning);
+        }
+        internal void OnDespawning(){
+         UpdatePersistentData(true);
         }
         internal void OnChunkPooled(){
         }

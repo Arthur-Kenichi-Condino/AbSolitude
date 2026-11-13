@@ -49,6 +49,16 @@ namespace AKCondinoO.SimActors{
           selectableSimsCount[key]=count+1;
          }
         }
+        internal void OnSimDespawning(SimActor sim){
+         var key=(sim.simObjectType,sim.variant);
+         sims[key].Remove(sim.id);
+         if(sim.isPlayable){
+          selectableSims[key].Remove(sim.id);
+          if(selectableSimsCount.TryGetValue(key,out int count)){
+           selectableSimsCount[key]=count-1;
+          }
+         }
+        }
         public override void ManualUpdate(){
          base.ManualUpdate();
          if(ActiveZone.main!=null){

@@ -139,7 +139,7 @@ namespace AKCondinoO.World{
          }
         }
         internal void OnSimObjectPositionChanged(ActiveZone zone,SimObject simObject){
-         Logs.Debug(()=>"'sim object position changed:rebuild nav mesh':"+simObject.id);
+         //Logs.Debug(()=>"'sim object position changed:rebuild nav mesh':"+simObject.id);
          if(zoneToCluster.TryGetValue(zone,out var cluster)){
           cluster.AddOrUpdateSource(simObject);
          }
