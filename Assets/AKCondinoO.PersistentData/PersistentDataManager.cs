@@ -378,6 +378,9 @@ namespace AKCondinoO.PersistentData{
         internal virtual int GetHeaderSize(){
          return fileHeader?.headerSize??-1;
         }
+        internal virtual int GetHeaderVersion(){
+         return fileHeader?.headerVersion??-1;
+        }
         internal virtual void Close(){
          rwl.EnterWriteLock();
          try{

@@ -252,6 +252,9 @@ namespace AKCondinoO.World{
          var waitNavMeshUpdateInterval=new WaitForSeconds(.1f);
          var waitAgentTypeInterval=new WaitForSeconds(.01f);
          while(true){
+          while(WorldChunkManager.singleton.debugDisableNavMesh){
+           yield return null;
+          }
           while(isDirty){
            yield return null;
           }

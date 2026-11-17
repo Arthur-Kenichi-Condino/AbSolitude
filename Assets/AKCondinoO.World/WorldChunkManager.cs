@@ -21,6 +21,7 @@ namespace AKCondinoO.World{
      internal NavMeshProvider navMeshProvider;
      [SerializeField]internal bool debugDisableGeneration=false;
      [SerializeField]internal bool debugForceRegenerate=false;
+     [SerializeField]internal bool debugDisableNavMesh=false;
         public override void Initialize(){
          base.Initialize();
          MaterialAtlasHelper.SetAtlasData();
@@ -96,6 +97,7 @@ namespace AKCondinoO.World{
            break;
           }
          }
+         SimObjectManager.singleton.OnChunkExists(chunk);
         }
         internal bool OnAddSimObjectAt(Vector3 pos,SimObject simObject){
          return false;

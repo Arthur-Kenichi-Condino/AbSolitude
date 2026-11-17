@@ -241,6 +241,9 @@ namespace AKCondinoO.SimObjects{
         }
         internal void OnEnsureChunkExists(Vector2Int cCoord){
         }
+        internal void OnChunkExists(WorldChunk chunk){
+         simObjectSaveSystem.OnChunkExists(chunk);
+        }
      internal readonly List<SpawnRequest>spawnRequests=new();
         internal void FlushSpawnRequests(){
          #region Debug

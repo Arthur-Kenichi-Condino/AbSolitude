@@ -79,7 +79,7 @@ namespace AKCondinoO.PersistentData{
          WriteTo(writer,index,key,spawnObject);
          fileHandle.SetIndex(key,index);
          fileHandle.SetSpawnMapObject(key,spawnObject);
-         Logs.Debug(()=>"'WriteSpawnMapSimObject':key:"+key+";index:"+index);
+         //Logs.Debug(()=>"'WriteSpawnMapSimObject':key:"+key+";index:"+index);
         }
         internal int CalculateSerializationSize(ref SpawnMapIndex index,SpawnMapKey key,SpawnMapObject spawnObject){
          var serializationSize=

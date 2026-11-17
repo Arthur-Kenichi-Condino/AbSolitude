@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1436571075076591851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6284879715576795627}
+  - component: {fileID: 1859009433091526944}
+  - component: {fileID: -5475898191325542119}
+  - component: {fileID: -6017015266426448335}
+  m_Layer: 13
+  m_Name: CloudParticle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6284879715576795627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436571075076591851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1859009433091526944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436571075076591851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd4d298cc1a70b4784a78a0a6703aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AlphaSet:
+    Value: 0
+    Min: 0
+    Max: 0.37255
+    IncrementSpeed: 0.0305178
+    TryInvertingInterval: 13
+    ChanceToInvert: 15
+  OrbitSet:
+    ToRotate: {x: 0, y: 0, z: 0}
+    Min: {x: 1, y: 1, z: 1}
+    Max: {x: 720, y: 720, z: 720}
+    IncrementSpeed: {x: 0.0625, y: 0.0625, z: 0.0625}
+    TryInvertingInterval: 39
+    ChanceToInvert: {x: 15, y: 15, z: 15}
+  Rotation:
+    Value: {x: 0, y: 1, z: 0}
+    IncrementSpeed: 0.5
+    TryInvertingInterval: 52
+    ChanceToInvert: 15
+  Distance:
+    ToTranslate: {x: 0, y: 0, z: 0}
+    FromCamera: 0
+    Min: {x: 1, y: 1, z: 1}
+    Max: {x: 10, y: 10, z: 10}
+    IncrementSpeed: {x: 0.0625, y: 0.0625, z: 0.0625}
+    TryInvertingInterval: 39
+    ChanceToInvert: {x: 25, y: 25, z: 25}
+  ScaleSet:
+    Value: {x: 0, y: 0, z: 0}
+    Min: 5
+    Max: 30
+    IncrementSpeed: 0.0000610352
+    TryInvertingInterval: 52
+    ChanceToInvert: 50
+--- !u!33 &-5475898191325542119
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436571075076591851}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &-6017015266426448335
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436571075076591851}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: cbf4449fb3a285d45880b3f326161ce1, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

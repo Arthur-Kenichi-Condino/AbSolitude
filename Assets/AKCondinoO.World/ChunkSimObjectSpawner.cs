@@ -41,17 +41,22 @@ namespace AKCondinoO.World.SimObjects{
            ()=>new(),
            (BiomesSimObjectSpawnerJob item)=>{
             foreach(var kvp in item.debugSpawnCoords){
-             kvp.Value.Clear();
+             debugSpawnsPool.Return(kvp.Value);
             }
-            item.visited.Clear();
+            item.debugSpawnCoords.Clear();
             item.spawner=null;
            }
           );
          internal ChunkSimObjectSpawner spawner;
          internal Vector2Int cCoord;
-         private readonly Dictionary<Vector3Int,SpawnCandidate>visited=new();
-         internal readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();
          protected SpawnList spawnList;
+         internal static readonly Utilities.ObjectPool<HashSet<SpawnReserve>>debugSpawnsPool=
+          Pool.GetPool<HashSet<SpawnReserve>>(
+           "",
+           ()=>new(),
+           (HashSet<SpawnReserve>item)=>{item.Clear();}
+          );
+         internal readonly Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords=new();
             public void CancelGraciously(){
             }
             public void OnDoScheduleSetContainerData(){
@@ -80,7 +85,6 @@ namespace AKCondinoO.World.SimObjects{
                  spawnLayerData=spawnLayerData,
                 };
                 RecursivelyReserveBounds(iterationSetup,cnkRgn);
-                visited.Clear();
                 layerSw.Stop();
                 Logs.Debug(()=>"'layer "+layer+" spawn recursion execution time':"+layerSw.ElapsedMilliseconds+" ms");
                }
@@ -91,6 +95,66 @@ namespace AKCondinoO.World.SimObjects{
              }
              Logs.Debug(()=>"'biome sim object spawning done':"+cCoord);
             }
+            sealed class RecursionContext{
+             internal static readonly Utilities.ObjectPool<RecursionContext>pool=
+              Pool.GetPool<RecursionContext>(
+               "",
+               ()=>new(),
+               (RecursionContext item)=>{item.OnReturnToPoolRecycle();}
+              );
+             internal BiomesSimObjectSpawnerJob job;
+             internal int layer;
+             internal readonly Dictionary<Vector3Int,SpawnCandidate>visited=new();
+             internal readonly Dictionary<Vector3Int,UncommitedSpawn>uncommited=new();
+                internal struct UncommitedSpawn{
+                 internal Vector2Int cCoord;
+                 internal Vector3Int vCoord;
+                 internal bool fromFile;
+                 internal bool empty;
+                 internal SpawnCandidate candidate;
+                 internal SpawnReserve reservation;
+                 internal SimObjectSpawn simObjectSpawn;
+                }
+                internal void OnReturnToPoolRecycle(){
+                 job=null;
+                 visited.Clear();
+                 uncommited.Clear();
+                }
+                internal void Init(BiomesSimObjectSpawnerJob job,int layer){
+                 this.job=job;
+                 this.layer=layer;
+                }
+                internal void Commit(SpawnList spawnList,SpawnMapFiles spawnMapFiles,Dictionary<int,HashSet<SpawnReserve>>debugSpawnCoords){
+                 foreach(var kvp in uncommited){
+                  var worldCoord=kvp.Key;
+                  var uncommitedSpawn=kvp.Value;
+                  var cCoord=uncommitedSpawn.cCoord;
+                  var vCoord=uncommitedSpawn.vCoord;
+                  var cnkRgn=cCoordTocnkRgn(cCoord);
+                  var fromFile=uncommitedSpawn.fromFile;
+                  var empty=uncommitedSpawn.empty;
+                  var candidate=uncommitedSpawn.candidate;
+                  if(!empty){
+                   var reserve=uncommitedSpawn.reservation;
+                   WorldSimObjectSpatialMap.RegisterSimObjectSpawn(layer,cCoord,reserve);
+                   if(cnkRgn==job.cnkRgn){
+                    spawnList.Add(uncommitedSpawn.simObjectSpawn);
+                   }
+                   if(!debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
+                    debugSpawnCoords.Add(layer,debugSpawns=debugSpawnsPool.Rent());
+                   }
+                   debugSpawns.Add(reserve);
+                   if(!fromFile){
+                    spawnMapFiles?.WriteToSpawnMapFile(cnkRgn,layer,vCoord,candidate,reserve);
+                   }
+                  }else{
+                   if(!fromFile){
+                    spawnMapFiles?.WriteEmptyToSpawnMapFile(cnkRgn,layer,vCoord);
+                   }
+                  }
+                 }
+                }
+            }
             /// <summary>
             ///  "Eu só desisto se a função disser que eu perdi e quem me derrota realmente conseguir existir.", chatGPT
             /// </summary>
@@ -99,6 +163,8 @@ namespace AKCondinoO.World.SimObjects{
             void RecursivelyReserveBounds(GridIterationSetup setup,Vector2Int center){
              SpawnMapFiles spawnMapFiles=(PersistentDataManager.singleton.GetFileManager(typeof(SpawnMapFiles))as SpawnMapFiles);
              int layer=setup.layer;
+             var recursionContext=RecursionContext.pool.Rent();
+             recursionContext.Init(this,layer);
              var gridIteration=SetupGridIteration(setup,center);
              var gridSize=gridIteration.gridSize;
              var start=gridIteration.start;
@@ -107,15 +173,19 @@ namespace AKCondinoO.World.SimObjects{
              for(int x=start.x;x<=end.x;x+=gridSize){
              for(int z=start.z;z<=end.z;z+=gridSize){
               Vector3Int worldCoord=new(x,0,z);
-              DoRecursion(setup,worldCoord,null,spawnMapFiles);
+              if(DoRecursion(setup,worldCoord,null,spawnMapFiles,recursionContext)){
+              }
              }}
              if(debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
-              Logs.Debug(()=>"layer.."+layer+"..spawn count:"+debugSpawns.Count);
+              //Logs.Debug(()=>"layer.."+layer+"..spawn count:"+debugSpawns.Count);
              }
+             recursionContext.Commit(spawnList,spawnMapFiles,debugSpawnCoords);
+             RecursionContext.pool.Return(recursionContext);
             }
          static readonly Utilities.ObjectPool<List<SpawnConflict>>conflictsListPool=
           Pool.GetPool<List<SpawnConflict>>("",()=>new(),(List<SpawnConflict>item)=>{item.Clear();});
             internal struct SpawnCandidate{
+             internal int recursionCalls;
              internal CandidateState state;
              internal Vector3Int worldCoord;
              internal SpawnEntry spawnEntry;
@@ -134,8 +204,8 @@ namespace AKCondinoO.World.SimObjects{
              Rejected,
              Accepted,
             }
-            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord,Vector3Int?caller,SpawnMapFiles spawnMapFiles){
-             if(visited.TryGetValue(worldCoord,out var visitedCandidate)){
+            bool DoRecursion(GridIterationSetup setup,Vector3Int worldCoord,Vector3Int?caller,SpawnMapFiles spawnMapFiles,RecursionContext context){
+             if(context.visited.TryGetValue(worldCoord,out var visitedCandidate)){
               switch(visitedCandidate.state){
                case(CandidateState.Resolving):{
                 if(caller.HasValue)
@@ -150,7 +220,7 @@ namespace AKCondinoO.World.SimObjects{
               state=CandidateState.Resolving,
               worldCoord=worldCoord,
              };
-             visited[worldCoord]=candidate;
+             context.visited[worldCoord]=candidate;
              int layer=setup.layer;
              Vector3Int coord=worldCoord-new Vector3Int(this.cnkRgn.x,0,this.cnkRgn.y)+new Vector3Int(Width/2,0,Depth/2);
              var cCoord=this.cCoord;
@@ -167,29 +237,53 @@ namespace AKCondinoO.World.SimObjects{
                out candidate.rot
               );
               candidate.state=CandidateState.Accepted;
-              visited[worldCoord]=candidate;
-              var reserve=Reserve(layer,vCoord,cCoord,candidate);
+              context.visited[worldCoord]=candidate;
+              RecursionContext.UncommitedSpawn uncommitedSpawn=new(){
+               cCoord=cCoord,
+               vCoord=vCoord,
+               fromFile=true,
+               empty=false,
+               candidate=candidate,
+              };
+              var reservation=Reservation(candidate);
+              uncommitedSpawn.reservation=reservation;
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
                SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
-                reserve.pos,reserve.rot,reserve.scale
+                reservation.pos,reservation.rot,reservation.scale
                ){
                };
-               spawnList.Add(spawn);
+               uncommitedSpawn.simObjectSpawn=spawn;
               }
+              context.uncommited.Add(worldCoord,uncommitedSpawn);
               return true;
              }
              if(result==SpawnMapFileReadResult.Empty){
               //Logs.Debug(()=>"'ReadFromSpawnMapFile':empty:"+empty);
               candidate.state=CandidateState.Rejected;
-              visited[worldCoord]=candidate;
+              context.visited[worldCoord]=candidate;
+              RecursionContext.UncommitedSpawn uncommitedSpawn=new(){
+               cCoord=cCoord,
+               vCoord=vCoord,
+               fromFile=true,
+               empty=true,
+               candidate=candidate,
+              };
+              context.uncommited.Add(worldCoord,uncommitedSpawn);
               return false;
              }
              //Logs.Debug(()=>"'get entry should not be called anymore if generation was completed and saved':result:"+result);
              if(!GetEntry(layer,vCoord,cCoord,out var spawnEntry,out SpawnVariation variation,out SpawnSurface surface)){
               candidate.state=CandidateState.Rejected;
-              visited[worldCoord]=candidate;
-              spawnMapFiles?.WriteEmptyToSpawnMapFile(cnkRgn,layer,vCoord);
+              context.visited[worldCoord]=candidate;
+              RecursionContext.UncommitedSpawn uncommitedSpawn=new(){
+               cCoord=cCoord,
+               vCoord=vCoord,
+               fromFile=false,
+               empty=true,
+               candidate=candidate,
+              };
+              context.uncommited.Add(worldCoord,uncommitedSpawn);
               return false;
              }
              candidate.spawnEntry=new SpawnEntry(){
@@ -202,7 +296,7 @@ namespace AKCondinoO.World.SimObjects{
               candidate.spawnEntry,candidate.variation,candidate.surface,
               out candidate.rot
              );
-             visited[worldCoord]=candidate;
+             context.visited[worldCoord]=candidate;
              var conflictsList=conflictsListPool.Rent();
              CollectConflicts(setup,worldCoord,conflictsList);
              bool blocked=false;
@@ -212,7 +306,7 @@ namespace AKCondinoO.World.SimObjects{
                continue;
               if(!ConflictBlocks(setup,conflict,candidate))
                continue;
-              if(DoRecursion(setup,conflict.worldCoord,worldCoord,spawnMapFiles)){
+              if(DoRecursion(setup,conflict.worldCoord,worldCoord,spawnMapFiles,context)){
                blocked=true;
                break;
               }
@@ -226,22 +320,37 @@ namespace AKCondinoO.World.SimObjects{
              }
              if(blocked){
               candidate.state=CandidateState.Rejected;
-              visited[worldCoord]=candidate;
-              spawnMapFiles?.WriteEmptyToSpawnMapFile(cnkRgn,layer,vCoord);
+              context.visited[worldCoord]=candidate;
+              RecursionContext.UncommitedSpawn uncommitedSpawn=new(){
+               cCoord=cCoord,
+               vCoord=vCoord,
+               fromFile=false,
+               empty=true,
+               candidate=candidate,
+              };
+              context.uncommited.Add(worldCoord,uncommitedSpawn);
               return false;
              }else{
               candidate.state=CandidateState.Accepted;
-              visited[worldCoord]=candidate;
-              var reserve=Reserve(layer,vCoord,cCoord,candidate);
-              spawnMapFiles?.WriteToSpawnMapFile(cnkRgn,layer,vCoord,candidate,reserve);
+              context.visited[worldCoord]=candidate;
+              RecursionContext.UncommitedSpawn uncommitedSpawn=new(){
+               cCoord=cCoord,
+               vCoord=vCoord,
+               fromFile=false,
+               empty=false,
+               candidate=candidate,
+              };
+              var reservation=Reservation(candidate);
+              uncommitedSpawn.reservation=reservation;
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
                SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
-                reserve.pos,reserve.rot,reserve.scale
+                reservation.pos,reservation.rot,reservation.scale
                ){
                };
-               spawnList.Add(spawn);
+               uncommitedSpawn.simObjectSpawn=spawn;
               }
+              context.uncommited.Add(worldCoord,uncommitedSpawn);
               return true;
              }
             }
@@ -575,8 +684,7 @@ namespace AKCondinoO.World.SimObjects{
              internal Vector3 scale;
              internal OrientedBounds obb;
             }
-            SpawnReserve Reserve(int layer,Vector3Int vCoord,Vector2Int cCoord,SpawnCandidate candidate){
-             Vector2Int cnkRgn=cCoordTocnkRgn(cCoord);
+            SpawnReserve Reservation(SpawnCandidate candidate){
              Vector3 pos=candidate.obb.spawnPos;
              var bounds=candidate.spawnEntry.bounds;
              var spawnReserve=new SpawnReserve(){
@@ -586,11 +694,6 @@ namespace AKCondinoO.World.SimObjects{
               scale=candidate.variation.scale,
               obb=candidate.obb,
              };
-             WorldSimObjectSpatialMap.RegisterSimObjectSpawn(layer,cCoord,spawnReserve);
-             if(!debugSpawnCoords.TryGetValue(layer,out var debugSpawns)){
-              debugSpawnCoords.Add(layer,debugSpawns=new());
-             }
-             debugSpawns.Add(spawnReserve);
              return spawnReserve;
             }
             public void OnCompletedDoAtMainThread(){

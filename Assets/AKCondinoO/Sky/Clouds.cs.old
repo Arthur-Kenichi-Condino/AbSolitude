@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class Clouds:MonoBehaviour{
+    public GameObject CloudParticlePrefab;
+    public int MaxClouds=10;
+    List<CloudParticle>clouds=new List<CloudParticle>();
+    public System.Random Random=new System.Random();
+    public static Clouds _get{get;private set;}
+    void OnEnable(){
+                      if(_get==null){
+                         _get=(this);
+                      }else{
+    return;
+                      }   
+        for(int i=0;i<MaxClouds;i++){
+            clouds.Add(Instantiate(CloudParticlePrefab,transform).GetComponent<CloudParticle>());
+            clouds[i].name=CloudParticlePrefab.name+i;
+        }
+    }
+    void OnDestroy(){
+                      if(_get==this){
+                         _get=(null);
+                      }else{
+    return;
+                      }   
+    }
+    public Color Dawn =new Color(1.000f,0.670f,0.169f,0.38f);
+    public Color Day  =new Color(0.502f,0.502f,0.502f,0.38f);
+    public Color Night=new Color(0.040f,0.040f,0.040f,0.38f);
+    public Color Set  =new Color(1.000f,0.670f,0.169f,0.38f);
+    [NonSerialized]public Color CloudsColor=ColorHelper.HexToColor("808080",94);
+    float CloudsInverseColorLerpValue;
+    //  Update is called once per frame
+    void Update(){
+        //--------------------------------------------------------------------------------------------
+        if      (GameTime._get.TimeOfDay> 0.75f*GameTime._get._DAY||
+                 GameTime._get.TimeOfDay< 0.25f*GameTime._get._DAY){//  Night
+            CloudsColor=Night;
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.67f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.71f*GameTime._get._DAY){//  Set
+            CloudsInverseColorLerpValue=(0.71f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            CloudsColor.r=Mathf.Lerp(Day.r,Set.r,1f-CloudsInverseColorLerpValue);
+            CloudsColor.g=Mathf.Lerp(Day.g,Set.g,1f-CloudsInverseColorLerpValue);
+            CloudsColor.b=Mathf.Lerp(Day.b,Set.b,1f-CloudsInverseColorLerpValue); 
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.71f*GameTime._get._DAY){
+            CloudsInverseColorLerpValue=(0.75f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;if(CloudsInverseColorLerpValue>1f)CloudsInverseColorLerpValue=1f;
+            CloudsColor.r=Mathf.Lerp(Set.r,Night.r,1f-CloudsInverseColorLerpValue);
+            CloudsColor.g=Mathf.Lerp(Set.g,Night.g,1f-CloudsInverseColorLerpValue);
+            CloudsColor.b=Mathf.Lerp(Set.b,Night.b,1f-CloudsInverseColorLerpValue); 
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.25f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.29f*GameTime._get._DAY){
+            CloudsInverseColorLerpValue=(0.29f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            CloudsColor.r=Mathf.Lerp(Night.r,Dawn.r,1f-CloudsInverseColorLerpValue);
+            CloudsColor.g=Mathf.Lerp(Night.g,Dawn.g,1f-CloudsInverseColorLerpValue);
+            CloudsColor.b=Mathf.Lerp(Night.b,Dawn.b,1f-CloudsInverseColorLerpValue);
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.29f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.33f*GameTime._get._DAY){
+            CloudsInverseColorLerpValue=(0.33f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            CloudsColor.r=Mathf.Lerp(Dawn.r,Day.r,1f-CloudsInverseColorLerpValue);
+            CloudsColor.g=Mathf.Lerp(Dawn.g,Day.g,1f-CloudsInverseColorLerpValue);
+            CloudsColor.b=Mathf.Lerp(Dawn.b,Day.b,1f-CloudsInverseColorLerpValue);
+        //--------------------------------------------------------------------------------------------
+        }else{
+            CloudsColor=Day;
+        //--------------------------------------------------------------------------------------------
+        }
+    }
+}

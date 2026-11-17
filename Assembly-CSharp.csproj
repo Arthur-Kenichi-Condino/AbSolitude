@@ -361,6 +361,7 @@
     <Compile Include="Assets\AKCondinoO\Sims\Actors\Skills\Catalogue\Area\AreaSkill.cs" />
     <Compile Include="Assets\AKCondinoO.ExternalCode\ricardojmendez\LibNoise.Unity\Operator\Displace.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\InspectStateDefinition.cs" />
+    <Compile Include="Assets\AKCondinoO.Ambience\SimulationTime.cs" />
     <Compile Include="Assets\AKCondinoO.World\MultiplyModuleNode.cs" />
     <Compile Include="Assets\AKCondinoO.SimObjects\SimInteractionResolver.cs" />
     <Compile Include="Assets\AKCondinoO\Util\Vector3Util.cs" />
@@ -553,6 +554,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\AKCondinoO\Voxels\Water\Water4\WaterInclude.cginc" />
     <None Include="Assets\AKCondinoO.ExternalCode\umasteeringgroup\UMA\UMAProject\Assets\UMA\InternalDataStore\InGame\Resources\Shader\NormalShader.compute" />
+    <None Include="Assets\AKCondinoO\Sky\Materials\NightDome.shader" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainInput.cginc" />
     <None Include="Assets\CatlikeCoding\Shaders\AKCondinoO\Voxels\Terrain\CatlikeCodingVoxelTerrainLighting.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />

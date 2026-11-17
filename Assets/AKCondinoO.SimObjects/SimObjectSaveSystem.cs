@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.PersistentData;
 using AKCondinoO.Utilities;
+using AKCondinoO.World;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,12 +94,17 @@ namespace AKCondinoO.SimObjects{
         protected static void ReturnPersistentData(SimObjectPersistentData data){
          SimObjectPersistentData.Return(data.GetType(),data);
         }
+     internal HashSet<Vector2Int>pendingLoad=new();
+        internal void OnChunkExists(WorldChunk chunk){
+         var cCoord=chunk.cCoord;
+         pendingLoad.Add(cCoord);
+        }
      private float processPendingInterval=5f;
      private float processPendingTimer;
         internal void OnManualUpdate(){
          if(processPendingInterval>0f){
           if(processPendingTimer<processPendingInterval){
-           processPendingTimer+=Time.unscaledDeltaTime;
+           processPendingTimer+=Time.deltaTime;
           }
           if(processPendingTimer>=processPendingInterval){
            if(TryProcessPending()){
@@ -113,20 +119,31 @@ namespace AKCondinoO.SimObjects{
          if(processing){
           return false;
          }
-         if(pendingSave.Count>0){
-          Logs.Debug(()=>"'process pending save data, count':"+pendingSave.Count);
+         bool pending=
+          pendingSave.Count>0||
+          pendingLoad.Count>0;
+         if(pending){
           processing=true;
-          var scheduleForProcessing=pendingSave;
-          pendingSave=processingSave;
-          processingSave=scheduleForProcessing;
+          Dictionary<SimObjectSaveKey,SimObjectSaveValue>scheduleForProcessing=null;
+          if(pendingSave.Count>0){
+           Logs.Debug(()=>"'process pending save data, count':"+pendingSave.Count);
+           scheduleForProcessing=pendingSave;
+           pendingSave=processingSave;
+           processingSave=scheduleForProcessing;
+          }
+          if(pendingLoad.Count>0){
+           Logs.Debug(()=>"'process pending load data, count':"+pendingLoad.Count);
+          }
           processSaveFilesJob=ProcessSaveFilesJob.pool.Rent();
           processSaveFilesJob.processingSave=processingSave;
           bool scheduled=ThreadDispatcher.TrySchedule(processSaveFilesJob);
           Logs.Debug(()=>"scheduled:"+scheduled);
           if(!scheduled){
            Logs.Warning("'pending save data could not be processed, count':"+processingSave.Count);
-           processingSave=pendingSave;
-           pendingSave=scheduleForProcessing;
+           if(scheduleForProcessing!=null){
+            processingSave=pendingSave;
+            pendingSave=scheduleForProcessing;
+           }
            ProcessSaveFilesJob.pool.Return(processSaveFilesJob);
            processSaveFilesJob=null;
            processing=false;

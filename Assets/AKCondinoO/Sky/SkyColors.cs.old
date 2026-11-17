@@ -1,0 +1,83 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class SkyColors:MonoBehaviour{
+        public bool DEBUG_LOG=false;
+    public Color Clear=ColorHelper.HexToColor("9CD2E7");
+    public Color Dawn =ColorHelper.HexToColor("F8C6FF");
+    public Color Set  =ColorHelper.HexToColor("F8C6FF");
+    public Color Night=Color.black;
+    //  SkySphere
+    public Material     SkySphereMaterial;
+                  float SkySphereInverseColorLerpValue;
+                  Color SkySphereColor;
+    public Material     NightDomeMaterial;
+                  float NightDomeInverseVisibility;
+    //  Update is called once per frame
+    void Update(){
+        //--------------------------------------------------------------------------------------------
+#region SkySphere
+        //--------------------------------------------------------------------------------------------
+        if      (GameTime._get.TimeOfDay> 0.75f*GameTime._get._DAY||
+                 GameTime._get.TimeOfDay< 0.25f*GameTime._get._DAY){//  Das 18 h às 06 h
+            SkySphereColor=Night;
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.67f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.71f*GameTime._get._DAY){//  Das 16 h às 17 h
+            SkySphereInverseColorLerpValue=(0.71f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            SkySphereColor.r=Mathf.Lerp(Clear.r,Set.r,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.g=Mathf.Lerp(Clear.g,Set.g,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.b=Mathf.Lerp(Clear.b,Set.b,1f-SkySphereInverseColorLerpValue);
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.71f*GameTime._get._DAY){// A partir das 17 h 
+            SkySphereInverseColorLerpValue=(0.75f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;if(SkySphereInverseColorLerpValue>1f)SkySphereInverseColorLerpValue=1f;
+            SkySphereColor.r=Mathf.Lerp(Set.r,Night.r,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.g=Mathf.Lerp(Set.g,Night.g,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.b=Mathf.Lerp(Set.b,Night.b,1f-SkySphereInverseColorLerpValue); 
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.25f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.29f*GameTime._get._DAY){//  Das 06 h às 07 h
+            SkySphereInverseColorLerpValue=(0.29f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            SkySphereColor.r=Mathf.Lerp(Night.r,Dawn.r,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.g=Mathf.Lerp(Night.g,Dawn.g,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.b=Mathf.Lerp(Night.b,Dawn.b,1f-SkySphereInverseColorLerpValue);
+        //--------------------------------------------------------------------------------------------
+        }else if(GameTime._get.TimeOfDay>=0.29f*GameTime._get._DAY&&
+                 GameTime._get.TimeOfDay< 0.33f*GameTime._get._DAY){//  Das 07 h às 08 h
+            SkySphereInverseColorLerpValue=(0.33f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+            SkySphereColor.r=Mathf.Lerp(Dawn.r,Clear.r,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.g=Mathf.Lerp(Dawn.g,Clear.g,1f-SkySphereInverseColorLerpValue);
+            SkySphereColor.b=Mathf.Lerp(Dawn.b,Clear.b,1f-SkySphereInverseColorLerpValue);
+        //--------------------------------------------------------------------------------------------
+        }else{
+            SkySphereColor=Clear;
+        //--------------------------------------------------------------------------------------------
+        }
+        //  Apply to Material
+        SkySphereMaterial.color=SkySphereColor;
+#endregion
+        //--------------------------------------------------------------------------------------------
+#region NightDome
+        //--------------------------------------------------------------------------------------------
+        if      (GameTime._get.TimeOfDay>0.75f*GameTime._get._DAY||
+                 GameTime._get.TimeOfDay<0.25f*GameTime._get._DAY){//Night
+            NightDomeInverseVisibility=0.0f;
+if(DEBUG_LOG)Log.print("_Night_");
+        }else if(GameTime._get.TimeOfDay>0.71f*GameTime._get._DAY){//Set
+            NightDomeInverseVisibility=(0.75f*GameTime._get._DAY-GameTime._get.TimeOfDay)/GameTime._get._HOUR;
+if(DEBUG_LOG)Log.print("_Set_");
+        }else if(GameTime._get.TimeOfDay<0.29f*GameTime._get._DAY){//Dawn
+            NightDomeInverseVisibility=(GameTime._get.TimeOfDay-0.25f*GameTime._get._DAY)/GameTime._get._HOUR;
+if(DEBUG_LOG)Log.print("_Dawn_");
+        }else{//Day
+            NightDomeInverseVisibility=1.0f;
+if(DEBUG_LOG)Log.print("_Day_");
+        }
+        //  Apply to Material
+if(DEBUG_LOG)Log.print("_NightDomeInverseVisibility:"+NightDomeInverseVisibility+"_");
+        NightDomeMaterial.SetFloat("_Alpha",1-NightDomeInverseVisibility);
+        NightDomeMaterial.SetFloat("_TimeOfDay",GameTime._get.TimeOfDay);
+#endregion
+        //--------------------------------------------------------------------------------------------
+    }
+}

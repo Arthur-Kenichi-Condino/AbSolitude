@@ -1,0 +1,126 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static Clouds;
+public class CloudParticle:MonoBehaviour{
+    public bool DEBUG_DRAW=false;
+    Material material;
+    void OnEnable(){
+        material=GetComponent<MeshRenderer>().material;
+        AlphaSet.Value+=(float)_get.Random.NextDouble()*(AlphaSet.Max-AlphaSet.Min)+AlphaSet.Min;
+        Distance.ToTranslate.z=(float)_get.Random.NextDouble()*(Distance.Max.z-Distance.Min.z)+Distance.Min.z;
+        transform.Translate(Vector3.forward*Distance.ToTranslate.z,Space.Self);
+        OrbitSet.ToRotate.x=(float)_get.Random.NextDouble()*360f;
+        OrbitSet.ToRotate.y=(float)_get.Random.NextDouble()*360f;
+        OrbitSet.ToRotate.z=(float)_get.Random.NextDouble()*360f;
+        transform.RotateAround(_get.transform.position,Vector3.right  ,OrbitSet.ToRotate.x);
+        transform.RotateAround(_get.transform.position,Vector3.up     ,OrbitSet.ToRotate.y);
+        transform.RotateAround(_get.transform.position,Vector3.forward,OrbitSet.ToRotate.z);
+        Rotation.Value=Quaternion.AngleAxis((float)_get.Random.NextDouble()*360f,transform.forward)*Rotation.Value;
+        transform.LookAt(_get.transform,Rotation.Value);
+        ScaleSet.Value.x=(float)_get.Random.NextDouble()*(ScaleSet.Max-ScaleSet.Min)+ScaleSet.Min;
+        ScaleSet.Value.y=(float)_get.Random.NextDouble()*(ScaleSet.Max-ScaleSet.Min)+ScaleSet.Min;
+        ScaleSet.Value.z=1;
+        transform.localScale=ScaleSet.Value;
+    }
+    Color CurrentColor=new Color(0.5f,0.5f,0.5f,0.37f);
+    //  Update is called once per frame
+    void Update(){
+#region Alpha
+        AlphaSet.Value+=(AlphaSet.IncrementSpeed*Time.deltaTime);
+        if(AlphaSet.Value<=AlphaSet.Min){
+           AlphaSet.Value=(AlphaSet.Min);
+           AlphaSet.IncrementSpeed=-AlphaSet.IncrementSpeed;
+        }else if(AlphaSet.Value>=AlphaSet.Max){
+                 AlphaSet.Value=(AlphaSet.Max);
+                 AlphaSet.IncrementSpeed=-AlphaSet.IncrementSpeed;
+        }
+#endregion
+#region OrbitAroundCamera
+        OrbitSet.ToRotate=OrbitSet.IncrementSpeed*Time.deltaTime;
+        transform.RotateAround(_get.transform.position,Vector3.right  ,OrbitSet.ToRotate.x);
+        transform.RotateAround(_get.transform.position,Vector3.up     ,OrbitSet.ToRotate.y);
+        transform.RotateAround(_get.transform.position,Vector3.forward,OrbitSet.ToRotate.z);
+#endregion
+#region RotateSelf
+        Rotation.Value=Quaternion.AngleAxis(Rotation.IncrementSpeed*Time.deltaTime,transform.forward)*Rotation.Value;
+        transform.LookAt(_get.transform,Rotation.Value);
+#endregion
+#region DistanceZToCamera
+        Distance.ToTranslate.z=Distance.IncrementSpeed.z*Time.deltaTime;
+        //------------------------------------------------------------------------------------------------------------------------------------------
+        if((Distance.FromCamera=Vector3.Distance(_get.transform.position,transform.position))<Distance.Min.z){
+            Distance.ToTranslate.z=-(Distance.Min.z-Distance.FromCamera);//  Forward do Quad da partícula é apontado pro centro (câmera)
+            Distance.IncrementSpeed.z=-Math.Abs(Distance.IncrementSpeed.z);
+        //------------------------------------------------------------------------------------------------------------------------------------------
+        }else if(Distance.FromCamera>Distance.Max.z){
+                 Distance.ToTranslate.z=(Distance.FromCamera-Distance.Max.z);//  ^ (nota acima)
+                 Distance.IncrementSpeed.z= Math.Abs(Distance.IncrementSpeed.z);
+        //------------------------------------------------------------------------------------------------------------------------------------------
+        }
+                transform.Translate(Vector3.forward*Distance.ToTranslate.z,Space.Self);
+#endregion
+#region Scale
+        ScaleSet.IncrementValueNext=ScaleSet.IncrementSpeed*Time.deltaTime;
+        ScaleSet.Value.x=transform.localScale.x-(ScaleSet.IncrementValueNext);
+        ScaleSet.Value.y=transform.localScale.y-(ScaleSet.IncrementValueNext);
+        ScaleSet.Value.z=1;
+        if(ScaleSet.Value.x<=ScaleSet.Min||ScaleSet.Value.y<=ScaleSet.Min){ 
+           ScaleSet.Value.x=(ScaleSet.Min);ScaleSet.Value.y=(ScaleSet.Min);
+           ScaleSet.IncrementSpeed=-ScaleSet.IncrementSpeed;
+        }else if(ScaleSet.Value.x>=ScaleSet.Max||ScaleSet.Value.y>=ScaleSet.Max){
+                 ScaleSet.Value.x=(ScaleSet.Max);ScaleSet.Value.y=(ScaleSet.Max);
+                 ScaleSet.IncrementSpeed=-ScaleSet.IncrementSpeed;
+        }
+        transform.localScale=ScaleSet.Value;
+#endregion
+if(DEBUG_DRAW)Debug.DrawLine(transform.position,_get.transform.position,Color.gray);
+if(DEBUG_DRAW)Debug.DrawRay(transform.position,transform.forward);
+        CurrentColor.r=_get.CloudsColor.r;
+        CurrentColor.g=_get.CloudsColor.g;
+        CurrentColor.b=_get.CloudsColor.b;
+        CurrentColor.a=AlphaSet.Value;
+        material.SetColor("_TintColor",CurrentColor);
+    }
+    public AlphaSettings AlphaSet=new AlphaSettings();[Serializable]public class AlphaSettings{
+        public float Value=0;
+        public float Min=0;
+        public float Max=0.37255f;
+        public float IncrementSpeed=3.05178E-02f;
+        public float TryInvertingInterval=13f;
+        public int   ChanceToInvert=15;
+    }
+    public OrbitSettings OrbitSet=new OrbitSettings();[Serializable]public class OrbitSettings{
+        public Vector3 ToRotate;
+        public Vector3 Min=new Vector3(001,001,001);
+        public Vector3 Max=new Vector3(720,720,720);
+        public Vector3 IncrementSpeed=new Vector3(0.0625f,0.0625f,0.0625f);
+        public float   TryInvertingInterval=39f;
+        public Vector3 ChanceToInvert=new Vector3(15f,15f,15f);
+    }
+    public RotationSettings Rotation=new RotationSettings();[Serializable]public class RotationSettings{
+        public Vector3 Value=Vector3.up;
+        public float   IncrementSpeed=0.50f;
+        public float   TryInvertingInterval=52f;
+        public int     ChanceToInvert=15;
+    }
+    public DistanceSettings Distance=new DistanceSettings();[Serializable]public class DistanceSettings{
+        public Vector3 ToTranslate=Vector3.zero;
+        public float   FromCamera;
+        public Vector3 Min=new Vector3(01,01,01);
+        public Vector3 Max=new Vector3(10,10,10);
+        public Vector3 IncrementSpeed=new Vector3(0.0625f,0.0625f,0.0625f);
+        public float   TryInvertingInterval=39f;
+        public Vector3 ChanceToInvert=new Vector3(25,25,25);
+    }
+    public ScaleSettings ScaleSet=new ScaleSettings();[Serializable]public class ScaleSettings{
+        public Vector3 Value=Vector3.zero;
+        public float   Min=05;
+        public float   Max=30;
+        public float   IncrementSpeed=6.10352E-05f;
+        public float   IncrementValueNext;
+        public float   TryInvertingInterval=52f;
+        public int     ChanceToInvert=50;
+    }
+}

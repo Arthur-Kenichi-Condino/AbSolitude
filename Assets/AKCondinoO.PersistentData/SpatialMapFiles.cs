@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -93,6 +94,38 @@ namespace AKCondinoO.PersistentData{
           key=new SpatialMapKey(type,variant,id),
           out index
          );
+        }
+        internal bool ReadFromSpatialMapFile(Vector2Int cnkRgn,List<SpatialMapKey>keys){
+         var filePath=GetSpatialMapSaveFilePath(cnkRgn);
+         using(var fileHandle=(SpatialMapFileHandle)GetOrOpenSaveFile(filePath,true)){
+          using(var readerLease=fileHandle.AcquireReader(false)){
+           var reader=readerLease.reader;
+           if(reader==null){
+            return false;
+           }
+           var stream=reader.BaseStream;
+           long fileLength=stream.Length;
+           var headerSize=fileHandle.GetHeaderSize();
+           if(headerSize<0){
+            return false;
+           }
+           int version=fileHandle.GetHeaderVersion();
+           if(version<0){
+            return false;
+           }
+           if(fileHandle.TryGetIndexesEnumerator(out var enumerator)){
+            while(enumerator.MoveNext()){
+             var key=enumerator.Current.Key;
+             var index=enumerator.Current.Value;
+             ReadSpatialMapSimObject(key,keys);
+            }
+           }
+           return true;
+          }
+         }
+        }
+        internal void ReadSpatialMapSimObject(SpatialMapKey key,List<SpatialMapKey>keys){
+         keys.Add(key);
         }
         internal readonly struct SpatialMapKey:IEquatable<SpatialMapKey>{
          public readonly Type type;
@@ -327,6 +360,12 @@ namespace AKCondinoO.PersistentData{
         protected SpatialMapFile GetSpatialMapFile(){
          return CurrentFile()as SpatialMapFile;
         }
+        internal int GetHeaderSize(){
+         return GetSpatialMapFile()?.GetHeaderSize()??-1;
+        }
+        internal int GetHeaderVersion(){
+         return GetSpatialMapFile()?.GetHeaderVersion()??-1;
+        }
         internal void SetIndex(
          SpatialMapKey key,
          SpatialMapIndex index
@@ -342,6 +381,15 @@ namespace AKCondinoO.PersistentData{
           return file.indexes.TryGetValue(key,out index);
          }
          index=new(){offset=-1,};
+         return false;
+        }
+        internal bool TryGetIndexesEnumerator(out Dictionary<SpatialMapKey,SpatialMapIndex>.Enumerator enumerator){
+         var file=GetSpatialMapFile();
+         if(file!=null){
+          enumerator=file.indexes.GetEnumerator();
+          return true;
+         }
+         enumerator=default;
          return false;
         }
     }

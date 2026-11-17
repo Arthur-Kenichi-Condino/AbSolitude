@@ -1,3 +1,4 @@
+using AKCondinoO.Ambience;
 using AKCondinoO.PersistentData;
 using AKCondinoO.SimActors;
 using AKCondinoO.SimObjects;
@@ -15,6 +16,7 @@ namespace AKCondinoO.Bootstrap{
       {typeof(PersistentDataManager   ), 110},
       {typeof(InputHandler            ), 200},
       {typeof(UISystem                ), 300},
+      {typeof(SimulationTime          ), 390},
       {typeof(GameOrchestrator        ), 400},
       {typeof(MainCamera              ), 500},
       {typeof(BiomesSystem            ), 600},
