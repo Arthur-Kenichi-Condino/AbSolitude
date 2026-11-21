@@ -2600,6 +2600,290 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: realTimeHoursInGameDay
+      value: 0.0016666668
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime4
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime5
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime6
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.ctime7
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key2.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key3.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key3.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key3.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key4.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key4.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key4.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key5.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key5.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key5.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key6.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key6.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key6.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key7.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key7.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.key7.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.ctime1
+      value: 32768
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.ctime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.key2.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].lateNightColor.m_NumColorKeys
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].ambientLightColor.m_NumColorKeys
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key1.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[0].ambientLightGradient.key1.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[1].ambientLightGradient.ctime0
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[1].ambientLightGradient.key0.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[1].ambientLightGradient.key0.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[1].ambientLightGradient.key1.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[1].ambientLightGradient.key1.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[2].ambientLightGradient.key0.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[2].ambientLightGradient.key0.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[2].ambientLightGradient.key1.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[2].ambientLightGradient.key1.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key0.b
+      value: 0.90588236
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key0.g
+      value: 0.8235294
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key0.r
+      value: 0.6117647
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key1.b
+      value: 0.90588236
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key1.g
+      value: 0.8235294
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[3].ambientLightGradient.key1.r
+      value: 0.6117647
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[4].ambientLightGradient.key0.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[4].ambientLightGradient.key0.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[4].ambientLightGradient.key1.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[4].ambientLightGradient.key1.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[5].ambientLightGradient.key0.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[5].ambientLightGradient.key0.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[5].ambientLightGradient.key1.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[5].ambientLightGradient.key1.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key1.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6049093194964522477, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
+      propertyPath: seasons.Array.data[1].dayPeriods.Array.data[6].ambientLightGradient.key1.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2682213598731880854, guid: 8c78305bc7a2aa6488df3045e9b9d8ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
