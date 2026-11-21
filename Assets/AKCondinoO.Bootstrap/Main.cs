@@ -44,6 +44,7 @@ namespace AKCondinoO.Bootstrap{
           SingletonManager.ShutdownAll();
           ActiveZone.ShutdownAny();
           Pool.MultithreadedReturnDispatcher.Shutdown();
+          LeastRecentlyUsedCache.Shutdown();
          }
          base.OnDestroy();
         }

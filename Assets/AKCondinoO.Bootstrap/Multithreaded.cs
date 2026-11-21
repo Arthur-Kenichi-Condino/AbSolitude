@@ -1,7 +1,10 @@
+using AKCondinoO.Utilities;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 namespace AKCondinoO.Bootstrap{
     internal interface MultithreadedContainerJob{
@@ -136,6 +139,123 @@ namespace AKCondinoO.Bootstrap{
           }
           return false;
          }
+        }
+    }
+    internal sealed class TaskDispatcher:TaskScheduler,IDisposable{
+     static readonly ConcurrentDictionary<TaskDispatcherKey,Lazy<Utilities.ObjectPool<TaskDispatcher>>>pools=new();
+        internal readonly struct TaskDispatcherKey:IEquatable<TaskDispatcherKey>{
+         internal readonly int degree;
+         internal readonly System.Threading.ThreadPriority priority;
+         internal readonly bool isBackground;
+         internal TaskDispatcherKey(
+          int degree,
+          System.Threading.ThreadPriority priority,
+          bool isBackground
+         ){
+          this.degree=degree;
+          this.priority=priority;
+          this.isBackground=isBackground;
+         }
+         public bool Equals(TaskDispatcherKey other){
+          return degree==other.degree
+           &&priority==other.priority
+           &&isBackground==other.isBackground;
+         }
+         public override bool Equals(object obj){
+          return obj is TaskDispatcherKey other&&Equals(other);
+         }
+         public override int GetHashCode(){
+          return HashCode.Combine(degree,priority,isBackground);
+         }
+        }
+        readonly struct TaskDispatcherFactorySettings{
+         internal readonly int degree;
+         internal readonly System.Threading.ThreadPriority priority;
+         internal readonly bool isBackground;
+         internal TaskDispatcherFactorySettings(TaskDispatcherKey key){
+          degree=key.degree;
+          priority=key.priority;
+          isBackground=key.isBackground;
+         }
+         internal TaskDispatcher Create(){
+          return new TaskDispatcher(degree,priority,isBackground);
+         }
+        }
+        internal sealed class TaskDispatcherFactory{
+         internal readonly TaskDispatcherKey key;
+         readonly TaskDispatcherFactorySettings settings;
+         internal TaskDispatcherFactory(TaskDispatcherKey key){
+          this.key=key;
+          this.settings=new TaskDispatcherFactorySettings(key);
+         }
+         internal TaskDispatcher Create()=>settings.Create();
+         internal void Reset(TaskDispatcher item){
+          item.OnReturnToPoolRecycle();
+         }
+        }
+        internal static TaskDispatcher RentTaskDispatcher(
+         TaskDispatcherFactory factory
+        ){
+         var key=factory.key;
+         return pools.GetOrAdd(
+          key,
+          k=>new Lazy<Utilities.ObjectPool<TaskDispatcher>>(
+           ()=>Pool.GetPool<TaskDispatcher>(
+            $"{k.degree}:{(int)k.priority}:{k.isBackground}",
+            factory.Create,
+            factory.Reset,
+            multithreaded:true
+           ),
+           LazyThreadSafetyMode.ExecutionAndPublication
+          )
+         ).Value.Rent();
+        }
+        internal static void ReturnTaskDispatcher(
+         TaskDispatcherFactory factory,
+         TaskDispatcher dispatcher
+        ){
+         var key=factory.key;
+         Pool.GetPool<TaskDispatcher>(
+          $"{key.degree}:{(int)key.priority}:{key.isBackground}",
+          factory.Create,
+          factory.Reset,
+          multithreaded:true
+         ).Return(dispatcher);
+        }
+     readonly BlockingCollection<Task>tasks=new();
+     readonly Thread[]workers;
+     bool disposed;
+        public TaskDispatcher(int degree,System.Threading.ThreadPriority priority=System.Threading.ThreadPriority.BelowNormal,bool isBackground=false){
+         workers=new Thread[degree];
+         for(int i=0;i<degree;i++){
+          workers[i]=new(Execute){
+           IsBackground=isBackground,
+           Priority=priority
+          };
+          workers[i].Start();
+         }
+        }
+        internal void OnReturnToPoolRecycle(){
+        }
+     public override int MaximumConcurrencyLevel=>workers.Length;
+        protected override void QueueTask(Task task){
+         tasks.Add(task);
+        }
+        protected override bool TryExecuteTaskInline(Task task,bool taskWasPreviouslyQueued){
+         return false;
+        }
+        protected override IEnumerable<Task>GetScheduledTasks(){
+         return tasks.ToArray();
+        }
+        void Execute(){
+         foreach(var task in tasks.GetConsumingEnumerable())
+          TryExecuteTask(task);
+        }
+        public void Dispose(){
+         tasks.CompleteAdding();
+         foreach(var worker in workers)
+          worker.Join();
+         tasks.Dispose();
         }
     }
 }

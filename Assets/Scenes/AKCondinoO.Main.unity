@@ -1122,6 +1122,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.0008861054
       objectReference: {fileID: 0}
+    - target: {fileID: 5175398941779320243, guid: 476255938913a5941afb3e990b2a6fcf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00015659461
+      objectReference: {fileID: 0}
     - target: {fileID: 5197022967913827799, guid: 476255938913a5941afb3e990b2a6fcf, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1919,7 +1923,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: workerCount
-      value: 32
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 32743345392041923, guid: 42da37afe9969504892c1f590fcf0da3, type: 3}
       propertyPath: debugCreateActiveZone
@@ -3467,6 +3471,14 @@ PrefabInstance:
     - target: {fileID: 9062533864227514082, guid: f0f5b313d5782ba4ea49725e15ff8d8e, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062533864227514082, guid: f0f5b313d5782ba4ea49725e15ff8d8e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.00006484985
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062533864227514082, guid: f0f5b313d5782ba4ea49725e15ff8d8e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00004196167
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

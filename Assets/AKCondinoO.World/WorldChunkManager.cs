@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using AKCondinoO.SimObjects;
 using AKCondinoO.Utilities;
+using AKCondinoO.World.SimObjects;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,6 +51,7 @@ namespace AKCondinoO.World{
          }
          toDestroyModules.Clear();
          chunkPool.Destroy();
+         ChunkSimObjectSpawner.OnShutdownStatic();
          base.Shutdown();
         }
      internal static readonly Utilities.ObjectPool<HashSet<ActiveZone>>cRefPool=

@@ -109,7 +109,8 @@ namespace AKCondinoO.World{
          var oldSnapshot=snapshot;
          rwl.EnterWriteLock();
          try{
-         snapshot=newSnapshot;
+          LeastRecentlyUsedCache.Clear();
+          snapshot=newSnapshot;
          }catch(Exception e){
           Logs.Error(e?.Message+"\n"+e?.StackTrace+"\n"+e?.Source);
          }finally{
