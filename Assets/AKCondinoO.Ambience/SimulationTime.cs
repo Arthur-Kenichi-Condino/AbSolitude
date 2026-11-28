@@ -1,6 +1,7 @@
 using AKCondinoO.Bootstrap;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 namespace AKCondinoO.Ambience{
@@ -32,11 +33,24 @@ namespace AKCondinoO.Ambience{
             }
         }
         [System.Serializable]
+        internal class DirectionalLightSettings{
+         [SerializeField]internal string id;
+         [SerializeField]internal Gradient colorGradient;
+         [SerializeField]internal AnimationCurve intensityCurve;
+        }
+        [System.Serializable]
         internal class DayPeriod{
          [SerializeField]internal string periodName;
          [SerializeField]internal TimeRange timeRange;
+         [Header("Sun and Moon (Directional Lights)")]
+         [SerializeField]internal DirectionalLightSettings[]directionalLightSettings;
          [Header("Ambient Lighting")]
          [SerializeField]internal Gradient ambientLightGradient;
+         [Header("Sky Sphere")]
+         [SerializeField]internal Gradient skySphereGradient;
+         [Header("Sky Box (Reflections)")]
+         [SerializeField]internal Gradient skyboxTintGradient;
+         [SerializeField]internal Gradient skyboxGroundGradient;
         }
         [System.Serializable]
         internal class Season{
@@ -44,8 +58,16 @@ namespace AKCondinoO.Ambience{
          [SerializeField]internal SeasonId seasonId;
          [Header("Day Periods")]
          [SerializeField]internal DayPeriod[]dayPeriods;
+         internal readonly Dictionary<string,SeasonDirectionalLightAttributes>seasonDirectionalLightAttributesById=new();
+            internal class SeasonDirectionalLightAttributes{
+             internal string id;
+             internal Gradient[]colorGradients=new Gradient[0]{};
+             internal AnimationCurve[]intensityCurves=new AnimationCurve[0]{};
+            }
          internal Gradient[]ambientLightGradients=new Gradient[0]{};
-         internal Gradient[]skySphereGradient=new Gradient[0]{};
+         internal Gradient[]skySphereGradients=new Gradient[0]{};
+         internal Gradient[]skyboxTintGradients=new Gradient[0]{};
+         internal Gradient[]skyboxGroundGradients=new Gradient[0]{};
          internal static readonly Gradient defaultGradient=CreateDefaultGradient();
             internal static Gradient CreateDefaultGradient(){
              Gradient gradient=new();
@@ -62,30 +84,33 @@ namespace AKCondinoO.Ambience{
              );
              return gradient;
             }
-            internal void BuildAmbientLightGradient(){
-             //  Construir os gradientes finais.
-             int count=dayPeriods.Length;
-             Array.Resize(ref ambientLightGradients,count);
-             //  Primeiro, copiamos todos os gradientes originais.
+            internal void Build(){
+             BuildGradients(ref ambientLightGradients,dayPeriods.Select(p=>p.ambientLightGradient).ToArray());
+             BuildGradients(ref    skySphereGradients,dayPeriods.Select(p=>p.   skySphereGradient).ToArray());
+             BuildGradients(ref   skyboxTintGradients,dayPeriods.Select(p=>p.  skyboxTintGradient).ToArray());
+             BuildGradients(ref skyboxGroundGradients,dayPeriods.Select(p=>p.skyboxGroundGradient).ToArray());
+             BuildDirectionalLights();
+            }
+            internal static void BuildGradients(ref Gradient[]gradients,Gradient[]sourceGradients){
+             int count=sourceGradients.Length;
+             Array.Resize(ref gradients,count);
              for(int i=0;i<count;i++){
-              Gradient source=dayPeriods[i].ambientLightGradient;
+              Gradient source=sourceGradients[i];
               Gradient result=new();
               result.SetKeys(source.colorKeys,source.alphaKeys);
               result.mode=GradientMode.Blend;
-              ambientLightGradients[i]=result;
+              gradients[i]=result;
              }
-             //  Depois, conciliamos as fronteiras entre os períodos.
              for(int i=0;i<count-1;i++){
-              ReconcileBoundary(i,i+1);
+              ReconcileBoundary(i,i+1,ref gradients);
              }
-             //  Fronteira circular: Early Night -> Late Night.
              if(count>1){
-              ReconcileBoundary(count-1,0);
+              ReconcileBoundary(count-1,0,ref gradients);
              }
                 //  Concilia as fronteiras entre os períodos.
-                void ReconcileBoundary(int previousIndex,int nextIndex){
-                 Gradient previous=ambientLightGradients[previousIndex];
-                 Gradient next=ambientLightGradients[nextIndex];
+                static void ReconcileBoundary(int previousIndex,int nextIndex,ref Gradient[]gradients){
+                 Gradient previous=gradients[previousIndex];
+                 Gradient next=gradients[nextIndex];
                  Color boundary=Color.LerpUnclamped(
                   previous.Evaluate(1f),
                   next.Evaluate(0f),
@@ -109,22 +134,103 @@ namespace AKCondinoO.Ambience{
                  next.SetKeys(nextColors,nextAlphas);
                 }
             }
-            internal void Update(){
-             var simTime=SimulationTime.singleton;
-             RenderSettings.ambientLight=EvaluateAmbientLight(simTime.dayTimeNormalized);
+         readonly Dictionary<string,Gradient[]>buildingGradientsById=new();
+         readonly Dictionary<string,AnimationCurve[]>buildingDirectionalLightIntensityCurvesById=new();
+            void BuildDirectionalLights(){
+             for(int i=0;i<dayPeriods.Length;i++){
+              var period=dayPeriods[i];
+              for(int j=0;j<period.directionalLightSettings.Length;j++){
+               var lightSettings=period.directionalLightSettings[j];
+               var id=lightSettings.id;
+               if(!seasonDirectionalLightAttributesById.TryGetValue(id,out var lightAttributes)){
+                seasonDirectionalLightAttributesById.Add(id,lightAttributes=new(){id=id,});
+                buildingGradientsById[id]=new Gradient[dayPeriods.Length];
+                buildingDirectionalLightIntensityCurvesById[id]=new AnimationCurve[dayPeriods.Length];
+               }
+               if(buildingGradientsById[id].Length<dayPeriods.Length){
+                var gradients=buildingGradientsById[id];
+                Array.Resize(ref gradients,dayPeriods.Length);
+                buildingGradientsById[id]=gradients;
+                var intensityCurves=buildingDirectionalLightIntensityCurvesById[id];
+                Array.Resize(ref intensityCurves,dayPeriods.Length);
+                buildingDirectionalLightIntensityCurvesById[id]=intensityCurves;
+               }
+               buildingGradientsById[id][i]=lightSettings.colorGradient;
+              }
+             }
+             foreach(var kvp in seasonDirectionalLightAttributesById){
+              var id=kvp.Key;
+              var gradients=buildingGradientsById[id];
+              BuildGradients(ref seasonDirectionalLightAttributesById[id].colorGradients,gradients);
+             }
             }
-            internal Color EvaluateAmbientLight(float dayTimeNormalized){
-             float hour=dayTimeNormalized*24f;
-             hour=Mathf.Repeat(hour,24f);
+         internal readonly Dictionary<string,DirectionalLightController>directionalLightsById=new();
+            internal void OnStart(){
+             var simTime=SimulationTime.singleton;
+             foreach(var kvp in seasonDirectionalLightAttributesById){
+              var id=kvp.Key;
+              var lightAttributes=kvp.Value;
+              var light=simTime.directionalLightPool.Rent();
+              light.Set(lightAttributes);
+              directionalLightsById.Add(id,light);
+             }
+            }
+            internal void OnEnd(){
+             var simTime=SimulationTime.singleton;
+             foreach(var kvp in directionalLightsById){
+              var light=kvp.Value;
+              simTime.directionalLightPool.Return(light);
+             }
+             directionalLightsById.Clear();
+            }
+            bool hasSkyTintId;
+            bool hasGroundColorId;
+            internal void OnManualUpdate(){
+             var simTime=SimulationTime.singleton;
+             if(GetCurrentPeriod(simTime.dayTimeNormalized,dayPeriods,out var periodIndex,out var localTime)){
+              RenderSettings.ambientLight=EvaluateAmbientLight  (periodIndex,localTime);
+              simTime.skySphere.color    =EvaluateSkySphereColor(periodIndex,localTime);
+              if(hasSkyTintId    ||(hasSkyTintId    =simTime.skyboxMaterial.HasProperty(    skyTintId))){
+               simTime.skyboxMaterial.SetColor(    skyTintId,EvaluateSkyboxTint       (periodIndex,localTime));
+              }
+              if(hasGroundColorId||(hasGroundColorId=simTime.skyboxMaterial.HasProperty(groundColorId))){
+               simTime.skyboxMaterial.SetColor(groundColorId,EvaluateSkyboxGroundColor(periodIndex,localTime));
+              }
+              foreach(var kvp in directionalLightsById){
+               kvp.Value.OnManualUpdate(periodIndex,localTime);
+              }
+             }
+            }
+            internal Color EvaluateAmbientLight     (int periodIndex,float localTime){
+             return EvaluateGradient(periodIndex,localTime,ambientLightGradients);
+            }
+            internal Color EvaluateSkySphereColor   (int periodIndex,float localTime){
+             return EvaluateGradient(periodIndex,localTime,   skySphereGradients);
+            }
+            internal Color EvaluateSkyboxTint       (int periodIndex,float localTime){
+             return EvaluateGradient(periodIndex,localTime,  skyboxTintGradients);
+            }
+            internal Color EvaluateSkyboxGroundColor(int periodIndex,float localTime){
+             return EvaluateGradient(periodIndex,localTime,skyboxGroundGradients);
+            }
+            internal static Color EvaluateGradient(int periodIndex,float localTime,Gradient[]gradients){
+             return periodIndex>=0&&periodIndex<gradients.Length
+              ?gradients[periodIndex].Evaluate(localTime)
+              :defaultGradient.Evaluate(0f);
+            }
+            internal static bool GetCurrentPeriod(float dayTimeNormalized,DayPeriod[]dayPeriods,out int periodIndex,out float localTime){
+             float hour=Mathf.Repeat(dayTimeNormalized*24f,24f);
              for(int i=0;i<dayPeriods.Length;i++){
               TimeRange range=dayPeriods[i].timeRange;
               if(hour>=range.start&&hour<range.end){
-               float duration=range.end-range.start;
-               float localTime=(hour-range.start)/duration;
-               return ambientLightGradients[i].Evaluate(localTime);
+               periodIndex=i;
+               localTime=(hour-range.start)/(range.end-range.start);
+               return true;
               }
              }
-             return defaultGradient.Evaluate(0f);
+             periodIndex=-1;
+             localTime=0f;
+             return false;
             }
         }
      [SerializeField]internal Season[]seasons=new Season[]{
@@ -181,10 +287,22 @@ namespace AKCondinoO.Ambience{
        }
       }
      };
-     [SerializeField]Material skySphereMaterial;
+     [SerializeField]internal DirectionalLightController directionalLightPrefab;
+     [SerializeField]internal Material skyboxMaterial;
+     internal static readonly int     skyTintId=Shader.PropertyToID("_SkyTint"    );
+     internal static readonly int groundColorId=Shader.PropertyToID("_GroundColor");
+     private MonoPool<DirectionalLightController>directionalLightPool;
+     internal SkySphere skySphere;
      internal Dictionary<SeasonId,Season>seasonsById=new();
         public override void Initialize(){
          base.Initialize();
+         directionalLightPool=new(directionalLightPrefab,transform);
+         DirectionalLightController[]existingLights=GetComponentsInChildren<DirectionalLightController>(true);
+         foreach(var light in existingLights){
+          directionalLightPool.Return(light);
+         }
+         skySphere=GetComponentInChildren<SkySphere>();
+         skySphere.OnInitialize();
          RenderSettings.ambientMode=AmbientMode.Trilight;
          RenderSettings.ambientMode=AmbientMode.Flat;
          RecalculateSettings();
@@ -196,8 +314,10 @@ namespace AKCondinoO.Ambience{
           realTimeHoursInGameDay=1f/3600f;
          }
          gameSecond=86400d/(realTimeHoursInGameDay*3600d);
+         currentSeason?.OnEnd();
          SetSeasons();
          currentSeason=GetCurrentSeason();
+         currentSeason.OnStart();
         }
         internal void SetSeasons(){
          seasonsById.Clear();
@@ -206,7 +326,7 @@ namespace AKCondinoO.Ambience{
           if(seasonsById.ContainsKey(season.seasonId)){
            Logs.Error("'season with id "+season.seasonId+" is duplicated, please check your configuration.'");
           }
-          season.BuildAmbientLightGradient();
+          season.Build();
           seasonsById[season.seasonId]=season;
          }
         }
@@ -215,6 +335,10 @@ namespace AKCondinoO.Ambience{
         }
         internal Season GetSeason(SeasonId id){
          return seasonsById.TryGetValue(id,out var season)?season:null;
+        }
+        public override void Shutdown(){
+         base.Shutdown();
+         directionalLightPool.Destroy();
         }
         public override void ManualUpdate(){
          base.ManualUpdate();
@@ -236,7 +360,7 @@ namespace AKCondinoO.Ambience{
           }
          }
          if(currentSeason!=null){
-          currentSeason.Update();
+          currentSeason.OnManualUpdate();
          }
         }
     }

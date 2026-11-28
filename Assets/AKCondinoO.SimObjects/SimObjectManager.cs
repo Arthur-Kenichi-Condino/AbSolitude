@@ -314,7 +314,7 @@ namespace AKCondinoO.SimObjects{
              foreach(var request in requested){
               for(int i=0;i<request.count;i++){
                spawnList.Add(
-                new(request.type,request.variant,request.position,request.rotation,request.scale)
+                new(request.type,request.variant,0,request.position,request.rotation,request.scale)
                );
               }
              }
@@ -355,8 +355,11 @@ namespace AKCondinoO.SimObjects{
          currentIndex=0;
          dequeued=true;
         }
-        internal void Add(SimObjectSpawn toSpawn){
+        internal void Add(SimObjectSpawn toSpawn,SimObjectPersistentData persistentData=null){
          data.Add(toSpawn);
+         if(persistentData!=null){
+          readData.Add(data.Count-1,persistentData);
+         }
          dequeued=false;
         }
         internal void Clear(){
@@ -388,12 +391,14 @@ namespace AKCondinoO.SimObjects{
     internal struct SimObjectSpawn{
      internal Type simObjectType;
      internal string variant;
+     internal ulong id;
      internal Vector3 position;
      internal Quaternion rotation;
      internal Vector3 scale;
-        internal SimObjectSpawn(Type simObjectType,string variant,Vector3 position,Quaternion rotation,Vector3 scale){
+        internal SimObjectSpawn(Type simObjectType,string variant,ulong id=0,Vector3 position=default,Quaternion rotation=default,Vector3 scale=default){
          this.simObjectType=simObjectType;
          this.variant=variant;
+         this.id=id;
          this.position=position;
          this.rotation=rotation;
          this.scale=scale;

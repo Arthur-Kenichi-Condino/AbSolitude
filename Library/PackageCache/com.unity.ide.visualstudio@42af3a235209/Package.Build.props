@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <_UnityVisualStudioEditorImportBuildProps>false</_UnityVisualStudioEditorImportBuildProps>
+    <_UnityVisualStudioEditorImportBuildProps Condition="'$(UnityVisualStudioEditorBuildPropsImported)' == ''">true</_UnityVisualStudioEditorImportBuildProps>
+    <UnityVisualStudioEditorBuildPropsImported>true</UnityVisualStudioEditorBuildPropsImported>
+    <UnityVisualStudioEditorActive Condition="'$(UnityVisualStudioEditorActive)' == ''">false</UnityVisualStudioEditorActive>
+  </PropertyGroup>
+
+  <Import Project="$(SolutionDir)Library/VisualStudioEditor/MSBuild/VisualStudioEditor.Generated.props"
+          Condition="'$(_UnityVisualStudioEditorImportBuildProps)' == 'true' And Exists('$(SolutionDir)Library/VisualStudioEditor/MSBuild/VisualStudioEditor.Generated.props')" />
+
+  <!-- Unity.EntryPoint.Sdk imports package props before setting IsEntryPointProject. -->
+  <PropertyGroup Condition="'$(_UnityVisualStudioEditorImportBuildProps)' == 'true' And '$(UnityVisualStudioEditorActive)' == 'true' And '$(DesignTimeBuild)' == 'true' And '$(IsEntryPointProject)' != 'true' And '$(MSBuildProjectName)' != 'Main.EntryPoint'">
+    <NoWarn>$(NoWarn);USG0001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(_UnityVisualStudioEditorImportBuildProps)' == 'true' And Exists('$(SolutionDir)Library/VisualStudioEditor/MSBuild/VisualStudioEditor.Generated.props')">
+    <_UnityVisualStudioEditorGeneratedProps Include="$(SolutionDir)Library/VisualStudioEditor/MSBuild/VisualStudioEditor.Generated.props" />
+    <FastUpToDateCheckBuildInput Include="_UnityVisualStudioEditorGeneratedProps" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(_UnityVisualStudioEditorImportBuildProps)' == 'true' And '$(UnityVisualStudioEditorActive)' == 'true' And '$(IsEntryPointProject)' != 'true' And '$(MSBuildProjectName)' != 'Main.EntryPoint'">
+    <ProjectCapability Include="Unity" />
+    <ProjectCapability Include="EnableOnDemandExcludedFolderLoading" />
+  </ItemGroup>
+</Project>

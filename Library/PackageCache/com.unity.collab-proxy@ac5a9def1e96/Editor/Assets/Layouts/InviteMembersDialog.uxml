@@ -1,0 +1,56 @@
+<UXML xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <VisualElement name="container">
+        <VisualElement name="header">
+            <VisualElement name="projectIconContainer">
+                <Image name="projectIcon" />
+            </VisualElement>
+            <Label name="projectName" />
+        </VisualElement>
+        <VisualElement name="content">
+            <VisualElement name="userAndEmailsLabelContainer">
+                <Label name="emailsLabel" class="field-label" />
+                <Label name="emailsLabelRequired" text="*" class="field-label" />
+            </VisualElement>
+            <ScrollView name="emailChipsScrollView" class="chips-input" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                <VisualElement name="emailChipsContainer" class="chips-content">
+                    <TextField name="emailsInput" />
+                </VisualElement>
+            </ScrollView>
+            <VisualElement name="emailsHelperContainer" class="helper-text-container">
+                <Label name="emailsHelper" class="helper-text" />
+                <VisualElement name="emailsLimitContainer" class="limit-container">
+                    <Image name="emailsLimitIcon" class="limit-icon collapse" />
+                    <Label name="emailsHelperLimit" class="helper-text" />
+                </VisualElement>
+            </VisualElement>
+            <VisualElement name="userTypeSection">
+                <VisualElement name="userTypeLabelContainer">
+                    <Label name="userTypeLabel" class="field-label" />
+                    <Image name="userTypeHelp" class="help-icon" />
+                    <Label name="userTypeLabelRequired" text="*" class="field-label" />
+                </VisualElement>
+                <DropdownField name="userTypeDropdown" index="0" />
+                <Label name="userTypeDescription" class="description-text" />
+            </VisualElement>
+        </VisualElement>
+        <VisualElement class="spacer" />
+        <VisualElement name="responseHelpBox" class="helpbox collapse">
+            <VisualElement name="successRow" class="helpbox-row collapse">
+                <Image name="successIcon" class="helpbox-icon" />
+                <Label name="addedMembersLabel" class="helpbox-label" />
+            </VisualElement>
+            <VisualElement name="errorRow" class="helpbox-row collapse">
+                <Image name="errorIcon" class="helpbox-icon" />
+                <VisualElement name="errorMessageContainer" class="helpbox-inline-text">
+                    <Label name="errorMessageLabel" class="helpbox-label" />
+                    <Label name="tryInUnityCloudLabel" class="helpbox-label helpbox-link" />
+                </VisualElement>
+            </VisualElement>
+        </VisualElement>
+        <VisualElement name="footer">
+            <VisualElement class="grow-max" />
+            <Button name="addButton" />
+            <Button name="cancelButton" />
+        </VisualElement>
+    </VisualElement>
+</UXML>

@@ -1,0 +1,41 @@
+{
+  "name": "com.unity.collab-proxy",
+  "displayName": "Unity Version Control",
+  "version": "2.14.0",
+  "unity": "6000.0",
+  "description": "The package gives you the ability to use Unity Version Control in the Unity editor. To use Unity Version Control, a subscription is required. Learn more about how you can get started for free by visiting https://unity.com/solutions/version-control",
+  "keywords": [
+    "backup",
+    "cloud",
+    "collab",
+    "collaborate",
+    "collaboration",
+    "control",
+    "devops",
+    "plastic",
+    "plasticscm",
+    "source",
+    "team",
+    "teams",
+    "version",
+    "vcs",
+    "uvcs"
+  ],
+  "category": "Editor",
+  "relatedPackages": {
+    "com.unity.collab-proxy.tests": "2.14.0"
+  },
+  "_upm": {
+    "changelog": "### Added\n\n- Added compatibility with Unity Editors running on CoreCLR.\n- Added a new dialog to invite members to cloud project.\n- Added the Annotate option to the context menus across all views.\n- Added asset status icons for HierarchyV2.\n- Added deep link support for Unity Hub links.\n- Added the Unity Version Control skill for Unity AI Assistant, with a banner to enable it.\n\n### Changed\n\n- Migrated the Pending Changes comment area, toolbar, and file list to UI Toolkit.\n\n### Fixed\n\n- Fixed the handling of the Unity process PATH environment variable when the desktop app is installed.\n- Fixed icon file naming to use only ASCII characters.\n- Fixed asset diffs so loaded objects no longer affect the open scene.\n- Fixed the release of cached icon textures on domain reload.\n- Fixed the startup behavior so the Unity Version Control window only opens when needed.\n- Fixed the reopening of IMGUI tabs so they always attach to the correct parent window.\n- Fixed Editor responsiveness while waiting for pending operations.\n- Fixed restoring the Differences window from a previous session.\n- Fixed the layout of the \"How do you prefer to work\" text when creating a workspace.\n- Fixed the cleanup of the Unity Version Control window updater.\n- Fixed Windows x86 player builds ensuring that all package's Editor-only libraries are excluded."
+  },
+  "upmCi": {
+    "footprint": "16b7a2a7bd480021a7f61c8731123cdde8a6b897"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.collab-proxy@2.14/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/com.unity.cloud.collaborate.git",
+    "type": "git",
+    "revision": "7eb88695e4c1762c4fa9390637e82099d3150ab4"
+  },
+  "_fingerprint": "ac5a9def1e96ce88b8e364a01fb299d3b800e882"
+}

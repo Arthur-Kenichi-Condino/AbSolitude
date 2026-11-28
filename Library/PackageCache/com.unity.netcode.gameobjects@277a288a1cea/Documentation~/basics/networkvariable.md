@@ -1,0 +1,787 @@
+# NetworkVariables
+
+`NetworkVariable`s are a way of synchronizing properties between servers and clients in a persistent manner, unlike [RPCs](../advanced-topics/message-system/rpc.md) and [custom messages](../advanced-topics/message-system/custom-messages.md), which are one-off, point-in-time communications that aren't shared with any clients not connected at the time of sending.
+
+`NetworkVariable` is a wrapper of the stored value of type `T`, so you need to use the `NetworkVariable.Value` property to access the actual value being synchronized. A `NetworkVariable` is synchronized with:
+
+* New clients joining the game (also referred to as late-joining clients)
+    * When the associated NetworkObject of a NetworkBehaviour with `NetworkVariable` properties is spawned, any `NetworkVariable`'s current state (`Value`) is automatically synchronized on the client side.
+* Connected clients
+    * When a `NetworkVariable` value changes, all connected clients that subscribed to the `NetworkVariable.OnValueChanged` event (prior to the value being changed) are notified of the change. Two parameters are passed to any `NetworkVariable.OnValueChanged` subscribed callback method:
+        - First parameter (Previous): The previous value before the value was changed
+        - Second parameter (Current): The newly changed `NetworkVariable.Value`
+
+You can use `NetworkVariable` [permissions](#permissions) to control read and write access to `NetworkVariable`s. You can also create [custom `NetworkVariable`s](custom-networkvariables.md).
+
+## Setting up NetworkVariables
+
+### Defining a NetworkVariable
+
+- A `NetworkVariable` property must be defined within a NetworkBehaviour-derived class attached to a GameObject.
+    - The GameObject or a parent GameObject must also have a NetworkObject component attached to it.
+- A `NetworkVariable`'s value can only be set:
+    - When initializing the property (either when it's declared or within the Awake method).
+    - While the associated NetworkObject is spawned (upon being spawned or any time while it's still spawned).
+
+###  Initializing a NetworkVariable
+
+When a client first connects, it's synchronized with the current value of the `NetworkVariable`. Typically, clients should register for `NetworkVariable.OnValueChanged` within the `OnNetworkSpawn` method. A NetworkBehaviour's `Start` and `OnNetworkSpawn` methods are invoked based on the type of NetworkObject the NetworkBehaviour is associated with:
+
+- In-scene placed: Since the instantiation occurs via the scene loading mechanism(s), the `Start` method is invoked before `OnNetworkSpawn`.
+- Dynamically spawned: Since `OnNetworkSpawn` is invoked immediately (that is, within the same relative call-stack) after instantiation, the `Start` method is invoked after `OnNetworkSpawn`.
+
+Typically, these methods are invoked at least one frame after the NetworkObject and associated NetworkBehaviour components are instantiated. The table below lists the event order for dynamically spawned and in-scene placed objects respectively.
+
+Dynamically spawned | In-scene placed
+------------------- | ---------------
+Awake               | Awake
+OnNetworkSpawn      | Start
+Start               | OnNetworkSpawn
+
+You should only set the value of a `NetworkVariable` when first initializing it or if it's spawned. It isn't recommended to set a `NetworkVariable` when the associated NetworkObject isn't spawned.
+
+> [!NOTE]
+> If you need to initialize other components or objects based on a `NetworkVariable`'s initial synchronized state, then you can use a common method that's invoked on the client side within the `NetworkVariable.OnValueChanged` callback (if assigned) and `NetworkBehaviour.OnNetworkSpawn` method.
+
+## Supported types
+
+`NetworkVariable` supports the following types:
+
+* C# unmanaged [primitive types](../advanced-topics/serialization/cprimitives.md) (which are serialized by direct `memcpy` into/out of the buffer): `bool`, `byte`, `sbyte`, `char`, `decimal`, `double`, `float`, `int`, `uint`, `long`, `ulong`, `short`, and `ushort`.
+* Unity unmanaged [built-in types](../advanced-topics/serialization/unity-primitives.md) (which are serialized by direct `memcpy` into/out of the buffer): `Vector2`, `Vector3`, `Vector2Int`, `Vector3Int`, `Vector4`, `Quaternion`, `Color`, `Color32`, `Ray`, `Ray2D`.
+* Any [`enum`](../advanced-topics/serialization/enum-types.md) types (which are serialized by direct `memcpy` into/out of the buffer).
+* Any type (managed or unmanaged) that implements [`INetworkSerializable`](../advanced-topics/serialization/inetworkserializable.md) (which are serialized by calling their `NetworkSerialize` method). **On the reading side, these values are deserialized in-place, meaning the existing instance is reused and any non-serialized values are left in their current state.**
+* Any unmanaged struct type that implements [`INetworkSerializeByMemcpy`](../advanced-topics/serialization/inetworkserializebymemcpy.md) (which are serialized by direct `memcpy `of the entire struct into/out of the buffer).
+* Unity [fixed string](../advanced-topics/serialization/fixedstrings.md) types: `FixedString32Bytes`, `FixedString64Bytes`, `FixedString128Bytes`, `FixedString512Bytes`, and `FixedString4096Bytes` (which are serialized intelligently, only sending the used part across the network and adjusting the length of the string on the other side to fit the received data).
+
+For any types that don't fit within this list, including managed types and unmanaged types with pointers: you can provide delegates informing the serialization system of how to serialize and deserialize your values. For more information, refer to [Custom Serialization](../advanced-topics/custom-serialization.md). A limitation of custom serialization is that, unlike `INetworkSerializable` types, types using custom serialization aren't able to be read in-place, so managed types will, by necessity, incur a garbage collection allocation (which can cause performance issues) on every update.
+
+### Managing garbage collection
+
+Although `NetworkVariable` supports both managed and [unmanaged](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/constraints-on-type-parameters#unmanaged-constraint) types, managed types come with additional overhead.
+
+Netcode for GameObjects has been designed to minimize garbage collection allocations for managed `INetworkSerializable` types (for example, a new value is only allocated if the value changes from `null` to non-`null`). However, the ability of a type to be `null` adds additional overhead both in logic (checking for nulls before serializing) and bandwidth (every serialization carries an additional byte indicating whether the value is `null`).
+
+Additionally, any type that has a managed type is itself a managed type - so a struct that has `int[]` is a managed type because `int[]` is a managed type.
+
+Finally, while managed `INetworkSerializable` types are serialized in-place (and thus don't incur allocations for simple value updates), C# arrays and managed types serialized through custom serialization are **not** serialized in-place, and will incur an allocation on every update.
+
+### Using collections with `NetworkVariable`s
+
+You can use `NetworkVariable`s with both managed and unmanaged collections, but you need to call `NetworkVariable<T>.CheckDirtyState()` after making changes to a collection (or items in a collection) for those changes to be detected. Then the [`OnValueChanged`](#onvaluechanged-example) event will trigger, if subscribed locally, and by the end of the frame the rest of the clients and server will be synchronized with the detected change(s).
+
+`NetworkVariable<T>.CheckDirtyState()` checks every item in a collection, including recursively nested collections, which can have a significant impact on performance if collections are large. If you're making multiple changes to a collection, you only need to call `NetworkVariable<T>.CheckDirtyState()` once after all changes are complete, rather than calling it after each change.
+
+## Synchronization and notification example
+
+The following client-server example shows how the initial `NetworkVariable` synchronization has already occurred by the time `OnNetworkSpawn` is invoked. It also shows how subscribing to `NetworkVariable.OnValueChanged` within `OnNetworkSpawn` provides notifications for any changes to `m_SomeValue.Value` that occur.
+
+1. The server initializes the `NetworkVariable` when the associated NetworkObject is spawned.
+1. The client confirms that the `NetworkVariable` is synchronized to the initial value set by the server and assigns a callback method to `NetworkVariable.OnValueChanged`.
+1. Once spawned, the client is notified of any changes made to the `NetworkVariable`.
+
+> [!NOTE]
+> This example only tests the initial client synchronization of the value and when the value changes. If a second client joins, it will throw a warning about the `NetworkVariable.Value` not being the initial value. This example is intended for use with a single server or host and a single client.
+
+ ```csharp
+public class TestNetworkVariableSynchronization : NetworkBehaviour
+{
+    private NetworkVariable<int> m_SomeValue = new NetworkVariable<int>();
+    private const int k_InitialValue = 1111;
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            m_SomeValue.Value = k_InitialValue;
+            NetworkManager.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        }
+        else
+        {
+            if (m_SomeValue.Value != k_InitialValue)
+            {
+                Debug.LogWarning($"NetworkVariable was {m_SomeValue.Value} upon being spawned" +
+                    $" when it should have been {k_InitialValue}");
+            }
+            else
+            {
+                Debug.Log($"NetworkVariable is {m_SomeValue.Value} when spawned.");
+            }
+            m_SomeValue.OnValueChanged += OnSomeValueChanged;
+        }
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong obj)
+    {
+        StartCoroutine(StartChangingNetworkVariable());
+    }
+
+    private void OnSomeValueChanged(int previous, int current)
+    {
+        Debug.Log($"Detected NetworkVariable Change: Previous: {previous} | Current: {current}");
+    }
+
+    private IEnumerator StartChangingNetworkVariable()
+    {
+        var count = 0;
+        var updateFrequency = new WaitForSeconds(0.5f);
+        while (count < 4)
+        {
+            m_SomeValue.Value += m_SomeValue.Value;
+            yield return updateFrequency;
+        }
+        NetworkManager.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
+    }
+}
+ ```
+
+If you attach the above script to an in-scene placed NetworkObject, make a standalone build, run the standalone build as a host, and then connect to that host by entering Play Mode in the Editor, you can see (in the console output):
+- The client side `NetworkVariable` value is the same as the server when `NetworkBehaviour.OnNetworkSpawn` is invoked.
+- The client detects any changes made to the `NetworkVariable` after the in-scene placed NetworkObject is spawned.
+
+This works the same way with dynamically spawned NetworkObjects.
+
+## OnValueChanged example
+
+The [synchronization and notification example](#synchronization-and-notification-example) highlights the differences between synchronizing a `NetworkVariable` with newly-joining clients and notifying connected clients when a `NetworkVariable` changes, but it doesn't provide any concrete example usage.
+
+The `OnValueChanged` example shows a simple server-authoritative `NetworkVariable` being used to track the state of a door (open or closed) using an RPC that's sent to the server. Each time the door is used by a client, the `Door.ToggleStateRpc` is invoked and the server-side toggles the state of the door. When the `Door.State.Value` changes, all connected clients are synchronized to the (new) current `Value` and the `OnStateChanged` method is invoked locally on each client.
+
+```csharp
+using System.Runtime.CompilerServices;
+using Unity.Netcode;
+using UnityEngine;
+
+/// <summary>
+/// Example of using a <see cref="NetworkVariable{T}"/> to drive changes
+/// in state.
+/// </summary>
+/// <remarks>
+/// This is a simple state driven door example.
+/// This script was written with recommended usages patterns in mind.
+/// </remarks>
+public class Door : NetworkBehaviour, INetworkUpdateSystem
+{
+    /// <summary>
+    /// The two door states.
+    /// </summary>
+    public enum DoorStates
+    {
+        Closed,
+        Open
+    }
+
+    /// <summary>
+    /// Initializes the door to a specific state (server side) when first spawned.
+    /// </summary>
+    [Tooltip("Configures the door's initial state when 1st spawned.")]
+    public DoorStates InitialState = DoorStates.Closed;
+
+    /// <summary>
+    /// Used for <see cref="CanPlayerToggleState"/> example purposes.
+    /// When true, only the server can open and close the door.
+    /// Clients will receive a console log saying they could not open the door.
+    /// </summary>
+    public bool IsLocked;
+
+    /// <summary>
+    /// A simple door state where the server has write permissions and everyone has read permissions.
+    /// </summary>
+    private NetworkVariable<DoorStates> m_State = new NetworkVariable<DoorStates>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    /// <summary>
+    /// The current state of the door.
+    /// </summary>
+    public DoorStates CurrentState => m_State.Value;
+
+    /// <summary>
+    /// Invoked while the <see cref="NetworkObject"/> is in the process of
+    /// being spawned.
+    /// </summary>
+    public override void OnNetworkSpawn()
+    {
+        // The write authority (server) doesn't need to know about its
+        // own changes (for this example) since it's the "single point
+        // of truth" for the door instance.
+        if (IsServer)
+        {
+            // Host/Server:
+            // Applies the configurable state upon spawning.
+            m_State.Value = InitialState;
+        }
+        else
+        {
+            // Clients:
+            // Subscribe to changes in the door's state.
+            m_State.OnValueChanged += OnStateChanged;
+        }
+    }
+
+    /// <summary>
+    /// Invoked once the door and all associated components
+    /// have finished the spawn process.
+    /// </summary>
+    protected override void OnNetworkPostSpawn()
+    {
+        // Everyone updates their door state when finished spawning the door
+        // to ensure the door reflects (visually) its current state.
+        UpdateFromState();
+
+        // Begin updating this NetworkBehaviour instance once all
+        // netcode related components have finished the spawn process.
+        NetworkUpdateLoop.RegisterNetworkUpdate(this, NetworkUpdateStage.Update);
+        base.OnNetworkPostSpawn();
+    }
+
+    /// <summary>
+    /// Example of using the <see cref="INetworkUpdateSystem"/> usage pattern
+    /// where it only updates while spawned.
+    /// </summary>
+    /// <param name="updateStage">The current update stage being invoked.</param>
+    public void NetworkUpdate(NetworkUpdateStage updateStage)
+    {
+        switch (updateStage)
+        {
+            case NetworkUpdateStage.Update:
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        Interact();
+                    }
+                    break;
+                }
+        }
+    }
+
+    /// <summary>
+    /// Invoked just before this instance runs through its despawn
+    /// sequence. A good time to unsubscribe from things.
+    /// </summary>
+    public override void OnNetworkPreDespawn()
+    {
+        if (!IsServer)
+        {
+            m_State.OnValueChanged -= OnStateChanged;
+        }
+
+        // Stop updating this NetworkBehaviour instance prior to running
+        // through the despawn process.
+        NetworkUpdateLoop.RegisterNetworkUpdate(this, NetworkUpdateStage.Update);
+        base.OnNetworkPreDespawn();
+    }
+
+    /// <summary>
+    /// Server makes changes to the state.
+    /// Clients receive the changes in state.
+    /// </summary>
+    /// <remarks>
+    /// When the previous state equals the current state, we are a client
+    /// that is doing its first synchronization of this door instance.
+    /// </remarks>
+    /// <param name="previous">The previous <see cref="DoorStates"/> state.</param>
+    /// <param name="current">The current <see cref="DoorStates"/> state.</param>
+    public void OnStateChanged(DoorStates previous, DoorStates current)
+    {
+        UpdateFromState();
+    }
+
+    /// <summary>
+    /// Invoke when the state is updated to apply the change
+    /// in door state to the door asset itself.
+    /// </summary>
+    private void UpdateFromState()
+    {
+        switch(m_State.Value)
+        {
+            case DoorStates.Closed:
+                {
+                    // door is open:
+                    //  - rotate door transform
+                    //  - play animations, sound etc.
+                    /// <see cref="Netcode.Components.Helpers.ComponentCont"
+                    break;
+                }
+            case DoorStates.Open:
+                {
+                    // door is closed:
+                    //  - rotate door transform
+                    //  - play animations, sound etc.
+                    break;
+                }
+        }
+        Debug.Log($"[{name}] Door is currently {m_State.Value}.");
+    }
+
+    /// <summary>
+    /// Override to apply specific checks (like a player having the right
+    /// key to open the door) or make it a non-virtual class and add logic
+    /// directly to this method.
+    /// </summary>
+    /// <param name="player">The player attempting to open the door.</param>
+    /// <returns></returns>
+    protected virtual bool CanPlayerToggleState(NetworkObject player)
+    {
+        // For this example, if the door "is locked" then clients will
+        // not be able to open the door but the host-client's player can.
+        return !IsLocked || player.IsOwnedByServer;
+    }
+
+    /// <summary>
+    /// Invoked by either a host or clients to interact with the door.
+    /// </summary>
+    public void Interact()
+    {
+        // Optional:
+        // This is only if you want clients to be able to
+        // interact with doors. A dedicated server would not
+        // be able to do this since it does not have a player.
+        if (IsServer && !IsHost)
+        {
+            // Optional to log a warning about this.
+            return;
+        }
+
+        if (IsHost)
+        {
+            ToggleState(NetworkManager.LocalClientId);
+        }
+        else
+        {
+            // Clients send an RPC to server (write authority) who applies the
+            // change in state that will be synchronized with all client observers.
+            ToggleStateRpc();
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private DoorStates NextToggleState()
+    {
+        return m_State.Value == DoorStates.Open ? DoorStates.Closed : DoorStates.Open;
+    }
+
+    /// <summary>
+    /// Invoked only server-side
+    /// Primary method to handle toggling the door state.
+    /// </summary>
+    /// <param name="clientId">The client toggling the door state.</param>
+    private void ToggleState(ulong clientId)
+    {
+        // Get the server-side client player instance
+        var playerObject = NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId);
+        if (playerObject != null)
+        {
+            var nextToggleState = NextToggleState();
+            if (CanPlayerToggleState(playerObject))
+            {
+                // Host toggles the state
+                m_State.Value = nextToggleState;
+                UpdateFromState();
+            }
+            else
+            {
+                ToggleStateFailRpc(nextToggleState, RpcTarget.Single(clientId, RpcTargetUse.Temp));
+            }
+        }
+        else
+        {
+            // Optional as to how you handle this. Since ToggleState is only invoked by
+            // sever-side only script, this could mean many things depending upon whether
+            // or not a client could interact with something and not have a player object.
+            // If that is the case, then don't even bother checking for a player object.
+            // If that is not the case, then there could be a timing issue between when
+            // something can be "interacted with" and when a player is about to be de-spawned.
+            // For this example, we just log a warning as this example was built with
+            // the requirement that a client has a spawned player object that is used for
+            // reference to determine if the client's player can toggle the state of the
+            // door or not.
+            NetworkLog.LogWarningServer($"Client-{clientId} has no spawned player object!");
+        }
+    }
+
+    /// <summary>
+    /// Invoked by clients.
+    /// Re-directs to the common <see cref="ToggleState(ulong)"/> method.
+    /// </summary>
+    /// <param name="rpcParams">includes <see cref="RpcReceiveParams.SenderClientId"/> that is automatically populated for you.</param>
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void ToggleStateRpc(RpcParams rpcParams = default)
+    {
+        ToggleState(rpcParams.Receive.SenderClientId);
+    }
+
+    /// <summary>
+    /// Optional:
+    /// Handling when a player cannot open a door.
+    /// </summary>
+    /// <param name="rpcParams">includes <see cref="RpcReceiveParams.SenderClientId"/> that is automatically populated for you.</param>
+    [Rpc(SendTo.SpecifiedInParams, InvokePermission = RpcInvokePermission.Server)]
+    private void ToggleStateFailRpc(DoorStates doorState, RpcParams rpcParams = default)
+    {
+        // Provide player feedback that toggling failed.
+        Debug.Log($"Failed to {doorState} the door!");
+    }
+}
+```
+
+## Permissions
+
+The `NetworkVariable` constructor can take up to three parameters:
+
+```csharp
+public NetworkVariable(T value = default,
+NetworkVariableReadPermission readPerm = NetworkVariableReadPermission.Everyone,
+NetworkVariableWritePermission writePerm = NetworkVariableWritePermission.Server);
+```
+
+By default, in a [client-server](../terms-concepts/client-server.md) context, the default permissions are:
+
+- **Server**: Has read and write permissions
+- **Clients:** Have read-only permissions.
+
+The two types of permissions are defined within [NetworkVariablePermissions.cs](https://github.com/Unity-Technologies/com.unity.netcode.gameobjects/blob/release/1.0.0/com.unity.netcode.gameobjects/Runtime/NetworkVariable/NetworkVariablePermission.cs):
+
+```csharp
+    /// <summary>
+    /// The permission types for reading a var
+    /// </summary>
+    public enum NetworkVariableReadPermission
+    {
+        /// <summary>
+        /// Everyone can read
+        /// </summary>
+        Everyone,
+        /// <summary>
+        /// Only the owner and the server can read
+        /// </summary>
+        Owner,
+    }
+
+    /// <summary>
+    ///  The permission types for writing a var
+    /// </summary>
+    public enum NetworkVariableWritePermission
+    {
+        /// <summary>
+        /// Only the server can write
+        /// </summary>
+        Server,
+        /// <summary>
+        /// Only the owner can write
+        /// </summary>
+        Owner
+    }
+```
+> [!NOTE]
+> Owner writer permissions are owner-only.
+
+### Read permissions
+
+There are two options for reading a `NetworkVariable.Value`:
+
+- **Everyone(default)**: both owners and non-owners of the NetworkObject can read the value.
+    - This is useful for global states that all clients should be aware of, such as player scores, health, or any other state that all clients should know about.
+    - We provided an example of maintaining a door's open or closed state using the everyone permission.
+- **Owner**: only the owner of the NetworkObject and the server can read the value.
+    - This is useful if your `NetworkVariable` represents something specific to the client's player that only the server and client should know about, such as a player's inventory or ammo count.
+
+### Write permissions
+
+There are two options for writing a `NetworkVariable.Value`:
+
+- **Server(default)**: the server is the only one that can write the value.
+    - This is useful for server-side specific states that all clients should be aware of but can't change, such as an NPC's status or some global world environment state (that is, is it night or day time).
+- **Owner**: only the owner of the NetworkObject can write to the value.
+    - This is useful if your `NetworkVariable` represents something specific to the client's player that only the owning client should be able to set, such as a player's skin or other cosmetics.
+
+### Permissions example
+
+The following example has a few different permissions configurations that you might use in a game while keeping track of a player's state. It also provides details of each `NetworkVariable`'s purpose and the reasoning behind each `NetworkVariable`'s read and write permission settings.
+
+```csharp
+public class PlayerState : NetworkBehaviour
+{
+    private const float k_DefaultHealth = 100.0f;
+    /// <summary>
+    /// Default Permissions: Everyone can read, server can only write
+    /// Player health is typically something determined (updated/written to) on the server
+    ///  side, but a value everyone should be synchronized with (that is, read permissions).
+    /// </summary>
+    public NetworkVariable<float> Health = new NetworkVariable<float>(k_DefaultHealth);
+
+    /// <summary>
+    /// Owner Read Permissions: Owner or server can read
+    /// Owner Write Permissions: Only the Owner can write
+    /// A player's ammo count is something that you might want, for convenience sake, the
+    /// client-side to update locally. This might be because you are trying to reduce
+    /// bandwidth consumption for the server and all non-owners/ players or you might be
+    /// trying to incorporate a more client-side "hack resistant" design where non-owners
+    /// are never synchronized with this value.
+    /// </summary>
+    public NetworkVariable<int> AmmoCount = new NetworkVariable<int>(default,
+        NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// Owner Write & Everyone Read Permissions:
+    /// A player's model's skin selection index. You might have the option to allow players
+    /// to select different skin materials as a way to further encourage a player's personal
+    /// association with their player character.  It would make sense to make the permissions
+    /// setting of the NetworkVariable such that the client can change the value, but everyone
+    /// will be notified when it changes to visually reflect the new skin selection.
+    /// </summary>
+    public NetworkVariable<int> SkinSelectionIndex = new NetworkVariable<int>(default,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// Owner Read & Server Write Permissions:
+    /// You might incorporate some form of reconnection logic that stores a player's state on
+    /// the server side and can be used by the client to reconnect a player if disconnected
+    /// unexpectedly.  In order for the client to let the server know it's the "same client"
+    /// you might have implemented a keyed array (that is, Hashtable, Dictionary, etc, ) to track
+    /// each connected client. The key value for each connected client would only be written to
+    /// the each client's PlayerState.ReconnectionKey. Under this scenario, you only want the
+    /// server to have write permissions and the owner (client) to be synchronized with this
+    /// value (via owner only read permissions).
+    /// </summary>
+    public NetworkVariable<ulong> ReconnectionKey = new NetworkVariable<ulong>(default,
+    NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+}
+```
+
+> [!NOTE]
+> You might be wondering about our earlier door example and why we chose to use a server RPC for clients to notify the server that the door's open/closed state has changed. In that scenario, the owner of the door will most likely be owned by the server, just like non-player characters will almost always be owned by the server. In a server-owned scenario, using an RPC to handle updating a `NetworkVariable` is the proper choice above permissions for most cases.
+
+## Complex types
+
+Any type that implements the [`INetworkSerializable`](../advanced-topics/serialization/inetworkserializable.md) interface can be used inside a `NetworkVariable`. To synchronize a custom type that is not supported by the default serialization provided by Netcode for GameObjects, implement this interface to allow it to be used inside a `NetworkVariable`.
+
+### Synchronizing complex types example
+
+This example extends the previous `PlayerState` class to include some complex types to handle a weapon boosting game play mechanic. The example uses two complex values types:
+
+- `WeaponBooster`: A power-up weapon booster that can only be applied by the client. This is a simple example of a complex type.
+- `AreaWeaponBooster`: A second kind of weapon booster power-up that players can deploy at a specific location, and any team members within the radius of the `AreaWeaponBooster` have the weapon booster applied. This is an example of a nested complex type.
+
+`WeaponBooster` only needs one `NetworkVariable` to handle synchronizing everyone with any currently active player-local `WeaponBooster`. However, the `AreaWeaponBooster` must consider what happens if there are eight team members that can, at any given moment, deploy an `AreaWeaponBooster`. It requires, at a minimum, a list of all deployed and currently active `AreaWeaponBooster`s.  This task uses a `NetworkList` instead of a `NetworkVariable`.
+
+Below are the `PlayerState` additions along with the `WeaponBooster` structure (complex type):
+
+```csharp
+public class PlayerState : NetworkBehaviour
+{
+    // ^^^^^^^ including all code from previous example ^^^^^^^
+
+    // The weapon booster currently applied to a player
+    private NetworkVariable<WeaponBooster> PlayerWeaponBooster = new NetworkVariable<WeaponBooster>();
+
+    /// <summary>
+    /// A list of team members active "area weapon boosters" that can be applied if the local player
+    /// is within their range.
+    /// </summary>
+    private NetworkList<AreaWeaponBooster> TeamAreaWeaponBoosters;
+
+    void Awake()
+    {
+        //NetworkList can't be initialized at declaration time like NetworkVariable. It must be initialized in Awake instead.
+        //If you do initialize at declaration, you will run into Memory leak errors.
+        TeamAreaWeaponBoosters = new NetworkList<AreaWeaponBooster>();
+    }
+
+    void Start()
+    {
+        /*At this point, the object hasn't been network spawned yet, so you're not allowed to edit network variables! */
+        //list.Add(new AreaWeaponBooster());
+    }
+
+    void Update()
+    {
+        //This is just an example that shows how to add an element to the list after its initialization:
+        if (!IsServer) { return; } //remember: only the server can edit the list
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            TeamAreaWeaponBoosters.Add(new AreaWeaponBooster()));
+        }
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsClient)
+        {
+            TeamAreaWeaponBoosters.OnListChanged += OnClientListChanged;
+        }
+        if (IsServer)
+        {
+            TeamAreaWeaponBoosters.OnListChanged += OnServerListChanged;
+            TeamAreaWeaponBoosters.Add(new AreaWeaponBooster()); //if you want to initialize the list with some default values, this is a good time to do so.
+        }
+    }
+
+    void OnServerListChanged(NetworkListEvent<AreaWeaponBooster> changeEvent)
+    {
+        Debug.Log($"[S] The list changed and now has {TeamAreaWeaponBoosters.Count} elements");
+    }
+
+    void OnClientListChanged(NetworkListEvent<AreaWeaponBooster> changeEvent)
+    {
+        Debug.Log($"[C] The list changed and now has {TeamAreaWeaponBoosters.Count} elements");
+    }
+}
+
+/// <summary>
+/// Example: Complex Type
+/// This is an example of how one might handle tracking any weapon booster currently applied
+/// to a player.
+/// </summary>
+public struct WeaponBooster : INetworkSerializable, System.IEquatable<WeaponBooster>
+{
+    public float PowerAmplifier;
+    public float Duration;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        if (serializer.IsReader)
+        {
+            var reader = serializer.GetFastBufferReader();
+            reader.ReadValueSafe(out PowerAmplifier);
+            reader.ReadValueSafe(out Duration);
+        }
+        else
+        {
+            var writer = serializer.GetFastBufferWriter();
+            writer.WriteValueSafe(PowerAmplifier);
+            writer.WriteValueSafe(Duration);
+        }
+    }
+
+    public bool Equals(WeaponBooster other)
+    {
+        return PowerAmplifier == other.PowerAmplifier && Duration == other.Duration;
+    }
+}
+```
+
+The example code above shows how a complex type implements `INetworkSerializable`. The second part of the example below shows that the `AreaWeaponBooster` includes a `WeaponBooster` property that would (for example) be applied to team members that are within the `AreaWeaponBoosters` radius:
+
+```csharp
+/// <summary>
+/// Example: Nesting Complex Types
+/// This example uses the previous WeaponBooster complex type to be a "container" for
+/// the "weapon booster" information of an AreaWeaponBooster.  It then provides additional
+/// information that would allow clients to easily determine, based on location and radius,
+/// if it should add (for example) a special power up HUD symbol or special-FX to the local
+/// player.
+/// </summary>
+public struct AreaWeaponBooster : INetworkSerializable, System.IEquatable<AreaWeaponBooster>
+{
+    public WeaponBooster ApplyWeaponBooster; // the nested complex type
+    public float Radius;
+    public Vector3 Location;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        if (serializer.IsReader)
+        {
+            // The complex type handles its own de-serialization
+            serializer.SerializeValue(ref ApplyWeaponBooster);
+            // Now de-serialize the non-complex type properties
+            var reader = serializer.GetFastBufferReader();
+            reader.ReadValueSafe(out Radius);
+            reader.ReadValueSafe(out Location);
+        }
+        else
+        {
+            // The complex type handles its own serialization
+            serializer.SerializeValue(ref ApplyWeaponBooster);
+            // Now serialize the non-complex type properties
+            var writer = serializer.GetFastBufferWriter();
+            writer.WriteValueSafe(Radius);
+            writer.WriteValueSafe(Location);
+        }
+    }
+
+    public bool Equals(AreaWeaponBooster other)
+    {
+        return other.Equals(this) && Radius == other.Radius && Location == other.Location;
+    }
+}
+```
+
+Looking closely at the read and write segments of code within `AreaWeaponBooster.NetworkSerialize`, the nested complex type property `ApplyWeaponBooster` handles its own serialization and de-serialization. The `ApplyWeaponBooster`'s implemented `NetworkSerialize` method serializes and deserialized any `AreaWeaponBooster` type property. This design approach can help reduce code replication while providing a more modular foundation to build even more complex, nested types.
+
+Further information on customizing the serialization of complex types can be found in [custom serialization](../advanced-topics/custom-serialization.md#networkvariable).
+## Strings
+
+While `NetworkVariable` does support managed `INetworkSerializable` types, strings aren't in the [list of supported types](#supported-types). This is because strings in C# are immutable types, preventing them from being deserialized in-place, so every update to a `NetworkVariable<string>` would cause a Garbage Collected allocation to create the new string, which may lead to performance problems.
+
+While it's technically possible to support strings using custom serialization through [`UserNetworkVariableSerialization`](../advanced-topics/custom-serialization.md#networkvariable), it isn't recommended to do so due to the performance implications that come with it. Instead, it's recommended to use one of the `Unity.Collections.FixedString` value types. In the below example, a `FixedString128Bytes` is the `NetworkVariable` value type. On the server side, it changes the string value each time you press the space bar on the server or host instance. Joining clients will be synchronized with the current value applied on the server side, and each time you hit the space bar on the server side, the client synchronizes with the changed string.
+
+> [!NOTE]
+> `NetworkVariable<T>` won't serialize the entire 128 bytes each time the `Value` is changed. Only the number of bytes that are actually used to store the string value will be sent, no matter which size of `FixedString` you use.
+
+```csharp
+public class TestFixedString : NetworkBehaviour
+{
+    /// Create your 128 byte fixed string NetworkVariable
+    private NetworkVariable<FixedString128Bytes> m_TextString = new NetworkVariable<FixedString128Bytes>();
+
+    private string[] m_Messages ={ "This is the first message.",
+    "This is the second message (not like the first)",
+    "This is the third message (but not the last)",
+    "This is the fourth and last message (next will roll over to the first)"
+    };
+
+    private int m_MessageIndex = 0;
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            // Assin the current value based on the current message index value
+            m_TextString.Value = m_Messages[m_MessageIndex];
+        }
+        else
+        {
+            // Subscribe to the OnValueChanged event
+            m_TextString.OnValueChanged += OnTextStringChanged;
+            // Log the current value of the text string when the client connected
+            Debug.Log($"Client-{NetworkManager.LocalClientId}'s TextString = {m_TextString.Value}");
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        m_TextString.OnValueChanged -= OnTextStringChanged;
+    }
+
+    private void OnTextStringChanged(FixedString128Bytes previous, FixedString128Bytes current)
+    {
+        // Just log a notification when m_TextString changes
+        Debug.Log($"Client-{NetworkManager.LocalClientId}'s TextString = {m_TextString.Value}");
+    }
+
+    private void LateUpdate()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            m_MessageIndex++;
+            m_MessageIndex %= m_Messages.Length;
+            m_TextString.Value = m_Messages[m_MessageIndex];
+            Debug.Log($"Server-{NetworkManager.LocalClientId}'s TextString = {m_TextString.Value}");
+        }
+    }
+}
+```
+
+
+> [!NOTE]
+> The above example uses a pre-set list of strings to cycle through for example purposes only.  If you have a predefined set of text strings as part of your actual design then you would not want to use a FixedString to handle synchronizing the changes to `m_TextString`.  Instead, you would want to use a `uint` for the type `T` where the `uint` was the index of the string message to apply to `m_TextString`.
+
+### Delta updates
+
+To save bandwidth, `NetworkVariables` can send delta updates. A delta is a compact description of what changed since the last sync. By default, [collection types](#using-collections-with-networkvariables) all support sending delta updates. This means adding a single item to a large list doesn't need to send the entire list over the network. For complex types, it is often worth considering whether sending deltas will improve bandwidth. Delta serialization can be configured via [`UserNetworkVariableSerialization`](../advanced-topics/custom-serialization.md#serializing-delta-updates).
+
+When a NetworkObject is spawned or a late-joining client first sees it, every `NetworkVariable` will be serialized in full. This allows game clients to start receiving deltas from a known state.

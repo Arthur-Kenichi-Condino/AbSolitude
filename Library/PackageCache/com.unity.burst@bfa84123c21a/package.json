@@ -1,0 +1,27 @@
+{
+  "name": "com.unity.burst",
+  "displayName": "Burst",
+  "version": "1.8.31",
+  "unity": "6000.0",
+  "description": "Burst is a compiler that translates from IL/.NET bytecode to highly optimized native code using LLVM.",
+  "dependencies": {
+    "com.unity.mathematics": "1.2.1",
+    "com.unity.modules.jsonserialize": "1.0.0"
+  },
+  "relatedPackages": {
+    "com.unity.burst.tests": "1.8.31"
+  },
+  "_upm": {
+    "changelog": "### Added\n- Added LLVM 22 and 23 support.\n\n### Removed\n\n### Changed\n- Changed the default LLVM version to 23.\n\n### Fixed\n- Fixed the Burst Inspector disassembly search bar requiring a second Ctrl/Cmd + F press to reopen after being closed.\n- When launching Unity Arm64 version, from an X64 host process (e.g. github launcher), burst bundles would not be correctly signed, causing process exit.\n- Fixed Burst AOT linking on QNX failing with `No such file or directory` for every generated object file, because the linker paths were passed with literal quote characters.\n\n### Known Issues\n\n### Purpose"
+  },
+  "upmCi": {
+    "footprint": "65d5ff3a2a2a9a72d17d0ed0bf17a27e4cdf2607"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/burst.git",
+    "type": "git",
+    "revision": "1a7430f9e0f57ea7fd23f602e244ecebeb579db3"
+  },
+  "_fingerprint": "bfa84123c21a3f0463163b6dbc1112f2f6da87e6"
+}

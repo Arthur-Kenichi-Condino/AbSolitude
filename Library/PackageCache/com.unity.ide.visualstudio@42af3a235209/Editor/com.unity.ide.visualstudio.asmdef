@@ -1,0 +1,23 @@
+{
+    "name": "Unity.VisualStudio.Editor",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "7000.0.0a6",
+            "define": "LIFECYCLE_APIS_AVAILABLE"
+        }
+    ],
+    "noEngineReferences": false
+}

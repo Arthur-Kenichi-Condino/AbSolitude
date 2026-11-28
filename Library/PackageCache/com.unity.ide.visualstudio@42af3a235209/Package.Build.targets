@@ -1,0 +1,33 @@
+<Project>
+  <PropertyGroup>
+    <_UnityVisualStudioEditorImportBuildTargets>false</_UnityVisualStudioEditorImportBuildTargets>
+    <_UnityVisualStudioEditorImportBuildTargets Condition="'$(UnityVisualStudioEditorBuildTargetsImported)' == ''">true</_UnityVisualStudioEditorImportBuildTargets>
+    <UnityVisualStudioEditorBuildTargetsImported>true</UnityVisualStudioEditorBuildTargetsImported>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_UnityVisualStudioEditorImportBuildTargets)' == 'true' And '$(UnityVisualStudioEditorActive)' == 'true' And '$(IsEntryPointProject)' != 'true'">
+    <UnityProjectGenerator>Unity/MSBuild</UnityProjectGenerator>
+    <UnityProjectGeneratorVersion>$(UnityEditorVersion)</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorStyle>SDK</UnityProjectGeneratorStyle>
+    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType Condition="$([System.String]::Copy('$(AssemblyName)').Contains('firstpass'))">GamePlugins:3</UnityProjectType>
+    <UnityProjectType Condition="$([System.String]::Copy('$(AssemblyName)').Contains('Editor'))">Editor:5</UnityProjectType>
+    <UnityProjectType Condition="$([System.String]::Copy('$(AssemblyName)').Contains('firstpass')) And $([System.String]::Copy('$(AssemblyName)').Contains('Editor'))">EditorPlugins:7</UnityProjectType>
+    <UnityBuildTarget Condition="'$(UnityVisualStudioBuildTarget)' != ''">$(UnityVisualStudioBuildTarget)</UnityBuildTarget>
+    <UnityVersion>$(UnityEditorVersion)</UnityVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(_UnityVisualStudioEditorImportBuildTargets)' == 'true' And '$(UnityVisualStudioEditorActive)' == 'true' And '$(IsEntryPointProject)' != 'true'">
+    <ProjectCapability Remove="LaunchProfiles" />
+    <ProjectCapability Remove="SharedProjectReferences" />
+    <ProjectCapability Remove="ReferenceManagerSharedProjects" />
+    <ProjectCapability Remove="COMReferences" />
+    <ProjectCapability Remove="ReferenceManagerCOM" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(_UnityVisualStudioEditorImportBuildTargets)' == 'true' And '$(UnityVisualStudioEditorActive)' == 'true' And '$(IsEntryPointProject)' != 'true' And $(MSBuildProjectName.EndsWith('.gen'))">
+    <ProjectCapability Remove="ReferenceManagerProjects" />
+    <ProjectCapability Remove="AssemblyReferences" />
+    <ProjectCapability Remove="ReferenceManagerAssemblies" />
+  </ItemGroup>
+</Project>

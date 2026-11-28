@@ -455,7 +455,7 @@ namespace AKCondinoO.World.SimObjects{
               uncommitedSpawn.reservation=reservation;
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
-               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
+               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,0,
                 reservation.pos,reservation.rot,reservation.scale
                ){
                };
@@ -545,7 +545,7 @@ namespace AKCondinoO.World.SimObjects{
               uncommitedSpawn.reservation=reservation;
               if(cnkRgn==this.cnkRgn){
                var prefab=candidate.spawnEntry.prefab;
-               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,
+               SimObjectSpawn spawn=new(prefab.GetType(),prefab.variant,0,
                 reservation.pos,reservation.rot,reservation.scale
                ){
                };

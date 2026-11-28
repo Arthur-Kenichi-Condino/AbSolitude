@@ -27,6 +27,8 @@ namespace AKCondinoO.SimObjects{
       public StateDefinition[]partStateDefinitions;
      }
      private InteractionSlot[]slotPrefabs;
+     internal T prefab=>pool.prefab;
+     internal(Type type,string variant)spawnKey=>(prefab.simObjectType,prefab.variant);
         internal SimObjectFactory(T prefab,Transform parent=null){
          var manager=SimObjectManager.singleton;
          pool=new(prefab,parent);
@@ -112,24 +114,51 @@ namespace AKCondinoO.SimObjects{
         }
         internal virtual SimObject Spawn(SimObjectSpawn item,SimObjectPersistentData persistentData){
          var manager=SimObjectManager.singleton;
+         if(!prefab.IsSimActor()){
+          if(manager.simObjects[spawnKey].TryGetValue(item.id,out _)){
+           Logs.Debug(()=>"'sim object already spawned':item.id:"+item.id);
+           OnCancel(item,persistentData);
+           return null;
+          }
+         }else{
+          if(manager.sims[spawnKey].TryGetValue(item.id,out _)){
+           Logs.Debug(()=>"'sim already spawned':item.id:"+item.id);
+           OnCancel(item,persistentData);
+           return null;
+          }
+         }
          T simObject=pool.Rent();
          simObject.doInitialization=true;
          simObject.groundingPlane=groundingPlane;
          if(simObject.groundingPlane!=null){
           Logs.Debug(()=>"simObject.groundingPlane.groundOffset:"+simObject.groundingPlane.groundOffset);
          }
-         AssignId(simObject);
+         AssignId(simObject,item.id);
          SetupSimObject(simObject);
-         simObject.transform.position=item.position;
-         simObject.transform.rotation=item.rotation;
-         simObject.transform.localScale=item.scale;
+         if(persistentData==null){
+          simObject.transform.position=item.position;
+          simObject.transform.rotation=item.rotation;
+          simObject.transform.localScale=item.scale;
+         }else{
+          persistentData.ApplyTo(simObject);
+         }
+         simObject.transform.localScale=Vector3.Max(simObject.transform.localScale,Vector3.one*1e-6f);
          simObject.OnSpawn(persistentData);
          manager.OnSpawn(simObject);
          return simObject;
         }
-        private void AssignId(T simObject){
+        protected virtual void OnCancel(SimObjectSpawn item,SimObjectPersistentData persistentData){
+         if(persistentData!=null){
+          SimObjectPersistentData.Return(persistentData.GetType(),persistentData);
+         }
+        }
+        private void AssignId(T simObject,ulong id=0){
          var manager=SimObjectManager.singleton;
-         simObject.id=manager.simIds.Next((simObject.simObjectType,simObject.variant));
+         if(id>0){
+          simObject.id=id;
+         }else{
+          simObject.id=manager.simIds.Next((simObject.simObjectType,simObject.variant));
+         }
         }
         private void ReturnId(T simObject){
          Logs.Warning("'não implementado ainda'");

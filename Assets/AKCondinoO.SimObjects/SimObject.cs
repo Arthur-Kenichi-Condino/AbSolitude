@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.SimObjects{
-    internal class SimObject:MonoBehaviour{
+    internal class SimObject:PoolableMonoBehaviour{
      internal Type simObjectType=>type??=GetType();private Type type;
      [SerializeField]internal string variant;
      [SerializeField]internal bool useInstancedRendering=false;

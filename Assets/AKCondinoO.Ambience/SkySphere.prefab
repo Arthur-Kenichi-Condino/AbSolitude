@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8009814748480139400}
+  - component: {fileID: -2887124637149035079}
   m_Layer: 0
   m_Name: SkySphere
   m_TagString: Untagged
@@ -33,6 +34,18 @@ Transform:
   - {fileID: 6527881941017369944}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2887124637149035079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726862698136741565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9db7bbcdd805f47b2c01bb9fdba3e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkySphere
 --- !u!1001 &3308022033112199251
 PrefabInstance:
   m_ObjectHideFlags: 0

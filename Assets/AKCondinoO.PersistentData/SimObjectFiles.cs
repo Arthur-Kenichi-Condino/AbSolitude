@@ -45,12 +45,12 @@ namespace AKCondinoO.PersistentData{
            if(indexed||index.offset<0){return;}
            using(var writerLease=fileHandle.AcquireWriter(readerLease)){
             var writer=writerLease.writer;
-            WriteSimObject(writer,(SimObjectFileHandle)fileHandle,id,persistentData);
+            WriteSimObject(writer,(SimObjectFileHandle)fileHandle,type,variant,id,persistentData);
            }
           }
          }
         }
-        internal void WriteSimObject(BinaryWriter writer,SimObjectFileHandle fileHandle,ulong id,SimObjectPersistentData persistentData){
+        internal void WriteSimObject(BinaryWriter writer,SimObjectFileHandle fileHandle,Type type,string variant,ulong id,SimObjectPersistentData persistentData){
          if(writer==null){
           return;
          }
@@ -65,6 +65,9 @@ namespace AKCondinoO.PersistentData{
          CalculateSerializationSize(ref index,persistentData);
          WriteTo(writer,index,persistentData);
          fileHandle.SetIndex(id,index);
+         var value=SimObjectPersistentData.RentFor(type);
+         persistentData.CopyTo(value);
+         fileHandle.SetPersistentData(id,value);
         }
         internal int CalculateSerializationSize(ref SimObjectIndex index,SimObjectPersistentData persistentData){
          var serializationSize=
@@ -88,6 +91,47 @@ namespace AKCondinoO.PersistentData{
          return fileHandle.TryGetIndex(
           id,
           out index
+         );
+        }
+        internal bool ReadFromSimObjectFile(Vector2Int cnkRgn,Type type,string variant,ulong id,SimObjectPersistentData persistentData){
+         var filePath=GetSimObjectSaveFilePath(cnkRgn,type,variant);
+         using(var fileHandle=(SimObjectFileHandle)GetOrOpenSaveFile(filePath,true)){
+          using(var readerLease=fileHandle.AcquireReader(false)){
+           var reader=readerLease.reader;
+           if(reader==null){
+            return false;
+           }
+           bool indexed=FindIndex(reader,fileHandle,id,
+            out var simObjectIndex
+           );
+           if(!indexed){
+            return false;
+           }
+           return ReadSimObject(reader,fileHandle,id,simObjectIndex,persistentData);
+          }
+         }
+        }
+        internal bool ReadSimObject(BinaryReader reader,SimObjectFileHandle fileHandle,ulong id,SimObjectIndex index,SimObjectPersistentData persistentData){
+         if(reader==null){
+          return false;
+         }
+         if(fileHandle.TryGetPersistentData(id,persistentData)){
+          return true;
+         }
+         var stream=reader.BaseStream;
+         if(index.offset+index.serializationSize>stream.Length){
+          return false;
+         }
+         int version=index.version;
+         SeekToSimObject(stream,index,version);
+         simObjectSerializer.ReadFromInto(reader,persistentData,version);
+         return true;
+        }
+        void SeekToSimObject(Stream stream,SimObjectIndex index,int version){
+         stream.Seek(
+          index.offset+
+          simObjectIndexSerializer.CalculateSerializedSize(index,version),
+          SeekOrigin.Begin
          );
         }
         internal struct SimObjectIndex{
@@ -164,6 +208,14 @@ namespace AKCondinoO.PersistentData{
               }
              }
             }
+            protected override void OnReadFromInto(BinaryReader reader,SimObjectPersistentData persistentData,int savedVersion,int supportedVersion){
+             switch(supportedVersion){
+              default:{
+               persistentData.Read(reader,savedVersion,supportedVersion);
+               break;
+              }
+             }
+            }
         }
     }
     internal class SimObjectFile:PersistentDataFileStreaming{
@@ -171,6 +223,10 @@ namespace AKCondinoO.PersistentData{
          PersistentDataFileHeader.Return(typeof(SimObjectFileHeader),fileHeader);
          fileHeader=null;
          indexes.Clear();
+         foreach(var kvp in values){
+          SimObjectPersistentData.Return(kvp.Value.GetType(),kvp.Value);
+         }
+         values.Clear();
          base.OnReturnToPoolRecycle();
         }
         protected override void EnsureHeader(){
@@ -209,6 +265,7 @@ namespace AKCondinoO.PersistentData{
          }
         }
      internal readonly Dictionary<ulong,SimObjectIndex>indexes=new();
+     internal readonly Dictionary<ulong,SimObjectPersistentData>values=new();
         internal override void OnOpen(){
          base.OnOpen();
          RebuildIndexes();
@@ -312,6 +369,28 @@ namespace AKCondinoO.PersistentData{
           return file.indexes.TryGetValue(id,out index);
          }
          index=new(){offset=-1,};
+         return false;
+        }
+        internal void SetPersistentData(
+         ulong key,
+         SimObjectPersistentData value
+        ){
+         var file=GetSimObjectFile();
+         if(file!=null){
+          file.values.Add(key,value);
+         }
+        }
+        internal bool TryGetPersistentData(
+         ulong key,
+         SimObjectPersistentData persistentData
+        ){
+         var file=GetSimObjectFile();
+         if(file!=null){
+          if(file.values.TryGetValue(key,out var value)){
+           value.CopyTo(persistentData);
+           return true;
+          }
+         }
          return false;
         }
     }

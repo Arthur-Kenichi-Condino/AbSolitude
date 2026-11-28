@@ -1,0 +1,19 @@
+{
+    "name": "Unity.Multiplayer.Tools.NetVis.Configuration",
+    "rootNamespace": "Unity.Multiplayer.Tools.NetVis.Configuration",
+    "references": [
+        "Unity.Multiplayer.Tools.Common",
+        "Unity.Multiplayer.Tools.Adapters",
+        "Unity.Burst",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

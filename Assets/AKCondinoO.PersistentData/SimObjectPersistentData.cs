@@ -6,7 +6,16 @@ using System.IO;
 using UnityEngine;
 using static AKCondinoO.PersistentData.PersistentDataSerialization;
 namespace AKCondinoO.PersistentData{
-    internal class SimObjectPersistentData{
+    internal abstract class BasePersistentData{
+        internal abstract void ApplyTo(SimObject simObject);
+        internal abstract void Update(SimObject simObject,SimObjectPersistentData snapshot);
+        internal abstract int CalculateSerializedSize(int version,int supportedVersion);
+        internal abstract void Write(BinaryWriter writer,int requestedVersion,int supportedVersion);
+        internal abstract void Read(BinaryReader reader,int savedVersion,int supportedVersion);
+        internal abstract void CopyTo(SimObjectPersistentData target);
+        public abstract override string ToString();
+    }
+    internal class SimObjectPersistentData:BasePersistentData{
      static readonly Dictionary<(Type,string),ObjectPoolBase>pool=new(){
       {(typeof(SimObjectPersistentData),""),Pool.GetPool<SimObjectPersistentData>("",()=>new(),(SimObjectPersistentData item)=>{item.OnReturnToPoolRecycle();},true)},
      };
@@ -37,7 +46,13 @@ namespace AKCondinoO.PersistentData{
      public Quaternion rot;
      public Vector3 pos;
      public Vector3 scale;
-        internal virtual void Update(SimObject simObject,SimObjectPersistentData snapshot){
+        internal override void ApplyTo(SimObject simObject){
+         var transform=simObject.transform;
+         transform.rotation=rot;
+         transform.position=pos;
+         transform.localScale=scale;
+        }
+        internal override void Update(SimObject simObject,SimObjectPersistentData snapshot){
          snapshot.readFromFile=readFromFile;
          snapshot.readRot=readRot;
          snapshot.readPos=readPos;
@@ -47,18 +62,21 @@ namespace AKCondinoO.PersistentData{
          pos=snapshot.pos=transform.position;
          scale=snapshot.scale=transform.localScale;
         }
-        internal virtual int CalculateSerializedSize(int version,int supportedVersion){
+        public override string ToString(){
+         return"type:"+GetType()+";rot:"+rot+";pos:"+pos+";scale:"+scale;
+        }
+        internal override int CalculateSerializedSize(int version,int supportedVersion){
          return
           sizeof(float)*4+//  rot
           sizeof(float)*3+//  pos
           sizeof(float)*3;//  scale
         }
-        internal virtual void Write(BinaryWriter writer,int requestedVersion,int supportedVersion){
+        internal override void Write(BinaryWriter writer,int requestedVersion,int supportedVersion){
          WriteQuaternion(writer,rot);
          WriteVector3(writer,pos);
          WriteVector3(writer,scale);
         }
-        internal virtual void Read(BinaryReader reader,int savedVersion,int supportedVersion){
+        internal override void Read(BinaryReader reader,int savedVersion,int supportedVersion){
          readFromFile=true;
          readRot=ReadQuaternion(reader);
          readPos=ReadVector3(reader);
@@ -66,6 +84,15 @@ namespace AKCondinoO.PersistentData{
          rot=readRot;
          pos=readPos;
          scale=readScale;
+        }
+        internal override void CopyTo(SimObjectPersistentData target){
+         target.readFromFile=readFromFile;
+         target.readRot=readRot;
+         target.readPos=readPos;
+         target.readScale=readScale;
+         target.rot=rot;
+         target.pos=pos;
+         target.scale=scale;
         }
      internal static readonly Dictionary<Type,IPersistentDataSerializer>serializers=new(){
       {typeof(SimObjectPersistentData),new SimObjectPersistentDataSerializer()},

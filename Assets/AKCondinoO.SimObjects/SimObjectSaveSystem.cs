@@ -5,6 +5,7 @@ using AKCondinoO.World;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static AKCondinoO.PersistentData.SpatialMapFiles;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.SimObjects{
     internal class SimObjectSaveSystem{
@@ -115,6 +116,7 @@ namespace AKCondinoO.SimObjects{
         }
      public static bool processing{get;protected set;}
      internal Dictionary<SimObjectSaveKey,SimObjectSaveValue>processingSave=new();
+     internal HashSet<Vector2Int>processingLoad=new();
         internal bool TryProcessPending(){
          if(processing){
           return false;
@@ -124,25 +126,35 @@ namespace AKCondinoO.SimObjects{
           pendingLoad.Count>0;
          if(pending){
           processing=true;
-          Dictionary<SimObjectSaveKey,SimObjectSaveValue>scheduleForProcessing=null;
+          Dictionary<SimObjectSaveKey,SimObjectSaveValue>scheduleSaveForProcessing=null;
+          HashSet<Vector2Int>scheduleLoadForProcessing=null;
           if(pendingSave.Count>0){
            Logs.Debug(()=>"'process pending save data, count':"+pendingSave.Count);
-           scheduleForProcessing=pendingSave;
+           scheduleSaveForProcessing=pendingSave;
            pendingSave=processingSave;
-           processingSave=scheduleForProcessing;
+           processingSave=scheduleSaveForProcessing;
           }
           if(pendingLoad.Count>0){
            Logs.Debug(()=>"'process pending load data, count':"+pendingLoad.Count);
+           scheduleLoadForProcessing=pendingLoad;
+           pendingLoad=processingLoad;
+           processingLoad=scheduleLoadForProcessing;
           }
           processSaveFilesJob=ProcessSaveFilesJob.pool.Rent();
           processSaveFilesJob.processingSave=processingSave;
+          processSaveFilesJob.processingLoad=processingLoad;
           bool scheduled=ThreadDispatcher.TrySchedule(processSaveFilesJob);
           Logs.Debug(()=>"scheduled:"+scheduled);
           if(!scheduled){
            Logs.Warning("'pending save data could not be processed, count':"+processingSave.Count);
-           if(scheduleForProcessing!=null){
+           if(scheduleSaveForProcessing!=null){
             processingSave=pendingSave;
-            pendingSave=scheduleForProcessing;
+            pendingSave=scheduleSaveForProcessing;
+           }
+           Logs.Warning("'pending load data could not be processed, count':"+processingLoad.Count);
+           if(scheduleLoadForProcessing!=null){
+            processingLoad=pendingLoad;
+            pendingLoad=scheduleLoadForProcessing;
            }
            ProcessSaveFilesJob.pool.Return(processSaveFilesJob);
            processSaveFilesJob=null;
@@ -160,6 +172,7 @@ namespace AKCondinoO.SimObjects{
            (ProcessSaveFilesJob item)=>{item.OnReturnToPoolRecycle();}
           );
      internal Dictionary<SimObjectSaveKey,SimObjectSaveValue>processingSave;
+     internal HashSet<Vector2Int>processingLoad;
             protected virtual void OnReturnToPoolRecycle(){
              processingSave=null;
             }
@@ -170,6 +183,7 @@ namespace AKCondinoO.SimObjects{
             public void ExecuteAtBackgroundThread(){
              Logs.Debug(()=>"ProcessSaveFilesJob.ExecuteAtBackgroundThread");
              OnSave();
+             OnLoad();
             }
             internal void OnSave(){
              Logs.Debug(()=>"OnSave:'begin'");
@@ -190,7 +204,47 @@ namespace AKCondinoO.SimObjects{
              }
              processingSave.Clear();
             }
+         readonly List<SpatialMapKey>keys=new();
+         protected SpawnList spawnList;
+            internal void OnLoad(){
+             if(processingLoad.Count>0){
+              spawnList=SpawnList.pool.Rent();
+              var simObjectFiles=(PersistentDataManager.singleton.GetFileManager(typeof(SimObjectFiles))as SimObjectFiles);
+              foreach(var cCoord in processingLoad){
+               var cnkRgn=cCoordTocnkRgn(cCoord);
+               (PersistentDataManager.singleton.GetFileManager(typeof(SpatialMapFiles))as SpatialMapFiles)?.ReadFromSpatialMapFile(cnkRgn,keys);
+               Logs.Debug(()=>"OnLoad:cnkRgn:"+cnkRgn+";keys.Count:"+keys.Count);
+               foreach(var key in keys){
+                var type=key.type;
+                var variant=key.variant;
+                var id=key.id;
+                Logs.Debug(()=>"OnLoad:type:"+type+";variant:"+variant+";id:"+id+";cCoord:"+cCoord+";cnkRgn:"+cnkRgn);
+                var persistentData=SimObjectPersistentData.RentFor(type);
+                bool read=simObjectFiles.ReadFromSimObjectFile(cnkRgn,type,variant,id,persistentData);
+                Logs.Debug(()=>"OnLoad:id:"+id+";read:"+read+";persistentData:"+persistentData);
+                if(!read){
+                 PoolPersistentData(persistentData);
+                }else{
+                 spawnList.Add(new(){simObjectType=type,variant=variant,id=id,},persistentData);
+                }
+               }
+               keys.Clear();
+              }
+              processingLoad.Clear();
+             }
+            }
             public void OnCompletedDoAtMainThread(){
+             var singleton=SimObjectManager.singleton;
+             if(!object.ReferenceEquals(singleton,null)){
+              if(spawnList!=null){
+               singleton.spawnQueue.Enqueue(spawnList);
+              }
+             }else{
+              if(spawnList!=null){
+               SpawnList.pool.Return(spawnList);
+              }
+             }
+             spawnList=null;
              ProcessSaveFilesJob.pool.Return(this);
              processing=false;
             }

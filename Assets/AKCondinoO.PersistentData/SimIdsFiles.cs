@@ -54,7 +54,7 @@ namespace AKCondinoO.PersistentData{
         }
         internal bool ReadFromSimIdsFile(Type simObjectType,string variant,out ulong counter){
          var filePath=GetSimIdsSaveFilePath(simObjectType,variant);
-         using(var fileHandle=(SimIdsFileHandle)GetOrOpenSaveFile(filePath)){
+         using(var fileHandle=(SimIdsFileHandle)GetOrOpenSaveFile(filePath,true)){
           using(var readerLease=fileHandle.AcquireReader(false)){
            var reader=readerLease.reader;
            return ReadSimIdsFileCounter(fileHandle,reader,out counter);

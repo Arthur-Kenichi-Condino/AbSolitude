@@ -6,7 +6,7 @@ using UnityEngine;
 using static AKCondinoO.World.NavMeshProvider;
 using static AKCondinoO.World.WorldChunkManagerConst;
 namespace AKCondinoO.World{
-    internal class WorldChunk:MonoBehaviour{
+    internal class WorldChunk:PoolableMonoBehaviour{
      internal Bounds bounds;
      [SerializeField]internal WorldChunkTerrain terrain;
      [SerializeField]internal WorldChunkSpawning spawning;

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:Unity.MemoryProfiler.Editor.UI="Unity.MemoryProfiler.Editor.UI"
+    xsi:noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd">
+
+    <engine:VisualElement name="comparison-view" class="comparison-view-base__container table-view-base__container">
+        <Style src="ComparisonView.uss"/>
+        <engine:VisualElement name="comparison-view__config-top-container" class="table-view__config-top-container">
+            <engine:Label name="comparison-view__description-label" class="comparison-view-base__description-label"/>
+            <engine:VisualElement name="comparison-view__search-field-and-filter-container" class="table-view__search-and-filter-group">
+                <editor:ToolbarSearchField name="comparison-view__search-field" class="table-view__search-field"/>
+                <Unity.MemoryProfiler.Editor.UI:StatusFilterButton name="comparison-view__status-filter-button"/>
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement class="comparison-view__snapshot-size-bar comparison-view-base__snapshot-size-bar">
+            <engine:Label class="memory-profile-snapshotfile__tag__label memory-profile-snapshotfile__tag__label__large" text="A"/>
+            <Unity.MemoryProfiler.Editor.UI:DetailedSizeBar name="comparison-view__base-total-size-bar"/>
+        </engine:VisualElement>
+        <engine:VisualElement class="comparison-view__snapshot-size-bar comparison-view-base__snapshot-size-bar">
+            <engine:Label class="memory-profile-snapshotfile__tag__label memory-profile-snapshotfile__tag__label__large" text="B"/>
+            <Unity.MemoryProfiler.Editor.UI:DetailedSizeBar name="comparison-view__compared-total-size-bar"/>
+        </engine:VisualElement>
+        <engine:TwoPaneSplitView name="comparison-view__split-view" orientation="vertical" fixed-pane-index="1">
+            <engine:VisualElement name="comparison-view__primary" class="comparison-view-base__primary">
+                <engine:MultiColumnTreeView name="comparison-view__tree-view" class="table-view-base__tree-view" sorting-enabled="true">
+                    <engine:Columns reorderable="false">
+                        <engine:Column name="comparison-view__tree-view__column__description" resizable="true" stretchable="false" optional="false"/>
+                        <engine:Column name="comparison-view__tree-view__column__count-delta" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__size-delta-bar" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__size-delta" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__total-size-in-a" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__total-size-in-b" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__count-in-a" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__count-in-b" resizable="true" stretchable="true"/>
+                        <engine:Column name="comparison-view__tree-view__column__status-in-a" resizable="true" stretchable="true" visible="false"/>
+                        <engine:Column name="comparison-view__tree-view__column__status-in-b" resizable="true" stretchable="true" visible="false"/>
+                    </engine:Columns>
+                    <engine:SortColumnDescriptions>
+                        <engine:SortColumnDescription column-name="comparison-view__tree-view__column__size-delta-bar" direction="descending"/>
+                    </engine:SortColumnDescriptions>
+                </engine:MultiColumnTreeView>
+                <Unity.MemoryProfiler.Editor.UI:PaginationControl name="comparison-view__pager" class="comparison-view__pager"/>
+                <editor:Toolbar name="comparison-view__footer-toolbar" class="comparison-view-base__footer-toolbar">
+                    <engine:VisualElement class="table-view-base__footer-toolbar__group table-view-base__footer-toolbar__rebuild-options">
+                        <engine:Toggle name="comparison-view__toolbar__flatten-toggle"/>
+                        <engine:Toggle name="comparison-view__toolbar__unchanged-toggle"/>
+                        <engine:Toggle name="comparison-view__toolbar__status-toggle"/>
+                    </engine:VisualElement>
+                    <engine:VisualElement class="table-view-base__footer-toolbar__group table-view-base__footer-toolbar__display-options">
+                        <engine:Toggle name="comparison-view__toolbar__scale-bars-toggle"/>
+                    </engine:VisualElement>
+                </editor:Toolbar>
+                <Unity.MemoryProfiler.Editor.UI:ActivityIndicatorOverlay name="comparison-view__loading-overlay"/>
+            </engine:VisualElement>
+            <engine:VisualElement name="comparison-view__secondary" class="comparison-view-base__secondary">
+                <engine:VisualElement name="comparison-view__secondary__base">
+                    <engine:VisualElement class="comparison-view__secondary__title-container comparison-view-base__secondary__title-container">
+                        <engine:Label class="memory-profile-snapshotfile__tag__label memory-profile-snapshotfile__tag__label__large" text="A"/>
+                        <engine:Label name="comparison-view__secondary__base-title-label" class="comparison-view__secondary__title-label comparison-view-base__secondary__title-label"/>
+                        <engine:Label name="comparison-view__secondary__base-description-label" class="comparison-view__secondary__description-label"/>
+                    </engine:VisualElement>
+                    <engine:VisualElement name="comparison-view__secondary__base-table-container"/>
+                </engine:VisualElement>
+                <engine:VisualElement name="comparison-view__secondary__compared">
+                    <engine:VisualElement class="comparison-view__secondary__title-container comparison-view-base__secondary__title-container">
+                        <engine:Label class="memory-profile-snapshotfile__tag__label memory-profile-snapshotfile__tag__label__large" text="B"/>
+                        <engine:Label name="comparison-view__secondary__compared-title-label" class="comparison-view__secondary__title-label comparison-view-base__secondary__title-label"/>
+                        <engine:Label name="comparison-view__secondary__compared-description-label" class="comparison-view__secondary__description-label"/>
+                    </engine:VisualElement>
+                    <engine:VisualElement name="comparison-view__secondary__compared-table-container"/>
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:TwoPaneSplitView>
+        <engine:Label name="comparison-view__error-label" class="table-view-base__error-label"/>
+    </engine:VisualElement>
+
+</engine:UXML>

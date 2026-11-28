@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2378712634588945357}
   - component: {fileID: 5046699750932413999}
   - component: {fileID: 827007774999394238}
-  m_Layer: 12
+  m_Layer: 29
   m_Name: SkySphere.MeshPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

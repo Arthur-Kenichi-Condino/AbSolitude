@@ -1,0 +1,24 @@
+{
+  "name": "com.unity.ide.visualstudio",
+  "displayName": "Visual Studio Editor",
+  "description": "Code editor integration for supporting Visual Studio as code editor for unity. Adds support for generating csproj files for intellisense purposes, auto discovery of installations, etc.",
+  "version": "2.0.29",
+  "unity": "2021.3",
+  "dependencies": {},
+  "relatedPackages": {
+    "com.unity.ide.visualstudio.tests": "2.0.29"
+  },
+  "_upm": {
+    "changelog": "Integration:\n\n- Delegate project generation to Unity's MSBuild pipeline when `UNITY_MSBUILD_ENABLED` is set, retaining design-time IDE analyzers, user-project capabilities, and editor configuration.\n- Remove stale generated MSBuild integration metadata when returning to regular compilation.\n- Remove the `com.unity.test-framework` dependency. The Test Explorer integration is now compiled only when the Test Framework package is present in the project."
+  },
+  "upmCi": {
+    "footprint": "3015dff7be5ecf3011a6bfee1829439f0dc7171a"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.ide.visualstudio@2.0/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/com.unity.ide.visualstudio.git",
+    "type": "git",
+    "revision": "2f1341d571a7fc8600c9aade07412391b749d562"
+  },
+  "_fingerprint": "42af3a235209974579e5d38b6839611458b5a0dd"
+}

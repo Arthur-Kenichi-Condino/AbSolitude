@@ -1,0 +1,63 @@
+{
+  "name": "com.unity.probuilder",
+  "displayName": "ProBuilder",
+  "version": "6.1.4",
+  "unity": "6000.0",
+  "description": "Build, edit, and texture custom geometry in Unity. Use ProBuilder for in-scene level design, prototyping, collision meshes, all with on-the-fly play-testing.\n\nAdvanced features include UV editing, vertex colors, parametric shapes, and texture blending. With ProBuilder's model export feature it's easy to tweak your levels in any external 3D modelling suite.",
+  "keywords": [
+    "3d",
+    "model",
+    "mesh",
+    "modeling",
+    "geometry",
+    "shape",
+    "cube",
+    "blender",
+    "max",
+    "maya",
+    "fbx",
+    "obj",
+    "level",
+    "design",
+    "block",
+    "greybox",
+    "graybox",
+    "whitebox",
+    "prototype",
+    "probuilder"
+  ],
+  "samples": [
+    {
+      "displayName": "Editor Examples",
+      "description": "Scripts demonstrating how to integrate new functionality into the ProBuilder editor window.",
+      "path": "Samples~/Editor"
+    },
+    {
+      "displayName": "Runtime Examples",
+      "description": "Scripts showing how to create and modify meshes at runtime.",
+      "path": "Samples~/Runtime"
+    }
+  ],
+  "dependencies": {
+    "com.unity.shadergraph": "17.0.3",
+    "com.unity.settings-manager": "1.0.3",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0"
+  },
+  "relatedPackages": {
+    "com.unity.probuilder.tests": "6.1.4"
+  },
+  "_upm": {
+    "changelog": "### Fixed\n\n- [UUM-158028] Fixed the Move, Rotate and Scale tools drifting while dragging vertices, edges or faces, applying the drag offset repeatedly instead of once."
+  },
+  "upmCi": {
+    "footprint": "fa83141fba4005c4b045013376da797dee689b08"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.probuilder@6.1/manual/index.html",
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.probuilder.git",
+    "type": "git",
+    "revision": "4f2ab7253c218560de6ac42df77020662adadbc5"
+  },
+  "_fingerprint": "7ffe746297d03335276b9d386e2b23303a216e94"
+}
